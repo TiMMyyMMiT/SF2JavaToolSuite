@@ -1,7 +1,7 @@
 *.bak
-nbproject/private/*
-build/*
-/dist/
+*/nbproject/private/*
+*/build/*
+*/dist/
 
 *.png
 
@@ -11,8 +11,8 @@ build/*
 .mtj.tmp/
 
 # Package Files #
-dist/*.jar
-store/*.jar
+*/dist/*.jar
+*/store/*.jar
 *.war
 *.ear
 
