@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.core.gui.TextAreaOutputStream;
 import com.sfc.sf2.palette.PaletteManager;
 import java.io.File;
 import java.io.PrintStream;

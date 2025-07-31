@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.graphics.gui;
 
+import com.sfc.sf2.core.MainEditor;
 import com.sfc.sf2.graphics.GraphicsManager;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.layout.DefaultLayout;
