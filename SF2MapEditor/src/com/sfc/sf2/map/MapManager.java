@@ -14,7 +14,6 @@ import com.sfc.sf2.map.io.RawImageManager;
 import com.sfc.sf2.map.layout.DisassemblyException;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;
-import com.sfc.sf2.map.layout.layout.MapLayoutLayout;
 
 /**
  *

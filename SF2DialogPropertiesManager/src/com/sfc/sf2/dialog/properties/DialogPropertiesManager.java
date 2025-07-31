@@ -48,7 +48,7 @@ public class DialogPropertiesManager {
         for(int i=0;i<mapspriteImages.length;i++){
             MapSprite ms = mapsprites[i*3+2];
             if(ms!=null){            
-                BufferedImage img = MapSpriteLayout.buildImage(ms.getTiles(), 6);
+                BufferedImage img = ms.getIndexedColorImage();
                 img = img.getSubimage(0, 0, 24, 24);
                 BufferedImage newImage = new BufferedImage(img.getWidth()*2, img.getHeight()*2, BufferedImage.TYPE_INT_ARGB);
                 Graphics g = newImage.getGraphics();

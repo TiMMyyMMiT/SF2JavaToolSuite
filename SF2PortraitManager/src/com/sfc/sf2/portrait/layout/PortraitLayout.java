@@ -6,17 +6,15 @@
 package com.sfc.sf2.portrait.layout;
 
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.portrait.Portrait;
 import com.sfc.sf2.portrait.gui.PortraitTableModel;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
 import javax.swing.JPanel;
 
 /**
@@ -25,10 +23,7 @@ import javax.swing.JPanel;
  */
 public class PortraitLayout extends JPanel  implements MouseListener, MouseMotionListener{
     
-    private static final int DEFAULT_TILES_PER_ROW = 8;
-    
-    private int tilesPerRow = DEFAULT_TILES_PER_ROW;
-    private Tile[] tiles;
+    private Portrait portrait;
     
     private PortraitTableModel eyeAnimTable;
     private PortraitTableModel mouthAnimTable;
@@ -59,10 +54,10 @@ public class PortraitLayout extends JPanel  implements MouseListener, MouseMotio
     
     public BufferedImage buildImage(){
         if (redraw) {
-            if (tiles == null || tiles.length == 0) {
+            if (portrait == null || portrait.getTiles().length == 0) {
                 currentImage = null;
             } else {
-                currentImage = buildImage(this.tiles,this.tilesPerRow);
+                currentImage = buildImage(this.portrait);
                 setSize(currentImage.getWidth(), currentImage.getHeight());
                 if (showGrid) { drawGrid(currentImage); }
             }
@@ -71,38 +66,12 @@ public class PortraitLayout extends JPanel  implements MouseListener, MouseMotio
         return currentImage;
     }
     
-    public BufferedImage buildImage(Tile[] tiles, int tilesPerRow){
-        int imageHeight = (tiles.length/tilesPerRow)*8;
-        if(tiles.length%tilesPerRow!=0){
-            imageHeight+=8;
-        }
+    public BufferedImage buildImage(Portrait portrait) {
         if(redraw){
-            currentImage = new BufferedImage(tilesPerRow*8, imageHeight , BufferedImage.TYPE_INT_ARGB);
+            currentImage = new BufferedImage(Portrait.PORTRAIT_TILES_FULL_WIDTH*8, Portrait.PORTRAIT_TILES_HEIGHT*8, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();
-            for(int i=0;i<8;i++){
-                for(int j=0;j<8;j++){
-                    int tileID = i+j*8;
-                    if (blinking) {
-                        int[][] eyeTableData = eyeAnimTable.getTableData();
-                        for (int b = 0; b < eyeTableData.length; b++) {
-                            if (eyeTableData[b][0] == i && eyeTableData[b][1] == j) {
-                                tileID = eyeTableData[b][2]+eyeTableData[b][3]*8;
-                                break;
-                            }
-                        }
-                    }
-                    if (speaking) {
-                        int[][] mouthTableData = mouthAnimTable.getTableData();
-                        for (int m = 0; m < mouthTableData.length; m++) {
-                            if (mouthTableData[m][0] == i && mouthTableData[m][1] == j) {
-                                tileID = mouthTableData[m][2]+mouthTableData[m][3]*8;
-                                break;
-                            }
-                        }
-                    }
-                    graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*8, j*8, null);
-                }
-            }
+            portrait.clearIndexedColorImage();
+            graphics.drawImage(portrait.getIndexedColorImage(true, blinking, speaking), 0, 0, null);
             redraw = false;
         }
         currentImage = resize(currentImage);
@@ -153,8 +122,12 @@ public class PortraitLayout extends JPanel  implements MouseListener, MouseMotio
         return new Dimension(getWidth(), getHeight());
     }
     
-        public Tile[] getTiles() {
-        return tiles;
+    public Portrait getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(Portrait portrait) {
+        this.portrait = portrait;
     }
     
     public int getDisplaySize() {
@@ -167,18 +140,6 @@ public class PortraitLayout extends JPanel  implements MouseListener, MouseMotio
             selectedTileImage = null;
             redraw = true;
         }
-    }
-
-    public void setTiles(Tile[] tiles) {
-        this.tiles = tiles;
-    }
-    
-    public int getTilesPerRow() {
-        return tilesPerRow;
-    }
-
-    public void setTilesPerRow(int tilesPerRow) {
-        this.tilesPerRow = tilesPerRow;
     }
 
     public PortraitTableModel getEyeAnimTable() {

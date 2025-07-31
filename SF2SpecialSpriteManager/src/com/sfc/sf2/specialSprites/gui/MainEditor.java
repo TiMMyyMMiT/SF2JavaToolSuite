@@ -970,7 +970,6 @@ public class MainEditor extends javax.swing.JFrame {
         jPanel2.setLayout(new GridLayout(1,1));
         specialSpriteLayout.setTilesPerRow((int)jSpinner1.getValue());
         specialSpriteLayout.setTiles(specialSpriteManager.getTiles());
-        specialSpriteLayout.setPalette(specialSpriteManager.getPalette());
     }
     
     void repaintLayout() {

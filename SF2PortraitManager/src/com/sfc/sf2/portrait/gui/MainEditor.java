@@ -1049,10 +1049,9 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void setupPortraitLayout() {
         jPanel2.removeAll();
-        Tile[] tiles = portraitManager.getTiles();
         jPanel2.setLayout(new GridLayout(1,1));
         portraitLayout = new PortraitLayout();
-        portraitLayout.setTiles(tiles);
+        portraitLayout.setPortrait(portraitManager.getPortrait());
         eyeTable = new PortraitTableModel(portraitManager.getPortrait().getEyeTiles(),portraitLayout);
         mouthTable = new PortraitTableModel(portraitManager.getPortrait().getMouthTiles(),portraitLayout);
         jCheckBox1.setSelected(false);

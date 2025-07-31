@@ -41,7 +41,7 @@ public class DisassemblyManager {
                 String line = scan.nextLine().trim();
                 if(line.length() > 2 && !line.startsWith(";")) {
                     String path = line.substring(line.indexOf("\"")+1, line.lastIndexOf("\""));
-                    Palette palette = com.sfc.sf2.palette.io.DisassemblyManager.importDisassembly(file.getParent() + INCBIN_PATH + path, false);
+                    Palette palette = com.sfc.sf2.palette.io.DisassemblyManager.importDisassembly(file.getParent().toString() + INCBIN_PATH + path, false);
                     if (palette.getColors().length == 2) {  //Weapon palettes should only contain 2 colors
                         Color[] colors = new Color[16];
                         System.arraycopy(basePalette.getColors(), 0, colors, 0, 14);

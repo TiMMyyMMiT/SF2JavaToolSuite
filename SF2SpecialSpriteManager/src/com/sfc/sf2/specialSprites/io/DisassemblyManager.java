@@ -9,10 +9,9 @@ import com.sfc.sf2.graphics.GraphicsManager;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.compressed.StackGraphicsDecoder;
 import com.sfc.sf2.graphics.compressed.StackGraphicsEncoder;
+import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.graphics.PaletteDecoder;
 import com.sfc.sf2.palette.graphics.PaletteEncoder;
-import java.awt.Color;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,9 +24,9 @@ import java.util.logging.Logger;
  */
 public class DisassemblyManager {
     
-    public static Color[] importDisassembly(String filepath, GraphicsManager graphicsManager, int blockRows, int blockColumns, int tilesPerBlock, String paletteFilepath) {
+    public static Palette importDisassembly(String filepath, GraphicsManager graphicsManager, int blockRows, int blockColumns, int tilesPerBlock, String paletteFilepath) {
         System.out.println("com.sfc.sf2.specialSprites.io.disassemblyManager.importDisassembly() - Importing disassembly file ...");
-        Color[] palette = null;
+        Palette palette = null;
         try {
             boolean separatePalette = paletteFilepath != null && paletteFilepath.length() > 0;
             Path path = Paths.get(filepath);
@@ -40,7 +39,9 @@ public class DisassemblyManager {
                 if (data.length >= 32) {
                     byte[] colorData = new byte[32];
                     System.arraycopy(data, 0, colorData, 0, 32);
-                    palette = PaletteDecoder.parsePalette(colorData);
+                    String paletteName = path.getFileName().toString();
+                    paletteName = paletteName.substring(0, paletteName.lastIndexOf("."));
+                    palette = new Palette(paletteName, PaletteDecoder.parsePalette(colorData));
                 } else {
                     System.out.println("com.sfc.sf2.specialSprites.io.disassemblyManager.parseGraphics() - Palette file ignored because of too small length (must be a dummy file) " + data.length + " : " + filepath);
                 }
@@ -66,13 +67,13 @@ public class DisassemblyManager {
         return palette;
     }
     
-    public static void exportDisassembly(String filepath, Color[] palette, Tile[] tiles, int blockRows, int blockColumns, int tilesPerBlock) {
+    public static void exportDisassembly(String filepath, Palette palette, Tile[] tiles, int blockRows, int blockColumns, int tilesPerBlock) {
         System.out.println("com.sfc.sf2.specialSprites.io.disassemblyManager.exportDisassembly() - Exporting disassembly ...");
         try {
             byte[] paletteBytes = new byte[0];
             int paletteOffset = palette == null ? 0 : 32;
             if (palette != null) {
-                PaletteEncoder.producePalette(palette);
+                PaletteEncoder.producePalette(palette.getColors());
                 paletteBytes = PaletteEncoder.getNewPaletteFileBytes();
             }
             tiles = reorderTilesForDisasssembly(tiles, blockColumns, blockRows, tilesPerBlock);

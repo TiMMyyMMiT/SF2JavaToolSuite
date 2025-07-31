@@ -7,8 +7,8 @@ package com.sfc.sf2.specialSprites;
 
 import com.sfc.sf2.graphics.GraphicsManager;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.specialSprites.io.DisassemblyManager;
-import java.awt.Color;
 
 /**
  *
@@ -18,7 +18,7 @@ public class SpecialSpriteManager {
 
     private GraphicsManager graphicsManager = new GraphicsManager();
     private Tile[] tiles;
-    private Color[] palette;
+    private Palette palette;
        
     public void importDisassembly(String graphicsFilePath, int blockRows, int blockColumns, int tilesPerBlock, String paletteFilepath) {
         System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Importing disassembly ...");
@@ -71,11 +71,11 @@ public class SpecialSpriteManager {
         this.tiles = tiles;
     }
 
-    public Color[] getPalette() {
+    public Palette getPalette() {
         return palette;
     }
 
-    public void setPalette(Color[] palette) {
+    public void setPalette(Palette palette) {
         this.palette = palette;
     }
 }

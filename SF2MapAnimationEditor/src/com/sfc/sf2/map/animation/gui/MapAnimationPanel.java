@@ -6,24 +6,16 @@
 package com.sfc.sf2.map.animation.gui;
 
 import com.sfc.sf2.map.animation.Map;
-import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.map.block.gui.BlockSlotPanel;
-import com.sfc.sf2.map.block.layout.MapBlockLayout;
 import com.sfc.sf2.map.layout.MapLayout;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -83,35 +75,15 @@ public class MapAnimationPanel extends JPanel {
         if(redraw){
             MapBlock[] blocks = this.map.getAnimation().getFrames()[this.selectedAnimFrame].getBlocks();
             int imageHeight = 64*3*8;
-            Color[] palette = blocks[0].getTiles()[0].getPalette();
-            palette[0] = new Color(255, 255, 255, 0);
-            IndexColorModel icm = buildIndexColorModel(palette);
             currentImage = new BufferedImage(tilesPerRow*8, imageHeight , BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();            
             for(int y=0;y<64;y++){
                 for(int x=0;x<64;x++){
                     MapBlock block = blocks[y*64+x];
-                    BufferedImage blockImage = block.getImage();
-                    BufferedImage explorationFlagImage = block.getExplorationFlagImage();
-                    BufferedImage interactionFlagImage = block.getInteractionFlagImage();
-                    if(blockImage==null){
-                        blockImage = new BufferedImage(3*8, 3*8 , BufferedImage.TYPE_BYTE_INDEXED, icm);
-                        Graphics blockGraphics = blockImage.getGraphics();                    
-                        blockGraphics.drawImage(block.getTiles()[0].getImage(), 0*8, 0*8, null);
-                        blockGraphics.drawImage(block.getTiles()[1].getImage(), 1*8, 0*8, null);
-                        blockGraphics.drawImage(block.getTiles()[2].getImage(), 2*8, 0*8, null);
-                        blockGraphics.drawImage(block.getTiles()[3].getImage(), 0*8, 1*8, null);
-                        blockGraphics.drawImage(block.getTiles()[4].getImage(), 1*8, 1*8, null);
-                        blockGraphics.drawImage(block.getTiles()[5].getImage(), 2*8, 1*8, null);
-                        blockGraphics.drawImage(block.getTiles()[6].getImage(), 0*8, 2*8, null);
-                        blockGraphics.drawImage(block.getTiles()[7].getImage(), 1*8, 2*8, null);
-                        blockGraphics.drawImage(block.getTiles()[8].getImage(), 2*8, 2*8, null);
-                        block.setImage(blockImage);
-                    }
-                    graphics.drawImage(blockImage, x*3*8, y*3*8, null);
+                    graphics.drawImage(block.getIndexedColorImage(), x*3*8, y*3*8, null);
                     if(drawExplorationFlags){
                         int explorationFlags = block.getFlags()&0xC000;
-                        if(explorationFlagImage==null){
+                        /*if(explorationFlagImage==null){
                             explorationFlagImage = new BufferedImage(3*8, 3*8, BufferedImage.TYPE_INT_ARGB);
                             Graphics2D g2 = (Graphics2D) explorationFlagImage.getGraphics();
                             switch (explorationFlags) {
@@ -129,11 +101,10 @@ public class MapAnimationPanel extends JPanel {
                             }
                             block.setExplorationFlagImage(explorationFlagImage);
                         }
-                        graphics.drawImage(explorationFlagImage, x*3*8, y*3*8, null); 
-                    }                    
+                        graphics.drawImage(explorationFlagImage, x*3*8, y*3*8, null);*/
+                    }
                 }
-                   
-            } 
+            }
             if(drawGrid){
                 graphics.drawImage(getGridImage(), 0, 0, null);
             }

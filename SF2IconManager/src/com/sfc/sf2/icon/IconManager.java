@@ -8,8 +8,7 @@ package com.sfc.sf2.icon;
 import com.sfc.sf2.graphics.GraphicsManager;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.icon.io.DisassemblyManager;
-import com.sfc.sf2.icon.io.PngManager;
-import com.sfc.sf2.icon.io.GifManager;
+import com.sfc.sf2.icon.io.RawImageManager;
 
 /**
  *
@@ -56,27 +55,27 @@ public class IconManager {
     
     public void importPng(String basepath){
         System.out.println("com.sfc.sf2.icon.IconManager.importPng() - Importing PNG ...");
-        tiles = PngManager.importPng(basepath);
+        tiles = RawImageManager.importImage(basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
         graphicsManager.setTiles(tiles);
         System.out.println("com.sfc.sf2.icon.IconManager.importPng() - PNG imported.");
     }
     
     public void exportPng(String basepath){
         System.out.println("com.sfc.sf2.icon.IconManager.exportPng() - Exporting PNG ...");
-        PngManager.exportPng(tiles, basepath);
+        RawImageManager.exportImage(tiles, basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
         System.out.println("com.sfc.sf2.icon.IconManager.exportPng() - PNG exported.");       
     }    
     
     public void importGif(String basepath){
         System.out.println("com.sfc.sf2.icon.IconManager.importGif() - Importing GIF ...");
-        tiles = GifManager.importGif(basepath);
+        tiles = RawImageManager.importImage(basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
         graphicsManager.setTiles(tiles);
         System.out.println("com.sfc.sf2.icon.IconManager.importGif() - GIF imported.");
     }
     
     public void exportGif(String basepath){
         System.out.println("com.sfc.sf2.icon.IconManager.exportGif() - Exporting GIF ...");
-        GifManager.exportGif(tiles, basepath);
+        RawImageManager.exportImage(tiles, basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
         System.out.println("com.sfc.sf2.icon.IconManager.exportGif() - GIF exported.");       
     }
 }

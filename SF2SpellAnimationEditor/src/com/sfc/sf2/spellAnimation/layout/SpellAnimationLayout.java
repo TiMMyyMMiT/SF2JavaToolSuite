@@ -179,7 +179,6 @@ public class SpellAnimationLayout extends JPanel {
         this.background = background;
         if (this.background != null) {
             BackgroundLayout backgroundLayout = new BackgroundLayout();
-            backgroundLayout.setTiles(background.getTiles());
             backgroundImage = backgroundLayout.buildImage();        
         }
         backgroundImage = null;
@@ -190,7 +189,6 @@ public class SpellAnimationLayout extends JPanel {
         this.ground = ground;
         if (ground != null) {
             GroundLayout groundLayout = new GroundLayout();
-            groundLayout.setTiles(ground.getTiles());        
             groundImage = groundLayout.buildImage();
         }
         groundImage = null;

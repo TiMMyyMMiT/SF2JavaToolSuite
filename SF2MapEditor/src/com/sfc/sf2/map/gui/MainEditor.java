@@ -10,7 +10,6 @@ import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.layout.MapBlockLayout;
 import com.sfc.sf2.map.MapManager;
 import com.sfc.sf2.map.layout.DisassemblyException;
-import com.sfc.sf2.map.layout.layout.MapLayoutLayout;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.PrintStream;

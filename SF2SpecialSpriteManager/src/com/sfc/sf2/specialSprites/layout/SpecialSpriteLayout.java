@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 public class SpecialSpriteLayout extends JPanel {
     
     private Tile[] tiles;
-    Color[] palette;
     
     BufferedImage currentImage;
     private boolean redraw = true;
@@ -113,14 +112,6 @@ public class SpecialSpriteLayout extends JPanel {
     public void setTiles(Tile[] tiles) {
         this.tiles = tiles;
         redraw = true;
-    }
-
-    public Color[] getPalette() {
-        return palette;
-    }
-
-    public void setPalette(Color[] palette) {
-        this.palette = palette;
     }
     
     public int getTilesPerRow() {

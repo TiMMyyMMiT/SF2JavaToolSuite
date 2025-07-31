@@ -1694,7 +1694,7 @@ public class MainEditor extends javax.swing.JFrame {
                     for (int i = 0; i < tiles.length; i++) {
                         tiles[i].clearIndexedColorImage();
                     }
-                    palette.setColors(colors);
+                    palette.setColors(colors, true);
                     spellGraphicLayout.revalidate();
                     spellGraphicLayout.repaint();
                 }

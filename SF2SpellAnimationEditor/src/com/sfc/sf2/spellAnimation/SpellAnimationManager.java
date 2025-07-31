@@ -31,9 +31,7 @@ public class SpellAnimationManager {
         spellGraphicManager.importDisassembly(spellGraphicPath, spellPalettePath);
         spellAnimation.setSpellGraphic(spellGraphicManager.getSpellGraphic());
         backgroundManager.setBackgrounds(null);
-        backgroundManager.setTiles(null);
         groundManager.setGround(null);
-        groundManager.setTiles(null);
         System.out.println("com.sfc.sf2.spellAnimation.SpellAnimationManager.importDisassembly() - Disassembly imported.");
     }
     

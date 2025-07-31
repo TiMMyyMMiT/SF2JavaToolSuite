@@ -10,6 +10,7 @@ import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationManager;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
 import com.sfc.sf2.battlesprite.animation.layout.BattleSpriteAnimationLayout;
+import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -857,7 +858,8 @@ public class MainEditor extends javax.swing.JFrame implements ActionListener {
         }
         jComboBox3.removeAllItems();
         if(battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite()!=null){
-            for(int i=0;i<battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite().getPalettes().length;i++){
+            Tile[][] frames = battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite().getFrames();
+            for(int i=0;i<frames.length;i++){
                 jComboBox3.addItem(String.valueOf(i));
             }
         }
@@ -994,7 +996,7 @@ public class MainEditor extends javax.swing.JFrame implements ActionListener {
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         if(jComboBox2.getSelectedIndex()>=0 && battlespriteanimationLayout!=null){
             BattleSprite battlesprite = battlespriteanimationManager.getBattlespriteManager().getBattleSprite();
-            Color[][] palettes = battlesprite.getPalettes();
+            Palette[] palettes = battlesprite.getPalettes();
             Tile[][] frames = battlesprite.getFrames();
             for(int i=0;i<frames.length;i++){
                 for(int j=0;j<frames[i].length;j++){
@@ -1011,10 +1013,12 @@ public class MainEditor extends javax.swing.JFrame implements ActionListener {
         if(jComboBox3.getSelectedIndex()>=0 && battlespriteanimationLayout!=null){
             WeaponSprite weaponsprite = battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite();
             if(weaponsprite!=null){
-                Color[][] palettes = weaponsprite.getPalettes();
-                Tile[] tiles = weaponsprite.getTiles();
-                for(int i=0;i<tiles.length;i++){
-                    tiles[i].setPalette(palettes[jComboBox3.getSelectedIndex()]);
+                Palette[] palettes = battlespriteanimationManager.getWeaponspriteManager().getPalettes();
+                Tile[][] frames = weaponsprite.getFrames();
+                for (int f = 0; f < frames.length; f++) {
+                    for(int i=0; i < frames[f].length; i++) {
+                        frames[f][i].setPalette(palettes[jComboBox3.getSelectedIndex()]);
+                    }
                 }
                 battlespriteanimationLayout.setWeaponsprite(weaponsprite);
                 jPanel2.revalidate();

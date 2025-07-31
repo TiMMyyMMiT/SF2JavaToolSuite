@@ -6,15 +6,11 @@
 package com.sfc.sf2.map.animation.gui;
 
 import com.sfc.sf2.map.animation.Map;
-import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.layout.MapBlockLayout;
 import com.sfc.sf2.map.animation.MapAnimationManager;
 import com.sfc.sf2.map.layout.DisassemblyException;
-import com.sfc.sf2.map.layout.layout.MapLayoutLayout;
 import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URISyntaxException;

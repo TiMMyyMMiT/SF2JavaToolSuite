@@ -47,7 +47,7 @@ public class DialogPropertiesTableModel extends AbstractTableModel {
                 int portraitId = entries[i].getPortraitId();
                 tableData[i][2] = portraitId;
                 if(portraitId<portraits.length){
-                    tableData[i][3] = portraits[portraitId].getImage();
+                    tableData[i][3] = portraits[portraitId].getIndexedColorImage(false, false, false);
                 }else{
                     tableData[i][3] = emptyImage;
                 }
@@ -104,7 +104,7 @@ public class DialogPropertiesTableModel extends AbstractTableModel {
     public void updatePortrait(int row){
         int portraitId = (int)tableData[row][2];
         if(portraitId>=0&&portraitId<portraits.length){
-            tableData[row][3] = portraits[portraitId].getImage();
+            tableData[row][3] = portraits[portraitId].getIndexedColorImage(false, false, false);
         }else{
             tableData[row][3] = emptyImage;
         }

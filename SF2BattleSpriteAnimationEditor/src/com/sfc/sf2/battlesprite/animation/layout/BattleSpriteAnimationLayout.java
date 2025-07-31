@@ -12,6 +12,7 @@ import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.ground.Ground;
 import com.sfc.sf2.ground.layout.GroundLayout;
+import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
 import com.sfc.sf2.weaponsprite.layout.WeaponSpriteLayout;
 import java.awt.Color;
@@ -103,12 +104,13 @@ public class BattleSpriteAnimationLayout extends JPanel {
         return resize(image);
     }
     
-    private void drawBattleSpriteFrame(Graphics graphics, Tile[] frameTiles, int xOffset, int yOffset, int tilesPerRow, Color[] palette) {
+    private void drawBattleSpriteFrame(Graphics graphics, Tile[] frameTiles, int xOffset, int yOffset, int tilesPerRow, Palette palette) {
         
         for(int t = 0; t < frameTiles.length; t++) {
             int x = (t%tilesPerRow)*8 + xOffset;
             int y = (t/tilesPerRow)*8 + yOffset;
             frameTiles[t].setPalette(palette);
+            frameTiles[t].clearIndexedColorImage();
             graphics.drawImage(frameTiles[t].getIndexedColorImage(), x, y, null);
         }
     }
@@ -121,14 +123,14 @@ public class BattleSpriteAnimationLayout extends JPanel {
     public void setBackground(Background background) {
         this.background = background;
         BackgroundLayout backgroundLayout = new BackgroundLayout();
-        backgroundLayout.setTiles(background.getTiles());
-        backgroundImage = backgroundLayout.buildImage();        
+        backgroundLayout.setBackgrounds(new Background[] { background });
+        backgroundImage = backgroundLayout.buildImage();
     }
 
     public void setGround(Ground ground) {
         this.ground = ground;
         GroundLayout groundLayout = new GroundLayout();
-        groundLayout.setTiles(ground.getTiles());        
+        groundLayout.setGround(ground);
         groundImage = groundLayout.buildImage();
     }
 
@@ -146,7 +148,7 @@ public class BattleSpriteAnimationLayout extends JPanel {
     public void generateWeaponspriteImages(){
         WeaponSpriteLayout weaponspriteLayout = new WeaponSpriteLayout();
         weaponspriteImages = new BufferedImage[4][4];
-        weaponspriteLayout.setTiles(weaponsprite.getTiles());
+        weaponspriteLayout.setWeaponSprite(weaponsprite);
         BufferedImage image = weaponspriteLayout.buildImage();
         for(int i=0;i<4;i++){
             weaponspriteImages[0][i] = image.getSubimage(0, i*64, 64, 64);

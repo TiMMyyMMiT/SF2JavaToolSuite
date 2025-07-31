@@ -9,7 +9,6 @@ import com.sfc.sf2.background.BackgroundManager;
 import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.BattleSpriteManager;
 import com.sfc.sf2.battlesprite.animation.io.DisassemblyManager;
-import com.sfc.sf2.battlesprite.animation.io.PngManager;
 import com.sfc.sf2.ground.GroundManager;
 import com.sfc.sf2.weaponsprite.WeaponSpriteManager;
 
@@ -43,13 +42,6 @@ public class BattleSpriteAnimationManager {
         int animationType = (battlespriteManager.getBattleSprite().getType()==BattleSprite.TYPE_ALLY)?BattleSpriteAnimation.TYPE_ALLY:BattleSpriteAnimation.TYPE_ENEMY;
         DisassemblyManager.exportDisassembly(battlespriteanimation, filepath, animationType);
         System.out.println("com.sfc.sf2.battlespriteanimation.BattleSpriteAnimationManager.importDisassembly() - Disassembly exported.");        
-    }   
-    
-    
-    public void exportPng(String filepath, int selectedPalette){
-        System.out.println("com.sfc.sf2.battlespriteanimation.BattleSpriteAnimationManager.exportPng() - Exporting PNG ...");
-        PngManager.exportPng(battlespriteanimation, filepath, selectedPalette);
-        System.out.println("com.sfc.sf2.battlespriteanimation.BattleSpriteAnimationManager.exportPng() - PNG exported.");       
     }
 
     public BattleSpriteAnimation getBattleSpriteAnimation() {

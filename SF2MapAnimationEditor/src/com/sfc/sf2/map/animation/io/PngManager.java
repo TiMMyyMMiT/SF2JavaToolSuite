@@ -5,23 +5,9 @@
  */
 package com.sfc.sf2.map.animation.io;
 
-import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.graphics.layout.DefaultLayout;
-import com.sfc.sf2.map.animation.Map;
 import com.sfc.sf2.map.animation.gui.MapAnimationPanel;
-import com.sfc.sf2.map.layout.layout.MapLayoutLayout;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.IndexColorModel;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
