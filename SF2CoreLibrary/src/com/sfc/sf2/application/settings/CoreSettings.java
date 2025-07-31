@@ -18,7 +18,7 @@ public class CoreSettings implements AbstractSettings {
     String basePath = null;
     String incbinPath = null;
     
-    Color LayoutBackgroundColor;
+    Color layoutBackgroundColor;
         
     public String getBasePath() {
         return basePath;
@@ -41,11 +41,11 @@ public class CoreSettings implements AbstractSettings {
     }
     
     public Color getLayoutBackgroundColor() {
-        return LayoutBackgroundColor;
+        return layoutBackgroundColor;
     }
     
     public void setLayoutBackgroundColor(Color LayoutBackgroundColor) {
-        this.LayoutBackgroundColor = LayoutBackgroundColor;
+        this.layoutBackgroundColor = LayoutBackgroundColor;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class CoreSettings implements AbstractSettings {
         } else {    //A dev build?
             basePath = incbinPath = null;
         }
-        LayoutBackgroundColor = new Color(200, 200, 200);
+        layoutBackgroundColor = new Color(200, 200, 200);
     }
     
     @Override
@@ -69,11 +69,17 @@ public class CoreSettings implements AbstractSettings {
         if (data.containsKey("incbinPath")) {
             incbinPath = data.get("incbinPath");
         }
+        if (data.containsKey("layoutBackgroundColor")) {
+            layoutBackgroundColor = new Color(Integer.parseInt(data.get("layoutBackgroundColor"), 16));
+        }
     }
 
     @Override
     public void encodeSettings(HashMap<String, String> data) {
-        data.put("basePath", basePath);
-        data.put("incbinPath", incbinPath);
+        if (basePath != null) {
+            data.put("basePath", basePath);
+            data.put("incbinPath", incbinPath);
+        }
+        data.put("layoutBackgroundColor", Integer.toString(layoutBackgroundColor.getRGB(), 16));
     }
 }

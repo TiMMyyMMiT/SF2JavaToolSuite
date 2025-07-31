@@ -5,8 +5,12 @@
  */
 package com.sfc.sf2.core.gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
-import java.awt.GridLayout;
+import com.sfc.sf2.helpers.PathHelpers;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
@@ -17,6 +21,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+import javax.swing.UIManager;
 
 /**
  *
@@ -30,6 +36,7 @@ public class MainEditor extends javax.swing.JFrame {
     public MainEditor() {
         initComponents();
         initApp();
+        initEditor();
     }
     
     protected void initApp() {
@@ -43,6 +50,21 @@ public class MainEditor extends javax.swing.JFrame {
             System.getLogger(MainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         SettingsManager.loadSettingsFile();
+        
+        //Check if settings panel should be shown
+        Timer timer = new Timer(250, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CoreSettings core = SettingsManager.getSettingsStore("core");
+                if (!core.arePathsSet()) {
+                    jTextFieldBaseFolder.setText(PathHelpers.getApplicationpath().toString());
+                    jTextFieldIncbinFolder.setText(PathHelpers.getApplicationpath().toString());
+                    jFrameSettings.setVisible(true);
+                }
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
     
     private static void initConsole(JTextArea textArea){
@@ -109,14 +131,135 @@ public class MainEditor extends javax.swing.JFrame {
         jFileChooserFiles = new javax.swing.JFileChooser();
         jFileChooserDirectories = new javax.swing.JFileChooser();
         jColorChooser1 = new javax.swing.JColorChooser();
+        jFrameSettings = new javax.swing.JFrame();
+        jPanel1 = new javax.swing.JPanel();
+        jButtonBaseFolder = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldIncbinFolder = new javax.swing.JTextField();
+        jTextFieldBaseFolder = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jButtonIncbinFolder = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        flatSearchIcon1 = new com.formdev.flatlaf.icons.FlatSearchIcon();
+        flatFileViewFileIcon1 = new com.formdev.flatlaf.icons.FlatFileViewFileIcon();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaConsole = new javax.swing.JTextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuFile = new javax.swing.JMenu();
+        jMenuItemExit = new javax.swing.JMenuItem();
+        jMenuSettings = new javax.swing.JMenu();
+        jMenuItemSettings = new javax.swing.JMenuItem();
 
         jFileChooserDirectories.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+        jFrameSettings.setTitle("Settings");
+        jFrameSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jFrameSettings.setLocationByPlatform(true);
+        jFrameSettings.setMinimumSize(new java.awt.Dimension(500, 200));
+        jFrameSettings.setName("Frame Settings"); // NOI18N
+        jFrameSettings.setPreferredSize(new java.awt.Dimension(500, 250));
+        jFrameSettings.setResizable(false);
+        jFrameSettings.setSize(new java.awt.Dimension(500, 250));
+        jFrameSettings.setType(java.awt.Window.Type.POPUP);
+
+        jPanel1.setMinimumSize(new java.awt.Dimension(400, 200));
+        jPanel1.setPreferredSize(new java.awt.Dimension(400, 200));
+
+        jButtonBaseFolder.setIcon(flatFileViewFileIcon1);
+        jButtonBaseFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBaseFolderActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Incbin folder :");
+
+        jTextFieldIncbinFolder.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        jTextFieldIncbinFolder.setText("jTextField1");
+
+        jTextFieldBaseFolder.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        jTextFieldBaseFolder.setText("jTextField1");
+
+        jLabel1.setText("Base folder :");
+
+        jButtonIncbinFolder.setIcon(flatFileViewFileIcon1);
+        jButtonIncbinFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIncbinFolderActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Base folder is where the .jar file is expected to be run from");
+        jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jLabel4.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)</html>");
+        jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel4.setMinimumSize(new java.awt.Dimension(111, 32));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldIncbinFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldBaseFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonBaseFolder)
+                            .addComponent(jButtonIncbinFolder)))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldBaseFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBaseFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButtonIncbinFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldIncbinFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+        );
+
+        javax.swing.GroupLayout jFrameSettingsLayout = new javax.swing.GroupLayout(jFrameSettings.getContentPane());
+        jFrameSettings.getContentPane().setLayout(jFrameSettingsLayout);
+        jFrameSettingsLayout.setHorizontalGroup(
+            jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameSettingsLayout.createSequentialGroup()
+                .addContainerGap(39, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
+        jFrameSettingsLayout.setVerticalGroup(
+            jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameSettingsLayout.createSequentialGroup()
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2 App");
@@ -157,7 +300,7 @@ public class MainEditor extends javax.swing.JFrame {
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
         );
 
         jSplitPane1.setBottomComponent(jPanel7);
@@ -172,6 +315,32 @@ public class MainEditor extends javax.swing.JFrame {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSplitPane1)
         );
+
+        jMenuFile.setText("File");
+
+        jMenuItemExit.setText("Exit");
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItemExit);
+
+        jMenuBar1.add(jMenuFile);
+
+        jMenuSettings.setText("Settings");
+
+        jMenuItemSettings.setText("Settings");
+        jMenuItemSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSettingsActionPerformed(evt);
+            }
+        });
+        jMenuSettings.add(jMenuItemSettings);
+
+        jMenuBar1.add(jMenuSettings);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -188,6 +357,26 @@ public class MainEditor extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
+        dispose();
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
+
+    private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
+        CoreSettings core = SettingsManager.getSettingsStore("core");
+        jTextFieldBaseFolder.setText(core.getBasePath());
+        jTextFieldIncbinFolder.setText(core.getIncbinPath());
+        jFrameSettings.setVisible(true);
+    }//GEN-LAST:event_jMenuItemSettingsActionPerformed
+
+    private void jButtonIncbinFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncbinFolderActionPerformed
+        openDirectoryChooser(jTextFieldIncbinFolder);
+    }//GEN-LAST:event_jButtonIncbinFolderActionPerformed
+
+    private void jButtonBaseFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBaseFolderActionPerformed
+        openDirectoryChooser(jTextFieldBaseFolder);
+    }//GEN-LAST:event_jButtonBaseFolderActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -199,14 +388,20 @@ public class MainEditor extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            FlatDarkLaf.setup();
+            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            }*/
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(MainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex1) {
+                java.util.logging.Logger.getLogger(MainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
         }
         //</editor-fold>
         //</editor-fold>
@@ -225,15 +420,32 @@ public class MainEditor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.formdev.flatlaf.icons.FlatFileViewFileIcon flatFileViewFileIcon1;
+    private com.formdev.flatlaf.icons.FlatSearchIcon flatSearchIcon1;
+    private javax.swing.JButton jButtonBaseFolder;
+    private javax.swing.JButton jButtonIncbinFolder;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JFileChooser jFileChooserDirectories;
     private javax.swing.JFileChooser jFileChooserFiles;
+    private javax.swing.JFrame jFrameSettings;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuFile;
+    private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemSettings;
+    private javax.swing.JMenu jMenuSettings;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextArea jTextAreaConsole;
+    private javax.swing.JTextField jTextFieldBaseFolder;
+    private javax.swing.JTextField jTextFieldIncbinFolder;
     // End of variables declaration//GEN-END:variables
 
 }

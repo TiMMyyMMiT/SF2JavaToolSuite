@@ -8,6 +8,7 @@ package com.sfc.sf2.application.settings;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.Scanner;
  * @author TiMMy
  */
 public class SettingsManager {
+
     private static final String SETTINGS_FILE_PATH = ".\\.sf2settings.txt";
     
     static final HashMap<String, AbstractSettings> settingsStores = new HashMap<>();
@@ -97,12 +99,14 @@ public class SettingsManager {
                     HashMap<String, String> data = new HashMap<>();
                     entry.getValue().encodeSettings(data);
                     for (Map.Entry<String, String> dataItem : data.entrySet()) {
+                        sb.append("\t");
                         sb.append(dataItem.getKey() + ": " + dataItem.getValue() + "\n");
                     }
                     sb.append("\n");
                 }
                 Path filepath = Paths.get(SETTINGS_FILE_PATH);                
                 Files.write(filepath, sb.toString().getBytes());
+                Files.setAttribute(filepath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
         } catch (IOException ex) {
             System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         } catch (Exception e) {
