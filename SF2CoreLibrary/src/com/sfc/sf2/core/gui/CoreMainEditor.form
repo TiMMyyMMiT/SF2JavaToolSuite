@@ -112,12 +112,12 @@
                 <Property name="verticalAlignment" type="int" value="1"/>
               </Properties>
             </Component>
-            <Component class="com.sfc.sf2.core.gui.DirectoryButton" name="directoryButtonBasePath">
+            <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButtonBasePath">
               <Properties>
                 <Property name="labelText" type="java.lang.String" value="Base folder :"/>
               </Properties>
             </Component>
-            <Component class="com.sfc.sf2.core.gui.DirectoryButton" name="directoryButtonIncbinPath">
+            <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButtonIncbinPath">
               <Properties>
                 <Property name="labelText" type="java.lang.String" value="incbin folder :"/>
               </Properties>

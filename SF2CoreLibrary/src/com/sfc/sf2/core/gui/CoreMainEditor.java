@@ -109,8 +109,8 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jFrameSettings = new javax.swing.JFrame();
         jPanelSettings = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        directoryButtonBasePath = new com.sfc.sf2.core.gui.DirectoryButton();
-        directoryButtonIncbinPath = new com.sfc.sf2.core.gui.DirectoryButton();
+        directoryButtonBasePath = new com.sfc.sf2.core.gui.controls.DirectoryButton();
+        directoryButtonIncbinPath = new com.sfc.sf2.core.gui.controls.DirectoryButton();
         jRadioThemeLight = new javax.swing.JRadioButton();
         jRadioThemeDark = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
@@ -404,8 +404,8 @@ public class CoreMainEditor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupTheme;
-    private com.sfc.sf2.core.gui.DirectoryButton directoryButtonBasePath;
-    private com.sfc.sf2.core.gui.DirectoryButton directoryButtonIncbinPath;
+    private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButtonBasePath;
+    private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButtonIncbinPath;
     private javax.swing.JFrame jFrameSettings;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
