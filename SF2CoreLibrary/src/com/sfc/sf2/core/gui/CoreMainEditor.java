@@ -128,7 +128,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jMenuItemExit = new javax.swing.JMenuItem();
         jMenuSettings = new javax.swing.JMenu();
         jMenuItemSettings = new javax.swing.JMenuItem();
-        jMenuItemTheme = new javax.swing.JMenuItem();
 
         jFrameSettings.setTitle("Settings");
         jFrameSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -160,11 +159,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
         buttonGroupTheme.add(jRadioThemeLight);
         jRadioThemeLight.setSelected(true);
         jRadioThemeLight.setText("Light");
-        jRadioThemeLight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioThemeLightActionPerformed(evt);
-            }
-        });
 
         buttonGroupTheme.add(jRadioThemeDark);
         jRadioThemeDark.setText("Dark");
@@ -201,11 +195,11 @@ public class CoreMainEditor extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSettingsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -214,7 +208,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
                     .addComponent(jRadioThemeDark)
                     .addComponent(jRadioThemeLight)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(3, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jFrameSettingsLayout = new javax.swing.GroupLayout(jFrameSettings.getContentPane());
@@ -229,9 +223,9 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jFrameSettingsLayout.setVerticalGroup(
             jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameSettingsLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jPanelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(jPanelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -311,14 +305,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
         });
         jMenuSettings.add(jMenuItemSettings);
 
-        jMenuItemTheme.setText("jMenuItemTheme");
-        jMenuItemTheme.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemThemeActionPerformed(evt);
-            }
-        });
-        jMenuSettings.add(jMenuItemTheme);
-
         jMenuBar1.add(jMenuSettings);
 
         setJMenuBar(jMenuBar1);
@@ -347,10 +333,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jFrameSettings.setVisible(true);
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
-    private void jMenuItemThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemThemeActionPerformed
-        
-    }//GEN-LAST:event_jMenuItemThemeActionPerformed
-
     private void jFrameSettingsWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowClosing
         CoreSettings core = SettingsManager.getSettingsStore("core");
         core.setBasePath(directoryButtonBasePath.getDirectoryPath());
@@ -370,10 +352,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
             jRadioThemeDark.setSelected(core.getIsDarkTheme());
         }
     }//GEN-LAST:event_jFrameSettingsWindowOpened
-
-    private void jRadioThemeLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioThemeLightActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioThemeLightActionPerformed
 
     
     /**
@@ -433,7 +411,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemSettings;
-    private javax.swing.JMenuItem jMenuItemTheme;
     private javax.swing.JMenu jMenuSettings;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel15;
