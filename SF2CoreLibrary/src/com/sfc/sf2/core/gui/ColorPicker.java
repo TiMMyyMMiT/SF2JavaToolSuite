@@ -5,9 +5,14 @@
  */
 package com.sfc.sf2.core.gui;
 
+import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.beans.BeanProperty;
-import javax.swing.Icon;
+import java.util.EventListener;
 
 /**
  *
@@ -22,6 +27,14 @@ public class ColorPicker extends javax.swing.JPanel {
      */
     public ColorPicker() {
         initComponents();
+    }
+    
+    public synchronized void addColorChangedListener(ColorChangedListener l) {
+        listenerList.add(ColorChangedListener.class, l);
+    }
+
+    public synchronized void removeColorChangedListener(ColorChangedListener l) {
+        listenerList.remove(ColorChangedListener.class, l);
     }
     
     public String getDialogTitle() {
@@ -77,11 +90,40 @@ public class ColorPicker extends javax.swing.JPanel {
         Color returnCol = jColorChooser.showDialog(this, colorDialogTitle, this.getBackground());
         if (returnCol != null) {
             this.setBackground(returnCol);
+            fireColorChanged();
         }
     }//GEN-LAST:event_formMouseClicked
 
+    @SuppressWarnings("deprecation")
+    protected void fireColorChanged() {
+        // Guaranteed to return a non-null array
+        Object[] listeners = listenerList.getListenerList();
+        int modifiers = 0;
+        AWTEvent currentEvent = EventQueue.getCurrentEvent();
+        modifiers = ((ActionEvent)currentEvent).getModifiers();
+        ActionEvent e =
+            new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Color Changed", EventQueue.getMostRecentEventTime(), modifiers);
+
+        // Process the listeners last to first, notifying
+        // those that are interested in this event
+        for (int i = listeners.length-2; i>=0; i-=2) {
+            if (listeners[i]==ColorChangedListener.class) {
+                ((ColorChangedListener)listeners[i+1]).colorChanged(e);
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JColorChooser jColorChooser;
     // End of variables declaration//GEN-END:variables
+    
+    public interface ColorChangedListener extends EventListener {
+
+        /**
+         * Invoked when an action occurs.
+         * @param e the event to be processed
+         */
+        public void colorChanged(ActionEvent e);
+
+    }
 }
