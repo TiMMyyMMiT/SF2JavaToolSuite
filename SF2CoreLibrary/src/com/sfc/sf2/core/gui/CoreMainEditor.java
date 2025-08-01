@@ -24,7 +24,7 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
 public class CoreMainEditor extends javax.swing.JFrame {
     

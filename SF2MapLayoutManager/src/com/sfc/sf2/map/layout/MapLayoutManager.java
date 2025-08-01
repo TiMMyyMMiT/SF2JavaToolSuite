@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.map.layout;
 
+import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.GraphicsManager;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.io.DisassemblyManager;

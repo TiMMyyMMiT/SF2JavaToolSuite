@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.sfc.sf2.map.layout.DisassemblyException;
+import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.palette.Palette;
 import java.io.File;
 import java.io.FileNotFoundException;

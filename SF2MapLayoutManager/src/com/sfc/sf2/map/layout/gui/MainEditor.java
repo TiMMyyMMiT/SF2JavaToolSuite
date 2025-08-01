@@ -7,7 +7,7 @@ package com.sfc.sf2.map.layout.gui;
 
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.layout.MapBlockLayout;
-import com.sfc.sf2.map.layout.DisassemblyException;
+import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.map.layout.MapLayoutManager;
 import com.sfc.sf2.map.layout.layout.EditableMapLayout;
 import java.awt.Color;
