@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.sfc.sf2.core.gui;
+package com.sfc.sf2.core.gui.controls;
 
 import java.beans.BeanProperty;
 import java.io.File;
@@ -16,12 +16,12 @@ import javax.swing.JTextField;
  *
  * @author TiMMy
  */
-public class FileButton extends javax.swing.JPanel {
+public class DirectoryButton extends javax.swing.JPanel {
         
     /**
      * Creates new form FileButton
      */
-    public FileButton() {
+    public DirectoryButton() {
         initComponents();
     }
     
@@ -34,12 +34,12 @@ public class FileButton extends javax.swing.JPanel {
         jLabelFile.setText(text);
     }
     
-    public String getFilePath() {
+    public String getDirectoryPath() {
         return jTextFieldFile.getText();
     }
     
     @BeanProperty(preferred = true, visualUpdate = true, description = "The default text that will appear in the text field.")
-    public void setFilePath(String path) {
+    public void setDirectoryPath(String path) {
         jTextFieldFile.setText(path);
     }
     
@@ -59,22 +59,24 @@ public class FileButton extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        flatFileViewFileIcon = new com.formdev.flatlaf.icons.FlatFileViewFileIcon();
         jFileChooserFiles = new javax.swing.JFileChooser();
+        flatFileViewDirectoryIcon = new com.formdev.flatlaf.icons.FlatFileViewDirectoryIcon();
         jLabelFile = new javax.swing.JLabel();
         jTextFieldFile = new javax.swing.JTextField();
         jButtonFile = new javax.swing.JButton();
 
+        jFileChooserFiles.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
         setMinimumSize(new java.awt.Dimension(250, 38));
         setPreferredSize(new java.awt.Dimension(400, 38));
 
-        jLabelFile.setText("Filename :");
+        jLabelFile.setText("Path name :");
 
         jTextFieldFile.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         jTextFieldFile.setText("jTextField1");
         jTextFieldFile.setMinimumSize(new java.awt.Dimension(50, 26));
 
-        jButtonFile.setIcon(flatFileViewFileIcon);
+        jButtonFile.setIcon(flatFileViewDirectoryIcon);
         jButtonFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFileActionPerformed(evt);
@@ -89,7 +91,7 @@ public class FileButton extends javax.swing.JPanel {
                 .addGap(0, 0, 0)
                 .addComponent(jLabelFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldFile, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                .addComponent(jTextFieldFile, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonFile)
                 .addGap(0, 0, 0))
@@ -120,7 +122,7 @@ public class FileButton extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.formdev.flatlaf.icons.FlatFileViewFileIcon flatFileViewFileIcon;
+    private com.formdev.flatlaf.icons.FlatFileViewDirectoryIcon flatFileViewDirectoryIcon;
     private javax.swing.JButton jButtonFile;
     private javax.swing.JFileChooser jFileChooserFiles;
     private javax.swing.JLabel jLabelFile;

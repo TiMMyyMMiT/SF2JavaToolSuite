@@ -3,14 +3,12 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.sfc.sf2.core.gui;
+package com.sfc.sf2.core.gui.controls;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.beans.BeanProperty;
 import java.util.EventListener;
 

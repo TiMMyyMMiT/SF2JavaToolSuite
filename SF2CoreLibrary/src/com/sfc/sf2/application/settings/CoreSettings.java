@@ -45,6 +45,14 @@ public class CoreSettings implements AbstractSettings {
         return darkTheme;
     }
     
+    public void setTransparentBGColor(Color transparentBGColor) {
+        this.transparentBGColor = transparentBGColor;
+    }
+    
+    public Color getTransparentBGColor() {
+        return transparentBGColor;
+    }
+    
     public void setIsDarkTheme(boolean darkTheme) {
         this.darkTheme = darkTheme;
     }
