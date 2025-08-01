@@ -50,17 +50,26 @@ public class SettingsManager {
     }
     
     public static void loadSettingsFile() {
+        loadSettings(null);
+    }
+    
+    public static void loadSpecificSettings(String id) {
+        loadSettings(id);
+    }
+    
+    private static void loadSettings(String specificId) {
+        String line = null;
         try {
             File file = new File(SETTINGS_FILE_PATH);
             if (file.exists()) {
                 Scanner scan = new Scanner(file);
-                String line = scan.nextLine();
+                line = scan.nextLine();
                 String storeId = null;
                 HashMap<String, String> data = null;
                 while (scan.hasNext()) {
                     if (line.startsWith("Store_")) {
                         storeId = line.substring(line.indexOf("_")+1).trim();
-                        if (settingsStores.containsKey(storeId)) {
+                        if (settingsStores.containsKey(storeId) && (specificId == null || storeId.equals(specificId))) {
                             data = new HashMap<>();
                             while (scan.hasNext()) {
                                 line = scan.nextLine();
@@ -74,43 +83,48 @@ public class SettingsManager {
                                 }
                             }
                             settingsStores.get(storeId).decodeSettings(data);
+                            if (specificId != null) {
+                                break;
+                            }
                         }
                     }
                 }
                 scan.close();
             } else {
-                for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
-                    entry.getValue().initialiseNewUser();
+                if (specificId == null) {
+                    for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
+                        entry.getValue().initialiseNewUser();
+                    }
+                    saveSettingsFile();
+                } else if (settingsStores.containsKey(specificId)) {
+                    settingsStores.get(specificId).initialiseNewUser();
                 }
-                saveSettingsFile();
             }
         } catch (IOException ex) {
-            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, "Could not load settings file from : " + SETTINGS_FILE_PATH, ex);
         } catch (Exception e) {
-            System.out.println("Error loading settings file. " + e);
+            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, "Error reading settings file. Line : " + line, e);
         }
     }
     
     public static void saveSettingsFile() {
         try {
-                StringBuilder sb = new StringBuilder();
-                for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
-                    sb.append("Store_" + entry.getKey() + "\n");
-                    HashMap<String, String> data = new HashMap<>();
-                    entry.getValue().encodeSettings(data);
-                    for (Map.Entry<String, String> dataItem : data.entrySet()) {
-                        sb.append("\t");
-                        sb.append(dataItem.getKey() + ": " + dataItem.getValue() + "\n");
-                    }
-                    sb.append("\n");
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
+                sb.append("Store_" + entry.getKey() + "\n");
+                HashMap<String, String> data = new HashMap<>();
+                entry.getValue().encodeSettings(data);
+                for (Map.Entry<String, String> dataItem : data.entrySet()) {
+                    sb.append("\t");
+                    sb.append(dataItem.getKey() + ": " + dataItem.getValue() + "\n");
                 }
-                Path filepath = Paths.get(SETTINGS_FILE_PATH);                
-                Files.write(filepath, sb.toString().getBytes());
-                Files.setAttribute(filepath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
-        } catch (IOException ex) {
-            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (Exception e) {
-            System.out.println("Error saving settings file. " + e);
+                sb.append("\n");
+            }
+            Path filepath = Paths.get(SETTINGS_FILE_PATH);                
+            Files.write(filepath, sb.toString().getBytes());
+            Files.setAttribute(filepath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
+        } catch (Exception ex) {
+            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, "Could not save settings file to : " + SETTINGS_FILE_PATH, ex);
         }
     }
 }

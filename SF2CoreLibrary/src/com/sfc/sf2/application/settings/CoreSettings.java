@@ -6,7 +6,6 @@
 package com.sfc.sf2.application.settings;
 
 import com.sfc.sf2.helpers.PathHelpers;
-import java.awt.Color;
 import java.util.HashMap;
 
 /**
@@ -15,10 +14,10 @@ import java.util.HashMap;
  */
 public class CoreSettings implements AbstractSettings {
 
-    String basePath = null;
-    String incbinPath = null;
+    private String basePath = null;
+    private String incbinPath = null;
     
-    Color layoutBackgroundColor;
+    private boolean darkTheme = false;
         
     public String getBasePath() {
         return basePath;
@@ -40,12 +39,12 @@ public class CoreSettings implements AbstractSettings {
         return basePath != null;
     }
     
-    public Color getLayoutBackgroundColor() {
-        return layoutBackgroundColor;
+    public boolean getIsDarkTheme() {
+        return darkTheme;
     }
     
-    public void setLayoutBackgroundColor(Color LayoutBackgroundColor) {
-        this.layoutBackgroundColor = LayoutBackgroundColor;
+    public void setIsDarkTheme(boolean darkTheme) {
+        this.darkTheme = darkTheme;
     }
 
     @Override
@@ -58,7 +57,7 @@ public class CoreSettings implements AbstractSettings {
         } else {    //A dev build?
             basePath = incbinPath = null;
         }
-        layoutBackgroundColor = new Color(200, 200, 200);
+        darkTheme = false;
     }
     
     @Override
@@ -69,8 +68,8 @@ public class CoreSettings implements AbstractSettings {
         if (data.containsKey("incbinPath")) {
             incbinPath = data.get("incbinPath");
         }
-        if (data.containsKey("layoutBackgroundColor")) {
-            layoutBackgroundColor = new Color(Integer.parseInt(data.get("layoutBackgroundColor"), 16));
+        if (data.containsKey("darkTheme")) {
+            darkTheme = Boolean.parseBoolean(data.get("darkTheme"));
         }
     }
 
@@ -80,6 +79,6 @@ public class CoreSettings implements AbstractSettings {
             data.put("basePath", basePath);
             data.put("incbinPath", incbinPath);
         }
-        data.put("layoutBackgroundColor", Integer.toString(layoutBackgroundColor.getRGB(), 16));
+        data.put("darkTheme", Boolean.toString(darkTheme));
     }
 }

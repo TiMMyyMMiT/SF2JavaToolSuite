@@ -6,6 +6,7 @@
 package com.sfc.sf2.core.gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
@@ -14,13 +15,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
@@ -28,12 +26,12 @@ import javax.swing.UIManager;
  *
  * @author wiz
  */
-public class MainEditor extends javax.swing.JFrame {
+public class CoreMainEditor extends javax.swing.JFrame {
     
     /**
      * Creates new form New Application
      */
-    public MainEditor() {
+    public CoreMainEditor() {
         initComponents();
         initApp();
         initEditor();
@@ -44,10 +42,10 @@ public class MainEditor extends javax.swing.JFrame {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%2$s - %5$s%6$s%n");
         initLogger("com.sfc.sf2.graphics", Level.FINEST);
         try {
-            File workingDirectory = new File(MainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
+            File workingDirectory = new File(CoreMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
             System.setProperty("user.dir", workingDirectory.toString());
         } catch (URISyntaxException ex) {
-            System.getLogger(MainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(CoreMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         SettingsManager.loadSettingsFile();
         
@@ -57,8 +55,6 @@ public class MainEditor extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 CoreSettings core = SettingsManager.getSettingsStore("core");
                 if (!core.arePathsSet()) {
-                    jTextFieldBaseFolder.setText(PathHelpers.getApplicationpath().toString());
-                    jTextFieldIncbinFolder.setText(PathHelpers.getApplicationpath().toString());
                     jFrameSettings.setVisible(true);
                 }
             }
@@ -80,24 +76,6 @@ public class MainEditor extends javax.swing.JFrame {
         ConsoleHandler ch = new ConsoleHandler();
         ch.setLevel(level);        
         log.addHandler(ch);
-    }
-    
-    protected void openFileChooser(JTextField textField) {
-        jFileChooserFiles.setCurrentDirectory(Path.of(textField.getText()).toFile());
-        int returnVal = jFileChooserFiles.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooserFiles.getSelectedFile();
-            textField.setText(file.getAbsolutePath());
-        }
-    }
-    
-    protected void openDirectoryChooser(JTextField textField) {
-        jFileChooserDirectories.setCurrentDirectory(Path.of(textField.getText()).toFile());
-        int returnVal = jFileChooserDirectories.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooserDirectories.getSelectedFile();
-            textField.setText(file.getAbsolutePath());
-        }
     }
     
     protected void initEditor() {
@@ -128,21 +106,17 @@ public class MainEditor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooserFiles = new javax.swing.JFileChooser();
-        jFileChooserDirectories = new javax.swing.JFileChooser();
-        jColorChooser1 = new javax.swing.JColorChooser();
         jFrameSettings = new javax.swing.JFrame();
-        jPanel1 = new javax.swing.JPanel();
-        jButtonBaseFolder = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jTextFieldIncbinFolder = new javax.swing.JTextField();
-        jTextFieldBaseFolder = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jButtonIncbinFolder = new javax.swing.JButton();
+        jPanelSettings = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        flatSearchIcon1 = new com.formdev.flatlaf.icons.FlatSearchIcon();
-        flatFileViewFileIcon1 = new com.formdev.flatlaf.icons.FlatFileViewFileIcon();
+        directoryButtonBasePath = new com.sfc.sf2.core.gui.DirectoryButton();
+        directoryButtonIncbinPath = new com.sfc.sf2.core.gui.DirectoryButton();
+        jRadioThemeLight = new javax.swing.JRadioButton();
+        jRadioThemeDark = new javax.swing.JRadioButton();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
+        buttonGroupTheme = new javax.swing.ButtonGroup();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -154,94 +128,93 @@ public class MainEditor extends javax.swing.JFrame {
         jMenuItemExit = new javax.swing.JMenuItem();
         jMenuSettings = new javax.swing.JMenu();
         jMenuItemSettings = new javax.swing.JMenuItem();
-
-        jFileChooserDirectories.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jMenuItemTheme = new javax.swing.JMenuItem();
 
         jFrameSettings.setTitle("Settings");
         jFrameSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jFrameSettings.setLocationByPlatform(true);
         jFrameSettings.setMinimumSize(new java.awt.Dimension(500, 200));
         jFrameSettings.setName("Frame Settings"); // NOI18N
-        jFrameSettings.setPreferredSize(new java.awt.Dimension(500, 250));
         jFrameSettings.setResizable(false);
         jFrameSettings.setSize(new java.awt.Dimension(500, 250));
         jFrameSettings.setType(java.awt.Window.Type.POPUP);
-
-        jPanel1.setMinimumSize(new java.awt.Dimension(400, 200));
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 200));
-
-        jButtonBaseFolder.setIcon(flatFileViewFileIcon1);
-        jButtonBaseFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBaseFolderActionPerformed(evt);
+        jFrameSettings.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                jFrameSettingsWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                jFrameSettingsWindowOpened(evt);
             }
         });
 
-        jLabel2.setText("Incbin folder :");
-
-        jTextFieldIncbinFolder.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextFieldIncbinFolder.setText("jTextField1");
-
-        jTextFieldBaseFolder.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextFieldBaseFolder.setText("jTextField1");
-
-        jLabel1.setText("Base folder :");
-
-        jButtonIncbinFolder.setIcon(flatFileViewFileIcon1);
-        jButtonIncbinFolder.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonIncbinFolderActionPerformed(evt);
-            }
-        });
+        jPanelSettings.setMinimumSize(new java.awt.Dimension(400, 200));
+        jPanelSettings.setPreferredSize(new java.awt.Dimension(400, 200));
 
         jLabel3.setText("Base folder is where the .jar file is expected to be run from");
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jLabel4.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)</html>");
-        jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jLabel4.setMinimumSize(new java.awt.Dimension(111, 32));
+        directoryButtonBasePath.setLabelText("Base folder :");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        directoryButtonIncbinPath.setLabelText("incbin folder :");
+
+        buttonGroupTheme.add(jRadioThemeLight);
+        jRadioThemeLight.setSelected(true);
+        jRadioThemeLight.setText("Light");
+        jRadioThemeLight.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioThemeLightActionPerformed(evt);
+            }
+        });
+
+        buttonGroupTheme.add(jRadioThemeDark);
+        jRadioThemeDark.setText("Dark");
+
+        jLabel6.setText("<html>Theme <i>(Requires restart)</i>  :</html>");
+
+        jLabel7.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)</html>");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel7.setMinimumSize(new java.awt.Dimension(111, 32));
+
+        javax.swing.GroupLayout jPanelSettingsLayout = new javax.swing.GroupLayout(jPanelSettings);
+        jPanelSettings.setLayout(jPanelSettingsLayout);
+        jPanelSettingsLayout.setHorizontalGroup(
+            jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSettingsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                    .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addGroup(jPanelSettingsLayout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldIncbinFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldBaseFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonBaseFolder)
-                            .addComponent(jButtonIncbinFolder)))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                        .addComponent(jRadioThemeLight)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioThemeDark)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextFieldBaseFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonBaseFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanelSettingsLayout.setVerticalGroup(
+            jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSettingsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jButtonIncbinFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldIncbinFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jRadioThemeDark)
+                    .addComponent(jRadioThemeLight)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(3, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jFrameSettingsLayout = new javax.swing.GroupLayout(jFrameSettings.getContentPane());
@@ -249,16 +222,16 @@ public class MainEditor extends javax.swing.JFrame {
         jFrameSettingsLayout.setHorizontalGroup(
             jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameSettingsLayout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addComponent(jPanelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jFrameSettingsLayout.setVerticalGroup(
             jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameSettingsLayout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addComponent(jPanelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -338,6 +311,14 @@ public class MainEditor extends javax.swing.JFrame {
         });
         jMenuSettings.add(jMenuItemSettings);
 
+        jMenuItemTheme.setText("jMenuItemTheme");
+        jMenuItemTheme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemThemeActionPerformed(evt);
+            }
+        });
+        jMenuSettings.add(jMenuItemTheme);
+
         jMenuBar1.add(jMenuSettings);
 
         setJMenuBar(jMenuBar1);
@@ -363,19 +344,36 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        CoreSettings core = SettingsManager.getSettingsStore("core");
-        jTextFieldBaseFolder.setText(core.getBasePath());
-        jTextFieldIncbinFolder.setText(core.getIncbinPath());
         jFrameSettings.setVisible(true);
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
-    private void jButtonIncbinFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncbinFolderActionPerformed
-        openDirectoryChooser(jTextFieldIncbinFolder);
-    }//GEN-LAST:event_jButtonIncbinFolderActionPerformed
+    private void jMenuItemThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemThemeActionPerformed
+        
+    }//GEN-LAST:event_jMenuItemThemeActionPerformed
 
-    private void jButtonBaseFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBaseFolderActionPerformed
-        openDirectoryChooser(jTextFieldBaseFolder);
-    }//GEN-LAST:event_jButtonBaseFolderActionPerformed
+    private void jFrameSettingsWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowClosing
+        CoreSettings core = SettingsManager.getSettingsStore("core");
+        core.setBasePath(directoryButtonBasePath.getDirectoryPath());
+        core.setIncbinPath(directoryButtonBasePath.getDirectoryPath());
+        core.setIsDarkTheme(jRadioThemeDark.isSelected());
+        SettingsManager.saveSettingsFile();
+    }//GEN-LAST:event_jFrameSettingsWindowClosing
+
+    private void jFrameSettingsWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowOpened
+        jFrameSettings.setLocationRelativeTo(this);
+        jFrameSettings.setSize(jFrameSettings.getPreferredSize());
+        CoreSettings core = SettingsManager.getSettingsStore("core");
+        if (!core.arePathsSet()) {
+            directoryButtonBasePath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
+            directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
+            jRadioThemeLight.setSelected(!core.getIsDarkTheme());
+            jRadioThemeDark.setSelected(core.getIsDarkTheme());
+        }
+    }//GEN-LAST:event_jFrameSettingsWindowOpened
+
+    private void jRadioThemeLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioThemeLightActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioThemeLightActionPerformed
 
     
     /**
@@ -388,21 +386,25 @@ public class MainEditor extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            FlatDarkLaf.setup();
-            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }*/
+            //Have to load core settings first to check theme                                     
+            SettingsManager.loadSettingsFile();
+            CoreSettings core = SettingsManager.getSettingsStore("core");
+            if (core.getIsDarkTheme())
+                FlatDarkLaf.setup();
+            else
+                FlatLightLaf.setup();
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(MainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CoreMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, "FlatLaf theme could not be loaded. Loading default theme instead", ex);
             try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex1) {
-                java.util.logging.Logger.getLogger(MainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(CoreMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -414,38 +416,35 @@ public class MainEditor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainEditor().setVisible(true);
+                new CoreMainEditor().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.formdev.flatlaf.icons.FlatFileViewFileIcon flatFileViewFileIcon1;
-    private com.formdev.flatlaf.icons.FlatSearchIcon flatSearchIcon1;
-    private javax.swing.JButton jButtonBaseFolder;
-    private javax.swing.JButton jButtonIncbinFolder;
-    private javax.swing.JColorChooser jColorChooser1;
-    private javax.swing.JFileChooser jFileChooserDirectories;
-    private javax.swing.JFileChooser jFileChooserFiles;
+    private javax.swing.ButtonGroup buttonGroupTheme;
+    private com.sfc.sf2.core.gui.DirectoryButton directoryButtonBasePath;
+    private com.sfc.sf2.core.gui.DirectoryButton directoryButtonIncbinPath;
     private javax.swing.JFrame jFrameSettings;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemSettings;
+    private javax.swing.JMenuItem jMenuItemTheme;
     private javax.swing.JMenu jMenuSettings;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanelSettings;
+    private javax.swing.JRadioButton jRadioThemeDark;
+    private javax.swing.JRadioButton jRadioThemeLight;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTextArea jTextAreaConsole;
-    private javax.swing.JTextField jTextFieldBaseFolder;
-    private javax.swing.JTextField jTextFieldIncbinFolder;
     // End of variables declaration//GEN-END:variables
 
 }
