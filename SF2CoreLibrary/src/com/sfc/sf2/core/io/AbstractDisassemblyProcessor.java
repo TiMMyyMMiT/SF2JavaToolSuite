@@ -16,8 +16,8 @@ import java.util.logging.Logger;
  * @param <TType> The type of data being loaded
  * @param <TPackage> The input data required to load the TType
  */
-public abstract class AbstractDisassemblyManager<TType extends Object, TPackage extends Object> {
-    private static final Logger LOG = Logger.getLogger(AbstractDisassemblyManager.class.getName());
+public abstract class AbstractDisassemblyProcessor<TType extends Object, TPackage extends Object> {
+    private static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
     
     public TType importDisassembly(Path filePath, TPackage pckg) {
         LOG.entering(LOG.getName(), "importDisassembly : " + filePath);
@@ -36,11 +36,11 @@ public abstract class AbstractDisassemblyManager<TType extends Object, TPackage 
     
     protected abstract TType parseDisassemblyData(byte[] data, TPackage pckg) throws DisassemblyException;
     
-    public boolean exportDisassembly(Path filePath, TType item) {
+    public boolean exportDisassembly(Path filePath, TType item, TPackage pckg) {
         LOG.entering(LOG.getName(), "exportDisassembly : " + filePath);
         boolean error = false;
         try {
-            byte[] disasmData = packageDisassemblyData(item);
+            byte[] disasmData = packageDisassemblyData(item, pckg);
             Files.write(filePath, disasmData);
             
         } catch (Exception e) {
@@ -51,5 +51,5 @@ public abstract class AbstractDisassemblyManager<TType extends Object, TPackage 
         return error;
     }
 
-    protected abstract byte[] packageDisassemblyData(TType item) throws DisassemblyException;
+    protected abstract byte[] packageDisassemblyData(TType item, TPackage pckg) throws DisassemblyException;
 }

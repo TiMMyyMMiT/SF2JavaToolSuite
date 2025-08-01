@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.core.io;
 
+import com.sfc.sf2.helpers.PathHelpers;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
@@ -22,32 +23,18 @@ import javax.imageio.ImageIO;
  * @param <TType> The type of data being loaded
  * @param <TPackage> The input data required to load the TType
  */
-public abstract class AbstractRawImageManager<TType extends Object, TPackage extends Object> {
-    private static final Logger LOG = Logger.getLogger(AbstractDisassemblyManager.class.getName());
+public abstract class AbstractRawImageProcessor<TType extends Object, TPackage extends Object> {
+    private static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
     
     public enum FileFormat {
+        UNKNOWN,
         PNG,
         GIF,
     }
     
-    public static String GetFileExtensionString(FileFormat fileFormat) {
-        return "."+GetFileExtensionName(fileFormat);
-    }
-    
-    public static String GetFileExtensionName(FileFormat fileFormat) {
-        switch (fileFormat) {
-            case PNG:
-                return "png";
-            case GIF:
-                return "gif";
-            default:
-                LOG.throwing(LOG.getName(),"UNKNOWN FILE FORMAT", new IOException());
-                return "png";
-        }
-    }
-    
-    public TType importRawImage(Path filePath, TPackage pckg, FileFormat fileFormat) {
-        LOG.entering(LOG.getName(), "importRawImage : " + filePath);
+    public TType importRawImage(Path filePath, TPackage pckg) {
+        FileFormat fileFormat = fileExtensionToFormat(filePath);
+        LOG.entering(LOG.getName(), "importRawImage : " + filePath + ". Format : " + fileFormat);
         TType item = null;
         try {
             BufferedImage image = ImageIO.read(filePath.toFile());
@@ -69,11 +56,12 @@ public abstract class AbstractRawImageManager<TType extends Object, TPackage ext
     
     protected abstract TType parseImageData(WritableRaster raster, IndexColorModel icm, TPackage pckg) throws DisassemblyException;
     
-    public boolean exportRawImage(Path filePath, TType item, FileFormat fileFormat) {
-        LOG.entering(LOG.getName(), "exportRawImage : " + filePath);
+    public boolean exportRawImage(Path filePath, TType item, TPackage pckg) {
+        FileFormat fileFormat = fileExtensionToFormat(filePath);
+        LOG.entering(LOG.getName(), "exportRawImage : " + filePath + ". Format : " + fileFormat);
         boolean error = false;
         try {
-            BufferedImage image = packageImageData(item);
+            BufferedImage image = packageImageData(item, pckg);
             File outputfile = filePath.toFile();
             ImageIO.write(image, GetFileExtensionString(fileFormat), outputfile);
             
@@ -85,5 +73,36 @@ public abstract class AbstractRawImageManager<TType extends Object, TPackage ext
         return error;
     }
 
-    protected abstract BufferedImage packageImageData(TType item) throws DisassemblyException;
+    protected abstract BufferedImage packageImageData(TType item, TPackage pckg) throws DisassemblyException;
+    
+    
+    public static String GetFileExtensionString(FileFormat fileFormat) {
+        return "."+GetFileExtensionName(fileFormat);
+    }
+    
+    public static String GetFileExtensionName(FileFormat fileFormat) {
+        switch (fileFormat) {
+            case PNG:
+                return "png";
+            case GIF:
+                return "gif";
+            default:
+                LOG.throwing(LOG.getName(),"UNKNOWN FILE FORMAT", new IOException());
+                return "unkn";
+        }
+    }
+    
+    public static FileFormat fileExtensionToFormat(Path filePath) {
+        String extension = PathHelpers.extensionFromPath(filePath);
+        switch (extension) {
+            case "png":
+            case ".png":
+                return FileFormat.PNG;
+            case "gif":
+            case ".gif":
+                return FileFormat.GIF;
+            default:
+                return FileFormat.UNKNOWN;
+        }
+    }
 }

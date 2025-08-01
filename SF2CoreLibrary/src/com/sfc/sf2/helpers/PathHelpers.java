@@ -28,4 +28,24 @@ public class PathHelpers {
     public static Path getIncbinPath() {
         return Path.of(coreSettings.getIncbinPath());
     }
+    
+    public static String filenameFromPath(Path path) {
+        String name = path.getFileName().toString();
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex == -1) {
+            return name;
+        } else {
+            return name.substring(0, dotIndex+1);
+        }
+    }
+    
+    public static String extensionFromPath(Path path) {
+        String name = path.getFileName().toString();
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex == -1) {
+            return "";
+        } else {
+            return name.substring(dotIndex+1);
+        }
+    }
 }

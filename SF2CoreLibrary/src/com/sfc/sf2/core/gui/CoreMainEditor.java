@@ -10,8 +10,6 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
@@ -19,7 +17,6 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextArea;
-import javax.swing.Timer;
 import javax.swing.UIManager;
 
 /**
@@ -27,7 +24,7 @@ import javax.swing.UIManager;
  * @author TiMMy
  */
 public class CoreMainEditor extends javax.swing.JFrame {
-    
+        
     /**
      * Creates new form New Application
      */
@@ -37,39 +34,28 @@ public class CoreMainEditor extends javax.swing.JFrame {
         initEditor();
     }
     
-    protected void initApp() {
+    private void initApp() {
         initConsole(jTextAreaConsole);
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%2$s - %5$s%6$s%n");
         initLogger("com.sfc.sf2.graphics", Level.FINEST);
-        try {
-            File workingDirectory = new File(CoreMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-            System.setProperty("user.dir", workingDirectory.toString());
-        } catch (URISyntaxException ex) {
-            System.getLogger(CoreMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
         SettingsManager.loadSettingsFile();
         
         //Check if settings panel should be shown
-        Timer timer = new Timer(250, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CoreSettings core = SettingsManager.getSettingsStore("core");
-                if (!core.arePathsSet()) {
-                    jFrameSettings.setVisible(true);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            CoreSettings core = SettingsManager.getSettingsStore("core");
+            if (!core.arePathsSet()) {
+                jFrameSettings.setVisible(true);
             }
         });
-        timer.setRepeats(false);
-        timer.start();
     }
     
-    private static void initConsole(JTextArea textArea){
+    private void initConsole(JTextArea textArea) {
         PrintStream con=new PrintStream(new TextAreaOutputStream(textArea));
         System.setOut(con);
         System.setErr(con);
     }
     
-    private void initLogger(String name, Level level){
+    private void initLogger(String name, Level level) {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%2$s - %5$s%6$s%n");
         Logger log = Logger.getLogger(name);
         log.setUseParentHandlers(false);
         log.setLevel(level);
@@ -89,6 +75,8 @@ public class CoreMainEditor extends javax.swing.JFrame {
         //TODO define a default layout class (or support multiple in the main editor
         //defaultLayout.setTilesPerRow(tileWidth);
         //defaultLayout.setTiles(tiles);
+        
+        repaintEditorLayout();
     }
     
     protected void repaintEditorLayout() {
@@ -355,12 +343,28 @@ public class CoreMainEditor extends javax.swing.JFrame {
             directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
         }
     }//GEN-LAST:event_jFrameSettingsWindowOpened
-
     
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        CoreMainEditor.programSetup();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CoreMainEditor().setVisible(true);
+            }
+        });
+    }
+    
+    public static void programSetup() {
+        try {
+            File workingDirectory = new File(CoreMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
+            System.setProperty("user.dir", workingDirectory.toString());
+        } catch (URISyntaxException ex) {
+            System.getLogger(CoreMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        SettingsManager.loadSettingsFile();
+        
         /* Set the Windows look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Windows is not available, stay with the default look and feel.
@@ -368,7 +372,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
          */
         try {
             //Have to load core settings first to check theme                                     
-            SettingsManager.loadSettingsFile();
             CoreSettings core = SettingsManager.getSettingsStore("core");
             if (core.getIsDarkTheme())
                 FlatDarkLaf.setup();
@@ -393,15 +396,8 @@ public class CoreMainEditor extends javax.swing.JFrame {
         
         //</editor-fold>
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CoreMainEditor().setVisible(true);
-            }
-        });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupTheme;
     private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButtonBasePath;

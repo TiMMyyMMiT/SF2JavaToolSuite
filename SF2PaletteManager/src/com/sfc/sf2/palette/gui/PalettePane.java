@@ -82,7 +82,7 @@ public class PalettePane extends JPanel {
         }
    }
    
-   public Palette getUpdatedColors() {
+   public Palette getUpdatedPalette() {
        Color[] colors = palette.getColors();
        for(int i=0;i<currentColorPanes.length;i++){
            colors[i] = currentColorPanes[i].getCurrentColor();
