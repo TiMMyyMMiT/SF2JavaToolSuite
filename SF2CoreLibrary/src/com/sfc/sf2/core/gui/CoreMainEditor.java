@@ -336,7 +336,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
     private void jFrameSettingsWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowClosing
         CoreSettings core = SettingsManager.getSettingsStore("core");
         core.setBasePath(directoryButtonBasePath.getDirectoryPath());
-        core.setIncbinPath(directoryButtonBasePath.getDirectoryPath());
+        core.setIncbinPath(directoryButtonIncbinPath.getDirectoryPath());
         core.setIsDarkTheme(jRadioThemeDark.isSelected());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_jFrameSettingsWindowClosing
@@ -345,11 +345,14 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jFrameSettings.setLocationRelativeTo(this);
         jFrameSettings.setSize(jFrameSettings.getPreferredSize());
         CoreSettings core = SettingsManager.getSettingsStore("core");
-        if (!core.arePathsSet()) {
-            directoryButtonBasePath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
-            directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
+        if (core.arePathsSet()) {
+            directoryButtonBasePath.setDirectoryPath(core.getBasePath());
+            directoryButtonIncbinPath.setDirectoryPath(core.getIncbinPath());
             jRadioThemeLight.setSelected(!core.getIsDarkTheme());
             jRadioThemeDark.setSelected(core.getIsDarkTheme());
+        } else {
+            directoryButtonBasePath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
+            directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
         }
     }//GEN-LAST:event_jFrameSettingsWindowOpened
 

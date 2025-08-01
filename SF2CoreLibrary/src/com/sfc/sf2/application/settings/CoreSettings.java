@@ -6,6 +6,7 @@
 package com.sfc.sf2.application.settings;
 
 import com.sfc.sf2.helpers.PathHelpers;
+import java.awt.Color;
 import java.util.HashMap;
 
 /**
@@ -18,6 +19,7 @@ public class CoreSettings implements AbstractSettings {
     private String incbinPath = null;
     
     private boolean darkTheme = false;
+    private Color transparentBGColor = new Color(200, 0, 200);
         
     public String getBasePath() {
         return basePath;
@@ -36,7 +38,7 @@ public class CoreSettings implements AbstractSettings {
     }
     
     public boolean arePathsSet() {
-        return basePath != null;
+        return basePath != null && basePath.length() > 0;
     }
     
     public boolean getIsDarkTheme() {
@@ -58,6 +60,7 @@ public class CoreSettings implements AbstractSettings {
             basePath = incbinPath = null;
         }
         darkTheme = false;
+        transparentBGColor = new Color(200, 0, 200);
     }
     
     @Override
@@ -71,6 +74,10 @@ public class CoreSettings implements AbstractSettings {
         if (data.containsKey("darkTheme")) {
             darkTheme = Boolean.parseBoolean(data.get("darkTheme"));
         }
+        if (data.containsKey("transparentBGColor")) {
+            String[] colorSplit = data.get("transparentBGColor").split(",");
+            transparentBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
+        }
     }
 
     @Override
@@ -80,5 +87,6 @@ public class CoreSettings implements AbstractSettings {
             data.put("incbinPath", incbinPath);
         }
         data.put("darkTheme", Boolean.toString(darkTheme));
+        data.put("transparentBGColor", String.format("%d, %d, %d", transparentBGColor.getRed(), transparentBGColor.getGreen(), transparentBGColor.getBlue()));
     }
 }

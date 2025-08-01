@@ -76,9 +76,13 @@ public class SettingsManager {
                                 if (line.startsWith("Store_")) {
                                     break;
                                 } else {
-                                    String[] split = line.split(":");
-                                    if (split.length > 1) {
-                                        data.put(split[0].trim(), split[1].trim());
+                                    int marker = line.indexOf(':');
+                                    if (marker >= 0) {
+                                        String id = line.substring(0, marker).trim();
+                                        String dataItem = line.substring(marker+1).trim();
+                                        data.put(id, dataItem);
+                                    } else {
+                                        throw new Exception("Settings file corrupted. Line : " + line);
                                     }
                                 }
                             }
