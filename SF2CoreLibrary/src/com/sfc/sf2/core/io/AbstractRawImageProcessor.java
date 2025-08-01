@@ -24,7 +24,7 @@ import javax.imageio.ImageIO;
  * @param <TPackage> The input data required to load the TType
  */
 public abstract class AbstractRawImageProcessor<TType extends Object, TPackage extends Object> {
-    private static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
+    protected static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
     
     public enum FileFormat {
         UNKNOWN,

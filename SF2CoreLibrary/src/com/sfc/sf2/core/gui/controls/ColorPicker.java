@@ -5,10 +5,13 @@
  */
 package com.sfc.sf2.core.gui.controls;
 
+import com.sfc.sf2.helpers.GraphicsHelpers;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.beans.BeanProperty;
 import java.util.EventListener;
 
@@ -18,7 +21,7 @@ import java.util.EventListener;
  */
 public class ColorPicker extends javax.swing.JPanel {
 
-    String colorDialogTitle;
+    String colorDialogTitle = "BG Color";
     
     /**
      * Creates new form ColorPicker
@@ -51,6 +54,13 @@ public class ColorPicker extends javax.swing.JPanel {
     @BeanProperty(preferred = true, visualUpdate = true, description = "The default color of the picker.")
     public void setColor(Color color) {
         this.setBackground(color);
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        BufferedImage bg = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        GraphicsHelpers.drawBackgroundTransparencyPattern(bg, getColor());
     }
 
     /**

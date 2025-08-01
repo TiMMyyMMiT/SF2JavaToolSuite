@@ -45,7 +45,8 @@ public class Tile extends JPanel {
 
     public void setId(int id) {
         this.id = id;
-    }    
+    }
+    
     public Palette getPalette() {
         return palette;
     }

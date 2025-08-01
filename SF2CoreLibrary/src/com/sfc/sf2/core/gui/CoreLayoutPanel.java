@@ -48,17 +48,23 @@ public abstract class CoreLayoutPanel extends JPanel {
     
     public BufferedImage buildImage(){
         if (redraw) {
+            //Setup image
             Dimension imageSize = calculateImageSize();
             currentImage = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();
+            //Render BG color
             GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor);
+            //Render main image
+            renderCounter++;
+            System.getLogger(CoreLayoutPanel.class.getName()).log(System.Logger.Level.ALL, "render " + renderCounter);
             currentImage = buildImage(currentImage);
             graphics.dispose();
+            //Resize
             currentImage = resize(currentImage);
             setSize(currentImage.getWidth(), currentImage.getHeight());
+            //DrawGrid
             if (showGrid) { drawGrid(currentImage); }
             getParent().revalidate();
-            getParent().repaint();
                 
             redraw = false;
         }
@@ -67,11 +73,7 @@ public abstract class CoreLayoutPanel extends JPanel {
     
     protected abstract Dimension calculateImageSize();
     
-    protected BufferedImage buildImage(BufferedImage image) {
-        renderCounter++;
-        System.getLogger(CoreLayoutPanel.class.getName()).log(System.Logger.Level.ALL, "render " + renderCounter);
-        return currentImage;
-    }
+    protected abstract BufferedImage buildImage(BufferedImage image);
     
     protected void setGridDimensions(int gridW, int gridH) {
         setGridDimensions(gridW, gridH, -1, -1);
@@ -119,11 +121,11 @@ public abstract class CoreLayoutPanel extends JPanel {
         this.tilesPerRow = tilesPerRow;
     }
 
-    public int getCurrentDisplayScale() {
+    public int getDisplayScale() {
         return displayScale;
     }
 
-    public void setCurrentDisplayScale(int displayScale) {
+    public void setDisplayScale(int displayScale) {
         this.displayScale = displayScale;
         redraw = true;
     }
@@ -137,8 +139,8 @@ public abstract class CoreLayoutPanel extends JPanel {
         redraw = true;
     }
 
-    public void setRedraw(boolean redraw) {
-        this.redraw = redraw;
+    public void redraw() {
+        this.redraw = true;
     }
 
     public boolean isShowGrid() {

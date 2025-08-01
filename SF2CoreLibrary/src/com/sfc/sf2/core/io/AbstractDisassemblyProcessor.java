@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * @param <TPackage> The input data required to load the TType
  */
 public abstract class AbstractDisassemblyProcessor<TType extends Object, TPackage extends Object> {
-    private static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
+    protected static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
     
     public TType importDisassembly(Path filePath, TPackage pckg) {
         LOG.entering(LOG.getName(), "importDisassembly : " + filePath);

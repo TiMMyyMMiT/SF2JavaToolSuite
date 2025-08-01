@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.graphics.compressed;
+package com.sfc.sf2.graphics.compression;
 
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.graphics.uncompressed.*;
+import com.sfc.sf2.helpers.BinaryHelpers;
 import com.sfc.sf2.palette.Palette;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,15 +14,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author wiz
  */
-public class StackGraphicsDecoder {
-
-    private static final Logger LOG = Logger.getLogger(StackGraphicsDecoder.class.getName());
+public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
+    private static final int MAX_COPY_OFFSET = 2047;
     
     private byte[] inputData;
     private short inputWord = 0;
@@ -32,7 +30,11 @@ public class StackGraphicsDecoder {
     
     private List<Integer> historyStack = new ArrayList<Integer>(Arrays.asList(new Integer[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}));
     
-    public Tile[] decodeStackGraphics(byte[] input, Palette palette){
+    private static final List<String> historyBitStrings = new ArrayList<String>(Arrays.asList(
+            new String[] {"00","01","100","101","110","11100","11101","11110","1111100","1111101","1111110","111111100","111111101","111111110","1111111110","1111111111"}));
+        
+    @Override
+    public Tile[] decode(byte[] input, Palette palette) {
         LOG.entering(LOG.getName(),"decodeStackGraphics");
         LOG.fine("Data length = " + input.length + " bytes.");
         this.inputData = input;
@@ -64,7 +66,7 @@ public class StackGraphicsDecoder {
                         /* command 0 : word value built from four 4-bit values taken from history stack */
                         value = getWordValue();
                         LOG.log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
-                        writeWord(value);
+                        BinaryHelpers.setWord(value,output);
                     }else{
                         /* command 1 : section copy */
                         copyOffset = getCopyOffset();
@@ -90,27 +92,18 @@ public class StackGraphicsDecoder {
             for(int i=0;i<bytes.length;i++){
                 bytes[i] = output.get(i);
             }
-            tiles = UncompressedGraphicsDecoder.decodeUncompressedGraphics(bytes, palette);
+            tiles = new UncompressedGraphicsDecoder().decode(bytes, palette);
         }
         LOG.exiting(LOG.getName(),"decodeStackGraphics");
         return tiles;
-    }  
-    
-    private static short getNextWord(byte[] data, int cursor){
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        bb.put(data[cursor+1]);
-        bb.put(data[cursor]);
-        short s = bb.getShort(0);
-        return s;
-    }    
+    }
     
     private int getNextBit(){
         int bit = 0;
         if(inputBitCursor>=16){
             inputBitCursor = 0;
             inputCursor+=2;
-            inputWord = getNextWord(inputData, inputCursor);
+            inputWord = BinaryHelpers.getWord(inputData, inputCursor);
         } 
         bit = (inputWord>>(15-inputBitCursor)) & 1;
         inputBitCursor++;
@@ -279,23 +272,184 @@ public class StackGraphicsDecoder {
         }
         return length;
     }
-    
-    private void writeWord(short word){
-        byte firstByte = (byte)((word>>8)&0xFF);
-        byte secondByte = (byte)(word&0xFF);
-        output.add(firstByte);
-        output.add(secondByte);
+
+    @Override
+    public byte[] encode(Tile[] tiles) {
+        LOG.entering(LOG.getName(),"encode");
+        List<Integer> historyStack = new ArrayList<Integer>(Arrays.asList(new Integer[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}));
+        StringBuilder outputSb = new StringBuilder();
+        StringBuilder commandSb = new StringBuilder(16);
+        StringBuilder dataSb = new StringBuilder();
+        byte[] inputData = new UncompressedGraphicsDecoder().encode(tiles);
+        LOG.fine("input = " + BinaryHelpers.bytesToHex(inputData));
+        int inputCursor = 0;
+        byte[] output;
+        int potentialCopyLength;
+        int candidateSourceCursor;
+        int copyCursor;
+        StringBuilder offsetSb = new StringBuilder(11);
+        StringBuilder lengthSb = new StringBuilder();
+        while(inputCursor<inputData.length){
+       
+            short inputWord = BinaryHelpers.getWord(inputData, inputCursor);
+            
+            //LOG.fine("inputWord = " + Integer.toHexString(inputWord & 0xFFFF));
+        
+            /* Get number of potential word sequence to copy */
+            potentialCopyLength = 0;
+            candidateSourceCursor = 0;
+            copyCursor = inputCursor-2;
+            while(copyCursor>=0&&(((inputCursor - copyCursor)/2)<MAX_COPY_OFFSET)){
+                int testLength = 0;
+                short destWord = inputWord;        
+                short sourceWord = BinaryHelpers.getWord(inputData, copyCursor);
+                while(sourceWord==destWord){
+                    testLength++;
+                    if((inputCursor+testLength*2)<inputData.length){          
+                        sourceWord = BinaryHelpers.getWord(inputData, copyCursor+testLength*2);                                 
+                        destWord = BinaryHelpers.getWord(inputData, inputCursor+testLength*2); 
+                    }else{
+                        break;
+                    }
+                } 
+                if(testLength>potentialCopyLength){
+                    candidateSourceCursor = copyCursor;
+                    potentialCopyLength = testLength;
+                }
+                copyCursor-=2;      
+            }
+            //LOG.fine("Potential copy length from " + candidateSourceCursor + " = " + potentialCopyLength); 
+            
+            if(potentialCopyLength>1){
+                // Apply word sequence copy
+                int startOffset = (inputCursor - candidateSourceCursor) / 2;
+                int copyLength = potentialCopyLength;
+                commandSb.append("1");
+                offsetSb.setLength(0);
+                offsetSb.append(Integer.toBinaryString(startOffset));
+                while(offsetSb.length()<11){
+                    offsetSb.insert(0, "0");
+                }
+                dataSb.append(offsetSb);
+                lengthSb.setLength(0);
+                copyLength-=2;
+                while(copyLength>=0){
+                    switch(copyLength){
+                        case 0:
+                            lengthSb.append("1");
+                            copyLength=-1;
+                            break;
+                        case 1:
+                            lengthSb.append("01");
+                            copyLength=-1;
+                            break;
+                        default:
+                            lengthSb.append("00");
+                            copyLength-=2;
+                            break;  
+                    }
+                }
+                dataSb.append(lengthSb);
+                inputCursor+=potentialCopyLength*2;
+                LOG.fine("input word "+Integer.toHexString(inputWord & 0xFFFF)+" copy : offset=" + startOffset + "/" + offsetSb.toString() + ", length="+potentialCopyLength + "/" + lengthSb);
+            }else{
+                // No copy : word value
+                commandSb.append("0");
+                String valueBitString = getValueBitString(historyStack, inputWord);
+                dataSb.append(valueBitString);
+                inputCursor+=2;
+                LOG.fine("input word "+Integer.toHexString(inputWord & 0xFFFF)+" value : " + valueBitString+", history="+historyStack.toString());
+            }
+          
+            if(commandSb.length()==16){
+                String commandBitString = getCommandBitString(commandSb);
+                LOG.fine("commandSb=" + commandSb.toString()+", commandBitString="+commandBitString);
+                outputSb.append(commandBitString);
+                outputSb.append(dataSb);
+                commandSb.setLength(0);
+                dataSb.setLength(0);
+                LOG.fine("output = " + outputSb.toString());
+            }            
+
+            
+        }
+        /* Add ending command with offset 0 */
+        commandSb.append("1");
+        dataSb.append("000000000001");
+        while(commandSb.length()!=16){
+            commandSb.append("1");
+        }
+        String commandBitString = getCommandBitString(commandSb);
+        outputSb.append(commandBitString);
+        outputSb.append(dataSb);
+        LOG.fine("output = " + outputSb.toString());
+        
+        /* Word-wise padding */
+        while(outputSb.length()%16 != 0){
+            outputSb.append("1");
+        }
+        
+        /* Byte array conversion */
+        output = new byte[outputSb.length()/8];
+        for(int i=0;i<output.length;i++){
+            Byte b = (byte)(Integer.valueOf(outputSb.substring(i*8, i*8+8),2)&0xFF);
+            output[i] = b;
+        }
+        LOG.fine("output bytes length = " + output.length);
+        LOG.fine("output = " + BinaryHelpers.bytesToHex(output));
+        LOG.exiting(LOG.getName(),"encode");
+        return output;
     }
     
-    final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex(List<Byte> bytes) {
-        char[] hexChars = new char[bytes.size() * 2];
-        for ( int j = 0; j < bytes.size(); j++ ) {
-            int v = bytes.get(j) & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+    private static String getValueBitString(List<Integer> historyStack, short value){
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<4;i++){
+            int quartet = (value>>(16-4*(i+1)))&0xF;
+            for(int j=0;j<16;j++){
+                if(quartet == historyStack.get(j)){
+                    sb.append(historyBitStrings.get(j));
+                    historyStack.remove(j);
+                    historyStack.add(0, quartet);
+                    break;
+                }
+            }        
         }
-        return new String(hexChars);
-    }    
+        return sb.toString();
+    }
     
+    private static String getCommandBitString(StringBuilder commandSb){
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<4;i++){
+            String quartet = commandSb.substring(i*4, i*4+4);
+            switch(quartet){
+                /* input bitstring	==> 4 command bits : 0 = word value, 1 = section copy */
+                case "0000":
+                    /* 0 		==> 0000 (4 word values, most frequent pattern, naturally) */
+                    sb.append("0");
+                    break;
+                case "0001":
+                    /* 100 		==> 0001 (3 word values, then 1 section copy) */
+                    sb.append("100");
+                    break;
+                case "0010":
+                    /* 101 		==> 0010 (2 word values etc ...) */
+                    sb.append("101");
+                    break;
+                case "0100":
+                    /* 110 		==> 0100 */
+                    sb.append("110");
+                    break;
+                case "1000":
+                    /* 1110 		==> 1000 */
+                    sb.append("1110");
+                    break;
+                default:
+                    /* 1111 xxxx 	==> xxxx (custom command pattern) */
+                    sb.append("1111").append(quartet);
+                    break;
+            }
+                    
+        }
+        return sb.toString();
+    }
 }

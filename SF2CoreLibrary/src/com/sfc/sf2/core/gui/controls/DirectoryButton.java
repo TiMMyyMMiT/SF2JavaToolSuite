@@ -67,8 +67,8 @@ public class DirectoryButton extends javax.swing.JPanel {
 
         jFileChooserFiles.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
-        setMinimumSize(new java.awt.Dimension(250, 38));
-        setPreferredSize(new java.awt.Dimension(400, 38));
+        setMinimumSize(new java.awt.Dimension(250, 25));
+        setPreferredSize(new java.awt.Dimension(400, 25));
 
         jLabelFile.setText("Path name :");
 
@@ -99,12 +99,12 @@ public class DirectoryButton extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabelFile)
                     .addComponent(jTextFieldFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonFile, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -2,7 +2,6 @@
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="SF2PaletteManager"/>
   </Properties>
   <SyntheticProperties>
@@ -148,8 +147,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="fileButton1" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="jLabel2" pref="472" max="32767" attributes="0"/>
+                                  <Component id="jLabel2" pref="478" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton18" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -165,10 +163,13 @@
                           <Component id="fileButton1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jButton18" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="jButton18" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jLabel2" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -208,12 +209,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fileButton2" alignment="1" pref="566" max="32767" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel3" max="32767" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="fileButton2" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel3" pref="478" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton20" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -228,11 +229,17 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="fileButton2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jButton20" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jButton20" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -240,7 +247,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;Select a 16-color indexed PNG file.&lt;br&gt;The palette will be extracted.&lt;/html&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Select an image File (e.g. PNG or GIF).&lt;br&gt;&#xa;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;&#xa;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16).&#xa;&lt;/html&gt;"/>
                     <Property name="verticalAlignment" type="int" value="1"/>
                   </Properties>
                 </Component>
@@ -312,10 +319,9 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fileButton4" max="32767" attributes="0"/>
+                              <Component id="fileButton4" pref="560" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                  <Component id="jLabel1" pref="472" max="32767" attributes="0"/>
+                                  <Component id="jLabel1" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -330,9 +336,9 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="fileButton4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jButton2" max="32767" attributes="0"/>
+                              <Component id="jLabel1" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace pref="10" max="32767" attributes="0"/>
                       </Group>
@@ -351,6 +357,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&lt;html&gt;Select a new target file. This export will create a new file.&lt;/html&gt;"/>
+                    <Property name="verticalAlignment" type="int" value="1"/>
                   </Properties>
                 </Component>
                 <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton4">
@@ -405,7 +412,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel7">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;html&gt;Select a new target file. &lt;br/&gt;&#xa;This export will create a new 16x1 file with current palette.&lt;br&gt;&#xa;Recommended to save as .png or .gif.&lt;/html&gt;"/>
+                    <Property name="text" type="java.lang.String" value="&lt;html&gt;Export data to a new image file. &lt;br&gt;&#xa;Recommended to save as PNG or GIF.&lt;br&gt;&#xa;Exported color format : 4BPP / 16 indexed colors.&lt;br&gt;Transparent color at index 0.&lt;/html&gt;"/>
                     <Property name="verticalAlignment" type="int" value="1"/>
                   </Properties>
                 </Component>

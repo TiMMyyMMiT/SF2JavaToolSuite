@@ -3,33 +3,104 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.graphics.compressed;
+package com.sfc.sf2.graphics.compression;
 
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.graphics.uncompressed.*;
+import com.sfc.sf2.helpers.BinaryHelpers;
+import com.sfc.sf2.palette.Palette;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *
  * @author wiz
  */
-public class BasicGraphicsEncoder {
+public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
     
+    @Override
+    public Tile[] decode(byte[] input, Palette palette) {
+        LOG.entering(LOG.getName(),"decode");
+        LOG.fine("Data length = " + input.length + " bytes.");
+        List<Byte> output = new ArrayList();
+        boolean done = false;
+        int pointer = 0;
+        Tile[] tiles = null;
+        try{
+            while(!done){
+                ByteBuffer bbCommand = ByteBuffer.allocate(2);
+                bbCommand.order(ByteOrder.LITTLE_ENDIAN);
+                bbCommand.put(input[pointer+1]);
+                bbCommand.put(input[pointer]);
+                short commands = bbCommand.getShort(0);
+                pointer+=2;
+                LOG.fine("commands = " + Integer.toHexString(commands&0xFFFF)); 
+                for(int i=0;i<16;i++){
+                    if((commands & (1<<15-i)) != 0){
+                        // apply repeat
+                        ByteBuffer bbRepeat = ByteBuffer.allocate(2);
+                        bbRepeat.order(ByteOrder.LITTLE_ENDIAN);
+                        bbRepeat.put(input[pointer+1]);
+                        bbRepeat.put(input[pointer]);          
+                        short repeatCommand = bbRepeat.getShort(0); 
+                        pointer+=2;
+                        LOG.fine("repeatCommand = " + Integer.toHexString(repeatCommand&0xFFFF)); 
+                        if(repeatCommand==0){
+                            done = true;
+                            break;
+                        }else{
+                            byte repeats = (byte)(repeatCommand & 0x1F);
+                            short wordIndex = (short)((repeatCommand - repeats)>>5);
+                            LOG.fine("pointer = " + pointer);
+                            LOG.fine("repeats = " + Integer.toHexString(repeats&0xFFFF) + ", wordIndex = " + Integer.toHexString(wordIndex&0xFFFF));
+                            if(wordIndex==1){
+                                // repeat last word (4 pixels)
+                                byte firstByte = output.get(output.size()-2);
+                                byte secondByte = output.get(output.size()-1);
+                                for(int r=0;r<33-repeats;r++){
+                                    output.add(firstByte);
+                                    output.add(secondByte);
+                                }
+                            }else{
+                                // repeat pointed 2 words (2 x 4 pixels)
+                                int copyPointer = output.size()-wordIndex*2;
+                                for(int r=0;r<33-repeats;r++){
+                                    output.add(output.get(copyPointer));
+                                    output.add(output.get(copyPointer+1));
+                                    copyPointer+=2;
+                                }
+                            }
+                            LOG.fine("output = " + BinaryHelpers.byteListToHex(output));
+                        }
+                    }else{
+                        // copy word
+                        output.add(input[pointer]);
+                        output.add(input[pointer+1]);
+                        pointer+=2;
+                        LOG.fine("output = " + BinaryHelpers.byteListToHex(output));
+                    }
+                }
+                
+            }
+        }catch(Exception e){
+            LOG.throwing(LOG.getName(),"decodeBasicGraphics",e);
+        }finally{
+            byte[] bytes = new byte[output.size()];
+            for(int i=0;i<bytes.length;i++){
+                bytes[i] = output.get(i);
+            }
+            tiles = new UncompressedGraphicsDecoder().decode(input, palette);
+        }
+        LOG.exiting(LOG.getName(),"decode");
+        return tiles;
+    }
     
-    private static byte[] newGraphicsFileBytes;  
-    
-    private static final Logger LOG = Logger.getLogger(BasicGraphicsEncoder.class.getName());  
-    
-    public static void produceGraphics(Tile[] tiles){
-        LOG.entering(LOG.getName(),"produceGraphics");
-        UncompressedGraphicsEncoder.produceGraphics(tiles);
-        byte[] input = UncompressedGraphicsEncoder.getNewGraphicsFileBytes();
-        LOG.fine("input = " + bytesToHex(input));
+    @Override
+    public byte[] encode(Tile[] tiles) {
+        LOG.entering(LOG.getName(),"encode");
+        byte[] input = new UncompressedGraphicsDecoder().encode(tiles);
+        LOG.fine("input = " + BinaryHelpers.bytesToHex(input));
         byte[] output = null;
         List<Short> outputWords = new ArrayList();
         Short currentCommandWord = null;
@@ -149,7 +220,7 @@ public class BasicGraphicsEncoder {
             previousbb.put(input[inputPointer-2]);          
             previousWord = previousbb.getShort(0);            
             commandWordCursor++;
-            LOG.fine("output = " + shortListToHex(outputWords));
+            LOG.fine("output = " + BinaryHelpers.shortListToHex(outputWords));
         }
         if(commandWordCursor % 16 == 0){
             currentCommandWord = (short)0;
@@ -159,7 +230,7 @@ public class BasicGraphicsEncoder {
         }  
         outputWords.set(commandWordIndex, (short) (outputWords.get(commandWordIndex) | (0x8000 >> commandWordCursor)));
         outputWords.add((short)0);
-        LOG.fine("output = " + shortListToHex(outputWords));
+        LOG.fine("output = " + BinaryHelpers.shortListToHex(outputWords));
         
         output = new byte[outputWords.size()*2];
         for(int i=0;i<outputWords.size();i++){
@@ -168,43 +239,7 @@ public class BasicGraphicsEncoder {
             output[i*2+1] = (byte)(word & 0xff);
         }
         LOG.fine("output bytes length = " + output.length);
-        LOG.exiting(LOG.getName(),"produceGraphics");
-        newGraphicsFileBytes = output;
+        LOG.exiting(LOG.getName(),"encode");
+        return output;
     }
-    
-    public static byte[] getNewGraphicsFileBytes(){
-        return newGraphicsFileBytes;
-    }
-    
-    final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for ( int j = 0; j < bytes.length; j++ ) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars);
-    }    
-    public static String byteListToHex(List<Byte> bytes) {
-        char[] hexChars = new char[bytes.size() * 2];
-        for ( int j = 0; j < bytes.size(); j++ ) {
-            int v = bytes.get(j) & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars);
-    }   
-    public static String shortListToHex(List<Short> shorts) {
-        char[] hexChars = new char[shorts.size() * 4];
-        for ( int j = 0; j < shorts.size(); j++ ) {
-            short v = (short)(shorts.get(j) & 0xFFFF);
-            hexChars[j * 4] = HEX_ARRAY[(v & 0xF000) >>> 12];
-            hexChars[(j * 4) + 1] = HEX_ARRAY[(v & 0x0F00) >>> 8];
-            hexChars[(j * 4) + 2] = HEX_ARRAY[(v & 0x00F0) >>> 4];
-            hexChars[(j * 4) + 3] = HEX_ARRAY[(v & 0x000F)];            
-        }
-        return new String(hexChars);
-    }      
-
 }

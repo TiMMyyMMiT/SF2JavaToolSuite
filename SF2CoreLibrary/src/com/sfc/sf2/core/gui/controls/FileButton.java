@@ -65,8 +65,8 @@ public class FileButton extends javax.swing.JPanel {
         jTextFieldFile = new javax.swing.JTextField();
         jButtonFile = new javax.swing.JButton();
 
-        setMinimumSize(new java.awt.Dimension(250, 38));
-        setPreferredSize(new java.awt.Dimension(400, 38));
+        setMinimumSize(new java.awt.Dimension(250, 26));
+        setPreferredSize(new java.awt.Dimension(400, 26));
 
         jLabelFile.setText("Filename :");
 
@@ -97,12 +97,11 @@ public class FileButton extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabelFile)
                     .addComponent(jTextFieldFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonFile, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

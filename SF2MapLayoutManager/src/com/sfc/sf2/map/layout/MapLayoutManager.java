@@ -88,7 +88,7 @@ public class MapLayoutManager {
     
     public void exportPng(String filepath){
         System.out.println("com.sfc.sf2.maplayout.MapLayoutManager.exportPng() - Exporting PNG ...");
-        com.sfc.sf2.map.block.io.RawImageManager.exportRawImage(layout.getBlocks(), filepath, 64, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
+        com.sfc.sf2.map.block.io.RawImageManager.exportRawImage(layout.getBlocks(), filepath, 64, com.sfc.sf2.graphics.io.RawImageProcessor.FILE_FORMAT_PNG);
         System.out.println("com.sfc.sf2.maplayout.MapLayoutManager.exportPng() - PNG exported.");       
     }
 
