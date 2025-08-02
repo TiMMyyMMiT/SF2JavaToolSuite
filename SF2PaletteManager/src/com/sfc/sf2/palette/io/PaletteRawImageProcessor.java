@@ -26,7 +26,7 @@ public class PaletteRawImageProcessor extends AbstractRawImageProcessor<Palette,
 
     @Override
     protected BufferedImage packageImageData(Palette item, PalettePackage pckg) throws DisassemblyException {
-        BufferedImage image = new BufferedImage(16, 1, BufferedImage.TYPE_BYTE_BINARY, item.getIcm());
+        BufferedImage image = new BufferedImage(16, 1, BufferedImage.TYPE_BYTE_INDEXED, item.getIcm());
         byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
         for (int i = 0; i < data.length; i++) {
             data[i] = (byte)i;

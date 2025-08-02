@@ -261,7 +261,7 @@
                 </Component>
                 <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton2">
                   <Properties>
-                    <Property name="filePath" type="java.lang.String" value="./export/palette.png"/>
+                    <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005cpalette.png" containsInvalidXMLChars="true"/>
                     <Property name="labelText" type="java.lang.String" value="Image file :"/>
                   </Properties>
                 </Component>
@@ -426,7 +426,7 @@
                 </Component>
                 <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton3">
                   <Properties>
-                    <Property name="filePath" type="java.lang.String" value="./export/palette.png"/>
+                    <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005cpalette.png" containsInvalidXMLChars="true"/>
                     <Property name="labelText" type="java.lang.String" value="Image file :"/>
                   </Properties>
                 </Component>
@@ -449,16 +449,19 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="palettePane1" alignment="1" max="32767" attributes="0"/>
-              <Component id="colorEditor2" alignment="0" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="colorEditor1" max="32767" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Component id="palettePane1" min="-2" pref="39" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="colorEditor2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Component id="colorEditor1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -466,7 +469,7 @@
       <SubComponents>
         <Component class="com.sfc.sf2.palette.gui.PalettePane" name="palettePane1">
         </Component>
-        <Component class="com.sfc.sf2.palette.gui.ColorEditor" name="colorEditor2">
+        <Component class="com.sfc.sf2.palette.gui.ColorEditor" name="colorEditor1">
         </Component>
       </SubComponents>
     </Container>

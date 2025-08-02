@@ -10,50 +10,28 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.border.MatteBorder;
 
 /**
  *
  * @author wiz
  */
 public class PalettePane extends JPanel {
-    
+        
     private ColorEditor colorEditor;
     private Palette palette;
-    private ColorPane[] currentColorPanes;
+    private ColorPane[] colorPanes;
     
-    public PalettePane(Palette palette) {
-        setLayout(new GridBagLayout());
-        setPalette(palette);
-   }
-    
-    public PalettePane(){
-        Color[] colors = {};
+    public PalettePane() {
         setLayout(new GridBagLayout());
         
         GridBagConstraints gbc = new GridBagConstraints();
-        for (int col = 0; col < colors.length; col++) {
-            gbc.gridx = col;
-
-            ColorPane colorPane = new ColorPane(colors[col], colorEditor);
-            Border border = null;
-            if (col < colors.length-1) {
-                border = new MatteBorder(1, 1, 1, 0, Color.GRAY);
-            } else {
-                border = new MatteBorder(1, 1, 1, 1, Color.GRAY);
-            }
-            colorPane.setBorder(border);
+        colorPanes = new ColorPane[16];
+        for (int i = 0; i < 16; i++) {
+            gbc.gridx = i;
+            ColorPane colorPane = new ColorPane(Color.BLACK, colorEditor);
+            colorPanes[i] = colorPane;
             add(colorPane, gbc);
         }
-    }
-
-    public ColorPane[] getCurrentColorPanes() {
-        return currentColorPanes;
-    }
-
-    public void setCurrentColorPanes(ColorPane[] currentColorPanes) {
-        this.currentColorPanes = currentColorPanes;
     }
 
     public ColorEditor getColorEditor() {
@@ -62,6 +40,9 @@ public class PalettePane extends JPanel {
 
     public void setColorEditor(ColorEditor colorEditor) {
         this.colorEditor = colorEditor;
+        for (int i = 0; i < colorPanes.length; i++) {
+            colorPanes[i].setEditor(colorEditor);
+        }
     }
 
     public Palette getPalette() {
@@ -69,24 +50,23 @@ public class PalettePane extends JPanel {
     }
     
    public void setPalette(Palette palette) {
-        this.removeAll();
         this.palette = palette;
         Color[] colors = palette.getColors();
-        this.currentColorPanes = new ColorPane[colors.length];
-        GridBagConstraints gbc = new GridBagConstraints();
-        for (int col = 0; col < colors.length; col++) {
-            gbc.gridx = col;
-            ColorPane colorPane = new ColorPane(colors[col],colorEditor);
-            currentColorPanes[col] = colorPane;
-            add(colorPane, gbc);
+        for (int i = 0; i < colorPanes.length; i++) {
+            if (i < colors.length) {
+                colorPanes[i].updateColor(colors[i]);
+                colorPanes[i].setVisible(true);
+            } else {
+                colorPanes[i].setVisible(false);
+            }
         }
    }
    
    public Palette getUpdatedPalette() {
-       Color[] colors = palette.getColors();
-       for(int i=0;i<currentColorPanes.length;i++){
-           colors[i] = currentColorPanes[i].getCurrentColor();
+       Color[] colors = new Color[palette.getColors().length];
+       for(int i=0; i < colorPanes.length; i++) {
+           colors[i] = colorPanes[i].getCurrentColor();
        }
-       return palette;
+       return new Palette("New Palette", colors);
    }
 }

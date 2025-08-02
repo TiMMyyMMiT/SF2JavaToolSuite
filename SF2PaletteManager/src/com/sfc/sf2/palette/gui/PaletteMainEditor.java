@@ -20,13 +20,15 @@ public class PaletteMainEditor extends CoreMainEditor {
     
     @Override
     protected void initEditor() {
+        initComponents();
         super.initEditor();
+        
+        palettePane1.setColorEditor(colorEditor1);
     }
     
     @Override
     protected void updateEditorData() {
         palettePane1.setPalette(paletteManager.getPalette());
-        palettePane1.setColorEditor(colorEditor2);
         
         super.updateEditorData();
     }
@@ -71,7 +73,7 @@ public class PaletteMainEditor extends CoreMainEditor {
         fileButton3 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel1 = new javax.swing.JPanel();
         palettePane1 = new com.sfc.sf2.palette.gui.PalettePane();
-        colorEditor2 = new com.sfc.sf2.palette.gui.ColorEditor();
+        colorEditor1 = new com.sfc.sf2.palette.gui.ColorEditor();
 
         setTitle("SF2PaletteManager");
 
@@ -153,7 +155,7 @@ public class PaletteMainEditor extends CoreMainEditor {
             }
         });
 
-        fileButton2.setFilePath("./export/palette.png");
+        fileButton2.setFilePath(".\\export\\palette.png");
         fileButton2.setLabelText("Image file :");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -256,7 +258,7 @@ public class PaletteMainEditor extends CoreMainEditor {
             }
         });
 
-        fileButton3.setFilePath("./export/palette.png");
+        fileButton3.setFilePath(".\\export\\palette.png");
         fileButton3.setLabelText("Image file :");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -298,7 +300,7 @@ public class PaletteMainEditor extends CoreMainEditor {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, Short.MAX_VALUE)
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Palette"));
@@ -308,15 +310,17 @@ public class PaletteMainEditor extends CoreMainEditor {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(palettePane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(colorEditor2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(colorEditor1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(palettePane1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(colorEditor2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(colorEditor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -382,16 +386,12 @@ public class PaletteMainEditor extends CoreMainEditor {
             }
         });
     }
-    
-    public PaletteMainEditor() {   // <------ Change the constructor to the new Main Editor class
-        initComponents();
-    }
     /**
      * To create a new Main Editor, copy the above code
      */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.palette.gui.ColorEditor colorEditor2;
+    private com.sfc.sf2.palette.gui.ColorEditor colorEditor1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;

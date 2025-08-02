@@ -55,12 +55,16 @@ public class ColorPane extends JPanel {
     public Dimension getPreferredSize() {
         return new Dimension(30, 30);
     }
+    
+    public void setEditor(ColorEditor ce) {
+        colorEditor = ce;
+    }
 
     public Color getCurrentColor() {
         return currentColor;
     }
     
-    public void updateColor(Color c){
+    public void updateColor(Color c) {
         currentColor = c;
         if (c.getAlpha() == 0)
             currentColor = new Color(c.getRed(),c.getGreen(),c.getBlue(),255);
