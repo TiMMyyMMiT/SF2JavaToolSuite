@@ -23,11 +23,21 @@ public class SettingsManager {
 
     private static final String SETTINGS_FILE_PATH = ".\\.sf2settings.txt";
     
-    static final HashMap<String, AbstractSettings> settingsStores = new HashMap<>();
+    private static final HashMap<String, AbstractSettings> settingsStores = new HashMap<>();
+    
+    private static boolean isRunningInEditor = true;
 
     static {
         CoreSettings core = new CoreSettings();
         settingsStores.put("core", core);
+    }
+    
+    public static boolean isRunningInEditor() {
+        return isRunningInEditor;
+    }
+    
+    public static void setRunningInEditor(boolean inEditor) {
+        isRunningInEditor = inEditor;
     }
     
     public static void registerSettingsStore(String id, AbstractSettings settings) {

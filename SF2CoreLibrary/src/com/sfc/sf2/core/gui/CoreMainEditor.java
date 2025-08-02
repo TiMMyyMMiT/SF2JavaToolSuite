@@ -40,12 +40,14 @@ public class CoreMainEditor extends javax.swing.JFrame {
         SettingsManager.loadSettingsFile();
         
         //Check if settings panel should be shown
-        java.awt.EventQueue.invokeLater(() -> {
-            CoreSettings core = SettingsManager.getSettingsStore("core");
-            if (!core.arePathsSet()) {
-                jFrameSettings.setVisible(true);
-            }
-        });
+        if (!SettingsManager.isRunningInEditor()) {
+            java.awt.EventQueue.invokeLater(() -> {
+                CoreSettings core = SettingsManager.getSettingsStore("core");
+                if (!core.arePathsSet()) {
+                    jFrameSettings.setVisible(true);
+                }
+            });
+        }
     }
     
     private void initConsole(JTextArea textArea) {
@@ -357,6 +359,11 @@ public class CoreMainEditor extends javax.swing.JFrame {
     }
     
     public static void programSetup() {
+        //Hack to determine if project is running from editor (IDE) or is a build. (property 'user.dir' is blank if in editor)
+        String dir = System.getProperty("user.dir");
+        SettingsManager.setRunningInEditor(dir == null || dir.length() == 0);
+        
+        //Core setup
         try {
             File workingDirectory = new File(CoreMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
             System.setProperty("user.dir", workingDirectory.toString());
@@ -365,7 +372,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
         }
         SettingsManager.loadSettingsFile();
         
-        /* Set the Windows look and feel */
+        //Set look and feel
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Windows is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -385,16 +392,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
                 java.util.logging.Logger.getLogger(CoreMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
         //</editor-fold>
     }
     
