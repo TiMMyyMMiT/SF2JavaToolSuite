@@ -63,7 +63,7 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
         try {
             BufferedImage image = packageImageData(item, pckg);
             File outputfile = filePath.toFile();
-            ImageIO.write(image, GetFileExtensionString(fileFormat), outputfile);
+            ImageIO.write(image, GetFileExtensionName(fileFormat), outputfile);
             
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Could not export image : " + filePath, e);
