@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.core.gui.controls;
 
+import com.sfc.sf2.helpers.PathHelpers;
 import java.beans.BeanProperty;
 import java.io.File;
 import java.nio.file.Path;
@@ -113,11 +114,12 @@ public class DirectoryButton extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonFileActionPerformed
 
     protected void openFileChooser(JTextField textField) {
-        jFileChooserFiles.setCurrentDirectory(Path.of(textField.getText()).toFile());
+        File file = PathHelpers.getNearestValidParent(Path.of(textField.getText()));
+        jFileChooserFiles.setCurrentDirectory(file);
         int returnVal = jFileChooserFiles.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooserFiles.getSelectedFile();
-            textField.setText(file.getAbsolutePath());
+            File newFile = jFileChooserFiles.getSelectedFile();
+            textField.setText(newFile.getAbsolutePath());
         }
     }
 

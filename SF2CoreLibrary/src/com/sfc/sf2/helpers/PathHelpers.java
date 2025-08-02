@@ -7,6 +7,7 @@ package com.sfc.sf2.helpers;
 
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
+import java.io.File;
 import java.nio.file.Path;
 
 /**
@@ -47,5 +48,19 @@ public class PathHelpers {
         } else {
             return name.substring(dotIndex+1);
         }
+    }
+    
+    public static File getNearestValidParent(Path path) {
+        if (!path.isAbsolute()) {
+            path = getBasePath().resolve(path);
+        }
+        return getNearestValidParent(path.toFile());
+    }
+    
+    public static File getNearestValidParent(File file) {
+        if (file.exists()) return file;
+        File parent = file.getParentFile();
+        if (parent == null) return file;
+        return getNearestValidParent(parent);
     }
 }
