@@ -8,7 +8,10 @@ package com.sfc.sf2.helpers;
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -62,5 +65,30 @@ public class PathHelpers {
         File parent = file.getParentFile();
         if (parent == null) return file;
         return getNearestValidParent(parent);
+    }
+    
+    public static boolean createPathIfRequred(Path path) {
+        File file = path.toFile();
+        if (file.exists()) {
+            return true;    //File/Folder exists
+        }
+        boolean isFile = path.getFileName().toString().lastIndexOf('.') != -1;
+        if (isFile) {
+            file = file.getParentFile();
+            if (file.exists()) {
+                return true;    //Parent folder exists
+            }
+        }
+        int ret = JOptionPane.showConfirmDialog(null, "Folder '" + file.toString() + "'does not exist.\nDo you want to create this folder?", "Directly not found", JOptionPane.OK_CANCEL_OPTION);
+        if (ret == JOptionPane.YES_OPTION) {
+            try {
+                Files.createDirectories(file.toPath());
+                return true;
+            } catch (IOException ex) {
+                System.getLogger(PathHelpers.class.getName()).log(System.Logger.Level.ERROR, (String)null, ex);
+                return false;
+            }
+        }
+        return false;   //Do not save file
     }
 }

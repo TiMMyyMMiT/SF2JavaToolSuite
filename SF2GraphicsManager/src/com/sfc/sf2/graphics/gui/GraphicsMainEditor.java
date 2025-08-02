@@ -1073,12 +1073,16 @@ public class GraphicsMainEditor extends CoreMainEditor {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Path disasmPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        if (!PathHelpers.createPathIfRequred(disasmPath))
+            return;
         TilesetCompression compression = TilesetCompression.valueOf(jComboBox4.getSelectedItem().toString());
         graphicsManager.exportDisassembly(disasmPath, compression);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         Path imagePath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
+        if (!PathHelpers.createPathIfRequred(imagePath))
+            return;
         graphicsManager.getTileset().setTilesPerRow((int)jSpinner2.getValue());
         graphicsManager.exportImage(imagePath);
     }//GEN-LAST:event_jButton13ActionPerformed

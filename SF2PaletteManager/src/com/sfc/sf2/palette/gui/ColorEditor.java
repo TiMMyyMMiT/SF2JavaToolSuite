@@ -19,8 +19,8 @@ public class ColorEditor extends javax.swing.JPanel {
     int redValue, greenValue, blueValue;
     
     public ColorEditor() {
-        jLabelRGB.setText("");
         initComponents();
+        jLabelRGB.setText("");
     }
     
     private void updateColor() {

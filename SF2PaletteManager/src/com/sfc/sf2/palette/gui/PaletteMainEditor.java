@@ -353,13 +353,14 @@ public class PaletteMainEditor extends CoreMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Path filePath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
-        paletteManager.exportDisassembly(filePath, palettePane1.getUpdatedPalette(), true);
+        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        if (PathHelpers.createPathIfRequred(disasmPath))
+            paletteManager.exportDisassembly(disasmPath, palettePane1.getUpdatedPalette(), true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        Path filePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
-        paletteManager.importDisassembly(filePath, true);
+        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        paletteManager.importDisassembly(disasmPath, true);
         updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
 
@@ -371,7 +372,8 @@ public class PaletteMainEditor extends CoreMainEditor {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Path filePath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
-        paletteManager.exportImage(filePath,palettePane1.getUpdatedPalette(),true);
+        if (PathHelpers.createPathIfRequred(filePath))
+            paletteManager.exportImage(filePath,palettePane1.getUpdatedPalette(),true);
     }//GEN-LAST:event_jButton3ActionPerformed
     
     /**
