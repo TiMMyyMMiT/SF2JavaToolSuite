@@ -139,7 +139,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jPanelSettings.setMinimumSize(new java.awt.Dimension(400, 200));
         jPanelSettings.setPreferredSize(new java.awt.Dimension(400, 200));
 
-        jLabel3.setText("Base folder is where the .jar file is expected to be run from");
+        jLabel3.setText("<html>Base folder is where the .jar file is expected to be run from.<br>\n<b>Most users do not need to edit this path.</b></html>");
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         directoryButtonBasePath.setLabelText("Base folder :");
@@ -155,7 +155,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
 
         jLabel6.setText("<html>Theme <i>(Requires restart)</i>  :</html>");
 
-        jLabel7.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)</html>");
+        jLabel7.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)<br>\n<b>Most users do not need to edit this path.</b></html>");
         jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel7.setMinimumSize(new java.awt.Dimension(111, 32));
 
@@ -167,10 +167,10 @@ public class CoreMainEditor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
                     .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelSettingsLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -185,20 +185,20 @@ public class CoreMainEditor extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSettingsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jRadioThemeDark)
                     .addComponent(jRadioThemeLight)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jFrameSettingsLayout = new javax.swing.GroupLayout(jFrameSettings.getContentPane());

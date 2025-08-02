@@ -67,7 +67,7 @@
                           <Component id="jLabel3" max="32767" attributes="0"/>
                           <Component id="directoryButtonIncbinPath" pref="0" max="32767" attributes="0"/>
                           <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel7" alignment="0" pref="388" max="32767" attributes="0"/>
+                          <Component id="jLabel7" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -86,13 +86,13 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="directoryButtonBasePath" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" pref="22" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="directoryButtonIncbinPath" min="-2" pref="38" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="jLabel7" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="jLabel3" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="directoryButtonIncbinPath" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel7" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
@@ -100,7 +100,7 @@
                           <Component id="jRadioThemeLight" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="22" max="32767" attributes="0"/>
+                      <EmptySpace pref="14" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -108,7 +108,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Base folder is where the .jar file is expected to be run from"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Base folder is where the .jar file is expected to be run from.&lt;br&gt;&#xa;&lt;b&gt;Most users do not need to edit this path.&lt;/b&gt;&lt;/html&gt;"/>
                 <Property name="verticalAlignment" type="int" value="1"/>
               </Properties>
             </Component>
@@ -148,7 +148,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Incbin is the root folder for the disassemby (usually SF2DISASM\u005cdisasm\u005c)&lt;/html&gt;" containsInvalidXMLChars="true"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Incbin is the root folder for the disassemby (usually SF2DISASM\u005cdisasm\u005c)&lt;br&gt;&#xa;&lt;b&gt;Most users do not need to edit this path.&lt;/b&gt;&lt;/html&gt;" containsInvalidXMLChars="true"/>
                 <Property name="verticalAlignment" type="int" value="1"/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[111, 32]"/>
