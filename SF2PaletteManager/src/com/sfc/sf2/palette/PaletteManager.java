@@ -6,11 +6,15 @@
 package com.sfc.sf2.palette;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
 import com.sfc.sf2.palette.io.PalettePackage;
 import com.sfc.sf2.palette.io.PaletteRawImageProcessor;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  *
@@ -32,8 +36,15 @@ public class PaletteManager {
        
     public Palette importDisassembly(Path filePath, boolean firstColorTransparent) {
         Console.logger().finest("ENTERING importDisassembly");
-        PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), firstColorTransparent);
-        this.palette = paletteDisassemblyProcessor.importDisassembly(filePath, pckg);
+        try {
+            PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), firstColorTransparent);
+            palette = paletteDisassemblyProcessor.importDisassembly(filePath, pckg);
+            Console.logger().info("Palette imported successfully from : " + filePath);
+        } catch (DisassemblyException | IOException ex) {
+            palette = null;
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("Palette could not be imported from  " + filePath);
+        }
         Console.logger().finest("EXITING importDisassembly");
         return palette;
     }
@@ -41,24 +52,39 @@ public class PaletteManager {
     public void exportDisassembly(Path filePath, Palette palette, boolean firstColorTransparent) {
         Console.logger().finest("ENTERING exportDisassembly");
         this.palette = palette;
-        PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);
-        paletteDisassemblyProcessor.exportDisassembly(filePath, palette, pckg);
+        try {
+            PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);
+            paletteDisassemblyProcessor.exportDisassembly(filePath, palette, pckg);
+        } catch (IOException | DisassemblyException ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("Palette could not be exported to  " + filePath);
+        }
         Console.logger().finest("EXITING exportDisassembly");
     }
     
     public Palette importImage(Path filePath, boolean firstColorTransparent) {
         Console.logger().finest("ENTERING importImage");
         PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), firstColorTransparent);
-        this.palette = paletteImageProcessor.importRawImage(filePath, pckg);
+        try {
+            palette = paletteImageProcessor.importRawImage(filePath, pckg);
+        } catch (RawImageException | DisassemblyException | IOException ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("Palette could not be imported from  " + filePath);
+        }
         Console.logger().finest("EXITING importImage");
         return palette;
     }
     
     public void exportImage(Path filePath, Palette currentPalette, boolean firstColorTransparent) {
         Console.logger().finest("ENTERING exportImage");
-        this.palette = currentPalette;
+        palette = currentPalette;
         PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);
-        paletteImageProcessor.exportRawImage(filePath, palette, pckg);
+        try {
+            paletteImageProcessor.exportRawImage(filePath, palette, pckg);
+        } catch (IOException | DisassemblyException ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("Palette could not be exported to " + filePath);
+        }
         Console.logger().finest("EXITING exportImage");
     }
 }

@@ -51,13 +51,20 @@ public class PalettePane extends JPanel {
     
    public void setPalette(Palette palette) {
         this.palette = palette;
-        Color[] colors = palette.getColors();
-        for (int i = 0; i < colorPanes.length; i++) {
-            if (i < colors.length) {
-                colorPanes[i].updateColor(colors[i]);
+        if (palette == null) {
+            for (int i = 0; i < colorPanes.length; i++) {
+                colorPanes[i].updateColor(Color.BLACK);
                 colorPanes[i].setVisible(true);
-            } else {
-                colorPanes[i].setVisible(false);
+            }
+        } else {
+            Color[] colors = palette.getColors();
+            for (int i = 0; i < colorPanes.length; i++) {
+                if (i < colors.length) {
+                    colorPanes[i].updateColor(colors[i]);
+                    colorPanes[i].setVisible(true);
+                } else {
+                    colorPanes[i].setVisible(false);
+                }
             }
         }
    }

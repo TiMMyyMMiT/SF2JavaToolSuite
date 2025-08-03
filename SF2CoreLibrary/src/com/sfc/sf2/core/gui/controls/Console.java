@@ -122,6 +122,7 @@ public class Console extends javax.swing.JPanel {
 
         jTextAreaConsole.setEditable(false);
         jTextAreaConsole.setColumns(20);
+        jTextAreaConsole.setLineWrap(true);
         jTextAreaConsole.setRows(5);
         jScrollPaneConsole.setViewportView(jTextAreaConsole);
 

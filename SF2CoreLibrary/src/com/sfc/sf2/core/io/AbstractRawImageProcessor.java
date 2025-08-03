@@ -12,6 +12,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
@@ -30,23 +31,18 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
         GIF,
     }
     
-    public TType importRawImage(Path filePath, TPackage pckg) {
+    public TType importRawImage(Path filePath, TPackage pckg) throws RawImageException, DisassemblyException, IOException {
         FileFormat fileFormat = fileExtensionToFormat(filePath);
         Console.logger().finest("ENTERING importRawImage : " + filePath + ". Format : " + fileFormat);
         TType item = null;
-        try {
-            BufferedImage image = ImageIO.read(filePath.toFile());
-            ColorModel cm = image.getColorModel();
-            if(!(cm instanceof IndexColorModel)){
-                throw new RawImageException("IMAGE FORMAT ERROR : COLORS ARE NOT INDEXED AS EXPECTED. Format : " + cm.getColorSpace().toString());
-            }else{
-                IndexColorModel icm = (IndexColorModel)cm;
-                WritableRaster raster = image.getRaster();
-                item = parseImageData(raster, icm, pckg);
-            }
-        } catch (Exception e) {
-            Console.logger().log(Level.SEVERE, "Could not import image : " + filePath, e);
-            item = null;
+        BufferedImage image = ImageIO.read(filePath.toFile());
+        ColorModel cm = image.getColorModel();
+        if(!(cm instanceof IndexColorModel)){
+            throw new RawImageException("IMAGE FORMAT ERROR : COLORS ARE NOT INDEXED AS EXPECTED. Format : " + cm.getColorSpace().toString());
+        }else{
+            IndexColorModel icm = (IndexColorModel)cm;
+            WritableRaster raster = image.getRaster();
+            item = parseImageData(raster, icm, pckg);
         }
         Console.logger().finest("EXITING importRawImage");
         return item;
@@ -54,21 +50,13 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
     
     protected abstract TType parseImageData(WritableRaster raster, IndexColorModel icm, TPackage pckg) throws DisassemblyException;
     
-    public boolean exportRawImage(Path filePath, TType item, TPackage pckg) {
+    public void exportRawImage(Path filePath, TType item, TPackage pckg) throws IOException, DisassemblyException {
         FileFormat fileFormat = fileExtensionToFormat(filePath);
         Console.logger().finest("ENTERING exportRawImage : " + filePath + ". Format : " + fileFormat);
-        boolean error = false;
-        try {
-            BufferedImage image = packageImageData(item, pckg);
-            File outputfile = filePath.toFile();
-            ImageIO.write(image, GetFileExtensionName(fileFormat), outputfile);
-            
-        } catch (Exception e) {
-            Console.logger().log(Level.SEVERE, "Could not export image : " + filePath, e);
-            error = true;
-        }
+        BufferedImage image = packageImageData(item, pckg);
+        File outputfile = filePath.toFile();
+        ImageIO.write(image, GetFileExtensionName(fileFormat), outputfile);
         Console.logger().finest("EXITING exportRawImage");
-        return error;
     }
 
     protected abstract BufferedImage packageImageData(TType item, TPackage pckg) throws DisassemblyException;

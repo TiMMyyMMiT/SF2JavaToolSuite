@@ -6,6 +6,7 @@
 package com.sfc.sf2.core.io;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -18,37 +19,23 @@ import java.util.logging.Level;
  */
 public abstract class AbstractDisassemblyProcessor<TType extends Object, TPackage extends Object> {
     
-    public TType importDisassembly(Path filePath, TPackage pckg) {
+    public TType importDisassembly(Path filePath, TPackage pckg) throws DisassemblyException, IOException {
         
         Console.logger().finest("ENTERING importDisassembly : " + filePath);
         TType item = null;
-        try {
-            byte[] data = Files.readAllBytes(filePath);
-            item = parseDisassemblyData(data, pckg);
-            
-        } catch (Exception e) {
-            Console.logger().log(Level.SEVERE, "Could not import disassembly : " + filePath, e);
-            item = null;
-        }
+        byte[] data = Files.readAllBytes(filePath);
+        item = parseDisassemblyData(data, pckg);
         Console.logger().finest("EXITING importDisassembly");
         return item;
     }
     
     protected abstract TType parseDisassemblyData(byte[] data, TPackage pckg) throws DisassemblyException;
     
-    public boolean exportDisassembly(Path filePath, TType item, TPackage pckg) {
+    public void exportDisassembly(Path filePath, TType item, TPackage pckg) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly : " + filePath);
-        boolean error = false;
-        try {
-            byte[] disasmData = packageDisassemblyData(item, pckg);
-            Files.write(filePath, disasmData);
-            
-        } catch (Exception e) {
-            Console.logger().log(Level.SEVERE, "Could not export disassembly : " + filePath, e);
-            error = true;
-        }
+        byte[] disasmData = packageDisassemblyData(item, pckg);
+        Files.write(filePath, disasmData);
         Console.logger().finest("EXITING exportDisassembly");
-        return error;
     }
 
     protected abstract byte[] packageDisassemblyData(TType item, TPackage pckg) throws DisassemblyException;
