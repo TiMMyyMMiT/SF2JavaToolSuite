@@ -95,7 +95,6 @@
                 <StringItem index="3" value="Errors"/>
               </StringArray>
             </Property>
-            <Property name="selectedIndex" type="int" value="1"/>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBoxLogLevelItemStateChanged"/>
@@ -119,6 +118,7 @@
             <Property name="columns" type="int" value="20"/>
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
+            <Property name="tabSize" type="int" value="4"/>
           </Properties>
         </Component>
       </SubComponents>

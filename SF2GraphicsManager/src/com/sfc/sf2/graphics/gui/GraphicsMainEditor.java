@@ -29,11 +29,12 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     @Override
     protected void initEditor() {
         super.initEditor();
+        initComponents();
+        initCore(console1);
     }
     
     @Override
     protected void updateEditorData() {
-        
         CoreSettings settings = SettingsManager.getSettingsStore("core");
         colorPicker1.setColor(settings.getTransparentBGColor());
         
@@ -159,9 +160,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel54 = new javax.swing.JLabel();
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jLabel55 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
@@ -874,7 +873,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -904,7 +903,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
         );
 
         jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("View"));
@@ -934,7 +933,6 @@ public class GraphicsMainEditor extends AbstractMainEditor {
 
         jLabel54.setText("Tiles per row :");
 
-        colorPicker1.setDialogTitle("BG Color");
         colorPicker1.addColorChangedListener(new com.sfc.sf2.core.gui.controls.ColorPicker.ColorChangedListener() {
             public void colorChanged(java.awt.event.ActionEvent evt) {
                 colorPicker1ColorChanged(evt);
@@ -1016,34 +1014,11 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
         );
 
         jSplitPane1.setTopComponent(jPanel15);
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-        jPanel7.setToolTipText("");
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-        );
-
-        jSplitPane1.setBottomComponent(jPanel7);
+        jSplitPane1.setRightComponent(console1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -1075,7 +1050,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         Path disasmPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         if (!PathHelpers.createPathIfRequred(disasmPath))
             return;
-        TilesetCompression compression = TilesetCompression.valueOf(jComboBox4.getSelectedItem().toString());
+        TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
         graphicsManager.exportDisassembly(disasmPath, compression);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -1098,7 +1073,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path disasmPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
-        TilesetCompression compression = TilesetCompression.valueOf(jComboBox1.getSelectedItem().toString());
+        TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
         graphicsManager.importDisassembly(palettePath, disasmPath, compression, (int)jSpinner1.getValue());
         jSpinner2.setValue(jSpinner1.getValue());
         updateInterface();
@@ -1264,16 +1239,13 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             }
         });
     }
-    
-    public GraphicsMainEditor() {   // <------ Change the constructor to the new Main Editor class
-        initComponents();
-    }
     /**
      * To create a new Main Editor, copy the above code
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
+    private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;
@@ -1350,10 +1322,8 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
@@ -1361,7 +1331,6 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField19;

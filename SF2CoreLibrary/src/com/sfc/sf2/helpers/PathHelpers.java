@@ -7,6 +7,7 @@ package com.sfc.sf2.helpers;
 
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.gui.controls.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -83,12 +84,15 @@ public class PathHelpers {
         if (ret == JOptionPane.YES_OPTION) {
             try {
                 Files.createDirectories(file.toPath());
+                Console.logger().info("Folder created at " + file);
                 return true;
             } catch (IOException ex) {
                 System.getLogger(PathHelpers.class.getName()).log(System.Logger.Level.ERROR, (String)null, ex);
+                Console.logger().info("ERROR: Folder could not be created at " + file);
                 return false;
             }
         }
+        Console.logger().info("User decided not to create folder at " + file);
         return false;   //Do not save file
     }
 }

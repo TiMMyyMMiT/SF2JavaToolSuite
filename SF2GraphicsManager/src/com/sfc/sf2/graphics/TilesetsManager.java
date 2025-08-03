@@ -6,6 +6,8 @@
 package com.sfc.sf2.graphics;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor.TilesetCompression;
 import com.sfc.sf2.graphics.io.TilesetPackage;
@@ -13,8 +15,9 @@ import com.sfc.sf2.graphics.io.TilesetRawImageProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
-import java.util.logging.Level;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  *
@@ -29,33 +32,59 @@ public class TilesetsManager {
        
     public Tileset importDisassembly(Path paletteFilePath, Path graphicsFilePath, TilesetCompression compression, int tilesPerRow) {
         Console.logger().finest("ENTERING importDisassembly");
-        Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
-        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(graphicsFilePath), compression, palette, tilesPerRow);
-        tileset = tilesetDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
+        try {
+            Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
+            TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(graphicsFilePath), compression, palette, tilesPerRow);
+            tileset = tilesetDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
+            Console.logger().info("Tileset successfully imported from : " + graphicsFilePath);
+        } catch (DisassemblyException | IOException ex) {
+            tileset = null;
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Tileset could not be imported from : " + graphicsFilePath);
+        }
         Console.logger().finest("EXITING importDisassembly");
         return tileset;
     }
     
     public void exportDisassembly(Path graphicsFilePath, TilesetCompression compression) {
         Console.logger().finest("ENTERING exportDisassembly");
-        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(graphicsFilePath), compression, tileset.getPalette(), tileset.getTilesPerRow());
-        tilesetDisassemblyProcessor.exportDisassembly(graphicsFilePath, tileset, pckg);
-        Console.logger().finest("EXITING exportDisassembly");   
+        try {
+            TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(graphicsFilePath), compression, tileset.getPalette(), tileset.getTilesPerRow());
+            tilesetDisassemblyProcessor.exportDisassembly(graphicsFilePath, tileset, pckg);
+            Console.logger().info("Tilese successfully exported to : " + graphicsFilePath);  
+        } catch (IOException | DisassemblyException ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Palette could not be exported to : " + graphicsFilePath);
+        }
+        Console.logger().finest("EXITING exportDisassembly");
     }
     
     public Tileset importImage(Path filePath) {
         Console.logger().finest("ENTERING importImage");
-        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(filePath), TilesetCompression.NONE, null, 0);
-        tileset = tilesetImageProcessor.importRawImage(filePath, pckg);
-        paletteManager.setPalette(tileset.getPalette());
+        try {
+            TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(filePath), TilesetCompression.NONE, null, 0);
+            tileset = tilesetImageProcessor.importRawImage(filePath, pckg);
+            Console.logger().info("Tileset successfully imported from : " + filePath);
+            paletteManager.setPalette(tileset.getPalette());
+        } catch (RawImageException | DisassemblyException | IOException ex) {
+            tileset = null;
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Palette could not be imported from : " + filePath);
+        }
         Console.logger().finest("EXITING importImage");
         return tileset;
     }
     
     public void exportImage(Path filePath) {
         Console.logger().finest("ENTERING exportImage");
-        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(filePath), TilesetCompression.NONE, null, 0);
-        tilesetImageProcessor.exportRawImage(filePath, tileset, pckg);
+        try {
+            TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(filePath), TilesetCompression.NONE, null, 0);
+            tilesetImageProcessor.exportRawImage(filePath, tileset, pckg);
+            Console.logger().info("Tileset successfully exported to : " + filePath); 
+        } catch (IOException | DisassemblyException ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Palette could not be imported from : " + filePath);
+        }
         Console.logger().finest("EXITING exportImage");
     }
        

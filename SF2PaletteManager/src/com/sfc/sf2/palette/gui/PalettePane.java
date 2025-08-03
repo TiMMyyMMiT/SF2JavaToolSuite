@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.palette.Palette;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -70,6 +71,10 @@ public class PalettePane extends JPanel {
    }
    
    public Palette getUpdatedPalette() {
+       if (palette == null) {
+           Console.logger().warning("Palette not loaded.");
+           return null;
+       }
        Color[] colors = new Color[palette.getColors().length];
        for(int i=0; i < colorPanes.length; i++) {
            colors[i] = colorPanes[i].getCurrentColor();

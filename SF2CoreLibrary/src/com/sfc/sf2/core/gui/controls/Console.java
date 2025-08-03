@@ -92,7 +92,6 @@ public class Console extends javax.swing.JPanel {
         jLabel1.setText("Console");
 
         jComboBoxLogLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Logs", "Warnings", "Errors" }));
-        jComboBoxLogLevel.setSelectedIndex(1);
         jComboBoxLogLevel.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxLogLevelItemStateChanged(evt);
@@ -124,6 +123,7 @@ public class Console extends javax.swing.JPanel {
         jTextAreaConsole.setColumns(20);
         jTextAreaConsole.setLineWrap(true);
         jTextAreaConsole.setRows(5);
+        jTextAreaConsole.setTabSize(4);
         jScrollPaneConsole.setViewportView(jTextAreaConsole);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

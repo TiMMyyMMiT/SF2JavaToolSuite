@@ -9,7 +9,6 @@ import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 
@@ -26,11 +25,13 @@ public class PaletteRawImageProcessor extends AbstractRawImageProcessor<Palette,
 
     @Override
     protected BufferedImage packageImageData(Palette item, PalettePackage pckg) throws DisassemblyException {
-        BufferedImage image = new BufferedImage(16, 1, BufferedImage.TYPE_BYTE_INDEXED, item.getIcm());
-        byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
-        for (int i = 0; i < data.length; i++) {
-            data[i] = (byte)i;
+        BufferedImage image = new BufferedImage(item.getColors().length, 1, BufferedImage.TYPE_BYTE_INDEXED, item.getIcm());
+        WritableRaster raster = image.getRaster();
+        int[] colors = new int[item.getColors().length];
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = i;
         }
+        raster.setPixels(0, 0, colors.length, 1, colors);
         return image;
     }
 }

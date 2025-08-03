@@ -7,17 +7,17 @@ package com.sfc.sf2.helpers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.awt.image.IndexColorModel;
 
 /**
  *
  * @author TiMMy
  */
 public class GraphicsHelpers {
-    
+        
     public static void drawBackgroundTransparencyPattern(BufferedImage image, Color bgColor) {
         Color bgDarkerColor = bgColor.darker();
         int bgInt = bgColor.getRGB();

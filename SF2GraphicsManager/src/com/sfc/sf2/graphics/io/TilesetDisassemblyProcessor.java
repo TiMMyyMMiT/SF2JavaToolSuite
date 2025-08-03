@@ -80,55 +80,60 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
     }
 
     public Tile[] importDisassemblyWithLayout(Path baseTilesetPath, Palette[] palettes, Path tileset1FilePath, String tileset1Offset, Path tileset2FilePath, String tileset2Offset, TilesetCompression compression, int tilesPerRow, Path layoutPath) {
-        Console.logger().finest("ENTERING importDisassemblyWithLayout");
-        TilesetDisassemblyProcessor processor = new TilesetDisassemblyProcessor();
-        TilesetPackage basePckg = new TilesetPackage(PathHelpers.filenameFromPath(baseTilesetPath), TilesetCompression.STACK, palettes[0], tilesPerRow);
-        Tile[] baseTiles = processor.importDisassembly(baseTilesetPath, basePckg).getTiles();
-        TilesetPackage tilesetPckg1 = new TilesetPackage(PathHelpers.filenameFromPath(tileset1FilePath), compression, palettes[0], tilesPerRow);
-        TilesetPackage tilesetPckg2 = new TilesetPackage(PathHelpers.filenameFromPath(tileset2FilePath), compression, palettes[0], tilesPerRow);
-        Tile[] tileset1 = processor.importDisassembly(tileset1FilePath, tilesetPckg1).getTiles();
-        Tile[] tileset2 = processor.importDisassembly(tileset2FilePath, tilesetPckg2).getTiles();
-        Tile[] vRamTiles = new Tile[0x800];
-        Tile[] tiles = null;
-        int t1offset = Integer.valueOf(tileset1Offset, 16) / 0x20;
-        int t2offset = Integer.valueOf(tileset2Offset, 16) / 0x20;
-        System.arraycopy(baseTiles, 0, vRamTiles, 0, baseTiles.length);
-        System.arraycopy(tileset1, 0, vRamTiles, t1offset, tileset1.length);
-        System.arraycopy(tileset2, 0, vRamTiles, t2offset, tileset2.length);
         try {
-            byte[] data = Files.readAllBytes(layoutPath);
-            Tile[] layoutTiles = new Tile[data.length/2];
-            for(int i=0;i<layoutTiles.length;i++){
-                int layoutValue = BinaryHelpers.getWord(data,i*2);
-                int priority = (layoutValue&0x8000)>>15;
-                int palette = (layoutValue&0x6000)>>13;
-                int vFlip = (layoutValue&0x1000)>>12;
-                int hFlip = (layoutValue&0x0800)>>11;
-                int tileId = (layoutValue&0x7FF);
-                if(tileId>=0&&tileId<vRamTiles.length){
-                    Tile outputTile = vRamTiles[tileId];
-                    if(outputTile!=null&&palette!=0){
-                        outputTile = Tile.paletteSwap(outputTile,palettes[palette]);
+            Console.logger().finest("ENTERING importDisassemblyWithLayout");
+            TilesetDisassemblyProcessor processor = new TilesetDisassemblyProcessor();
+            TilesetPackage basePckg = new TilesetPackage(PathHelpers.filenameFromPath(baseTilesetPath), TilesetCompression.STACK, palettes[0], tilesPerRow);
+            Tile[] baseTiles = processor.importDisassembly(baseTilesetPath, basePckg).getTiles();
+            TilesetPackage tilesetPckg1 = new TilesetPackage(PathHelpers.filenameFromPath(tileset1FilePath), compression, palettes[0], tilesPerRow);
+            TilesetPackage tilesetPckg2 = new TilesetPackage(PathHelpers.filenameFromPath(tileset2FilePath), compression, palettes[0], tilesPerRow);
+            Tile[] tileset1 = processor.importDisassembly(tileset1FilePath, tilesetPckg1).getTiles();
+            Tile[] tileset2 = processor.importDisassembly(tileset2FilePath, tilesetPckg2).getTiles();
+            Tile[] vRamTiles = new Tile[0x800];
+            Tile[] tiles = null;
+            int t1offset = Integer.valueOf(tileset1Offset, 16) / 0x20;
+            int t2offset = Integer.valueOf(tileset2Offset, 16) / 0x20;
+            System.arraycopy(baseTiles, 0, vRamTiles, 0, baseTiles.length);
+            System.arraycopy(tileset1, 0, vRamTiles, t1offset, tileset1.length);
+            System.arraycopy(tileset2, 0, vRamTiles, t2offset, tileset2.length);
+            try {
+                byte[] data = Files.readAllBytes(layoutPath);
+                Tile[] layoutTiles = new Tile[data.length/2];
+                for(int i=0;i<layoutTiles.length;i++){
+                    int layoutValue = BinaryHelpers.getWord(data,i*2);
+                    int priority = (layoutValue&0x8000)>>15;
+                    int palette = (layoutValue&0x6000)>>13;
+                    int vFlip = (layoutValue&0x1000)>>12;
+                    int hFlip = (layoutValue&0x0800)>>11;
+                    int tileId = (layoutValue&0x7FF);
+                    if(tileId>=0&&tileId<vRamTiles.length){
+                        Tile outputTile = vRamTiles[tileId];
+                        if(outputTile!=null&&palette!=0){
+                            outputTile = Tile.paletteSwap(outputTile,palettes[palette]);
+                        }
+                        if(outputTile!=null&&vFlip!=0){
+                            outputTile = Tile.vFlip(outputTile);
+                        }
+                        if(outputTile!=null&&hFlip!=0){
+                            outputTile = Tile.hFlip(outputTile);
+                        }
+                        layoutTiles[i] = outputTile;
                     }
-                    if(outputTile!=null&&vFlip!=0){
-                        outputTile = Tile.vFlip(outputTile);
+                    if(layoutTiles[i]==null){
+                        Console.logger().fine("Layout tile "+i+" : wrong tile id "+tileId);
+                        layoutTiles[i] = baseTiles[0];
                     }
-                    if(outputTile!=null&&hFlip!=0){
-                        outputTile = Tile.hFlip(outputTile);
-                    }
-                    layoutTiles[i] = outputTile;
                 }
-                if(layoutTiles[i]==null){
-                    Console.logger().fine("Layout tile "+i+" : wrong tile id "+tileId);
-                    layoutTiles[i] = baseTiles[0];
-                }
+                tiles = layoutTiles;
+            } catch (IOException ex) {
+                Console.logger().log(Level.SEVERE, null, ex);
             }
-            tiles = layoutTiles;
-        } catch (IOException ex) {
-            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().finest("EXITING importDisassemblyWithLayout");
+            return tiles;
+        } catch (DisassemblyException | IOException ex) {
+            System.getLogger(TilesetDisassemblyProcessor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            return null;
         }
-        Console.logger().finest("EXITING importDisassemblyWithLayout");
-        return tiles;
     }
 
     public void exportTilesAndLayout(Tile[] tiles, Path tilesPath, Path layoutPath, String graphicsOffset, TilesetCompression compression, Palette palette) {

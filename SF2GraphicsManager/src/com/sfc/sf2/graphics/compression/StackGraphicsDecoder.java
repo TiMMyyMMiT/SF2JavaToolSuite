@@ -47,52 +47,47 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         inputCursor = -2;
         inputBitCursor = 16;
         Tile[] tiles = null;
-        try{
-            while(!decodingDone){
-                /* Step 1 - Parse command bitmap word */
-                commandBitmap = 0;
-                for(int i=0;i<4;i++){
-                    commandPattern = getNextCommandPattern();
-                    commandBitmap = (short) (commandBitmap << 4);
-                    commandBitmap += commandPattern;
-                }
-                Console.logger().finest("command bitmap = " + Integer.toHexString(commandBitmap&0xFFFF));
-                
-                /* Step 2 - Apply commands on following data */
-                for(int i=0;i<16;i++){
-                    command = (commandBitmap>>15-i) & 1;
-                    if(command==0){
-                        /* command 0 : word value built from four 4-bit values taken from history stack */
-                        value = getWordValue();
-                        Console.logger().log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
-                        BinaryHelpers.setWord(value,output);
-                    }else{
-                        /* command 1 : section copy */
-                        copyOffset = getCopyOffset();
-                        if(copyOffset==0){
-                            decodingDone = true;
-                            break; 
-                        }
-                        copyLength = getCopyLength();
-                        Console.logger().finest("1 - section copy offset="+Integer.toHexString(copyOffset&0xFFFF)+", length="+ Integer.toHexString(copyLength&0xFFFF));
-                        for(int j=0;j<copyLength;j++){
-                            output.add(output.get(output.size()-2*copyOffset));
-                            output.add(output.get(output.size()-2*copyOffset));
-                        }
-                    }
+        while(!decodingDone){
+            /* Step 1 - Parse command bitmap word */
+            commandBitmap = 0;
+            for(int i=0;i<4;i++){
+                commandPattern = getNextCommandPattern();
+                commandBitmap = (short) (commandBitmap << 4);
+                commandBitmap += commandPattern;
+            }
+            Console.logger().finest("command bitmap = " + Integer.toHexString(commandBitmap&0xFFFF));
 
+            /* Step 2 - Apply commands on following data */
+            for(int i=0;i<16;i++){
+                command = (commandBitmap>>15-i) & 1;
+                if(command==0){
+                    /* command 0 : word value built from four 4-bit values taken from history stack */
+                    value = getWordValue();
+                    Console.logger().log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
+                    BinaryHelpers.setWord(value,output);
+                }else{
+                    /* command 1 : section copy */
+                    copyOffset = getCopyOffset();
+                    if(copyOffset==0){
+                        decodingDone = true;
+                        break; 
+                    }
+                    copyLength = getCopyLength();
+                    Console.logger().finest("1 - section copy offset="+Integer.toHexString(copyOffset&0xFFFF)+", length="+ Integer.toHexString(copyLength&0xFFFF));
+                    for(int j=0;j<copyLength;j++){
+                        output.add(output.get(output.size()-2*copyOffset));
+                        output.add(output.get(output.size()-2*copyOffset));
+                    }
                 }
-                
+
             }
-        }catch(Exception e){
-            Console.logger().log(Level.SEVERE,"decodeStackGraphics",e);
-        }finally{
-            byte[] bytes = new byte[output.size()];
-            for(int i=0;i<bytes.length;i++){
-                bytes[i] = output.get(i);
-            }
-            tiles = new UncompressedGraphicsDecoder().decode(bytes, palette);
+
         }
+        byte[] bytes = new byte[output.size()];
+        for(int i=0;i<bytes.length;i++){
+            bytes[i] = output.get(i);
+        }
+        tiles = new UncompressedGraphicsDecoder().decode(bytes, palette);
         Console.logger().finest("EXITING decodeStackGraphics");
         return tiles;
     }

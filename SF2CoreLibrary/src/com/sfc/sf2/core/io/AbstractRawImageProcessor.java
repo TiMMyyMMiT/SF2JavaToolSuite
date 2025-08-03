@@ -14,7 +14,6 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 
 /**

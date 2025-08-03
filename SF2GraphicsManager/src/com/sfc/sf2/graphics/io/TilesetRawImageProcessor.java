@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.graphics.io;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.Tile;
@@ -25,18 +26,18 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
         if(imageWidth%8!=0 || imageHeight%8!=0){
-            LOG.warning("IMAGE FORMAT WARNING : DIMENSIONS ARE NOT MULTIPLES OF 8. (8 pixels per tile)");
+            Console.logger().warning("IWarning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
         }
         Palette palette = new Palette(pckg.name(), Palette.fromICM(icm));
         int tilesPerRow = imageWidth/8;
-        LOG.fine("Tiles per row : " + tilesPerRow);
+        Console.logger().fine("Tiles per row : " + tilesPerRow);
         Tile[] tiles = new Tile[(imageWidth/8)*(imageHeight/8)];
         int tileId = 0;
         int[] pixels = new int[64];
         for(int t = 0; t < tiles.length; t++) {
             int x = t%tilesPerRow*8;
             int y = t/tilesPerRow*8;
-            LOG.fine("Building tile from coordinates "+x+":"+y);
+            Console.logger().fine("Building tile from coordinates "+x+":"+y);
             Tile tile = new Tile();
             tile.setId(tileId);
             tile.setPalette(palette);
@@ -46,7 +47,7 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
                     tile.setPixel(i, j, pixels[i+j*8]);
                 }
             }
-            LOG.finest(tile.toString());
+            Console.logger().finest(tile.toString());
             tiles[tileId] = tile;   
             tileId++;
         }

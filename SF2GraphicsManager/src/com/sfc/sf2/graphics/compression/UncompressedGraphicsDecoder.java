@@ -8,7 +8,6 @@ package com.sfc.sf2.graphics.compression;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.palette.Palette;
-import java.util.logging.lEVEL;
 
 /**
  *
@@ -19,7 +18,7 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
     @Override
     public Tile[] decode(byte[] input, Palette palette) {
         Console.logger().finest("ENTERING decode");
-        Console.logger().fine("Data length = " + input.length + ", -> expecting " + input.length/32 + " tiles to parse.");
+        Console.logger().finest("Data length = " + input.length + ", -> expecting " + input.length/32 + " tiles to parse.");
         Tile[] tiles = new Tile[input.length/32];
         for(int i=0;i<tiles.length;i++){
             Tile tile = new Tile();
@@ -44,7 +43,7 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
     @Override
     public byte[] encode(Tile[] tiles) {
         Console.logger().finest("ENTERING encode");
-        Console.logger().fine("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
+        Console.logger().finest("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
         byte[] output = new byte[tiles.length*32];
         for(int i=0;i<tiles.length;i++){
             int[][] pixels = tiles[i].getPixels();
