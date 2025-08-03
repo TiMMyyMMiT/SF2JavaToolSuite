@@ -135,8 +135,11 @@ public class SettingsManager {
                 HashMap<String, String> data = new HashMap<>();
                 entry.getValue().encodeSettings(data);
                 for (Map.Entry<String, String> dataItem : data.entrySet()) {
+                    String line = dataItem.getKey() + ": " + dataItem.getValue();
                     sb.append("\t");
-                    sb.append(dataItem.getKey() + ": " + dataItem.getValue() + "\n");
+                    sb.append(line);
+                    sb.append("\n");
+                    Console.logger().finest("Settings : " + line);
                 }
                 sb.append("\n");
             }

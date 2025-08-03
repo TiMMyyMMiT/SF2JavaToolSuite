@@ -6,7 +6,6 @@
 package com.sfc.sf2.core.gui.controls;
 
 import com.sfc.sf2.helpers.GraphicsHelpers;
-import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -28,6 +27,14 @@ public class ColorPicker extends javax.swing.JPanel {
      */
     public ColorPicker() {
         initComponents();
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        GraphicsHelpers.drawBackgroundTransparencyPattern(image, getColor(), getWidth()/2);
+        g.drawImage(image, 0, 0, this);
     }
     
     public synchronized void addColorChangedListener(ColorChangedListener l) {
@@ -54,13 +61,6 @@ public class ColorPicker extends javax.swing.JPanel {
     @BeanProperty(preferred = true, visualUpdate = true, description = "The default color of the picker.")
     public void setColor(Color color) {
         this.setBackground(color);
-    }
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        BufferedImage bg = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        GraphicsHelpers.drawBackgroundTransparencyPattern(bg, getColor());
     }
 
     /**
@@ -98,6 +98,7 @@ public class ColorPicker extends javax.swing.JPanel {
         Color returnCol = jColorChooser.showDialog(this, colorDialogTitle, this.getBackground());
         if (returnCol != null) {
             this.setBackground(returnCol);
+            this.repaint();
             fireColorChanged();
         }
     }//GEN-LAST:event_formMouseClicked
@@ -106,12 +107,7 @@ public class ColorPicker extends javax.swing.JPanel {
     protected void fireColorChanged() {
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
-        int modifiers = 0;
-        AWTEvent currentEvent = EventQueue.getCurrentEvent();
-        modifiers = ((ActionEvent)currentEvent).getModifiers();
-        ActionEvent e =
-            new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Color Changed", EventQueue.getMostRecentEventTime(), modifiers);
-
+        ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "Color Changed", (int)EventQueue.getMostRecentEventTime());
         // Process the listeners last to first, notifying
         // those that are interested in this event
         for (int i = listeners.length-2; i>=0; i-=2) {

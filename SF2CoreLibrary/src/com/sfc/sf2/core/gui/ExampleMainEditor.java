@@ -7,7 +7,7 @@ package com.sfc.sf2.core.gui;
 
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
-import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.core.gui.controls.Console;
 
 /**
  *
@@ -15,13 +15,19 @@ import com.sfc.sf2.helpers.PathHelpers;
  */
 public final class ExampleMainEditor extends AbstractMainEditor {
     
+    public ExampleMainEditor() {
+        super();
+        initComponents();;      //<--- This is required
+        initCore(console1);;    //<--- This is required
+    }
+    
     @Override
     protected void initEditor() {
         super.initEditor();
-        initComponents();
-        initCore(console1);     //<--- This is required
         
         //One-time setup
+        CoreSettings settings = SettingsManager.getSettingsStore("core");
+        colorPicker1.setColor(settings.getTransparentBGColor());
     }
     
     @Override
@@ -46,124 +52,12 @@ public final class ExampleMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFrameSettings = new javax.swing.JFrame();
-        jPanelSettings = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        directoryButtonBasePath = new com.sfc.sf2.core.gui.controls.DirectoryButton();
-        directoryButtonIncbinPath = new com.sfc.sf2.core.gui.controls.DirectoryButton();
-        jRadioThemeLight = new javax.swing.JRadioButton();
-        jRadioThemeDark = new javax.swing.JRadioButton();
-        jLabel6 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel7 = new javax.swing.JLabel();
-        buttonGroupTheme = new javax.swing.ButtonGroup();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuFile = new javax.swing.JMenu();
-        jMenuItemExit = new javax.swing.JMenuItem();
-        jMenuSettings = new javax.swing.JMenu();
-        jMenuItemSettings = new javax.swing.JMenuItem();
-
-        jFrameSettings.setTitle("Settings");
-        jFrameSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jFrameSettings.setLocationByPlatform(true);
-        jFrameSettings.setMinimumSize(new java.awt.Dimension(500, 200));
-        jFrameSettings.setName("Frame Settings"); // NOI18N
-        jFrameSettings.setResizable(false);
-        jFrameSettings.setSize(new java.awt.Dimension(500, 250));
-        jFrameSettings.setType(java.awt.Window.Type.POPUP);
-        jFrameSettings.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                jFrameSettingsWindowClosing(evt);
-            }
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                jFrameSettingsWindowOpened(evt);
-            }
-        });
-
-        jPanelSettings.setMinimumSize(new java.awt.Dimension(400, 200));
-        jPanelSettings.setPreferredSize(new java.awt.Dimension(400, 200));
-
-        jLabel3.setText("<html>Base folder is where the .jar file is expected to be run from.<br>\n<b>Most users do not need to edit this path.</b></html>");
-        jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        directoryButtonBasePath.setLabelText("Base folder :");
-
-        directoryButtonIncbinPath.setLabelText("incbin folder :");
-
-        buttonGroupTheme.add(jRadioThemeLight);
-        jRadioThemeLight.setSelected(true);
-        jRadioThemeLight.setText("Light");
-
-        buttonGroupTheme.add(jRadioThemeDark);
-        jRadioThemeDark.setText("Dark");
-
-        jLabel6.setText("<html>Theme <i>(Requires restart)</i>  :</html>");
-
-        jLabel7.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)<br>\n<b>Most users do not need to edit this path.</b></html>");
-        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        javax.swing.GroupLayout jPanelSettingsLayout = new javax.swing.GroupLayout(jPanelSettings);
-        jPanelSettings.setLayout(jPanelSettingsLayout);
-        jPanelSettingsLayout.setHorizontalGroup(
-            jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelSettingsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addComponent(jLabel7)
-                    .addGroup(jPanelSettingsLayout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioThemeLight)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioThemeDark)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanelSettingsLayout.setVerticalGroup(
-            jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSettingsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(directoryButtonBasePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jRadioThemeDark)
-                    .addComponent(jRadioThemeLight)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jFrameSettingsLayout = new javax.swing.GroupLayout(jFrameSettings.getContentPane());
-        jFrameSettings.getContentPane().setLayout(jFrameSettingsLayout);
-        jFrameSettingsLayout.setHorizontalGroup(
-            jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFrameSettingsLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jPanelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(25, Short.MAX_VALUE))
-        );
-        jFrameSettingsLayout.setVerticalGroup(
-            jFrameSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFrameSettingsLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jPanelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                .addContainerGap(33, Short.MAX_VALUE))
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2 App");
@@ -172,15 +66,57 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setOneTouchExpandable(true);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Color picker test"));
+
+        colorPicker1.addColorChangedListener(new com.sfc.sf2.core.gui.controls.ColorPicker.ColorChangedListener() {
+            public void colorChanged(java.awt.event.ActionEvent evt) {
+                colorPicker1ColorChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout colorPicker1Layout = new javax.swing.GroupLayout(colorPicker1);
+        colorPicker1.setLayout(colorPicker1Layout);
+        colorPicker1Layout.setHorizontalGroup(
+            colorPicker1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 98, Short.MAX_VALUE)
+        );
+        colorPicker1Layout.setVerticalGroup(
+            colorPicker1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 98, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(82, Short.MAX_VALUE)
+                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1012, Short.MAX_VALUE)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(732, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(236, Short.MAX_VALUE))
         );
 
         jSplitPane1.setTopComponent(jPanel15);
@@ -197,32 +133,6 @@ public final class ExampleMainEditor extends AbstractMainEditor {
             .addComponent(jSplitPane1)
         );
 
-        jMenuFile.setText("File");
-
-        jMenuItemExit.setText("Exit");
-        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemExitActionPerformed(evt);
-            }
-        });
-        jMenuFile.add(jMenuItemExit);
-
-        jMenuBar1.add(jMenuFile);
-
-        jMenuSettings.setText("Settings");
-
-        jMenuItemSettings.setText("Settings");
-        jMenuItemSettings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSettingsActionPerformed(evt);
-            }
-        });
-        jMenuSettings.add(jMenuItemSettings);
-
-        jMenuBar1.add(jMenuSettings);
-
-        setJMenuBar(jMenuBar1);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -238,37 +148,13 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
-        dispose();
-        System.exit(0);
-    }//GEN-LAST:event_jMenuItemExitActionPerformed
-
-    private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        jFrameSettings.setVisible(true);
-    }//GEN-LAST:event_jMenuItemSettingsActionPerformed
-
-    private void jFrameSettingsWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowClosing
-        CoreSettings core = SettingsManager.getSettingsStore("core");
-        core.setBasePath(directoryButtonBasePath.getDirectoryPath());
-        core.setIncbinPath(directoryButtonIncbinPath.getDirectoryPath());
-        core.setIsDarkTheme(jRadioThemeDark.isSelected());
+    private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
+        Console.logger().info("Color changed : " + colorPicker1.getColor());
+        CoreSettings settings = SettingsManager.getSettingsStore("core");
+        settings.setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveSettingsFile();
-    }//GEN-LAST:event_jFrameSettingsWindowClosing
-
-    private void jFrameSettingsWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowOpened
-        jFrameSettings.setLocationRelativeTo(this);
-        jFrameSettings.setSize(jFrameSettings.getPreferredSize());
-        CoreSettings core = SettingsManager.getSettingsStore("core");
-        if (core.arePathsSet()) {
-            directoryButtonBasePath.setDirectoryPath(core.getBasePath());
-            directoryButtonIncbinPath.setDirectoryPath(core.getIncbinPath());
-            jRadioThemeLight.setSelected(!core.getIsDarkTheme());
-            jRadioThemeDark.setSelected(core.getIsDarkTheme());
-        } else {
-            directoryButtonBasePath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
-            directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
-        }
-    }//GEN-LAST:event_jFrameSettingsWindowOpened
+        repaintEditorLayout();
+    }//GEN-LAST:event_colorPicker1ColorChanged
     
     /**
      * To create a new Main Editor, copy the below code
@@ -287,25 +173,11 @@ public final class ExampleMainEditor extends AbstractMainEditor {
      */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroupTheme;
+    private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
-    private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButtonBasePath;
-    private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButtonIncbinPath;
-    private javax.swing.JFrame jFrameSettings;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuFile;
-    private javax.swing.JMenuItem jMenuItemExit;
-    private javax.swing.JMenuItem jMenuItemSettings;
-    private javax.swing.JMenu jMenuSettings;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanelSettings;
-    private javax.swing.JRadioButton jRadioThemeDark;
-    private javax.swing.JRadioButton jRadioThemeLight;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
     // End of variables declaration//GEN-END:variables
 

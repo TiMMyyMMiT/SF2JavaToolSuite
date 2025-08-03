@@ -66,7 +66,7 @@ public class PaletteManager extends AbstractManager {
         return palette;
     }
     
-    public void exportImage(Path filePath, Palette currentPalette, boolean firstColorTransparent) throws IOException, DisassemblyException {
+    public void exportImage(Path filePath, Palette currentPalette, boolean firstColorTransparent) throws RawImageException, IOException, DisassemblyException {
         Console.logger().finest("ENTERING exportImage");
         palette = currentPalette;
         PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);

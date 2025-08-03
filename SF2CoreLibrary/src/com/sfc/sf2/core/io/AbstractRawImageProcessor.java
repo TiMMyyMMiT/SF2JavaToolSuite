@@ -37,22 +37,25 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
         BufferedImage image = ImageIO.read(filePath.toFile());
         ColorModel cm = image.getColorModel();
         if(!(cm instanceof IndexColorModel)){
-            throw new RawImageException("IMAGE FORMAT ERROR : COLORS ARE NOT INDEXED AS EXPECTED. Format : " + cm.getColorSpace().toString());
-        }else{
-            IndexColorModel icm = (IndexColorModel)cm;
-            WritableRaster raster = image.getRaster();
-            item = parseImageData(raster, icm, pckg);
+            throw new RawImageException("ERROR: Image must be in an indexed color format. Format : " + cm.getColorSpace().toString());
         }
+        IndexColorModel icm = (IndexColorModel)cm;
+        WritableRaster raster = image.getRaster();
+        item = parseImageData(raster, icm, pckg);
         Console.logger().finest("EXITING importRawImage");
         return item;
     }
     
     protected abstract TType parseImageData(WritableRaster raster, IndexColorModel icm, TPackage pckg) throws DisassemblyException;
     
-    public void exportRawImage(Path filePath, TType item, TPackage pckg) throws IOException, DisassemblyException {
+    public void exportRawImage(Path filePath, TType item, TPackage pckg) throws IOException, RawImageException, DisassemblyException {
         FileFormat fileFormat = fileExtensionToFormat(filePath);
         Console.logger().finest("ENTERING exportRawImage : " + filePath + ". Format : " + fileFormat);
         BufferedImage image = packageImageData(item, pckg);
+        ColorModel cm = image.getColorModel();
+        if(!(cm instanceof IndexColorModel)){
+            throw new RawImageException("ERROR: Image must be in an indexed color format. Format : " + cm.getColorSpace().toString());
+        }
         File outputfile = filePath.toFile();
         ImageIO.write(image, GetFileExtensionName(fileFormat), outputfile);
         Console.logger().finest("EXITING exportRawImage");

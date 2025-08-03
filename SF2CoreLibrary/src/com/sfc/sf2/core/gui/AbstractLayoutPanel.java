@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  *
  * @author TiMMy
  */
-public abstract class CoreLayoutPanel extends JPanel {
+public abstract class AbstractLayoutPanel extends JPanel {
         
     protected int tilesPerRow = 8;
     private int displayScale = 1;
@@ -35,7 +35,7 @@ public abstract class CoreLayoutPanel extends JPanel {
     
     protected Color bgColor = null;
 
-    public CoreLayoutPanel() {
+    public AbstractLayoutPanel() {
         CoreSettings core = SettingsManager.getSettingsStore("core");
         bgColor = core.getTransparentBGColor();
     }
@@ -43,21 +43,21 @@ public abstract class CoreLayoutPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);   
-        g.drawImage(buildImage(), 0, 0, this);       
+        g.drawImage(paintImage(), 0, 0, this);       
     }
     
-    public BufferedImage buildImage(){
-        if (redraw) {
+    public BufferedImage paintImage() {
+        if (redraw && hasData()) {
             //Setup image
-            Dimension imageSize = calculateImageSize();
-            currentImage = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage targetImage = buildImage();
+            currentImage = new BufferedImage(targetImage.getWidth(), targetImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();
             //Render BG color
-            GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor);
+            GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor, 12);
             //Render main image
             renderCounter++;
-            System.getLogger(CoreLayoutPanel.class.getName()).log(System.Logger.Level.ALL, "render " + renderCounter);
-            currentImage = buildImage(currentImage);
+            System.getLogger(AbstractLayoutPanel.class.getName()).log(System.Logger.Level.ALL, "render " + renderCounter);
+            graphics.drawImage(targetImage, 0, 0, null);
             graphics.dispose();
             //Resize
             currentImage = resize(currentImage);
@@ -71,9 +71,9 @@ public abstract class CoreLayoutPanel extends JPanel {
         return currentImage;
     }
     
-    protected abstract Dimension calculateImageSize();
+    protected abstract boolean hasData();
     
-    protected abstract BufferedImage buildImage(BufferedImage image);
+    protected abstract BufferedImage buildImage();
     
     protected void setGridDimensions(int gridW, int gridH) {
         setGridDimensions(gridW, gridH, -1, -1);

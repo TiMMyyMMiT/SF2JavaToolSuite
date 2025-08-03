@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.graphics.gui;
 
-import com.sfc.sf2.core.gui.CoreLayoutPanel;
+import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import java.awt.Dimension;
@@ -15,22 +15,17 @@ import java.awt.image.BufferedImage;
  *
  * @author wiz
  */
-public class GraphicsLayoutPanel extends CoreLayoutPanel {
+public class GraphicsLayoutPanel extends AbstractLayoutPanel {
     
     private Tileset tileset;
-    
+
     @Override
-    protected Dimension calculateImageSize() {
-        int tileCount = tileset.getTiles().length;
-        int imageHeight = (tileCount/tilesPerRow);
-        if(tileCount%tilesPerRow != 0) {
-            imageHeight++;
-        }
-        return new Dimension(tilesPerRow*Tile.PIXEL_WIDTH, imageHeight*Tile.PIXEL_HEIGHT);
+    protected boolean hasData() {
+        return tileset != null && tileset.getTiles().length > 0;
     }
 
     @Override
-    protected BufferedImage buildImage(BufferedImage image) {
+    protected BufferedImage buildImage() {
         return tileset.getIndexedColorImage();
     }
     

@@ -71,7 +71,7 @@ public class Tileset {
             int height = tiles.length/tilesPerRow;
             if (tiles.length%tilesPerRow != 0)
                 height++;
-            indexedColorImage = new BufferedImage(width*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            indexedColorImage = new BufferedImage(width*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, getPalette().getIcm());
             Graphics graphics = indexedColorImage.getGraphics();
             for(int j=0;j<height;j++){
                 for(int i=0;i<width;i++){

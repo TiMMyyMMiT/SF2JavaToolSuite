@@ -57,6 +57,7 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
 
     @Override
     protected BufferedImage packageImageData(Tileset item, TilesetPackage pckg) throws DisassemblyException {
+        item.clearIndexedColorImage();
         return item.getIndexedColorImage();
     }
 }

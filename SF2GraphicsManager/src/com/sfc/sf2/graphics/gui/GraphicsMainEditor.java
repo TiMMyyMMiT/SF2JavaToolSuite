@@ -8,6 +8,7 @@ package com.sfc.sf2.graphics.gui;
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.TilesetsManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor.TilesetCompression;
@@ -15,6 +16,7 @@ import com.sfc.sf2.helpers.PathHelpers;
 import java.awt.GridLayout;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.logging.Level;
 import javax.swing.JFileChooser;
 
 /**
@@ -26,24 +28,37 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     TilesetsManager graphicsManager = new TilesetsManager();
     GraphicsLayoutPanel graphicsLayoutPanel = new GraphicsLayoutPanel();
     
-    @Override
-    protected void initEditor() {
-        super.initEditor();
+    public GraphicsMainEditor() {
+        super();
         initComponents();
         initCore(console1);
     }
     
     @Override
-    protected void updateEditorData() {
+    protected void initEditor() {
+        super.initEditor();
+        
         CoreSettings settings = SettingsManager.getSettingsStore("core");
         colorPicker1.setColor(settings.getTransparentBGColor());
+        jPanel2.removeAll();
+        jPanel2.add(graphicsLayoutPanel);
+        jPanel2.setLayout(new GridLayout(1,1));
+    }
+    
+    @Override
+    protected void updateEditorData() {
+        Tileset tileset = graphicsManager.getTileset();
+        int tileWidth = (int)jSpinner2.getValue();
+        graphicsLayoutPanel.setTilesPerRow(tileWidth);
+        graphicsLayoutPanel.setTileset(tileset);
         
         super.updateEditorData();
     }
     
     @Override
     protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
+        graphicsLayoutPanel.revalidate();
+        graphicsLayoutPanel.repaint();
     }
     
     /**
@@ -1047,37 +1062,59 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
-        if (!PathHelpers.createPathIfRequred(disasmPath))
-            return;
-        TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
-        graphicsManager.exportDisassembly(disasmPath, compression);
+        Path graphicPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        if (!PathHelpers.createPathIfRequred(graphicPath)) return;
+        try {
+            TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
+            graphicsManager.exportDisassembly(graphicPath, compression);
+        } catch (Exception ex) {
+            graphicsManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Graphic disasm could not be exported to : " + graphicPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        Path imagePath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
-        if (!PathHelpers.createPathIfRequred(imagePath))
-            return;
-        graphicsManager.getTileset().setTilesPerRow((int)jSpinner2.getValue());
-        graphicsManager.exportImage(imagePath);
+        Path graphicPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
+        if (!PathHelpers.createPathIfRequred(graphicPath)) return;
+        try {
+            graphicsManager.getTileset().setTilesPerRow((int)jSpinner2.getValue());
+            graphicsManager.exportImage(graphicPath);
+        } catch (Exception ex) {
+            graphicsManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Graphic image could not be exported to : " + graphicPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        Path imagePath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
-        graphicsManager.importImage(imagePath);
-        jSpinner2.setValue(graphicsManager.getTileset().getTilesPerRow());
-        updateInterface();
-        repaintLayout();
+        Path graphicPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        try {
+            graphicsManager.importImage(graphicPath);
+            jSpinner2.setValue(graphicsManager.getTileset().getTilesPerRow());
+        } catch (Exception ex) {
+            graphicsManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Graphic image could not be imported from : " + graphicPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
-        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
-        TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
-        graphicsManager.importDisassembly(palettePath, disasmPath, compression, (int)jSpinner1.getValue());
-        jSpinner2.setValue(jSpinner1.getValue());
-        updateInterface();
-        repaintLayout();
+        Path graphicPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        try {
+            TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
+            graphicsManager.importDisassembly(palettePath, graphicPath, compression, (int)jSpinner1.getValue());
+            jSpinner2.setValue(jSpinner1.getValue());
+        } catch (Exception ex) {
+            graphicsManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Graphic disasm could not be imported from : " + graphicPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton37ActionPerformed
@@ -1110,12 +1147,12 @@ public class GraphicsMainEditor extends AbstractMainEditor {
 
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
         graphicsLayoutPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
-        repaintLayout();
+        repaintEditorLayout();
     }//GEN-LAST:event_jComboBox7ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         graphicsLayoutPanel.setShowGrid(jCheckBox1.isSelected());
-        repaintLayout();
+        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -1186,8 +1223,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             jTextField10.getText(),jTextField39.getText(),
             jTextField14.getText(),jTextField40.getText(),
             jTextField19.getText(),jComboBox5.getSelectedIndex());
-        updateInterface();
-        repaintLayout();
+        updateEditorData();
     }//GEN-LAST:event_jButton25ActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
@@ -1204,29 +1240,17 @@ public class GraphicsMainEditor extends AbstractMainEditor {
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         graphicsLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
-        repaintLayout();
+        repaintEditorLayout();
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
-        CoreSettings settings = SettingsManager.getSettingsStore("core");
-        colorPicker1.setColor(settings.getTransparentBGColor());
         graphicsLayoutPanel.setBGColor(colorPicker1.getColor());
+        CoreSettings settings = SettingsManager.getSettingsStore("core");
+        settings.setTransparentBGColor(colorPicker1.getColor());
+        SettingsManager.saveSettingsFile();
+        repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
-    void updateInterface() {
-        jPanel2.setLayout(new GridLayout(1,1));
-        Tileset tileset = graphicsManager.getTileset();
-        int tileWidth = (int)jSpinner2.getValue();
-        graphicsLayoutPanel.setTilesPerRow(tileWidth);
-        graphicsLayoutPanel.setTileset(tileset);
-    }
-    
-    void repaintLayout() {
-        graphicsLayoutPanel.revalidate();
-        graphicsLayoutPanel.repaint();
-        jPanel2.setSize(graphicsLayoutPanel.getSize());
-    }
-    
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)

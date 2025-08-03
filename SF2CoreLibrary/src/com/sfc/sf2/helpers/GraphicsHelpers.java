@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.awt.image.IndexColorModel;
 
 /**
  *
@@ -18,7 +17,7 @@ import java.awt.image.IndexColorModel;
  */
 public class GraphicsHelpers {
         
-    public static void drawBackgroundTransparencyPattern(BufferedImage image, Color bgColor) {
+    public static void drawBackgroundTransparencyPattern(BufferedImage image, Color bgColor, int pixelGrid) {
         Color bgDarkerColor = bgColor.darker();
         int bgInt = bgColor.getRGB();
         int darkInt = bgDarkerColor.getRGB();
@@ -27,9 +26,9 @@ public class GraphicsHelpers {
         int height = image.getHeight();
         int offset;
         for (int j = 0; j < height; j++) {
-            offset = ((j/12)%2) == 0 ? 12 : 0;
+            offset = j/pixelGrid;
             for (int i = 0; i < width; i++) {
-                data[i+j*width] = ((i+j*width+offset)%24) < 12 ? bgInt : darkInt;
+                data[i+j*width] = (i/pixelGrid + offset)%2 == 0 ? bgInt : darkInt;
             }
         }
     }

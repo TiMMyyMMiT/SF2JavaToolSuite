@@ -20,12 +20,16 @@ public class PaletteMainEditor extends AbstractMainEditor {
     
     PaletteManager paletteManager = new PaletteManager();
     
+    public PaletteMainEditor() {
+        super();
+        initComponents();
+        initCore(console1);
+    }
+    
     @Override
     protected void initEditor() {
         super.initEditor();
-        initComponents();
-        initCore(console1);
-        
+                
         palettePane1.setColorEditor(colorEditor1);
     }
     
@@ -334,48 +338,48 @@ public class PaletteMainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
-        if (!PathHelpers.createPathIfRequred(disasmPath)) return;
+        Path palettePath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        if (!PathHelpers.createPathIfRequred(palettePath)) return;
         try {
-            paletteManager.exportDisassembly(disasmPath, palettePane1.getUpdatedPalette(), true);
+            paletteManager.exportDisassembly(palettePath, palettePane1.getUpdatedPalette(), true);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Palette could not be exported to : " + disasmPath);
+            Console.logger().severe("ERROR Palette disasm could not be exported to : " + palettePath);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path palettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         try {
-            paletteManager.importDisassembly(disasmPath, true);
+            paletteManager.importDisassembly(palettePath, true);
         } catch (Exception ex) {
             paletteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Palette could not be imported from : " + disasmPath);
+            Console.logger().severe("ERROR Palette disasm could not be imported from : " + palettePath);
         }
         updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
-        Path filePath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        Path palettePath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         try {
-            paletteManager.importImage(filePath,true);
+            paletteManager.importImage(palettePath,true);
         } catch (Exception ex) {
             paletteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Palette could not be imported from : " + filePath);
+            Console.logger().severe("ERROR Palette image could not be imported from : " + palettePath);
         }
         updateEditorData();
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Path filePath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
-        if (!PathHelpers.createPathIfRequred(filePath)) return;
+        Path palettePath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        if (!PathHelpers.createPathIfRequred(palettePath)) return;
         try {
-            paletteManager.exportImage(filePath,palettePane1.getUpdatedPalette(),true);
+            paletteManager.exportImage(palettePath,palettePane1.getUpdatedPalette(),true);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Palette could not be exported to : " + filePath);
+            Console.logger().severe("ERROR Palette image could not be exported to : " + palettePath);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
     

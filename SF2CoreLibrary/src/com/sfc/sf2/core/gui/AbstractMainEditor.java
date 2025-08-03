@@ -28,7 +28,9 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
      */
     public AbstractMainEditor() {
         initComponents();
-        initEditor();
+        java.awt.EventQueue.invokeLater(() -> {
+            initEditor();
+        });
     }
     
     protected void initCore(Console console) {
@@ -66,6 +68,44 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         //TODO define a default layout class (or support multiple in the main editor
         //defaultLayout.revalidate();
         //defaultLayout.repaint();
+    }
+    
+    public static void programSetup() {
+        //Hack to determine if project is running from editor (IDE) or is a build. (property 'user.dir' is blank if in editor)
+        String dir = System.getProperty("user.dir");
+        SettingsManager.setRunningInEditor(dir == null || dir.length() == 0);
+        
+        //Core setup
+        try {
+            File workingDirectory = new File(AbstractMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
+            System.setProperty("user.dir", workingDirectory.toString());
+        } catch (URISyntaxException ex) {
+            System.getLogger(AbstractMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        SettingsManager.loadSettingsFile();
+        
+        //Set look and feel
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Windows is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            //Have to load core settings first to check theme                                     
+            CoreSettings core = SettingsManager.getSettingsStore("core");
+            if (core.getIsDarkTheme())
+                FlatDarkLaf.setup();
+            else
+                FlatLightLaf.setup();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, "FlatLaf theme could not be loaded. Loading default theme instead", ex);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex1) {
+                java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+        }
+        //</editor-fold>
+        //</editor-fold>
     }
 
     /**
@@ -312,45 +352,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
             directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
         }
     }//GEN-LAST:event_jFrameSettingsWindowOpened
-        
-    public static void programSetup() {
-        //Hack to determine if project is running from editor (IDE) or is a build. (property 'user.dir' is blank if in editor)
-        String dir = System.getProperty("user.dir");
-        SettingsManager.setRunningInEditor(dir == null || dir.length() == 0);
-        
-        //Core setup
-        try {
-            File workingDirectory = new File(AbstractMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-            System.setProperty("user.dir", workingDirectory.toString());
-        } catch (URISyntaxException ex) {
-            System.getLogger(AbstractMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
-        SettingsManager.loadSettingsFile();
-        
-        //Set look and feel
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Windows is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            //Have to load core settings first to check theme                                     
-            CoreSettings core = SettingsManager.getSettingsStore("core");
-            if (core.getIsDarkTheme())
-                FlatDarkLaf.setup();
-            else
-                FlatLightLaf.setup();
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, "FlatLaf theme could not be loaded. Loading default theme instead", ex);
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex1) {
-                java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
-        }
-        //</editor-fold>
-        //</editor-fold>
-    }
-    
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupTheme;
     private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButtonBasePath;
