@@ -7,7 +7,7 @@ package com.sfc.sf2.graphics.gui;
 
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
-import com.sfc.sf2.core.gui.CoreMainEditor;
+import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.graphics.TilesetsManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor.TilesetCompression;
@@ -21,7 +21,7 @@ import javax.swing.JFileChooser;
  *
  * @author wiz
  */
-public class GraphicsMainEditor extends CoreMainEditor {
+public class GraphicsMainEditor extends AbstractMainEditor {
     
     TilesetsManager graphicsManager = new TilesetsManager();
     GraphicsLayoutPanel graphicsLayoutPanel = new GraphicsLayoutPanel();
@@ -1257,7 +1257,7 @@ public class GraphicsMainEditor extends CoreMainEditor {
      * Don't forget to change the new main class (below)
      */
     public static void main(String args[]) {
-        CoreMainEditor.programSetup();
+        AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GraphicsMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class

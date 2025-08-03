@@ -5,11 +5,10 @@
  */
 package com.sfc.sf2.graphics.compression;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.helpers.BinaryHelpers;
 import com.sfc.sf2.palette.Palette;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,8 +34,8 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         
     @Override
     public Tile[] decode(byte[] input, Palette palette) {
-        LOG.entering(LOG.getName(),"decodeStackGraphics");
-        LOG.fine("Data length = " + input.length + " bytes.");
+        Console.logger().finest("ENTERING decodeStackGraphics");
+        Console.logger().finest("Data length = " + input.length + " bytes.");
         this.inputData = input;
         boolean decodingDone = false;
         short commandBitmap = 0;
@@ -57,7 +56,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                     commandBitmap = (short) (commandBitmap << 4);
                     commandBitmap += commandPattern;
                 }
-                LOG.log(Level.FINE, "command bitmap = {0}", Integer.toHexString(commandBitmap&0xFFFF));
+                Console.logger().finest("command bitmap = " + Integer.toHexString(commandBitmap&0xFFFF));
                 
                 /* Step 2 - Apply commands on following data */
                 for(int i=0;i<16;i++){
@@ -65,7 +64,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                     if(command==0){
                         /* command 0 : word value built from four 4-bit values taken from history stack */
                         value = getWordValue();
-                        LOG.log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
+                        Console.logger().log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
                         BinaryHelpers.setWord(value,output);
                     }else{
                         /* command 1 : section copy */
@@ -75,7 +74,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                             break; 
                         }
                         copyLength = getCopyLength();
-                        LOG.log(Level.FINE, "1 - section copy offset="+Integer.toHexString(copyOffset&0xFFFF)+", length="+ Integer.toHexString(copyLength&0xFFFF));
+                        Console.logger().finest("1 - section copy offset="+Integer.toHexString(copyOffset&0xFFFF)+", length="+ Integer.toHexString(copyLength&0xFFFF));
                         for(int j=0;j<copyLength;j++){
                             output.add(output.get(output.size()-2*copyOffset));
                             output.add(output.get(output.size()-2*copyOffset));
@@ -86,7 +85,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                 
             }
         }catch(Exception e){
-            LOG.throwing(LOG.getName(),"decodeStackGraphics",e);
+            Console.logger().log(Level.SEVERE,"decodeStackGraphics",e);
         }finally{
             byte[] bytes = new byte[output.size()];
             for(int i=0;i<bytes.length;i++){
@@ -94,7 +93,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
             }
             tiles = new UncompressedGraphicsDecoder().decode(bytes, palette);
         }
-        LOG.exiting(LOG.getName(),"decodeStackGraphics");
+        Console.logger().finest("EXITING decodeStackGraphics");
         return tiles;
     }
     
@@ -275,13 +274,13 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
 
     @Override
     public byte[] encode(Tile[] tiles) {
-        LOG.entering(LOG.getName(),"encode");
+        Console.logger().finest("ENTERING encode");
         List<Integer> historyStack = new ArrayList<Integer>(Arrays.asList(new Integer[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}));
         StringBuilder outputSb = new StringBuilder();
         StringBuilder commandSb = new StringBuilder(16);
         StringBuilder dataSb = new StringBuilder();
         byte[] inputData = new UncompressedGraphicsDecoder().encode(tiles);
-        LOG.fine("input = " + BinaryHelpers.bytesToHex(inputData));
+        Console.logger().finest("input = " + BinaryHelpers.bytesToHex(inputData));
         int inputCursor = 0;
         byte[] output;
         int potentialCopyLength;
@@ -293,7 +292,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
        
             short inputWord = BinaryHelpers.getWord(inputData, inputCursor);
             
-            //LOG.fine("inputWord = " + Integer.toHexString(inputWord & 0xFFFF));
+            //Console.logger().finest("inputWord = " + Integer.toHexString(inputWord & 0xFFFF));
         
             /* Get number of potential word sequence to copy */
             potentialCopyLength = 0;
@@ -318,7 +317,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                 }
                 copyCursor-=2;      
             }
-            //LOG.fine("Potential copy length from " + candidateSourceCursor + " = " + potentialCopyLength); 
+            //Console.logger().finest("Potential copy length from " + candidateSourceCursor + " = " + potentialCopyLength); 
             
             if(potentialCopyLength>1){
                 // Apply word sequence copy
@@ -351,24 +350,24 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                 }
                 dataSb.append(lengthSb);
                 inputCursor+=potentialCopyLength*2;
-                LOG.fine("input word "+Integer.toHexString(inputWord & 0xFFFF)+" copy : offset=" + startOffset + "/" + offsetSb.toString() + ", length="+potentialCopyLength + "/" + lengthSb);
+                Console.logger().finest("input word "+Integer.toHexString(inputWord & 0xFFFF)+" copy : offset=" + startOffset + "/" + offsetSb.toString() + ", length="+potentialCopyLength + "/" + lengthSb);
             }else{
                 // No copy : word value
                 commandSb.append("0");
                 String valueBitString = getValueBitString(historyStack, inputWord);
                 dataSb.append(valueBitString);
                 inputCursor+=2;
-                LOG.fine("input word "+Integer.toHexString(inputWord & 0xFFFF)+" value : " + valueBitString+", history="+historyStack.toString());
+                Console.logger().finest("input word "+Integer.toHexString(inputWord & 0xFFFF)+" value : " + valueBitString+", history="+historyStack.toString());
             }
           
             if(commandSb.length()==16){
                 String commandBitString = getCommandBitString(commandSb);
-                LOG.fine("commandSb=" + commandSb.toString()+", commandBitString="+commandBitString);
+                Console.logger().finest("commandSb=" + commandSb.toString()+", commandBitString="+commandBitString);
                 outputSb.append(commandBitString);
                 outputSb.append(dataSb);
                 commandSb.setLength(0);
                 dataSb.setLength(0);
-                LOG.fine("output = " + outputSb.toString());
+                Console.logger().finest("output = " + outputSb.toString());
             }            
 
             
@@ -382,7 +381,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         String commandBitString = getCommandBitString(commandSb);
         outputSb.append(commandBitString);
         outputSb.append(dataSb);
-        LOG.fine("output = " + outputSb.toString());
+        Console.logger().finest("output = " + outputSb.toString());
         
         /* Word-wise padding */
         while(outputSb.length()%16 != 0){
@@ -395,9 +394,9 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
             Byte b = (byte)(Integer.valueOf(outputSb.substring(i*8, i*8+8),2)&0xFF);
             output[i] = b;
         }
-        LOG.fine("output bytes length = " + output.length);
-        LOG.fine("output = " + BinaryHelpers.bytesToHex(output));
-        LOG.exiting(LOG.getName(),"encode");
+        Console.logger().finest("output bytes length = " + output.length);
+        Console.logger().finest("output = " + BinaryHelpers.bytesToHex(output));
+        Console.logger().finest("EXITING encode");
         return output;
     }
     

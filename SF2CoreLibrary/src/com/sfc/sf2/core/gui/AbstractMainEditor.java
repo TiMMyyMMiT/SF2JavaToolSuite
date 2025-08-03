@@ -9,36 +9,33 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.io.File;
-import java.io.PrintStream;
 import java.net.URISyntaxException;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
 /**
  *
  * @author TiMMy
  */
-public class CoreMainEditor extends javax.swing.JFrame {
-        
+public abstract class AbstractMainEditor extends javax.swing.JFrame {
+    
+    private Console console;
+    
     /**
      * Creates new form New Application
      */
-    public CoreMainEditor() {
+    public AbstractMainEditor() {
         initComponents();
-        initApp();
         initEditor();
     }
     
-    private void initApp() {
-        initConsole(jTextAreaConsole);
-        initLogger("com.sfc.sf2.graphics", Level.FINEST);
-        SettingsManager.loadSettingsFile();
+    protected void initCore(Console console) {
+        this.console = console;
+        console.initLogger("SF2 Java Suite");
         
+        SettingsManager.loadSettingsFile();        
         //Check if settings panel should be shown
         if (!SettingsManager.isRunningInEditor()) {
             java.awt.EventQueue.invokeLater(() -> {
@@ -48,22 +45,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
                 }
             });
         }
-    }
-    
-    private void initConsole(JTextArea textArea) {
-        PrintStream con=new PrintStream(new TextAreaOutputStream(textArea));
-        System.setOut(con);
-        System.setErr(con);
-    }
-    
-    private void initLogger(String name, Level level) {
-        System.setProperty("java.util.logging.SimpleFormatter.format", "%2$s - %5$s%6$s%n");
-        Logger log = Logger.getLogger(name);
-        log.setUseParentHandlers(false);
-        log.setLevel(level);
-        ConsoleHandler ch = new ConsoleHandler();
-        ch.setLevel(level);        
-        log.addHandler(ch);
     }
     
     protected void initEditor() {
@@ -110,9 +91,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaConsole = new javax.swing.JTextArea();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemExit = new javax.swing.JMenuItem();
@@ -157,7 +136,6 @@ public class CoreMainEditor extends javax.swing.JFrame {
 
         jLabel7.setText("<html>Incbin is the root folder for the disassemby (usually SF2DISASM\\disasm\\)<br>\n<b>Most users do not need to edit this path.</b></html>");
         jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jLabel7.setMinimumSize(new java.awt.Dimension(111, 32));
 
         javax.swing.GroupLayout jPanelSettingsLayout = new javax.swing.GroupLayout(jPanelSettings);
         jPanelSettings.setLayout(jPanelSettingsLayout);
@@ -170,7 +148,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7)
                     .addGroup(jPanelSettingsLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -190,7 +168,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(directoryButtonIncbinPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -221,7 +199,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2 App");
 
-        jSplitPane1.setDividerLocation(550);
+        jSplitPane1.setDividerLocation(450);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setOneTouchExpandable(true);
 
@@ -233,34 +211,23 @@ public class CoreMainEditor extends javax.swing.JFrame {
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jSplitPane1.setTopComponent(jPanel15);
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-        jPanel7.setToolTipText("");
-
-        jTextAreaConsole.setEditable(false);
-        jTextAreaConsole.setColumns(20);
-        jTextAreaConsole.setRows(5);
-        jScrollPane1.setViewportView(jTextAreaConsole);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1012, Short.MAX_VALUE)
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 178, Short.MAX_VALUE)
         );
 
-        jSplitPane1.setBottomComponent(jPanel7);
+        jSplitPane1.setBottomComponent(jPanel1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -345,19 +312,7 @@ public class CoreMainEditor extends javax.swing.JFrame {
             directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
         }
     }//GEN-LAST:event_jFrameSettingsWindowOpened
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        CoreMainEditor.programSetup();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CoreMainEditor().setVisible(true);
-            }
-        });
-    }
-    
+        
     public static void programSetup() {
         //Hack to determine if project is running from editor (IDE) or is a build. (property 'user.dir' is blank if in editor)
         String dir = System.getProperty("user.dir");
@@ -365,10 +320,10 @@ public class CoreMainEditor extends javax.swing.JFrame {
         
         //Core setup
         try {
-            File workingDirectory = new File(CoreMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
+            File workingDirectory = new File(AbstractMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
             System.setProperty("user.dir", workingDirectory.toString());
         } catch (URISyntaxException ex) {
-            System.getLogger(CoreMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            System.getLogger(AbstractMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         SettingsManager.loadSettingsFile();
         
@@ -385,13 +340,14 @@ public class CoreMainEditor extends javax.swing.JFrame {
             else
                 FlatLightLaf.setup();
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(CoreMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, "FlatLaf theme could not be loaded. Loading default theme instead", ex);
+            java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, "FlatLaf theme could not be loaded. Loading default theme instead", ex);
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex1) {
-                java.util.logging.Logger.getLogger(CoreMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
         }
+        //</editor-fold>
         //</editor-fold>
     }
     
@@ -408,16 +364,14 @@ public class CoreMainEditor extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemSettings;
     private javax.swing.JMenu jMenuSettings;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanelSettings;
     private javax.swing.JRadioButton jRadioThemeDark;
     private javax.swing.JRadioButton jRadioThemeLight;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTextArea jTextAreaConsole;
     // End of variables declaration//GEN-END:variables
 
 }

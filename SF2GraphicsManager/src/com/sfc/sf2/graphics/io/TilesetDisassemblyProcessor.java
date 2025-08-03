@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.graphics.io;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.AbstractDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.Tile;
@@ -18,7 +19,6 @@ import com.sfc.sf2.palette.Palette;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -80,7 +80,7 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
     }
 
     public Tile[] importDisassemblyWithLayout(Path baseTilesetPath, Palette[] palettes, Path tileset1FilePath, String tileset1Offset, Path tileset2FilePath, String tileset2Offset, TilesetCompression compression, int tilesPerRow, Path layoutPath) {
-        LOG.entering(LOG.getName(),"importDisassemblyWithLayout");
+        Console.logger().finest("ENTERING importDisassemblyWithLayout");
         TilesetDisassemblyProcessor processor = new TilesetDisassemblyProcessor();
         TilesetPackage basePckg = new TilesetPackage(PathHelpers.filenameFromPath(baseTilesetPath), TilesetCompression.STACK, palettes[0], tilesPerRow);
         Tile[] baseTiles = processor.importDisassembly(baseTilesetPath, basePckg).getTiles();
@@ -119,23 +119,22 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
                     layoutTiles[i] = outputTile;
                 }
                 if(layoutTiles[i]==null){
-                    LOG.fine("Layout tile "+i+" : wrong tile id "+tileId);
+                    Console.logger().fine("Layout tile "+i+" : wrong tile id "+tileId);
                     layoutTiles[i] = baseTiles[0];
                 }
             }
             tiles = layoutTiles;
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            Console.logger().log(Level.SEVERE, null, ex);
         }
-        LOG.exiting(LOG.getName(),"importDisassemblyWithLayout");
+        Console.logger().finest("EXITING importDisassemblyWithLayout");
         return tiles;
     }
 
     public void exportTilesAndLayout(Tile[] tiles, Path tilesPath, Path layoutPath, String graphicsOffset, TilesetCompression compression, Palette palette) {
-        LOG.entering(LOG.getName(),"exportTilesAndLayout");
+        Console.logger().finest("ENTERING exportTilesAndLayout");
         
         int vramTileOffset = Integer.parseInt(graphicsOffset,16) / 0x20;
-        
         try{
             int tilesetIndex = -1;
             byte[] layout = new byte[tiles.length*2];
@@ -166,9 +165,8 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
             this.exportDisassembly(tilesPath, tileset, pckg);
             Files.write(layoutPath, layout);
         }catch(Exception e){
-            LOG.throwing(LOG.getName(),"exportTilesAndLayout", e);
+            Console.logger().log(Level.SEVERE, null, e);
         }
-        
-        LOG.exiting(LOG.getName(),"exportTilesAndLayout");        
+        Console.logger().finest("EXITING exportTilesAndLayout");
     }
 }

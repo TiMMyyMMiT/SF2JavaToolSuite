@@ -5,16 +5,15 @@
  */
 package com.sfc.sf2.core.io;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -24,7 +23,6 @@ import javax.imageio.ImageIO;
  * @param <TPackage> The input data required to load the TType
  */
 public abstract class AbstractRawImageProcessor<TType extends Object, TPackage extends Object> {
-    protected static final Logger LOG = Logger.getLogger(AbstractDisassemblyProcessor.class.getName());
     
     public enum FileFormat {
         UNKNOWN,
@@ -34,7 +32,7 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
     
     public TType importRawImage(Path filePath, TPackage pckg) {
         FileFormat fileFormat = fileExtensionToFormat(filePath);
-        LOG.entering(LOG.getName(), "importRawImage : " + filePath + ". Format : " + fileFormat);
+        Console.logger().finest("ENTERING importRawImage : " + filePath + ". Format : " + fileFormat);
         TType item = null;
         try {
             BufferedImage image = ImageIO.read(filePath.toFile());
@@ -47,10 +45,10 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
                 item = parseImageData(raster, icm, pckg);
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not import image : " + filePath, e);
+            Console.logger().log(Level.SEVERE, "Could not import image : " + filePath, e);
             item = null;
         }
-        LOG.exiting(LOG.getName(), "importRawImage");
+        Console.logger().finest("EXITING importRawImage");
         return item;
     }
     
@@ -58,7 +56,7 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
     
     public boolean exportRawImage(Path filePath, TType item, TPackage pckg) {
         FileFormat fileFormat = fileExtensionToFormat(filePath);
-        LOG.entering(LOG.getName(), "exportRawImage : " + filePath + ". Format : " + fileFormat);
+        Console.logger().finest("ENTERING exportRawImage : " + filePath + ". Format : " + fileFormat);
         boolean error = false;
         try {
             BufferedImage image = packageImageData(item, pckg);
@@ -66,10 +64,10 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
             ImageIO.write(image, GetFileExtensionName(fileFormat), outputfile);
             
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Could not export image : " + filePath, e);
+            Console.logger().log(Level.SEVERE, "Could not export image : " + filePath, e);
             error = true;
         }
-        LOG.exiting(LOG.getName(), "exportRawImage");
+        Console.logger().finest("EXITING exportRawImage");
         return error;
     }
 
@@ -87,7 +85,6 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
             case GIF:
                 return "gif";
             default:
-                LOG.throwing(LOG.getName(),"UNKNOWN FILE FORMAT", new IOException());
                 return "unkn";
         }
     }

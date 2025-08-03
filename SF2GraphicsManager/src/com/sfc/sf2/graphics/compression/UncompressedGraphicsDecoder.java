@@ -5,9 +5,10 @@
  */
 package com.sfc.sf2.graphics.compression;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.palette.Palette;
-import java.util.logging.Logger;
+import java.util.logging.lEVEL;
 
 /**
  *
@@ -17,8 +18,8 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
     
     @Override
     public Tile[] decode(byte[] input, Palette palette) {
-        LOG.entering(LOG.getName(),"decode");
-        LOG.fine("Data length = " + input.length + ", -> expecting " + input.length/32 + " tiles to parse.");
+        Console.logger().finest("ENTERING decode");
+        Console.logger().fine("Data length = " + input.length + ", -> expecting " + input.length/32 + " tiles to parse.");
         Tile[] tiles = new Tile[input.length/32];
         for(int i=0;i<tiles.length;i++){
             Tile tile = new Tile();
@@ -33,17 +34,17 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
                     tile.setPixel(x+1, y, secondPixel);
                 }
             }
-            LOG.finest(tile.toString());
+            Console.logger().finest(tile.toString());
             tiles[i] = tile;
         }
-        LOG.exiting(LOG.getName(),"decode");
+        Console.logger().finest("EXITING decode");
         return tiles;
     }
     
     @Override
     public byte[] encode(Tile[] tiles) {
-        LOG.entering(LOG.getName(),"encode");
-        LOG.fine("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
+        Console.logger().finest("ENTERING encode");
+        Console.logger().fine("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
         byte[] output = new byte[tiles.length*32];
         for(int i=0;i<tiles.length;i++){
             int[][] pixels = tiles[i].getPixels();
@@ -55,7 +56,7 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
                 }
             }
         }
-        LOG.exiting(LOG.getName(),"encode");
+        Console.logger().finest("EXITING encode");
         return output;
     }
 }

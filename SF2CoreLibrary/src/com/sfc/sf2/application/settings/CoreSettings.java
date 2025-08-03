@@ -18,8 +18,9 @@ public class CoreSettings implements AbstractSettings {
     private String basePath = null;
     private String incbinPath = null;
     
-    private boolean darkTheme = false;
-    private Color transparentBGColor = new Color(200, 0, 200);
+    private boolean darkTheme;
+    private Color transparentBGColor;
+    private int logLevel;
         
     public String getBasePath() {
         return basePath;
@@ -56,6 +57,14 @@ public class CoreSettings implements AbstractSettings {
     public void setIsDarkTheme(boolean darkTheme) {
         this.darkTheme = darkTheme;
     }
+    
+    public int getLogLevel() {
+        return logLevel;
+    }
+    
+    public void setLogLevel(int logLevel) {
+        this.logLevel = logLevel;
+    }
 
     @Override
     public void initialiseNewUser() {
@@ -69,6 +78,7 @@ public class CoreSettings implements AbstractSettings {
         }
         darkTheme = false;
         transparentBGColor = new Color(200, 0, 200);
+        logLevel = 1;
     }
     
     @Override
@@ -86,6 +96,9 @@ public class CoreSettings implements AbstractSettings {
             String[] colorSplit = data.get("transparentBGColor").split(",");
             transparentBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
         }
+        if (data.containsKey("logLevel")) {
+            logLevel = Integer.parseInt(data.get("logLevel"));
+        }
     }
 
     @Override
@@ -96,5 +109,6 @@ public class CoreSettings implements AbstractSettings {
         }
         data.put("darkTheme", Boolean.toString(darkTheme));
         data.put("transparentBGColor", String.format("%d, %d, %d", transparentBGColor.getRed(), transparentBGColor.getGreen(), transparentBGColor.getBlue()));
+        data.put("logLevel", Integer.toString(logLevel));
     }
 }

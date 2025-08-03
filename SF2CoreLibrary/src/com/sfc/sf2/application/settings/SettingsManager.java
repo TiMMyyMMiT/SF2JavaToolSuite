@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.application.settings;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,13 +15,13 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
 
 /**
  *
  * @author TiMMy
  */
 public class SettingsManager {
-
     private static final String SETTINGS_FILE_PATH = ".\\.sf2settings.txt";
     
     private static final HashMap<String, AbstractSettings> settingsStores = new HashMap<>();
@@ -42,10 +43,10 @@ public class SettingsManager {
     
     public static void registerSettingsStore(String id, AbstractSettings settings) {
         if (settings.getClass().toString().equals("CoreSettings")) {
-            System.out.println("Error: Cannot add another instance of \"Core\" settings.");
+            Console.logger().severe("Error: Cannot add another instance of \"Core\" settings.");
             return;
         } else if (settingsStores.containsKey(id)) {
-            System.out.println("Error: Cannot add duplicate instance of " + id + " settings.");
+            Console.logger().severe("Error: Cannot add duplicate instance of " + id + " settings.");
             return;
         }
         settingsStores.put(id, settings);
@@ -68,6 +69,7 @@ public class SettingsManager {
     }
     
     private static void loadSettings(String specificId) {
+        Console.logger().finest("ENTERING loadSettings");
         String line = null;
         try {
             File file = new File(SETTINGS_FILE_PATH);
@@ -91,6 +93,7 @@ public class SettingsManager {
                                         String id = line.substring(0, marker).trim();
                                         String dataItem = line.substring(marker+1).trim();
                                         data.put(id, dataItem);
+                                        Console.logger().finest("Settings : " + line);
                                     } else {
                                         throw new Exception("Settings file corrupted. Line : " + line);
                                     }
@@ -105,6 +108,7 @@ public class SettingsManager {
                 }
                 scan.close();
             } else {
+                Console.logger().info("Initialising new user settings...");
                 if (specificId == null) {
                     for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
                         entry.getValue().initialiseNewUser();
@@ -115,13 +119,15 @@ public class SettingsManager {
                 }
             }
         } catch (IOException ex) {
-            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, "Could not load settings file from : " + SETTINGS_FILE_PATH, ex);
+            Console.logger().log(Level.SEVERE, "Could not load settings file from : " + SETTINGS_FILE_PATH, ex);
         } catch (Exception e) {
-            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, "Error reading settings file. Line : " + line, e);
+            Console.logger().log(Level.SEVERE, "Error reading settings file. Line : " + line, e);
         }
+        Console.logger().finest("EXITING loadSettings");
     }
     
     public static void saveSettingsFile() {
+        Console.logger().finest("ENTERING saveSettingsFile");
         try {
             StringBuilder sb = new StringBuilder();
             for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
@@ -138,7 +144,8 @@ public class SettingsManager {
             Files.write(filepath, sb.toString().getBytes());
             Files.setAttribute(filepath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
         } catch (Exception ex) {
-            System.getLogger(SettingsManager.class.getName()).log(System.Logger.Level.ERROR, "Could not save settings file to : " + SETTINGS_FILE_PATH, ex);
+            Console.logger().log(Level.SEVERE, "Could not save settings file to : " + SETTINGS_FILE_PATH, ex);
         }
+        Console.logger().finest("EXITING saveSettingsFile");
     }
 }

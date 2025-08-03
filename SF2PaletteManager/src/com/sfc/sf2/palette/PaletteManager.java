@@ -5,20 +5,18 @@
  */
 package com.sfc.sf2.palette;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
 import com.sfc.sf2.palette.io.PalettePackage;
 import com.sfc.sf2.palette.io.PaletteRawImageProcessor;
 import java.nio.file.Path;
-import java.util.logging.Logger;
 
 /**
  *
  * @author wiz
  */
-public class PaletteManager {
-    private static final Logger LOG = Logger.getLogger(PaletteManager.class.getName());
-    
+public class PaletteManager {    
     private final PaletteDisassemblyProcessor paletteDisassemblyProcessor = new PaletteDisassemblyProcessor();
     private final PaletteRawImageProcessor paletteImageProcessor = new PaletteRawImageProcessor();
     
@@ -32,35 +30,35 @@ public class PaletteManager {
         this.palette = palette;
     }
        
-    public Palette importDisassembly(Path filePath, boolean firstColorTransparent){
-        LOG.entering(LOG.getName(),"importDisassembly");
+    public Palette importDisassembly(Path filePath, boolean firstColorTransparent) {
+        Console.logger().finest("ENTERING importDisassembly");
         PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), firstColorTransparent);
         this.palette = paletteDisassemblyProcessor.importDisassembly(filePath, pckg);
-        LOG.exiting(LOG.getName(),"importDisassembly");
+        Console.logger().finest("EXITING importDisassembly");
         return palette;
     }
     
-    public void exportDisassembly(Path filePath, Palette palette, boolean firstColorTransparent){
-        LOG.entering(LOG.getName(),"importDisassembly");
+    public void exportDisassembly(Path filePath, Palette palette, boolean firstColorTransparent) {
+        Console.logger().finest("ENTERING exportDisassembly");
         this.palette = palette;
         PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);
         paletteDisassemblyProcessor.exportDisassembly(filePath, palette, pckg);
-        LOG.exiting(LOG.getName(),"importDisassembly"); 
+        Console.logger().finest("EXITING exportDisassembly");
     }
     
     public Palette importImage(Path filePath, boolean firstColorTransparent) {
-        LOG.entering(LOG.getName(),"importImage");
+        Console.logger().finest("ENTERING importImage");
         PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), firstColorTransparent);
         this.palette = paletteImageProcessor.importRawImage(filePath, pckg);
-        LOG.exiting(LOG.getName(),"importImage");
+        Console.logger().finest("EXITING importImage");
         return palette;
     }
     
     public void exportImage(Path filePath, Palette currentPalette, boolean firstColorTransparent) {
-        LOG.entering(LOG.getName(),"exportImage");
+        Console.logger().finest("ENTERING exportImage");
         this.palette = currentPalette;
         PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);
         paletteImageProcessor.exportRawImage(filePath, palette, pckg);
-        LOG.exiting(LOG.getName(),"exportImage");  
+        Console.logger().finest("EXITING exportImage");
     }
 }
