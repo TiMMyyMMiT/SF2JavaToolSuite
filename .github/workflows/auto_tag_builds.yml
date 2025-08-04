@@ -1,0 +1,43 @@
+name: build/standard auto-update
+
+on:
+  push:
+    branches:
+      - test/versioning
+    paths:
+      - version.properties
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Read version from version.properties
+      id: get_version
+      run: |
+        version=$(grep '^version:' version.properties | cut -d':' -f2 | xargs)
+        echo "version=$version" >> $GITHUB_OUTPUT
+
+    - name: Get repository name
+      id: get_repo
+      run: |
+        repo_name=$(basename "$GITHUB_REPOSITORY")
+        echo "repo=$repo_name" >> $GITHUB_OUTPUT
+          
+    - name: Create Tag
+      uses: actions/github-script@v6
+      with:
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+        
+    - name: Create tag
+      run: |
+        tag_name="${{ steps.get_repo.outputs.repo }}_${{ steps.get_version.outputs.version }}"
+        user_name: 'GitHub Auto Merge Action'  
+        git tag "$tag_name"
+        git push origin "$tag_name"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
