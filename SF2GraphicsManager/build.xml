@@ -19,7 +19,7 @@
         -->
         <property name="store.jar.name" value="SF2GraphicsManager"/>
 
-        <loadproperties srcfile="version.properties"></loadproperties>
+        <loadproperties srcfile="version.properties"/>
 
         <!-- don't edit below this line -->
 
