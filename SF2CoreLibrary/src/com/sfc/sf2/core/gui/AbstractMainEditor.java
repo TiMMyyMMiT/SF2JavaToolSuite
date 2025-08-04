@@ -82,14 +82,6 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         //Hack to determine if project is running from editor (IDE) or is a build. (property 'user.dir' is blank if in editor)
         String dir = System.getProperty("user.dir");
         SettingsManager.setRunningInEditor(dir == null || dir.length() == 0);
-        
-        //Core setup
-        try {
-            File workingDirectory = new File(AbstractMainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-            System.setProperty("user.dir", workingDirectory.toString());
-        } catch (URISyntaxException ex) {
-            System.getLogger(AbstractMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
         SettingsManager.loadSettingsFile();
         
         //Set look and feel

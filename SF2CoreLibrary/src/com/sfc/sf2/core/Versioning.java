@@ -1,12 +1,7 @@
 package com.sfc.sf2.core;
 
 import com.sfc.sf2.core.gui.controls.Console;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /*
@@ -35,7 +30,7 @@ public class Versioning {
     }
     
     private static String manuallyLoadManifest() {
-        File manifest = new File(System.getProperty("user.dir") + "\\..\\manifest.mf");
+        File manifest = new File(System.getProperty("user.dir") + "\\manifest.mf");
         if (manifest.exists()) {
             try {
                 //Probably running in editor
