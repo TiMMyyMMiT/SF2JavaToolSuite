@@ -9,6 +9,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.Versioning;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.io.File;
@@ -34,12 +35,19 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
     }
     
     protected void initCore(Console console) {
+        //Console
         this.console = console;
         console.initLogger("SF2 Java Suite");
-        
-        SettingsManager.loadSettingsFile();        
-        //Check if settings panel should be shown
+        //Version
         if (!SettingsManager.isRunningInEditor()) {
+            String version = Versioning.getVersion();
+            if (version != null)
+                this.setTitle(this.getTitle() + " - v" + version);
+        }
+        //Settings
+        SettingsManager.loadSettingsFile();
+        if (!SettingsManager.isRunningInEditor()) {
+            //Check if settings panel should be shown
             java.awt.EventQueue.invokeLater(() -> {
                 CoreSettings core = SettingsManager.getSettingsStore("core");
                 if (!core.arePathsSet()) {
