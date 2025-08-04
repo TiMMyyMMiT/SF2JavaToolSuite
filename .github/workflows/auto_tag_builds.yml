@@ -41,7 +41,7 @@ jobs:
           if [ -f "$file_path" ]; then
             folder_name=$(basename "$(dirname "$file_path")")
             version=$(grep '^version:' "$file_path" | cut -d':' -f2 | xargs)
-            tag_name="${folder_name}_${version}"
+            tag_name="${folder_name}-${version}"
             echo "Tagging $tag_name from $file_path"
             git config user.name 'GitHub Auto Merge Action'
             git config user.email 'actions@github.com'
