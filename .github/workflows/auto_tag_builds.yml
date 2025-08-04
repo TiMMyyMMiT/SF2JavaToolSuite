@@ -3,7 +3,7 @@ name: auto tag builds
 on:
   push:
     branches:
-      - test/versioning
+      - master
     paths:
       - '**/version.properties'
 
