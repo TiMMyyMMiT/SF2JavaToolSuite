@@ -1,8 +1,9 @@
 package com.sfc.sf2.core;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.Scanner;
+import java.io.FileReader;
 
 /*
 * To change this license header, choose License Headers in Project Properties.
@@ -30,19 +31,20 @@ public class Versioning {
     }
     
     private static String manuallyLoadManifest() {
-        File manifest = new File(System.getProperty("user.dir") + "\\manifest.mf");
+        File manifest = new File(System.getProperty("user.dir") + "\\version.properties");
         if (manifest.exists()) {
             try {
                 //Probably running in editor
-                Scanner scan = new Scanner(manifest);
-                while (scan.hasNext()) {
-                    String line = scan.nextLine();
-                    if (line.startsWith("Implementation-Version")) {
+                BufferedReader reader = new BufferedReader(new FileReader(manifest));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.startsWith("version")) {
                         String version = line.substring(line.indexOf(':')+1).trim();
-                        scan.close();return version;
+                        reader.close();
+                        return version;
                     }
                 }
-                scan.close();
+                reader.close();
             } catch (Exception ex) { }
         }
         return null;
