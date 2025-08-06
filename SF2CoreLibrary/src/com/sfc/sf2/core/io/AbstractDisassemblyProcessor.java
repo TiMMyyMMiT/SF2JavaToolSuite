@@ -6,10 +6,11 @@
 package com.sfc.sf2.core.io;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.logging.Level;
 
 /**
  *
@@ -19,12 +20,14 @@ import java.util.logging.Level;
  */
 public abstract class AbstractDisassemblyProcessor<TType extends Object, TPackage extends Object> {
     
-    public TType importDisassembly(Path filePath, TPackage pckg) throws DisassemblyException, IOException {
-        
+    public TType importDisassembly(Path filePath, TPackage pckg) throws DisassemblyException, IOException, FileNotFoundException {
         Console.logger().finest("ENTERING importDisassembly : " + filePath);
-        TType item = null;
+        File disasmFile = filePath.toFile();
+        if (!disasmFile.exists()) {
+            throw new FileNotFoundException("Disassembly file not found : " + filePath);
+        }
         byte[] data = Files.readAllBytes(filePath);
-        item = parseDisassemblyData(data, pckg);
+        TType item = parseDisassemblyData(data, pckg);
         Console.logger().finest("EXITING importDisassembly");
         return item;
     }

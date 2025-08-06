@@ -49,15 +49,15 @@ public abstract class AbstractLayoutPanel extends JPanel {
     public BufferedImage paintImage() {
         if (redraw && hasData()) {
             //Setup image
-            BufferedImage targetImage = buildImage();
-            currentImage = new BufferedImage(targetImage.getWidth(), targetImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Dimension dims = getImageDimensions();
+            currentImage = new BufferedImage(dims.width, dims.height, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();
             //Render BG color
-            GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor, 12);
+            GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor, 4);
             //Render main image
             renderCounter++;
             System.getLogger(AbstractLayoutPanel.class.getName()).log(System.Logger.Level.ALL, "render " + renderCounter);
-            graphics.drawImage(targetImage, 0, 0, null);
+            buildImage(graphics);
             graphics.dispose();
             //Resize
             currentImage = resize(currentImage);
@@ -73,7 +73,8 @@ public abstract class AbstractLayoutPanel extends JPanel {
     
     protected abstract boolean hasData();
     
-    protected abstract BufferedImage buildImage();
+    protected abstract Dimension getImageDimensions();
+    protected abstract void buildImage(Graphics graphics);
     
     protected void setGridDimensions(int gridW, int gridH) {
         setGridDimensions(gridW, gridH, -1, -1);
@@ -119,6 +120,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
 
     public void setTilesPerRow(int tilesPerRow) {
         this.tilesPerRow = tilesPerRow;
+        redraw = true;
     }
 
     public int getDisplayScale() {
@@ -142,7 +144,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     public void redraw() {
         this.redraw = true;
     }
-
+    
     public boolean isShowGrid() {
         return showGrid;
     }

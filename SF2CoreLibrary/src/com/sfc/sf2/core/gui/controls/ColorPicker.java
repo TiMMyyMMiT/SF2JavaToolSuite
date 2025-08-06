@@ -37,14 +37,6 @@ public class ColorPicker extends javax.swing.JPanel {
         g.drawImage(image, 0, 0, this);
     }
     
-    public synchronized void addColorChangedListener(ColorChangedListener l) {
-        listenerList.add(ColorChangedListener.class, l);
-    }
-
-    public synchronized void removeColorChangedListener(ColorChangedListener l) {
-        listenerList.remove(ColorChangedListener.class, l);
-    }
-    
     public String getDialogTitle() {
         return colorDialogTitle;
     }
@@ -102,7 +94,15 @@ public class ColorPicker extends javax.swing.JPanel {
             fireColorChanged();
         }
     }//GEN-LAST:event_formMouseClicked
+    
+    public synchronized void addColorChangedListener(ColorChangedListener l) {
+        listenerList.add(ColorChangedListener.class, l);
+    }
 
+    public synchronized void removeColorChangedListener(ColorChangedListener l) {
+        listenerList.remove(ColorChangedListener.class, l);
+    }
+    
     @SuppressWarnings("deprecation")
     protected void fireColorChanged() {
         // Guaranteed to return a non-null array

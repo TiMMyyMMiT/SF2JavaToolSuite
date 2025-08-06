@@ -8,6 +8,7 @@ package com.sfc.sf2.portrait;
 import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -22,21 +23,40 @@ public class Portrait {
     public static final int PORTRAIT_TILES_WIDTH = 6;
     public static final int PORTRAIT_TILES_HEIGHT = 8;
     
-    private Tile[] tiles;
+    private String name;
+    private Tileset tileset;
     private BufferedImage indexedColorImage = null;
     
-    private int[][] eyeTiles;
-    
+    private int[][] eyeTiles;    
     private int[][] mouthTiles;
     
-    private BufferedImage image;
-
-    public Tile[] getTiles() {
-        return tiles;
+    public Portrait(String name, Tileset tileset) {
+        this.name = name;
+        this.tileset = tileset;
+    }
+    
+    public Portrait(String name, Tileset tileset, int[][] eyeTiles, int[][] mouthTiles) {
+        this.name = name;
+        this.tileset = tileset;
+        this.eyeTiles = eyeTiles;
+        this.mouthTiles = mouthTiles;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setTiles(Tile[] tiles) {
-        this.tiles = tiles;
+    public Tileset getTileset() {
+        return tileset;
+    }
+
+    public void setTileset(Tileset tileset) {
+        this.tileset = tileset;
+        clearIndexedColorImage();
     }
     
     public int[][] getEyeTiles() {
@@ -56,17 +76,18 @@ public class Portrait {
     }
     
     public Palette getPalette() {
-        if (tiles == null || tiles.length == 0) {
+        if (tileset == null) {
             return null;
         }
-        return tiles[0].getPalette();
+        return tileset.getPalette();
     }
     
     public BufferedImage getIndexedColorImage(boolean showfullImage, boolean blinking, boolean speaking) {
-        if (tiles == null || tiles.length == 0) {
+        if (tileset == null || tileset.getTiles().length == 0) {
             return null;
         }
         if (indexedColorImage == null) {
+            Tile[] tiles = tileset.getTiles();
             int width = showfullImage ? PORTRAIT_TILES_FULL_WIDTH : PORTRAIT_TILES_WIDTH;
             indexedColorImage = new BufferedImage(width*PIXEL_WIDTH, PORTRAIT_TILES_HEIGHT*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = indexedColorImage.getGraphics();

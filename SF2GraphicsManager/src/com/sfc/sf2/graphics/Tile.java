@@ -15,7 +15,7 @@ import javax.swing.JPanel;
  *
  * @author wiz
  */
-public class Tile extends JPanel {
+public class Tile {
     
     public static final int PIXEL_WIDTH = 8;
     public static final int PIXEL_HEIGHT = 8;
@@ -107,10 +107,6 @@ public class Tile extends JPanel {
 
     public void setvFlip(boolean vFlip) {
         this.vFlip = vFlip;
-    }  
-    
-    public Tile(){
-        setSize(8,8);
     }
     
     public void setPixel(int x, int y, int colorIndex){
@@ -218,7 +214,8 @@ public class Tile extends JPanel {
         return true;        
     }
     
-    private Tile cloneTile() {
+    @Override
+    public Tile clone() {
         Tile newTile = new Tile();
         newTile.setId(getId());
         newTile.setPalette(getPalette());

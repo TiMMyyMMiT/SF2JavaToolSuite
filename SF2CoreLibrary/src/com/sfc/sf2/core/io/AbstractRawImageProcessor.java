@@ -12,6 +12,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import javax.imageio.ImageIO;
@@ -33,7 +34,10 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
     public TType importRawImage(Path filePath, TPackage pckg) throws RawImageException, DisassemblyException, IOException {
         FileFormat fileFormat = fileExtensionToFormat(filePath);
         Console.logger().finest("ENTERING importRawImage : " + filePath + ". Format : " + fileFormat);
-        TType item = null;
+        File imageFile = filePath.toFile();
+        if (!imageFile.exists()) {
+            throw new FileNotFoundException("Image file not found : " + filePath);
+        }
         BufferedImage image = ImageIO.read(filePath.toFile());
         ColorModel cm = image.getColorModel();
         if(!(cm instanceof IndexColorModel)){
@@ -41,7 +45,7 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
         }
         IndexColorModel icm = (IndexColorModel)cm;
         WritableRaster raster = image.getRaster();
-        item = parseImageData(raster, icm, pckg);
+        TType item = parseImageData(raster, icm, pckg);
         Console.logger().finest("EXITING importRawImage");
         return item;
     }
