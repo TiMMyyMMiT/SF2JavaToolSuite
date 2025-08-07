@@ -53,7 +53,7 @@ public class TilesetManager extends AbstractManager {
         this.tileset = tileset;
         TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(graphicsFilePath), compression, tileset.getPalette(), tileset.getTilesPerRow());
         tilesetDisassemblyProcessor.exportDisassembly(graphicsFilePath, tileset, pckg);
-        Console.logger().info("Tilese successfully exported to : " + graphicsFilePath);
+        Console.logger().info("Tileset successfully exported to : " + graphicsFilePath);
         Console.logger().finest("EXITING exportDisassembly");
     }
     
