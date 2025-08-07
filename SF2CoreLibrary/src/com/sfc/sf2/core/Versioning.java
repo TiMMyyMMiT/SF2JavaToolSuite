@@ -18,7 +18,7 @@ import java.io.FileReader;
 public class Versioning {
     
     public static String getVersion() {
-        String version = String.class.getPackage().getImplementationVersion();
+        String version = Versioning.class.getPackage().getImplementationVersion();
         if (version == null) {
             version = manuallyLoadManifest();
         }
