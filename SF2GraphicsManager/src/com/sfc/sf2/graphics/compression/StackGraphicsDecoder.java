@@ -66,7 +66,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                     /* command 0 : word value built from four 4-bit values taken from history stack */
                     value = getWordValue();
                     Console.logger().log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
-                    BinaryHelpers.setWord(value,output);
+                    BinaryHelpers.setWordList(value,output);
                 }else{
                     /* command 1 : section copy */
                     copyOffset = getCopyOffset();

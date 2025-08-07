@@ -19,6 +19,10 @@ public class InvocationGraphic {
     private short unknown2;
     private short unknown3;
     
+    public InvocationGraphic(Tileset[] frames) {
+        this.frames = frames;
+    }
+    
     public InvocationGraphic(Tileset[] frames, short unknown1, short unknown2, short unknown3) {
         this.frames = frames;
         this.unknown1 = unknown1;

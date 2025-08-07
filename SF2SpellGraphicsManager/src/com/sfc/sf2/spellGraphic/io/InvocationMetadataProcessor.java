@@ -7,7 +7,6 @@ package com.sfc.sf2.spellGraphic.io;
 
 import com.sfc.sf2.core.io.AbstractMetadataProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
-import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -17,7 +16,7 @@ import java.io.IOException;
  *
  * @author TiMMy
  */
-public class InvocationMetadataProcessor extends AbstractMetadataProcessor<InvocationGraphic, EmptyPackage> {
+public class InvocationMetadataProcessor extends AbstractMetadataProcessor<InvocationGraphic> {
 
     @Override
     protected void parseMetaData(BufferedReader reader, InvocationGraphic item) throws DisassemblyException, IOException {

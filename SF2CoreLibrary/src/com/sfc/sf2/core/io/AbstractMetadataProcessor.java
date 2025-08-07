@@ -18,9 +18,8 @@ import java.nio.file.Path;
  *
  * @author TiMMy
  * @param <TType> The type of data being loaded
- * @param <TPackage> The input data required to load the TType
  */
-public abstract class AbstractMetadataProcessor<TType extends Object, TPackage extends Object> {
+public abstract class AbstractMetadataProcessor<TType extends Object> {
     
     public TType importMetadata(Path filePath, TType item) throws DisassemblyException, IOException, FileNotFoundException {
         Console.logger().finest("ENTERING importMetadata : " + filePath);

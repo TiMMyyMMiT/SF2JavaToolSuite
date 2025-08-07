@@ -16,7 +16,7 @@ import java.io.IOException;
  *
  * @author TiMMy
  */
-public class PortraitMetadataProcessor extends AbstractMetadataProcessor<Portrait, PortraitPackage> {
+public class PortraitMetadataProcessor extends AbstractMetadataProcessor<Portrait> {
 
     @Override
     protected void parseMetaData(BufferedReader reader, Portrait item) throws DisassemblyException, IOException {

@@ -5,76 +5,91 @@
  */
 package com.sfc.sf2.spellGraphic;
 
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tileset;
-import com.sfc.sf2.graphics.TilesetManager;
+import com.sfc.sf2.graphics.io.TilesetRawImageProcessor;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.spellGraphic.io.SpellDisassemblyProcessor;
 import com.sfc.sf2.palette.PaletteManager;
+import com.sfc.sf2.palette.io.PalettePackage;
+import com.sfc.sf2.spellGraphic.io.SpellDisassemblyProcessor;
+import com.sfc.sf2.spellGraphic.io.SpellTilesetPackage;
+import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  *
  * @author TiMMy
  */
-public class SpellGraphicManager {
-       
+public class SpellGraphicManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
-    private final TilesetManager tilesetManager = new TilesetManager();
+    private final SpellDisassemblyProcessor spellDisassemblyProcessor = new SpellDisassemblyProcessor();
+    private final TilesetRawImageProcessor tilesetImageProcessor = new TilesetRawImageProcessor();
+    
     private Palette defaultPalette;
     private Tileset spellTileset;
 
-    public void importDisassembly(String filepath, String defaultPalettePath) {
-        /*System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.importDisassembly() - Importing disassembly ...");
-        filepath = getAbsoluteFilepath(filepath);
-        importDefaultPalette(defaultPalettePath);
-        spellTileset = SpellDisassemblyManager.importDisassembly(filepath, defaultPalette);
-        System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.importDisassembly() - Disassembly imported.");*/
+    @Override
+    public void clearData() {
+        paletteManager.clearData();
+        defaultPalette = null;
+        spellTileset = null;
     }
     
-    public void exportDisassembly(String filepath) {
-        /*System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.importDisassembly() - Exporting disassembly ...");
-        filepath = getAbsoluteFilepath(filepath);
-        SpellDisassemblyManager.exportDisassembly(spellTileset, filepath);
-        System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.importDisassembly() - Disassembly exported.");*/
-    }   
-        
-    public void importPng(String filepath, String defaultPalettePath) {
-        /*System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.importPng() - Importing PNG ...");
-        filepath = getAbsoluteFilepath(filepath);
+    public Tileset importDisassembly(Path filepath, Path defaultPalettePath, int tilesPerRow) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
         importDefaultPalette(defaultPalettePath);
-        tilesetManager.importImage(filepath);
-        spellTileset = new SpellGraphic();
-        spellTileset.setTiles(tilesetManager.getTiles());
+        SpellTilesetPackage pckg = new SpellTilesetPackage(PathHelpers.filenameFromPath(filepath), defaultPalette, tilesPerRow);
+        spellTileset = spellDisassemblyProcessor.importDisassembly(filepath, pckg);
+        Console.logger().info("Spell successfully imported from : " + filepath);
+        Console.logger().finest("EXITING importDisassembly");
+        return spellTileset;
+    }
+    
+    public void exportDisassembly(Path filePath, Tileset spellTileset) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.spellTileset = spellTileset;
+        spellDisassemblyProcessor.exportDisassembly(filePath, spellTileset, null);
+        Console.logger().info("Spell successfully exported to : " + filePath);
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public Tileset importImage(Path filePath, Path defaultPalettePath) throws RawImageException, IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importImage");
+        importDefaultPalette(defaultPalettePath);
+        PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), true);
+        spellTileset = tilesetImageProcessor.importRawImage(filePath, pckg);
         Palette palette = spellTileset.getPalette();
         adjustImportedPalette(defaultPalette, palette);
-        System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.importPng() - PNG imported.");*/
+        Console.logger().info("Spell successfully imported from : " + filePath);
+        Console.logger().finest("EXITING importImage");
+        return spellTileset;
     }
     
-    public void exportPng(String filepath, int tilesPerRow) {
-        /*System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.exportPng() - Exporting PNG ...");
-        filepath = getAbsoluteFilepath(filepath);
-        tilesetManager.exportImage(filepath, tilesPerRow);
-        System.out.println("com.sfc.sf2.spellGraphic.SpellGraphicManager.exportPng() - PNG exported.");*/
+    public void exportImage(Path filePath, Tileset spellTileset, int tilesPerRow) throws RawImageException, IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportImage");
+        this.spellTileset = spellTileset;
+        spellTileset.setTilesPerRow(tilesPerRow);
+        PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), true);
+        tilesetImageProcessor.exportRawImage(filePath, spellTileset, pckg);
+        Console.logger().info("Spell successfully exported to : " + filePath);
+        Console.logger().finest("EXITING exportImage");
     }
     
-    private void importDefaultPalette(String palettePath) {        
-        /*if (defaultPalette == null) {
-            paletteManager.importDisassembly(palettePath);
-            defaultPalette = paletteManager.getPalette();
-        }*/
+    private void importDefaultPalette(Path defaultPalettePath) throws IOException, DisassemblyException {        
+        if (defaultPalette == null) {
+            defaultPalette = paletteManager.importDisassembly(defaultPalettePath, true);
+        }
     }
     
     private static void adjustImportedPalette(Palette defaultPalette, Palette importedPalette) {
-        /*for (int i = 0; i < defaultPalette.getColors().length; i++) {
+        for (int i = 0; i < defaultPalette.getColors().length; i++) {
             if (i != 9 && i != 13 && i != 14)
                 importedPalette.getColors()[i] = defaultPalette.getColors()[i];
-        }*/
-    }
-    
-    public void clearData() {
-        defaultPalette = null;
-        spellTileset = null;
+        }
     }
 
     public Tileset getSpellTileset() {

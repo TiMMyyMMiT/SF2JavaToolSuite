@@ -67,11 +67,19 @@ public abstract class AbstractRawImageProcessor<TType extends Object, TPackage e
 
     protected abstract BufferedImage packageImageData(TType item, TPackage pckg) throws DisassemblyException;
     
-    
+    /**
+     *
+     * @return a file extension with the dot. i.e. ".png" or ".gif"
+     */
     public static String GetFileExtensionString(FileFormat fileFormat) {
         return "."+GetFileExtensionName(fileFormat);
     }
     
+    /**
+     *
+     * @return a file extension without the dot. i.e. "png" or "gif"
+     * Required for exporting raw images
+     */
     public static String GetFileExtensionName(FileFormat fileFormat) {
         switch (fileFormat) {
             case PNG:

@@ -19,7 +19,6 @@ import com.sfc.sf2.palette.PaletteManager;
 import com.sfc.sf2.palette.io.PalettePackage;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 /**
  *
