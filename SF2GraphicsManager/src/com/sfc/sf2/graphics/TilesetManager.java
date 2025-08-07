@@ -16,6 +16,7 @@ import com.sfc.sf2.graphics.io.TilesetRawImageProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
+import com.sfc.sf2.palette.io.PalettePackage;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -57,7 +58,7 @@ public class TilesetManager extends AbstractManager {
     
     public Tileset importImage(Path filePath) throws RawImageException, IOException, DisassemblyException {
         Console.logger().finest("ENTERING importImage");
-        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(filePath), TilesetCompression.NONE, null, 0);
+        PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), true);
         tileset = tilesetImageProcessor.importRawImage(filePath, pckg);
         Console.logger().info("Tileset successfully imported from : " + filePath);
         paletteManager.setPalette(tileset.getPalette());
@@ -68,7 +69,7 @@ public class TilesetManager extends AbstractManager {
     public void exportImage(Path filePath, Tileset tileset) throws RawImageException, IOException, DisassemblyException {
         Console.logger().finest("ENTERING exportImage");
         this.tileset = tileset;
-        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(filePath), TilesetCompression.NONE, null, 0);
+        PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), true);
         tilesetImageProcessor.exportRawImage(filePath, tileset, pckg);
         Console.logger().info("Tileset successfully exported to : " + filePath);
         Console.logger().finest("EXITING exportImage");

@@ -112,16 +112,13 @@ public class Palette {
         byte[] greens = new byte[colors.length];
         byte[] blues = new byte[colors.length];
         byte[] alphas = new byte[colors.length];
-        reds[0] = (byte)0xFF;
-        greens[0] = (byte)0xFF;
-        blues[0] = (byte)0xFF;
-        alphas[0] = firstColorTransparent ? 0 : (byte)0xFF;
-        for(int i=1; i<colors.length; i++) {
+        for(int i=0; i<colors.length; i++) {
             reds[i] = (byte)colors[i].getRed();
             greens[i] = (byte)colors[i].getGreen();
             blues[i] = (byte)colors[i].getBlue();
             alphas[i] = (byte)0xFF;
         }
+        alphas[0] = firstColorTransparent ? 0 : (byte)0xFF;
         IndexColorModel icm = new IndexColorModel(4,colors.length,reds,greens,blues,alphas);
         return icm;
     }

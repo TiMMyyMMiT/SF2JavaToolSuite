@@ -50,8 +50,8 @@ public class PortraitDisassemblyProcessor extends AbstractDisassemblyProcessor<P
         int paletteOffset = 2+eyesTileNumber*4+2+mouthTileNumber*4;
         byte[] paletteData = new byte[32];
         System.arraycopy(data, paletteOffset, paletteData, 0, paletteData.length);
-        Color[] colors = PaletteDecoder.decodePalette(paletteData, false);
-        Palette palette = new Palette(pckg.name(), colors, false);
+        Color[] colors = PaletteDecoder.decodePalette(paletteData);
+        Palette palette = new Palette(pckg.name(), colors, true);
         
         int graphicsOffset = paletteOffset + 32;
         byte[] tileData = new byte[data.length-graphicsOffset];

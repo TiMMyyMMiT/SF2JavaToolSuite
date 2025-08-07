@@ -11,6 +11,7 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
+import com.sfc.sf2.palette.io.PalettePackage;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
@@ -19,16 +20,16 @@ import java.awt.image.WritableRaster;
  *
  * @author TiMMy
  */
-public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset, TilesetPackage> {
+public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset, PalettePackage> {
     
     @Override
-    protected Tileset parseImageData(WritableRaster raster, IndexColorModel icm, TilesetPackage pckg) throws DisassemblyException {
+    protected Tileset parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
         if(imageWidth%8!=0 || imageHeight%8!=0){
             Console.logger().warning("IWarning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
         }
-        Palette palette = new Palette(pckg.name(), Palette.fromICM(icm));
+        Palette palette = new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
         int tilesPerRow = imageWidth/8;
         Console.logger().fine("Tiles per row : " + tilesPerRow);
         Tile[] tiles = new Tile[(imageWidth/8)*(imageHeight/8)];
@@ -56,7 +57,7 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
     }
 
     @Override
-    protected BufferedImage packageImageData(Tileset item, TilesetPackage pckg) throws DisassemblyException {
+    protected BufferedImage packageImageData(Tileset item, PalettePackage pckg) throws DisassemblyException {
         item.clearIndexedColorImage();
         return item.getIndexedColorImage();
     }
