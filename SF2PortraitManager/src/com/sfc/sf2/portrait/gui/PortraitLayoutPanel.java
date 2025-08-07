@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.portrait.layout;
+package com.sfc.sf2.portrait.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.controls.Console;
@@ -64,7 +64,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel implements MouseLis
             graphics.drawRect(item[2]*PIXEL_WIDTH, item[3]*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
         }
         if (selectedMouthTile >= 0 && selectedMouthTile < mouthAnimTable.getRowCount()) {
-            int[] item = eyeAnimTable.getRow(selectedMouthTile);
+            int[] item = mouthAnimTable.getRow(selectedMouthTile);
             graphics.drawRect(item[0]*PIXEL_WIDTH, item[1]*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             graphics.drawRect(item[2]*PIXEL_WIDTH, item[3]*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
         }

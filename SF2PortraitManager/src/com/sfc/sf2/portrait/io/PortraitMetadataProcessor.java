@@ -46,14 +46,13 @@ public class PortraitMetadataProcessor extends AbstractMetadataProcessor<Portrai
 
     @Override
     protected void packageMetaData(FileWriter writer, Portrait item) throws DisassemblyException, IOException {
-        StringBuilder sb = new StringBuilder();
         int[][] eyeTiles = item.getEyeTiles();
-        sb.append(String.format("Eyes: %s\n", eyeTiles.length));
+        writer.append(String.format("Eyes: %s\n", eyeTiles.length));
         for (int i = 0; i < eyeTiles.length; i++) {
             writer.append(String.format("%d, %d, %d, %d\n", eyeTiles[i][0], eyeTiles[i][1], eyeTiles[i][2], eyeTiles[i][3]));
         }
         int[][] mouthTiles = item.getMouthTiles();
-        sb.append(String.format("Mouths: %s\n", mouthTiles.length));
+        writer.append(String.format("Mouths: %s\n", mouthTiles.length));
         for (int i = 0; i < mouthTiles.length; i++) {
             writer.append(String.format("%d, %d, %d, %d\n", mouthTiles[i][0], mouthTiles[i][1], mouthTiles[i][2], mouthTiles[i][3]));
         }

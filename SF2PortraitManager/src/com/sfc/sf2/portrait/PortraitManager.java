@@ -56,8 +56,12 @@ public class PortraitManager extends AbstractManager {
         Tileset tileset = tilesetManager.importImage(portraitPath);
         portrait = new Portrait(tileset.getName(), tileset);
         Console.logger().info("Portrait successfully imported from : " + portraitPath);
-        portraitMetadataProcessor.importMetadata(metadataPath, portrait);
-        Console.logger().info("Portrait metadata successfully imported from : " + metadataPath);
+        try {
+            portraitMetadataProcessor.importMetadata(metadataPath, portrait);
+            Console.logger().info("Portrait metadata successfully imported from : " + metadataPath);
+        } catch (Exception e) {
+            Console.logger().info("ERROR Portrait metadata could not be imported : " + metadataPath + "\nImage still loaded.");
+        }
         Console.logger().finest("EXITING importImage");
     }
     
