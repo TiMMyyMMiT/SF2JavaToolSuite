@@ -51,13 +51,13 @@ public class PortraitDisassemblyProcessor extends AbstractDisassemblyProcessor<P
         byte[] paletteData = new byte[32];
         System.arraycopy(data, paletteOffset, paletteData, 0, paletteData.length);
         Color[] colors = PaletteDecoder.decodePalette(paletteData, false);
-        Palette palette = new Palette(pckg.name(), colors);
+        Palette palette = new Palette(pckg.name(), colors, false);
         
         int graphicsOffset = paletteOffset + 32;
         byte[] tileData = new byte[data.length-graphicsOffset];
         System.arraycopy(data, graphicsOffset, tileData, 0, tileData.length);
         tiles = new StackGraphicsDecoder().decode(tileData, palette);
-        Tileset tileset = new Tileset(pckg.name(), tiles, Portrait.PORTRAIT_TILES_WIDTH);
+        Tileset tileset = new Tileset(pckg.name(), tiles, Portrait.PORTRAIT_TILES_FULL_WIDTH);
         
         return new Portrait(pckg.name(), tileset, eyesTiles, mouthTiles);
     }

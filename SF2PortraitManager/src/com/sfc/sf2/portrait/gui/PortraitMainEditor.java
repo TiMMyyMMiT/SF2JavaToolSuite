@@ -576,7 +576,7 @@ public class PortraitMainEditor extends AbstractMainEditor {
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         Path imagePath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
-        Path metaPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
+        Path metaPath = PathHelpers.replaceExtension(imagePath, fileButton6.getFilePath());
         if (!PathHelpers.createPathIfRequred(imagePath)) return;
         if (!PathHelpers.createPathIfRequred(metaPath)) return;
         try {
@@ -604,7 +604,7 @@ public class PortraitMainEditor extends AbstractMainEditor {
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         Path imagePath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
-        Path metaPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        Path metaPath = PathHelpers.replaceExtension(imagePath, fileButton3.getFilePath());
         try {
             portraitManager.importImage(imagePath, metaPath);
         } catch (Exception ex) {

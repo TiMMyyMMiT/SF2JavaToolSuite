@@ -76,7 +76,11 @@ public class Tileset {
             for(int j=0;j<height;j++){
                 for(int i=0;i<width;i++){
                     int tileID = i+j*8;
-                    graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
+                    if (tileID >= tiles.length) {
+                        break;
+                    } else {
+                        graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
+                    }
                 }
             }
             graphics.dispose();

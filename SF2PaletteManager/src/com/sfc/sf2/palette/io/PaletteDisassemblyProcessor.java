@@ -18,7 +18,7 @@ public class PaletteDisassemblyProcessor extends AbstractDisassemblyProcessor<Pa
     
     @Override
     protected Palette parseDisassemblyData(byte[] data, PalettePackage pckg) throws DisassemblyException {
-        return new Palette(pckg.name(), PaletteDecoder.decodePalette(data, pckg.firstColorTransparent()));
+        return new Palette(pckg.name(), PaletteDecoder.decodePalette(data), pckg.firstColorTransparent());
     }
 
     @Override

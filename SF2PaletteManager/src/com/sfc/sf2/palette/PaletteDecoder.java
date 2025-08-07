@@ -29,12 +29,8 @@ public class PaletteDecoder {
     };
     
     public static Color[] decodePalette(byte[] data){
-        return decodePalette(data,false);
-    }
-    
-    public static Color[] decodePalette(byte[] data, boolean firstColorTransparent){
         Color[] colors = new Color[data.length/2];
-        int a = firstColorTransparent?0:255;
+        int a = 255;
         for(int i=0;i*2<data.length;i++){
             if(i*2+1<data.length){
                 byte first = data[i*2];

@@ -95,4 +95,15 @@ public class PathHelpers {
         Console.logger().info("User decided not to create folder at " + file);
         return false;   //Do not save file
     }
+    
+    public static Path replaceExtension(Path filePath, String extension) {
+        if (extension.startsWith(".")) {
+            String newPath = filePath.toString();
+            newPath = newPath.substring(0, newPath.lastIndexOf('.'));
+            newPath += extension;
+            return Path.of(newPath);
+        } else {
+            return Path.of(extension);
+        }
+    }
 }

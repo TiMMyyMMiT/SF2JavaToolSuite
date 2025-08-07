@@ -24,16 +24,10 @@ public class Palette {
         this.colors = null;
     }
     
-    public Palette(Color[] colors) {
+    public Palette(Color[] colors, boolean firstColorTransparent) {
         setName("New Palette");
-        setColors(colors, true);
+        setColors(colors, firstColorTransparent);
     }
-    
-    public Palette(String name, Color[] colors) {
-        setName(name);
-        setColors(colors, true);
-    }
-    
     public Palette(String name, Color[] colors, boolean firstColorTransparent) {
         setName(name);
         setColors(colors, firstColorTransparent);

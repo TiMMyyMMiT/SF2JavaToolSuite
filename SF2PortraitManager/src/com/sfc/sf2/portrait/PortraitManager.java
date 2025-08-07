@@ -57,14 +57,14 @@ public class PortraitManager extends AbstractManager {
         portrait = new Portrait(tileset.getName(), tileset);
         Console.logger().info("Portrait successfully imported from : " + portraitPath);
         portraitMetadataProcessor.importMetadata(metadataPath, portrait);
-        Console.logger().info("Portrait metadata successfully imported from : " + portraitPath);
+        Console.logger().info("Portrait metadata successfully imported from : " + metadataPath);
         Console.logger().finest("EXITING importImage");
     }
     
-    public void exportImage(Path portraitPath, Path metadataPath, Portrait portrait) throws IOException, DisassemblyException {
+    public void exportImage(Path portraitPath, Path metadataPath, Portrait portrait) throws IOException, DisassemblyException, RawImageException {
         Console.logger().finest("ENTERING exportImage");
         this.portrait = portrait;
-        portraitMetadataProcessor.exportMetadata(portraitPath, portrait);
+        tilesetManager.exportImage(portraitPath, portrait.getTileset());
         Console.logger().info("Portrait successfully exported to : " + portraitPath);
         portraitMetadataProcessor.exportMetadata(metadataPath, portrait);
         Console.logger().info("Portrait metadata successfully exported to : " + metadataPath);

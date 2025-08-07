@@ -20,7 +20,7 @@ public class PaletteRawImageProcessor extends AbstractRawImageProcessor<Palette,
 
     @Override
     protected Palette parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
-        return new Palette(pckg.name(), Palette.fromICM(icm));
+        return new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
     }
 
     @Override
