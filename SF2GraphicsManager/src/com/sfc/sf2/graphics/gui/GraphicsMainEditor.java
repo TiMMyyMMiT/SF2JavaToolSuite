@@ -174,6 +174,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setTitle("SF2GraphicsManager");
+        setPreferredSize(new java.awt.Dimension(1000, 750));
 
         jSplitPane1.setDividerLocation(600);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
@@ -893,7 +894,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         graphicsLayoutPanel.setLayout(graphicsLayoutPanelLayout);
         graphicsLayoutPanelLayout.setHorizontalGroup(
             graphicsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 487, Short.MAX_VALUE)
+            .addGap(0, 429, Short.MAX_VALUE)
         );
         graphicsLayoutPanelLayout.setVerticalGroup(
             graphicsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -910,7 +911,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
 
         jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("View"));
@@ -1035,7 +1036,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1049,7 +1050,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1074, 739));
+        setSize(new java.awt.Dimension(1016, 808));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

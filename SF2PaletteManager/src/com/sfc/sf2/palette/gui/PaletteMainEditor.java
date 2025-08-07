@@ -92,7 +92,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
             }
         });
 
-        jLabel2.setText("<html>Select a disassembly palette file.<br>Most can be found at following directory : graphics/technical/</html>");
+        jLabel2.setText("<html>Select a disassembly palette file.<br>Most can be found at following directory : graphics/tech/</html>");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         fileButton1.setFilePath(".\\tech\\basepalette.bin");
