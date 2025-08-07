@@ -6,6 +6,7 @@
 package com.sfc.sf2.spellGraphic.io;
 
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import java.io.BufferedReader;
@@ -34,19 +35,19 @@ public class InvocationRawImageManager {
             File directory = new File(dir);
             File[] files = directory.listFiles();
             for (File f : files) { 
-                if (f.getName().startsWith(pattern + "-frame") && f.getName().endsWith(com.sfc.sf2.graphics.io.RawImageManager.GetFileExtensionString(fileFormat))) {
+                /*if (f.getName().startsWith(pattern + "-frame") && f.getName().endsWith(com.sfc.sf2.graphics.io.RawImageManager.GetFileExtensionString(fileFormat))) {
                     Tile[] frame = com.sfc.sf2.graphics.io.RawImageManager.importImage(f.getAbsolutePath());
                     palette = frame[0].getPalette();
                     frames.add(frame);
-                }
+                }*/
             }
             if (frames.isEmpty()) {
                 System.err.println("com.sfc.sf2.spellGraphic.io..importImage() - ERROR : no frame imported. Image files missing for this pattern ?");
             } else {
                 System.out.println("com.sfc.sf2.spellGraphic.io..importImage() - " + frames.size() + " : " + frames);
                 invocationGraphic = new InvocationGraphic();
-                invocationGraphic.setFrames(frames.toArray(new Tile[frames.size()][]));
-                invocationGraphic.setPalette(palette);
+                invocationGraphic.setFrames(frames.toArray(new Tileset[frames.size()]));
+                //invocationGraphic.setPalette(palette);
                 
                 String metaPath = filepath + ".meta";
                 File inputFile = new File(metaPath);
@@ -75,10 +76,10 @@ public class InvocationRawImageManager {
     public static void exportImage(InvocationGraphic invocationGraphic, String filepath, int fileFormat) {
         try {
             System.out.println("com.sfc.sf2.spellGraphic.io..exportImage() - Exporting image files and palettes ...");
-            Tile[][] frames = invocationGraphic.getFrames();
+            Tileset[] frames = invocationGraphic.getFrames();
             for(int i=0;i<frames.length;i++){
-                String framePath = filepath + "-frame-" + String.format("%02d", i) + "." + com.sfc.sf2.graphics.io.RawImageManager.GetFileExtensionString(fileFormat);
-                com.sfc.sf2.graphics.io.RawImageManager.exportImage(frames[i], framePath, 16, fileFormat);
+                //String framePath = filepath + "-frame-" + String.format("%02d", i) + "." + com.sfc.sf2.graphics.io.RawImageManager.GetFileExtensionString(fileFormat);
+                //com.sfc.sf2.graphics.io.RawImageManager.exportImage(frames[i], framePath, 16, fileFormat);
             }
             String metaPath = filepath + ".meta";
             StringBuilder sb = new StringBuilder();

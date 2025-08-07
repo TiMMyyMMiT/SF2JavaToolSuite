@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.spellGraphic.layout;
+package com.sfc.sf2.spellGraphic.gui;
 
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.spellGraphic.SpellGraphic;
+import com.sfc.sf2.graphics.Tileset;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -22,7 +22,7 @@ public class SpellGraphicLayout extends JPanel {
     private int displaySize;
     private boolean showGrid = true;
     
-    private SpellGraphic spellGraphic;
+    private Tileset spellTileset;
     
     @Override
     protected void paintComponent(Graphics g) {
@@ -31,15 +31,15 @@ public class SpellGraphicLayout extends JPanel {
     }
     
     public BufferedImage buildImage() {
-        BufferedImage image = buildImage(spellGraphic, false);
+        BufferedImage image = buildImage(spellTileset, false);
         image = resize(image);
         setSize(image.getWidth(), image.getHeight());
         if (showGrid) { drawGrid(image); }
         return image;
     }
     
-    public static BufferedImage buildImage(SpellGraphic spellGraphic, boolean pngExport) {
-        Tile[] tiles = spellGraphic.getTiles();
+    public static BufferedImage buildImage(Tileset spellTileset, boolean pngExport) {
+        Tile[] tiles = spellTileset.getTiles();
         int imageHeight = (tiles.length/tilesPerRow);
         if(tiles.length%tilesPerRow!=0){
             imageHeight++;
@@ -92,12 +92,12 @@ public class SpellGraphicLayout extends JPanel {
         return new Dimension(getWidth(), getHeight());
     }
 
-    public SpellGraphic getSpellGraphic() {
-        return spellGraphic;
+    public Tileset getSpellTileset() {
+        return spellTileset;
     }
 
-    public void setSpellGraphic(SpellGraphic spellGraphic) {
-        this.spellGraphic = spellGraphic;
+    public void setSpellTileset(Tileset spellTileset) {
+        this.spellTileset = spellTileset;
     }
 
     public int getDisplaySize() {

@@ -5,14 +5,12 @@
  */
 package com.sfc.sf2.spellGraphic.gui;
 
-import com.sfc.sf2.spellGraphic.SpellGraphic;
 import com.sfc.sf2.spellGraphic.SpellGraphicManager;
-import com.sfc.sf2.spellGraphic.layout.SpellGraphicLayout;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import com.sfc.sf2.spellGraphic.InvocationGraphicManager;
-import com.sfc.sf2.spellGraphic.layout.InvocationGraphicLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -1495,9 +1493,9 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton19ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        invocationGraphicManager.clearData();
-        spellGraphicManager.importGif(jTextField12.getText(), jTextField10.getText());
-        updateSpellPanel();
+        //invocationGraphicManager.clearData();
+        //spellGraphicManager.importGif(jTextField12.getText(), jTextField10.getText());
+        //updateSpellPanel();
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
@@ -1505,8 +1503,8 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton28ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-        invocationGraphicManager.clearData();
-        spellGraphicManager.exportGif(jTextField16.getText(), (int)jSpinner1.getValue());
+        //invocationGraphicManager.clearData();
+        //spellGraphicManager.exportGif(jTextField16.getText(), (int)jSpinner1.getValue());
     }//GEN-LAST:event_jButton16ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -1641,11 +1639,11 @@ public class MainEditor extends javax.swing.JFrame {
         jPanel2.setLayout(new GridLayout(1,1));
         if (invocationGraphicManager.getInvocationGraphic() == null) {
             jPanel2.add(spellGraphicLayout);
-            spellGraphicLayout.setSpellGraphic(spellGraphicManager.getSpellGraphic());
+            spellGraphicLayout.setSpellTileset(spellGraphicManager.getSpellTileset());
             spellGraphicLayout.setDisplaySize(jComboBox1.getSelectedIndex()+1);
-            SpellGraphic spellGraphic = spellGraphicLayout.getSpellGraphic();
-            if (spellGraphic != null) {
-                Color[] colors = spellGraphic.getPalette().getColors();
+            Tileset spellTileset = spellGraphicLayout.getSpellTileset();
+            if (spellTileset != null) {
+                Color[] colors = spellTileset.getPalette().getColors();
                 jPanelColor9.setBackground(colors[9]);
                 jPanelColor13.setBackground(colors[13]);
                 jPanelColor14.setBackground(colors[14]);
@@ -1683,14 +1681,14 @@ public class MainEditor extends javax.swing.JFrame {
     }
     
     private void updateSpellPaletteColor(int index, Color newColor) {
-        SpellGraphic spellGraphic = spellGraphicLayout.getSpellGraphic();
-        if (spellGraphic != null) {
-            Palette palette = spellGraphic.getPalette();
+        Tileset spellTileset = spellGraphicLayout.getSpellTileset();
+        if (spellTileset != null) {
+            Palette palette = spellTileset.getPalette();
             if (palette != null) {
-                Color[] colors = spellGraphic.getPalette().getColors();
+                Color[] colors = spellTileset.getPalette().getColors();
                 if (!colors[index].equals(newColor)) {
                     colors[index] = newColor;
-                    Tile[] tiles = spellGraphic.getTiles();
+                    Tile[] tiles = spellTileset.getTiles();
                     for (int i = 0; i < tiles.length; i++) {
                         tiles[i].clearIndexedColorImage();
                     }

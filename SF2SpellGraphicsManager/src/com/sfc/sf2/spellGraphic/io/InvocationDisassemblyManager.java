@@ -6,12 +6,11 @@
 package com.sfc.sf2.spellGraphic.io;
 
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.graphics.compressed.StackGraphicsDecoder;
-import com.sfc.sf2.graphics.compressed.StackGraphicsEncoder;
-import com.sfc.sf2.graphics.io.DisassemblyManager;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.compression.StackGraphicsDecoder;
+import com.sfc.sf2.helpers.TileHelpers;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.palette.graphics.PaletteDecoder;
-import com.sfc.sf2.palette.graphics.PaletteEncoder;
+import com.sfc.sf2.palette.PaletteDecoder;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -51,22 +50,22 @@ public class InvocationDisassemblyManager {
                     System.arraycopy(data, palettesOffset, paletteData, 0, paletteData.length);
                     String paletteName = path.getFileName().toString();
                     paletteName = paletteName.substring(0, paletteName.lastIndexOf("."));
-                    Palette palette = new Palette(paletteName, PaletteDecoder.parsePalette(paletteData));
-                    invocationGraphic.setPalette(palette);
+                    Palette palette = new Palette(paletteName, PaletteDecoder.decodePalette(paletteData), true);
                     
                     int[] frameOffsets = new int[(palettesOffset-8) / 2];
                     for (int i = 0; i < frameOffsets.length; i++) {
                         frameOffsets[i] = getNextWord(data, 8 + i*2) + (8 + i*2);
                     }
-                    Tile[][] frameList = new Tile[frameOffsets.length][128];
+                    Tileset[] frameList = new Tileset[frameOffsets.length];
                     for (int i = 0; i < frameOffsets.length; i++) {
                         int frameOffset = getNextWord(data, 8 + i*2) + (8 + i*2);
                         int dataLength = (i == frameOffsets.length-1) ? data.length-frameOffsets[i] : frameOffsets[i+1] - frameOffsets[i];
                         byte[] tileData = new byte[dataLength];
                         System.arraycopy(data, frameOffset, tileData, 0, dataLength);
-                        Tile[] frame = new StackGraphicsDecoder().decodeStackGraphics(tileData, palette);
-                        frameList[i] = DisassemblyManager.reorderTilesSequentially(frame, 4, 2, 4);
-                        System.out.println("Frame "+i+" length="+dataLength+", offset="+frameOffset+", tiles="+frameList[i].length);
+                        Tile[] frame = new StackGraphicsDecoder().decode(tileData, palette);
+                        frame = TileHelpers.reorderTilesSequentially(frame, 4, 2, 4);
+                        frameList[i].setTiles(frame);
+                        System.out.println("Frame "+i+" length="+dataLength+", offset="+frameOffset+", tiles="+frameList[i].getTiles().length);
                     }
                     invocationGraphic.setFrames(frameList);
                 }else{
@@ -90,18 +89,16 @@ public class InvocationDisassemblyManager {
                 
                 Palette palette = invocationGraphic.getPalette();
                 byte[] paletteBytes;
-                PaletteEncoder.producePalette(palette.getColors());
-                paletteBytes = PaletteEncoder.getNewPaletteFileBytes();
+                paletteBytes = PaletteDecoder.encodePalette(palette.getColors());
                 short paletteOffset = (short)(invocationGraphic.getFrames().length*2 + 2);
                 
-                Tile[][] frames = invocationGraphic.getFrames();
+                Tileset[] frames = invocationGraphic.getFrames();
                 byte[][] frameBytes = new byte[frames.length][];
                 short[] frameOffsets = new short[frames.length];
                 int totalFramesSize = 0;
                 for (int i = 0; i < frames.length; i++) {
-                    Tile[] tiles = DisassemblyManager.reorderTilesForDisasssembly(frames[i], 4, 2, 4);
-                    StackGraphicsEncoder.produceGraphics(tiles);
-                    frameBytes[i] = StackGraphicsEncoder.getNewGraphicsFileBytes();
+                    Tile[] tiles = TileHelpers.reorderTilesForDisasssembly(frames[i].getTiles(), 4, 2, 4);
+                    frameBytes[i] = new StackGraphicsDecoder().encode(tiles);
                     if (i == 0) {
                         frameOffsets[i] = (short)(frames.length*2 + 32);
                     } else {

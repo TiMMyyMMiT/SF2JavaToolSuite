@@ -6,12 +6,10 @@
 package com.sfc.sf2.spellGraphic.io;
 
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.spellGraphic.SpellGraphic;
-import com.sfc.sf2.graphics.compressed.StackGraphicsDecoder;
-import com.sfc.sf2.graphics.compressed.StackGraphicsEncoder;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.compression.StackGraphicsDecoder;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.palette.graphics.PaletteDecoder;
-import com.sfc.sf2.palette.graphics.PaletteEncoder;
+import com.sfc.sf2.palette.PaletteDecoder;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -27,10 +25,10 @@ import java.util.logging.Logger;
  */
 public class SpellDisassemblyManager {
     
-    public static SpellGraphic importDisassembly(String filepath, Palette defaultPalette){
+    public static Tileset importDisassembly(String filepath, Palette defaultPalette){
         System.out.println("com.sfc.sf2.spellGraphic.io.spellDisassemblyManager.importDisassembly() - Importing disassembly file ...");
         
-        SpellGraphic spellGraphic = new SpellGraphic();
+        //Tileset tileset = new Tileset();
         try {
             Path path = Paths.get(filepath);
             if(path.toFile().exists()){
@@ -38,7 +36,7 @@ public class SpellDisassemblyManager {
                 if(data.length>42){
                     byte[] colorData = new byte[6];
                     System.arraycopy(data, 2, colorData, 0, 6);
-                    Color[] swapColors = PaletteDecoder.parsePalette(colorData, false);
+                    Color[] swapColors = PaletteDecoder.decodePalette(colorData);
                     Color[] paletteColors = new Color[defaultPalette.getColors().length];
                     System.arraycopy(defaultPalette.getColors(), 0, paletteColors, 0, paletteColors.length);
                     paletteColors[9] = swapColors[0];
@@ -46,13 +44,13 @@ public class SpellDisassemblyManager {
                     paletteColors[14] = swapColors[2];
                     String paletteName = path.getFileName().toString();
                     paletteName = paletteName.substring(0, paletteName.lastIndexOf("."));
-                    Palette palette = new Palette(paletteName, paletteColors);
+                    Palette palette = new Palette(paletteName, paletteColors, true);
                     
                     byte[] tileData = new byte[data.length - 8];
                     System.arraycopy(data, 8, tileData, 0, tileData.length);
-                    Tile[] tiles = new StackGraphicsDecoder().decodeStackGraphics(tileData, palette);
+                    Tile[] tiles = new StackGraphicsDecoder().decode(tileData, palette);
                     
-                    spellGraphic.setTiles(tiles);
+                    //tileset.setTiles(tiles);
                 }else{
                     System.out.println("com.sfc.sf2.spellGraphic.io.spellDisassemblyManager.parseGraphics() - File ignored because of too small length (must be a dummy file) " + data.length + " : " + filepath);
                 }
@@ -62,24 +60,22 @@ public class SpellDisassemblyManager {
              e.printStackTrace();
         }    
         System.out.println("com.sfc.sf2.spellGraphic.io.spellDisassemblyManager.importDisassembly() - Disassembly imported.");
-        return spellGraphic;
+        return null;//tileset;
     }
     
-    public static void exportDisassembly(SpellGraphic spellGraphic, String filepath){
+    public static void exportDisassembly(Tileset spellTileset, String filepath){
         System.out.println("com.sfc.sf2.spellGraphic.io.spellDisassemblyManager.exportDisassembly() - Exporting disassembly ...");
         try {
-            Color[] paletteColors = spellGraphic.getPalette().getColors();
+            Color[] paletteColors = spellTileset.getPalette().getColors();
             Color[] swapColors = new Color[3];
             swapColors[0] = paletteColors[9];
             swapColors[1] = paletteColors[13];
             swapColors[2] = paletteColors[14];
-            PaletteEncoder.producePalette(swapColors);
-            byte[] colorSwapBytes = PaletteEncoder.getNewPaletteFileBytes();
-            StackGraphicsEncoder.produceGraphics(spellGraphic.getTiles());
-            byte[] tilesBytes = StackGraphicsEncoder.getNewGraphicsFileBytes();
+            byte[] colorSwapBytes = PaletteDecoder.encodePalette(swapColors);
+            byte[] tilesBytes = new StackGraphicsDecoder().encode(spellTileset.getTiles());
 
             byte[] newSpellGraphicFileBytes = new byte[tilesBytes.length + 8];
-            setWord(newSpellGraphicFileBytes,0,(short)(StackGraphicsEncoder.getNewGraphicsFileUncompressedBytes()));
+            setWord(newSpellGraphicFileBytes,0,(short)(StackGraphicsDecoder.lastEncodedUncompressedBytes));
             System.arraycopy(colorSwapBytes, 0, newSpellGraphicFileBytes, 2, colorSwapBytes.length);
             System.arraycopy(tilesBytes, 0, newSpellGraphicFileBytes, 8, tilesBytes.length);
 

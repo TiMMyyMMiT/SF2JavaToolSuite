@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.spellGraphic;
 
-import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 
 /**
@@ -14,26 +14,24 @@ import com.sfc.sf2.palette.Palette;
  */
 public class InvocationGraphic {
 
-    private Tile[][] frames;
-    private Palette palette;
+    private Tileset[] frames;
     private short unknown1;
     private short unknown2;
     private short unknown3;
 
-    public Tile[][] getFrames() {
+    public Tileset[] getFrames() {
         return frames;
     }
 
-    public void setFrames(Tile[][] frames) {
+    public void setFrames(Tileset[] frames) {
         this.frames = frames;
     }
 
     public Palette getPalette() {
-        return palette;
-    }
-
-    public void setPalette(Palette palette) {
-        this.palette = palette;
+        if (frames == null || frames.length == 0) {
+            return null;
+        }
+        return frames[0].getPalette();
     }
 
     public short getUnknown1() {

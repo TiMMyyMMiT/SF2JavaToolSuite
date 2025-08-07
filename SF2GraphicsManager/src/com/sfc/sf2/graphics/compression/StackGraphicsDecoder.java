@@ -18,7 +18,7 @@ import java.util.logging.Level;
  *
  * @author wiz
  */
-public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
+public class StackGraphicsDecoder extends AbstractGraphicsDecoder { 
     private static final int MAX_COPY_OFFSET = 2047;
     
     private byte[] inputData;
@@ -26,6 +26,8 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
     private int inputCursor = -2;
     private int inputBitCursor = 16;
     private List<Byte> output = new ArrayList();
+        
+    public static int lastEncodedUncompressedBytes;
     
     private List<Integer> historyStack = new ArrayList<Integer>(Arrays.asList(new Integer[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}));
     
@@ -392,6 +394,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         Console.logger().finest("output bytes length = " + output.length);
         Console.logger().finest("output = " + BinaryHelpers.bytesToHex(output));
         Console.logger().finest("EXITING encode");
+        lastEncodedUncompressedBytes = inputData.length;
         return output;
     }
     

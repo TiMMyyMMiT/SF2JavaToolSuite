@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.spellGraphic.layout;
+package com.sfc.sf2.spellGraphic.gui;
 
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
@@ -48,7 +48,7 @@ public class InvocationGraphicLayout extends JPanel {
         image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = image.getGraphics();
         for(int f = 0; f < frames; f++) {
-            Tile[] frameTiles = invocationGraphic.getFrames()[f];
+            Tile[] frameTiles = invocationGraphic.getFrames()[f].getTiles();
             for(int t = 0; t < frameTiles.length; t++) {
                 int x = (t%16)*8;
                 int y = (f*8 + t/16)*8;
