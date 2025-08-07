@@ -39,8 +39,7 @@ public class PortraitMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
-        CoreSettings settings = SettingsManager.getSettingsStore("core");
-        colorPicker1.setColor(settings.getTransparentBGColor());
+        colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         
         eyeTable = (PortraitDataTableModel)tableEyes.getModel();
         mouthTable = (PortraitDataTableModel)tableMouth.getModel();
