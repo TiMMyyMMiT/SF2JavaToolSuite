@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.core.gui;
 
-import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.core.gui.controls.Console;
 
@@ -26,8 +25,7 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         super.initEditor();
         
         //One-time setup
-        CoreSettings settings = SettingsManager.getSettingsStore("core");
-        colorPicker1.setColor(settings.getTransparentBGColor());
+        colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
     }
     
     @Override
@@ -175,9 +173,8 @@ public final class ExampleMainEditor extends AbstractMainEditor {
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
         Console.logger().info("Color changed : " + colorPicker1.getColor());
-        CoreSettings settings = SettingsManager.getSettingsStore("core");
-        settings.setTransparentBGColor(colorPicker1.getColor());
-        SettingsManager.saveSettingsFile();
+        SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
+        SettingsManager.saveGlobalSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
     

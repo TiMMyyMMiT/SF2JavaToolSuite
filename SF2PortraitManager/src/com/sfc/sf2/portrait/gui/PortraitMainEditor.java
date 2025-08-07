@@ -638,9 +638,8 @@ public class PortraitMainEditor extends AbstractMainEditor {
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
         portraitLayoutPanel.setBGColor(colorPicker1.getColor());
-        CoreSettings settings = SettingsManager.getSettingsStore("core");
-        settings.setTransparentBGColor(colorPicker1.getColor());
-        SettingsManager.saveSettingsFile();
+        SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
+        SettingsManager.saveGlobalSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
 

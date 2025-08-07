@@ -36,8 +36,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     protected Color bgColor = null;
 
     public AbstractLayoutPanel() {
-        CoreSettings core = SettingsManager.getSettingsStore("core");
-        bgColor = core.getTransparentBGColor();
+        bgColor = SettingsManager.getGlobalSettings().getTransparentBGColor();
     }
     
     @Override

@@ -9,9 +9,7 @@ import com.sfc.sf2.core.gui.controls.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,14 +19,17 @@ import java.util.logging.Level;
  *
  * @author TiMMy
  */
-public class SettingsManager {
-    private static final String SETTINGS_FILE_PATH = ".\\.sf2settings.txt";
-    
+public class SettingsManager {    
     private static final HashMap<String, AbstractSettings> settingsStores = new HashMap<>();
+    private static Path settingsFilePath = null;
+    
+    private static GlobalSettings globalSettings;
+    private static Path globalSettingsPath = null;
     
     private static boolean isRunningInEditor = true;
 
     static {
+        globalSettings = new GlobalSettings();
         CoreSettings core = new CoreSettings();
         settingsStores.put("core", core);
     }
@@ -41,8 +42,33 @@ public class SettingsManager {
         isRunningInEditor = inEditor;
     }
     
+    private static Path getGlobalSettingsFilePath() {
+        if (globalSettingsPath == null) {
+            globalSettingsPath = Path.of(System.getenv("APPDATA")).resolve("SF2").resolve("global.settings");
+        }
+        return globalSettingsPath;
+    }
+    
+    private static Path getSettingsFilePath() {
+        if (settingsFilePath == null) {
+            settingsFilePath = Path.of(System.getenv("APPDATA")).resolve("SF2");
+            String projectName = System.getProperty("program.name");
+            if (projectName == null) {
+                //Probably in editor
+                Console.logger().severe("Project name not found.");
+                String path = System.getProperty("user.dir");
+                projectName = path.substring(path.lastIndexOf('\\')+1);
+            }
+            settingsFilePath = settingsFilePath.resolve(projectName + ".settings");
+        }
+        return settingsFilePath;
+    }
+    
     public static void registerSettingsStore(String id, AbstractSettings settings) {
-        if (settings.getClass().toString().equals("CoreSettings")) {
+        if (settings.getClass().toString().equals("GlobalSettings")) {
+            Console.logger().severe("Error: Cannot add another instance of \"Core\" settings.");
+            return;
+        } else if (settings.getClass().toString().equals("CoreSettings")) {
             Console.logger().severe("Error: Cannot add another instance of \"Core\" settings.");
             return;
         } else if (settingsStores.containsKey(id)) {
@@ -52,12 +78,38 @@ public class SettingsManager {
         settingsStores.put(id, settings);
     }
     
+    public static GlobalSettings getGlobalSettings() {
+        return globalSettings;
+    }
+    
     @SuppressWarnings("unchecked")
     public static <T extends AbstractSettings> T getSettingsStore(String id) {
         if (settingsStores.containsKey(id)) {
             return (T)settingsStores.get(id);
         }
         return null;
+    }
+    
+    public static void loadGlobalSettings() {
+        Console.logger().finest("ENTERING loadGlobalSettings");
+        String line = null;
+        try {
+            File file = getGlobalSettingsFilePath().toFile();
+            if (file.exists()) {
+                Scanner scan = new Scanner(file);
+                readStoreData(scan, globalSettings);
+                scan.close();
+            } else {
+                Console.logger().info("Initialising new global settings...");
+                globalSettings.initialiseNewUser();
+                saveGlobalSettingsFile();
+            }
+        } catch (IOException ex) {
+            Console.logger().log(Level.SEVERE, "Could not load settings file from : " + getSettingsFilePath(), ex);
+        } catch (Exception e) {
+            Console.logger().log(Level.SEVERE, "Error reading settings file. Line : " + line, e);
+        }
+        Console.logger().finest("EXITING loadGlobalSettings");
     }
     
     public static void loadSettingsFile() {
@@ -72,7 +124,7 @@ public class SettingsManager {
         Console.logger().finest("ENTERING loadSettings");
         String line = null;
         try {
-            File file = new File(SETTINGS_FILE_PATH);
+            File file = getSettingsFilePath().toFile();
             if (file.exists()) {
                 Scanner scan = new Scanner(file);
                 line = scan.nextLine();
@@ -82,27 +134,10 @@ public class SettingsManager {
                     if (line.startsWith("Store_")) {
                         storeId = line.substring(line.indexOf("_")+1).trim();
                         if (settingsStores.containsKey(storeId) && (specificId == null || storeId.equals(specificId))) {
-                            data = new HashMap<>();
-                            while (scan.hasNext()) {
-                                line = scan.nextLine();
-                                if (line.startsWith("Store_")) {
-                                    break;
-                                } else {
-                                    int marker = line.indexOf(':');
-                                    if (marker >= 0) {
-                                        String id = line.substring(0, marker).trim();
-                                        String dataItem = line.substring(marker+1).trim();
-                                        data.put(id, dataItem);
-                                        Console.logger().finest("Settings : " + line);
-                                    } else {
-                                        throw new Exception("Settings file corrupted. Line : " + line);
-                                    }
-                                }
-                            }
-                            settingsStores.get(storeId).decodeSettings(data);
-                            if (specificId != null) {
-                                break;
-                            }
+                            readStoreData(scan, settingsStores.get(storeId));
+                        }
+                        if (specificId != null) {
+                            break;
                         }
                     }
                 }
@@ -119,11 +154,46 @@ public class SettingsManager {
                 }
             }
         } catch (IOException ex) {
-            Console.logger().log(Level.SEVERE, "Could not load settings file from : " + SETTINGS_FILE_PATH, ex);
+            Console.logger().log(Level.SEVERE, "Could not load settings file from : " + getSettingsFilePath(), ex);
         } catch (Exception e) {
             Console.logger().log(Level.SEVERE, "Error reading settings file. Line : " + line, e);
         }
         Console.logger().finest("EXITING loadSettings");
+    }
+    
+    private static void readStoreData(Scanner scan, AbstractSettings store) throws Exception {
+        HashMap<String, String> data = new HashMap<>();
+        while (scan.hasNext()) {
+            String line = scan.nextLine();
+            if (line.startsWith("Store_")) {
+                break;
+            } else {
+                int marker = line.indexOf(':');
+                if (marker >= 0) {
+                    String id = line.substring(0, marker).trim();
+                    String dataItem = line.substring(marker+1).trim();
+                    data.put(id, dataItem);
+                    Console.logger().finest("Settings : " + line);
+                } else {
+                    throw new Exception("Settings file corrupted. Line : " + line);
+                }
+            }
+        }
+        store.decodeSettings(data);
+    }
+    
+    public static void saveGlobalSettingsFile() {
+        Console.logger().finest("ENTERING saveGlobalSettingsFile");
+        try {
+            StringBuilder sb = new StringBuilder();
+            writeStoreData(sb, globalSettings);
+            Path filepath = getGlobalSettingsFilePath();
+            checkSettingsFolderExists(filepath);
+            Files.write(filepath, sb.toString().getBytes());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, "Could not save settings file to : " + getSettingsFilePath(), ex);
+        }
+        Console.logger().finest("EXITING saveGlobalSettingsFile");
     }
     
     public static void saveSettingsFile() {
@@ -132,23 +202,33 @@ public class SettingsManager {
             StringBuilder sb = new StringBuilder();
             for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
                 sb.append("Store_" + entry.getKey() + "\n");
-                HashMap<String, String> data = new HashMap<>();
-                entry.getValue().encodeSettings(data);
-                for (Map.Entry<String, String> dataItem : data.entrySet()) {
-                    String line = dataItem.getKey() + ": " + dataItem.getValue();
-                    sb.append("\t");
-                    sb.append(line);
-                    sb.append("\n");
-                    Console.logger().finest("Settings : " + line);
-                }
-                sb.append("\n");
+                writeStoreData(sb, entry.getValue());
             }
-            Path filepath = Paths.get(SETTINGS_FILE_PATH);                
+            Path filepath = getSettingsFilePath();
+            checkSettingsFolderExists(filepath);
             Files.write(filepath, sb.toString().getBytes());
-            Files.setAttribute(filepath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
         } catch (Exception ex) {
-            Console.logger().log(Level.SEVERE, "Could not save settings file to : " + SETTINGS_FILE_PATH, ex);
+            Console.logger().log(Level.SEVERE, "Could not save settings file to : " + getSettingsFilePath(), ex);
         }
         Console.logger().finest("EXITING saveSettingsFile");
+    }
+    
+    private static void writeStoreData(StringBuilder sb, AbstractSettings store) {
+        HashMap<String, String> data = new HashMap<>();
+        store.encodeSettings(data);
+        for (Map.Entry<String, String> dataItem : data.entrySet()) {
+            String line = dataItem.getKey() + ": " + dataItem.getValue();
+            sb.append("\t");
+            sb.append(line);
+            sb.append("\n");
+            Console.logger().finest("Settings : " + line);
+        }
+        sb.append("\n");
+    }
+    
+    private static void checkSettingsFolderExists(Path settingsPath) throws IOException {
+        Path folder = settingsPath.getParent();
+        if (!Files.exists(folder))
+            Files.createDirectory(folder);
     }
 }

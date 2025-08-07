@@ -2,7 +2,6 @@
 */nbproject/private/*
 */build/*
 */dist/
-**/.sf2settings.txt
 
 *.png
 *.class

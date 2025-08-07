@@ -8,6 +8,7 @@ package com.sfc.sf2.core.gui;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.sfc.sf2.application.settings.CoreSettings;
+import com.sfc.sf2.application.settings.GlobalSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.core.Versioning;
 import com.sfc.sf2.core.gui.controls.Console;
@@ -19,9 +20,7 @@ import javax.swing.UIManager;
  * @author TiMMy
  */
 public abstract class AbstractMainEditor extends javax.swing.JFrame {
-    
-    private Console console;
-    
+        
     /**
      * Creates new form New Application
      */
@@ -34,7 +33,6 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
     
     protected void initCore(Console console) {
         //Console
-        this.console = console;
         console.initLogger("SF2 Java Suite");
         //Version
         if (!SettingsManager.isRunningInEditor()) {
@@ -43,6 +41,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
                 this.setTitle(this.getTitle() + " - v" + version);
         }
         //Settings
+        SettingsManager.loadGlobalSettings();
         SettingsManager.loadSettingsFile();
         if (!SettingsManager.isRunningInEditor()) {
             //Check if settings panel should be shown
@@ -81,7 +80,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         //Hack to determine if project is running from editor (IDE) or is a build. (property 'user.dir' is blank if in editor)
         String dir = System.getProperty("user.dir");
         SettingsManager.setRunningInEditor(dir == null || dir.length() == 0);
-        SettingsManager.loadSettingsFile();
+        SettingsManager.loadGlobalSettings();
         
         //Set look and feel
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -90,8 +89,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
          */
         try {
             //Have to load core settings first to check theme                                     
-            CoreSettings core = SettingsManager.getSettingsStore("core");
-            if (core.getIsDarkTheme())
+            if (SettingsManager.getGlobalSettings().getIsDarkTheme())
                 FlatDarkLaf.setup();
             else
                 FlatLightLaf.setup();
@@ -333,19 +331,21 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         CoreSettings core = SettingsManager.getSettingsStore("core");
         core.setBasePath(directoryButtonBasePath.getDirectoryPath());
         core.setIncbinPath(directoryButtonIncbinPath.getDirectoryPath());
-        core.setIsDarkTheme(jRadioThemeDark.isSelected());
+        SettingsManager.getGlobalSettings().setIsDarkTheme(jRadioThemeDark.isSelected());
+        SettingsManager.saveGlobalSettingsFile();
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_jFrameSettingsWindowClosing
 
     private void jFrameSettingsWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrameSettingsWindowOpened
         jFrameSettings.setLocationRelativeTo(this);
         jFrameSettings.setSize(jFrameSettings.getPreferredSize());
+        GlobalSettings global = SettingsManager.getGlobalSettings();
         CoreSettings core = SettingsManager.getSettingsStore("core");
         if (core.arePathsSet()) {
             directoryButtonBasePath.setDirectoryPath(core.getBasePath());
             directoryButtonIncbinPath.setDirectoryPath(core.getIncbinPath());
-            jRadioThemeLight.setSelected(!core.getIsDarkTheme());
-            jRadioThemeDark.setSelected(core.getIsDarkTheme());
+            jRadioThemeLight.setSelected(!global.getIsDarkTheme());
+            jRadioThemeDark.setSelected(global.getIsDarkTheme());
         } else {
             directoryButtonBasePath.setDirectoryPath(PathHelpers.getApplicationpath().toString());
             directoryButtonIncbinPath.setDirectoryPath(PathHelpers.getApplicationpath().toString());

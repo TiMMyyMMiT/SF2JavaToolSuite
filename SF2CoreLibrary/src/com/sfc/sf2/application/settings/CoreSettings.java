@@ -6,7 +6,6 @@
 package com.sfc.sf2.application.settings;
 
 import com.sfc.sf2.helpers.PathHelpers;
-import java.awt.Color;
 import java.util.HashMap;
 
 /**
@@ -18,8 +17,6 @@ public class CoreSettings implements AbstractSettings {
     private String basePath = null;
     private String incbinPath = null;
     
-    private boolean darkTheme;
-    private Color transparentBGColor;
     private int logLevel;
         
     public String getBasePath() {
@@ -42,22 +39,6 @@ public class CoreSettings implements AbstractSettings {
         return basePath != null && basePath.length() > 0;
     }
     
-    public boolean getIsDarkTheme() {
-        return darkTheme;
-    }
-    
-    public void setTransparentBGColor(Color transparentBGColor) {
-        this.transparentBGColor = transparentBGColor;
-    }
-    
-    public Color getTransparentBGColor() {
-        return transparentBGColor;
-    }
-    
-    public void setIsDarkTheme(boolean darkTheme) {
-        this.darkTheme = darkTheme;
-    }
-    
     public int getLogLevel() {
         return logLevel;
     }
@@ -76,8 +57,6 @@ public class CoreSettings implements AbstractSettings {
         } else {    //A dev build?
             basePath = incbinPath = null;
         }
-        darkTheme = false;
-        transparentBGColor = new Color(200, 0, 200);
         logLevel = 1;
     }
     
@@ -88,13 +67,6 @@ public class CoreSettings implements AbstractSettings {
         }
         if (data.containsKey("incbinPath")) {
             incbinPath = data.get("incbinPath");
-        }
-        if (data.containsKey("darkTheme")) {
-            darkTheme = Boolean.parseBoolean(data.get("darkTheme"));
-        }
-        if (data.containsKey("transparentBGColor")) {
-            String[] colorSplit = data.get("transparentBGColor").split(",");
-            transparentBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
         }
         if (data.containsKey("logLevel")) {
             logLevel = Integer.parseInt(data.get("logLevel"));
@@ -107,8 +79,6 @@ public class CoreSettings implements AbstractSettings {
             data.put("basePath", basePath);
             data.put("incbinPath", incbinPath);
         }
-        data.put("darkTheme", Boolean.toString(darkTheme));
-        data.put("transparentBGColor", String.format("%d, %d, %d", transparentBGColor.getRed(), transparentBGColor.getGreen(), transparentBGColor.getBlue()));
         data.put("logLevel", Integer.toString(logLevel));
     }
 }
