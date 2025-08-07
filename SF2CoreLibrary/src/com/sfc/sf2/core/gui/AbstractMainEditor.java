@@ -12,8 +12,6 @@ import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.core.Versioning;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
-import java.io.File;
-import java.net.URISyntaxException;
 import javax.swing.UIManager;
 
 /**
@@ -51,6 +49,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 CoreSettings core = SettingsManager.getSettingsStore("core");
                 if (!core.arePathsSet()) {
+                    Console.logger().info("Could not automatically detect app path : " + PathHelpers.getApplicationpath().toString());
                     jFrameSettings.setVisible(true);
                 }
             });
