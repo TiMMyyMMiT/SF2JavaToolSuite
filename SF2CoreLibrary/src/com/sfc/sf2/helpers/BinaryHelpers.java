@@ -33,7 +33,15 @@ public class BinaryHelpers {
         return s;
     }
     
-    public static void setWord(short word, List<Byte> data) {
+    public static void setWord(byte[] data, int cursor, short value){
+        ByteBuffer bb = ByteBuffer.allocate(2);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        bb.putShort(value);
+        data[cursor+1] = bb.get(0);
+        data[cursor] = bb.get(1);
+    }
+    
+    public static void setWordList(short word, List<Byte> data) {
         byte firstByte = (byte)((word>>8)&0xFF);
         byte secondByte = (byte)(word&0xFF);
         data.add(firstByte);

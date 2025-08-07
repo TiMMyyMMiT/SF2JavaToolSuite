@@ -18,6 +18,13 @@ public class InvocationGraphic {
     private short unknown1;
     private short unknown2;
     private short unknown3;
+    
+    public InvocationGraphic(Tileset[] frames, short unknown1, short unknown2, short unknown3) {
+        this.frames = frames;
+        this.unknown1 = unknown1;
+        this.unknown2 = unknown2;
+        this.unknown3 = unknown3;
+    }
 
     public Tileset[] getFrames() {
         return frames;

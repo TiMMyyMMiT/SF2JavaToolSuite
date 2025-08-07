@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.spellGraphic;
 
-import com.sfc.sf2.spellGraphic.io.InvocationDisassemblyManager;
+import com.sfc.sf2.spellGraphic.io.InvocationDisassemblyProcessor;
 import com.sfc.sf2.spellGraphic.io.InvocationRawImageManager;
 import java.nio.file.Path;
 import java.nio.file.Paths;

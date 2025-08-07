@@ -8,7 +8,7 @@ package com.sfc.sf2.spellGraphic;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.spellGraphic.io.SpellDisassemblyManager;
+import com.sfc.sf2.spellGraphic.io.SpellDisassemblyProcessor;
 import com.sfc.sf2.palette.PaletteManager;
 import java.nio.file.Path;
 import java.nio.file.Paths;
