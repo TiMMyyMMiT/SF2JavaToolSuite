@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.application.settings;
 
-import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.awt.Color;
 import java.util.HashMap;
@@ -70,9 +69,9 @@ public class CoreSettings implements AbstractSettings {
     @Override
     public void initialiseNewUser() {
         String appPath = PathHelpers.getApplicationpath().toString();
-        int incbinIndex = appPath.indexOf("disasm\\data\\");
+        int incbinIndex = appPath.indexOf("\\disasm\\data\\");
         if (incbinIndex >= 0) {    //In SF2DISASM
-            incbinPath = appPath.substring(0, incbinIndex);
+            incbinPath = appPath.substring(0, incbinIndex+8);
             basePath =  appPath;
         } else {    //A dev build?
             basePath = incbinPath = null;
