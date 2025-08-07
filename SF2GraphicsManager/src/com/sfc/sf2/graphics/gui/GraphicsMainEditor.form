@@ -54,7 +54,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jSplitPane1" alignment="0" max="32767" attributes="0"/>
+              <Component id="jSplitPane1" alignment="0" pref="731" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -83,7 +83,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="0" pref="568" max="32767" attributes="0"/>
+                      <Component id="jSplitPane2" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -384,31 +384,30 @@
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="1" attributes="0">
+                                                          <Component id="jLabel43" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jLabel39" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jLabel41" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                                           <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jTextField38" min="-2" pref="20" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jButton36" min="-2" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="jLabel39" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jTextField33" min="-2" pref="20" max="-2" attributes="0"/>
+                                                              <Component id="jTextField33" pref="38" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton32" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jTextField34" min="-2" pref="20" max="-2" attributes="0"/>
+                                                              <Component id="jTextField34" pref="0" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton34" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="jLabel43" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jTextField38" pref="0" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jTextField36" min="-2" pref="20" max="-2" attributes="0"/>
+                                                              <Component id="jButton36" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <Group type="102" alignment="1" attributes="0">
+                                                              <Component id="jTextField36" pref="0" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton35" min="-2" max="-2" attributes="0"/>
                                                           </Group>
@@ -438,7 +437,7 @@
                                                           <Group type="102" attributes="0">
                                                               <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jTextField10" pref="304" max="32767" attributes="0"/>
+                                                              <Component id="jTextField10" pref="264" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jLabel46" min="-2" max="-2" attributes="0"/>
                                                           </Group>
@@ -598,7 +597,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField10">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitletiles.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlescreentiles.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JLabel" name="jLabel24">
@@ -619,7 +618,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField19">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlelayoutA.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlescreenlayoutA.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton31">
@@ -638,7 +637,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField24">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlepalettes.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlescreenpalettes.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton32">
@@ -687,7 +686,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField27">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlepalettes.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlescreenpalettes.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton34">
@@ -717,7 +716,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField35">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlepalettes.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlescreenpalettes.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton35">
@@ -747,7 +746,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField37">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlepalettes.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cspecialscreens\u005ctitlescreen\u005ctitlescreenpalettes.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton36">
@@ -788,7 +787,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField14">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005ctech\u005cfonts\u005cstaticwidthfont.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005ctech\u005cfonts\u005ctitlescreenfont.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JLabel" name="jLabel48">
@@ -883,7 +882,6 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="fileButton4" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Group type="103" groupAlignment="3" attributes="0">
@@ -895,7 +893,7 @@
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
-                                                      <Component id="jLabel1" pref="88" max="32767" attributes="0"/>
+                                                      <Component id="jLabel1" pref="94" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
@@ -1087,7 +1085,7 @@
                                                   <Component id="jLabel51" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jButton39" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jTextField42" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel49" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1111,7 +1109,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField41">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cnewtiles.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cexport\u005cnewtiles.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton37">
@@ -1169,7 +1167,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField43">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cnewlayout.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cexport\u005cnewlayout.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton39">
@@ -1208,7 +1206,7 @@
                                     <Component class="javax.swing.JTextField" name="jTextField44">
                                       <Properties>
                                         <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value=".\u005cnewpalette.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="text" type="java.lang.String" value=".\u005cexport\u005cnewpalette.bin" containsInvalidXMLChars="true"/>
                                       </Properties>
                                     </Component>
                                     <Component class="javax.swing.JButton" name="jButton40">
@@ -1270,7 +1268,7 @@
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" alignment="0" pref="486" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                           </Layout>

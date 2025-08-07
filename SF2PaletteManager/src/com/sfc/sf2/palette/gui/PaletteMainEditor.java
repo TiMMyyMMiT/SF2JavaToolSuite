@@ -341,7 +341,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         if (!PathHelpers.createPathIfRequred(palettePath)) return;
         try {
-            paletteManager.exportDisassembly(palettePath, palettePane1.getUpdatedPalette(), true);
+            paletteManager.exportDisassembly(palettePath, palettePane1.getUpdatedPalette());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Palette disasm could not be exported to : " + palettePath);

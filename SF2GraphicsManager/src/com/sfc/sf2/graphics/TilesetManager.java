@@ -19,6 +19,7 @@ import com.sfc.sf2.palette.PaletteManager;
 import com.sfc.sf2.palette.io.PalettePackage;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 /**
  *
@@ -75,38 +76,24 @@ public class TilesetManager extends AbstractManager {
         Console.logger().finest("EXITING exportImage");
     }
        
-    public void importDisassemblyWithLayout(String baseTilesetFilePath, 
-        String palette1FilePath, String palette1Offset,
-        String palette2FilePath, String palette2Offset,
-        String palette3FilePath, String palette3Offset,
-        String palette4FilePath, String palette4Offset,
-        String tileset1FilePath, String tileset1Offset,
-        String tileset2FilePath, String tileset2Offset,
-        String layoutFilePath, int compression){/*
-        Console.logger().entering(Console.logger().getName(),"importDisassemblyWithLayout");
-        Console.logger().info("info");
-        Console.logger().fine("fine");
-        Console.logger().finer("finer");
-        Console.logger().finest("finest");
-        Palette[] palettes = new Palette[4];
-        paletteManager.importRom(palette1FilePath, palette1Offset,"32");
-        palettes[0] = paletteManager.getPalette();
-        paletteManager.importRom(palette2FilePath, palette2Offset,"32");
-        palettes[1] = paletteManager.getPalette();
-        paletteManager.importRom(palette3FilePath, palette3Offset,"32");
-        palettes[2] = paletteManager.getPalette();
-        paletteManager.importRom(palette4FilePath, palette4Offset,"32");
-        palettes[3] = paletteManager.getPalette();
-        //palette[0] = new Color(255, 255, 255, 0);
-        tiles = DisassemblyManager.importDisassemblyWithLayout(baseTilesetFilePath, palettes, tileset1FilePath, tileset1Offset, tileset2FilePath, tileset2Offset, compression, layoutFilePath);
-        Console.logger().exiting(Console.logger().getName(),"importDisassemblyWithLayout");*/
+    public void importDisassemblyWithLayout(Path baseTilesetFilePath,Path palette1FilePath, int palette1Offset, Path palette2FilePath, int palette2Offset, Path palette3FilePath, int palette3Offset, Path palette4FilePath, int palette4Offset,
+            Path tileset1FilePath, int tileset1Offset, Path tileset2FilePath, int tileset2Offset, Path layoutFilePath, TilesetCompression compression, int tilesPerRow)
+            throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassemblyWithLayout");
+        Path[] palettePaths = new Path[] { palette1FilePath, palette2FilePath, palette3FilePath, palette4FilePath };
+        int[] offsets = new int[] { palette1Offset, palette2Offset, palette3Offset, palette4Offset };
+        int[] lengths = new int[] { 32, 32, 32, 32 };
+        Palette[] palettes = paletteManager.importDisassemblyFromPartials(palettePaths, offsets, lengths, true);
+        tileset = tilesetDisassemblyProcessor.importDisassemblyWithLayout(baseTilesetFilePath, palettes, tileset1FilePath, tileset1Offset, tileset2FilePath, tileset2Offset, compression, tilesPerRow, layoutFilePath);
+        Console.logger().finest("EXITING importDisassemblyWithLayout");
     }
     
-    public void exportTilesAndLayout(String palettePath, String tilesPath, String layoutPath, String graphicsOffset, int compression, int palette){
-        /*Console.logger().entering(Console.logger().getName(),"exportTilesAndLayout");
-        paletteManager.exportDisassembly(palettePath, tiles[0].getPalette());
-        DisassemblyManager.exportTilesAndLayout(tiles, tilesPath, layoutPath, graphicsOffset, compression, palette);
-        Console.logger().exiting(Console.logger().getName(),"exportTilesAndLayout");    */
+    public void exportTilesAndLayout(Path palettePath, Path tilesPath, Tileset tileset, Path layoutPath, int graphicsOffset, TilesetCompression compression, int palette)
+            throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportTilesAndLayout");
+        paletteManager.exportDisassembly(palettePath, tileset.getPalette());
+        tilesetDisassemblyProcessor.exportTilesAndLayout(tileset, tilesPath, layoutPath, graphicsOffset, compression, tileset.getPalette());
+        Console.logger().finest("EXITING exportTilesAndLayout");
     }
 
     public Tileset getTileset() {

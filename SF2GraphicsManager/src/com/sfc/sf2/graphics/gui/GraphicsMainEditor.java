@@ -24,7 +24,7 @@ import javax.swing.JFileChooser;
  */
 public class GraphicsMainEditor extends AbstractMainEditor {
     
-    TilesetManager graphicsManager = new TilesetManager();
+    TilesetManager tilesetManager = new TilesetManager();
     
     public GraphicsMainEditor() {
         super();
@@ -42,7 +42,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     
     @Override
     protected void updateEditorData() {
-        Tileset tileset = graphicsManager.getTileset();
+        Tileset tileset = tilesetManager.getTileset();
         int tileWidth = (int)jSpinner2.getValue();
         graphicsLayoutPanel.setTilesPerRow(tileWidth);
         graphicsLayoutPanel.setTileset(tileset);
@@ -329,7 +329,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         });
 
         jTextField10.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField10.setText(".\\specialscreens\\titlescreen\\titletiles.bin");
+        jTextField10.setText(".\\specialscreens\\titlescreen\\titlescreentiles.bin");
 
         jLabel24.setText("Tileset 1 :");
 
@@ -338,7 +338,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel25.setText("Layout file :");
 
         jTextField19.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField19.setText(".\\specialscreens\\titlescreen\\titlelayoutA.bin");
+        jTextField19.setText(".\\specialscreens\\titlescreen\\titlescreenlayoutA.bin");
 
         jButton31.setText("File...");
         jButton31.addActionListener(new java.awt.event.ActionListener() {
@@ -350,7 +350,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel27.setText("Palette 1 :");
 
         jTextField24.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField24.setText(".\\specialscreens\\titlescreen\\titlepalettes.bin");
+        jTextField24.setText(".\\specialscreens\\titlescreen\\titlescreenpalettes.bin");
 
         jButton32.setText("File...");
         jButton32.addActionListener(new java.awt.event.ActionListener() {
@@ -379,7 +379,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel40.setText("Palette 2 :");
 
         jTextField27.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField27.setText(".\\specialscreens\\titlescreen\\titlepalettes.bin");
+        jTextField27.setText(".\\specialscreens\\titlescreen\\titlescreenpalettes.bin");
 
         jButton34.setText("File...");
         jButton34.addActionListener(new java.awt.event.ActionListener() {
@@ -396,7 +396,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel42.setText("Palette 3 :");
 
         jTextField35.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField35.setText(".\\specialscreens\\titlescreen\\titlepalettes.bin");
+        jTextField35.setText(".\\specialscreens\\titlescreen\\titlescreenpalettes.bin");
 
         jButton35.setText("File...");
         jButton35.addActionListener(new java.awt.event.ActionListener() {
@@ -413,7 +413,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel44.setText("Palette 4 :");
 
         jTextField37.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField37.setText(".\\specialscreens\\titlescreen\\titlepalettes.bin");
+        jTextField37.setText(".\\specialscreens\\titlescreen\\titlescreenpalettes.bin");
 
         jButton36.setText("File...");
         jButton36.addActionListener(new java.awt.event.ActionListener() {
@@ -435,7 +435,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel47.setText("Tileset 2 :");
 
         jTextField14.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField14.setText(".\\tech\\fonts\\staticwidthfont.bin");
+        jTextField14.setText(".\\tech\\fonts\\titlescreenfont.bin");
 
         jLabel48.setText("VRAM 0x");
 
@@ -482,28 +482,26 @@ public class GraphicsMainEditor extends AbstractMainEditor {
                                 .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel43)
+                            .addComponent(jLabel39)
+                            .addComponent(jLabel41)
+                            .addComponent(jLabel45))
+                        .addGap(0, 0, 0)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel18Layout.createSequentialGroup()
-                                .addComponent(jLabel45)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField38, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton36))
-                            .addGroup(jPanel18Layout.createSequentialGroup()
-                                .addComponent(jLabel39)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField33, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField33, javax.swing.GroupLayout.PREFERRED_SIZE, 38, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton32))
                             .addGroup(jPanel18Layout.createSequentialGroup()
-                                .addComponent(jLabel41)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton34))
                             .addGroup(jPanel18Layout.createSequentialGroup()
-                                .addComponent(jLabel43)
+                                .addComponent(jTextField38, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton36))
+                            .addGroup(jPanel18Layout.createSequentialGroup()
+                                .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton35))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
@@ -528,7 +526,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
                             .addGroup(jPanel18Layout.createSequentialGroup()
                                 .addComponent(jLabel24)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                                .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel46))
                             .addGroup(jPanel18Layout.createSequentialGroup()
@@ -659,7 +657,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fileButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel34)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -673,7 +671,6 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -683,7 +680,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -709,7 +706,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                    .addComponent(fileButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel9)
@@ -734,7 +731,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel19.setText("Tiles :");
 
         jTextField41.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField41.setText(".\\newtiles.bin");
+        jTextField41.setText(".\\export\\newtiles.bin");
 
         jButton37.setText("File...");
         jButton37.addActionListener(new java.awt.event.ActionListener() {
@@ -763,7 +760,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel51.setText("Layout :");
 
         jTextField43.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField43.setText(".\\newlayout.bin");
+        jTextField43.setText(".\\export\\newlayout.bin");
 
         jButton39.setText("File...");
         jButton39.addActionListener(new java.awt.event.ActionListener() {
@@ -779,7 +776,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jLabel52.setText("Palette :");
 
         jTextField44.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        jTextField44.setText(".\\newpalette.bin");
+        jTextField44.setText(".\\export\\newpalette.bin");
 
         jButton40.setText("File...");
         jButton40.addActionListener(new java.awt.event.ActionListener() {
@@ -846,7 +843,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
                     .addComponent(jTextField43, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel51)
                     .addComponent(jButton39))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel49)
@@ -870,7 +867,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -914,7 +911,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
         );
 
         jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("View"));
@@ -1025,7 +1022,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+            .addComponent(jSplitPane2)
         );
 
         jSplitPane1.setTopComponent(jPanel15);
@@ -1039,7 +1036,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1062,7 +1059,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         if (!PathHelpers.createPathIfRequred(graphicPath)) return;
         try {
             TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
-            graphicsManager.exportDisassembly(graphicPath, graphicsLayoutPanel.getTileset(), compression);
+            tilesetManager.exportDisassembly(graphicPath, graphicsLayoutPanel.getTileset(), compression);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Graphic disasm could not be exported to : " + graphicPath);
@@ -1073,8 +1070,8 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         Path graphicPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
         if (!PathHelpers.createPathIfRequred(graphicPath)) return;
         try {
-            graphicsManager.getTileset().setTilesPerRow((int)jSpinner2.getValue());
-            graphicsManager.exportImage(graphicPath, graphicsLayoutPanel.getTileset());
+            tilesetManager.getTileset().setTilesPerRow((int)jSpinner2.getValue());
+            tilesetManager.exportImage(graphicPath, graphicsLayoutPanel.getTileset());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Graphic image could not be exported to : " + graphicPath);
@@ -1084,10 +1081,10 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         Path graphicPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         try {
-            graphicsManager.importImage(graphicPath);
-            jSpinner2.setValue(graphicsManager.getTileset().getTilesPerRow());
+            tilesetManager.importImage(graphicPath);
+            jSpinner2.setValue(tilesetManager.getTileset().getTilesPerRow());
         } catch (Exception ex) {
-            graphicsManager.clearData();
+            tilesetManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Graphic image could not be imported from : " + graphicPath);
         }
@@ -1099,10 +1096,10 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         Path graphicPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         try {
             TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
-            graphicsManager.importDisassembly(palettePath, graphicPath, compression, (int)jSpinner1.getValue());
+            tilesetManager.importDisassembly(palettePath, graphicPath, compression, (int)jSpinner1.getValue());
             jSpinner2.setValue(jSpinner1.getValue());
         } catch (Exception ex) {
-            graphicsManager.clearData();
+            tilesetManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Graphic disasm could not be imported from : " + graphicPath);
         }
@@ -1118,7 +1115,20 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton37ActionPerformed
 
     private void jButton38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton38ActionPerformed
-        graphicsManager.exportTilesAndLayout(jTextField44.getText(),jTextField41.getText(),jTextField43.getText(),jTextField42.getText(),jComboBox6.getSelectedIndex(),jComboBox8.getSelectedIndex());
+        Path graphicPath = PathHelpers.getBasePath().resolve(jTextField44.getText());
+        Path tilesetPath = PathHelpers.getBasePath().resolve(jTextField41.getText());
+        Path layoutPath = PathHelpers.getBasePath().resolve(jTextField43.getText());
+        if (!PathHelpers.createPathIfRequred(graphicPath)) return;
+        if (!PathHelpers.createPathIfRequred(tilesetPath)) return;
+        if (!PathHelpers.createPathIfRequred(layoutPath)) return;
+        try {
+            TilesetCompression compression = TilesetCompression.values()[jComboBox6.getSelectedIndex()];
+            int graphicsOffset = Integer.parseInt(jTextField42.getText(),16) / 0x20;
+            tilesetManager.exportTilesAndLayout(graphicPath, tilesetPath, graphicsLayoutPanel.getTileset(), layoutPath,graphicsOffset, compression, jComboBox8.getSelectedIndex());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Tileset/Layout could not be exported to : " + graphicPath);
+        }
     }//GEN-LAST:event_jButton38ActionPerformed
 
     private void jButton39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton39ActionPerformed
@@ -1207,14 +1217,31 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton31ActionPerformed
 
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
-        graphicsManager.importDisassemblyWithLayout(jTextField25.getText(),
-            jTextField24.getText(),jTextField33.getText(),
-            jTextField27.getText(),jTextField34.getText(),
-            jTextField35.getText(),jTextField36.getText(),
-            jTextField37.getText(),jTextField38.getText(),
-            jTextField10.getText(),jTextField39.getText(),
-            jTextField14.getText(),jTextField40.getText(),
-            jTextField19.getText(),jComboBox5.getSelectedIndex());
+        Path baseTilesetPath = PathHelpers.getBasePath().resolve(jTextField25.getText());
+        Path palette1Path = PathHelpers.getBasePath().resolve(jTextField24.getText());
+        Path palette2Path = PathHelpers.getBasePath().resolve(jTextField27.getText());
+        Path palette3Path = PathHelpers.getBasePath().resolve(jTextField35.getText());
+        Path palette4Path = PathHelpers.getBasePath().resolve(jTextField37.getText());
+        Path tileset1Path = PathHelpers.getBasePath().resolve(jTextField10.getText());
+        Path tileset2Path = PathHelpers.getBasePath().resolve(jTextField14.getText());
+        Path layoutPath = PathHelpers.getBasePath().resolve(jTextField19.getText());
+        try {
+            int p1offset = Integer.parseInt(jTextField33.getText(), 16);
+            int p2offset = Integer.parseInt(jTextField34.getText(), 16);
+            int p3offset = Integer.parseInt(jTextField36.getText(), 16);
+            int p4offset = Integer.parseInt(jTextField38.getText(), 16);
+            int t1offset = Integer.parseInt(jTextField39.getText(), 16) / 0x20;
+            int t2offset = Integer.parseInt(jTextField40.getText(), 16) / 0x20;
+            TilesetCompression compression = TilesetCompression.values()[jComboBox5.getSelectedIndex()];
+            int tilesPerRow = Integer.parseInt(jTextField32.getText());
+            tilesetManager.importDisassemblyWithLayout(baseTilesetPath, palette1Path, p1offset, palette2Path, p2offset, palette3Path, p3offset, palette4Path, p4offset,
+                tileset1Path, t1offset, tileset2Path,t2offset, layoutPath,compression, tilesPerRow);
+            jSpinner2.setValue(tilesPerRow);
+        } catch (Exception ex) {
+            tilesetManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Tileset/Layout could not be imported");
+        }
         updateEditorData();
     }//GEN-LAST:event_jButton25ActionPerformed
 

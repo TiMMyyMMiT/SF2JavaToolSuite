@@ -7,14 +7,19 @@ package com.sfc.sf2.palette;
 
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.BinaryDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
 import com.sfc.sf2.palette.io.PalettePackage;
 import com.sfc.sf2.palette.io.PaletteRawImageProcessor;
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -23,6 +28,7 @@ import java.nio.file.Path;
 public class PaletteManager extends AbstractManager {    
     private final PaletteDisassemblyProcessor paletteDisassemblyProcessor = new PaletteDisassemblyProcessor();
     private final PaletteRawImageProcessor paletteImageProcessor = new PaletteRawImageProcessor();
+    private final BinaryDisassemblyProcessor binaryDisassemblyProcessor = new BinaryDisassemblyProcessor();
     
     private Palette palette;
 
@@ -48,10 +54,27 @@ public class PaletteManager extends AbstractManager {
         return palette;
     }
     
-    public void exportDisassembly(Path filePath, Palette palette, boolean firstColorTransparent) throws IOException, DisassemblyException {
+    public Palette[] importDisassemblyFromPartials(Path[] filePaths, int[] offsets, int[] lengths, boolean firstColorTransparent) throws IOException, DisassemblyException {
+        byte[][] dataSets = new byte[filePaths.length][];
+        Palette[] palettes = new Palette[filePaths.length];
+        for (int i = 0; i < filePaths.length; i++) {
+            if (i > 0 && filePaths[i].equals(filePaths[i-1])) {
+                dataSets[i] = dataSets[i-1];
+            } else {
+                PalettePackage pckg = new PalettePackage(Integer.toString(i), firstColorTransparent);
+                dataSets[i] = binaryDisassemblyProcessor.importDisassembly(filePaths[i], null);
+            }
+            
+            byte[] newData = Arrays.copyOfRange(dataSets[i], offsets[i], offsets[i]+lengths[i]);
+            palettes[i] = new Palette(Integer.toString(i), PaletteDecoder.decodePalette(newData), true);
+        }
+        return palettes;
+    }
+    
+    public void exportDisassembly(Path filePath, Palette palette) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.palette = palette;
-        PalettePackage pckg = new PalettePackage(palette.getName(), firstColorTransparent);
+        PalettePackage pckg = new PalettePackage(palette.getName(), false);
         paletteDisassemblyProcessor.exportDisassembly(filePath, palette, pckg);
         Console.logger().info("Palette successfully exported to : " + filePath);
         Console.logger().finest("EXITING exportDisassembly");

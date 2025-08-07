@@ -75,7 +75,7 @@ public class Tileset {
             Graphics graphics = indexedColorImage.getGraphics();
             for(int j=0;j<height;j++){
                 for(int i=0;i<width;i++){
-                    int tileID = i+j*8;
+                    int tileID = i+j*width;
                     if (tileID >= tiles.length) {
                         break;
                     } else {
