@@ -58,7 +58,29 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
 
     @Override
     protected BufferedImage packageImageData(Tileset item, PalettePackage pckg) throws DisassemblyException {
-        item.clearIndexedColorImage();
-        return item.getIndexedColorImage();
+        Tile[] tiles = item.getTiles();
+        int tilesPerRow = item.getTilesPerRow();
+        int imageHeight = tiles.length/tilesPerRow*8;
+        if (tiles.length%tilesPerRow != 0) {
+            imageHeight += 8;
+        }
+        int imageWidth = item.getTilesPerRow()*8;
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_BINARY, tiles[0].getIcm());
+        WritableRaster raster = image.getRaster();
+
+        int[] pixels = new int[64];
+        for(int t = 0; t < tiles.length; t++) {
+            if (tiles[t] != null) {
+                for(int j=0;j<8;j++){
+                    for(int i=0;i<8;i++){
+                        pixels[i+j*8] = tiles[t].getPixels()[i][j];
+                    }
+                }
+                int x = t%tilesPerRow*8;
+                int y = t/tilesPerRow*8;
+                raster.setPixels(x, y, 8, 8, pixels);
+            }
+        }
+        return image;
     }
 }
