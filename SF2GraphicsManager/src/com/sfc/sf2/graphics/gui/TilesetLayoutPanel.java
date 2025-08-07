@@ -16,11 +16,11 @@ import java.awt.Graphics;
  *
  * @author wiz
  */
-public class GraphicsLayoutPanel extends AbstractLayoutPanel { 
+public class TilesetLayoutPanel extends AbstractLayoutPanel { 
     
     private Tileset tileset;
     
-    public GraphicsLayoutPanel() {
+    public TilesetLayoutPanel() {
         super();
         setGridDimensions(8, 8);
     }
@@ -34,9 +34,7 @@ public class GraphicsLayoutPanel extends AbstractLayoutPanel {
     protected Dimension getImageDimensions() {
         tileset.setTilesPerRow(tilesPerRow);
         int width = tileset.getTilesPerRow()*PIXEL_WIDTH;
-        int height = tileset.getTiles().length/tileset.getTilesPerRow()*PIXEL_HEIGHT;
-        if (tileset.getTiles().length%tileset.getTilesPerRow() != 0)
-            height += PIXEL_HEIGHT;
+        int height = (int)Math.ceil((double)tileset.getTiles().length/tileset.getTilesPerRow())*PIXEL_HEIGHT;
         return new Dimension(width, height);
     }
 

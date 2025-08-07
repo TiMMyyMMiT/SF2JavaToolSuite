@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.graphics.gui;
 
-import com.sfc.sf2.application.settings.CoreSettings;
 import com.sfc.sf2.application.settings.SettingsManager;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
@@ -43,16 +42,16 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     protected void updateEditorData() {
         Tileset tileset = tilesetManager.getTileset();
         int tileWidth = (int)jSpinner2.getValue();
-        graphicsLayoutPanel.setTilesPerRow(tileWidth);
-        graphicsLayoutPanel.setTileset(tileset);
+        tilesetLayoutPanel.setTilesPerRow(tileWidth);
+        tilesetLayoutPanel.setTileset(tileset);
         
         super.updateEditorData();
     }
     
     @Override
     protected void repaintEditorLayout() {
-        graphicsLayoutPanel.revalidate();
-        graphicsLayoutPanel.repaint();
+        tilesetLayoutPanel.revalidate();
+        tilesetLayoutPanel.repaint();
     }
     
     /**
@@ -160,7 +159,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        graphicsLayoutPanel = new com.sfc.sf2.graphics.gui.GraphicsLayoutPanel();
+        tilesetLayoutPanel = new com.sfc.sf2.graphics.gui.TilesetLayoutPanel();
         jPanel20 = new javax.swing.JPanel();
         jComboBox7 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
@@ -890,18 +889,18 @@ public class GraphicsMainEditor extends AbstractMainEditor {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiles"));
 
-        javax.swing.GroupLayout graphicsLayoutPanelLayout = new javax.swing.GroupLayout(graphicsLayoutPanel);
-        graphicsLayoutPanel.setLayout(graphicsLayoutPanelLayout);
-        graphicsLayoutPanelLayout.setHorizontalGroup(
-            graphicsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout tilesetLayoutPanelLayout = new javax.swing.GroupLayout(tilesetLayoutPanel);
+        tilesetLayoutPanel.setLayout(tilesetLayoutPanelLayout);
+        tilesetLayoutPanelLayout.setHorizontalGroup(
+            tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 429, Short.MAX_VALUE)
         );
-        graphicsLayoutPanelLayout.setVerticalGroup(
-            graphicsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        tilesetLayoutPanelLayout.setVerticalGroup(
+            tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 504, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(graphicsLayoutPanel);
+        jScrollPane2.setViewportView(tilesetLayoutPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1036,7 +1035,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1059,7 +1058,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         if (!PathHelpers.createPathIfRequred(graphicPath)) return;
         try {
             TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
-            tilesetManager.exportDisassembly(graphicPath, graphicsLayoutPanel.getTileset(), compression);
+            tilesetManager.exportDisassembly(graphicPath, tilesetLayoutPanel.getTileset(), compression);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Graphic disasm could not be exported to : " + graphicPath);
@@ -1071,7 +1070,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         if (!PathHelpers.createPathIfRequred(graphicPath)) return;
         try {
             tilesetManager.getTileset().setTilesPerRow((int)jSpinner2.getValue());
-            tilesetManager.exportImage(graphicPath, graphicsLayoutPanel.getTileset());
+            tilesetManager.exportImage(graphicPath, tilesetLayoutPanel.getTileset());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Graphic image could not be exported to : " + graphicPath);
@@ -1124,7 +1123,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         try {
             TilesetCompression compression = TilesetCompression.values()[jComboBox6.getSelectedIndex()];
             int graphicsOffset = Integer.parseInt(jTextField42.getText(),16) / 0x20;
-            tilesetManager.exportTilesAndLayout(graphicPath, tilesetPath, graphicsLayoutPanel.getTileset(), layoutPath,graphicsOffset, compression, jComboBox8.getSelectedIndex());
+            tilesetManager.exportTilesAndLayout(graphicPath, tilesetPath, tilesetLayoutPanel.getTileset(), layoutPath,graphicsOffset, compression, jComboBox8.getSelectedIndex());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Tileset/Layout could not be exported to : " + graphicPath);
@@ -1148,12 +1147,12 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton40ActionPerformed
 
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
-        graphicsLayoutPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
+        tilesetLayoutPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
         repaintEditorLayout();
     }//GEN-LAST:event_jComboBox7ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        graphicsLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+        tilesetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
@@ -1258,12 +1257,12 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton24ActionPerformed
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        graphicsLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
+        tilesetLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
         repaintEditorLayout();
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
-        graphicsLayoutPanel.setBGColor(colorPicker1.getColor());
+        tilesetLayoutPanel.setBGColor(colorPicker1.getColor());
         SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveGlobalSettingsFile();
         repaintEditorLayout();
@@ -1293,7 +1292,6 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton4;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton5;
-    private com.sfc.sf2.graphics.gui.GraphicsLayoutPanel graphicsLayoutPanel;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton18;
@@ -1392,6 +1390,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private javax.swing.JTextField jTextField42;
     private javax.swing.JTextField jTextField43;
     private javax.swing.JTextField jTextField44;
+    private com.sfc.sf2.graphics.gui.TilesetLayoutPanel tilesetLayoutPanel;
     // End of variables declaration//GEN-END:variables
 
 }

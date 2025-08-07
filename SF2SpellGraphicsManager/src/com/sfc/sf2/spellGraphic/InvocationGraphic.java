@@ -15,16 +15,20 @@ import com.sfc.sf2.palette.Palette;
 public class InvocationGraphic {
 
     private Tileset[] frames;
+    private int frameWidth;
+    private int frameHeight;
     private short unknown1;
     private short unknown2;
     private short unknown3;
     
     public InvocationGraphic(Tileset[] frames) {
         this.frames = frames;
+        recalcFrameDimensions();
     }
     
     public InvocationGraphic(Tileset[] frames, short unknown1, short unknown2, short unknown3) {
         this.frames = frames;
+        recalcFrameDimensions();
         this.unknown1 = unknown1;
         this.unknown2 = unknown2;
         this.unknown3 = unknown3;
@@ -36,6 +40,16 @@ public class InvocationGraphic {
 
     public void setFrames(Tileset[] frames) {
         this.frames = frames;
+        recalcFrameDimensions();
+    }
+    
+    private void recalcFrameDimensions() {
+        if (frames == null) {
+            frameWidth = frameHeight = 0;
+        } else {
+            frameWidth = frames[0].getTilesPerRow();
+            frameHeight = (int)Math.ceil((double)frames[0].getTiles().length/frameWidth);
+        }
     }
 
     public Palette getPalette() {
@@ -43,6 +57,18 @@ public class InvocationGraphic {
             return null;
         }
         return frames[0].getPalette();
+    }
+
+    public int getFrameWidth() {
+        return frameWidth;
+    }
+
+    public int getFrameHeight() {
+        return frameHeight;
+    }
+
+    public int getTotalHeight() {
+        return frames == null ? 0 : frameHeight*frames.length;
     }
 
     public short getUnknown1() {
