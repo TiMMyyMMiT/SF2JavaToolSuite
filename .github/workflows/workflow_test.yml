@@ -149,7 +149,7 @@ jobs:
               jar_name=$(basename "$proj")
               echo "Contents of $proj/dist/lib/ after base build:"
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
-                  cp "$proj/lib/." "$proj/dist/lib/"
+                  cp -r "$proj/lib/"* "$proj/dist/lib/"
                   ls -la "$proj/dist/lib"
               else
                 echo "Warning: $proj/dist/${jar_name}.jar not found after build"
@@ -175,7 +175,7 @@ jobs:
                 if [ -f "$dep/dist/$dep.jar" ]; then
                   echo "  Copying dependency $dep.jar into $proj/dist/lib/"
                   cp "$dep/dist/$dep.jar" "$proj/dist/lib/"
-                  cp "$dep/dist/lib/." "$proj/dist/lib/"
+                  cp -r "$dep/dist/lib/"* "$proj/dist/lib/"
                 fi
               done
 
