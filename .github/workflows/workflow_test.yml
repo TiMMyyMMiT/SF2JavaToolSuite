@@ -146,9 +146,7 @@ jobs:
               ant -q -f "$proj/build.xml" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
 
               jar_name=$(basename "$proj")
-              if [ -f "$proj/dist/${jar_name}.jar" ]; then
-              
-              else
+              if [ ! -f "$proj/dist/${jar_name}.jar" ]; then
                 echo "Warning: $proj/dist/${jar_name}.jar not found after build"
               fi
             fi
