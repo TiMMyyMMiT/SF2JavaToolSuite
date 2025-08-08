@@ -43,10 +43,11 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         //Settings
         SettingsManager.loadGlobalSettings();
         SettingsManager.loadSettingsFile();
+        CoreSettings core = SettingsManager.getSettingsStore("core");
+        console.setLogLevel(core.getLogLevel());
         if (!SettingsManager.isRunningInEditor()) {
             //Check if settings panel should be shown
             java.awt.EventQueue.invokeLater(() -> {
-                CoreSettings core = SettingsManager.getSettingsStore("core");
                 if (!core.arePathsSet()) {
                     Console.logger().info("Could not automatically detect app path : " + PathHelpers.getApplicationpath().toString());
                     jFrameSettings.setVisible(true);

@@ -55,9 +55,14 @@ public class SettingsManager {
             String projectName = System.getProperty("program.name");
             if (projectName == null) {
                 //Probably in editor
-                Console.logger().severe("Project name not found.");
+                Console.logger().warning("Project name not found, trying to fetch from path.");
                 String path = System.getProperty("user.dir");
                 projectName = path.substring(path.lastIndexOf('\\')+1);
+                if (projectName == null) {
+                    Console.logger().severe("ERROR Project name not found. Settings will not load correctly.");
+                } else {
+                    Console.logger().warning("Project name found : " + projectName);
+                }
             }
             settingsFilePath = settingsFilePath.resolve(projectName + ".settings");
         }
