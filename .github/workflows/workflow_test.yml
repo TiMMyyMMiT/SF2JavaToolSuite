@@ -118,8 +118,9 @@ jobs:
             fi
           done
 
-      - name: Upload all built jars
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-jars
-          path: '**/build/*.jar'
+        - name: Upload artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: jars
+            path: '**/dist/*.jar'
+
