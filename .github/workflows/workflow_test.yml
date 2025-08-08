@@ -144,7 +144,7 @@ jobs:
               mkdir -p "$proj/dist/lib"
               mkdir -p "$proj/lib"
 
-              ant -q -f build.xml "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
+              ant -q -f "$proj/build.xml" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
 
               jar_name=$(basename "$proj")
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
@@ -187,7 +187,7 @@ jobs:
               echo "Contents of $proj/dist/lib/ before build:"
               ls -la "$proj/dist/lib"
 
-              ant -q -f build.xml "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
+              ant -q -f "$proj/build.xml" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
 
               jar_name=$(basename "$proj")
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
