@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.core.settings;
 
+import com.sfc.sf2.core.Manifest;
 import com.sfc.sf2.core.gui.controls.Console;
 import java.io.File;
 import java.io.IOException;
@@ -52,18 +53,7 @@ public class SettingsManager {
     private static Path getSettingsFilePath() {
         if (settingsFilePath == null) {
             settingsFilePath = Path.of(System.getenv("APPDATA")).resolve("SF2");
-            String projectName = System.getProperty("program.name");
-            if (projectName == null) {
-                //Probably in editor
-                Console.logger().warning("Project name not found, trying to fetch from path.");
-                String path = System.getProperty("user.dir");
-                projectName = path.substring(path.lastIndexOf('\\')+1);
-                if (projectName == null) {
-                    Console.logger().severe("ERROR Project name not found. Settings will not load correctly.");
-                } else {
-                    Console.logger().warning("Project name found : " + projectName);
-                }
-            }
+            String projectName = Manifest.getProjectName();
             settingsFilePath = settingsFilePath.resolve(projectName + ".settings");
         }
         return settingsFilePath;

@@ -7,10 +7,10 @@ package com.sfc.sf2.core.gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.sfc.sf2.core.Manifest;
 import com.sfc.sf2.core.settings.CoreSettings;
 import com.sfc.sf2.core.settings.GlobalSettings;
 import com.sfc.sf2.core.settings.SettingsManager;
-import com.sfc.sf2.core.Versioning;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
 import javax.swing.UIManager;
@@ -36,7 +36,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         console.initLogger("SF2 Java Suite");
         //Version
         if (!SettingsManager.isRunningInEditor()) {
-            String version = Versioning.getVersion();
+            String version = Manifest.getProjectVersion();
             if (version != null)
                 this.setTitle(this.getTitle() + " - v" + version);
         }
