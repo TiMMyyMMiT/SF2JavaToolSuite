@@ -2,9 +2,13 @@ name: Build Changed Projects
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '**/version.properties'
   pull_request:
+    branches:
+      - main
     paths:
       - '**/version.properties'
 
@@ -38,8 +42,19 @@ jobs:
       - name: Build each changed project with Ant
         run: |
           echo "JAVA_HOME is $JAVA_HOME"
+          mkdir -p built-jars
           for file in $CHANGED_FILES; do
             project_dir=$(dirname "$file")
             echo "Building project in $project_dir with Ant"
             ant -f "$project_dir" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
+            # Copy generated jars to a common folder for upload
+            if [ -d "$project_dir/dist" ]; then
+              cp "$project_dir"/dist/*.jar built-jars/ || true
+            fi
           done
+
+      - name: Upload built jars
+        uses: actions/upload-artifact@v3
+        with:
+          name: built-jars
+          path: built-jars/*.jar
