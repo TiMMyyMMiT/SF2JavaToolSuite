@@ -51,7 +51,7 @@ public class InvocationDisassemblyProcessor extends AbstractDisassemblyProcessor
             System.arraycopy(data, frameOffset, tileData, 0, dataLength);
             Tile[] frame = new StackGraphicsDecoder().decode(tileData, palette);
             frame = TileHelpers.reorderTilesSequentially(frame, 4, 2, 4);
-            frameList[i].setTiles(frame);
+            frameList[i] = new Tileset(Integer.toString(i), frame, InvocationGraphic.INVOCATION_TILE_WIDTH);
             System.out.println("Frame "+i+" length="+dataLength+", offset="+frameOffset+", tiles="+frameList[i].getTiles().length);
         }
         return new InvocationGraphic(frameList, unknown1, unknown2, unknown3);

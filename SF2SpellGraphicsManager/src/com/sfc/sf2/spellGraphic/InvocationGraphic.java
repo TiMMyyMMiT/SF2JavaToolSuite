@@ -14,6 +14,9 @@ import com.sfc.sf2.palette.Palette;
  */
 public class InvocationGraphic {
 
+    public static int INVOCATION_TILE_WIDTH = 16;
+    public static int INVOCATION_TILE_HEIGHT = 8;
+    
     private Tileset[] frames;
     private int frameWidth;
     private int frameHeight;
@@ -47,8 +50,8 @@ public class InvocationGraphic {
         if (frames == null) {
             frameWidth = frameHeight = 0;
         } else {
-            frameWidth = frames[0].getTilesPerRow();
-            frameHeight = (int)Math.ceil((double)frames[0].getTiles().length/frameWidth);
+            frameWidth = INVOCATION_TILE_WIDTH;
+            frameHeight = INVOCATION_TILE_HEIGHT;
         }
     }
 

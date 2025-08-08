@@ -11,21 +11,13 @@ import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.spellGraphic.SpellGraphicManager;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
-import com.sfc.sf2.graphics.gui.TilesetLayoutPanel;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import com.sfc.sf2.spellGraphic.InvocationGraphicManager;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.io.File;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
 
 /**
  *
@@ -33,10 +25,9 @@ import javax.swing.JTextField;
  */
 public class SpellMainEditor extends AbstractMainEditor {
     
-    SpellGraphicManager spellGraphicManager = new SpellGraphicManager();
-    TilesetLayoutPanel spellLayoutPanel = new TilesetLayoutPanel();
-    InvocationGraphicManager invocationGraphicManager = new InvocationGraphicManager();
-    InvocationLayoutPanel invocationLayoutPanel = new InvocationLayoutPanel();
+    private final SpellGraphicManager spellGraphicManager = new SpellGraphicManager();
+    private final InvocationGraphicManager invocationGraphicManager = new InvocationGraphicManager();
+    
     
     /**
      * Creates new form NewApplication
@@ -44,21 +35,17 @@ public class SpellMainEditor extends AbstractMainEditor {
     public SpellMainEditor() {
         super();
         initComponents();
-        //initCore(console1);
+        initCore(console1);
     }
     
     @Override
     protected void initEditor() {
         super.initEditor();
         
-        /*colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         
-        eyeTable = (PortraitDataTableModel)tableEyes.getModel();
-        mouthTable = (PortraitDataTableModel)tableMouth.getModel();
-        portraitLayoutPanel.setEyeAnimTable(eyeTable);
-        portraitLayoutPanel.setMouthAnimTable(mouthTable);
-        tableEyes.addListSelectionListener(this::eyesListSelectionChanged);
-        tableMouth.addListSelectionListener(this::mouthListSelectionChanged);*/
+        invocationLayoutPanel.setVisible(false);
+        jPanelInvocationData.setVisible(false);
     }
     
     @Override
@@ -67,6 +54,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             Tileset spellTileset = spellGraphicManager.getSpellTileset();
             spellLayoutPanel.setTileset(spellTileset);
             spellLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+            spellLayoutPanel.setShowGrid(jCheckBox1.isSelected());
             if (spellTileset != null) {
                 Color[] colors = spellTileset.getPalette().getColors();
                 jPanelColor9.setBackground(colors[9]);
@@ -75,10 +63,13 @@ public class SpellMainEditor extends AbstractMainEditor {
             }
             spellLayoutPanel.setVisible(true);
             invocationLayoutPanel.setVisible(false);
+            jPanelSpellData.setVisible(true);
+            jPanelInvocationData.setVisible(false);
         } else {
-            InvocationGraphic invocationGraphic = invocationLayoutPanel.getInvocationGraphic();
+            InvocationGraphic invocationGraphic = invocationGraphicManager.getInvocationGraphic();
             invocationLayoutPanel.setInvocationGraphic(invocationGraphic);
             invocationLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+            invocationLayoutPanel.setShowGrid(jCheckBox1.isSelected());
             if (invocationGraphic != null) {
                 jSpinner2.setValue(invocationGraphic.getUnknown1());
                 jSpinner3.setValue(invocationGraphic.getUnknown2());
@@ -86,6 +77,8 @@ public class SpellMainEditor extends AbstractMainEditor {
             }
             spellLayoutPanel.setVisible(false);
             invocationLayoutPanel.setVisible(true);
+            jPanelSpellData.setVisible(false);
+            jPanelInvocationData.setVisible(true);
         }
         super.updateEditorData();
     }
@@ -99,6 +92,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             invocationLayoutPanel.revalidate();
             invocationLayoutPanel.repaint();
         }
+        jScrollPane2.revalidate();
     }
     
     /**
@@ -110,8 +104,6 @@ public class SpellMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jFileChooser2 = new javax.swing.JFileChooser();
         jColorChooser1 = new javax.swing.JColorChooser();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -166,9 +158,11 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
+        jPanellayoutContainer = new javax.swing.JPanel();
+        spellLayoutPanel = new com.sfc.sf2.graphics.gui.TilesetLayoutPanel();
+        invocationLayoutPanel = new com.sfc.sf2.spellGraphic.gui.InvocationLayoutPanel();
         jPanel29 = new javax.swing.JPanel();
-        jPanel16 = new javax.swing.JPanel();
+        jPanelSpellData = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -177,7 +171,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanelColor14 = new javax.swing.JPanel();
         jSpinner1 = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
-        jPanel30 = new javax.swing.JPanel();
+        jPanelInvocationData = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
@@ -188,11 +182,9 @@ public class SpellMainEditor extends AbstractMainEditor {
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-
-        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        jLabel55 = new javax.swing.JLabel();
+        colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
+        console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2SpellGraphicManager");
@@ -235,7 +227,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -277,7 +269,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -338,7 +330,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -379,7 +371,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -394,7 +386,7 @@ public class SpellMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton13)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -426,7 +418,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel28Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(fileButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(fileButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel28Layout.setVerticalGroup(
@@ -487,7 +479,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel20Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addGroup(jPanel20Layout.createSequentialGroup()
                         .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -529,7 +521,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addGroup(jPanel21Layout.createSequentialGroup()
                         .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -548,7 +540,7 @@ public class SpellMainEditor extends AbstractMainEditor {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane4.addTab("PNG", jPanel21);
+        jTabbedPane4.addTab("Image", jPanel21);
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -590,7 +582,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addGroup(jPanel24Layout.createSequentialGroup()
                         .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -632,7 +624,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -690,7 +682,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel27Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                .addComponent(jTabbedPane3)
                 .addGap(0, 0, 0))
         );
         jPanel27Layout.setVerticalGroup(
@@ -705,20 +697,53 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Spell sprite :"));
         jPanel1.setPreferredSize(new java.awt.Dimension(275, 300));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 705, Short.MAX_VALUE)
+        spellLayoutPanel.setMinimumSize(new java.awt.Dimension(100, 100));
+        spellLayoutPanel.setPreferredSize(new java.awt.Dimension(200, 200));
+
+        javax.swing.GroupLayout spellLayoutPanelLayout = new javax.swing.GroupLayout(spellLayoutPanel);
+        spellLayoutPanel.setLayout(spellLayoutPanelLayout);
+        spellLayoutPanelLayout.setHorizontalGroup(
+            spellLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 459, Short.MAX_VALUE)
+        spellLayoutPanelLayout.setVerticalGroup(
+            spellLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 131, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(jPanel2);
+        invocationLayoutPanel.setMinimumSize(new java.awt.Dimension(100, 100));
+        invocationLayoutPanel.setPreferredSize(new java.awt.Dimension(200, 200));
 
-        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Spell :"));
+        javax.swing.GroupLayout invocationLayoutPanelLayout = new javax.swing.GroupLayout(invocationLayoutPanel);
+        invocationLayoutPanel.setLayout(invocationLayoutPanelLayout);
+        invocationLayoutPanelLayout.setHorizontalGroup(
+            invocationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        invocationLayoutPanelLayout.setVerticalGroup(
+            invocationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 132, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanellayoutContainerLayout = new javax.swing.GroupLayout(jPanellayoutContainer);
+        jPanellayoutContainer.setLayout(jPanellayoutContainerLayout);
+        jPanellayoutContainerLayout.setHorizontalGroup(
+            jPanellayoutContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(spellLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(invocationLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanellayoutContainerLayout.setVerticalGroup(
+            jPanellayoutContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanellayoutContainerLayout.createSequentialGroup()
+                .addComponent(spellLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(invocationLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+
+        jScrollPane2.setViewportView(jPanellayoutContainer);
+
+        jPanelSpellData.setBorder(javax.swing.BorderFactory.createTitledBorder("Spell :"));
 
         jLabel6.setText("Color 9 :");
 
@@ -799,14 +824,14 @@ public class SpellMainEditor extends AbstractMainEditor {
 
         jLabel4.setText("Tiles per row :");
 
-        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
-        jPanel16.setLayout(jPanel16Layout);
-        jPanel16Layout.setHorizontalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel16Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelSpellDataLayout = new javax.swing.GroupLayout(jPanelSpellData);
+        jPanelSpellData.setLayout(jPanelSpellDataLayout);
+        jPanelSpellDataLayout.setHorizontalGroup(
+            jPanelSpellDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSpellDataLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel16Layout.createSequentialGroup()
+                .addGroup(jPanelSpellDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelSpellDataLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanelColor9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -818,17 +843,17 @@ public class SpellMainEditor extends AbstractMainEditor {
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanelColor14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel16Layout.createSequentialGroup()
+                    .addGroup(jPanelSpellDataLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel16Layout.setVerticalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel16Layout.createSequentialGroup()
+        jPanelSpellDataLayout.setVerticalGroup(
+            jPanelSpellDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSpellDataLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(jPanelSpellDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel6)
                     .addComponent(jLabel8)
                     .addComponent(jLabel17)
@@ -836,14 +861,14 @@ public class SpellMainEditor extends AbstractMainEditor {
                     .addComponent(jPanelColor13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanelColor14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(jPanelSpellDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(0, 0, 0))
         );
 
-        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Invocation :"));
-        jPanel30.setPreferredSize(new java.awt.Dimension(385, 85));
+        jPanelInvocationData.setBorder(javax.swing.BorderFactory.createTitledBorder("Invocation :"));
+        jPanelInvocationData.setPreferredSize(new java.awt.Dimension(385, 85));
 
         jLabel25.setText("Unknown 1 :");
 
@@ -872,14 +897,14 @@ public class SpellMainEditor extends AbstractMainEditor {
             }
         });
 
-        javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
-        jPanel30.setLayout(jPanel30Layout);
-        jPanel30Layout.setHorizontalGroup(
-            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel30Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelInvocationDataLayout = new javax.swing.GroupLayout(jPanelInvocationData);
+        jPanelInvocationData.setLayout(jPanelInvocationDataLayout);
+        jPanelInvocationDataLayout.setHorizontalGroup(
+            jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInvocationDataLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel30Layout.createSequentialGroup()
+                .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelInvocationDataLayout.createSequentialGroup()
                         .addComponent(jLabel25)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -887,23 +912,23 @@ public class SpellMainEditor extends AbstractMainEditor {
                         .addComponent(jLabel32)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel30Layout.createSequentialGroup()
+                    .addGroup(jPanelInvocationDataLayout.createSequentialGroup()
                         .addComponent(jLabel33)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel30Layout.setVerticalGroup(
-            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel30Layout.createSequentialGroup()
+        jPanelInvocationDataLayout.setVerticalGroup(
+            jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelInvocationDataLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
                     .addComponent(jLabel32)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel33)
                     .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -927,6 +952,25 @@ public class SpellMainEditor extends AbstractMainEditor {
             }
         });
 
+        jLabel55.setText("BG :");
+
+        colorPicker1.addColorChangedListener(new com.sfc.sf2.core.gui.controls.ColorPicker.ColorChangedListener() {
+            public void colorChanged(java.awt.event.ActionEvent evt) {
+                colorPicker1ColorChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout colorPicker1Layout = new javax.swing.GroupLayout(colorPicker1);
+        colorPicker1.setLayout(colorPicker1Layout);
+        colorPicker1Layout.setHorizontalGroup(
+            colorPicker1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 22, Short.MAX_VALUE)
+        );
+        colorPicker1Layout.setVerticalGroup(
+            colorPicker1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 22, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
@@ -938,17 +982,23 @@ public class SpellMainEditor extends AbstractMainEditor {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel55)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addContainerGap()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jCheckBox1))
-                .addGap(0, 0, 0))
+                    .addComponent(jCheckBox1)
+                    .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel55))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel29Layout = new javax.swing.GroupLayout(jPanel29);
@@ -956,17 +1006,17 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel29Layout.setHorizontalGroup(
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel30, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+            .addComponent(jPanelSpellData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelInvocationData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
         );
         jPanel29Layout.setVerticalGroup(
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel29Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelSpellData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelInvocationData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -975,13 +1025,13 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
             .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1011,30 +1061,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         );
 
         jSplitPane1.setTopComponent(jPanel15);
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-        jPanel7.setToolTipText("");
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-        );
-
-        jSplitPane1.setBottomComponent(jPanel7);
+        jSplitPane1.setBottomComponent(console1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -1063,68 +1090,113 @@ public class SpellMainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        /*invocationGraphicManager.clearData();
         Path spellPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         if (!PathHelpers.createPathIfRequred(spellPath)) return;
         try {
-            spellGraphicManager.exportDisassembly(spellPath, spellPath.getPortrait());
+            spellGraphicManager.exportDisassembly(spellPath, spellLayoutPanel.getTileset());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Portrait disasm could not be exported to : " + spellPath);
+            Console.logger().severe("ERROR Spell disasm could not be exported to : " + spellPath);
         }
-        
-        spellGraphicManager.exportDisassembly(jTextField13.getText());*/
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        /*invocationGraphicManager.clearData();
-        spellGraphicManager.exportPng(jTextField15.getText(), (int)jSpinner1.getValue());*/
+        Path spellPath = PathHelpers.getBasePath().resolve(fileButton7.getFilePath());
+        if (!PathHelpers.createPathIfRequred(spellPath)) return;
+        try {
+            spellGraphicManager.exportImage(spellPath, spellLayoutPanel.getTileset(), (int)jSpinner1.getValue());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Spell image could not be exported to : " + spellPath);
+        }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        /*invocationGraphicManager.clearData();
-        spellGraphicManager.importPng(jTextField11.getText(), jTextField10.getText());
-        updateSpellPanel();*/
+        Path basePalettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path spellPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        try {
+            invocationGraphicManager.clearData();
+            spellGraphicManager.importImage(spellPath, basePalettePath);
+        } catch (Exception ex) {
+            spellGraphicManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Spell image could not be imported from : " + spellPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        /*invocationGraphicManager.clearData();
-        spellGraphicManager.importDisassembly(jTextField9.getText(), jTextField10.getText());
-        updateSpellPanel();*/
+        Path basePalettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path spellPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        try {
+            invocationGraphicManager.clearData();
+            spellGraphicManager.importDisassembly(spellPath, basePalettePath, (int)jSpinner1.getValue());
+        } catch (Exception ex) {
+            spellGraphicManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Spell disasm could not be imported from : " + spellPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        /*spellLayoutPanel.setDisplaySize(jComboBox1.getSelectedIndex()+1);
-        invocationLayoutPanel.setDisplaySize(jComboBox1.getSelectedIndex()+1);
-        repaintTilesPanel();*/
+        spellLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        invocationLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        repaintEditorLayout();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        /*spellLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+        spellLayoutPanel.setShowGrid(jCheckBox1.isSelected());
         invocationLayoutPanel.setShowGrid(jCheckBox1.isSelected());
-        repaintTilesPanel();*/
+        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-        /*spellGraphicManager.clearData();
-        invocationGraphicManager.importDisassembly(jTextField14.getText(), jTextField10.getText());
-        updateSpellPanel();*/
+        Path invocationPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        try {
+            spellGraphicManager.clearData();
+            invocationGraphicManager.importDisassembly(invocationPath);
+        } catch (Exception ex) {
+            invocationGraphicManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Invocation disasm could not be imported from : " + invocationPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void jButton24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton24ActionPerformed
-        /*spellGraphicManager.clearData();
-        invocationGraphicManager.importPng(jTextField17.getText(), jTextField10.getText());
-        updateSpellPanel();*/
+        Path invocationPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
+        try {
+            spellGraphicManager.clearData();
+            invocationGraphicManager.importImage(invocationPath);
+        } catch (Exception ex) {
+            invocationGraphicManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Invocation images could not be imported from : " + invocationPath);
+        }
+        updateEditorData();
     }//GEN-LAST:event_jButton24ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        /*spellGraphicManager.clearData();
-        invocationGraphicManager.exportDisassembly(jTextField20.getText());*/
+        Path invocationPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        if (!PathHelpers.createPathIfRequred(invocationPath)) return;
+        try {
+            invocationGraphicManager.exportDisassembly(invocationPath, invocationLayoutPanel.getInvocationGraphic());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Invocation disasm could not be exported to : " + invocationPath);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton33ActionPerformed
-        /*spellGraphicManager.clearData();
-        invocationGraphicManager.exportPng(jTextField21.getText());*/
+        Path invocationPath = PathHelpers.getBasePath().resolve(fileButton9.getFilePath());
+        if (!PathHelpers.createPathIfRequred(invocationPath)) return;
+        try {
+            invocationGraphicManager.exportImage(invocationPath, invocationLayoutPanel.getInvocationGraphic());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Invocation images could not be exported to : " + invocationPath);
+        }
     }//GEN-LAST:event_jButton33ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
@@ -1173,13 +1245,13 @@ public class SpellMainEditor extends AbstractMainEditor {
             invocationGraphic.setUnknown3((short)jSpinner4.getValue());
     }//GEN-LAST:event_jSpinner4StateChanged
 
-    private void showFileChooser(JTextField textField) {
-        int returnVal = jFileChooser1.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooser1.getSelectedFile();
-            textField.setText(file.getAbsolutePath());
-        }
-    }
+    private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
+        spellLayoutPanel.setBGColor(colorPicker1.getColor());
+        invocationLayoutPanel.setBGColor(colorPicker1.getColor());
+        SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
+        SettingsManager.saveGlobalSettingsFile();
+        repaintEditorLayout();
+    }//GEN-LAST:event_colorPicker1ColorChanged
     
     private void updateSpellPaletteColor(int index, Color newColor) {
         Tileset spellTileset = spellLayoutPanel.getTileset();
@@ -1194,8 +1266,7 @@ public class SpellMainEditor extends AbstractMainEditor {
                         tiles[i].clearIndexedColorImage();
                     }
                     palette.setColors(colors, true);
-                    spellLayoutPanel.revalidate();
-                    spellLayoutPanel.repaint();
+                    repaintEditorLayout();
                 }
             }
         }
@@ -1218,6 +1289,8 @@ public class SpellMainEditor extends AbstractMainEditor {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
+    private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;
@@ -1227,6 +1300,7 @@ public class SpellMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton7;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton8;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton9;
+    private com.sfc.sf2.spellGraphic.gui.InvocationLayoutPanel invocationLayoutPanel;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton18;
@@ -1238,8 +1312,6 @@ public class SpellMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -1253,6 +1325,7 @@ public class SpellMainEditor extends AbstractMainEditor {
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -1263,10 +1336,8 @@ public class SpellMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel23;
@@ -1276,16 +1347,16 @@ public class SpellMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelColor13;
     private javax.swing.JPanel jPanelColor14;
     private javax.swing.JPanel jPanelColor9;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanelInvocationData;
+    private javax.swing.JPanel jPanelSpellData;
+    private javax.swing.JPanel jPanellayoutContainer;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
@@ -1298,7 +1369,7 @@ public class SpellMainEditor extends AbstractMainEditor {
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTabbedPane jTabbedPane5;
-    private javax.swing.JTextArea jTextArea1;
+    private com.sfc.sf2.graphics.gui.TilesetLayoutPanel spellLayoutPanel;
     // End of variables declaration//GEN-END:variables
 
 }

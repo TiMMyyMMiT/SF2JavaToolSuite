@@ -10,6 +10,8 @@ import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
+import static com.sfc.sf2.spellGraphic.InvocationGraphic.INVOCATION_TILE_HEIGHT;
+import static com.sfc.sf2.spellGraphic.InvocationGraphic.INVOCATION_TILE_WIDTH;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -20,6 +22,11 @@ import java.awt.Graphics;
 public class InvocationLayoutPanel extends AbstractLayoutPanel {
     
     private InvocationGraphic invocationGraphic;
+    
+    public InvocationLayoutPanel() {
+        super();
+        setGridDimensions(8, 8, -1, INVOCATION_TILE_HEIGHT);
+    }
 
     @Override
     protected boolean hasData() {
@@ -28,10 +35,8 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        tilesPerRow = invocationGraphic.getFrames()[0].getTilesPerRow();
         int width = invocationGraphic.getFrameWidth()*PIXEL_WIDTH;
         int height = invocationGraphic.getTotalHeight()*PIXEL_HEIGHT;
-            height += PIXEL_HEIGHT;
         return new Dimension(width, height);
     }
 
@@ -40,8 +45,8 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
         for(int f = 0; f < invocationGraphic.getFrames().length; f++) {
             Tile[] frameTiles = invocationGraphic.getFrames()[f].getTiles();
             for(int t = 0; t < frameTiles.length; t++) {
-                int x = (t%16)*8;
-                int y = (f*8 + t/16)*8;
+                int x = (t%INVOCATION_TILE_WIDTH)*8;
+                int y = ((f*INVOCATION_TILE_HEIGHT)*8 + t/INVOCATION_TILE_WIDTH)*8;
                 graphics.drawImage(frameTiles[t].getIndexedColorImage(), x, y, null);
             }
         }
@@ -54,5 +59,6 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
 
     public void setInvocationGraphic(InvocationGraphic invocationGraphic) {
         this.invocationGraphic = invocationGraphic;
+        redraw();
     }
 }
