@@ -1,14 +1,12 @@
-name: Build Changed Projects
+name: Dependency-Aware Build
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths:
       - '**/version.properties'
   pull_request:
-    branches:
-      - main
+    branches: [main]
     paths:
       - '**/version.properties'
 
@@ -19,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -30,30 +28,95 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ant
 
-      - name: Get changed version.properties files
-        id: changed-files
+      - name: Detect changed projects and resolve dependencies
+        id: project-graph
         run: |
+          # List of all projects and their internal dependencies (hardcoded for now)
+          declare -A dependencies
+          dependencies["SF2GraphicsManager"]="SF2CoreLibrary"
+          dependencies["SF2PaletteManager"]="SF2CoreLibrary SF2GraphicsManager"
+          dependencies["SF2CoreLibrary"]=""
+
+          # Find projects with changed version.properties
           git fetch origin ${{ github.event.before }}
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
-          echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
-          echo "$changed_files" >> $GITHUB_ENV
+
+          echo "Changed files:"
+          echo "$changed_files"
+
+          changed_projects=()
+          for file in $changed_files; do
+            project=$(dirname "$file")
+            changed_projects+=("$project")
+          done
+
+          echo "Changed projects: ${changed_projects[@]}"
+
+          # Resolve dependency closure
+          build_set=()
+          visited=()
+
+          function resolve_deps() {
+            local proj="$1"
+            if [[ " ${visited[@]} " =~ " ${proj} " ]]; then
+              return
+            fi
+            visited+=("$proj")
+
+            for dep in ${dependencies[$proj]}; do
+              resolve_deps "$dep"
+            done
+
+            build_set+=("$proj")
+          }
+
+          for proj in "${changed_projects[@]}"; do
+            resolve_deps "$proj"
+          done
+
+          echo "Build order:"
+          for proj in "${build_set[@]}"; do
+            echo "$proj"
+          done
+
+          # Save build order for next steps
+          echo "BUILD_ORDER<<EOF" >> $GITHUB_ENV
+          for proj in "${build_set[@]}"; do
+            echo "$proj"
+          done
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Build each changed project with Ant
+      - name: Build projects in dependency order
         run: |
-          echo "JAVA_HOME is $JAVA_HOME"
+          echo "Building projects in order:"
           mkdir -p built-jars
-          for file in $CHANGED_FILES; do
-            project_dir=$(dirname "$file")
-            echo "Building project in $project_dir with Ant"
-            ant -f "$project_dir" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
-            # Copy generated jars to a common folder for upload
-            if [ -d "$project_dir/dist" ]; then
-              cp "$project_dir"/dist/*.jar built-jars/ || true
+
+          for proj in $BUILD_ORDER; do
+            echo "Building $proj..."
+
+            # Copy dependencies' jars into this project's lib/
+            mkdir -p "$proj/lib"
+            for dep in $BUILD_ORDER; do
+              if [ "$dep" == "$proj" ]; then break; fi
+              if [ -f "built-jars/$dep.jar" ]; then
+                echo "  Adding $dep.jar to $proj/lib/"
+                cp "built-jars/$dep.jar" "$proj/lib/"
+              fi
+            done
+
+            # Build using Ant
+            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
+
+            # Move built jar to shared location
+            jar_name=$(basename "$proj")
+            if [ -f "$proj/dist/${jar_name}.jar" ]; then
+              cp "$proj/dist/${jar_name}.jar" "built-jars/$jar_name.jar"
+            else
+              echo "Warning: $proj/dist/${jar_name}.jar not found"
             fi
           done
 
-      - name: Upload built jars
+      - name: Upload all built jars
         uses: actions/upload-artifact@v4
         with:
           name: built-jars
