@@ -161,6 +161,7 @@ jobs:
             if [[ -n "${changed_map[$proj]}" ]]; then
               echo "Building changed project $proj with target 'package-for-store'..."
 
+              mkdir -p "$proj/build/classes"
               mkdir -p "$proj/dist/lib"
               mkdir -p "$proj/lib"
 
