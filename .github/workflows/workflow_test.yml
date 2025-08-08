@@ -135,13 +135,13 @@ jobs:
             mkdir -p "$proj/dist/lib"
             mkdir -p "$proj/lib"
 
-            # Copy dependencies' jars into this project's lib/
+            # Copy dependencies' jars into this project's dist/lib/
             for dep in "${BUILD_ORDER[@]}"; do
               if [ "$dep" == "$proj" ]; then break; fi
               if [ -f "built-deps/$dep.jar" ]; then
                 echo "  Adding $dep.jar to $proj/dist/lib"
                 mkdir -p "$proj/dist/lib"
-                cp "built-deps/$dep.jar" "$proj//dist/lib"
+                cp "built-deps/$dep.jar" "$proj/dist/lib/"
               fi
             done
 
@@ -156,16 +156,20 @@ jobs:
               fi
             done
 
+            echo "Contents of $proj/dist/lib/ before build:"
+            if [ -d "$proj/dist/lib" ]; then
+              ls -la "$proj/dist/lib"
+            else
+              echo "Directory $proj/dist/lib does not exist."
+            fi
+
             echo "Using target: $target"
-            #ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean
-            mkdir -p "$proj/build/classes"
-            mkdir -p "$proj/dist/lib"
-            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" "$target"
+            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean "$target"
 
             # Move built jar to shared location
             jar_name=$(basename "$proj")
             if [ -f "$proj/dist/${jar_name}.jar" ]; then
-              cp "$proj/dist/${jar_name}.jar" "built-jars/$jar_name.jar"
+              cp "$proj/dist/${jar_name}.jar" "$dest/$jar_name.jar"
             else
               echo "Warning: $proj/dist/${jar_name}.jar not found"
             fi
