@@ -146,7 +146,9 @@ jobs:
               ant -q -f "$proj/build.xml" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
 
               jar_name=$(basename "$proj")
-              if [ ! -f "$proj/dist/${jar_name}.jar" ]; then
+              if [ -f "$proj/dist/${jar_name}.jar" ]; then
+                  cp "$proj/lib/." "$proj/dist/lib/"
+              else
                 echo "Warning: $proj/dist/${jar_name}.jar not found after build"
               fi
             fi
@@ -170,7 +172,7 @@ jobs:
                 if [ -f "$dep/dist/$dep.jar" ]; then
                   echo "  Copying dependency $dep.jar into $proj/dist/lib/"
                   cp "$dep/dist/$dep.jar" "$proj/dist/lib/"
-                  cp "$dep/dist/lib/*.jar" "$proj/dist/lib/"
+                  cp "$dep/dist/lib/." "$proj/dist/lib/"
                 fi
               done
 
