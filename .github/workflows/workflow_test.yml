@@ -144,14 +144,11 @@ jobs:
               mkdir -p "$proj/lib"
 
               echo "Building $proj with ant 'jar'"
-              ant -q -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
+              ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
 
               jar_name=$(basename "$proj")
               echo "Contents of $proj/dist/lib/ after base build:"
-              if [ -f "$proj/dist/${jar_name}.jar" ]; then
-                  cp -r "$proj/lib/"* "$proj/dist/lib/"
-                  ls -la "$proj/dist/lib"
-              else
+              if [ ! -f "$proj/dist/${jar_name}.jar" ]; then
                 echo "Warning: $proj/dist/${jar_name}.jar not found after build"
               fi
             fi
@@ -167,22 +164,7 @@ jobs:
               mkdir -p "$proj/dist/lib"
               mkdir -p "$proj/lib"
 
-              # Copy dependencies jars into dist/lib/
-              for dep in "${BUILD_ORDER[@]}"; do
-                if [[ "$dep" == "$proj" ]]; then
-                  break
-                fi
-                if [ -f "$dep/dist/$dep.jar" ]; then
-                  echo "  Copying dependency $dep.jar into $proj/dist/lib/"
-                  cp "$dep/dist/$dep.jar" "$proj/dist/lib/"
-                  cp -r "$dep/dist/lib/"* "$proj/dist/lib/"
-                fi
-              done
-
-              echo "Contents of $proj/dist/lib/ before build:"
-              ls -la "$proj/dist/lib"
-
-              ant -q -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
+              ant -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
 
               jar_name=$(basename "$proj")
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
