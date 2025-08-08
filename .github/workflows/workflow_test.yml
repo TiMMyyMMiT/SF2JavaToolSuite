@@ -121,6 +121,7 @@ jobs:
         shell: bash
         run: |
           echo "Building projects in order:"
+          mkdir -p built-deps
           mkdir -p built-jars
 
           # Read arrays from env vars
@@ -137,18 +138,20 @@ jobs:
             # Copy dependencies' jars into this project's lib/
             for dep in "${BUILD_ORDER[@]}"; do
               if [ "$dep" == "$proj" ]; then break; fi
-              if [ -f "built-jars/$dep.jar" ]; then
-                echo "  Adding $dep.jar to $proj/lib/"
+              if [ -f "built-deps/$dep.jar" ]; then
+                echo "  Adding $dep.jar to $proj/dist/lib"
                 mkdir -p "$proj/dist/lib"
-                cp "built-jars/$dep.jar" "$proj//dist/lib"
+                cp "built-deps/$dep.jar" "$proj//dist/lib"
               fi
             done
 
             # Determine target: changed projects use package-for-store, others jar
             target="jar"
+            dest="built-deps"
             for changed in "${CHANGED_PROJECTS[@]}"; do
               if [ "$proj" == "$changed" ]; then
                 target="package-for-store"
+                dest="built-jars"
                 break
               fi
             done
