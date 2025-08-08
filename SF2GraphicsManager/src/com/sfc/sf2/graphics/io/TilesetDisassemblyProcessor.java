@@ -115,7 +115,7 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
                 layoutTiles[i] = outputTile;
             }
             if(layoutTiles[i]==null){
-                Console.logger().fine("Layout tile "+i+" : wrong tile id "+tileId);
+                Console.logger().finest("Layout tile "+i+" : wrong tile id "+tileId);
                 layoutTiles[i] = baseTiles[0];
             }
         }

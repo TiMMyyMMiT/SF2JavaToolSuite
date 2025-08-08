@@ -43,7 +43,7 @@ public class InvocationGraphicManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassembly");
         InvocationPackage pckg = new InvocationPackage(PathHelpers.filenameFromPath(filePath));
         invocationGraphic = invocationDisassemblyProcessor.importDisassembly(filePath, pckg);
-        Console.logger().info("Invocation successfully imported from : " + filePath);
+        Console.logger().info("Invocation with " + invocationGraphic.getFrames().length + " frames successfully imported from : " + filePath);
         Console.logger().finest("EXITING importDisassembly");
         return invocationGraphic;
     }
@@ -61,14 +61,22 @@ public class InvocationGraphicManager extends AbstractManager {
         Path dir = filePath.getParent();
         String name = filePath.getFileName().toString();
         String extension = null;
-        int dotIndex = name.indexOf('.');
-        if (dotIndex >= 0) {
+        String meta = null;
+        String pattern = null;
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex > 0 && name.length()-dotIndex < 5) {
             extension = name.substring(dotIndex);
         } else {
             extension = AbstractRawImageProcessor.GetFileExtensionString(AbstractRawImageProcessor.FileFormat.PNG);
         }
-        name = name.replaceAll("\\d+\\.[^\\.]+$", "");
-        String pattern = name + "-frame-";
+        int suffixIndex = name.indexOf("-frame-");
+        if (suffixIndex > 0) {
+            meta = name.substring(0, suffixIndex) + ".meta";
+            pattern = name.substring(0, suffixIndex+7);
+        } else {
+            meta = name + ".meta";
+            pattern = name + "-frame-";
+        }
         
         List<Tileset> frames = new ArrayList<>();
         File[] files = dir.toFile().listFiles();
@@ -82,8 +90,8 @@ public class InvocationGraphicManager extends AbstractManager {
             throw new DisassemblyException("ERROR : No frames found for pattern : " + dir.resolve(pattern + "XX" + extension));
         }
         invocationGraphic = new InvocationGraphic(frames.toArray(new Tileset[frames.size()]));
-        Console.logger().info("Invocation successfully imported from : " + filePath);
-        Path metaPath = dir.resolve(name + ".meta");
+        Console.logger().info("Invocation with " + invocationGraphic.getFrames().length + " frames successfully imported from : " + filePath);
+        Path metaPath = dir.resolve(meta);
         try {
             invocationMetadataProcessor.importMetadata(metaPath, invocationGraphic);
             Console.logger().info("Invocation meta successfully imported from : " + metaPath);

@@ -325,7 +325,7 @@
                                             </Component>
                                             <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton3">
                                               <Properties>
-                                                <Property name="filePath" type="java.lang.String" value=".\u005cspellgraphics00.png" containsInvalidXMLChars="true"/>
+                                                <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005cspellgraphics00.png" containsInvalidXMLChars="true"/>
                                                 <Property name="labelText" type="java.lang.String" value="Image files :"/>
                                               </Properties>
                                             </Component>
@@ -506,7 +506,7 @@
                                             </Component>
                                             <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton7">
                                               <Properties>
-                                                <Property name="filePath" type="java.lang.String" value=".\u005cspellgraphics00.png" containsInvalidXMLChars="true"/>
+                                                <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005cspellgraphics00.png" containsInvalidXMLChars="true"/>
                                               </Properties>
                                             </Component>
                                           </SubComponents>
@@ -617,7 +617,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTabbedPane4" max="32767" attributes="0"/>
+                                              <Component id="jTabbedPane4" pref="155" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -666,9 +666,9 @@
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
                                                           <Component id="jButton21" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jLabel18" alignment="0" pref="40" max="32767" attributes="0"/>
+                                                          <Component id="jLabel18" alignment="0" max="32767" attributes="0"/>
                                                       </Group>
-                                                      <EmptySpace pref="42" max="32767" attributes="0"/>
+                                                      <EmptySpace pref="34" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                             </DimensionLayout>
@@ -756,7 +756,7 @@
                                             </Component>
                                             <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton5">
                                               <Properties>
-                                                <Property name="filePath" type="java.lang.String" value=".\u005cinvocations\u005cnewInvocation" containsInvalidXMLChars="true"/>
+                                                <Property name="filePath" type="java.lang.String" value=".\u005cinvocations\u005cexport\u005cnewInvocation" containsInvalidXMLChars="true"/>
                                                 <Property name="labelText" type="java.lang.String" value="Invoation images :"/>
                                               </Properties>
                                             </Component>
@@ -934,7 +934,7 @@
                                             </Component>
                                             <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton9">
                                               <Properties>
-                                                <Property name="filePath" type="java.lang.String" value=".\u005cinvocations\u005cnewInvocation" containsInvalidXMLChars="true"/>
+                                                <Property name="filePath" type="java.lang.String" value=".\u005cinvocations\u005cexport\u005cnewInvocation" containsInvalidXMLChars="true"/>
                                                 <Property name="labelText" type="java.lang.String" value="Image files :"/>
                                               </Properties>
                                             </Component>
@@ -997,7 +997,7 @@
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jScrollPane2" pref="269" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" max="32767" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="jPanel29" min="-2" max="-2" attributes="0"/>
                                   </Group>

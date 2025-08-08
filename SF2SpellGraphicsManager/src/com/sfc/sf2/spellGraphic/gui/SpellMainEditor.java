@@ -259,7 +259,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel3.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
-        fileButton3.setFilePath(".\\spellgraphics00.png");
+        fileButton3.setFilePath(".\\export\\spellgraphics00.png");
         fileButton3.setLabelText("Image files :");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -362,7 +362,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jLabel9.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel9.setMinimumSize(new java.awt.Dimension(70, 70));
 
-        fileButton7.setFilePath(".\\spellgraphics00.png");
+        fileButton7.setFilePath(".\\export\\spellgraphics00.png");
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -494,8 +494,8 @@ public class SpellMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton21)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                    .addComponent(jLabel18))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         jTabbedPane4.addTab("Disassembly", jPanel20);
@@ -511,7 +511,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jLabel22.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel22.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
-        fileButton5.setFilePath(".\\invocations\\newInvocation");
+        fileButton5.setFilePath(".\\invocations\\export\\newInvocation");
         fileButton5.setLabelText("Invoation images :");
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
@@ -552,7 +552,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
         );
 
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -614,7 +614,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jLabel29.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel29.setMinimumSize(new java.awt.Dimension(70, 70));
 
-        fileButton9.setFilePath(".\\invocations\\newInvocation");
+        fileButton9.setFilePath(".\\invocations\\export\\newInvocation");
         fileButton9.setLabelText("Image files :");
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
@@ -1031,7 +1031,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1090,7 +1090,7 @@ public class SpellMainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Path spellPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        Path spellPath = PathHelpers.getBasePath().resolve(fileButton6.getFilePath());
         if (!PathHelpers.createPathIfRequred(spellPath)) return;
         try {
             spellGraphicManager.exportDisassembly(spellPath, spellLayoutPanel.getTileset());
@@ -1178,7 +1178,7 @@ public class SpellMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton24ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Path invocationPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        Path invocationPath = PathHelpers.getBasePath().resolve(fileButton8.getFilePath());
         if (!PathHelpers.createPathIfRequred(invocationPath)) return;
         try {
             invocationGraphicManager.exportDisassembly(invocationPath, invocationLayoutPanel.getInvocationGraphic());
@@ -1190,7 +1190,7 @@ public class SpellMainEditor extends AbstractMainEditor {
 
     private void jButton33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton33ActionPerformed
         Path invocationPath = PathHelpers.getBasePath().resolve(fileButton9.getFilePath());
-        if (!PathHelpers.createPathIfRequred(invocationPath)) return;
+        if (!PathHelpers.createPathIfRequred(invocationPath.getParent())) return;
         try {
             invocationGraphicManager.exportImage(invocationPath, invocationLayoutPanel.getInvocationGraphic());
         } catch (Exception ex) {

@@ -31,14 +31,14 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         }
         Palette palette = new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
         int tilesPerRow = imageWidth/8;
-        Console.logger().fine("Tiles per row : " + tilesPerRow);
+        Console.logger().finest("Tiles per row : " + tilesPerRow);
         Tile[] tiles = new Tile[(imageWidth/8)*(imageHeight/8)];
         int tileId = 0;
         int[] pixels = new int[64];
         for(int t = 0; t < tiles.length; t++) {
             int x = t%tilesPerRow*8;
             int y = t/tilesPerRow*8;
-            Console.logger().fine("Building tile from coordinates "+x+":"+y);
+            Console.logger().finest("Building tile from coordinates "+x+":"+y);
             Tile tile = new Tile();
             tile.setId(tileId);
             tile.setPalette(palette);

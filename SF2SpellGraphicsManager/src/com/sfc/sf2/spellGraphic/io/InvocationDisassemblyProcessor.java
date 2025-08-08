@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.spellGraphic.io;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.AbstractDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.Tile;
@@ -52,7 +53,7 @@ public class InvocationDisassemblyProcessor extends AbstractDisassemblyProcessor
             Tile[] frame = new StackGraphicsDecoder().decode(tileData, palette);
             frame = TileHelpers.reorderTilesSequentially(frame, 4, 2, 4);
             frameList[i] = new Tileset(Integer.toString(i), frame, InvocationGraphic.INVOCATION_TILE_WIDTH);
-            System.out.println("Frame "+i+" length="+dataLength+", offset="+frameOffset+", tiles="+frameList[i].getTiles().length);
+            Console.logger().finest("Frame "+i+" length="+dataLength+", offset="+frameOffset+", tiles="+frameList[i].getTiles().length);
         }
         return new InvocationGraphic(frameList, unknown1, unknown2, unknown3);
     }
@@ -82,7 +83,7 @@ public class InvocationDisassemblyProcessor extends AbstractDisassemblyProcessor
                 int offsetLocation = 6 + i*2;
                 frameOffsets[i] = (short)((target - offsetLocation)&0xFFFF);
             }
-            System.out.println("Frame "+i+" length="+frameBytes[i].length+", offset="+frameOffsets[i]);
+            Console.logger().finest("Frame "+i+" length="+frameBytes[i].length+", offset="+frameOffsets[i]);
             totalFramesSize += frameBytes[i].length;
         }
 
@@ -97,7 +98,7 @@ public class InvocationDisassemblyProcessor extends AbstractDisassemblyProcessor
         }
         System.arraycopy(paletteBytes, 0, newInvocationBytes, 6 + paletteOffset, 32);
         for (int i = 0; i < frameBytes.length; i++) {
-            System.out.println("Writing frame "+i+" with length="+frameBytes[i].length+" at offset="+(int)(frameOffsets[i]+8 + i*2));
+            Console.logger().finest("Writing frame "+i+" with length="+frameBytes[i].length+" at offset="+(int)(frameOffsets[i]+8 + i*2));
             System.arraycopy(frameBytes[i], 0, newInvocationBytes, frameOffsets[i]+8 + i*2, frameBytes[i].length);
         }
         return newInvocationBytes;
