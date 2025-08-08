@@ -48,12 +48,8 @@ jobs:
 
           declare -A dependencies
 
-          # Parse project.properties only for changed projects (recursively resolve)
-          # To resolve dependencies of dependencies, define a function:
-
           parse_deps() {
             local proj="$1"
-            # Avoid re-parsing
             if [[ -n "${dependencies[$proj]+x}" ]]; then
               return
             fi
@@ -68,9 +64,8 @@ jobs:
                   deps="$deps $ref_name"
                 fi
               done < "$props_file"
-              deps=$(echo "$deps" | xargs) # trim whitespace
+              deps=$(echo "$deps" | xargs)
               dependencies["$proj"]="$deps"
-              # Recursively parse dependencies
               for d in $deps; do
                 parse_deps "$d"
               done
@@ -111,11 +106,23 @@ jobs:
             echo "$proj"
           done
 
-          echo "BUILD_ORDER<<EOF" >> $GITHUB_ENV
-          for proj in "${build_set[@]}"; do
-            echo "$proj"
+          # Write BUILD_ORDER as a multiline environment variable to $GITHUB_ENV in one clean block
+          {
+            echo "BUILD_ORDER<<EOF"
+            for proj in "${build_set[@]}"; do
+              echo "$proj"
+            done
+            echo "EOF"
+          } >> $GITHUB_ENV
+
+      - name: Debug BUILD_ORDER variable
+        run: |
+          echo "BUILD_ORDER is:"
+          echo "$BUILD_ORDER"
+          echo "Iterate build order:"
+          for proj in $BUILD_ORDER; do
+            echo "  $proj"
           done
-          echo "EOF" >> $GITHUB_ENV
 
       - name: Build projects in dependency order
         run: |
@@ -154,4 +161,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jars
-          path: '**/dist/*.jar'
+          path: built-jars/*.jar
