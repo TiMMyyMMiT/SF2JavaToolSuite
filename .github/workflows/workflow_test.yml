@@ -152,6 +152,11 @@ jobs:
             ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean
             mkdir -p "$proj/build/classes"
             mkdir -p "$proj/dist/lib"
+            # Fix for lib
+            if [ -e "$proj/lib" ] && [ ! -d "$proj/lib" ]; then
+              echo "Removing file at $proj/lib to create directory"
+              rm -f "$proj/lib"
+            fi
             mkdir -p "$proj/lib"
             ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" "$target"
 
