@@ -30,7 +30,6 @@
 
         <delete dir="${store.dir}"/>
         <mkdir dir="${store.dir}"/>
-		<mkdir dir="dist/lib"/>
 
         <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
             <zipgroupfileset dir="dist" includes="*.jar"/>
