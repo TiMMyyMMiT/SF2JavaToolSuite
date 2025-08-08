@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.sfc.sf2.application.settings;
+package com.sfc.sf2.core.settings;
 
 import java.awt.Color;
 import java.util.HashMap;

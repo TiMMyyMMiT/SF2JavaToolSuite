@@ -7,9 +7,9 @@ package com.sfc.sf2.core.gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.sfc.sf2.application.settings.CoreSettings;
-import com.sfc.sf2.application.settings.GlobalSettings;
-import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.settings.CoreSettings;
+import com.sfc.sf2.core.settings.GlobalSettings;
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.core.Versioning;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;

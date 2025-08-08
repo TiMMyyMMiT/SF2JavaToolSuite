@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.core.gui;
 
-import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.GraphicsHelpers;
 import java.awt.Color;
 import java.awt.Dimension;

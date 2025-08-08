@@ -5,8 +5,8 @@
  */
 package com.sfc.sf2.helpers;
 
-import com.sfc.sf2.application.settings.CoreSettings;
-import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.settings.CoreSettings;
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import java.io.File;
 import java.io.IOException;

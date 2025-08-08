@@ -5,11 +5,10 @@
  */
 package com.sfc.sf2.spellGraphic.gui;
 
-import com.sfc.sf2.application.settings.SettingsManager;
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.spellGraphic.SpellGraphicManager;
-import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
