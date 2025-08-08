@@ -131,7 +131,7 @@ jobs:
             echo "Building $proj..."
 
             mkdir -p "$proj/build/classes"
-            mkdir -p "$proj/dist"
+            mkdir -p "$proj/dist/lib"
             mkdir -p "$proj/lib"
 
             # Copy dependencies' jars into this project's lib/
