@@ -23,10 +23,13 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Install Ant
+      - name: Download and install Apache Ant 1.10.14
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ant
+          wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.14-bin.tar.gz
+          tar -xzf apache-ant-1.10.14-bin.tar.gz
+          sudo mv apache-ant-1.10.14 /opt/ant
+          echo "ANT_HOME=/opt/ant" >> $GITHUB_ENV
+          echo "/opt/ant/bin" >> $GITHUB_PATH
 
       - name: Detect changed projects and resolve dependencies
         id: project-graph
@@ -95,20 +98,6 @@ jobs:
           build_set=()
           visited=()
 
-          resolve_deps() {
-            local proj="$1"
-            if [[ " ${visited[@]} " =~ " ${proj} " ]]; then return; fi
-            visited+=("$proj")
-            for dep in ${dependencies[$proj]}; do
-              resolve_deps "$dep"
-            done
-            build_set+=("$proj")
-          }
-
-          for proj in "${changed_projects[@]}"; do
-            resolve_deps "$proj"
-          done
-
           echo "Build order:"
           for proj in "${build_set[@]}"; do
             echo "$proj"
@@ -131,27 +120,6 @@ jobs:
           declare -A changed_map
           for p in "${CHANGED_PROJECTS[@]}"; do
             changed_map["$p"]=1
-          done
-
-          # Pahse 1: Build dependencies
-          echo "Phase 1: Build dependencies (non-changed projects)"
-          for proj in "${BUILD_ORDER[@]}"; do
-            if [[ -z "${changed_map[$proj]}" ]]; then
-              echo "Building dependency $proj with target 'jar'..."
-
-              mkdir -p "$proj/build/classes"
-              mkdir -p "$proj/dist/lib"
-              mkdir -p "$proj/lib"
-
-              echo "Building $proj with ant 'jar'"
-              ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
-
-              jar_name=$(basename "$proj")
-              echo "Contents of $proj/dist/lib/ after base build:"
-              if [ ! -f "$proj/dist/${jar_name}.jar" ]; then
-                echo "Warning: $proj/dist/${jar_name}.jar not found after build"
-              fi
-            fi
           done
           
           # Pahse 2: Build changed apps
