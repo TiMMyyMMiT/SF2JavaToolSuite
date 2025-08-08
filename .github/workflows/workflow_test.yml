@@ -175,9 +175,11 @@ jobs:
                   cp "$dep/dist/lib/." "$proj/dist/lib/"
                   
                   # Log contents of built-deps before copying dependencies
-                  echo "Contents of $proj/dist/lib/ after base build"
                   if [ -d $proj/dist/lib/ ]; then
+                    echo "Contents of $proj/dist/lib/ after base build"
                     ls -la $proj/dist/lib/
+                    echo "Contents of $dep/dist/lib/ after base build"
+                    ls -la $dep/dist/lib/
                   else
                     echo "$proj/dist/lib/ directory does not exist."
                   fi
