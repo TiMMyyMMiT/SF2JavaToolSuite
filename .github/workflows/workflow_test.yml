@@ -33,10 +33,12 @@ jobs:
           echo "$changed_files" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Build each changed project with Ant
-        run: |
-          for file in $CHANGED_FILES; do
-            project_dir=$(dirname "$file")
-            echo "Building project in $project_dir with Ant"
-            ant -f "$project_dir" -Dnb.internal.action.name=rebuild clean jar
-          done
+        - name: Build each changed project with Ant
+          run: |
+            echo "JAVA_HOME is $JAVA_HOME"
+            for file in $CHANGED_FILES; do
+              project_dir=$(dirname "$file")
+              echo "Building project in $project_dir with Ant"
+              ant -f "$project_dir" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
+            done
+
