@@ -30,72 +30,73 @@ jobs:
           sudo apt-get install -y ant
 
       - name: Detect changed projects and resolve dependencies
-        id: project-graph
-        shell: bash
-        run: |
-          git fetch origin ${{ github.event.before }}
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
+      id: project-graph
+      shell: bash
+      run: |
+        git fetch origin ${{ github.event.before }}
+        changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
 
-          echo "Changed files:"
-          echo "$changed_files"
+        echo "Changed files:"
+        echo "$changed_files"
 
-          changed_projects=()
-          for file in $changed_files; do
-            project=$(dirname "$file")
-            changed_projects+=("$(basename "$project")")
+        changed_projects=()
+        for file in $changed_files; do
+          project=$(dirname "$file")
+          changed_projects+=("$(basename "$project")")
+        done
+
+        echo "Changed projects: ${changed_projects[@]}"
+
+        declare -A dependencies
+
+        # Only parse project.properties for changed projects
+        for project_name in "${changed_projects[@]}"; do
+          props_file="${project_name}/nbproject/project.properties"
+          deps=""
+          if [ -f "$props_file" ]; then
+            while IFS= read -r line; do
+              if [[ "$line" =~ ^project\..*=.*$ ]]; then
+                ref_path=$(echo "$line" | cut -d'=' -f2 | xargs)
+                ref_name=$(basename "$ref_path")
+                deps="$deps $ref_name"
+              fi
+            done < "$props_file"
+            deps=$(echo "$deps" | xargs) # trim whitespace
+            dependencies["$project_name"]="$deps"
+          else
+            echo "Warning: $props_file not found"
+          fi
+        done
+
+        echo "Discovered dependencies (only for changed projects):"
+        for proj in "${!dependencies[@]}"; do
+          echo "  $proj -> ${dependencies[$proj]}"
+        done
+
+        build_set=()
+        visited=()
+
+        resolve_deps() {
+          local proj="$1"
+          if [[ " ${visited[@]} " =~ " ${proj} " ]]; then return; fi
+          visited+=("$proj")
+          for dep in ${dependencies[$proj]}; do
+            resolve_deps "$dep"
           done
+          build_set+=("$proj")
+        }
 
-          echo "Changed projects: ${changed_projects[@]}"
+        for proj in "${changed_projects[@]}"; do
+          resolve_deps "$proj"
+        done
 
-          declare -A dependencies
+        echo "Build order:"
+        for proj in "${build_set[@]}"; do
+          echo "$proj"
+        done
 
-          for dir in */ ; do
-            project_name=$(basename "$dir")
-            props_file="${dir}nbproject/project.properties"
-            deps=""
-            if [ -f "$props_file" ]; then
-              while IFS= read -r line; do
-                # Use regex match in bash instead of glob:
-                if [[ "$line" =~ ^project\..*=.*$ ]]; then
-                  ref_path=$(echo "$line" | cut -d'=' -f2 | xargs)
-                  ref_name=$(basename "$ref_path")
-                  deps="$deps $ref_name"
-                fi
-              done < "$props_file"
-              deps=$(echo "$deps" | xargs) # trim whitespace
-              dependencies["$project_name"]="$deps"
-            fi
-          done
-
-          echo "Discovered dependencies:"
-          for proj in "${!dependencies[@]}"; do
-            echo "  $proj -> ${dependencies[$proj]}"
-          done
-
-          build_set=()
-          visited=()
-
-          resolve_deps() {
-            local proj="$1"
-            if [[ " ${visited[@]} " =~ " ${proj} " ]]; then return; fi
-            visited+=("$proj")
-            for dep in ${dependencies[$proj]}; do
-              resolve_deps "$dep"
-            done
-            build_set+=("$proj")
-          }
-
-          for proj in "${changed_projects[@]}"; do
-            resolve_deps "$proj"
-          done
-
-          echo "Build order:"
-          for proj in "${build_set[@]}"; do
-            echo "$proj"
-          done
-
-          echo "BUILD_ORDER<<EOF" >> $GITHUB_ENV
-          for proj in "${build_set[@]}"; do
-            echo "$proj"
-          done
-          echo "EOF" >> $GITHUB_ENV
+        echo "BUILD_ORDER<<EOF" >> $GITHUB_ENV
+        for proj in "${build_set[@]}"; do
+          echo "$proj"
+        done
+        echo "EOF" >> $GITHUB_ENV
