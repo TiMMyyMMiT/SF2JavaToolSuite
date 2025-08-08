@@ -33,6 +33,8 @@ jobs:
         shell: bash
         run: |
           git fetch origin ${{ github.event.before }}
+
+          # Find changed version.properties files
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
 
           echo "Changed files:"
@@ -46,10 +48,15 @@ jobs:
 
           echo "Changed projects: ${changed_projects[@]}"
 
+          # Export changed projects to environment
+          echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
+
           declare -A dependencies
 
+          # Parse project.properties for changed projects and recursively for dependencies
           parse_deps() {
             local proj="$1"
+            # Avoid re-parsing
             if [[ -n "${dependencies[$proj]+x}" ]]; then
               return
             fi
@@ -64,8 +71,9 @@ jobs:
                   deps="$deps $ref_name"
                 fi
               done < "$props_file"
-              deps=$(echo "$deps" | xargs)
+              deps=$(echo "$deps" | xargs) # trim whitespace
               dependencies["$proj"]="$deps"
+              # Recursively parse dependencies
               for d in $deps; do
                 parse_deps "$d"
               done
@@ -106,30 +114,20 @@ jobs:
             echo "$proj"
           done
 
-          # Write BUILD_ORDER as a multiline environment variable to $GITHUB_ENV in one clean block
-          {
-            echo "BUILD_ORDER<<EOF"
-            for proj in "${build_set[@]}"; do
-              echo "$proj"
-            done
-            echo "EOF"
-          } >> $GITHUB_ENV
-
-      - name: Debug BUILD_ORDER variable
-        run: |
-          echo "BUILD_ORDER is:"
-          echo "$BUILD_ORDER"
-          echo "Iterate build order:"
-          for proj in $BUILD_ORDER; do
-            echo "  $proj"
-          done
+          # Export build order (space separated) for next step
+          echo "BUILD_ORDER=${build_set[*]}" >> $GITHUB_ENV
 
       - name: Build projects in dependency order
+        shell: bash
         run: |
           echo "Building projects in order:"
           mkdir -p built-jars
-          
-          for proj in $BUILD_ORDER; do
+
+          # Read arrays from env vars
+          read -a BUILD_ORDER <<< "$BUILD_ORDER"
+          read -a CHANGED_PROJECTS <<< "$CHANGED_PROJECTS"
+
+          for proj in "${BUILD_ORDER[@]}"; do
             echo "Building $proj..."
 
             mkdir -p "$proj/build/classes"
@@ -137,7 +135,7 @@ jobs:
             mkdir -p "$proj/lib"
 
             # Copy dependencies' jars into this project's lib/
-            for dep in $BUILD_ORDER; do
+            for dep in "${BUILD_ORDER[@]}"; do
               if [ "$dep" == "$proj" ]; then break; fi
               if [ -f "built-jars/$dep.jar" ]; then
                 echo "  Adding $dep.jar to $proj/lib/"
@@ -145,9 +143,18 @@ jobs:
               fi
             done
 
-            # Build using Ant
-            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
-            
+            # Determine target: changed projects use package-for-store, others jar
+            target="jar"
+            for changed in "${CHANGED_PROJECTS[@]}"; do
+              if [ "$proj" == "$changed" ]; then
+                target="package-for-store"
+                break
+              fi
+            done
+
+            echo "Using target: $target"
+            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean "$target"
+
             # Move built jar to shared location
             jar_name=$(basename "$proj")
             if [ -f "$proj/dist/${jar_name}.jar" ]; then
