@@ -51,7 +51,7 @@ public class Tileset {
     
     public void setTilesPerRow(int tilesPerRow) {
         if (this.tilesPerRow != tilesPerRow)
-            clearIndexedColorImage();
+            clearIndexedColorImage(false);
         this.tilesPerRow = tilesPerRow;
     }
 
@@ -88,8 +88,13 @@ public class Tileset {
         return indexedColorImage;
     }
     
-    public void clearIndexedColorImage() {
+    public void clearIndexedColorImage(boolean alsoClearTiles) {
         indexedColorImage = null;
+        if (alsoClearTiles) {
+            for (int i = 0; i < tiles.length; i++) {
+                tiles[i].clearIndexedColorImage();
+            }
+        }
     }
     
     public Tileset clone() {

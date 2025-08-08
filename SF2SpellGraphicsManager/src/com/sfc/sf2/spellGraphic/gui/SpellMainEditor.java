@@ -1261,11 +1261,9 @@ public class SpellMainEditor extends AbstractMainEditor {
                 Color[] colors = spellTileset.getPalette().getColors();
                 if (!colors[index].equals(newColor)) {
                     colors[index] = newColor;
-                    Tile[] tiles = spellTileset.getTiles();
-                    for (int i = 0; i < tiles.length; i++) {
-                        tiles[i].clearIndexedColorImage();
-                    }
+                    spellTileset.clearIndexedColorImage(true);
                     palette.setColors(colors, true);
+                    spellLayoutPanel.redraw();
                     repaintEditorLayout();
                 }
             }

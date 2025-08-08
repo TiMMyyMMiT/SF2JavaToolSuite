@@ -25,7 +25,7 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
     
     public InvocationLayoutPanel() {
         super();
-        setGridDimensions(8, 8, -1, INVOCATION_TILE_HEIGHT);
+        setGridDimensions(8, 8, -1, INVOCATION_TILE_HEIGHT*PIXEL_HEIGHT);
     }
 
     @Override
@@ -44,9 +44,10 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
     protected void buildImage(Graphics graphics) {
         for(int f = 0; f < invocationGraphic.getFrames().length; f++) {
             Tile[] frameTiles = invocationGraphic.getFrames()[f].getTiles();
+            int yy = f*INVOCATION_TILE_HEIGHT*PIXEL_HEIGHT;
             for(int t = 0; t < frameTiles.length; t++) {
-                int x = (t%INVOCATION_TILE_WIDTH)*8;
-                int y = ((f*INVOCATION_TILE_HEIGHT)*8 + t/INVOCATION_TILE_WIDTH)*8;
+                int x = (t%INVOCATION_TILE_WIDTH)*PIXEL_WIDTH;
+                int y = yy + t/INVOCATION_TILE_WIDTH*PIXEL_HEIGHT;
                 graphics.drawImage(frameTiles[t].getIndexedColorImage(), x, y, null);
             }
         }
