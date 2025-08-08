@@ -143,11 +143,14 @@ jobs:
               mkdir -p "$proj/dist/lib"
               mkdir -p "$proj/lib"
 
-              ant -q -f "$proj/build.xml" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
+              echo "Building $proj with ant 'jar'"
+              ant -q -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
 
               jar_name=$(basename "$proj")
+              echo "Contents of $proj/dist/lib/ after base build:"
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
                   cp "$proj/lib/." "$proj/dist/lib/"
+                  ls -la "$proj/dist/lib"
               else
                 echo "Warning: $proj/dist/${jar_name}.jar not found after build"
               fi
@@ -173,23 +176,13 @@ jobs:
                   echo "  Copying dependency $dep.jar into $proj/dist/lib/"
                   cp "$dep/dist/$dep.jar" "$proj/dist/lib/"
                   cp "$dep/dist/lib/." "$proj/dist/lib/"
-                  
-                  # Log contents of built-deps before copying dependencies
-                  if [ -d $proj/dist/lib/ ]; then
-                    echo "Contents of $proj/dist/lib/ after base build"
-                    ls -la $proj/dist/lib/
-                    echo "Contents of $dep/dist/lib/ after base build"
-                    ls -la $dep/dist/lib/
-                  else
-                    echo "$proj/dist/lib/ directory does not exist."
-                  fi
                 fi
               done
 
               echo "Contents of $proj/dist/lib/ before build:"
               ls -la "$proj/dist/lib"
 
-              ant -q -f "$proj/build.xml" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
+              ant -q -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
 
               jar_name=$(basename "$proj")
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
