@@ -130,10 +130,6 @@ jobs:
           for proj in "${BUILD_ORDER[@]}"; do
             echo "Building $proj..."
 
-            mkdir -p "$proj/build/classes"
-            mkdir -p "$proj/dist/lib"
-            mkdir -p "$proj/lib"
-
             # Copy dependencies' jars into this project's lib/
             for dep in "${BUILD_ORDER[@]}"; do
               if [ "$dep" == "$proj" ]; then break; fi
@@ -153,7 +149,11 @@ jobs:
             done
 
             echo "Using target: $target"
-            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean "$target"
+            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean
+            mkdir -p "$proj/build/classes"
+            mkdir -p "$proj/dist/lib"
+            mkdir -p "$proj/lib"
+            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" "$target"
 
             # Move built jar to shared location
             jar_name=$(basename "$proj")
