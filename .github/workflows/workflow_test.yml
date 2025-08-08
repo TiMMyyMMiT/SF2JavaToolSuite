@@ -13,32 +13,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup Ant
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Install Ant
+        run: sudo apt-get update && sudo apt-get install -y ant
+
       - name: Get changed version.properties files
         id: changed-files
         run: |
-          echo "Finding changed version.properties files..."
           git fetch origin ${{ github.event.before }}
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
-          echo "$changed_files"
           echo "CHANGED_FILES<<EOF" >> $GITHUB_ENV
           echo "$changed_files" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-        - name: Build each changed project with Ant
-          run: |
-            for file in $CHANGED_FILES; do
-              project_dir=$(dirname "$file")
-              echo "Building project in $project_dir with Ant"
-              
-              # Run Ant with your parameters
-              ant -f "$project_dir" -Dnb.internal.action.name=rebuild clean jar
-            done
+      - name: Build each changed project with Ant
+        run: |
+          for file in $CHANGED_FILES; do
+            project_dir=$(dirname "$file")
+            echo "Building project in $project_dir with Ant"
+            ant -f "$project_dir" -Dnb.internal.action.name=rebuild clean jar
+          done
