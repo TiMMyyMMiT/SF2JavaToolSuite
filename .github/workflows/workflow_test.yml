@@ -157,6 +157,7 @@ jobs:
             done
 
             echo "Contents of $proj/dist/lib/ before build:"
+            mkdir -p "$proj/dist/lib"
             if [ -d "$proj/dist/lib" ]; then
               ls -la "$proj/dist/lib"
             else
