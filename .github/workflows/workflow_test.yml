@@ -138,8 +138,8 @@ jobs:
             for dep in "${BUILD_ORDER[@]}"; do
               if [ "$dep" == "$proj" ]; then break; fi
               if [ -f "built-jars/$dep.jar" ]; then
-                mkdir -p "$proj/lib"
                 echo "  Adding $dep.jar to $proj/lib/"
+                mkdir -p "$proj/lib"
                 cp "built-jars/$dep.jar" "$proj/lib/"
               fi
             done
@@ -155,6 +155,8 @@ jobs:
 
             echo "Using target: $target"
             ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean
+            mkdir -p "$proj/build/classes"
+            mkdir -p "$proj/dist/lib"
             ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" "$target"
 
             # Move built jar to shared location
