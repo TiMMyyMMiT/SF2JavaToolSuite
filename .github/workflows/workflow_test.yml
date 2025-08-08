@@ -90,12 +90,14 @@ jobs:
         run: |
           echo "Building projects in order:"
           mkdir -p built-jars
-
+          
           for proj in $BUILD_ORDER; do
             echo "Building $proj..."
 
-            # Copy dependencies' jars into this project's lib/
+            mkdir -p "$proj/build/classes"
+            mkdir -p "$proj/dist"
             mkdir -p "$proj/lib"
+            # Copy dependencies' jars into this project's lib/
             for dep in $BUILD_ORDER; do
               if [ "$dep" == "$proj" ]; then break; fi
               if [ -f "built-jars/$dep.jar" ]; then
@@ -106,7 +108,7 @@ jobs:
 
             # Build using Ant
             ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
-
+            
             # Move built jar to shared location
             jar_name=$(basename "$proj")
             if [ -f "$proj/dist/${jar_name}.jar" ]; then
@@ -120,4 +122,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: built-jars
-          path: built-jars/*.jar
+          path: '**/build/*.jar'
