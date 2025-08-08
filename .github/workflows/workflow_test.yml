@@ -157,7 +157,7 @@ jobs:
             done
 
             echo "Using target: $target"
-            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean
+            #ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean
             mkdir -p "$proj/build/classes"
             mkdir -p "$proj/dist/lib"
             ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" "$target"
