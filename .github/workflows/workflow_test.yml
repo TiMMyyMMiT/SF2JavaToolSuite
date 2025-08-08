@@ -122,7 +122,6 @@ jobs:
         run: |
           echo "Starting build process..."
 
-          mkdir -p built-deps
           mkdir -p built-jars
 
           read -a BUILD_ORDER <<< "$BUILD_ORDER"
@@ -148,20 +147,12 @@ jobs:
 
               jar_name=$(basename "$proj")
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
-                cp "$proj/dist/${jar_name}.jar" "built-deps/$jar_name.jar"
+              
               else
                 echo "Warning: $proj/dist/${jar_name}.jar not found after build"
               fi
             fi
           done
-
-          # Log contents of built-deps before copying dependencies
-          echo "Contents of built-deps before copying to $proj/dist/lib:"
-          if [ -d built-deps ]; then
-            ls -la built-deps/
-          else
-            echo "built-deps directory does not exist."
-          fi
           
           # Pahse 2: Build changed apps
           echo "Phase 2: Build changed projects with 'package-for-store' and inject dependencies"
@@ -178,9 +169,10 @@ jobs:
                 if [[ "$dep" == "$proj" ]]; then
                   break
                 fi
-                if [ -f "built-deps/$dep.jar" ]; then
+                if [ -f "$dep/dist/$dep.jar" ]; then
                   echo "  Copying dependency $dep.jar into $proj/dist/lib/"
-                  cp "built-deps/$dep.jar" "$proj/dist/lib/"
+                  cp "$dep/dist/$dep.jar" "$proj/dist/lib/"
+                  cp "$dep/dist/lib/*.jar" "$proj/dist/lib/"
                 fi
               done
 
