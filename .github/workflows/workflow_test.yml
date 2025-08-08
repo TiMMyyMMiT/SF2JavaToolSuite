@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -31,96 +32,30 @@ jobs:
       - name: Detect changed projects and resolve dependencies
         id: project-graph
         run: |
-          # List of all projects and their internal dependencies (hardcoded for now)
-          declare -A dependencies
-          dependencies["SF2GraphicsManager"]="SF2CoreLibrary"
-          dependencies["SF2PaletteManager"]="SF2CoreLibrary SF2GraphicsManager"
-          dependencies["SF2CoreLibrary"]=""
-
-          # Find projects with changed version.properties
           git fetch origin ${{ github.event.before }}
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
 
           echo "Changed files:"
           echo "$changed_files"
 
+          # Extract changed projects
           changed_projects=()
           for file in $changed_files; do
             project=$(dirname "$file")
-            changed_projects+=("$project")
+            changed_projects+=("$(basename "$project")")
           done
 
           echo "Changed projects: ${changed_projects[@]}"
 
-          # Resolve dependency closure
-          build_set=()
-          visited=()
+          # Discover dependencies from NetBeans-style project.properties
+          declare -A dependencies
 
-          function resolve_deps() {
-            local proj="$1"
-            if [[ " ${visited[@]} " =~ " ${proj} " ]]; then
-              return
-            fi
-            visited+=("$proj")
-
-            for dep in ${dependencies[$proj]}; do
-              resolve_deps "$dep"
-            done
-
-            build_set+=("$proj")
-          }
-
-          for proj in "${changed_projects[@]}"; do
-            resolve_deps "$proj"
-          done
-
-          echo "Build order:"
-          for proj in "${build_set[@]}"; do
-            echo "$proj"
-          done
-
-          # Save build order for next steps
-          echo "BUILD_ORDER<<EOF" >> $GITHUB_ENV
-          for proj in "${build_set[@]}"; do
-            echo "$proj"
-          done
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Build projects in dependency order
-        run: |
-          echo "Building projects in order:"
-          mkdir -p built-jars
-          
-          for proj in $BUILD_ORDER; do
-            echo "Building $proj..."
-
-            mkdir -p "$proj/build/classes"
-            mkdir -p "$proj/dist"
-            mkdir -p "$proj/lib"
-            # Copy dependencies' jars into this project's lib/
-            for dep in $BUILD_ORDER; do
-              if [ "$dep" == "$proj" ]; then break; fi
-              if [ -f "built-jars/$dep.jar" ]; then
-                echo "  Adding $dep.jar to $proj/lib/"
-                cp "built-jars/$dep.jar" "$proj/lib/"
-              fi
-            done
-
-            # Build using Ant
-            ant -f "$proj" -Dnb.internal.action.name=rebuild -Dplatforms.JDK_17.home="$JAVA_HOME" clean jar
-            
-            # Move built jar to shared location
-            jar_name=$(basename "$proj")
-            if [ -f "$proj/dist/${jar_name}.jar" ]; then
-              cp "$proj/dist/${jar_name}.jar" "built-jars/$jar_name.jar"
-            else
-              echo "Warning: $proj/dist/${jar_name}.jar not found"
-            fi
-          done
-
-        - name: Upload artifacts
-          uses: actions/upload-artifact@v4
-          with:
-            name: jars
-            path: '**/dist/*.jar'
-
+          for dir in */ ; do
+            project_name=$(basename "$dir")
+            props_file="${dir}nbproject/project.properties"
+            deps=""
+            if [ -f "$props_file" ]; then
+              while IFS= read -r line; do
+                if [[ "$line" == project.*=* ]]; then
+                  ref_path=$(echo "$line" | cut -d'=' -f2 | xargs)
+                  ref_name=$(b_
