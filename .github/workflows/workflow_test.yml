@@ -23,11 +23,8 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Download and install Apache Ant 1.10.14
-        run: |
-          wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.14-bin.tar.gz
-          tar -xzf apache-ant-1.10.14-bin.tar.gz
-          sudo mv apache-ant-1.10.14 /opt/ant
+      - name: Setup Ant
+        uses: cedx/setup-ant@v1.10.14
           echo "ANT_HOME=/opt/ant" >> $GITHUB_ENV
           echo "/opt/ant/bin" >> $GITHUB_PATH
 
