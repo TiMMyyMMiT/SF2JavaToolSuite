@@ -111,7 +111,8 @@ jobs:
               tag_name="${folder_name}-${version}"
               jar_file="built-jars/${folder_name}.jar"
 
-              echo "==> Processing $folder_name ($version) in $dir_path"
+              echo "Processing ${folder_name} ($version) in ${dir_path}. Tag = ${tag_name}"
+              echo "JAR file = ${jar_file}"
               if [ -f "${jar_file}" ]; then
                 # Git tagging
                 git config user.name 'GitHub Actions'
