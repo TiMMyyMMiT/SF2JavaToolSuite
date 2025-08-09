@@ -28,9 +28,6 @@ jobs:
           mkdir -p tools
           curl -L -o tools/copylibs.jar https://repo1.maven.org/maven2/org/netbeans/modules/org-netbeans-modules-java-j2seproject-copylibstask/REPLACE_WITH_VERSION/org-netbeans-modules-java-j2seproject-copylibstask-RELEASE250.jar
     
-      - name: Set CopyLibs path
-        run: echo "libs.CopyLibs.classpath=tools/copylibs.jar" >> nbproject/project.properties
-
       - name: Download and install Apache Ant 1.10.14
         run: |
           wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.14-bin.tar.gz
@@ -75,6 +72,7 @@ jobs:
           echo "Build changed projects"
           for proj in "${CHANGED_PROJECTS[@]}"; do
               echo "Building project $proj..."
+              echo "libs.CopyLibs.classpath=tools/copylibs.jar" >> $proj/nbproject/project.properties
 
               mkdir -p "$proj/build/classes"
               mkdir -p "$proj/dist/lib"
