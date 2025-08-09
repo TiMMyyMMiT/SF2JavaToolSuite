@@ -75,10 +75,10 @@ jobs:
               ant -v -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" package-for-store
 
               jar_name=$(basename "$proj")
-              if [ -f "$proj/dist/${jar_name}.jar" ]; then
-                cp "$proj/dist/${jar_name}.jar" "built-jars/$jar_name.jar"
+              if [ -f "$proj/store/${jar_name}.jar" ]; then
+                cp "$proj/store/${jar_name}.jar" "built-jars/$jar_name.jar"
               else
-                echo "Warning: $proj/dist/${jar_name}.jar not found after package-for-store"
+                echo "Warning: $proj/store/${jar_name}.jar not found after package-for-store"
               fi
           done
 
