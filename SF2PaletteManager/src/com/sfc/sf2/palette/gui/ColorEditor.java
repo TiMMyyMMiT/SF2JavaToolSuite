@@ -26,7 +26,8 @@ public class ColorEditor extends javax.swing.JPanel {
     private void updateColor() {
         color = new Color(redValue, greenValue, blueValue);
         jPanelColor.setBackground(color);
-        colorPane.updateColor(color);
+        if (colorPane != null)
+            colorPane.updateColor(color);
         displayRGBColor();
         jPanelColor.revalidate();
     }
