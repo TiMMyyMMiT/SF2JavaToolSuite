@@ -44,18 +44,18 @@ jobs:
             echo "No version.properties files changed."
             echo "should_run=false" >> $GITHUB_OUTPUT
           else
-            echo "Changed files:"
-            echo "$changed_files"
-
+            changed_filepaths=()
             changed_projects=()
             for file in $changed_files; do
               project=$(dirname "$file")
               changed_projects+=("$(basename "$project")")
+              changed_filepaths+=("$(basename "$file")")
             done
+            echo "Changed files: ${changed_filepaths[@]}"
             echo "Changed projects: ${changed_projects[@]}"
 
             echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
-            echo "CHANGED_FILES=${changed_files[*]}" >> $GITHUB_OUTPUT
+            echo "CHANGED_FILES=${changed_filepaths[*]}" >> $GITHUB_OUTPUT
             echo "should_run=true" >> $GITHUB_OUTPUT
           fi
 
