@@ -55,6 +55,7 @@ jobs:
             echo "Changed projects: ${changed_projects[@]}"
 
             echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
+            echo "CHANGED_FILES=${changed_files[*]}" >> $GITHUB_OUTPUT
             echo "should_run=true" >> $GITHUB_OUTPUT
           fi
 
@@ -101,7 +102,8 @@ jobs:
           mkdir -p artifacts
           releases=""
 
-          echo "${{ steps.detect_changes.outputs.changed_projects }}" | while read file_path; do
+          IFS=' ' read -r -a files <<< "${{ steps.detect_changes.outputs.changed_files }}"
+          for file_path in "${files[@]}"; do
             if [ -f "$file_path" ]; then
               dir_path=$(dirname "$file_path")
               folder_name=$(basename "$dir_path")
@@ -128,15 +130,21 @@ jobs:
               else
                 echo "Warning: ${jar_file} not found so tag will not be created"
               fi
+            else
+              echo "Warning: File $file_path does not exist"
             fi
           done
 
       - name: Create GitHub Releases
         if: steps.detect_changes.outputs.should_run == 'true'
         run: |
-          while IFS='|' read -r tag jar_path; do
-            echo "Creating release for $tag with artifact $jar_path"
-            gh release create "$tag" "$jar_path" --title "$tag" --notes "Automated release for $tag"
-          done < release_list.txt
+          if [ -f release_list.txt ]; then
+            while IFS='|' read -r tag jar_path; do
+              echo "Creating release for $tag with artifact $jar_path"
+              gh release create "$tag" "$jar_path" --title "$tag" --notes "Automated release for $tag"
+            done < release_list.txt
+          else
+            echo "No releases to create."
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
