@@ -22,7 +22,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-    
+
       - name: Download and install Apache Ant 1.10.14
         run: |
           wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.14-bin.tar.gz
@@ -46,14 +46,14 @@ jobs:
           else
             echo "Changed files:"
             echo "$changed_files"
-            
+
             changed_projects=()
             for file in $changed_files; do
               project=$(dirname "$file")
               changed_projects+=("$(basename "$project")")
             done
             echo "Changed projects: ${changed_projects[@]}"
-            
+
             echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
             echo "should_run=true" >> $GITHUB_OUTPUT
           fi
@@ -68,24 +68,24 @@ jobs:
           mkdir -p built-jars
 
           read -a CHANGED_PROJECTS <<< "$CHANGED_PROJECTS"
-          
+
           # Build changed apps
           echo "Build changed projects"
           for proj in "${CHANGED_PROJECTS[@]}"; do
-              echo "Building project $proj..."
+            echo "Building project $proj..."
 
-              mkdir -p "$proj/build/classes"
-              mkdir -p "$proj/dist/lib"
-              mkdir -p "$proj/lib"
+            mkdir -p "$proj/build/classes"
+            mkdir -p "$proj/dist/lib"
+            mkdir -p "$proj/lib"
 
-              ant -v -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" package-for-store
+            ant -v -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" package-for-store
 
-              jar_name=$(basename "$proj")
-              if [ -f "$proj/store/${jar_name}.jar" ]; then
-                cp "$proj/store/${jar_name}.jar" "built-jars/$jar_name.jar"
-              else
-                echo "Warning: $proj/store/${jar_name}.jar not found after package-for-store"
-              fi
+            jar_name=$(basename "$proj")
+            if [ -f "$proj/store/${jar_name}.jar" ]; then
+              cp "$proj/store/${jar_name}.jar" "built-jars/$jar_name.jar"
+            else
+              echo "Warning: $proj/store/${jar_name}.jar not found after package-for-store"
+            fi
           done
 
       - name: Upload artifacts
@@ -94,48 +94,49 @@ jobs:
           name: jars
           path: built-jars/*.jar
 
-    - name: Tag
-      if: steps.detect_changes.outputs.should_run == 'true'
-      id: tag_and_release
-      run: |
-        mkdir -p artifacts
-        releases=""
+      - name: Tag
+        if: steps.detect_changes.outputs.should_run == 'true'
+        id: tag_and_release
+        run: |
+          mkdir -p artifacts
+          releases=""
 
-        echo "${{ steps.detect_changes.outputs.changed_projects }}" | while read file_path; do
-          if [ -f "$file_path" ]; then
-            dir_path=$(dirname "$file_path")
-            folder_name=$(basename "$dir_path")
-            version=$(grep '^version:' "$file_path" | cut -d':' -f2 | xargs)
-            tag_name="${folder_name}-${version}"
-            jar_file="built-jars/${folder_name}.jar"
+          echo "${{ steps.detect_changes.outputs.changed_projects }}" | while read file_path; do
+            if [ -f "$file_path" ]; then
+              dir_path=$(dirname "$file_path")
+              folder_name=$(basename "$dir_path")
+              version=$(grep '^version:' "$file_path" | cut -d':' -f2 | xargs)
+              tag_name="${folder_name}-${version}"
+              jar_file="built-jars/${folder_name}.jar"
 
-            echo "==> Processing $folder_name ($version) in $dir_path"
-            if[ -f ${jar_file} ]; then
-              # Git tagging
-              git config user.name 'GitHub Actions'
-              git config user.email 'actions@github.com'
-            
-              if git rev-parse "$tag_name" >/dev/null 2>&1; then
-                echo "Tag $tag_name already exists. Skipping tag creation."
+              echo "==> Processing $folder_name ($version) in $dir_path"
+              if [ -f "${jar_file}" ]; then
+                # Git tagging
+                git config user.name 'GitHub Actions'
+                git config user.email 'actions@github.com'
+
+                if git rev-parse "$tag_name" >/dev/null 2>&1; then
+                  echo "Tag $tag_name already exists. Skipping tag creation."
+                else
+                  echo "Creating Git tag $tag_name"
+                  git tag "$tag_name"
+                  git push origin "$tag_name"
+                fi
+
+                # Append to release list
+                echo "$tag_name|${jar_file}" >> release_list.txt
               else
-                echo "Creating Git tag $tag_name"
-                git tag "$tag_name"
-                git push origin "$tag_name"
+                echo "Warning: ${jar_file} not found so tag will not be created"
               fi
-              # Append to release list
-              echo "$tag_name|artifacts/${jar_file}" >> release_list.txt
-            else
-              echo "Warning: $built-jars/${jar_name}.jar not found so tag will not be created"
             fi
-          fi
-        done
+          done
 
-    - name: Create GitHub Releases
-      if: steps.detect_changes.outputs.should_run == 'true'
-      run: |
-        while IFS='|' read -r tag jar_path; do
-          echo "Creating release for $tag with artifact $jar_path"
-          gh release create "$tag" "$jar_path" --title "$tag" --notes "Automated release for $tag"
-        done < release_list.txt
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Releases
+        if: steps.detect_changes.outputs.should_run == 'true'
+        run: |
+          while IFS='|' read -r tag jar_path; do
+            echo "Creating release for $tag with artifact $jar_path"
+            gh release create "$tag" "$jar_path" --title "$tag" --notes "Automated release for $tag"
+          done < release_list.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
