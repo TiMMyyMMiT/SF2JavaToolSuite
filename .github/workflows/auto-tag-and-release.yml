@@ -55,7 +55,7 @@ jobs:
             echo "Changed projects: ${changed_projects[@]}"
 
             echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
-            echo "CHANGED_FILES=${changed_filepaths[*]}" >> $GITHUB_OUTPUT
+            echo "CHANGED_FILES=${changed_filepaths[*]}" >> $GITHUB_ENV
             echo "should_run=true" >> $GITHUB_OUTPUT
           fi
 
@@ -102,8 +102,8 @@ jobs:
           mkdir -p artifacts
           releases=""
 
-          IFS=' ' read -r -a files <<< "${{ steps.detect_changes.outputs.changed_files }}"
-          for file_path in "${files[@]}"; do
+          read -a CHANGED_FILES <<< "$CHANGED_FILES"
+          for file_path in "${CHANGED_FILES[@]}"; do
             if [ -f "$file_path" ]; then
               dir_path=$(dirname "$file_path")
               folder_name=$(basename "$dir_path")
@@ -165,8 +165,8 @@ jobs:
           skipped_count=0
     
           echo "Processing changed tool projects..."
-          IFS=' ' read -r -a changed_projects <<< "${{ steps.detect_changes.outputs.changed_projects }}"
-          for dir_path in "${changed_projects[@]}"; do
+          read -a CHANGED_FILES <<< "$CHANGED_FILES"
+          for dir_path in "${CHANGED_FILES[@]}"; do
             [ -z "$dir_path" ] && continue
     
             project_name=$(basename "$dir_path")
