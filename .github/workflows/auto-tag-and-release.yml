@@ -165,7 +165,8 @@ jobs:
           skipped_count=0
     
           echo "Processing changed tool projects..."
-          while read dir_path; do
+          IFS=' ' read -r -a changed_projects <<< "${{ steps.detect_changes.outputs.changed_projects }}"
+          for dir_path in "${changed_projects[@]}"; do
             [ -z "$dir_path" ] && continue
     
             project_name=$(basename "$dir_path")
@@ -189,7 +190,7 @@ jobs:
             mkdir -p "target-repo/$dest_path"
             cp "$jar_file" "target-repo/$dest_path/"
             success_count=$((success_count + 1))
-          done < changed_projects.txt
+          done
     
           cd target-repo
           git config user.name "GitHub Actions"
