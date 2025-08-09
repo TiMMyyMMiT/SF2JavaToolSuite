@@ -31,7 +31,7 @@ jobs:
           echo "ANT_HOME=/opt/ant" >> $GITHUB_ENV
           echo "/opt/ant/bin" >> $GITHUB_PATH
 
-      - name: Detect changed projects and resolve dependencies
+      - name: Detect changed projects
         id: project-graph
         shell: bash
         run: |
@@ -54,85 +54,25 @@ jobs:
           # Export changed projects to environment
           echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
 
-          declare -A dependencies
-
-          # Parse project.properties for changed projects and recursively for dependencies
-          parse_deps() {
-            local proj="$1"
-            # Avoid re-parsing
-            if [[ -n "${dependencies[$proj]+x}" ]]; then
-              return
-            fi
-
-            local props_file="${proj}/nbproject/project.properties"
-            local deps=""
-            if [ -f "$props_file" ]; then
-              while IFS= read -r line; do
-                if [[ "$line" =~ ^project\..*=.*$ ]]; then
-                  ref_path=$(echo "$line" | cut -d'=' -f2 | xargs)
-                  ref_name=$(basename "$ref_path")
-                  deps="$deps $ref_name"
-                fi
-              done < "$props_file"
-              deps=$(echo "$deps" | xargs) # trim whitespace
-              dependencies["$proj"]="$deps"
-              # Recursively parse dependencies
-              for d in $deps; do
-                parse_deps "$d"
-              done
-            else
-              echo "Warning: $props_file not found"
-              dependencies["$proj"]=""
-            fi
-          }
-
-          for proj in "${changed_projects[@]}"; do
-            parse_deps "$proj"
-          done
-
-          echo "Discovered dependencies:"
-          for proj in "${!dependencies[@]}"; do
-            echo "  $proj -> ${dependencies[$proj]}"
-          done
-
-          build_set=()
-          visited=()
-
-          echo "Build order:"
-          for proj in "${build_set[@]}"; do
-            echo "$proj"
-          done
-
-          # Export build order (space separated) for next step
-          echo "BUILD_ORDER=${build_set[*]}" >> $GITHUB_ENV
-
-      - name: Build dependencies and changed projects separately
+      - name: Build projects
         shell: bash
         run: |
           echo "Starting build process..."
 
           mkdir -p built-jars
 
-          read -a BUILD_ORDER <<< "$BUILD_ORDER"
           read -a CHANGED_PROJECTS <<< "$CHANGED_PROJECTS"
-
-          # Convert CHANGED_PROJECTS array to lookup for quick check
-          declare -A changed_map
-          for p in "${CHANGED_PROJECTS[@]}"; do
-            changed_map["$p"]=1
-          done
           
-          # Pahse 2: Build changed apps
-          echo "Phase 2: Build changed projects with 'package-for-store' and inject dependencies"
-          for proj in "${BUILD_ORDER[@]}"; do
-            if [[ -n "${changed_map[$proj]}" ]]; then
-              echo "Building changed project $proj with target 'package-for-store'..."
+          # Build changed apps
+          echo "Build changed projects"
+          for proj in "${CHANGED_PROJECTS[@]}"; do
+              echo "Building project $proj..."
 
               mkdir -p "$proj/build/classes"
               mkdir -p "$proj/dist/lib"
               mkdir -p "$proj/lib"
 
-              ant -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" clean package-for-store
+              ant -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" package-for-store
 
               jar_name=$(basename "$proj")
               if [ -f "$proj/dist/${jar_name}.jar" ]; then
@@ -140,7 +80,6 @@ jobs:
               else
                 echo "Warning: $proj/dist/${jar_name}.jar not found after package-for-store"
               fi
-            fi
           done
 
       - name: Upload artifacts
