@@ -1,4 +1,4 @@
-name: Dependency-Aware Build
+name: build-tag-release
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - '**/version.properties'
 
 jobs:
-  build:
+  build-tag-release:
     runs-on: ubuntu-latest
 
     steps:
