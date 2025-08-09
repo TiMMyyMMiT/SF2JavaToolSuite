@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.PaletteDecoder;
 import java.awt.Color;
 import javax.swing.JSlider;
 
@@ -16,7 +17,7 @@ public class ColorEditor extends javax.swing.JPanel {
 
     ColorPane colorPane;
     Color color;
-    int redValue, greenValue, blueValue;
+    int redIndex, greenIndex, blueIndex;
     
     public ColorEditor() {
         initComponents();
@@ -24,7 +25,10 @@ public class ColorEditor extends javax.swing.JPanel {
     }
     
     private void updateColor() {
-        color = new Color(redValue, greenValue, blueValue);
+        int r = PaletteDecoder.cramIndexToBrightness(redIndex);
+        int g = PaletteDecoder.cramIndexToBrightness(greenIndex);
+        int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
+        color = new Color(r, g, b);
         jPanelColor.setBackground(color);
         colorPane.updateColor(color);
         displayRGBColor();
@@ -34,17 +38,20 @@ public class ColorEditor extends javax.swing.JPanel {
     public void setColorPane(ColorPane cp){
         colorPane = cp;
         Color color = colorPane.getCurrentColor();
-        redValue = color.getRed();
-        greenValue = color.getGreen();
-        blueValue = color.getBlue();
-        sliderR.setValue(redValue/16);
-        sliderG.setValue(greenValue/16);
-        sliderB.setValue(blueValue/16);
+        redIndex = PaletteDecoder.brightnessToCramIndex(color.getRed());
+        greenIndex = PaletteDecoder.brightnessToCramIndex(color.getGreen());
+        blueIndex = PaletteDecoder.brightnessToCramIndex(color.getBlue());
+        sliderR.setValue(redIndex);
+        sliderG.setValue(greenIndex);
+        sliderB.setValue(blueIndex);
         updateColor();
     }
 
     public void displayRGBColor() {
-        jLabelRGB.setText("#" + Integer.toString(color.getRGB() & 0xffffff, 16));
+        int r = PaletteDecoder.cramIndexToBrightness(redIndex);
+        int g = PaletteDecoder.cramIndexToBrightness(greenIndex);
+        int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
+        jLabelRGB.setText(String.format("# R: %2d, G: %2d, B: %2d", r, g, b));
     }
 
     /**
@@ -154,11 +161,10 @@ public class ColorEditor extends javax.swing.JPanel {
 
     private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
         JSlider slider = (JSlider)evt.getSource();
-        if (slider == sliderR) redValue = sliderR.getValue()*16;
-        if (slider == sliderG) greenValue = sliderG.getValue()*16;
-        if (slider == sliderB) blueValue = sliderB.getValue()*16;
+        if (slider == sliderR) redIndex = sliderR.getValue();
+        if (slider == sliderG) greenIndex = sliderG.getValue();
+        if (slider == sliderB) blueIndex = sliderB.getValue();
         updateColor();
-        displayRGBColor();
     }//GEN-LAST:event_sliderStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -7,6 +7,7 @@ package com.sfc.sf2.palette.gui;
 
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.palette.Palette;
+import com.sfc.sf2.palette.PaletteDecoder;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -61,7 +62,7 @@ public class PalettePane extends JPanel {
             Color[] colors = palette.getColors();
             for (int i = 0; i < colorPanes.length; i++) {
                 if (i < colors.length) {
-                    colorPanes[i].updateColor(colors[i]);
+                    colorPanes[i].updateColor(PaletteDecoder.convertToCram(colors[i]));
                     colorPanes[i].setVisible(true);
                 } else {
                     colorPanes[i].setVisible(false);

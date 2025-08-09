@@ -76,24 +76,44 @@ public class PaletteDecoder {
     public static Color[] convertToCram(Color[] colors) {
         Color[] newColors = new Color[colors.length];
         for (int i = 0; i < colors.length; i++) {
-            int rgba = colors[i].getRGB();
-            int r = (rgba >> 16) & 0xFF;
-            int g = (rgba >>  8) & 0xFF;
-            int b = (rgba >>  0) & 0xFF;
-            int a = (rgba >> 24) & 0xFF;
-            r = brightnessToCram(r);
-            g = brightnessToCram(g);
-            b = brightnessToCram(b);
-            newColors[i] = new Color(r, g, b, a);
+            newColors[i] = convertToCram(colors[i]);
         }
         return newColors;
     }
     
+    public static Color convertToCram(Color color) {
+        int rgba = color.getRGB();
+        int r = (rgba >> 16) & 0xFF;
+        int g = (rgba >>  8) & 0xFF;
+        int b = (rgba >>  0) & 0xFF;
+        int a = (rgba >> 24) & 0xFF;
+        r = brightnessToCram(r);
+        g = brightnessToCram(g);
+        b = brightnessToCram(b);
+        return new Color(r, g, b, a);
+    }
+    
     private static int brightnessToCram(int brightness) {
         for (int i = 0; i < OFFSET_ARRAY.length; i++) {
-            if (brightness < OFFSET_ARRAY[i])
+            if (brightness <= OFFSET_ARRAY[i])
                 return VALUE_MAP.get(i*2);
         }
         return 0;
+    }
+    
+    public static int brightnessToCramIndex(int brightness) {
+        for (Map.Entry<Integer, Integer> entry : VALUE_MAP.entrySet()) {
+            if (brightness <= entry.getValue())
+                return entry.getKey();
+        }
+        return 0;
+    }
+    
+    public static int cramIndexToBrightness(int cram) {
+        if (VALUE_MAP.containsKey(cram)) {
+            return VALUE_MAP.get(cram);
+        } else {
+            return 0;
+        }
     }
 }

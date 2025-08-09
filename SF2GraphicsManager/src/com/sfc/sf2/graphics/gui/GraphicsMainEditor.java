@@ -963,7 +963,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
 
         jLabel55.setText("BG :");
 
-        jCheckBox2.setText("Force CRAM color");
+        jCheckBox2.setText("Force CRAM colors");
         jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox2ActionPerformed(evt);

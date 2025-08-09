@@ -1431,7 +1431,7 @@
                             </Component>
                             <Component class="javax.swing.JCheckBox" name="jCheckBox2">
                               <Properties>
-                                <Property name="text" type="java.lang.String" value="Force CRAM color"/>
+                                <Property name="text" type="java.lang.String" value="Force CRAM colors"/>
                               </Properties>
                               <Events>
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox2ActionPerformed"/>
