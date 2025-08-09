@@ -10,23 +10,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ *  //https://segaretro.org/Sega_Mega_Drive/Palettes_and_CRAM#Format
  * @author wiz
  */
 public class PaletteDecoder {
     
-    public static final Map<Integer, Integer> VALUE_MAP = new HashMap(){
-        {
-            put(0, 0);
-            put(2, 52);
-            put(4, 87);
-            put(6, 116);
-            put(8, 144);
-            put(10, 172);
-            put(12, 206);
-            put(14, 255);
-	}
-    };
+    private static final Map<Integer, Integer> VALUE_MAP = new HashMap(){ {
+        put(0, 0);
+        put(2, 52);
+        put(4, 87);
+        put(6, 116);
+        put(8, 144);
+        put(10, 172);
+        put(12, 206);
+        put(14, 255);
+    } };
     
     public static Color[] decodePalette(byte[] data){
         Color[] colors = new Color[data.length/2];
@@ -52,16 +50,11 @@ public class PaletteDecoder {
         return colors;
     }
     
-    public static final int[] VALUE_ARRAY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14};
-    
-    private static byte[] newPaletteBytes;
-    
+    private static final int[] VALUE_ARRAY = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14};
+        
     public static byte[] encodePalette(Color[] palette){
-
         byte[] paletteBytes = new byte[palette.length*2];
-        
         Color[] standardizedPalette = new Color[palette.length];
-        
         for(int i=0;i<palette.length;i++){
             byte first = 0x00;
             byte second = 0x00;
@@ -74,14 +67,33 @@ public class PaletteDecoder {
             second = (byte)(((g*16)&0xF0) | (r&0x0F));
             paletteBytes[i*2] = first;
             paletteBytes[i*2+1] = second;
-        }
-        
-        newPaletteBytes = paletteBytes;
-        
+        }        
         return paletteBytes;
     }
+                                                 //  0, 52,  87, 116, 144, 172, 206, 255
+    private static int[] OFFSET_ARRAY = new int[] { 26, 69, 101, 130, 158, 189, 230, 999 };
     
-    public static byte[] getNewPaletteFileBytes(){
-        return newPaletteBytes;
+    public static Color[] convertToCram(Color[] colors) {
+        Color[] newColors = new Color[colors.length];
+        for (int i = 0; i < colors.length; i++) {
+            int rgba = colors[i].getRGB();
+            int r = (rgba >> 16) & 0xFF;
+            int g = (rgba >>  8) & 0xFF;
+            int b = (rgba >>  0) & 0xFF;
+            int a = (rgba >> 24) & 0xFF;
+            r = brightnessToCram(r);
+            g = brightnessToCram(g);
+            b = brightnessToCram(b);
+            newColors[i] = new Color(r, g, b, a);
+        }
+        return newColors;
+    }
+    
+    private static int brightnessToCram(int brightness) {
+        for (int i = 0; i < OFFSET_ARRAY.length; i++) {
+            if (brightness < OFFSET_ARRAY[i])
+                return VALUE_MAP.get(i*2);
+        }
+        return 0;
     }
 }

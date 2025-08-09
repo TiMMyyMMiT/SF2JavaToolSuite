@@ -18,6 +18,7 @@ public class Palette {
     private Color[] colors;
     
     private IndexColorModel icm;
+    private boolean forceCram = false;  //Test. If correct then force this for all imported images
     
     public Palette() {
         this.name = "New Palette";
@@ -55,6 +56,20 @@ public class Palette {
     
     public int getColorsCount() {
         return colors.length;
+    }
+    
+    public boolean getForceCram() {  //Test. If correct then force this for all imported images
+        return forceCram;
+    }
+    
+    public void setForceCram(boolean forceCram) {  //Test. If correct then force this for all imported images
+        this.forceCram = forceCram;
+        icm = buildICM(colors, true);
+        if (forceCram) {
+            icm = buildICM(PaletteDecoder.convertToCram(colors), true);
+        } else {
+            icm = buildICM(colors, true);
+        }
     }
 
     public IndexColorModel getIcm() {
