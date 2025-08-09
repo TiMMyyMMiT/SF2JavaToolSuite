@@ -8,7 +8,6 @@ package com.sfc.sf2.spellAnimation.gui;
 import com.sfc.sf2.spellAnimation.SpellAnimationManager;
 import com.sfc.sf2.spellAnimation.SpellAnimation;
 import com.sfc.sf2.spellAnimation.SpellSubAnimation;
-import com.sfc.sf2.spellAnimation.layout.SpellAnimationLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

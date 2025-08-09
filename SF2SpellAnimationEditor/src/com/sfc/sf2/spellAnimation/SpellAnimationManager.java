@@ -8,6 +8,7 @@ package com.sfc.sf2.spellAnimation;
 import com.sfc.sf2.background.BackgroundManager;
 import com.sfc.sf2.spellAnimation.io.DisassemblyManager;
 import com.sfc.sf2.ground.GroundManager;
+import com.sfc.sf2.spellAnimation.io.SpellAnimationAsmProcessor;
 import com.sfc.sf2.spellGraphic.SpellGraphicManager;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,10 +19,10 @@ import java.nio.file.Paths;
  * @author TiMMy
  */
 public class SpellAnimationManager {
-
     private final SpellGraphicManager spellGraphicManager = new SpellGraphicManager();
     private final BackgroundManager backgroundManager = new BackgroundManager();
     private final GroundManager groundManager = new GroundManager();
+    private final SpellAnimationAsmProcessor spellAnimationAsmProcessor = new SpellAnimationAsmProcessor();
     
     private SpellAnimation spellAnimation = new SpellAnimation();
 

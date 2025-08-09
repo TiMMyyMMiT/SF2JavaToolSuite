@@ -7,7 +7,6 @@ package com.sfc.sf2.spellAnimation.gui;
 
 import com.sfc.sf2.spellAnimation.SpellAnimationFrame;
 import com.sfc.sf2.spellAnimation.SpellSubAnimation;
-import com.sfc.sf2.spellAnimation.layout.SpellAnimationLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
