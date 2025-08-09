@@ -22,6 +22,14 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          
+      - name: Download CopyLibs
+        run: |
+          mkdir -p tools
+          curl -L -o tools/copylibs.jar https://repo1.maven.org/maven2/org/netbeans/modules/org-netbeans-modules-java-j2seproject-copylibstask/REPLACE_WITH_VERSION/org-netbeans-modules-java-j2seproject-copylibstask-RELEASE250.jar
+    
+      - name: Set CopyLibs path
+        run: echo "libs.CopyLibs.classpath=tools/copylibs.jar" >> nbproject/project.properties
 
       - name: Download and install Apache Ant 1.10.14
         run: |
