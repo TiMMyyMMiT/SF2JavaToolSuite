@@ -37,6 +37,15 @@ public class TilesetManager extends AbstractManager {
         tileset = null;
     }
        
+    public Tileset importDisassembly(Path graphicsFilePath, Palette palette, TilesetCompression compression, int tilesPerRow) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        TilesetPackage pckg = new TilesetPackage(PathHelpers.filenameFromPath(graphicsFilePath), compression, palette, tilesPerRow);
+        tileset = tilesetDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
+        Console.logger().info("Tileset successfully imported from : " + graphicsFilePath);
+        Console.logger().finest("EXITING importDisassembly");
+        return tileset;
+    }
+       
     public Tileset importDisassembly(Path paletteFilePath, Path graphicsFilePath, TilesetCompression compression, int tilesPerRow) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);

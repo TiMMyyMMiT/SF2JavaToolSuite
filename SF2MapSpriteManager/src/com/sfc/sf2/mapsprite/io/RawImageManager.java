@@ -5,8 +5,15 @@
  */
 package com.sfc.sf2.mapsprite.io;
 
+import com.sfc.sf2.core.io.AbstractRawImageProcessor;
+import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.mapsprite.MapSprite;
+import com.sfc.sf2.palette.io.PalettePackage;
+import java.awt.image.IndexColorModel;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,11 +23,12 @@ import java.util.logging.Logger;
  *
  * @author wiz
  */
-public class RawImageManager {
+/*public class RawImageManager extends AbstractRawImageProcessor<Tileset, PalettePackage> {
     
     private static final String BASE_FILENAME = "mapspriteXXX-Y-Z.ext";
     
-    public static MapSprite[] importImage(String basepath, int fileFormat) {
+    @Override
+    protected Tileset parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
         System.out.println("com.sfc.sf2.mapsprite.io.RawImageManager.importImage() - Importing Image files ...");
         String extension = com.sfc.sf2.graphics.io.RawImageManager.GetFileExtensionString(fileFormat);
         List<MapSprite> mapSprites = new ArrayList();
@@ -71,4 +79,4 @@ public class RawImageManager {
             Logger.getLogger(RawImageManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-}
+}*/

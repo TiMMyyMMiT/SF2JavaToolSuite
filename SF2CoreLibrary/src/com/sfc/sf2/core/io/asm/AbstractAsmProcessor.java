@@ -3,9 +3,11 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.sfc.sf2.core.io;
+package com.sfc.sf2.core.io.asm;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.helpers.PathHelpers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,31 +23,31 @@ import java.nio.file.Path;
  */
 public abstract class AbstractAsmProcessor<TType extends Object> {
     
-    public TType importAsmData(Path filePath, TType item) throws DisassemblyException, IOException, FileNotFoundException {
+    public TType importAsmData(Path filePath) throws IOException, AsmException, FileNotFoundException {
         Console.logger().finest("ENTERING importAsmData : " + filePath);
         File asmFile = filePath.toFile();
         if (!asmFile.exists()) {
             throw new FileNotFoundException("ASM data file not found : " + filePath);
         }
         BufferedReader reader = new BufferedReader(new FileReader(asmFile));
-        parseAsmData(reader, item);
+        TType item = parseAsmData(reader);
         reader.close();
         Console.logger().finest("EXITING importAsmData");
         return item;
     }
     
-    protected abstract void parseAsmData(BufferedReader reader, TType item) throws DisassemblyException, IOException;
+    protected abstract TType parseAsmData(BufferedReader reader) throws IOException, AsmException;
     
-    public void exportAsmData(Path filePath, TType item) throws IOException, DisassemblyException {
+    public void exportAsmData(Path filePath, TType item) throws IOException, AsmException {
         Console.logger().finest("ENTERING exportAsmData : " + filePath);
         File asmFile = filePath.toFile();
-        FileWriter writer = new FileWriter(asmFile, false);
-        writeAsmHeader(writer, item);
+        FileWriter writer = new FileWriter(asmFile, false);writer.write("; ASM FILE ");
+        writer.write(PathHelpers.getIncbinPath().relativize(filePath).toString());
+        writer.write(" :\n");
         packageAsmData(writer, item);
         writer.close();
         Console.logger().finest("EXITING exportAsmData");
     }
 
-    protected abstract void writeAsmHeader(FileWriter writer, TType item) throws DisassemblyException, IOException;
-    protected abstract void packageAsmData(FileWriter writer, TType item) throws DisassemblyException, IOException;
+    protected abstract void packageAsmData(FileWriter writer, TType item) throws IOException, AsmException;
 }

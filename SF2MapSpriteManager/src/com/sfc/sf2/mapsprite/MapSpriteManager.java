@@ -5,91 +5,109 @@
  */
 package com.sfc.sf2.mapsprite;
 
-import com.sfc.sf2.graphics.GraphicsManager;
-import com.sfc.sf2.mapsprite.io.DisassemblyManager;
-import com.sfc.sf2.mapsprite.io.RawImageManager;
-import com.sfc.sf2.mapsprite.io.SFCDBankManager;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.core.io.asm.EntriesAsmData;
+import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.TilesetManager;
+import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor.TilesetCompression;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
-public class MapSpriteManager {
-       
-    private PaletteManager paletteManager = new PaletteManager();
-    private GraphicsManager graphicsManager = new GraphicsManager();
+public class MapSpriteManager extends AbstractManager {
+    private final PaletteManager paletteManager = new PaletteManager();
+    private final TilesetManager tilesetManager = new TilesetManager();
+    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+    
     private MapSprite[] mapSprites;
-
-    public void importDisassembly(String paletteFilePath, String graphicsBasepath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importDisassembly() - Importing disassembly ...");
-        paletteManager.importDisassembly(paletteFilePath);
-        Palette palette = paletteManager.getPalette();
-        mapSprites = DisassemblyManager.importDisassembly(graphicsBasepath, palette);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importDisassembly() - Disassembly imported.");
+    
+    @Override
+    public void clearData() {
+        paletteManager.clearData();
+        tilesetManager.clearData();
+        mapSprites = null;
     }
-       
-    public MapSprite[] importDisassemblyFromEntryFile(String paletteFilePath, String entriesPath, String basePath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importDisassemblyFromEntryFile() - Importing disassembly from entry file ...");
-        paletteManager.importDisassembly(paletteFilePath);
-        Palette palette = paletteManager.getPalette();
-        mapSprites = DisassemblyManager.importDisassemblyFromEntryFile(basePath, entriesPath, palette);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importDisassemblyFromEntryFile() - Disassembly from entry file imported.");
+
+    public MapSprite[] importDisassembly(Path paletteFilePath, Path graphicsFilePath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        mapSprites = new MapSprite[1];
+        int[] indices = getIndicesFromFilename(graphicsFilePath.getFileName());
+        mapSprites[0] = new MapSprite(tilesetManager.importDisassembly(paletteFilePath, graphicsFilePath, TilesetCompression.BASIC, 6), indices);
+        Console.logger().info("Mapsprite successfully imported from : " + graphicsFilePath);
+        Console.logger().finest("EXITING importDisassembly");
+        return mapSprites;
+    }
+        
+    //TODO update to new format
+    public MapSprite[] importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
+        Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
+        Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
+        mapSprites = new MapSprite[entriesData.entriesCount()];
+        int failedToLoad = 0;
+        for (int i = 0; i < mapSprites.length; i++) {
+            Path tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
+            try {
+                Tileset tileset = tilesetManager.importDisassembly(tilesetPath, palette, TilesetCompression.BASIC, 6);
+                mapSprites[i] = new MapSprite(tileset, getIndicesFromFilename(tilesetPath.getFileName()));
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Mapsprite could not be loaded : " + tilesetPath + " : " + e);
+            }
+        }
+        Console.logger().info(mapSprites.length + " mapsprites successfully imported from entries file : " + entriesPath);
+        Console.logger().info((entriesData.entriesCount() - entriesData.uniquePathsCount()) + " duplicate mapsprite entries found.");
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " mapsprites failed to load. See logs above");
+        }
+        Console.logger().finest("EXITING importDisassemblyFromEntryFile");
         return mapSprites;
     }
     
-    public void exportDisassembly(String basepath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importDisassembly() - Exporting disassembly ...");
+    public void exportDisassembly(String basepath) {
+        /*Console.logger().finest("ENTERING exportDisassembly");
         DisassemblyManager.exportDisassembly(mapSprites, basepath);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importDisassembly() - Disassembly exported.");        
-    }   
+        Console.logger().finest("EXITING exportDisassembly");*/
+    } 
     
-    public void importRom(String romFilePath, String paletteOffset, String paletteLength, String graphicsOffset, String graphicsLength){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importOriginalRom() - Importing original ROM ...");
-        graphicsManager.importRom(romFilePath, paletteOffset, paletteLength, graphicsOffset, graphicsLength,GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importOriginalRom() - Original ROM imported.");
-    }
-    
-    public void exportRom(String originalRomFilePath, String graphicsOffset){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.exportOriginalRom() - Exporting original ROM ...");
-        graphicsManager.exportRom(originalRomFilePath, graphicsOffset, GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.exportOriginalRom() - Original ROM exported.");        
-    }      
-    
-    public void importPng(String basepath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importPng() - Importing PNG ...");
+    public void importImage(String basepath) {
+        /*Console.logger().finest("ENTERING importImage");
         mapSprites = RawImageManager.importImage(basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importPng() - PNG imported.");
+        Console.logger().finest("EXITING importImage");*/
     }
     
-    public void exportPng(String basepath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.exportPng() - Exporting PNG ...");
+    public void exportImage(String basepath) {
+        /*Console.logger().finest("ENTERING exportImage");
         RawImageManager.exportImage(mapSprites, basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.exportPng() - PNG exported.");       
-    }
-    
-    public void importGif(String basepath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importGif() - Importing GIF ...");
-        mapSprites = RawImageManager.importImage(basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importGif() - GIF imported.");
-    }
-    
-    public void exportGif(String basepath){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.exportGif() - Exporting GIF ...");
-        RawImageManager.exportImage(mapSprites, basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.exportGif() - GIF exported.");       
-    }
-    
-    public void importSFCDBank(String paletteFilePath, String bankFilePath, String fileLoadingOffset, String pointerTableOffset, String numberOfEntries){
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importSFCDBank() - Importing SFCD Bank ...");
-        paletteManager.importDisassembly(paletteFilePath);
-        Palette palette = paletteManager.getPalette();
-        mapSprites = SFCDBankManager.importSFCDBank(bankFilePath, palette, fileLoadingOffset, pointerTableOffset, numberOfEntries);
-        System.out.println("com.sfc.sf2.mapsprite.MapSpriteManager.importSFCDBank() - SFCD Bank imported.");
+        Console.logger().finest("EXITING exportImage");*/
     }
     
     public MapSprite[] getMapSprites() {
         return mapSprites;
+    }
+    
+    private int[] getIndicesFromFilename(Path filename) {
+        String name = filename.toString();
+        int dotIndex = name.lastIndexOf('.');
+        if (dotIndex > 0) {
+            name = name.substring(0, dotIndex);
+        }
+        String[] split = name.substring(9).split("-");
+        int[] indices = new int[split.length];
+        for (int i = 0; i < indices.length; i++) {
+            indices[i] = Integer.parseInt(split[i]);
+        }
+        return indices;
     }
 }
