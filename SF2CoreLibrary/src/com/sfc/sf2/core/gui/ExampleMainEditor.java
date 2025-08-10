@@ -125,8 +125,16 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         fileButton1.setLabelText("Test file button :");
 
         infoButton1.setBackground(new java.awt.Color(0, 0, 0));
-        infoButton1.setMessageText("<html>This is a test message. See how the info buttons can teach you.<br>You can set the <b>\"messageText\"</b> field to make a message popup by default, or you can listen to the <b>ActionPerformed</b> event.<br><br><i>If the text has any newlines then html tags don't seem to work.</i></html>");
+        infoButton1.setMessageText("<html>This is a test message. See how the info buttons can teach you.<br>You can set the <b>\"messageText\"</b> field to make a message popup by default, or you can listen to the <b>ActionPerformed</b> event.<br><br><i>If the text has any newlines then html tags don't seem to work.</i><br><br>The bad news is that <a href=\"https://github.com/ShiningForceCentral\">hyperlinks do not work!</a></html>");
         infoButton1.setText("");
+        infoButton1.setMaximumSize(new java.awt.Dimension(26, 26));
+        infoButton1.setMinimumSize(new java.awt.Dimension(26, 26));
+        infoButton1.setPreferredSize(new java.awt.Dimension(26, 26));
+        infoButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Test help button:");
 
@@ -144,7 +152,7 @@ public final class ExampleMainEditor extends AbstractMainEditor {
                         .addGap(29, 29, 29)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(table1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -162,7 +170,7 @@ public final class ExampleMainEditor extends AbstractMainEditor {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(44, 44, 44)
                         .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -204,6 +212,10 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         SettingsManager.saveGlobalSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
+
+    private void infoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_infoButton1ActionPerformed
     
     /**
      * To create a new Main Editor, copy the below code

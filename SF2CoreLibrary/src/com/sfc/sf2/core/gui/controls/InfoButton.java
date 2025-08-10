@@ -5,12 +5,10 @@
  */
 package com.sfc.sf2.core.gui.controls;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.BeanProperty;
 import javax.swing.JOptionPane;
-import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -23,9 +21,9 @@ public class InfoButton extends javax.swing.JButton {
     
     public InfoButton() {
         flatHelpButtonIcon1 = new com.formdev.flatlaf.icons.FlatHelpButtonIcon();
-        setMaximumSize(new java.awt.Dimension(20, 20));
-        setMinimumSize(new java.awt.Dimension(20, 20));
-        setPreferredSize(new java.awt.Dimension(20, 20));
+        setMaximumSize(new java.awt.Dimension(26, 26));
+        setMinimumSize(new java.awt.Dimension(26, 26));
+        setPreferredSize(new java.awt.Dimension(26, 26));
         setText(null);
         setIcon(flatHelpButtonIcon1);
         setMargin(new java.awt.Insets(1, 1, 1, 1));
@@ -51,7 +49,7 @@ public class InfoButton extends javax.swing.JButton {
     
     private void buttonPressed(ActionEvent evt) {
         if (messageText != null) {
-            JOptionPane.showMessageDialog(this, messageText);
+            JOptionPane.showMessageDialog(null, messageText, "Help", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
