@@ -87,7 +87,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
         for(int i=0;i<bytes.length;i++){
             bytes[i] = output.get(i);
         }
-        tiles = new UncompressedGraphicsDecoder().decode(input, palette);
+        tiles = new UncompressedGraphicsDecoder().decode(bytes, palette);
         Console.logger().finest("EXITING decode");
         return tiles;
     }
