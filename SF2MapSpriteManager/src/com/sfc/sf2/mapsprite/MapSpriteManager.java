@@ -15,6 +15,8 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor.TilesetCompression;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.mapsprite.io.MapSpriteDisassemblyProcessor;
+import com.sfc.sf2.mapsprite.io.MapSpritePackage;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
 import java.io.IOException;
@@ -26,7 +28,7 @@ import java.nio.file.Path;
  */
 public class MapSpriteManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
-    private final TilesetManager tilesetManager = new TilesetManager();
+    private final MapSpriteDisassemblyProcessor mapSpriteDisassemblyProcessor = new MapSpriteDisassemblyProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
     
     private MapSprite[] mapSprites;
@@ -34,15 +36,16 @@ public class MapSpriteManager extends AbstractManager {
     @Override
     public void clearData() {
         paletteManager.clearData();
-        tilesetManager.clearData();
         mapSprites = null;
     }
 
     public MapSprite[] importDisassembly(Path paletteFilePath, Path graphicsFilePath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         mapSprites = new MapSprite[1];
+        Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
         int[] indices = getIndicesFromFilename(graphicsFilePath.getFileName());
-        mapSprites[0] = new MapSprite(tilesetManager.importDisassembly(paletteFilePath, graphicsFilePath, TilesetCompression.BASIC, 6), indices);
+        MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), palette, indices);
+        mapSprites[0] = mapSpriteDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
         Console.logger().info("Mapsprite successfully imported from : " + graphicsFilePath);
         Console.logger().finest("EXITING importDisassembly");
         return mapSprites;
@@ -50,7 +53,8 @@ public class MapSpriteManager extends AbstractManager {
         
     //TODO update to new format
     public MapSprite[] importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
-        Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
+        return importDisassembly(paletteFilePath, Path.of("D:\\TiMMy\\Dev\\ShiningForce2\\SF2DISASM\\disasm\\data\\graphics\\mapsprites\\mapsprite000-0.bin"));
+        /*Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
         EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
         Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
@@ -59,8 +63,9 @@ public class MapSpriteManager extends AbstractManager {
         for (int i = 0; i < mapSprites.length; i++) {
             Path tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
             try {
-                Tileset tileset = tilesetManager.importDisassembly(tilesetPath, palette, TilesetCompression.BASIC, 6);
-                mapSprites[i] = new MapSprite(tileset, getIndicesFromFilename(tilesetPath.getFileName()));
+                int[] indices = getIndicesFromFilename(tilesetPath.getFileName());
+                MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), palette, indices);
+                mapSprites[i] = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
             } catch (Exception e) {
                 failedToLoad++;
                 Console.logger().warning("Mapsprite could not be loaded : " + tilesetPath + " : " + e);
@@ -72,7 +77,7 @@ public class MapSpriteManager extends AbstractManager {
             Console.logger().severe(failedToLoad + " mapsprites failed to load. See logs above");
         }
         Console.logger().finest("EXITING importDisassemblyFromEntryFile");
-        return mapSprites;
+        return mapSprites;*/
     }
     
     public void exportDisassembly(String basepath) {
