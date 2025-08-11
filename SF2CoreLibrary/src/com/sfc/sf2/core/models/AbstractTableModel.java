@@ -6,6 +6,7 @@
 package com.sfc.sf2.core.models;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +31,12 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
         this.rowLimit = rowLimit;
     }
 
-    public T[] getTableData() {
-        Object[] data = tableItems.toArray();
-        return (T[])data;
+    public T[] getTableData(Class<T[]> type) {
+        T[] data = type.cast(Array.newInstance(type.getComponentType(), tableItems.size()));
+        for (int i = 0; i < data.length; i++) {
+            data[i] = tableItems.get(i);
+        }
+        return data;
     }
 
     public void setTableData(T[] tableData) {

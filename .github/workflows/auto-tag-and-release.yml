@@ -49,7 +49,7 @@ jobs:
             for file in $changed_files; do
               project=$(dirname "$file")
               changed_projects+=("$(basename "$project")")
-              changed_filepaths+=("$(basename "$file")")
+              changed_filepaths+=("$file")
             done
             echo "Changed files: ${changed_filepaths[@]}"
             echo "Changed projects: ${changed_projects[@]}"
@@ -111,7 +111,8 @@ jobs:
               tag_name="${folder_name}-${version}"
               jar_file="built-jars/${folder_name}.jar"
 
-              echo "==> Processing $folder_name ($version) in $dir_path"
+              echo "Processing ${folder_name} ($version) in ${dir_path}. Tag = ${tag_name}"
+              echo "JAR file = ${jar_file}"
               if [ -f "${jar_file}" ]; then
                 # Git tagging
                 git config user.name 'GitHub Actions'
@@ -153,7 +154,7 @@ jobs:
         if: steps.detect_changes.outputs.should_run == 'true'
         run: |
           echo "Cloning destination repo..."
-          git clone --depth=1 --branch feature/tools_updates https://x-access-token:${{ secrets.SF2DISASM_PUSH_TOKEN }}@github.com/TiMMyyMMiT/SF2DISASM.git target-repo
+          git clone --depth=1 --branch feature/tools_updates https://x-access-token:${{ secrets.SF2DISASM_PUSH_TOKEN }}@github.com/ShiningForceCentral/SF2DISASM.git target-repo
     
           root_release_file="release.properties"
           if [ ! -f "$root_release_file" ]; then

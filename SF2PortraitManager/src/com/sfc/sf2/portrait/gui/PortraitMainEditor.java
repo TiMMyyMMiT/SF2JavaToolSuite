@@ -644,7 +644,11 @@ public class PortraitMainEditor extends AbstractMainEditor {
     private void eyesListSelectionChanged(javax.swing.event.ListSelectionEvent evt) {
         if (selectedEyesRow != tableEyes.jTable.getSelectedRow()) {
             selectedEyesRow = tableEyes.jTable.getSelectedRow();
-            portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
+            Portrait portrait = portraitLayoutPanel.getPortrait();
+            if (portrait != null) {
+                portrait.setEyeTiles(eyeTable.getTableData(int[][].class));
+                portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
+            }
             repaintEditorLayout();
         }
     }
@@ -652,7 +656,11 @@ public class PortraitMainEditor extends AbstractMainEditor {
     private void mouthListSelectionChanged(javax.swing.event.ListSelectionEvent evt) {
         if (selectedMouthsRow != tableMouth.jTable.getSelectedRow()) {
             selectedMouthsRow = tableMouth.jTable.getSelectedRow();
-            portraitLayoutPanel.setSelectedMouthTile(selectedMouthsRow);
+            Portrait portrait = portraitLayoutPanel.getPortrait();
+            if (portrait != null) {
+                portrait.setMouthTiles(mouthTable.getTableData(int[][].class));
+                portraitLayoutPanel.setSelectedMouthTile(selectedMouthsRow);
+            }
             repaintEditorLayout();
         }
     }

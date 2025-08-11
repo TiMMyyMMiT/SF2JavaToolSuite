@@ -9,7 +9,6 @@ import com.sfc.sf2.core.models.AbstractTableModel;
 import java.beans.BeanProperty;
 import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelListener;
 
 /**
  *
