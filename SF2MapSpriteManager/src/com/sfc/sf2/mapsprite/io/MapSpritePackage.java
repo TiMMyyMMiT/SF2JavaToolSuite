@@ -11,4 +11,4 @@ import com.sfc.sf2.palette.Palette;
  * 
  * @author TiMMy
  */
-public record MapSpritePackage(String name, Palette palette, int[] indices) { }
+public record MapSpritePackage(String name, Palette palette) { }

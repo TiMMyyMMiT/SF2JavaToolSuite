@@ -34,27 +34,22 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        int w = DEFAULT_SPRITES_PER_ROW*3*PIXEL_WIDTH;
-        int h = ((mapsprites.length)*2/DEFAULT_SPRITES_PER_ROW)*3*PIXEL_HEIGHT;
-        if ((mapsprites.length*2) % DEFAULT_SPRITES_PER_ROW != 0)
-            h += 3*PIXEL_HEIGHT;
-        return new Dimension(w, h);
+        if (mapsprites.length == 1) {
+            return new Dimension(mapsprites[0].getSpritesWidth()*3*PIXEL_WIDTH, mapsprites[0].getSpritesHeight()*3*PIXEL_HEIGHT);
+        } else {
+            int w = DEFAULT_SPRITES_PER_ROW*3*PIXEL_WIDTH;
+            int h = ((mapsprites.length)*2/DEFAULT_SPRITES_PER_ROW)*3*PIXEL_HEIGHT;
+            if ((mapsprites.length*2) % DEFAULT_SPRITES_PER_ROW != 0)
+                h += 3*PIXEL_HEIGHT;
+            return new Dimension(w, h);
+        }
     }
 
     @Override
     protected void buildImage(Graphics graphics) {
-        int xStep = 2*3*PIXEL_WIDTH;
-        int w = xStep/2*DEFAULT_SPRITES_PER_ROW;
-        int yStep = 3*PIXEL_HEIGHT;
-        int x = 0, y = 0;
         for (int i = 0; i < mapsprites.length; i++) {
-            if (mapsprites[i] != null && mapsprites[i].getTileset() != null) {
-                graphics.drawImage(mapsprites[i].getIndexedColorImage(), x, y, null);
-            }
-            x += xStep;
-            if (x >= w) {
-                x = 0;
-                y += yStep;
+            if (mapsprites[i] != null) {
+                graphics.drawImage(mapsprites[i].getIndexedColorImage(), 0, i*3*PIXEL_HEIGHT, null);
             }
         }
     }

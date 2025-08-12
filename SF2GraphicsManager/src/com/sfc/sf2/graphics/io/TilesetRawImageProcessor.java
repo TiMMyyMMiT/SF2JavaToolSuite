@@ -26,7 +26,7 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
     protected Tileset parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
-        if(imageWidth%8!=0 || imageHeight%8!=0){
+        if (imageWidth%8 != 0 || imageHeight%8 != 0) {
             Console.logger().warning("IWarning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
         }
         Palette palette = pckg.preLoadedPalette();
@@ -41,7 +41,7 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         for(int t = 0; t < tiles.length; t++) {
             int x = t%tilesPerRow*8;
             int y = t/tilesPerRow*8;
-            Console.logger().finest("Building tile from coordinates "+x+":"+y);
+            //onsole.logger().finest("Building tile from coordinates "+x+":"+y);
             Tile tile = new Tile();
             tile.setId(tileId);
             tile.setPalette(palette);

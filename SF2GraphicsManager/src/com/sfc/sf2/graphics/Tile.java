@@ -80,8 +80,8 @@ public class Tile {
     public void clearIndexedColorImage() {
         if (indexedColorImage != null) {
             indexedColorImage.flush();
+            indexedColorImage = null;
         }
-        indexedColorImage = null;
     }
     
     public void drawIndexedColorPixels(BufferedImage image, int[][] pixels, int x, int y){
