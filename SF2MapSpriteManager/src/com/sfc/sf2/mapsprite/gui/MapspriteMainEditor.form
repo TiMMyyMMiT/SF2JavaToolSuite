@@ -282,10 +282,11 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jPanel3" pref="281" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jPanel5" min="-2" pref="157" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Component id="jPanel3" min="-2" pref="193" max="-2" attributes="0"/>
+                                  <EmptySpace pref="59" max="32767" attributes="0"/>
+                                  <Component id="jPanel5" min="-2" pref="186" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -439,7 +440,7 @@
                                                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -541,14 +542,14 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTabbedPane2" pref="840" max="32767" attributes="0"/>
+                                      <Component id="jTabbedPane2" pref="0" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTabbedPane2" alignment="0" pref="455" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane2" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                           </Layout>
@@ -572,9 +573,9 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="directoryButton2" pref="828" max="32767" attributes="0"/>
+                                                  <Component id="directoryButton2" pref="566" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="jLabel1" pref="746" max="32767" attributes="0"/>
+                                                      <Component id="jLabel1" pref="484" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                                                   </Group>
@@ -637,9 +638,9 @@
                                           <Group type="102" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="directoryButton3" pref="828" max="32767" attributes="0"/>
+                                                  <Component id="directoryButton3" pref="566" max="32767" attributes="0"/>
                                                   <Group type="102" attributes="0">
-                                                      <Component id="jLabel9" max="32767" attributes="0"/>
+                                                      <Component id="jLabel9" pref="254" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jPanel2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
@@ -663,7 +664,7 @@
                                                   </Group>
                                                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="-2" pref="263" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -679,12 +680,14 @@
                                     </Component>
                                     <Component class="javax.swing.JLabel" name="jLabel9">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Select a directory to create new &quot;mapspriteXXX-Y-Z.png&quot; files.&lt;br&gt;&#xa; Recommended to save as PNG or GIF.&lt;br&gt;&#xa;Exported color format : 4BPP / 16 indexed colors.&lt;br&gt;&#xa;Transparent color at index 0.&#xa;&lt;/html&gt;"/>
+                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Select a directory to create new mapsprite images.&lt;br&gt;&#xa;Exported color format : 4BPP / 16 indexed colors.&lt;br&gt;&#xa;Transparent color at index 0.&#xa;&lt;/html&gt;"/>
+                                        <Property name="verticalAlignment" type="int" value="1"/>
+                                        <Property name="verticalTextPosition" type="int" value="1"/>
                                       </Properties>
                                     </Component>
                                     <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButton3">
                                       <Properties>
-                                        <Property name="directoryPath" type="java.lang.String" value=".\u005cexport" containsInvalidXMLChars="true"/>
+                                        <Property name="directoryPath" type="java.lang.String" value=".\u005cexport\u005c" containsInvalidXMLChars="true"/>
                                         <Property name="labelText" type="java.lang.String" value="Image Directory :"/>
                                       </Properties>
                                     </Component>
@@ -716,7 +719,12 @@
                                                           <Component id="jComboBox2" min="-2" pref="132" max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
-                                                  <EmptySpace pref="77" max="32767" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="infoButton1" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="infoButton2" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                         </DimensionLayout>
@@ -727,12 +735,14 @@
                                                   <Group type="103" groupAlignment="3" attributes="0">
                                                       <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="infoButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jRadioButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jRadioButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="2" attributes="0">
+                                                      <Component id="infoButton2" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jRadioButton2" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jRadioButton1" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel4" alignment="2" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
@@ -765,14 +775,16 @@
                                         <Component class="javax.swing.JComboBox" name="jComboBox2">
                                           <Properties>
                                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                              <StringArray count="4">
+                                              <StringArray count="3">
                                                 <StringItem index="0" value="Item 1"/>
                                                 <StringItem index="1" value="Item 2"/>
                                                 <StringItem index="2" value="Item 3"/>
-                                                <StringItem index="3" value="Item 4"/>
                                               </StringArray>
                                             </Property>
                                           </Properties>
+                                          <Events>
+                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox2ActionPerformed"/>
+                                          </Events>
                                           <AuxValues>
                                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                                           </AuxValues>
@@ -780,6 +792,18 @@
                                         <Component class="javax.swing.JLabel" name="jLabel6">
                                           <Properties>
                                             <Property name="text" type="java.lang.String" value="Export :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
+                                          <Properties>
+                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;The number of sprites-per-image:&lt;br&gt;&lt;b&gt;INDIVIDUAL_FILES:&lt;/b&gt; i.e. all 6 frames (2x up, 2x left, 2x, right) of mapspriteXXX will be exported as individual files. This results in 6x images for each row, with the filename &quot;mapspriteXXX-Y-Z&quot;.&lt;br&gt;&lt;b&gt;FILE_PER_DIRECTION:&lt;/b&gt; i.e. the 3 facing directions (up, left, right) of mapspriteXXX will be exported as separate images. This results in 3 images for each row, with the filename &quot;mapsprite-XXX-Y&quot;.&lt;br&gt;&lt;b&gt;FILE_PER_SPRITE:&lt;/b&gt; All 6 frames of mapspriteXXX will be exported as a single file. This results in1x image per row with the filename &quot;mapsprite-XXX&quot;.&lt;/html&gt;"/>
+                                            <Property name="text" type="java.lang.String" value=""/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton2">
+                                          <Properties>
+                                            <Property name="messageText" type="java.lang.String" value="Export the images as .PNG or .GIF format."/>
+                                            <Property name="text" type="java.lang.String" value=""/>
                                           </Properties>
                                         </Component>
                                       </SubComponents>

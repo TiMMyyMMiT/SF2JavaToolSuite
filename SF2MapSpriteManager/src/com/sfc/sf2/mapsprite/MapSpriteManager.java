@@ -14,7 +14,6 @@ import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
 import com.sfc.sf2.graphics.Tileset;
-import com.sfc.sf2.graphics.io.TilesetRawImageProcessor;
 import com.sfc.sf2.helpers.FileHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.io.MapSpriteDisassemblyProcessor;
@@ -22,7 +21,6 @@ import com.sfc.sf2.mapsprite.io.MapSpritePackage;
 import com.sfc.sf2.mapsprite.io.MapSpriteRawImageProcessor;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
-import com.sfc.sf2.palette.io.PalettePackage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -151,14 +149,21 @@ public class MapSpriteManager extends AbstractManager {
             try {
                 int[] indices = getIndicesFromFilename(tilesetPath.getFileName());
                 MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), palette);
-                Tileset[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
+                Tileset[] frames = mapSpriteRawImageProcessor.importRawImage(tilesetPath, pckg);
                 frameCount+=frames.length;
                 if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
                     lastMapSprite = new MapSprite(indices[0]);
                     spritesList.add(lastMapSprite);
                 }
-                lastMapSprite.addFrame(frames[0], indices[1], 0);
-                lastMapSprite.addFrame(frames[1], indices[1], 1);
+                for (int i = 0; i < frames.length; i++) {
+                    if (indices[1] == -1) {
+                        lastMapSprite.addFrame(frames[i], i/2, i%2);
+                    } else if (indices[2] == -1) {
+                        lastMapSprite.addFrame(frames[i], indices[1], i%2);
+                    } else {
+                        lastMapSprite.addFrame(frames[i], indices[1], indices[2]);
+                    }
+                }
             } catch (Exception e) {
                 failedToLoad++;
                 Console.logger().warning("Mapsprite could not be imported : " + tilesetPath + " : " + e);
@@ -178,6 +183,7 @@ public class MapSpriteManager extends AbstractManager {
         Console.logger().finest("ENTERING exportImage");
         int failedToSave = 0;
         Path filePath = null;
+        int files = 0;
         for (MapSprite mapSprite : mapSprites) {
             try {
                 int index = mapSprite.getIndex();
@@ -187,8 +193,9 @@ public class MapSpriteManager extends AbstractManager {
                             Tileset[] frames = new Tileset[1];
                             frames[0] = mapSprite.getFrame(i/2, i%2);
                             if (frames[0] != null) {
-                                filePath = basePath.resolve(String.format("mapsprite%03d-%d-%ds", index, i/2, i%2, AbstractRawImageProcessor.GetFileExtensionString(format)));
-                                mapSpriteRawImageProcessor.exportRawImage(filePath, mapSprite.getFrames(), null);
+                                filePath = basePath.resolve(String.format("mapsprite%03d-%d-%d%s", index, i/2, i%2, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                                mapSpriteRawImageProcessor.exportRawImage(filePath, frames, null);
+                                files++;
                             }
                         }
                     break;
@@ -197,15 +204,17 @@ public class MapSpriteManager extends AbstractManager {
                             Tileset[] frames = new Tileset[2];
                             frames[0] = mapSprite.getFrame(i, 0);
                             frames[1] = mapSprite.getFrame(i, 1);
-                            if (frames[0] != null && frames[i] != null) {
-                                filePath = basePath.resolve(String.format("mapsprite%03d-%ds", index, i, AbstractRawImageProcessor.GetFileExtensionString(format)));
-                                mapSpriteRawImageProcessor.exportRawImage(filePath, mapSprite.getFrames(), null);
+                            if (frames[0] != null && frames[1] != null) {
+                                filePath = basePath.resolve(String.format("mapsprite%03d-%d%s", index, i, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                                mapSpriteRawImageProcessor.exportRawImage(filePath, frames, null);
+                                files++;
                             }
                         }
                         break;
                     case FILE_PER_SPRITE:
-                        filePath = basePath.resolve(String.format("mapsprite%03ds", index, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                        filePath = basePath.resolve(String.format("mapsprite%03d%s", index, AbstractRawImageProcessor.GetFileExtensionString(format)));
                         mapSpriteRawImageProcessor.exportRawImage(filePath, mapSprite.getFrames(), null);
+                        files++;
                         break;
                     default:
                         throw new ExecutionControl.NotImplementedException("Export format " + exportMode + "not supported.");
@@ -215,7 +224,7 @@ public class MapSpriteManager extends AbstractManager {
                 Console.logger().warning("Mapsprite could not be exported : " + filePath + " : " + e);
             }
         }
-        Console.logger().info((mapSprites.length - failedToSave) + " mapsprites successfully exported.");
+        Console.logger().info((files - failedToSave) + " mapsprites successfully exported.");
         if (failedToSave > 0) {
             Console.logger().severe(failedToSave + " mapsprites failed to export. See logs above");
         }
@@ -233,9 +242,9 @@ public class MapSpriteManager extends AbstractManager {
             name = name.substring(0, dotIndex);
         }
         String[] split = name.substring(9).split("-");
-        int[] indices = new int[split.length];
+        int[] indices = new int[3];
         for (int i = 0; i < indices.length; i++) {
-            indices[i] = Integer.parseInt(split[i]);
+            indices[i] = i < split.length ? Integer.parseInt(split[i]) : -1;
         }
         return indices;
     }

@@ -13,7 +13,6 @@ import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.palette.io.PalettePackage;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
@@ -22,56 +21,57 @@ import java.awt.image.WritableRaster;
  *
  * @author TiMMy
  */
-public class MapSpriteRawImageProcessor extends AbstractRawImageProcessor<Tileset[], PalettePackage> {
+public class MapSpriteRawImageProcessor extends AbstractRawImageProcessor<Tileset[], MapSpritePackage> {
 
     @Override
-    protected Tileset[] parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
+    protected Tileset[] parseImageData(WritableRaster raster, IndexColorModel icm, MapSpritePackage pckg) throws DisassemblyException {
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
         if (imageWidth%8 != 0 || imageHeight%8 != 0) {
             Console.logger().warning("Warning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
         }
-        Palette palette = pckg.preLoadedPalette();
+        Palette palette = pckg.palette();
         if (palette == null) {
-            new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
+            new Palette(pckg.name(), Palette.fromICM(icm), true);
         }
         int framesCount = imageWidth*imageHeight/24/24;
         Tileset[] frames = new Tileset[framesCount];
-        if (frames.length > 6 || frames.length%2 == 1) {
-            Console.logger().warning("Warning : Wrong number of sprites detected, may not import correctly. Expecting 2, 4, or 6. Found : " + frames.length);
+        if (frames.length != 1 && frames.length != 2 && frames.length != 6) {
+            Console.logger().warning("Warning : Wrong number of sprites detected, may not import correctly. Expecting 1, 2, or 6. Found : " + frames.length);
         }
-        int tilesWidth = imageWidth/24;
+        int frameRows = (imageWidth/8)/3;
+        int tileId = 0;
         for (int f = 0; f < frames.length; f++) {
+            int fx = (f%frameRows)*3;
+            int fy = (f/frameRows)*3;
             Tile[] tiles = new Tile[9];
-            int tileId = 0;
-            int[] pixels = new int[64];
-            for(int t = 0; t < tiles.length; t++) {
-                int x = t%tilesWidth*8;
-                int y = t/tilesWidth*8;
+            for (int i = 0; i < tiles.length; i++) {
+                int[] pixels = new int[64];
+                int x = i%3;
+                int y = i/3;
                 //Console.logger().finest("Building tile from coordinates "+x+":"+y);
                 Tile tile = new Tile();
                 tile.setId(tileId);
                 tile.setPalette(palette);
-                raster.getPixels(x, y, 8, 8, pixels);
-                for(int j=0;j<8;j++){
-                    for(int i=0;i<8;i++){
-                        tile.setPixel(i, j, pixels[i+j*8]);
-                    }
-                }
-                Console.logger().finest(tile.toString());
-                tiles[tileId] = tile;   
+                raster.getPixels((fx+x)*PIXEL_WIDTH, (fy+y)*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
+                tile.setPixels(pixels);
+                //Console.logger().finest(tile.toString());
+                tiles[i] = tile;
                 tileId++;
             }
-            frames[f] = new Tileset(pckg.name(), tiles, tilesWidth);
+            frames[f] = new Tileset(pckg.name(), tiles, imageWidth/8);
         }
         
         return frames;
     }
 
     @Override
-    protected BufferedImage packageImageData(Tileset[] item, PalettePackage pckg) throws DisassemblyException {
-        int tilesPerRow = 2;
+    protected BufferedImage packageImageData(Tileset[] item, MapSpritePackage pckg) throws DisassemblyException {
+        int tilesPerRow = item.length <= 1 ? 1 : 2;
         int imageHeight = item.length/2;
+        if (item.length%2 != 0) {
+            imageHeight++;
+        }
         Palette palette = null;
         for (int i = 0; i < item.length; i++) {
             if (item[i] != null && item[i].getTiles() != null) {
@@ -82,24 +82,16 @@ public class MapSpriteRawImageProcessor extends AbstractRawImageProcessor<Tilese
         BufferedImage image = new BufferedImage(tilesPerRow*3*PIXEL_WIDTH, imageHeight*3*PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, palette.getIcm());
         WritableRaster raster = image.getRaster();
 
-        int[] pixels = new int[64];
         for (int f = 0; f < item.length; f++) {
             if (item[f] == null || item[f].getTiles() == null) {
                 continue;
             }
-            int fx = (f%tilesPerRow)*3*PIXEL_WIDTH;
-            int fy = (f/tilesPerRow)*3*PIXEL_HEIGHT;
+            int fx = (f%tilesPerRow)*3;
+            int fy = (f/tilesPerRow)*3;
             Tile[] tiles = item[f].getTiles();
-            for(int t = 0; t < tiles.length; t++) {
-                if (tiles[t] != null) {
-                    for(int j=0;j<8;j++){
-                        for(int i=0;i<8;i++){
-                            pixels[i+j*8] = tiles[t].getPixels()[i][j];
-                        }
-                    }
-                    int x = t%tilesPerRow*8;
-                    int y = t/tilesPerRow*8;
-                    raster.setPixels(fx+x, fy+y, 8, 8, pixels);
+            for(int i = 0; i < tiles.length; i++) {
+                if (tiles[i] != null) {
+                    raster.setPixels((fx+i%3)*PIXEL_WIDTH, (fy+i/3)*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT, tiles[i].getPixels());
                 }
             }
         }

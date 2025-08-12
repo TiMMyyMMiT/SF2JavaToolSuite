@@ -7,6 +7,8 @@ package com.sfc.sf2.graphics.compression;
 
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.Tile;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.palette.Palette;
 
 /**
@@ -46,11 +48,11 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
         Console.logger().finest("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
         byte[] output = new byte[tiles.length*32];
         for(int i=0;i<tiles.length;i++){
-            int[][] pixels = tiles[i].getPixels();
-            for(int y=0;y<8;y++){
-                for(int x=0;x<8;x+=2){
-                    byte first = (byte)pixels[x][y];
-                    byte second = (byte)pixels[x+1][y];
+            int[] pixels = tiles[i].getPixels();
+            for(int y=0;y<pixels.length;y++){
+                for(int x=0;x<PIXEL_WIDTH;x+=2){
+                    byte first = (byte)pixels[x+y*PIXEL_WIDTH];
+                    byte second = (byte)pixels[x+1+y*PIXEL_WIDTH];
                     output[(i*64+y*8+x)/2] = (byte)(first*16 | second);
                 }
             }

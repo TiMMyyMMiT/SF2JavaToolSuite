@@ -42,9 +42,11 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
     protected byte[] packageDisassemblyData(Tileset[] item, MapSpritePackage pckg) throws DisassemblyException {
         Tile[] tiles = new Tile[9*item.length];
         for (int i = 0; i < item.length; i++) {
-            if (tiles != null)
-                tiles = TileHelpers.reorderTilesForDisasssembly(tiles, 1, 1, 3);
-                System.arraycopy(item[i].getTiles(), 0, tiles, i*9, 9);
+            if (tiles != null) {
+                Tile[] frame = item[i].getTiles();
+                frame = TileHelpers.reorderTilesForDisasssembly(frame, 1, 1, 3);
+                System.arraycopy(frame, 0, tiles, i*9, 9);
+            }
         }
         
         byte[] bytes = new BasicGraphicsDecoder().encode(tiles);

@@ -39,19 +39,15 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         int tileId = 0;
         int[] pixels = new int[64];
         for(int t = 0; t < tiles.length; t++) {
-            int x = t%tilesPerRow*8;
-            int y = t/tilesPerRow*8;
+            int x = (t%tilesPerRow)*8;
+            int y = (t/tilesPerRow)*8;
             //onsole.logger().finest("Building tile from coordinates "+x+":"+y);
             Tile tile = new Tile();
             tile.setId(tileId);
             tile.setPalette(palette);
             raster.getPixels(x, y, 8, 8, pixels);
-            for(int j=0;j<8;j++){
-                for(int i=0;i<8;i++){
-                    tile.setPixel(i, j, pixels[i+j*8]);
-                }
-            }
-            Console.logger().finest(tile.toString());
+            tile.setPixels(pixels);
+            //Console.logger().finest(tile.toString());
             tiles[tileId] = tile;   
             tileId++;
         }
@@ -71,17 +67,11 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_BINARY, tiles[0].getIcm());
         WritableRaster raster = image.getRaster();
 
-        int[] pixels = new int[64];
         for(int t = 0; t < tiles.length; t++) {
             if (tiles[t] != null) {
-                for(int j=0;j<8;j++){
-                    for(int i=0;i<8;i++){
-                        pixels[i+j*8] = tiles[t].getPixels()[i][j];
-                    }
-                }
                 int x = t%tilesPerRow*8;
                 int y = t/tilesPerRow*8;
-                raster.setPixels(x, y, 8, 8, pixels);
+                raster.setPixels(x, y, 8, 8, tiles[t].getPixels());
             }
         }
         return image;

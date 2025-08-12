@@ -28,6 +28,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         initComponents();
         java.awt.EventQueue.invokeLater(() -> {
             initEditor();
+            SettingsManager.setSavingAllowed(true); //Slight hack to prevent controls affecting settings on initialisation
         });
     }
     
