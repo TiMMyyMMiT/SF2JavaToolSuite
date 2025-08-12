@@ -29,7 +29,10 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         if(imageWidth%8!=0 || imageHeight%8!=0){
             Console.logger().warning("IWarning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
         }
-        Palette palette = new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
+        Palette palette = pckg.preLoadedPalette();
+        if (palette == null) {
+            new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
+        }
         int tilesPerRow = imageWidth/8;
         Console.logger().finest("Tiles per row : " + tilesPerRow);
         Tile[] tiles = new Tile[(imageWidth/8)*(imageHeight/8)];

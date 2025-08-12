@@ -6,7 +6,6 @@
 package com.sfc.sf2.core.io.asm;
 
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.io.BufferedReader;
 import java.io.File;
