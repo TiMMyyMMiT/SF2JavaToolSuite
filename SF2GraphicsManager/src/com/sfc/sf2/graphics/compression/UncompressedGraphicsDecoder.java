@@ -33,7 +33,7 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
                     tile.setPixel(x+1, y, secondPixel);
                 }
             }
-            Console.logger().finest(tile.toString());
+            //Console.logger().finest(tile.toString());
             tiles[i] = tile;
         }
         Console.logger().finest("EXITING decode");
