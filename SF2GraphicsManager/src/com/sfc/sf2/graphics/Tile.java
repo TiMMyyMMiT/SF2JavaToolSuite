@@ -9,7 +9,6 @@ import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.IndexColorModel;
-import javax.swing.JPanel;
 
 /**
  *
@@ -79,6 +78,9 @@ public class Tile {
     }
     
     public void clearIndexedColorImage() {
+        if (indexedColorImage != null) {
+            indexedColorImage.flush();
+        }
         indexedColorImage = null;
     }
     

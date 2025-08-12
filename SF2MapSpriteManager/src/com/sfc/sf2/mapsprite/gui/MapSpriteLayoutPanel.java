@@ -24,7 +24,7 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
     
     public MapSpriteLayoutPanel() {
         super();
-        setGridDimensions(8, 8, -1, PIXEL_HEIGHT*3);
+        setGridDimensions(8, 8);
     }
 
     @Override
@@ -35,24 +35,26 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
     @Override
     protected Dimension getImageDimensions() {
         int w = DEFAULT_SPRITES_PER_ROW*3*PIXEL_WIDTH;
-        int h = (mapsprites.length*2/DEFAULT_SPRITES_PER_ROW)*3*PIXEL_HEIGHT;
+        int h = ((mapsprites.length)*2/DEFAULT_SPRITES_PER_ROW)*3*PIXEL_HEIGHT;
+        if ((mapsprites.length*2) % DEFAULT_SPRITES_PER_ROW != 0)
+            h += 3*PIXEL_HEIGHT;
         return new Dimension(w, h);
     }
 
     @Override
     protected void buildImage(Graphics graphics) {
         int xStep = 2*3*PIXEL_WIDTH;
-        int w = xStep*DEFAULT_SPRITES_PER_ROW;
+        int w = xStep/2*DEFAULT_SPRITES_PER_ROW;
         int yStep = 3*PIXEL_HEIGHT;
         int x = 0, y = 0;
         for (int i = 0; i < mapsprites.length; i++) {
             if (mapsprites[i] != null && mapsprites[i].getTileset() != null) {
                 graphics.drawImage(mapsprites[i].getIndexedColorImage(), x, y, null);
-                x += xStep;
-                if (x >= w) {
-                    x = 0;
-                    y += yStep;
-                }
+            }
+            x += xStep;
+            if (x >= w) {
+                x = 0;
+                y += yStep;
             }
         }
     }

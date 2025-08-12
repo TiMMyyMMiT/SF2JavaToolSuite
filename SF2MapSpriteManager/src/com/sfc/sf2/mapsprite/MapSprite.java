@@ -20,7 +20,6 @@ public class MapSprite {
     private int frameIndex;
     private Tileset tileset;
     
-        
     public MapSprite(Tileset tileset, int index, int facingIndex, int frameIndex) {
         this.index = index;
         this.facingIndex = facingIndex;

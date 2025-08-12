@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.core.io.asm;
 
-import com.sfc.sf2.core.gui.controls.Console;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,63 +15,76 @@ import java.util.HashMap;
  */
 public class EntriesAsmData {
     private final ArrayList<String> entries = new ArrayList<>();
-    private final ArrayList<String> uniqueEntries = new ArrayList<>();
-    private final HashMap<String, Path> pathMap = new HashMap<>();
+    private final ArrayList<Path> paths = new ArrayList<>();
+    private final HashMap<Integer, Integer> hashMap = new HashMap<>();
+    private final ArrayList<Integer> entryIndices = new ArrayList<>();
+    private final ArrayList<Integer> uniqueEntryIndices = new ArrayList<>();
     
     public int entriesCount() {
-        return entries.size();
+        return entryIndices.size();
     }
     
     public int uniquePathsCount() {
-        return entries.size();
+        return entryIndices.size();
     }
     
     public String getEntry(int index) {
-        if (index >= 0 && index < entries.size()) {
-            return entries.get(index);
+        if (index >= 0 && index < entryIndices.size()) {
+            return entries.get(entryIndices.get(index));
         } else {
             return null;
         }
     }
     
     public String getUniqueEntries(int index) {
-        if (index >= 0 && index < uniqueEntries.size()) {
-            return uniqueEntries.get(index);
+        if (index >= 0 && index < uniqueEntryIndices.size()) {
+            return entries.get(uniqueEntryIndices.get(index));
         } else {
             return null;
         }
     }
     
     public Path getPathForEntry(int index) {
-        if (index >= 0 && index < entries.size()) {
-            return pathMap.get(entries.get(index));
+        if (index >= 0 && index < entryIndices.size()) {
+            return paths.get(entryIndices.get(index));
         } else {
             return null;
         }
     }
     
     public Path getPathForUnique(int index) {
-        if (index >= 0 && index < uniqueEntries.size()) {
-            return pathMap.get(uniqueEntries.get(index));
+        if (index >= 0 && index < uniqueEntryIndices.size()) {
+            return paths.get(uniqueEntryIndices.get(index));
         } else {
             return null;
         }
     }
     
     public void addEntry(String entry) {
-        entries.add(entry);
-        if (!pathMap.containsKey(entry)) {
-            uniqueEntries.add(entry);
-            pathMap.put(entry, null);
+        int hash = entry.hashCode();
+        if (hashMap.containsKey(hash)) {
+            int index = hashMap.get(hash);
+            entryIndices.add(index);
+            
+        } else {
+            int index = entries.size();
+            entries.add(entry);
+            paths.add(null);
+            hashMap.put(hash, index);
+            entryIndices.add(index);
+            uniqueEntryIndices.add(index);
         }
     }
     
     public void addPath(String entry, Path path) {
-        if (!pathMap.containsKey(entry)) {
+        int hash = entry.hashCode();
+        if (!hashMap.containsKey(hash)) {
             addEntry(entry);
         }
-        if (pathMap.get(entry) == null) {
-            pathMap.replace(entry, path);
+        int index = hashMap.get(hash);
+        Path existing = paths.get(index);
+        if (existing == null) {
+            paths.set(index, path);
         }
     }
 }

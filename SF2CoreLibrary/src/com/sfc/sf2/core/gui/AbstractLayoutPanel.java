@@ -40,12 +40,15 @@ public abstract class AbstractLayoutPanel extends JPanel {
     
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);   
-        g.drawImage(paintImage(), 0, 0, this);       
+        super.paintComponent(g);
+        g.drawImage(paintImage(), 0, 0, this);
     }
     
     public BufferedImage paintImage() {
         if (redraw && hasData()) {
+            if (currentImage != null) {
+                currentImage.flush();
+            }
             //Setup image
             Dimension dims = getImageDimensions();
             currentImage = new BufferedImage(dims.width, dims.height, BufferedImage.TYPE_INT_ARGB);
@@ -99,11 +102,12 @@ public abstract class AbstractLayoutPanel extends JPanel {
         currentImage = resize(currentImage);
     }
     
-    private BufferedImage resize(BufferedImage image){
+    private BufferedImage resize(BufferedImage image) {
         BufferedImage newImage = new BufferedImage(image.getWidth()*displayScale, image.getHeight()*displayScale, BufferedImage.TYPE_INT_ARGB);
         Graphics g = newImage.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth()*displayScale, image.getHeight()*displayScale, null);
         g.dispose();
+        image.flush();
         return newImage;
     }    
     
