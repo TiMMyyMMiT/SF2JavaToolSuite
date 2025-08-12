@@ -50,6 +50,8 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     
     @Override
     protected void repaintEditorLayout() {
+        super.repaintEditorLayout();
+        
         tilesetLayoutPanel.revalidate();
         tilesetLayoutPanel.repaint();
     }

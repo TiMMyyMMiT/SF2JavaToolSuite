@@ -27,14 +27,14 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
         } else if (tiles.length != 18) {
             System.out.println("Mapsprite tileset not loaded, expected 18 tiles but found " + tiles.length + ". Mapsprite : " + pckg.name());
         }
-        tiles = TileHelpers.reorderTilesSequentially(tiles, 1, 2, 3);
+        tiles = TileHelpers.reorderTilesSequentially(tiles, 2, 1, 3);
         Tileset tileset = new Tileset(pckg.name(), tiles, 6);
         return new MapSprite(tileset, pckg.indices());
     }
 
     @Override
     protected byte[] packageDisassemblyData(MapSprite item, MapSpritePackage pckg) throws DisassemblyException {
-        Tile[] tiles = TileHelpers.reorderTilesForDisasssembly(item.getTileset().getTiles(), 1, 2, 3);
+        Tile[] tiles = TileHelpers.reorderTilesForDisasssembly(item.getTileset().getTiles(), 2, 1, 3);
         byte[] bytes = new BasicGraphicsDecoder().encode(tiles);
         if (bytes == null || bytes.length == 0) {
             throw new DisassemblyException("Tileset not loaded. Tiles are empty.");

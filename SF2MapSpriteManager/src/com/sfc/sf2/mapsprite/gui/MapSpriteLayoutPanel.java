@@ -18,13 +18,13 @@ import java.awt.Graphics;
  */
 public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
     
-    private static final int DEFAULT_SPRITES_PER_ROW = 6;   //Sprite-pairs
+    private static final int DEFAULT_SPRITES_PER_ROW = 6;   //up, left, down
     
     private MapSprite[] mapsprites;
     
     public MapSpriteLayoutPanel() {
         super();
-        setGridDimensions(8, 8, -1, PIXEL_HEIGHT*2);
+        setGridDimensions(8, 8, -1, PIXEL_HEIGHT*3);
     }
 
     @Override
@@ -34,17 +34,27 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        return new Dimension(DEFAULT_SPRITES_PER_ROW*PIXEL_WIDTH, mapsprites.length*PIXEL_HEIGHT);
+        int w = DEFAULT_SPRITES_PER_ROW*3*PIXEL_WIDTH;
+        int h = (mapsprites.length*2/DEFAULT_SPRITES_PER_ROW)*3*PIXEL_HEIGHT;
+        return new Dimension(w, h);
     }
 
     @Override
     protected void buildImage(Graphics graphics) {
-        graphics.drawImage(mapsprites[0].getIndexedColorImage(), 0, PIXEL_HEIGHT, this);
-        /*for (int i = 0; i < mapsprites.length; i++) {
+        int xStep = 2*3*PIXEL_WIDTH;
+        int w = xStep*DEFAULT_SPRITES_PER_ROW;
+        int yStep = 3*PIXEL_HEIGHT;
+        int x = 0, y = 0;
+        for (int i = 0; i < mapsprites.length; i++) {
             if (mapsprites[i] != null && mapsprites[i].getTileset() != null) {
-                graphics.drawImage(mapsprites[i].getIndexedColorImage(), 0, i*PIXEL_HEIGHT, this);
+                graphics.drawImage(mapsprites[i].getIndexedColorImage(), x, y, null);
+                x += xStep;
+                if (x >= w) {
+                    x = 0;
+                    y += yStep;
+                }
             }
-        }*/
+        }
     }
 
     public MapSprite[] getMapSprite() {

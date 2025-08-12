@@ -53,8 +53,7 @@ public class MapSpriteManager extends AbstractManager {
         
     //TODO update to new format
     public MapSprite[] importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
-        return importDisassembly(paletteFilePath, Path.of("D:\\TiMMy\\Dev\\ShiningForce2\\SF2DISASM\\disasm\\data\\graphics\\mapsprites\\mapsprite000-0.bin"));
-        /*Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
+        Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
         EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
         Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
@@ -64,7 +63,7 @@ public class MapSpriteManager extends AbstractManager {
             Path tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
             try {
                 int[] indices = getIndicesFromFilename(tilesetPath.getFileName());
-                MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), palette, indices);
+                MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), palette, indices);
                 mapSprites[i] = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
             } catch (Exception e) {
                 failedToLoad++;
@@ -77,7 +76,7 @@ public class MapSpriteManager extends AbstractManager {
             Console.logger().severe(failedToLoad + " mapsprites failed to load. See logs above");
         }
         Console.logger().finest("EXITING importDisassemblyFromEntryFile");
-        return mapSprites;*/
+        return mapSprites;
     }
     
     public void exportDisassembly(String basepath) {
