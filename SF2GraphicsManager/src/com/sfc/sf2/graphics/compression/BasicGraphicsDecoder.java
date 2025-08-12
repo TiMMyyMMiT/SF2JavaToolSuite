@@ -96,7 +96,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
     public byte[] encode(Tile[] tiles) {
         Console.logger().finest("ENTERING encode");
         byte[] input = new UncompressedGraphicsDecoder().encode(tiles);
-        Console.logger().finest("input = " + BinaryHelpers.bytesToHex(input));
+        //Console.logger().finest("input = " + BinaryHelpers.bytesToHex(input));
         byte[] output = null;
         List<Short> outputWords = new ArrayList();
         Short currentCommandWord = null;
@@ -226,7 +226,6 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
         }  
         outputWords.set(commandWordIndex, (short) (outputWords.get(commandWordIndex) | (0x8000 >> commandWordCursor)));
         outputWords.add((short)0);
-        Console.logger().finest("output = " + BinaryHelpers.shortListToHex(outputWords));
         
         output = new byte[outputWords.size()*2];
         for(int i=0;i<outputWords.size();i++){
@@ -235,6 +234,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
             output[i*2+1] = (byte)(word & 0xff);
         }
         Console.logger().finest("output bytes length = " + output.length);
+        //Console.logger().finest("output = " + BinaryHelpers.shortListToHex(outputWords));
         Console.logger().finest("EXITING decode");
         return output;
     }

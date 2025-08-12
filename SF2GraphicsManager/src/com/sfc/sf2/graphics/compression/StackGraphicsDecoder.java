@@ -12,7 +12,6 @@ import com.sfc.sf2.palette.Palette;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  *
@@ -277,7 +276,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         StringBuilder commandSb = new StringBuilder(16);
         StringBuilder dataSb = new StringBuilder();
         byte[] inputData = new UncompressedGraphicsDecoder().encode(tiles);
-        Console.logger().finest("input = " + BinaryHelpers.bytesToHex(inputData));
+        //Console.logger().finest("input = " + BinaryHelpers.bytesToHex(inputData));
         int inputCursor = 0;
         byte[] output;
         int potentialCopyLength;
@@ -376,7 +375,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         String commandBitString = getCommandBitString(commandSb);
         outputSb.append(commandBitString);
         outputSb.append(dataSb);
-        Console.logger().finest("output = " + outputSb.toString());
+        //Console.logger().finest("output = " + outputSb.toString());
         
         /* Word-wise padding */
         while(outputSb.length()%16 != 0){
@@ -390,7 +389,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
             output[i] = b;
         }
         Console.logger().finest("output bytes length = " + output.length);
-        Console.logger().finest("output = " + BinaryHelpers.bytesToHex(output));
+        //Console.logger().finest("output = " + BinaryHelpers.bytesToHex(output));
         Console.logger().finest("EXITING encode");
         lastEncodedUncompressedBytes = inputData.length;
         return output;

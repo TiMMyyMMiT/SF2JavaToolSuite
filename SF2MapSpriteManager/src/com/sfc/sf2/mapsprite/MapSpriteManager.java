@@ -64,22 +64,38 @@ public class MapSpriteManager extends AbstractManager {
                 mapSprites[i] = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
             } catch (Exception e) {
                 failedToLoad++;
-                Console.logger().warning("Mapsprite could not be loaded : " + tilesetPath + " : " + e);
+                Console.logger().warning("Mapsprite could not be imported : " + tilesetPath + " : " + e);
             }
         }
         Console.logger().info(mapSprites.length + " mapsprites successfully imported from entries file : " + entriesPath);
         Console.logger().info((entriesData.entriesCount() - entriesData.uniquePathsCount()) + " duplicate mapsprite entries found.");
         if (failedToLoad > 0) {
-            Console.logger().severe(failedToLoad + " mapsprites failed to load. See logs above");
+            Console.logger().severe(failedToLoad + " mapsprites failed to import. See logs above");
         }
         Console.logger().finest("EXITING importDisassemblyFromEntryFile");
         return mapSprites;
     }
     
-    public void exportDisassembly(String basepath) {
-        /*Console.logger().finest("ENTERING exportDisassembly");
-        DisassemblyManager.exportDisassembly(mapSprites, basepath);
-        Console.logger().finest("EXITING exportDisassembly");*/
+    public void exportDisassembly(Path basePath) {
+        Console.logger().finest("ENTERING exportDisassembly");
+        int failedToSave = 0;
+        Path filePath = null;
+        for (MapSprite mapSprite : mapSprites) {
+            try {
+                int index = mapSprite.getIndex();
+                int facing = mapSprite.getFacingIndex();
+                filePath = basePath.resolve(String.format("mapsprite%3d-%d.bin", index, facing));
+                mapSpriteDisassemblyProcessor.exportDisassembly(filePath, mapSprite, null);
+            } catch (Exception e) {
+                failedToSave++;
+                Console.logger().warning("Mapsprite could not be exported : " + filePath + " : " + e);
+            }
+        }
+        Console.logger().info((mapSprites.length - failedToSave) + " mapsprites successfully exported.");
+        if (failedToSave > 0) {
+            Console.logger().severe(failedToSave + " mapsprites failed to export. See logs above");
+        }
+        Console.logger().finest("EXITING exportDisassembly");
     } 
     
     public void importImage(String basepath) {

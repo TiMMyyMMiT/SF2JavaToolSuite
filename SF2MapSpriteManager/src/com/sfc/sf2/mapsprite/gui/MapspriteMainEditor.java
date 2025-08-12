@@ -522,7 +522,14 @@ public class MapspriteMainEditor extends AbstractMainEditor {
             }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        //mapSpriteManager.exportDisassembly(jTextField13.getText());
+        Path directoryPath = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
+        if (!PathHelpers.createPathIfRequred(directoryPath)) return;
+        try {
+            mapSpriteManager.exportDisassembly(directoryPath);
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map Sprite disasm could not be exported to : " + directoryPath);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
