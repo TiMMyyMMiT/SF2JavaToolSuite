@@ -12,10 +12,10 @@ import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.compression.StackGraphicsDecoder;
 import com.sfc.sf2.helpers.BinaryHelpers;
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.portrait.Portrait;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteDecoder;
-import java.awt.Color;
 
 /**
  *
@@ -50,7 +50,7 @@ public class PortraitDisassemblyProcessor extends AbstractDisassemblyProcessor<P
         int paletteOffset = 2+eyesTileNumber*4+2+mouthTileNumber*4;
         byte[] paletteData = new byte[32];
         System.arraycopy(data, paletteOffset, paletteData, 0, paletteData.length);
-        Color[] colors = PaletteDecoder.decodePalette(paletteData);
+        CRAMColor[] colors = PaletteDecoder.decodePalette(paletteData);
         Palette palette = new Palette(pckg.name(), colors, true);
         
         int graphicsOffset = paletteOffset + 32;

@@ -96,7 +96,7 @@ public class Palette {
         icm.getReds(reds);
         icm.getGreens(greens);
         icm.getBlues(blues);
-        for(int i=0;i<16;i++){
+        for(int i=0;i<16;i++) {
             colors[i] = new CRAMColor((int)(reds[i]&0xff),(int)(greens[i]&0xff),(int)(blues[i]&0xff), 255);
         }
         return colors;

@@ -352,7 +352,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         try {
-            paletteManager.importDisassembly(palettePath, true);
+            paletteManager.importDisassembly(palettePath, false);
         } catch (Exception ex) {
             paletteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
@@ -364,7 +364,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         try {
-            paletteManager.importImage(palettePath,true);
+            paletteManager.importImage(palettePath, false);
         } catch (Exception ex) {
             paletteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
