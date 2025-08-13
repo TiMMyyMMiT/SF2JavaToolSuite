@@ -125,9 +125,11 @@ jobs:
                   git tag "$tag_name"
                   git push origin "$tag_name"
                 fi
-
-                # Append to release list
-                echo "$tag_name|${jar_file}" >> release_list.txt
+                
+                # Extract release notes
+                release_notes=$(grep '^release-notes:' "$file_path" | cut -d':' -f2- | xargs)
+                # Append to release list with release notes
+                echo "$tag_name|${jar_file}|${release_notes}" >> release_list.txt
               else
                 echo "Warning: ${jar_file} not found so tag will not be created"
               fi
@@ -139,6 +141,13 @@ jobs:
       - name: Create GitHub Releases
         if: steps.detect_changes.outputs.should_run == 'true'
         run: |
+        while IFS='|' read -r tag jar_path release_notes; do
+          echo "Creating release for $tag with artifact $jar_path"
+          release_notes+="\n\nAutomated release for $tag"
+          gh release create "$tag" "$jar_path" --title "$tag" --notes "$release_notes"
+        done < release_list.txt
+
+        
           if [ -f release_list.txt ]; then
             while IFS='|' read -r tag jar_path; do
               echo "Creating release for $tag with artifact $jar_path"
@@ -164,22 +173,31 @@ jobs:
     
           success_count=0
           skipped_count=0
-    
+          release_notes_list=()
           echo "Processing changed tool projects..."
-          for jar_file in built-jars/*.jar; do         
-            project_name=$(basename "$jar_file" .jar)    
+          for jar_file in built-jars/*.jar; do
+            project_name=$(basename "$jar_file" .jar)
             dest_path=$(grep -vE '^\s*(#|$)' "$root_release_file" | grep "^$project_name:" | cut -d':' -f2- | xargs)
-    
+      
             if [ -z "$dest_path" ]; then
               echo "$project_name not defined in $root_release_file. Skipping."
               skipped_count=$((skipped_count + 1))
               continue
             fi
-    
+      
             echo "Copying $(basename "$jar_file") to target-repo/$dest_path"
             mkdir -p "target-repo/$dest_path"
             cp "$jar_file" "target-repo/$dest_path/"
             success_count=$((success_count + 1))
+      
+            # Get the corresponding version.properties path
+            version_file=$(find . -name version.properties -path "*/$project_name/*" | head -n1)
+            if [ -f "$version_file" ]; then
+              note=$(grep '^release-notes:' "$version_file" | cut -d':' -f2- | xargs)
+              if [ -n "$note" ]; then
+                release_notes_list+=("- $project_name: $note")
+              fi
+            fi
           done
     
           cd target-repo
@@ -189,7 +207,16 @@ jobs:
           if git status --porcelain | grep .; then
             echo "Committing and pushing $success_count JAR(s)..."
             git add .
-            git commit -m "Update tools: auto-built JARs [${{ github.sha }}]"
+            if [ ${#release_notes_list[@]} -gt 0 ]; then
+              commit_msg="Update tools: auto-built JARs [${{ github.sha }}]\n\nRelease notes:"
+              for note in "${release_notes_list[@]}"; do
+                commit_msg+=$'\n'"$note"
+              done
+            else
+              commit_msg="Update tools: auto-built JARs [${{ github.sha }}]"
+            fi
+
+            git commit -m "$commit_msg"
             git push origin feature/tools_updates
           else
             echo "No changes to commit. ($skipped_count project(s) skipped)"
