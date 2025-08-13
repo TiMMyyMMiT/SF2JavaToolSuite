@@ -141,23 +141,18 @@ jobs:
       - name: Create GitHub Releases
         if: steps.detect_changes.outputs.should_run == 'true'
         run: |
-        while IFS='|' read -r tag jar_path release_notes; do
-          echo "Creating release for $tag with artifact $jar_path"
-          release_notes+="\n\nAutomated release for $tag"
-          gh release create "$tag" "$jar_path" --title "$tag" --notes "$release_notes"
-        done < release_list.txt
-
-        
           if [ -f release_list.txt ]; then
-            while IFS='|' read -r tag jar_path; do
+            while IFS='|' read -r tag jar_path release_notes; do
               echo "Creating release for $tag with artifact $jar_path"
-              gh release create "$tag" "$jar_path" --title "$tag" --notes "Automated release for $tag"
+              full_notes="${release_notes}\n\nAutomated release for $tag"
+              gh release create "$tag" "$jar_path" --title "$tag" --notes "$full_notes"
             done < release_list.txt
           else
             echo "No releases to create."
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Push to DISASM
         if: steps.detect_changes.outputs.should_run == 'true'
