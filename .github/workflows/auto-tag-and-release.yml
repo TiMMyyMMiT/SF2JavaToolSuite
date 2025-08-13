@@ -159,17 +159,18 @@ jobs:
         run: |
           echo "Cloning destination repo..."
           git clone --depth=1 --branch feature/tools_updates https://x-access-token:${{ secrets.SF2DISASM_PUSH_TOKEN }}@github.com/TiMMyyMMiT/SF2DISASM.git target-repo
-    
+      
           root_release_file="release.properties"
           if [ ! -f "$root_release_file" ]; then
             echo "release.properties file not found. Skipping push step."
             exit 0
           fi
-    
+      
           success_count=0
           skipped_count=0
           release_notes_list=()
           echo "Processing changed tool projects..."
+          
           for jar_file in built-jars/*.jar; do
             project_name=$(basename "$jar_file" .jar)
             dest_path=$(grep -vE '^\s*(#|$)' "$root_release_file" | grep "^$project_name:" | cut -d':' -f2- | xargs)
@@ -185,35 +186,44 @@ jobs:
             cp "$jar_file" "target-repo/$dest_path/"
             success_count=$((success_count + 1))
       
-            # Get the corresponding version.properties path
-            version_file=$(find . -name version.properties -path "*/$project_name/*" | head -n1)
-            if [ -f "$version_file" ]; then
-              note=$(grep '^release-notes:' "$version_file" | cut -d':' -f2- | xargs)
-              if [ -n "$note" ]; then
-                release_notes_list+=("- $project_name: $note")
+            # Extract release notes for this project from CHANGED_FILES
+            for changed_file in $CHANGED_FILES; do
+              changed_project=$(basename "$(dirname "$changed_file")")
+              if [ "$changed_project" == "$project_name" ]; then
+                note=$(grep '^release-notes:' "$changed_file" | cut -d':' -f2- | xargs)
+                if [ -n "$note" ]; then
+                  release_notes_list+=("- $project_name: $note")
+                fi
+                break
               fi
-            fi
+            done
           done
-    
+      
           cd target-repo
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-    
+      
           if git status --porcelain | grep .; then
             echo "Committing and pushing $success_count JAR(s)..."
             git add .
+      
             if [ ${#release_notes_list[@]} -gt 0 ]; then
-              commit_msg="Update tools: auto-built JARs [${{ github.sha }}]\n\nRelease notes:"
-              for note in "${release_notes_list[@]}"; do
-                commit_msg+=$'\n'"$note"
-              done
+              {
+                echo "Update tools: auto-built JARs [${{ github.sha }}]"
+                echo
+                echo "Release notes:"
+                for note in "${release_notes_list[@]}"; do
+                  echo "$note"
+                done
+              } > commit_msg.txt
+              git commit -F commit_msg.txt
             else
-              commit_msg="Update tools: auto-built JARs [${{ github.sha }}]"
+              git commit -m "Update tools: auto-built JARs [${{ github.sha }}]"
             fi
-
-            git commit -m "$commit_msg"
+      
             git push origin feature/tools_updates
           else
             echo "No changes to commit. ($skipped_count project(s) skipped)"
           fi
+
     
