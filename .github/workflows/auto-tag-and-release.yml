@@ -144,7 +144,7 @@ jobs:
           if [ -f release_list.txt ]; then
             while IFS='|' read -r tag jar_path release_notes; do
               echo "Creating release for $tag with artifact $jar_path"
-              full_notes="$(printf "%s\n\nAutomated release for %s" "$release_notes" "$tag")"
+              full_notes="$(printf "%s\n\n_Automated release for %s_" "$release_notes" "$tag")"
               gh release create "$tag" "$jar_path" --title "$tag" --notes "$full_notes"
             done < release_list.txt
           else
