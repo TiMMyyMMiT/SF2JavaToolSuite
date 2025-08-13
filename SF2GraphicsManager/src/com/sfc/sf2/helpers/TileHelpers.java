@@ -14,6 +14,11 @@ import com.sfc.sf2.graphics.Tile;
  */
 public class TileHelpers {
     
+    /**
+     *
+     * For tiles imported from disassembly
+     * @return
+     */
     public static Tile[] reorderTilesSequentially(Tile[] tiles, int blockColumnCount, int blockRowCount, int tilesPerBlock) {
         /* Disassembly tiles are stored in 4x4 chunks (top-bottom, left-right)
             1  5  9 13 33 37                  
@@ -37,6 +42,11 @@ public class TileHelpers {
         return newTiles;
     }
     
+    /**
+     *
+     * For tiles being exported back to disassembly
+     * @return
+     */
     public static Tile[] reorderTilesForDisasssembly(Tile[] tiles, int blockColumnCount, int blockRowCount, int tilesPerBlock) {
         int blockTotalTiles = tilesPerBlock*tilesPerBlock;
         Tile[] newTiles = new Tile[tiles.length];

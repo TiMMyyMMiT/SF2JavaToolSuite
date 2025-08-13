@@ -26,29 +26,28 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
     protected Tileset parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
-        if(imageWidth%8!=0 || imageHeight%8!=0){
+        if (imageWidth%8 != 0 || imageHeight%8 != 0) {
             Console.logger().warning("IWarning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
         }
-        Palette palette = new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
+        Palette palette = pckg.preLoadedPalette();
+        if (palette == null) {
+            new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
+        }
         int tilesPerRow = imageWidth/8;
         Console.logger().finest("Tiles per row : " + tilesPerRow);
         Tile[] tiles = new Tile[(imageWidth/8)*(imageHeight/8)];
         int tileId = 0;
         int[] pixels = new int[64];
         for(int t = 0; t < tiles.length; t++) {
-            int x = t%tilesPerRow*8;
-            int y = t/tilesPerRow*8;
-            Console.logger().finest("Building tile from coordinates "+x+":"+y);
+            int x = (t%tilesPerRow)*8;
+            int y = (t/tilesPerRow)*8;
+            //onsole.logger().finest("Building tile from coordinates "+x+":"+y);
             Tile tile = new Tile();
             tile.setId(tileId);
             tile.setPalette(palette);
             raster.getPixels(x, y, 8, 8, pixels);
-            for(int j=0;j<8;j++){
-                for(int i=0;i<8;i++){
-                    tile.setPixel(i, j, pixels[i+j*8]);
-                }
-            }
-            Console.logger().finest(tile.toString());
+            tile.setPixels(pixels);
+            //Console.logger().finest(tile.toString());
             tiles[tileId] = tile;   
             tileId++;
         }
@@ -68,17 +67,11 @@ public class TilesetRawImageProcessor extends AbstractRawImageProcessor<Tileset,
         BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_BINARY, tiles[0].getIcm());
         WritableRaster raster = image.getRaster();
 
-        int[] pixels = new int[64];
         for(int t = 0; t < tiles.length; t++) {
             if (tiles[t] != null) {
-                for(int j=0;j<8;j++){
-                    for(int i=0;i<8;i++){
-                        pixels[i+j*8] = tiles[t].getPixels()[i][j];
-                    }
-                }
                 int x = t%tilesPerRow*8;
                 int y = t/tilesPerRow*8;
-                raster.setPixels(x, y, 8, 8, pixels);
+                raster.setPixels(x, y, 8, 8, tiles[t].getPixels());
             }
         }
         return image;

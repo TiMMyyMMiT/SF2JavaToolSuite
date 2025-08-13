@@ -89,7 +89,11 @@ public class Tileset {
     }
     
     public void clearIndexedColorImage(boolean alsoClearTiles) {
-        indexedColorImage = null;
+        if (this.indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+        }
+        
         if (alsoClearTiles) {
             for (int i = 0; i < tiles.length; i++) {
                 tiles[i].clearIndexedColorImage();

@@ -28,6 +28,7 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         initComponents();
         java.awt.EventQueue.invokeLater(() -> {
             initEditor();
+            SettingsManager.setSavingAllowed(true); //Slight hack to prevent controls affecting settings on initialisation
         });
     }
     
@@ -98,8 +99,8 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, "FlatLaf theme could not be loaded. Loading default theme instead", ex);
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex1) {
-                java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
+                java.util.logging.Logger.getLogger(AbstractMainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, e);
             }
         }
         //</editor-fold>

@@ -9,7 +9,6 @@ import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.IndexColorModel;
-import javax.swing.JPanel;
 
 /**
  *
@@ -22,7 +21,7 @@ public class Tile {
     
     private int id;
     private Palette palette;
-    private int[][] pixels = new int[PIXEL_HEIGHT][PIXEL_WIDTH];
+    private int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
     private BufferedImage indexedColorImage = null;
     
     private boolean highPriority = false;
@@ -31,11 +30,11 @@ public class Tile {
     
     private int occurrences = 0;
 
-    public int[][] getPixels() {
+    public int[] getPixels() {
         return pixels;
     }
 
-    public void setPixels(int[][] pixels) {
+    public void setPixels(int[] pixels) {
         this.pixels = pixels;
     }
     
@@ -63,23 +62,23 @@ public class Tile {
         }
     }
 
-    public BufferedImage getIndexedColorImage(){
-        if(indexedColorImage==null){
+    public BufferedImage getIndexedColorImage() {
+        if (indexedColorImage == null) {
             IndexColorModel icm = palette.getIcm();
             indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, icm);
             byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
-            int width = indexedColorImage.getWidth();
-            for(int i=0;i<pixels.length;i++){
-                for(int j=0;j<pixels[i].length;j++){
-                    data[j*width+i] = (byte)(pixels[i][j]);
-                }
+            for (int i=0; i < pixels.length; i++) {
+                data[i] = (byte)(pixels[i]);
             }
         }
         return indexedColorImage;        
     }
     
     public void clearIndexedColorImage() {
-        indexedColorImage = null;
+        if (indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+        }
     }
     
     public void drawIndexedColorPixels(BufferedImage image, int[][] pixels, int x, int y){
@@ -110,7 +109,7 @@ public class Tile {
     }
     
     public void setPixel(int x, int y, int colorIndex){
-        this.pixels[x][y] = colorIndex;
+        this.pixels[x+y*PIXEL_WIDTH] = colorIndex;
     }
 
     public int getOccurrences() {
@@ -121,49 +120,49 @@ public class Tile {
         this.occurrences = occurrences;
     }
     
-    public static Tile vFlip(Tile tile){
+    public static Tile vFlip(Tile tile) {
         Tile flippedTile = new Tile();
         flippedTile.setId(tile.getId());
         flippedTile.setHighPriority(tile.isHighPriority());
         flippedTile.sethFlip(tile.ishFlip());
         flippedTile.setvFlip(!tile.isvFlip());
         flippedTile.setPalette(tile.getPalette());
-        for(int y=0;y<tile.getPixels().length;y++){
-            for(int x=0;x<tile.getPixels()[y].length;x++){
-                flippedTile.getPixels()[y][x] = tile.getPixels()[y][7-x];
+        for(int y=0;y<PIXEL_HEIGHT;y++){
+            for(int x=0;x<PIXEL_WIDTH;x++){
+                flippedTile.getPixels()[x+y*PIXEL_WIDTH] = tile.getPixels()[x+(PIXEL_HEIGHT-y)*PIXEL_WIDTH];
             }
         } 
         return flippedTile;
     }
     
-    public static Tile hFlip(Tile tile){
+    public static Tile hFlip(Tile tile) {
         Tile flippedTile = new Tile();
         flippedTile.setId(tile.getId());
         flippedTile.setHighPriority(tile.isHighPriority());
         flippedTile.sethFlip(!tile.ishFlip());
         flippedTile.setvFlip(tile.isvFlip());
         flippedTile.setPalette(tile.getPalette());
-        for(int y=0;y<tile.getPixels().length;y++){
-            for(int x=0;x<tile.getPixels()[y].length;x++){
-                flippedTile.getPixels()[y][x] = tile.getPixels()[7-y][x];
+        for(int y=0;y<PIXEL_HEIGHT;y++){
+            for(int x=0;x<PIXEL_WIDTH;x++){
+                flippedTile.getPixels()[x+y*PIXEL_WIDTH] = tile.getPixels()[(PIXEL_WIDTH-x)+y*PIXEL_WIDTH];
             }
         } 
         return flippedTile;
     }    
     
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Tile " + id +" :\n");
-        for(int y=0;y<pixels.length;y++){
-            for(int x=0;x<pixels[y].length;x++){
-                sb.append("\t"+pixels[x][y]);
+        for(int y=0;y<PIXEL_HEIGHT;y++){
+            for(int x=0;x<PIXEL_WIDTH;x++){
+                sb.append("\t"+pixels[x+y*PIXEL_HEIGHT]);
             }
             sb.append("\n");
         }
         return sb.toString();
     }
     
-    public static Tile paletteSwap(Tile tile, Palette palette){
+    public static Tile paletteSwap(Tile tile, Palette palette) {
         Tile pltSwappedTile = new Tile();
         pltSwappedTile.setId(tile.getId());
         pltSwappedTile.setPixels(tile.getPixels());
@@ -175,40 +174,36 @@ public class Tile {
     }
     
     @Override
-    public boolean equals(Object obj){
-        if(this==obj){
+    public boolean equals(Object obj) {
+        if (this==obj) {
             return true;
         }
-        if(obj==null || obj.getClass() != this.getClass()){
+        if (obj==null || obj.getClass() != this.getClass()){
             return false;
         }
         Tile tile = (Tile) obj;
-        for(int i=0;i<8;i++){
-            for(int j=0;j<8;j++){
-                if(this.pixels[j][i]!=tile.pixels[j][i]){
-                    return false;
-                }
+        for (int i=0;i<pixels.length;i++) {
+            if (this.pixels[i] != tile.pixels[i]) {
+                return false;
             }
         }
         return true;        
     }
     
-    public boolean equalsWithPriority(Object obj){
+    public boolean equalsWithPriority(Object obj) {
         if(this==obj){
             return true;
         }
-        if(obj==null || obj.getClass() != this.getClass()){
+        if (obj==null || obj.getClass() != this.getClass()) {
             return false;
         }
         Tile tile = (Tile) obj;
-        if(this.highPriority!=tile.isHighPriority()){
+        if (this.highPriority!=tile.isHighPriority()) {
             return false;
         }
-        for(int i=0;i<8;i++){
-            for(int j=0;j<8;j++){
-                if(this.pixels[j][i]!=tile.pixels[j][i]){
-                    return false;
-                }
+        for (int i=0;i<pixels.length;i++) {
+            if (this.pixels[i]!=tile.pixels[i]) {
+                return false;
             }
         }
         return true;        
@@ -230,11 +225,9 @@ public class Tile {
         if (pixels == null) {
             return true;
         }
-        for(int i=0;i<8;i++){
-            for(int j=0;j<8;j++){
-                if (pixels[i][j] > 0) {
-                    return false;
-                }
+        for (int i=0;i<pixels.length;i++) {
+            if (pixels[i] > 0) {
+                return false;
             }
         }
         return true;
@@ -243,7 +236,7 @@ public class Tile {
     public static Tile EmptyTile(Palette palette) {
         Tile emptyTile = new Tile();
         emptyTile.setPalette(palette);
-        emptyTile.setPixels(new int[8][8]);
+        emptyTile.setPixels(new int[PIXEL_WIDTH*PIXEL_HEIGHT]);
         return emptyTile;
     }
 }

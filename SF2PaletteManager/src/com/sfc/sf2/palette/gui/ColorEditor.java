@@ -7,6 +7,9 @@ package com.sfc.sf2.palette.gui;
 
 import com.sfc.sf2.palette.PaletteDecoder;
 import java.awt.Color;
+import java.awt.Desktop;
+import java.net.URL;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 
 /**
@@ -22,6 +25,8 @@ public class ColorEditor extends javax.swing.JPanel {
     public ColorEditor() {
         initComponents();
         jLabelRGB.setText("");
+        color = Color.BLACK;
+        displayRGBColor();
     }
     
     private void updateColor() {
@@ -30,7 +35,8 @@ public class ColorEditor extends javax.swing.JPanel {
         int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
         color = new Color(r, g, b);
         jPanelColor.setBackground(color);
-        colorPane.updateColor(color);
+        if (colorPane != null)
+            colorPane.updateColor(color);
         displayRGBColor();
         jPanelColor.revalidate();
     }
@@ -51,7 +57,7 @@ public class ColorEditor extends javax.swing.JPanel {
         int r = PaletteDecoder.cramIndexToBrightness(redIndex);
         int g = PaletteDecoder.cramIndexToBrightness(greenIndex);
         int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
-        jLabelRGB.setText(String.format("# R: %2d, G: %2d, B: %2d", r, g, b));
+        jLabelRGB.setText(String.format("#%02X%02X%02X", r, g, b));
     }
 
     /**
@@ -66,6 +72,7 @@ public class ColorEditor extends javax.swing.JPanel {
         sliderB = new javax.swing.JSlider();
         jPanelColor = new javax.swing.JPanel();
         jLabelRGB = new javax.swing.JLabel();
+        infoButton1 = new com.sfc.sf2.core.gui.controls.InfoButton();
 
         sliderR.setMajorTickSpacing(2);
         sliderR.setMaximum(14);
@@ -121,7 +128,14 @@ public class ColorEditor extends javax.swing.JPanel {
         );
 
         jLabelRGB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelRGB.setText("jLabel1");
+        jLabelRGB.setText("# FFFFFF");
+
+        infoButton1.setText("");
+        infoButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -135,27 +149,34 @@ public class ColorEditor extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sliderB, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sliderG, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(sliderG, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(sliderR, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(sliderR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(sliderR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sliderG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sliderB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(sliderG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jPanelColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelRGB)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(17, 17, 17)
+                        .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(sliderB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(9, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanelColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelRGB)
+                .addGap(22, 22, 22))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -167,7 +188,20 @@ public class ColorEditor extends javax.swing.JPanel {
         updateColor();
     }//GEN-LAST:event_sliderStateChanged
 
+    private void infoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoButton1ActionPerformed
+        Object res = JOptionPane.showOptionDialog(null, "<html><i>\"Why is the color range 0-14?\",<br>\"Why can I only select even numbers?\"</i><br><br>The color-space on the Genesis is limited by the CRAM format.<br>For further information, click the button below.</html>", "Help", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] { "Close", "<html>Read more on CRAM colors<br>(https://segaretro.org)<html>" }, null);
+        if (res == null) return; 
+        if ((int)res == 1) {
+            try {
+                Desktop.getDesktop().browse(new URL("https://segaretro.org/Sega_Mega_Drive/Palettes_and_CRAM").toURI());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_infoButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton1;
     private javax.swing.JLabel jLabelRGB;
     private javax.swing.JPanel jPanelColor;
     private javax.swing.JSlider sliderB;

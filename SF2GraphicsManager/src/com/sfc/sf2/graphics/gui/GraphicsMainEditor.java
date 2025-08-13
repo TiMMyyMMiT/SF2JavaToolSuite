@@ -53,6 +53,8 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     
     @Override
     protected void repaintEditorLayout() {
+        super.repaintEditorLayout();
+        
         tilesetLayoutPanel.revalidate();
         tilesetLayoutPanel.repaint();
     }
@@ -1112,7 +1114,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path graphicPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         try {
-            TilesetCompression compression = TilesetCompression.values()[jComboBox4.getSelectedIndex()];
+            TilesetCompression compression = TilesetCompression.values()[jComboBox1.getSelectedIndex()];
             tilesetManager.importDisassembly(palettePath, graphicPath, compression, (int)jSpinner1.getValue());
             jSpinner2.setValue(jSpinner1.getValue());
         } catch (Exception ex) {

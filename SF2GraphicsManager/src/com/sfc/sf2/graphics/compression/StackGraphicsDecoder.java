@@ -12,7 +12,6 @@ import com.sfc.sf2.palette.Palette;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  *
@@ -57,7 +56,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                 commandBitmap = (short) (commandBitmap << 4);
                 commandBitmap += commandPattern;
             }
-            Console.logger().finest("command bitmap = " + Integer.toHexString(commandBitmap&0xFFFF));
+            //Console.logger().finest("command bitmap = " + Integer.toHexString(commandBitmap&0xFFFF));
 
             /* Step 2 - Apply commands on following data */
             for(int i=0;i<16;i++){
@@ -65,7 +64,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                 if(command==0){
                     /* command 0 : word value built from four 4-bit values taken from history stack */
                     value = getWordValue();
-                    Console.logger().log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
+                    //Console.logger().log(Level.FINE, "0 - word value = {0}", Integer.toHexString(value&0xFFFF));
                     BinaryHelpers.setWordList(value,output);
                 }else{
                     /* command 1 : section copy */
@@ -75,7 +74,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                         break; 
                     }
                     copyLength = getCopyLength();
-                    Console.logger().finest("1 - section copy offset="+Integer.toHexString(copyOffset&0xFFFF)+", length="+ Integer.toHexString(copyLength&0xFFFF));
+                    //Console.logger().finest("1 - section copy offset="+Integer.toHexString(copyOffset&0xFFFF)+", length="+ Integer.toHexString(copyLength&0xFFFF));
                     for(int j=0;j<copyLength;j++){
                         output.add(output.get(output.size()-2*copyOffset));
                         output.add(output.get(output.size()-2*copyOffset));
@@ -277,7 +276,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         StringBuilder commandSb = new StringBuilder(16);
         StringBuilder dataSb = new StringBuilder();
         byte[] inputData = new UncompressedGraphicsDecoder().encode(tiles);
-        Console.logger().finest("input = " + BinaryHelpers.bytesToHex(inputData));
+        //Console.logger().finest("input = " + BinaryHelpers.bytesToHex(inputData));
         int inputCursor = 0;
         byte[] output;
         int potentialCopyLength;
@@ -347,27 +346,25 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
                 }
                 dataSb.append(lengthSb);
                 inputCursor+=potentialCopyLength*2;
-                Console.logger().finest("input word "+Integer.toHexString(inputWord & 0xFFFF)+" copy : offset=" + startOffset + "/" + offsetSb.toString() + ", length="+potentialCopyLength + "/" + lengthSb);
+                //Console.logger().finest("input word "+Integer.toHexString(inputWord & 0xFFFF)+" copy : offset=" + startOffset + "/" + offsetSb.toString() + ", length="+potentialCopyLength + "/" + lengthSb);
             }else{
                 // No copy : word value
                 commandSb.append("0");
                 String valueBitString = getValueBitString(historyStack, inputWord);
                 dataSb.append(valueBitString);
                 inputCursor+=2;
-                Console.logger().finest("input word "+Integer.toHexString(inputWord & 0xFFFF)+" value : " + valueBitString+", history="+historyStack.toString());
+                //Console.logger().finest("input word "+Integer.toHexString(inputWord & 0xFFFF)+" value : " + valueBitString+", history="+historyStack.toString());
             }
           
             if(commandSb.length()==16){
                 String commandBitString = getCommandBitString(commandSb);
-                Console.logger().finest("commandSb=" + commandSb.toString()+", commandBitString="+commandBitString);
+                //Console.logger().finest("commandSb=" + commandSb.toString()+", commandBitString="+commandBitString);
                 outputSb.append(commandBitString);
                 outputSb.append(dataSb);
                 commandSb.setLength(0);
                 dataSb.setLength(0);
-                Console.logger().finest("output = " + outputSb.toString());
-            }            
-
-            
+                //Console.logger().finest("output = " + outputSb.toString());
+            }
         }
         /* Add ending command with offset 0 */
         commandSb.append("1");
@@ -378,7 +375,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
         String commandBitString = getCommandBitString(commandSb);
         outputSb.append(commandBitString);
         outputSb.append(dataSb);
-        Console.logger().finest("output = " + outputSb.toString());
+        //Console.logger().finest("output = " + outputSb.toString());
         
         /* Word-wise padding */
         while(outputSb.length()%16 != 0){
@@ -392,7 +389,7 @@ public class StackGraphicsDecoder extends AbstractGraphicsDecoder {
             output[i] = b;
         }
         Console.logger().finest("output bytes length = " + output.length);
-        Console.logger().finest("output = " + BinaryHelpers.bytesToHex(output));
+        //Console.logger().finest("output = " + BinaryHelpers.bytesToHex(output));
         Console.logger().finest("EXITING encode");
         lastEncodedUncompressedBytes = inputData.length;
         return output;

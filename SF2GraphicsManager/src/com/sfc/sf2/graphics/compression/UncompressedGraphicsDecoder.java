@@ -7,6 +7,8 @@ package com.sfc.sf2.graphics.compression;
 
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.Tile;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.palette.Palette;
 
 /**
@@ -24,8 +26,8 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
             Tile tile = new Tile();
             tile.setId(i);
             tile.setPalette(palette);
-            for(int y=0;y<8;y++){
-                for(int x=0;x<8;x+=2){
+            for(int y=0;y<PIXEL_HEIGHT;y++){
+                for(int x=0;x<PIXEL_WIDTH;x+=2){
                     byte currentByte = input[i*32+(y*8+x)/2];
                     int firstPixel = (currentByte & 0xF0)/16;
                     int secondPixel = currentByte & 0x0F;
@@ -33,7 +35,7 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
                     tile.setPixel(x+1, y, secondPixel);
                 }
             }
-            Console.logger().finest(tile.toString());
+            //Console.logger().finest(tile.toString());
             tiles[i] = tile;
         }
         Console.logger().finest("EXITING decode");
@@ -46,11 +48,11 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
         Console.logger().finest("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
         byte[] output = new byte[tiles.length*32];
         for(int i=0;i<tiles.length;i++){
-            int[][] pixels = tiles[i].getPixels();
-            for(int y=0;y<8;y++){
-                for(int x=0;x<8;x+=2){
-                    byte first = (byte)pixels[x][y];
-                    byte second = (byte)pixels[x+1][y];
+            int[] pixels = tiles[i].getPixels();
+            for(int y=0;y<PIXEL_HEIGHT;y++){
+                for(int x=0;x<PIXEL_WIDTH;x+=2){
+                    byte first = (byte)pixels[x+y*PIXEL_WIDTH];
+                    byte second = (byte)pixels[x+1+y*PIXEL_WIDTH];
                     output[(i*64+y*8+x)/2] = (byte)(first*16 | second);
                 }
             }
