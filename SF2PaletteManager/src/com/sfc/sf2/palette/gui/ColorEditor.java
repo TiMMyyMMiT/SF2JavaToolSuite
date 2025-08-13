@@ -24,6 +24,8 @@ public class ColorEditor extends javax.swing.JPanel {
     public ColorEditor() {
         initComponents();
         jLabelRGB.setText("");
+        color = Color.BLACK;
+        displayRGBColor();
     }
     
     private void updateColor() {
@@ -48,7 +50,7 @@ public class ColorEditor extends javax.swing.JPanel {
     }
 
     public void displayRGBColor() {
-        jLabelRGB.setText("#" + Integer.toString(color.getRGB() & 0xffffff, 16));
+        jLabelRGB.setText(String.format("#%06X", color.getRGB() & 0xffffff));
     }
 
     /**
@@ -181,12 +183,11 @@ public class ColorEditor extends javax.swing.JPanel {
     }//GEN-LAST:event_sliderStateChanged
 
     private void infoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoButton1ActionPerformed
-        Object res = JOptionPane.showOptionDialog(null, "Message", "Help", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] { "Close", "Read more on CRAM colors" }, null);
-        if (res == null) return;
-        String response = (String)res; 
-        if (response.startsWith("Read more")) {
+        Object res = JOptionPane.showOptionDialog(null, "<html><i>\"Why is the color range 0-14?\",<br>\"Why can I only select even numbers?\"</i><br><br>The color-space on the Genesis is limited by the CRAM format.<br>For further information, click the button below.</html>", "Help", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] { "Close", "<html>Read more on CRAM colors<br>(https://segaretro.org)<html>" }, null);
+        if (res == null) return; 
+        if ((int)res == 1) {
             try {
-                Desktop.getDesktop().browse(new URL("https://segaretro.org/Sega_Mega_Drive/Palettes_and_CRAM#Format").toURI());
+                Desktop.getDesktop().browse(new URL("https://segaretro.org/Sega_Mega_Drive/Palettes_and_CRAM").toURI());
             } catch (Exception e) {
                 e.printStackTrace();
             }
