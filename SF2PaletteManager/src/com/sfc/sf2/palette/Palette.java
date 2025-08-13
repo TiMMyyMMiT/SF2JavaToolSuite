@@ -15,21 +15,20 @@ import java.awt.image.IndexColorModel;
 public class Palette {
     
     private String name;
-    private Color[] colors;
+    private CRAMColor[] colors;
     
     private IndexColorModel icm;
-    private boolean forceCram = false;  //Test. If correct then force this for all imported images
     
     public Palette() {
         this.name = "New Palette";
         this.colors = null;
     }
     
-    public Palette(Color[] colors, boolean firstColorTransparent) {
+    public Palette(CRAMColor[] colors, boolean firstColorTransparent) {
         setName("New Palette");
         setColors(colors, firstColorTransparent);
     }
-    public Palette(String name, Color[] colors, boolean firstColorTransparent) {
+    public Palette(String name, CRAMColor[] colors, boolean firstColorTransparent) {
         setName(name);
         setColors(colors, firstColorTransparent);
     }
@@ -42,11 +41,11 @@ public class Palette {
         this.name = name;
     }
 
-    public Color[] getColors() {
+    public CRAMColor[] getColors() {
         return colors;
     }
 
-    public void setColors(Color[] palette, boolean firstColorTransparent) {
+    public void setColors(CRAMColor[] palette, boolean firstColorTransparent) {
         this.colors = palette;
         if (firstColorTransparent) {
             ensureUniqueTransparencyColor();
@@ -56,20 +55,6 @@ public class Palette {
     
     public int getColorsCount() {
         return colors.length;
-    }
-    
-    public boolean getForceCram() {  //Test. If correct then force this for all imported images
-        return forceCram;
-    }
-    
-    public void setForceCram(boolean forceCram) {  //Test. If correct then force this for all imported images
-        this.forceCram = forceCram;
-        icm = buildICM(colors, true);
-        if (forceCram) {
-            icm = buildICM(PaletteDecoder.convertToCram(colors), true);
-        } else {
-            icm = buildICM(colors, true);
-        }
     }
 
     public IndexColorModel getIcm() {
@@ -81,22 +66,27 @@ public class Palette {
         preventing image rendering to use opaque color where needed.
         In such case, now applying standard magenta as transparency color.
     */
-    private void ensureUniqueTransparencyColor(){
-        for(int i=1;i<colors.length;i++){
-            if(colors[0].getRed()==colors[i].getRed()
-                    && colors[0].getGreen()==colors[i].getGreen()
-                    && colors[0].getBlue()==colors[i].getBlue()
-                    ){
-                colors[0] = new Color(0xFF00FF, true);
+    private void ensureUniqueTransparencyColor() {
+        Color zero = colors[0].CRAMColor();
+        Color color;
+        for (int i=1;i<colors.length;i++) {
+            color = colors[i].CRAMColor();
+            if (zero.getRed()==color.getRed() && zero.getGreen()==color.getGreen() && zero.getBlue()==color.getBlue()) {
+                colors[0] = CRAMColor.fromPremadeCramColor(new Color(0xFF00FFFF));
+                return;
             }
+        }
+        if (zero.getAlpha() > 0) {
+            int rgb = zero.getRGB() | 0xFF;
+            colors[0] = CRAMColor.fromPremadeCramColor(new Color(rgb));
         }
     }
     
     /*
         Gets {@code Color} array from an existing {@code Index Color Model}
     */
-    public static Color[] fromICM(IndexColorModel icm){
-        Color[] colors = new Color[16];
+    public static CRAMColor[] fromICM(IndexColorModel icm) {
+        CRAMColor[] colors = new CRAMColor[16];
         if(icm.getMapSize()>16){
             System.out.println("fromICM - Image format has more than 16 indexed colors. Palette may not load correctly.");
         }
@@ -107,7 +97,7 @@ public class Palette {
         icm.getGreens(greens);
         icm.getBlues(blues);
         for(int i=0;i<16;i++){
-            colors[i] = new Color((int)(reds[i]&0xff),(int)(greens[i]&0xff),(int)(blues[i]&0xff));
+            colors[i] = new CRAMColor((int)(reds[i]&0xff),(int)(greens[i]&0xff),(int)(blues[i]&0xff), 255);
         }
         return colors;
     }
@@ -115,22 +105,22 @@ public class Palette {
     /*
         Creates new {@code Index Color Model} from {@code Color} array
     */
-    public static IndexColorModel buildICM(Color[] colors) {
+    public static IndexColorModel buildICM(CRAMColor[] colors) {
         return buildICM(colors, true);
     }
     
     /*
         Creates new {@code Index Color Model} from {@code Color} array
     */
-    public static IndexColorModel buildICM(Color[] colors, boolean firstColorTransparent) {
+    public static IndexColorModel buildICM(CRAMColor[] colors, boolean firstColorTransparent) {
         byte[] reds = new byte[colors.length];
         byte[] greens = new byte[colors.length];
         byte[] blues = new byte[colors.length];
         byte[] alphas = new byte[colors.length];
         for(int i=0; i<colors.length; i++) {
-            reds[i] = (byte)colors[i].getRed();
-            greens[i] = (byte)colors[i].getGreen();
-            blues[i] = (byte)colors[i].getBlue();
+            reds[i] = (byte)colors[i].CRAMColor().getRed();
+            greens[i] = (byte)colors[i].CRAMColor().getGreen();
+            blues[i] = (byte)colors[i].CRAMColor().getBlue();
             alphas[i] = (byte)0xFF;
         }
         alphas[0] = firstColorTransparent ? 0 : (byte)0xFF;

@@ -5,8 +5,8 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.PaletteDecoder;
-import java.awt.Color;
 import java.awt.Desktop;
 import java.net.URL;
 import javax.swing.JOptionPane;
@@ -19,13 +19,13 @@ import javax.swing.JSlider;
 public class ColorEditor extends javax.swing.JPanel {
 
     ColorPane colorPane;
-    Color color;
+    CRAMColor color;
     int redIndex, greenIndex, blueIndex;
     
     public ColorEditor() {
         initComponents();
         jLabelRGB.setText("");
-        color = Color.BLACK;
+        color = CRAMColor.BLACK;
         displayRGBColor();
     }
     
@@ -33,20 +33,24 @@ public class ColorEditor extends javax.swing.JPanel {
         int r = PaletteDecoder.cramIndexToBrightness(redIndex);
         int g = PaletteDecoder.cramIndexToBrightness(greenIndex);
         int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
-        color = new Color(r, g, b);
-        jPanelColor.setBackground(color);
+        color = CRAMColor.fromPremadeCramColor(r, g, b, 255);
+        jPanelColor.setBackground(color.CRAMColor());
         if (colorPane != null)
             colorPane.updateColor(color);
         displayRGBColor();
         jPanelColor.revalidate();
     }
   
-    public void setColorPane(ColorPane cp){
+    public void setColorPane(ColorPane cp) {
         colorPane = cp;
-        Color color = colorPane.getCurrentColor();
-        redIndex = PaletteDecoder.brightnessToCramIndex(color.getRed());
-        greenIndex = PaletteDecoder.brightnessToCramIndex(color.getGreen());
-        blueIndex = PaletteDecoder.brightnessToCramIndex(color.getBlue());
+        if (colorPane != null) {
+            color = colorPane.getCurrentColor();
+        } else {
+            color = CRAMColor.BLACK;
+        }
+        redIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getRed());
+        greenIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getGreen());
+        blueIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getBlue());
         sliderR.setValue(redIndex);
         sliderG.setValue(greenIndex);
         sliderB.setValue(blueIndex);
