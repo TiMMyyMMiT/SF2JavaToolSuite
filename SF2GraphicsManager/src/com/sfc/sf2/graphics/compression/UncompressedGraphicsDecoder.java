@@ -26,8 +26,8 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
             Tile tile = new Tile();
             tile.setId(i);
             tile.setPalette(palette);
-            for(int y=0;y<8;y++){
-                for(int x=0;x<8;x+=2){
+            for(int y=0;y<PIXEL_HEIGHT;y++){
+                for(int x=0;x<PIXEL_WIDTH;x+=2){
                     byte currentByte = input[i*32+(y*8+x)/2];
                     int firstPixel = (currentByte & 0xF0)/16;
                     int secondPixel = currentByte & 0x0F;
@@ -49,7 +49,7 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
         byte[] output = new byte[tiles.length*32];
         for(int i=0;i<tiles.length;i++){
             int[] pixels = tiles[i].getPixels();
-            for(int y=0;y<pixels.length;y++){
+            for(int y=0;y<PIXEL_HEIGHT;y++){
                 for(int x=0;x<PIXEL_WIDTH;x+=2){
                     byte first = (byte)pixels[x+y*PIXEL_WIDTH];
                     byte second = (byte)pixels[x+1+y*PIXEL_WIDTH];
