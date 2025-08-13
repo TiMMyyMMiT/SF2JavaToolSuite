@@ -24,6 +24,8 @@ public class ColorEditor extends javax.swing.JPanel {
     public ColorEditor() {
         initComponents();
         jLabelRGB.setText("");
+        color = Color.BLACK;
+        displayRGBColor();
     }
     
     private void updateColor() {
@@ -48,7 +50,7 @@ public class ColorEditor extends javax.swing.JPanel {
     }
 
     public void displayRGBColor() {
-        jLabelRGB.setText(String.format("#%6d", Integer.toString(color.getRGB() & 0xffffff, 16)));
+        jLabelRGB.setText(String.format("#%06X", color.getRGB() & 0xffffff));
     }
 
     /**
