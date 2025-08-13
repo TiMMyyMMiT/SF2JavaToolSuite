@@ -16,6 +16,7 @@ import com.sfc.sf2.mapsprite.MapSpriteManager.MapSpriteExportMode;
 import com.sfc.sf2.mapsprite.settings.MapSpriteSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.JRadioButton;
 
 /**
  *
@@ -25,6 +26,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     
     private final MapSpriteSettings mapspriteSettings = new MapSpriteSettings();
     private final MapSpriteManager mapSpriteManager = new MapSpriteManager();
+    private boolean settingFileFormat = false;
     
     public MapspriteMainEditor() {
         super();
@@ -45,6 +47,10 @@ public class MapspriteMainEditor extends AbstractMainEditor {
             jComboBox2.addItem(exportModes[i].toString());
         }
         jComboBox2.setSelectedItem(mode.toString());
+        jRadioButton1.setSelected(mapspriteSettings.getExportFileFormat() == FileFormat.PNG);
+        jRadioButton2.setSelected(mapspriteSettings.getExportFileFormat() != FileFormat.PNG);
+        jRadioButton3.setSelected(mapspriteSettings.getExportFileFormat() == FileFormat.PNG);
+        jRadioButton4.setSelected(mapspriteSettings.getExportFileFormat() != FileFormat.PNG);
     }
     
     @Override
@@ -314,9 +320,19 @@ public class MapspriteMainEditor extends AbstractMainEditor {
             buttonGroupImport.add(jRadioButton3);
             jRadioButton3.setSelected(true);
             jRadioButton3.setText("PNG");
+            jRadioButton3.addChangeListener(new javax.swing.event.ChangeListener() {
+                public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                    jRadioStateChanged_Png(evt);
+                }
+            });
 
             buttonGroupImport.add(jRadioButton4);
             jRadioButton4.setText("GIF");
+            jRadioButton4.addChangeListener(new javax.swing.event.ChangeListener() {
+                public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                    jRadioStateChanged_Gif(evt);
+                }
+            });
 
             javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
             jPanel7.setLayout(jPanel7Layout);
@@ -453,10 +469,20 @@ public class MapspriteMainEditor extends AbstractMainEditor {
 
                     buttonGroupExport.add(jRadioButton2);
                     jRadioButton2.setText("GIF");
+                    jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
+                        public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                            jRadioStateChanged_Gif(evt);
+                        }
+                    });
 
                     buttonGroupExport.add(jRadioButton1);
                     jRadioButton1.setSelected(true);
                     jRadioButton1.setText("PNG");
+                    jRadioButton1.addChangeListener(new javax.swing.event.ChangeListener() {
+                        public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                            jRadioStateChanged_Png(evt);
+                        }
+                    });
 
                     jLabel4.setText("File format :");
 
@@ -692,10 +718,41 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         Object exportMode = jComboBox2.getSelectedItem();
         if (exportMode != null) {
-            mapspriteSettings.setExportMode(MapSpriteExportMode.valueOf((String)exportMode));
-            SettingsManager.saveSettingsFile();
+            MapSpriteExportMode mode = MapSpriteExportMode.valueOf((String)exportMode);
+            if (mapspriteSettings.getExportMode() != mode) {
+                mapspriteSettings.setExportMode(mode);
+                SettingsManager.saveSettingsFile();
+            }
         }
     }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jRadioStateChanged_Png(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioStateChanged_Png
+        if (settingFileFormat) return;
+        settingFileFormat = true;
+        JRadioButton radioButton = (JRadioButton)evt.getSource();
+        if (radioButton != null && radioButton.isSelected() && mapspriteSettings.getExportFileFormat() != FileFormat.PNG) {
+            FileFormat format = FileFormat.PNG;
+            jRadioButton1.setSelected(true);
+            jRadioButton3.setSelected(true);
+            mapspriteSettings.setExportFileFormat(format);
+            SettingsManager.saveSettingsFile();
+        }
+        settingFileFormat = false;
+    }//GEN-LAST:event_jRadioStateChanged_Png
+
+    private void jRadioStateChanged_Gif(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioStateChanged_Gif
+        if (settingFileFormat) return;
+        settingFileFormat = true;
+        JRadioButton radioButton = (JRadioButton)evt.getSource();
+        if (radioButton != null && radioButton.isSelected() && mapspriteSettings.getExportFileFormat() != FileFormat.GIF) {
+            FileFormat format = FileFormat.GIF;
+            jRadioButton2.setSelected(true);
+            jRadioButton4.setSelected(true);
+            mapspriteSettings.setExportFileFormat(format);
+            SettingsManager.saveSettingsFile();
+        }
+        settingFileFormat = false;
+    }//GEN-LAST:event_jRadioStateChanged_Gif
     
     /**
      * To create a new Main Editor, copy the below code

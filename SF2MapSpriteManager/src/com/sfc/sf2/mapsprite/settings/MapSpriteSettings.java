@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.mapsprite.settings;
 
+import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
 import com.sfc.sf2.core.settings.AbstractSettings;
 import com.sfc.sf2.mapsprite.MapSpriteManager.MapSpriteExportMode;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 public class MapSpriteSettings implements AbstractSettings {
 
     private MapSpriteExportMode exportMode;
+    private FileFormat exportFileFormat;
     
     public MapSpriteExportMode getExportMode() {
         return exportMode;
@@ -25,9 +27,18 @@ public class MapSpriteSettings implements AbstractSettings {
         this.exportMode = exportMode;
     }
     
+    public FileFormat getExportFileFormat() {
+        return exportFileFormat;
+    }
+    
+    public void setExportFileFormat(FileFormat exportFileFormat) {
+        this.exportFileFormat = exportFileFormat;
+    }
+    
     @Override
     public void initialiseNewUser() {
         exportMode = MapSpriteExportMode.INDIVIDUAL_FILES;
+        exportFileFormat = exportFileFormat.PNG;
     }
 
     @Override
@@ -35,6 +46,7 @@ public class MapSpriteSettings implements AbstractSettings {
         if (data.containsKey("exportMode")) {
             try {
                 exportMode = MapSpriteExportMode.valueOf((String)data.get("exportMode"));
+                exportFileFormat = FileFormat.valueOf((String)data.get("exportFileFormat"));
             } catch (Exception e) {
                 initialiseNewUser();
             }
@@ -44,5 +56,6 @@ public class MapSpriteSettings implements AbstractSettings {
     @Override
     public void encodeSettings(HashMap<String, String> data) {
         data.put("exportMode", exportMode.toString());
+        data.put("exportFileFormat", exportFileFormat.toString());
     }
 }
