@@ -5,9 +5,11 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.PaletteManager;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -67,7 +69,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
         fileButton2 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel1 = new javax.swing.JPanel();
         palettePane1 = new com.sfc.sf2.palette.gui.PalettePane();
-        colorEditor1 = new com.sfc.sf2.palette.gui.ColorEditor();
+        colorEditor1 = new com.sfc.sf2.palette.gui.controls.CRAMColorEditor();
         jPanel5 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel11 = new javax.swing.JPanel();
@@ -193,11 +195,11 @@ public class PaletteMainEditor extends AbstractMainEditor {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(palettePane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(colorEditor1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(palettePane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -401,7 +403,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
      */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.palette.gui.ColorEditor colorEditor1;
+    private com.sfc.sf2.palette.gui.controls.CRAMColorEditor colorEditor1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;

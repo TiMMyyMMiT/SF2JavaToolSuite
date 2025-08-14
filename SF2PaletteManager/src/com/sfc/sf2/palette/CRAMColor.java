@@ -68,6 +68,14 @@ public class CRAMColor {
     }
     
     @Override
+    public String toString() {
+        int r = cramColor.getRed();
+        int g = cramColor.getGreen();
+        int b = cramColor.getBlue();
+        return String.format("CRAM: [%02d, %02d, %02d] - Color: [r=%d, g=%d, b=%d]", r, g, b, PaletteDecoder.brightnessToCramIndex(r), PaletteDecoder.brightnessToCramIndex(g), PaletteDecoder.brightnessToCramIndex(b));
+    }
+    
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;

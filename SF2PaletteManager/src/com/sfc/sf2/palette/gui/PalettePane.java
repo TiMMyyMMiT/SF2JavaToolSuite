@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
@@ -18,7 +19,7 @@ import javax.swing.JPanel;
  */
 public class PalettePane extends JPanel {
         
-    private ColorEditor colorEditor;
+    private CRAMColorEditor colorEditor;
     private Palette palette;
     private ColorPane[] colorPanes;
     
@@ -35,11 +36,11 @@ public class PalettePane extends JPanel {
         }
     }
 
-    public ColorEditor getColorEditor() {
+    public CRAMColorEditor getColorEditor() {
         return colorEditor;
     }
 
-    public void setColorEditor(ColorEditor colorEditor) {
+    public void setColorEditor(CRAMColorEditor colorEditor) {
         this.colorEditor = colorEditor;
         for (int i = 0; i < colorPanes.length; i++) {
             colorPanes[i].setEditor(colorEditor);

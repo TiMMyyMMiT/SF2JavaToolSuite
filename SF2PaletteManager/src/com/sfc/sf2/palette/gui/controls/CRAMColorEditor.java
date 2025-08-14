@@ -3,30 +3,81 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.sfc.sf2.palette.gui;
+package com.sfc.sf2.palette.gui.controls;
 
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.PaletteDecoder;
+import com.sfc.sf2.palette.gui.ColorPane;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Desktop;
+import java.awt.Dialog;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.HeadlessException;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.Serializable;
 import java.net.URL;
+import java.util.Locale;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JSlider;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 /**
  *
  * @author TiMMy
  */
-public class ColorEditor extends javax.swing.JPanel {
+public class CRAMColorEditor extends javax.swing.JPanel {
 
     ColorPane colorPane;
     CRAMColor color;
     int redIndex, greenIndex, blueIndex;
     
-    public ColorEditor() {
+    public CRAMColorEditor() {
         initComponents();
-        jLabelRGB.setText("");
-        color = CRAMColor.BLACK;
-        displayRGBColor();
+        setColor(CRAMColor.BLACK);
+    }
+    
+    public CRAMColorEditor(CRAMColor initialColor) {
+        initComponents();
+        setColor(initialColor);
+    }
+  
+    public void setColorPane(ColorPane cp) {
+        colorPane = cp;
+        setColor(colorPane == null ? CRAMColor.BLACK : colorPane.getCurrentColor());
+    }
+    
+    public CRAMColor getColor() {
+        return color;
+    }
+    
+    public void setColor(CRAMColor color) {
+        redIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getRed());
+        greenIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getGreen());
+        blueIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getBlue());
+        sliderR.setValue(redIndex);
+        sliderG.setValue(greenIndex);
+        sliderB.setValue(blueIndex);
+        updateColor();
     }
     
     private void updateColor() {
@@ -39,22 +90,6 @@ public class ColorEditor extends javax.swing.JPanel {
             colorPane.updateColor(color);
         displayRGBColor();
         jPanelColor.revalidate();
-    }
-  
-    public void setColorPane(ColorPane cp) {
-        colorPane = cp;
-        if (colorPane != null) {
-            color = colorPane.getCurrentColor();
-        } else {
-            color = CRAMColor.BLACK;
-        }
-        redIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getRed());
-        greenIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getGreen());
-        blueIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getBlue());
-        sliderR.setValue(redIndex);
-        sliderG.setValue(greenIndex);
-        sliderB.setValue(blueIndex);
-        updateColor();
     }
 
     public void displayRGBColor() {
@@ -212,4 +247,184 @@ public class ColorEditor extends javax.swing.JPanel {
     private javax.swing.JSlider sliderG;
     private javax.swing.JSlider sliderR;
     // End of variables declaration//GEN-END:variables
+
+    public static CRAMColor showDialog(Component component, String title, CRAMColor initialColor) throws HeadlessException {
+
+        final CRAMColorEditor pane = new CRAMColorEditor(initialColor != null ? initialColor : CRAMColor.WHITE);
+        com.sfc.sf2.palette.gui.controls.ColorTracker ok = new com.sfc.sf2.palette.gui.controls.ColorTracker(pane);
+        JDialog dialog = createDialog(component, title, true, pane, ok, null);
+        dialog.addComponentListener(new com.sfc.sf2.palette.gui.controls.ColorChooserDialog.DisposeOnClose());
+        dialog.setVisible(true);// blocks until user brings dialog down...
+
+        return ok.getColor();
+    }
+    
+    private static JDialog createDialog(Component c, String title, boolean modal, CRAMColorEditor chooserPane, ActionListener okListener, ActionListener cancelListener) throws HeadlessException {
+
+        Window window = JOptionPane.getFrameForComponent(c);
+        com.sfc.sf2.palette.gui.controls.ColorChooserDialog dialog;
+        if (window instanceof Frame) {
+            dialog = new com.sfc.sf2.palette.gui.controls.ColorChooserDialog((Frame)window, title, modal, c, chooserPane, okListener, cancelListener);
+        } else {
+            dialog = new com.sfc.sf2.palette.gui.controls.ColorChooserDialog((Dialog)window, title, modal, c, chooserPane, okListener, cancelListener);
+        }
+        dialog.getAccessibleContext().setAccessibleDescription(title);
+        return dialog;
+    }
+}
+
+@SuppressWarnings("serial") // Superclass is not serializable across versions
+class ColorChooserDialog extends JDialog {
+    private CRAMColor initialColor;
+    private CRAMColorEditor chooserPane;
+    private JButton cancelButton;
+
+    public ColorChooserDialog(Dialog owner, String title, boolean modal, Component c, CRAMColorEditor chooserPane, ActionListener okListener, ActionListener cancelListener) throws HeadlessException {
+        super(owner, title, modal);
+        initColorChooserDialog(c, chooserPane, okListener, cancelListener);
+    }
+
+    public ColorChooserDialog(Frame owner, String title, boolean modal, Component c, CRAMColorEditor chooserPane, ActionListener okListener, ActionListener cancelListener) throws HeadlessException {
+        super(owner, title, modal);
+        initColorChooserDialog(c, chooserPane, okListener, cancelListener);
+    }
+
+    protected void initColorChooserDialog(Component c, CRAMColorEditor chooserPane, ActionListener okListener, ActionListener cancelListener) {
+        setResizable(false);
+
+        this.chooserPane = chooserPane;
+
+        Locale locale = getLocale();
+        String okString = "Ok";
+        String cancelString = "Cancel";
+        String resetString = "Reset";
+
+        Container contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(chooserPane, BorderLayout.CENTER);
+
+        /*
+         * Create Lower button panel
+         */
+        JPanel buttonPane = new JPanel();
+        buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JButton okButton = new JButton(okString);
+        getRootPane().setDefaultButton(okButton);
+        okButton.getAccessibleContext().setAccessibleDescription(okString);
+        okButton.setActionCommand("OK");
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        if (okListener != null) {
+            okButton.addActionListener(okListener);
+        }
+        buttonPane.add(okButton);
+
+        cancelButton = new JButton(cancelString);
+        cancelButton.getAccessibleContext().setAccessibleDescription(cancelString);
+
+        // The following few lines are used to register esc to close the dialog
+        @SuppressWarnings("serial") // anonymous class
+        Action cancelKeyAction = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                //((AbstractButton)e.getSource()).fireActionPerformed(e);
+            }
+        };
+        KeyStroke cancelKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        InputMap inputMap = cancelButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = cancelButton.getActionMap();
+        if (inputMap != null && actionMap != null) {
+            inputMap.put(cancelKeyStroke, "cancel");
+            actionMap.put("cancel", cancelKeyAction);
+        }
+        // end esc handling
+
+        cancelButton.setActionCommand("cancel");
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        if (cancelListener != null) {
+            cancelButton.addActionListener(cancelListener);
+        }
+        buttonPane.add(cancelButton);
+
+        JButton resetButton = new JButton(resetString);
+        resetButton.getAccessibleContext().setAccessibleDescription(resetString);
+        resetButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               reset();
+           }
+        });
+        /*int mnemonic = sun.swing.SwingUtilities2.getUIDefaultsInt("ColorChooser.resetMnemonic", locale, -1);
+        if (mnemonic != -1) {
+            resetButton.setMnemonic(mnemonic);
+        }*/
+        buttonPane.add(resetButton);
+        contentPane.add(buttonPane, BorderLayout.SOUTH);
+
+        if (JDialog.isDefaultLookAndFeelDecorated()) {
+            boolean supportsWindowDecorations =
+            UIManager.getLookAndFeel().getSupportsWindowDecorations();
+            if (supportsWindowDecorations) {
+                getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
+            }
+        }
+        applyComponentOrientation(((c == null) ? getRootPane() : c).getComponentOrientation());
+
+        pack();
+        setLocationRelativeTo(c);
+
+        this.addWindowListener(new Closer());
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        if (visible) {
+            initialColor = chooserPane.getColor();
+        }
+        super.setVisible(visible);
+    }
+
+    public void reset() {
+        chooserPane.setColor(initialColor);
+    }
+
+    @SuppressWarnings("serial") // JDK-implementation class
+    class Closer extends WindowAdapter implements Serializable{
+        public void windowClosing(WindowEvent e) {
+            cancelButton.doClick(0);
+            Window w = e.getWindow();
+            w.setVisible(false);
+        }
+    }
+
+    @SuppressWarnings("serial") // JDK-implementation class
+    static class DisposeOnClose extends ComponentAdapter implements Serializable{
+        public void componentHidden(ComponentEvent e) {
+            Window w = (Window)e.getComponent();
+            w.dispose();
+        }
+    }
+
+}
+
+class ColorTracker implements ActionListener, Serializable {
+    CRAMColorEditor chooser;
+    CRAMColor color;
+
+    public ColorTracker(CRAMColorEditor c) {
+        chooser = c;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        color = chooser.getColor();
+    }
+
+    public CRAMColor getColor() {
+        return color;
+    }
 }
