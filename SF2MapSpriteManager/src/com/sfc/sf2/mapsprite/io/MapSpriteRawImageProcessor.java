@@ -81,7 +81,6 @@ public class MapSpriteRawImageProcessor extends AbstractRawImageProcessor<Tilese
         }
         BufferedImage image = new BufferedImage(tilesPerRow*3*PIXEL_WIDTH, imageHeight*3*PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, palette.getIcm());
         WritableRaster raster = image.getRaster();
-
         for (int f = 0; f < item.length; f++) {
             if (item[f] == null || item[f].getTiles() == null) {
                 continue;

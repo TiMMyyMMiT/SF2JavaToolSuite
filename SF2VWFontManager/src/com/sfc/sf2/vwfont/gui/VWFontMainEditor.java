@@ -6,9 +6,12 @@
 package com.sfc.sf2.vwfont.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.vwfont.VWFontManager;
-import java.io.File;
-import javax.swing.JFileChooser;
+import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  *
@@ -58,8 +61,6 @@ public class VWFontMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jFileChooser2 = new javax.swing.JFileChooser();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
@@ -67,29 +68,21 @@ public class VWFontMainEditor extends AbstractMainEditor {
         jPanel3 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jButton14 = new javax.swing.JButton();
         jButton18 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        fileButton1 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel9 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        jButton17 = new javax.swing.JButton();
+        directoryButton1 = new com.sfc.sf2.core.gui.controls.DirectoryButton();
         jButton12 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel11 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
-        jButton19 = new javax.swing.JButton();
+        fileButton2 = new com.sfc.sf2.core.gui.controls.FileButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
-        jLabel15 = new javax.swing.JLabel();
-        jTextField15 = new javax.swing.JTextField();
-        jButton27 = new javax.swing.JButton();
+        directoryButton2 = new com.sfc.sf2.core.gui.controls.DirectoryButton();
         jButton13 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
@@ -100,8 +93,6 @@ public class VWFontMainEditor extends AbstractMainEditor {
         jLabel10 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
-
-        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2VWFontManager");
@@ -114,17 +105,6 @@ public class VWFontMainEditor extends AbstractMainEditor {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Import from :"));
         jPanel3.setPreferredSize(new java.awt.Dimension(590, 135));
 
-        jLabel8.setText("BIN file :");
-
-        jTextField8.setText(".\\variablewidthfont.bin");
-
-        jButton14.setText("File...");
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
-            }
-        });
-
         jButton18.setText("Import");
         jButton18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,7 +112,11 @@ public class VWFontMainEditor extends AbstractMainEditor {
             }
         });
 
-        jLabel2.setText("<html>Select a disassembly's \"variablewidthfont.bin\" file.<br>It can be found at following directory : graphics/technical/fonts/</html>");
+        jLabel2.setText("<html>Select a disassembly's \"variablewidthfont.bin\" file.<br>It can be found at following directory : graphics/tech/fonts/</html>");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        fileButton1.setFilePath(".\\variablewidthfont.bin");
+        fileButton1.setLabelText("BIN File :");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -140,14 +124,9 @@ public class VWFontMainEditor extends AbstractMainEditor {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton14))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,30 +135,20 @@ public class VWFontMainEditor extends AbstractMainEditor {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
-                    .addComponent(jButton14))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton18)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Disassembly", jPanel4);
 
-        jLabel11.setText("Base path :");
-
-        jTextField11.setText(".\\");
-
-            jButton17.setText("File...");
-            jButton17.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton17ActionPerformed(evt);
-                }
-            });
+        directoryButton1.setDirectoryPath(".\\export\\");
+            directoryButton1.setLabelText("Symbols drectory :");
 
             jButton12.setText("Import");
             jButton12.addActionListener(new java.awt.event.ActionListener() {
@@ -188,7 +157,8 @@ public class VWFontMainEditor extends AbstractMainEditor {
                 }
             });
 
-            jLabel3.setText("<html>Select a directory with \"symbolXX.png\" files.<br>Base path can end with an optional filename prefix.<br>\nThe symbol's 'width' should be denoted by a single grey pixel (color index 2) at row 0.</html>");
+            jLabel3.setText("<html>Select a directory with \"symbolXX.png\" files.<br>\nThe symbol's 'width' should be denoted by a single grey pixel (color index 2) at row 0.</html>");
+            jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
             javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
             jPanel9.setLayout(jPanel9Layout);
@@ -197,15 +167,10 @@ public class VWFontMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel9Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel9Layout.createSequentialGroup()
-                            .addComponent(jLabel11)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField11)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton17))
+                        .addComponent(directoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                             .addGap(6, 6, 6)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButton12)))
                     .addContainerGap())
@@ -213,15 +178,13 @@ public class VWFontMainEditor extends AbstractMainEditor {
             jPanel9Layout.setVerticalGroup(
                 jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel9Layout.createSequentialGroup()
-                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel11)
-                        .addComponent(jButton17))
+                    .addContainerGap()
+                    .addComponent(directoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton12)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap())
             );
 
             jTabbedPane1.addTab("Image", jPanel9);
@@ -237,22 +200,16 @@ public class VWFontMainEditor extends AbstractMainEditor {
             );
             jPanel3Layout.setVerticalGroup(
                 jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                    .addContainerGap())
             );
 
             jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
             jPanel5.setPreferredSize(new java.awt.Dimension(32, 135));
 
-            jLabel12.setText("BIN file :");
-
-            jTextField12.setText(".\\variablewidthfont.bin");
-
-            jButton19.setText("File...");
-            jButton19.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton19ActionPerformed(evt);
-                }
-            });
+            fileButton2.setFilePath(".\\variablewidthfont.bin");
+            fileButton2.setLabelText("BIN file :");
 
             jButton2.setText("Export");
             jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -262,6 +219,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
             });
 
             jLabel1.setText("<html>Select a new target file. This export will create a new file.</html>");
+            jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
             javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
             jPanel11.setLayout(jPanel11Layout);
@@ -270,15 +228,9 @@ public class VWFontMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel11Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                            .addComponent(jLabel12)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField12, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton19))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                            .addGap(6, 6, 6)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                        .addComponent(fileButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                        .addGroup(jPanel11Layout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButton2)))
                     .addContainerGap())
@@ -286,29 +238,19 @@ public class VWFontMainEditor extends AbstractMainEditor {
             jPanel11Layout.setVerticalGroup(
                 jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel11Layout.createSequentialGroup()
-                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel12)
-                        .addComponent(jButton19))
+                    .addContainerGap()
+                    .addComponent(fileButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton2)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap())
             );
 
             jTabbedPane2.addTab("Disassembly", jPanel11);
 
-            jLabel15.setText("Base path :");
-
-            jTextField15.setText(".\\");
-
-                jButton27.setText("File...");
-                jButton27.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jButton27ActionPerformed(evt);
-                    }
-                });
+            directoryButton2.setDirectoryPath(".\\export\\");
+                directoryButton2.setLabelText("Image directory :");
 
                 jButton13.setText("Export");
                 jButton13.addActionListener(new java.awt.event.ActionListener() {
@@ -318,6 +260,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
                 });
 
                 jLabel9.setText("<html>Select a target directory to create new \"symbolXX.png\" files.<br>The single grey pixel at row 0 indicates the 'width' of the symbol.</html>");
+                jLabel9.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
                 javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
                 jPanel14.setLayout(jPanel14Layout);
@@ -326,28 +269,20 @@ public class VWFontMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel14Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel14Layout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton27))
+                            .addComponent(directoryButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton13)))
                         .addContainerGap())
                 );
                 jPanel14Layout.setVerticalGroup(
                     jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel14Layout.createSequentialGroup()
-                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15)
-                            .addComponent(jButton27))
+                        .addContainerGap()
+                        .addComponent(directoryButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton13)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -359,7 +294,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
                 jPanel5.setLayout(jPanel5Layout);
                 jPanel5Layout.setHorizontalGroup(
                     jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jTabbedPane2)
                         .addContainerGap())
@@ -367,7 +302,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
                 jPanel5Layout.setVerticalGroup(
                     jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
                         .addContainerGap())
                 );
 
@@ -386,9 +321,9 @@ public class VWFontMainEditor extends AbstractMainEditor {
                     jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                 );
 
@@ -508,54 +443,51 @@ public class VWFontMainEditor extends AbstractMainEditor {
             }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        fontManager.exportDisassembly(jTextField12.getText());
+        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        if (!PathHelpers.createPathIfRequred(disasmPath)) return;
+        try {
+            fontManager.exportDisassembly(disasmPath, fontSymbolLayoutPanel.getFontSymbols());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Font symbol disasm could not be exported to : " + disasmPath);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        int returnVal = jFileChooser1.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooser1.getSelectedFile();
-            jTextField12.setText(file.getAbsolutePath());
-        }
-    }//GEN-LAST:event_jButton19ActionPerformed
-
-    private void jButton27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton27ActionPerformed
-        int returnVal = jFileChooser2.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooser2.getSelectedFile();
-            jTextField15.setText(file.getAbsolutePath()+System.getProperty("file.separator"));
-        }
-    }//GEN-LAST:event_jButton27ActionPerformed
-
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        fontManager.exportPng(jTextField15.getText());
+        Path directoryPath = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
+        if (!PathHelpers.createPathIfRequred(directoryPath)) return;
+        try {
+            fontManager.exportAllImages(directoryPath, fontSymbolLayoutPanel.getFontSymbols(), FileFormat.PNG);
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Font symbols images could not be exported to : " + directoryPath);
+        }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        fontManager.importPng(jTextField11.getText());
+        Path directoryPath = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
+        try {
+            FileFormat format = FileFormat.PNG;
+            fontManager.importAllImages(directoryPath, format);
+        } catch (Exception ex) {
+            fontManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Font symbol images could not be imported from directory : " + directoryPath);
+        }
         updateEditorData();
     }//GEN-LAST:event_jButton12ActionPerformed
 
-    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
-        int returnVal = jFileChooser2.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooser2.getSelectedFile();
-            jTextField11.setText(file.getAbsolutePath()+System.getProperty("file.separator"));
-        }
-    }//GEN-LAST:event_jButton17ActionPerformed
-
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        fontManager.importDisassembly(jTextField8.getText());
+        Path disasmPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        try {
+            fontManager.importDisassembly(disasmPath);
+        } catch (Exception ex) {
+            fontManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Font symbol disasm could not be imported from entries file : " + disasmPath);
+        }
         updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
-
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        int returnVal = jFileChooser1.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooser1.getSelectedFile();
-            jTextField8.setText(file.getAbsolutePath());
-        }
-    }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         symbolLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
@@ -585,27 +517,21 @@ public class VWFontMainEditor extends AbstractMainEditor {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.Console console1;
+    private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButton1;
+    private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButton2;
+    private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
+    private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
     private com.sfc.sf2.vwfont.gui.FontSymbolLayoutPanel fontSymbolLayoutPanel;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton27;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -622,10 +548,6 @@ public class VWFontMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 
 }

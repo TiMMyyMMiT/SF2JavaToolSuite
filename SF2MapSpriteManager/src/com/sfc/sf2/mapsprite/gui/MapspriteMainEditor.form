@@ -393,7 +393,7 @@
                                     <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton2">
                                       <Properties>
                                         <Property name="filePath" type="java.lang.String" value=".\u005centries.asm" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Mapsprite entires :"/>
+                                        <Property name="labelText" type="java.lang.String" value="Mapsprite entries :"/>
                                       </Properties>
                                     </Component>
                                   </SubComponents>
@@ -463,7 +463,7 @@
                                     <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButton1">
                                       <Properties>
                                         <Property name="directoryPath" type="java.lang.String" value=".\u005cexport\u005c" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Image Directory"/>
+                                        <Property name="labelText" type="java.lang.String" value="Image directory :"/>
                                       </Properties>
                                     </Component>
                                     <Container class="javax.swing.JPanel" name="jPanel7">
@@ -694,7 +694,7 @@
                                     <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButton3">
                                       <Properties>
                                         <Property name="directoryPath" type="java.lang.String" value=".\u005cexport\u005c" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Image Directory :"/>
+                                        <Property name="labelText" type="java.lang.String" value="Image directory :"/>
                                       </Properties>
                                     </Component>
                                     <Container class="javax.swing.JPanel" name="jPanel2">

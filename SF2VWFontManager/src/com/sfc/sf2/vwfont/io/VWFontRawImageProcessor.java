@@ -5,10 +5,14 @@
  */
 package com.sfc.sf2.vwfont.io;
 
+import com.sfc.sf2.core.io.AbstractRawImageProcessor;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.vwfont.FontSymbol;
 import static com.sfc.sf2.vwfont.FontSymbol.PIXEL_HEIGHT;
 import static com.sfc.sf2.vwfont.FontSymbol.PIXEL_WIDTH;
 import java.awt.image.BufferedImage;
+import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +26,16 @@ import javax.imageio.ImageIO;
  *
  * @author wiz
  */
-public class PngManager {
+public class VWFontRawImageProcessor extends AbstractRawImageProcessor<FontSymbol, EmptyPackage> {
     
     private static final String CHARACTER_FILENAME = "symbolXX.png";
+
+    @Override
+    protected FontSymbol parseImageData(WritableRaster raster, IndexColorModel icm, EmptyPackage pckg) throws DisassemblyException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
-    public static FontSymbol[] importPng(String basepath){
+    public static FontSymbol[] importPng(String basepath) {
         System.out.println("com.sfc.sf2.vwfont.io.PngManager.importPng() - Importing PNG files ...");
         FontSymbol[] symbols = null;
         List<FontSymbol> symbolsList = new ArrayList();
@@ -77,25 +86,14 @@ public class PngManager {
         System.out.println("com.sfc.sf2.vwfont.io.PngManager.importPng() - PNG files imported.");        
         return symbols;
     }
-    
-    public static void exportPng(FontSymbol[] symbols, String filepath) {
-        try {
-            System.out.println("com.sfc.sf2.vwfont.io.PngManager.exportPng() - Exporting PNG files ...");
-            for(int s = 0; s<symbols.length; s++){
-                String index = String.format("%03d", s);
-                
-                BufferedImage image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, symbols[s].getPalette().getIcm());
-                WritableRaster raster = image.getRaster();
 
-                int[] data = symbols[s].getPixels();
-                data[symbols[s].getWidth()] = 2;
-                raster.setPixels(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, data);
-                File outputfile = new File(filepath + System.getProperty("file.separator") + CHARACTER_FILENAME.replace("XX.png", index+".png"));
-                ImageIO.write(image, "png", outputfile);
-            }
-            System.out.println("com.sfc.sf2.vwfont.io.PngManager.exportPng() - PNG files exported.");
-        } catch (Exception ex) {
-            Logger.getLogger(PngManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    @Override
+    protected BufferedImage packageImageData(FontSymbol item, EmptyPackage pckg) throws DisassemblyException {
+        BufferedImage image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, item.getPalette().getIcm());
+        WritableRaster raster = image.getRaster();
+        int[] data = item.getPixels();
+        data[item.getWidth()] = 2;
+        raster.setPixels(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, data);
+        return image;
     }
 }

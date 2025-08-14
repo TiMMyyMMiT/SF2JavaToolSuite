@@ -31,7 +31,10 @@ public class PortraitManager extends AbstractManager {
 
     @Override
     public void clearData() {
-        portrait = null;
+        if (portrait != null) {
+            portrait.clearIndexedColorImage();
+            portrait = null;
+        }
     }
     
     public void importDisassembly(Path filePath) throws IOException, DisassemblyException {

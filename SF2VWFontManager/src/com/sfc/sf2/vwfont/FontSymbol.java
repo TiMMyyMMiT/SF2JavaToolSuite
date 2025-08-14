@@ -24,7 +24,7 @@ public class FontSymbol {
     private int id;
     private int width;
     private int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
-    private BufferedImage image = null;
+    private BufferedImage indexedColorImage = null;
 
     public int[] getPixels() {
         return pixels;
@@ -55,20 +55,21 @@ public class FontSymbol {
     }
 
     public BufferedImage getIndexColoredImage() {
-        if(image == null) {
-            image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, DEFAULT_PALETTE.getIcm());
-            byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
+        if(indexedColorImage == null) {
+            indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, DEFAULT_PALETTE.getIcm());
+            byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
             for (int j = 0; j < PIXEL_HEIGHT; j++) {
                 for (int i = 0; i < PIXEL_WIDTH; i++) {
                     data[i+j*PIXEL_WIDTH] = (byte)pixels[i+j*PIXEL_WIDTH];
                 }
             }
         }
-        return image;        
+        return indexedColorImage;        
     }
     
-    public void clearImage() {
-        image = null;
+    public void clearIndexedColorImage() {
+        indexedColorImage.flush();
+        indexedColorImage = null;
     }
     
     public static FontSymbol EmptySymbol() {

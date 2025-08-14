@@ -5,64 +5,101 @@
  */
 package com.sfc.sf2.vwfont;
 
-import com.sfc.sf2.vwfont.io.DisassemblyManager;
-import com.sfc.sf2.vwfont.io.PngManager;
-import com.sfc.sf2.vwfont.io.RomManager;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.AbstractRawImageProcessor;
+import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.helpers.FileHelpers;
+import com.sfc.sf2.vwfont.io.VWFontDisassemblyProcessor;
+import com.sfc.sf2.vwfont.io.VWFontRawImageProcessor;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  *
  * @author wiz
  */
-public class VWFontManager {
-       
+public class VWFontManager extends AbstractManager {
+    private final VWFontDisassemblyProcessor fontDisassemblyProcessor = new VWFontDisassemblyProcessor();
+    private final VWFontRawImageProcessor fontRawImageProcessor = new VWFontRawImageProcessor();
+    
     public FontSymbol[] symbols;
+
+    @Override
+    public void clearData() {
+        if (symbols != null) {
+            for (int i = 0; i < symbols.length; i++) {
+                symbols[i].clearIndexedColorImage();
+            }
+            symbols = null;
+        }
+    }
        
-    public void importDisassembly(String filePath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importDisassembly() - Importing disassembly ...");
-        symbols = DisassemblyManager.importDisassembly(filePath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importDisassembly() - Disassembly imported.");
+    public FontSymbol[] importDisassembly(Path fontFilePath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        symbols = fontDisassemblyProcessor.importDisassembly(fontFilePath, null);
+        Console.logger().info("VW fonts successfully imported from : " + fontFilePath);
+        Console.logger().finest("EXITING importDisassembly");
+        return symbols;
     }
     
-    public void exportDisassembly(String filePath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportDisassembly(symbols, filePath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importDisassembly() - Disassembly exported.");        
-    }   
-    
-    public void importOriginalRom(String originalRomFilePath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importOriginalRom() - Importing original ROM ...");
-        symbols = RomManager.importRom(RomManager.ORIGINAL_ROM_TYPE,originalRomFilePath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importOriginalRom() - Original ROM imported.");
+    public void exportDisassembly(Path fontFilePath, FontSymbol[] fontSymbols) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        fontDisassemblyProcessor.exportDisassembly(fontFilePath, symbols, null);
+        Console.logger().info("VW fonts successfully exported to : " + fontFilePath);
+        Console.logger().finest("EXITING exportDisassembly");
     }
     
-    public void exportOriginalRom(String originalRomFilePath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.exportOriginalRom() - Exporting original ROM ...");
-        RomManager.exportRom(RomManager.ORIGINAL_ROM_TYPE, symbols, originalRomFilePath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.exportOriginalRom() - Original ROM exported.");        
-    }   
-    
-    public void importCaravanRom(String caravanRomFilePath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importCaravanRom() - Importing Caravan ROM ...");
-        symbols = RomManager.importRom(RomManager.CARAVAN_ROM_TYPE,caravanRomFilePath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importCaravanRom() - Caravan ROM imported.");
+    public FontSymbol[] importAllImages(Path basePath, FileFormat format) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importAllImages");
+        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "symbol", AbstractRawImageProcessor.GetFileExtensionString(format));
+        Console.logger().info(files.length + " Font symbol images found.");
+        ArrayList<FontSymbol> symbolsList = new ArrayList<>();
+        int failedToLoad = 0;
+        for (File file : files) {
+            Path symbolPath = file.toPath();
+            try {
+                FontSymbol symbol = fontRawImageProcessor.importRawImage(symbolPath, null);
+                symbolsList.add(symbol);
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Font symbol could not be imported : " + symbolPath + " : " + e);
+            }
+        }
+        symbols = new FontSymbol[symbolsList.size()];
+        symbols = symbolsList.toArray(symbols);
+        Console.logger().info(symbols.length + " font symbols successfully imported from images : " + basePath);
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " font symbols failed to import. See logs above");
+        }
+        Console.logger().finest("EXITING importAllImages");
+        return symbols;
     }
     
-    public void exportCaravanRom(String caravanRomFilePath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.exportCaravanRom() - Exporting original ROM ...");
-        RomManager.exportRom(RomManager.CARAVAN_ROM_TYPE, symbols, caravanRomFilePath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.exportCaravanRom() - Caravan ROM exported.");        
-    }    
-    
-    public void importPng(String basepath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importPng() - Importing PNG ...");
-        symbols = PngManager.importPng(basepath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.importPng() - PNG imported.");
-    }
-    
-    public void exportPng(String basepath){
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.exportPng() - Exporting PNG ...");
-        PngManager.exportPng(symbols, basepath);
-        System.out.println("com.sfc.sf2.vwfont.VWFontManager.exportPng() - PNG exported.");       
+    public void exportAllImages(Path basePath, FontSymbol[] symbols, FileFormat format) {
+        Console.logger().finest("ENTERING exportAllImages");
+        this.symbols = symbols;
+        int failedToSave = 0;
+        Path filePath = null;
+        int fileCount = 0;
+        for (int i = 0; i < symbols.length; i++) {
+            try {
+                filePath = basePath.resolve(String.format("symbol%02d%s", i, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                fontRawImageProcessor.exportRawImage(filePath, symbols[i], null);
+                fileCount++;
+            } catch (Exception e) {
+                failedToSave++;
+                Console.logger().warning("Font symbol could not be exported : " + filePath + " : " + e);
+            }
+        }
+        Console.logger().info((fileCount - failedToSave) + " font symbols successfully exported.");
+        if (failedToSave > 0) {
+            Console.logger().severe(failedToSave + " font symbols failed to export. See logs above");
+        }
+        Console.logger().finest("EXITING exportAllImages");    
     }
     
     public FontSymbol[] getFontSymbols() {

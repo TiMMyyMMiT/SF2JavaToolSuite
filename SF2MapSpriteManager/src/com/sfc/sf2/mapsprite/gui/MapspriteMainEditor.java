@@ -271,7 +271,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
         fileButton1.setLabelText("Palette file :");
 
         fileButton2.setFilePath(".\\entries.asm");
-        fileButton2.setLabelText("Mapsprite entires :");
+        fileButton2.setLabelText("Mapsprite entries :");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -315,7 +315,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         directoryButton1.setDirectoryPath(".\\export\\");
-            directoryButton1.setLabelText("Image Directory");
+            directoryButton1.setLabelText("Image directory :");
 
             buttonGroupImport.add(jRadioButton3);
             jRadioButton3.setSelected(true);
@@ -463,7 +463,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                 jLabel9.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
                 directoryButton3.setDirectoryPath(".\\export\\");
-                    directoryButton3.setLabelText("Image Directory :");
+                    directoryButton3.setLabelText("Image directory :");
 
                     jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -666,7 +666,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
             mapSpriteManager.exportAllImages(directoryPath, exportMode, format);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Map Sprite disasm could not be exported to : " + directoryPath);
+            Console.logger().severe("ERROR Map Sprite images could not be exported to : " + directoryPath);
         }
     }//GEN-LAST:event_jButton13ActionPerformed
 
@@ -679,7 +679,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
         } catch (Exception ex) {
             mapSpriteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Map Sprite disasm could not be imported from entries file : " + directoryPath);
+            Console.logger().severe("ERROR Map Sprite images could not be imported from directory : " + directoryPath);
         }
         updateEditorData();
     }//GEN-LAST:event_jButton12ActionPerformed

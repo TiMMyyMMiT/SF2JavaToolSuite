@@ -34,7 +34,10 @@ public class TilesetManager extends AbstractManager {
     @Override
     public void clearData() {
         paletteManager.clearData();
-        tileset = null;
+        if (tileset != null) {
+            tileset.clearIndexedColorImage(true);
+            tileset = null;
+        }
     }
        
     public Tileset importDisassembly(Path graphicsFilePath, Palette palette, TilesetCompression compression, int tilesPerRow) throws IOException, DisassemblyException {

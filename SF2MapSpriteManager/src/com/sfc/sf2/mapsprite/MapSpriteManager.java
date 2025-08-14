@@ -49,7 +49,12 @@ public class MapSpriteManager extends AbstractManager {
     @Override
     public void clearData() {
         paletteManager.clearData();
-        mapSprites = null;
+        if (mapSprites != null) {
+            for (int i = 0; i < mapSprites.length; i++) {
+                mapSprites[i].clearIndexedColorImage(true);
+            }
+            mapSprites = null;
+        }
     }
 
     public MapSprite[] importDisassembly(Path paletteFilePath, Path graphicsFilePath) throws IOException, DisassemblyException {
@@ -133,7 +138,7 @@ public class MapSpriteManager extends AbstractManager {
             Console.logger().severe(failedToSave + " mapsprites failed to export. See logs above");
         }
         Console.logger().finest("EXITING exportDisassembly");
-    } 
+    }
     
     public MapSprite[] importAllImages(Path paletteFilePath, Path basePath, FileFormat format) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importImage");
