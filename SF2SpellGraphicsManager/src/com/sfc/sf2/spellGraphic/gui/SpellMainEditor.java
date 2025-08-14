@@ -11,6 +11,7 @@ import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.spellGraphic.SpellGraphicManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import com.sfc.sf2.spellGraphic.InvocationGraphicManager;
@@ -55,10 +56,10 @@ public class SpellMainEditor extends AbstractMainEditor {
             spellLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
             spellLayoutPanel.setShowGrid(jCheckBox1.isSelected());
             if (spellTileset != null) {
-                Color[] colors = spellTileset.getPalette().getColors();
-                jPanelColor9.setBackground(colors[9]);
-                jPanelColor13.setBackground(colors[13]);
-                jPanelColor14.setBackground(colors[14]);
+                CRAMColor[] colors = spellTileset.getPalette().getColors();
+                jPanelColor9.setBackground(colors[9].CRAMColor());
+                jPanelColor13.setBackground(colors[13].CRAMColor());
+                jPanelColor14.setBackground(colors[14].CRAMColor());
             }
             spellLayoutPanel.setVisible(true);
             invocationLayoutPanel.setVisible(false);
@@ -1253,13 +1254,14 @@ public class SpellMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_colorPicker1ColorChanged
     
     private void updateSpellPaletteColor(int index, Color newColor) {
+        CRAMColor newCram = new CRAMColor(newColor);
         Tileset spellTileset = spellLayoutPanel.getTileset();
         if (spellTileset != null) {
             Palette palette = spellTileset.getPalette();
             if (palette != null) {
-                Color[] colors = spellTileset.getPalette().getColors();
-                if (!colors[index].equals(newColor)) {
-                    colors[index] = newColor;
+                CRAMColor[] colors = spellTileset.getPalette().getColors();
+                if (!colors[index].equals(newCram)) {
+                    colors[index] = newCram;
                     spellTileset.clearIndexedColorImage(true);
                     palette.setColors(colors, true);
                     spellLayoutPanel.redraw();

@@ -14,6 +14,7 @@ import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteDecoder;
 import java.awt.Color;
 import com.sfc.sf2.helpers.BinaryHelpers;
+import com.sfc.sf2.palette.CRAMColor;
 
 /**
  *
@@ -28,8 +29,8 @@ public class SpellDisassemblyProcessor extends AbstractDisassemblyProcessor<Tile
         }
         byte[] colorData = new byte[6];
         System.arraycopy(data, 2, colorData, 0, 6);
-        Color[] swapColors = PaletteDecoder.decodePalette(colorData);
-        Color[] paletteColors = new Color[pckg.defaultPalette().getColors().length];
+        CRAMColor[] swapColors = PaletteDecoder.decodePalette(colorData);
+        CRAMColor[] paletteColors = new CRAMColor[pckg.defaultPalette().getColors().length];
         System.arraycopy(pckg.defaultPalette().getColors(), 0, paletteColors, 0, paletteColors.length);
         paletteColors[9] = swapColors[0];
         paletteColors[13] = swapColors[1];
@@ -45,8 +46,8 @@ public class SpellDisassemblyProcessor extends AbstractDisassemblyProcessor<Tile
     
     @Override
     protected byte[] packageDisassemblyData(Tileset item, SpellTilesetPackage pckg) throws DisassemblyException {
-        Color[] paletteColors = item.getPalette().getColors();
-        Color[] swapColors = new Color[3];
+        CRAMColor[] paletteColors = item.getPalette().getColors();
+        CRAMColor[] swapColors = new CRAMColor[3];
         swapColors[0] = paletteColors[9];
         swapColors[1] = paletteColors[13];
         swapColors[2] = paletteColors[14];
