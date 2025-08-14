@@ -17,9 +17,7 @@ import java.awt.Graphics;
  * @author wiz
  */
 public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
-    
-    private static final int DEFAULT_SPRITES_PER_ROW = 6;   //up, left, down
-    
+        
     private MapSprite[] mapsprites;
     
     public MapSpriteLayoutPanel() {
@@ -37,10 +35,8 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
         if (mapsprites.length == 1) {
             return new Dimension(mapsprites[0].getSpritesWidth()*3*PIXEL_WIDTH, mapsprites[0].getSpritesHeight()*3*PIXEL_HEIGHT);
         } else {
-            int w = DEFAULT_SPRITES_PER_ROW*3*PIXEL_WIDTH;
-            int h = ((mapsprites.length)*2/DEFAULT_SPRITES_PER_ROW)*3*PIXEL_HEIGHT;
-            if ((mapsprites.length*2) % DEFAULT_SPRITES_PER_ROW != 0)
-                h += 3*PIXEL_HEIGHT;
+            int w = 6*3*PIXEL_WIDTH;    //6 sprites per mapsprite (2x up, 2x left, 2x down)
+            int h = mapsprites.length*3*PIXEL_HEIGHT;
             return new Dimension(w, h);
         }
     }
