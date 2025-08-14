@@ -33,7 +33,7 @@ public class PaletteDecoder {
     * Offset values half way between each CRAM value. Allows converting from 255 color brightness to CRAM color
     * 
     */                                                      //  0, 52,  87, 116, 144, 172, 206, 255
-    private static final int[] CRAM_OFFSET_ARRAY = new int[] { 26, 69, 101, 130, 158, 189, 230, 999 };
+    private static final int[] CRAM_OFFSET_ARRAY = new int[] { 17, 63, 96, 125, 153, 183, 222, 999 };
     
     public static int brightnessToCramIndex(int brightness) {
         for (Map.Entry<Integer, Integer> entry : CRAM_VALUE_MAP.entrySet()) {
