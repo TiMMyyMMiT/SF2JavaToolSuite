@@ -14,7 +14,7 @@ import java.util.BitSet;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
 public class VWFontDisassemblyProcessor extends AbstractDisassemblyProcessor<FontSymbol[], EmptyPackage> {
     
@@ -25,13 +25,13 @@ public class VWFontDisassemblyProcessor extends AbstractDisassemblyProcessor<Fon
         for (int i = 0; i < symbols.length; i++) {
             byte[] character = new byte[32];
             System.arraycopy(data, i*32, character, 0, 32);
-            symbols[i] = decodeSymbol(character);
+            symbols[i] = decodeSymbol(character, i);
         }
             System.out.println("Parsed Font Symbols : " + symbols.length);
         return symbols;
     }
     
-    private FontSymbol decodeSymbol(byte[] data) {
+    private FontSymbol decodeSymbol(byte[] data, int id) {
         int width = data[1];
         int[] pixels = new int[16*16];
         BitSet bits = BitSet.valueOf(data);
@@ -44,10 +44,7 @@ public class VWFontDisassemblyProcessor extends AbstractDisassemblyProcessor<Fon
             }
         }
         
-        FontSymbol symbol = new FontSymbol();
-        symbol.setWidth(width);
-        symbol.setPixels(pixels);
-        return symbol;
+        return new FontSymbol(id, pixels, width);
     }
 
     @Override

@@ -7,7 +7,6 @@ package com.sfc.sf2.vwfont;
 
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
@@ -17,7 +16,7 @@ import java.awt.image.DataBufferByte;
  */
 public class FontSymbol {
     
-    private static final Palette DEFAULT_PALETTE = new Palette(new CRAMColor[] { new CRAMColor(new Color(0xFFF0)), CRAMColor.BLACK, CRAMColor.LIGHT_GRAY }, false);
+    private static final Palette DEFAULT_PALETTE = new Palette(new CRAMColor[] { CRAMColor.WHITE, CRAMColor.BLACK, CRAMColor.LIGHT_GRAY }, true);
     public static final int PIXEL_WIDTH = 16;
     public static final int PIXEL_HEIGHT = 16;
     
@@ -26,6 +25,12 @@ public class FontSymbol {
     private int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
     private BufferedImage indexedColorImage = null;
 
+    public FontSymbol(int id, int[] pixels, int width) {
+        this.id = id;
+        this.pixels = pixels;
+        this.width = width;
+    }
+    
     public int[] getPixels() {
         return pixels;
     }
@@ -73,7 +78,7 @@ public class FontSymbol {
     }
     
     public static FontSymbol EmptySymbol() {
-        FontSymbol emptySymbol = new FontSymbol();
+        FontSymbol emptySymbol = new FontSymbol(-1, null, 2);
         return emptySymbol;
     }
 }

@@ -7,88 +7,38 @@ package com.sfc.sf2.vwfont.io;
 
 import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
-import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.vwfont.FontSymbol;
 import static com.sfc.sf2.vwfont.FontSymbol.PIXEL_HEIGHT;
 import static com.sfc.sf2.vwfont.FontSymbol.PIXEL_WIDTH;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
-public class VWFontRawImageProcessor extends AbstractRawImageProcessor<FontSymbol, EmptyPackage> {
+public class VWFontRawImageProcessor extends AbstractRawImageProcessor<FontSymbol, FontSymbolPackage> {
     
-    private static final String CHARACTER_FILENAME = "symbolXX.png";
-
     @Override
-    protected FontSymbol parseImageData(WritableRaster raster, IndexColorModel icm, EmptyPackage pckg) throws DisassemblyException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    public static FontSymbol[] importPng(String basepath) {
-        System.out.println("com.sfc.sf2.vwfont.io.PngManager.importPng() - Importing PNG files ...");
-        FontSymbol[] symbols = null;
-        List<FontSymbol> symbolsList = new ArrayList();
-        try{
-            int count = 0;
-            int index = 0;
-            File directory = new File(basepath);
-            File[] files = directory.listFiles();
-            for (File f : files) { 
-                if (f.getName().startsWith("symbol") && f.getName().endsWith(".png")) {
-                    BufferedImage img = ImageIO.read(f);
-                    if (img.getWidth() < PIXEL_WIDTH || img.getHeight() < PIXEL_HEIGHT) {
-                        throw new IOException(String.format("Image dimensions are wrong. Image must be %d x %d", PIXEL_WIDTH, PIXEL_HEIGHT));
-                    }
-                    int symbolWidth = 0;
-                    int[] symbolPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
-                    int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
-                    WritableRaster raster = img.getRaster();
-                    raster.getPixels(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
-                    for (int i = 0; i < pixels.length; i++) {
-                        if (pixels[i] == 2) {   //Width marker
-                            symbolWidth = i%PIXEL_WIDTH;
-                            symbolPixels[i] = 0;
-                        } else {
-                            symbolPixels[i] = pixels[i];
-                        }
-                    }
-                    index = count;
-                    String fileNumber = f.getName().replaceAll("[^0-9]", "");
-                    if (fileNumber.length() > 0)
-                        index = Integer.parseInt(fileNumber);
-                    FontSymbol symbol = new FontSymbol();
-                    symbol.setId(index);
-                    symbol.setPixels(symbolPixels);
-                    symbol.setWidth(symbolWidth);
-                    symbolsList.add(symbol);
-                    count++;
-                }
+    protected FontSymbol parseImageData(WritableRaster raster, IndexColorModel icm, FontSymbolPackage pckg) throws DisassemblyException {
+        int symbolWidth = 0;
+        int[] symbolPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
+        int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
+        raster.getPixels(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
+        for (int i = 0; i < pixels.length; i++) {
+            if (pixels[i] == 2) {   //Width marker
+                symbolWidth = i%PIXEL_WIDTH;
+                symbolPixels[i] = 0;
+            } else {
+                symbolPixels[i] = pixels[i];
             }
-            System.out.println("Loaded Font Symbols : " + symbolsList.size());
-            symbols = new FontSymbol[symbolsList.size()];
-            symbols = symbolsList.toArray(symbols);
-        }catch(IOException e){
-            System.out.println("No more character files to parse.");
-        }catch(Exception e){
-             System.err.println("com.sfc.sf2.text.io.DisassemblyManager.parseTextbank() - Error while parsing character data : "+e);
-        }        
-        System.out.println("com.sfc.sf2.vwfont.io.PngManager.importPng() - PNG files imported.");        
-        return symbols;
+        }
+        return new FontSymbol(pckg.id(), symbolPixels, symbolWidth);
     }
 
     @Override
-    protected BufferedImage packageImageData(FontSymbol item, EmptyPackage pckg) throws DisassemblyException {
+    protected BufferedImage packageImageData(FontSymbol item, FontSymbolPackage pckg) throws DisassemblyException {
         BufferedImage image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, item.getPalette().getIcm());
         WritableRaster raster = image.getRaster();
         int[] data = item.getPixels();

@@ -17,6 +17,14 @@ import java.awt.image.DataBufferInt;
  */
 public class GraphicsHelpers {
         
+    public static void drawFlatBackgroundColor(BufferedImage image, Color bgColor) {
+        int bgInt = bgColor.getRGB();
+        int[] data = ((DataBufferInt)(image.getRaster().getDataBuffer())).getData();
+        for (int i = 0; i < data.length; i++) {
+            data[i] = bgInt;
+        }
+    }
+    
     public static void drawBackgroundTransparencyPattern(BufferedImage image, Color bgColor, int pixelGrid) {
         Color bgDarkerColor = bgColor.darker();
         int bgInt = bgColor.getRGB();

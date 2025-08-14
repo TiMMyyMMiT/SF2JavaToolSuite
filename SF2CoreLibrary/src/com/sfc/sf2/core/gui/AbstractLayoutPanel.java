@@ -26,6 +26,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     private boolean redraw = true;
     private int renderCounter = 0;
     
+    protected boolean bgCheckerPattern = true;  
     protected boolean showGrid = false;    
     private int gridWidth = -1;
     private int gridHeight = -1;
@@ -54,7 +55,11 @@ public abstract class AbstractLayoutPanel extends JPanel {
             currentImage = new BufferedImage(dims.width, dims.height, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();
             //Render BG color
-            GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor, 4);
+            if (bgCheckerPattern) {
+                GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor, 4);
+            } else {
+                GraphicsHelpers.drawFlatBackgroundColor(currentImage, bgColor);
+            }
             //Render main image
             renderCounter++;
             System.getLogger(AbstractLayoutPanel.class.getName()).log(System.Logger.Level.ALL, "render " + renderCounter);

@@ -11,6 +11,7 @@ import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.helpers.FileHelpers;
+import com.sfc.sf2.vwfont.io.FontSymbolPackage;
 import com.sfc.sf2.vwfont.io.VWFontDisassemblyProcessor;
 import com.sfc.sf2.vwfont.io.VWFontRawImageProcessor;
 import java.io.File;
@@ -62,7 +63,10 @@ public class VWFontManager extends AbstractManager {
         for (File file : files) {
             Path symbolPath = file.toPath();
             try {
-                FontSymbol symbol = fontRawImageProcessor.importRawImage(symbolPath, null);
+                String fileNum = file.getName().replace("symbol", "");
+                fileNum = fileNum.substring(0, fileNum.indexOf('.'));
+                int index = Integer.parseInt(fileNum);
+                FontSymbol symbol = fontRawImageProcessor.importRawImage(symbolPath, new FontSymbolPackage(index));
                 symbolsList.add(symbol);
             } catch (Exception e) {
                 failedToLoad++;
@@ -85,12 +89,12 @@ public class VWFontManager extends AbstractManager {
         int failedToSave = 0;
         Path filePath = null;
         int fileCount = 0;
-        for (int i = 0; i < symbols.length; i++) {
+        for (FontSymbol symbol : symbols) {
             try {
-                filePath = basePath.resolve(String.format("symbol%02d%s", i, AbstractRawImageProcessor.GetFileExtensionString(format)));
-                fontRawImageProcessor.exportRawImage(filePath, symbols[i], null);
+                filePath = basePath.resolve(String.format("symbol%02d%s", symbol.getId(), AbstractRawImageProcessor.GetFileExtensionString(format)));
+                fontRawImageProcessor.exportRawImage(filePath, symbol, null);
                 fileCount++;
-            } catch (Exception e) {
+            }catch (Exception e) {
                 failedToSave++;
                 Console.logger().warning("Font symbol could not be exported : " + filePath + " : " + e);
             }

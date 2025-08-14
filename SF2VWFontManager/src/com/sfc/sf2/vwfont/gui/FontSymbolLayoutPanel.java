@@ -22,10 +22,10 @@ public class FontSymbolLayoutPanel extends AbstractLayoutPanel {
     private static final int DEFAULT_TILES_PER_ROW = 8;
         
     private FontSymbol[] symbols;
-    private boolean drawWidthMarker;
     
     public FontSymbolLayoutPanel() {
         super();
+        bgCheckerPattern = false;
         tilesPerRow = DEFAULT_TILES_PER_ROW;    //Symbols per row
         setGridDimensions(16, 16);
     }
@@ -47,12 +47,12 @@ public class FontSymbolLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected void buildImage(Graphics graphics) {
-        if (drawWidthMarker) {
-            graphics.setColor(Color.LIGHT_GRAY);
+        if (showGrid) {
+            graphics.setColor(bgColor.darker());
             for (int i = 0; i < symbols.length; i++) {
                 int x = symbols[i].getWidth() + (i%tilesPerRow)*PIXEL_WIDTH;
                 int y = (i/tilesPerRow)*PIXEL_HEIGHT;
-                graphics.drawLine(x, y, x, y+PIXEL_HEIGHT);
+                graphics.drawLine(x, y, x, y+PIXEL_HEIGHT-1);
             }
         }
         
