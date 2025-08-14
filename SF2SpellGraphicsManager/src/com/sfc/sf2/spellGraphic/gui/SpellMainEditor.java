@@ -13,9 +13,9 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
+import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.spellGraphic.InvocationGraphic;
 import com.sfc.sf2.spellGraphic.InvocationGraphicManager;
-import java.awt.Color;
 import java.nio.file.Path;
 import java.util.logging.Level;
 
@@ -104,7 +104,6 @@ public class SpellMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jColorChooser1 = new javax.swing.JColorChooser();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -171,6 +170,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanelColor14 = new javax.swing.JPanel();
         jSpinner1 = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
+        infoButton1 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanelInvocationData = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
@@ -178,6 +178,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jSpinner2 = new javax.swing.JSpinner();
         jSpinner3 = new javax.swing.JSpinner();
         jSpinner4 = new javax.swing.JSpinner();
+        infoButton2 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanel12 = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -708,7 +709,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         );
         spellLayoutPanelLayout.setVerticalGroup(
             spellLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 126, Short.MAX_VALUE)
+            .addGap(0, 118, Short.MAX_VALUE)
         );
 
         invocationLayoutPanel.setMinimumSize(new java.awt.Dimension(100, 100));
@@ -722,7 +723,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         );
         invocationLayoutPanelLayout.setVerticalGroup(
             invocationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 127, Short.MAX_VALUE)
+            .addGap(0, 119, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanellayoutContainerLayout = new javax.swing.GroupLayout(jPanellayoutContainer);
@@ -824,6 +825,9 @@ public class SpellMainEditor extends AbstractMainEditor {
 
         jLabel4.setText("Tiles per row :");
 
+        infoButton1.setMessageText("<html>Each spell uses the <i>\"basepalette\"</i> but then replaces the 9th, 13th, & 14th color in the palette.<br>Spells can use the other colors from the basepalette but they cannot be changed for a specific spell.</html>");
+        infoButton1.setText("");
+
         javax.swing.GroupLayout jPanelSpellDataLayout = new javax.swing.GroupLayout(jPanelSpellData);
         jPanelSpellData.setLayout(jPanelSpellDataLayout);
         jPanelSpellDataLayout.setHorizontalGroup(
@@ -842,7 +846,9 @@ public class SpellMainEditor extends AbstractMainEditor {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelColor14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanelColor14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelSpellDataLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -859,12 +865,13 @@ public class SpellMainEditor extends AbstractMainEditor {
                     .addComponent(jLabel17)
                     .addComponent(jPanelColor9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanelColor13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelColor14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanelColor14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelSpellDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(0, 0, 0))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelInvocationData.setBorder(javax.swing.BorderFactory.createTitledBorder("Invocation :"));
@@ -897,6 +904,9 @@ public class SpellMainEditor extends AbstractMainEditor {
             }
         });
 
+        infoButton2.setMessageText("<html>These values are stored in the invocation .bin file.<br>It is currently unknown what these values do.</html>");
+        infoButton2.setText("");
+
         javax.swing.GroupLayout jPanelInvocationDataLayout = new javax.swing.GroupLayout(jPanelInvocationData);
         jPanelInvocationData.setLayout(jPanelInvocationDataLayout);
         jPanelInvocationDataLayout.setHorizontalGroup(
@@ -911,7 +921,9 @@ public class SpellMainEditor extends AbstractMainEditor {
                         .addGap(30, 30, 30)
                         .addComponent(jLabel32)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(infoButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelInvocationDataLayout.createSequentialGroup()
                         .addComponent(jLabel33)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -921,12 +933,14 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanelInvocationDataLayout.setVerticalGroup(
             jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelInvocationDataLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel32)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel25)
+                        .addComponent(jLabel32)
+                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(infoButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelInvocationDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel33)
@@ -977,15 +991,15 @@ public class SpellMainEditor extends AbstractMainEditor {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel55)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel55)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
@@ -1014,18 +1028,17 @@ public class SpellMainEditor extends AbstractMainEditor {
             .addGroup(jPanel29Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jPanelSpellData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanelInvocationData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelInvocationData, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
             .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -1044,7 +1057,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
 
         jSplitPane2.setRightComponent(jPanel10);
@@ -1067,7 +1080,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 875, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1204,25 +1217,25 @@ public class SpellMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jPanelColor14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelColor14MouseClicked
-        Color returnCol = jColorChooser1.showDialog(this, "Color 14", jPanelColor14.getBackground());
+        CRAMColor returnCol = CRAMColorEditor.showDialog(this, "Spell - Palette color 14", new CRAMColor(jPanelColor14.getBackground()));
         if (returnCol != null) {
-            jPanelColor14.setBackground(returnCol);
+            jPanelColor14.setBackground(returnCol.CRAMColor());
             updateSpellPaletteColor(14, returnCol);
         }
     }//GEN-LAST:event_jPanelColor14MouseClicked
 
     private void jPanelColor13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelColor13MouseClicked
-        Color returnCol = jColorChooser1.showDialog(this, "Color 13", jPanelColor13.getBackground());
+        CRAMColor returnCol = CRAMColorEditor.showDialog(this, "Spell - Palette color 13", new CRAMColor(jPanelColor13.getBackground()));
         if (returnCol != null) {
-            jPanelColor13.setBackground(returnCol);
+            jPanelColor13.setBackground(returnCol.CRAMColor());
             updateSpellPaletteColor(13, returnCol);
         }
     }//GEN-LAST:event_jPanelColor13MouseClicked
 
     private void jPanelColor9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelColor9MouseClicked
-        Color returnCol = jColorChooser1.showDialog(this, "Color 9", jPanelColor9.getBackground());
+        CRAMColor returnCol = CRAMColorEditor.showDialog(this, "Spell - Palette color 9", new CRAMColor(jPanelColor9.getBackground()));
         if (returnCol != null) {
-            jPanelColor9.setBackground(returnCol);
+            jPanelColor9.setBackground(returnCol.CRAMColor());
             updateSpellPaletteColor(9, returnCol);
         }
     }//GEN-LAST:event_jPanelColor9MouseClicked
@@ -1253,15 +1266,14 @@ public class SpellMainEditor extends AbstractMainEditor {
         repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
     
-    private void updateSpellPaletteColor(int index, Color newColor) {
-        CRAMColor newCram = new CRAMColor(newColor);
+    private void updateSpellPaletteColor(int index, CRAMColor newColor) {
         Tileset spellTileset = spellLayoutPanel.getTileset();
         if (spellTileset != null) {
             Palette palette = spellTileset.getPalette();
             if (palette != null) {
                 CRAMColor[] colors = spellTileset.getPalette().getColors();
-                if (!colors[index].equals(newCram)) {
-                    colors[index] = newCram;
+                if (!colors[index].equals(newColor)) {
+                    colors[index] = newColor;
                     spellTileset.clearIndexedColorImage(true);
                     palette.setColors(colors, true);
                     spellLayoutPanel.redraw();
@@ -1299,6 +1311,8 @@ public class SpellMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton7;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton8;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton9;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton1;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton2;
     private com.sfc.sf2.spellGraphic.gui.InvocationLayoutPanel invocationLayoutPanel;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
@@ -1309,7 +1323,6 @@ public class SpellMainEditor extends AbstractMainEditor {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton33;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel17;
