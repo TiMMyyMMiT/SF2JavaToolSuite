@@ -31,15 +31,15 @@ public class VWFontEncoder {
     private static byte[] encodeSymbol(FontSymbol symbol) {
         byte[] data = new byte[32];
         BitSet bits = new BitSet(256);
-        int[][] pixels = symbol.getPixels();
+        int[] pixels = symbol.getPixels();
         int startIndex = 16;
         for (int y = 0; y < 16; y++) {
             int rowStart = startIndex + y * 16;
             for (int x = 0; x < 8; x++) {
-                if (pixels[7 - x][y] == 1) {     // Left byte
+                if (pixels[7-x + y*16] == 1) {     // Left byte
                     bits.set(rowStart + x);
                 }
-                if (pixels[15 - x][y] == 1) {    // Right byte
+                if (pixels[15-x + y*16] == 1) {    // Right byte
                     bits.set(rowStart + 8 + x);
                 }
             }

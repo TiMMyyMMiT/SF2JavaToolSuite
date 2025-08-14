@@ -29,14 +29,14 @@ public class VWFontDecoder {
     
     private static FontSymbol decodeSymbol(byte[] data) {
         int width = data[1];
-        int[][] pixels = new int[16][16];
+        int[] pixels = new int[16*16];
         BitSet bits = BitSet.valueOf(data);
         int startIndex = 16;
         for (int y = 0; y < 16; y++) {
             int rowStart = startIndex + y * 16;
             for (int x = 0; x < 8; x++) {
-                pixels[7 - x][y] = bits.get(rowStart + x) ? 1 : 0;      //Left byte (bits 0-7)
-                pixels[15 - x][y] = bits.get(rowStart + 8 + x) ? 1 : 0; //Right byte (bits 8-15)
+                pixels[7-x + y*16] = bits.get(rowStart + x) ? 1 : 0;      //Left byte (bits 0-7)
+                pixels[15-x + y*16] = bits.get(rowStart + 8 + x) ? 1 : 0; //Right byte (bits 8-15)
             }
         }
         

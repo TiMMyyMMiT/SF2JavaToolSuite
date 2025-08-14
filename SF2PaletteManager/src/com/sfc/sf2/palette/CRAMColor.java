@@ -46,6 +46,7 @@ public class CRAMColor {
     
     //Static helpers
     public static CRAMColor BLACK = fromPremadeCramColor(Color.BLACK);
+    public static CRAMColor LIGHT_GRAY = fromPremadeCramColor(Color.LIGHT_GRAY);
     public static CRAMColor WHITE = fromPremadeCramColor(Color.WHITE);
     
     public static CRAMColor fromPremadeCramColor(int r, int g, int b, int a) {

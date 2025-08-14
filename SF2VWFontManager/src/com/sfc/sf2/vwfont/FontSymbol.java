@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.vwfont;
 
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -16,25 +17,25 @@ import java.awt.image.DataBufferByte;
  */
 public class FontSymbol {
     
+    private static final Palette DEFAULT_PALETTE = new Palette(new CRAMColor[] { new CRAMColor(new Color(0xFFF0)), CRAMColor.BLACK, CRAMColor.LIGHT_GRAY }, false);
     public static final int PIXEL_WIDTH = 16;
     public static final int PIXEL_HEIGHT = 16;
-    private static final Palette defaultPalette = new Palette(new Color[] { new Color(0xFFF0), Color.BLACK, Color.LIGHT_GRAY });
     
     private int id;
     private int width;
-    private int[][] pixels = new int[PIXEL_WIDTH][PIXEL_HEIGHT];
+    private int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
     private BufferedImage image = null;
 
-    public int[][] getPixels() {
+    public int[] getPixels() {
         return pixels;
     }
 
-    public void setPixels(int[][] pixels) {
+    public void setPixels(int[] pixels) {
         this.pixels = pixels;
     }
     
     public Palette getPalette() {
-        return defaultPalette;
+        return DEFAULT_PALETTE;
     }
     
     public int getId() {
@@ -55,11 +56,11 @@ public class FontSymbol {
 
     public BufferedImage getIndexColoredImage() {
         if(image == null) {
-            image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, defaultPalette.getIcm());
+            image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, DEFAULT_PALETTE.getIcm());
             byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
             for (int j = 0; j < PIXEL_HEIGHT; j++) {
                 for (int i = 0; i < PIXEL_WIDTH; i++) {
-                    data[i + j*PIXEL_HEIGHT] = (byte)pixels[i][j];
+                    data[i+j*PIXEL_WIDTH] = (byte)pixels[i+j*PIXEL_WIDTH];
                 }
             }
         }

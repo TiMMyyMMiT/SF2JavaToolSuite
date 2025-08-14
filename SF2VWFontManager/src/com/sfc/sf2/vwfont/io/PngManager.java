@@ -6,11 +6,9 @@
 package com.sfc.sf2.vwfont.io;
 
 import com.sfc.sf2.vwfont.FontSymbol;
-import java.awt.Color;
-import java.awt.Graphics;
+import static com.sfc.sf2.vwfont.FontSymbol.PIXEL_HEIGHT;
+import static com.sfc.sf2.vwfont.FontSymbol.PIXEL_WIDTH;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -40,20 +38,20 @@ public class PngManager {
             for (File f : files) { 
                 if (f.getName().startsWith("symbol") && f.getName().endsWith(".png")) {
                     BufferedImage img = ImageIO.read(f);
-                    if (img.getWidth() < FontSymbol.PIXEL_WIDTH || img.getHeight() < FontSymbol.PIXEL_HEIGHT) {
-                        throw new IOException(String.format("Image dimensions are wrong. Image must be %d x %d", FontSymbol.PIXEL_WIDTH, FontSymbol.PIXEL_HEIGHT));
+                    if (img.getWidth() < PIXEL_WIDTH || img.getHeight() < PIXEL_HEIGHT) {
+                        throw new IOException(String.format("Image dimensions are wrong. Image must be %d x %d", PIXEL_WIDTH, PIXEL_HEIGHT));
                     }
                     int symbolWidth = 0;
-                    int[][] symbolPixels = new int[FontSymbol.PIXEL_WIDTH][FontSymbol.PIXEL_HEIGHT];
-                    int[] pixels = new int[FontSymbol.PIXEL_WIDTH*FontSymbol.PIXEL_HEIGHT];
+                    int[] symbolPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
+                    int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
                     WritableRaster raster = img.getRaster();
-                    raster.getPixels(0, 0, FontSymbol.PIXEL_WIDTH, FontSymbol.PIXEL_HEIGHT, pixels);
+                    raster.getPixels(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
                     for (int i = 0; i < pixels.length; i++) {
                         if (pixels[i] == 2) {   //Width marker
-                            symbolWidth = i%FontSymbol.PIXEL_WIDTH;
-                            symbolPixels[i%FontSymbol.PIXEL_WIDTH][i/FontSymbol.PIXEL_WIDTH] = 0;
+                            symbolWidth = i%PIXEL_WIDTH;
+                            symbolPixels[i] = 0;
                         } else {
-                            symbolPixels[i%FontSymbol.PIXEL_WIDTH][i/FontSymbol.PIXEL_WIDTH] = pixels[i];
+                            symbolPixels[i] = pixels[i];
                         }
                     }
                     index = count;
@@ -85,20 +83,13 @@ public class PngManager {
             System.out.println("com.sfc.sf2.vwfont.io.PngManager.exportPng() - Exporting PNG files ...");
             for(int s = 0; s<symbols.length; s++){
                 String index = String.format("%03d", s);
-                int width = symbols[s].getWidth();
                 
-                BufferedImage image = new BufferedImage(FontSymbol.PIXEL_WIDTH, FontSymbol.PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, symbols[s].getPalette().getIcm());
+                BufferedImage image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, symbols[s].getPalette().getIcm());
                 WritableRaster raster = image.getRaster();
 
-                int[] data = new int[FontSymbol.PIXEL_WIDTH*FontSymbol.PIXEL_HEIGHT];
-                int[][] pixels = symbols[s].getPixels();
-                for (int j = 0; j < FontSymbol.PIXEL_HEIGHT; j++) {
-                    for (int i = 0; i < FontSymbol.PIXEL_WIDTH; i++) {
-                        data[i + j*FontSymbol.PIXEL_HEIGHT] = pixels[i][j];
-                    }
-                }
+                int[] data = symbols[s].getPixels();
                 data[symbols[s].getWidth()] = 2;
-                raster.setPixels(0, 0, FontSymbol.PIXEL_WIDTH, FontSymbol.PIXEL_HEIGHT, data);
+                raster.setPixels(0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, data);
                 File outputfile = new File(filepath + System.getProperty("file.separator") + CHARACTER_FILENAME.replace("XX.png", index+".png"));
                 ImageIO.write(image, "png", outputfile);
             }
