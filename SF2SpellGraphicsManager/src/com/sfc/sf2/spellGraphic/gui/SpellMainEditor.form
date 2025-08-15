@@ -157,6 +157,44 @@
                                 </DimensionLayout>
                               </Layout>
                               <SubComponents>
+                                <Container class="javax.swing.JPanel" name="jPanel28">
+                                  <Properties>
+                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                        <TitledBorder title="Base palette :"/>
+                                      </Border>
+                                    </Property>
+                                  </Properties>
+
+                                  <Layout>
+                                    <DimensionLayout dim="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton1" pref="428" max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                    </DimensionLayout>
+                                    <DimensionLayout dim="1">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton1" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                    </DimensionLayout>
+                                  </Layout>
+                                  <SubComponents>
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton1">
+                                      <Properties>
+                                        <Property name="filePath" type="java.lang.String" value="..\u005c..\u005ctech\u005cbasepalette.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Palette file :"/>
+                                      </Properties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
                                 <Container class="javax.swing.JPanel" name="jPanel3">
                                   <Properties>
                                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -350,8 +388,8 @@
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jTabbedPane2" pref="434" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jTabbedPane2" pref="440" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -389,9 +427,9 @@
                                                   <Group type="102" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="fileButton6" alignment="0" pref="422" max="32767" attributes="0"/>
+                                                          <Component id="fileButton6" alignment="0" pref="428" max="32767" attributes="0"/>
                                                           <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="jLabel1" pref="340" max="32767" attributes="0"/>
+                                                              <Component id="jLabel1" pref="346" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton2" max="-2" attributes="0"/>
                                                           </Group>
@@ -456,9 +494,9 @@
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="fileButton7" pref="422" max="32767" attributes="0"/>
+                                                          <Component id="fileButton7" pref="428" max="32767" attributes="0"/>
                                                           <Group type="102" attributes="0">
-                                                              <Component id="jLabel9" pref="340" max="32767" attributes="0"/>
+                                                              <Component id="jLabel9" pref="346" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton13" min="-2" max="-2" attributes="0"/>
                                                           </Group>
@@ -509,44 +547,6 @@
                                         </Container>
                                       </SubComponents>
                                     </Container>
-                                  </SubComponents>
-                                </Container>
-                                <Container class="javax.swing.JPanel" name="jPanel28">
-                                  <Properties>
-                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                        <TitledBorder title="Base palette :"/>
-                                      </Border>
-                                    </Property>
-                                  </Properties>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="fileButton1" pref="428" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="fileButton1" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton1">
-                                      <Properties>
-                                        <Property name="filePath" type="java.lang.String" value="..\u005c..\u005ctech\u005cbasepalette.bin" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Palette file :"/>
-                                      </Properties>
-                                    </Component>
                                   </SubComponents>
                                 </Container>
                               </SubComponents>
@@ -613,7 +613,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTabbedPane4" pref="155" max="32767" attributes="0"/>
+                                              <Component id="jTabbedPane4" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
