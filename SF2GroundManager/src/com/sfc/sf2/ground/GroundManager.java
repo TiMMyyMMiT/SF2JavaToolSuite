@@ -69,7 +69,7 @@ public class GroundManager extends AbstractManager {
     public void importImage(Path basePalettePath, Path filePath) throws IOException, DisassemblyException, RawImageException {
         Console.logger().finest("ENTERING importImage");
         importBasePalette(basePalettePath);
-        Tileset tileset = tilesetManager.importImage(filePath);
+        Tileset tileset = tilesetManager.importImage(filePath, true);
         ground = new Ground(tileset);
         Palette palette = PaletteHelpers.combinePalettes(basePalette, tileset.getPalette(), paletteInsertInto, paletteInsertInto);
         tileset.setPalette(palette);

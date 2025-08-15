@@ -13,7 +13,6 @@ import com.sfc.sf2.palette.Palette;
  * @author wiz
  */
 public class Ground {
-    
     public static final int GROUND_TILES_PER_ROW = 12;
     
     private Tileset tileset;

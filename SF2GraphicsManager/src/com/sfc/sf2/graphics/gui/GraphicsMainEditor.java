@@ -1084,7 +1084,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         Path graphicPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         try {
-            tilesetManager.importImage(graphicPath);
+            tilesetManager.importImage(graphicPath, true);
             jSpinner2.setValue(tilesetManager.getTileset().getTilesPerRow());
         } catch (Exception ex) {
             tilesetManager.clearData();

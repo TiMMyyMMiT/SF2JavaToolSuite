@@ -503,7 +503,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
         } catch (Exception ex) {
             fontManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Font symbol images could not be imported from directory : " + directoryPath);
+            Console.logger().severe("ERROR Font symbol images could not be imported from : " + directoryPath);
         }
         updateEditorData();
     }//GEN-LAST:event_jButton12ActionPerformed
@@ -515,7 +515,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
         } catch (Exception ex) {
             fontManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Font symbol disasm could not be imported from entries file : " + disasmPath);
+            Console.logger().severe("ERROR Font symbol disasm could not be imported from : " + disasmPath);
         }
         updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
