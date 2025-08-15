@@ -3,50 +3,50 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.graphics.gui;
+package com.sfc.sf2.ground.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
-import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.ground.Ground;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
-public class TilesetLayoutPanel extends AbstractLayoutPanel { 
+public class GroundLayoutPanel extends AbstractLayoutPanel {
+        
+    private Ground ground;
     
-    private Tileset tileset;
-    
-    public TilesetLayoutPanel() {
+    public GroundLayoutPanel() {
         super();
-        setGridDimensions(8, 8);
+        tilesPerRow = Ground.GROUND_TILES_PER_ROW;
+        setGridDimensions(PIXEL_WIDTH, PIXEL_HEIGHT);
     }
 
     @Override
     protected boolean hasData() {
-        return tileset != null && tileset.getTiles().length > 0;
+        return ground != null && ground.getTileset() != null;
     }
 
     @Override
     protected Dimension getImageDimensions() {
-        return tileset.getDimensions(tilesPerRow);
+        return ground.getTileset().getDimensions(tilesPerRow);
     }
 
     @Override
     protected void buildImage(Graphics graphics) {
-        tileset.clearIndexedColorImage(false);
-        graphics.drawImage(tileset.getIndexedColorImage(), 0, 0, null);
+        graphics.drawImage(ground.getTileset().getIndexedColorImage(), 0, 0, null);
     }
     
-    public Tileset getTileset() {
-        return tileset;
+    public Ground getGround() {
+        return ground;
     }
 
-    public void setTileset(Tileset tileset) {
-        this.tileset = tileset;
+    public void setGround(Ground ground) {
+        this.ground = ground;
         redraw();
     }
 }

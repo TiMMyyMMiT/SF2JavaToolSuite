@@ -5,108 +5,86 @@
  */
 package com.sfc.sf2.ground;
 
-import com.sfc.sf2.graphics.GraphicsManager;
-import com.sfc.sf2.ground.io.DisassemblyManager;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.RawImageException;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.TilesetManager;
+import com.sfc.sf2.ground.io.GroundDisassemblyProcessor;
+import com.sfc.sf2.ground.io.GroundPackage;
+import com.sfc.sf2.helpers.PaletteHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
-public class GroundManager {
+public class GroundManager extends AbstractManager {
+    private static int[] paletteInsertInto = new int[] { 3, 4, 8 };
+    private static int[] paletteInsertFrom = new int[] { 0, 1, 2 };
        
     private final PaletteManager paletteManager = new PaletteManager();
-    private final GraphicsManager graphicsManager = new GraphicsManager();
+    private final TilesetManager tilesetManager = new TilesetManager();
+    private final GroundDisassemblyProcessor groundDisassemblyProcessor = new GroundDisassemblyProcessor();
     
     private Palette basePalette;
     private Ground ground;
-       
-    public void importDisassembly(String basePalettePath, String palettePath, String graphicsPath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.importDisassembly() - Importing disassembly ...");
-        importBasePalette(basePalettePath);
-        ground = DisassemblyManager.importDisassembly(basePalettePath, palettePath, graphicsPath);
-        Palette palette = ground.getPalette();
-        adjustImportedPalette(basePalette, palette);
-        System.out.println("com.sfc.sf2.ground.GroundManager.importDisassembly() - Disassembly imported.");
-    }
     
-    public void exportPalette(String palettePath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.importDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportPalette(ground.getPalette(), palettePath);
-        System.out.println("com.sfc.sf2.ground.GroundManager.importDisassembly() - Disassembly exported.");        
-    }
-    
-    public void exportDisassembly(String graphicsPath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.importDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportDisassembly(ground, graphicsPath);
-        System.out.println("com.sfc.sf2.ground.GroundManager.importDisassembly() - Disassembly exported.");        
-    }
-    
-    public void importRom(String basePalettePath, String romFilePath, String paletteOffset, String paletteLength, String graphicsOffset, String graphicsLength){
-        System.out.println("com.sfc.sf2.ground.GroundManager.importOriginalRom() - Importing original ROM ...");
-        importBasePalette(basePalettePath);
-        graphicsManager.importRom(romFilePath, paletteOffset, paletteLength, graphicsOffset, graphicsLength,GraphicsManager.COMPRESSION_BASIC);
-        ground = new Ground();
-        ground.setTiles(graphicsManager.getTiles());
-        Palette palette = ground.getPalette();
-        adjustImportedPalette(basePalette, palette);
-        System.out.println("com.sfc.sf2.ground.GroundManager.importOriginalRom() - Original ROM imported.");
-    }
-    
-    public void exportRom(String originalRomFilePath, String graphicsOffset){
-        System.out.println("com.sfc.sf2.ground.GroundManager.exportOriginalRom() - Exporting original ROM ...");
-        graphicsManager.exportRom(originalRomFilePath, graphicsOffset, GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.ground.GroundManager.exportOriginalRom() - Original ROM exported.");        
-    }
-
-    public void importPng(String basePalettePath, String basepath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.importPng() - Importing PNG ...");
-        importBasePalette(basePalettePath);
-        graphicsManager.importPng(basepath);
-        ground = new Ground();
-        ground.setTiles(graphicsManager.getTiles());
-        Palette palette = ground.getPalette();
-        adjustImportedPalette(basePalette, palette);
-        System.out.println("com.sfc.sf2.ground.GroundManager.importPng() - PNG imported.");
-    }
-    
-    public void exportPng(String filepath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.exportPng() - Exporting PNG ...");
-        graphicsManager.setTiles(ground.getTiles());
-        graphicsManager.exportPng(filepath, 12);
-        System.out.println("com.sfc.sf2.ground.GroundManager.exportPng() - PNG exported.");       
-    }
-
-    public void importGif(String basePalettePath, String basepath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.importGif() - Importing GIF ...");
-        importBasePalette(basePalettePath);
-        graphicsManager.importGif(basepath);
-        ground = new Ground();
-        ground.setTiles(graphicsManager.getTiles());
-        Palette palette = ground.getPalette();
-        adjustImportedPalette(basePalette, palette);
-        System.out.println("com.sfc.sf2.ground.GroundManager.importGif() - GIF imported.");
-    }
-    
-    public void exportGif(String filepath){
-        System.out.println("com.sfc.sf2.ground.GroundManager.exportGif() - Exporting GIF ...");
-        graphicsManager.setTiles(ground.getTiles());
-        graphicsManager.exportGif(filepath, 12);
-        System.out.println("com.sfc.sf2.ground.GroundManager.exportGif() - GIF exported.");       
-    }
-    
-    private void importBasePalette(String palettePath) {        
-        if (basePalette == null) {
-            paletteManager.importDisassembly(palettePath);
-            basePalette = paletteManager.getPalette();
+    @Override
+    public void clearData() {
+        paletteManager.clearData();
+        basePalette = null;
+        if (ground != null && ground.getTileset() != null) {
+            ground.getTileset().clearIndexedColorImage(true);
+            ground = null;
         }
     }
     
-    private static void adjustImportedPalette(Palette basePalette, Palette importedPalette) {
-        for (int i = 0; i < basePalette.getColors().length; i++) {
-            if (i != 9 && i != 13 && i != 14)
-                importedPalette.getColors()[i] = basePalette.getColors()[i];
+    public void importDisassembly(Path basePalettePath, Path palettePath, Path graphicsPath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        importBasePalette(basePalettePath);
+        Palette palette = paletteManager.importDisassembly(palettePath, false);
+        palette = PaletteHelpers.combinePalettes(basePalette, palette, paletteInsertInto, paletteInsertFrom);
+        ground = groundDisassemblyProcessor.importDisassembly(graphicsPath, new GroundPackage(palette));
+        Console.logger().finest("EXITING importDisassembly");
+    }
+    
+    public void exportDisassembly(Path graphicsPath, Ground ground) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        groundDisassemblyProcessor.exportDisassembly(graphicsPath, ground, null);
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public void exportPalette(Path palettePath, Ground ground) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportPalette");
+        Palette palette = PaletteHelpers.extractColors(ground.getPalette(), paletteInsertInto);
+        paletteManager.exportDisassembly(palettePath, palette);
+        Console.logger().finest("EXITING exportPalette");
+    }
+
+    public void importImage(Path basePalettePath, Path filePath) throws IOException, DisassemblyException, RawImageException {
+        Console.logger().finest("ENTERING importImage");
+        importBasePalette(basePalettePath);
+        Tileset tileset = tilesetManager.importImage(filePath);
+        ground = new Ground(tileset);
+        Palette palette = PaletteHelpers.combinePalettes(basePalette, tileset.getPalette(), paletteInsertInto, paletteInsertInto);
+        tileset.setPalette(palette);
+        Console.logger().finest("EXITING importImage");
+    }
+    
+    public void exportImage(Path filePath, Ground ground) throws IOException, DisassemblyException, RawImageException {
+        Console.logger().finest("ENTERING exportImage");
+        tilesetManager.exportImage(filePath, ground.getTileset());
+        Console.logger().finest("EXITING exportImage");
+    }
+    
+    private void importBasePalette(Path palettePath) throws IOException, DisassemblyException {
+        if (basePalette == null) {
+            basePalette = paletteManager.importDisassembly(palettePath, true);
         }
     }
 

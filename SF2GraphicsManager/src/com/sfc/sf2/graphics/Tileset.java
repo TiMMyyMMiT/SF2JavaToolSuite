@@ -8,6 +8,7 @@ package com.sfc.sf2.graphics;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.palette.Palette;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -54,12 +55,36 @@ public class Tileset {
             clearIndexedColorImage(false);
         this.tilesPerRow = tilesPerRow;
     }
+    
+    public Dimension getDimensions(int tilesPerRow) {
+        this.setTilesPerRow(tilesPerRow);
+        return getDimensions();
+    }
+    
+    public Dimension getDimensions() {
+        int w = tilesPerRow;
+        int h = tiles.length/tilesPerRow;
+        if (tiles.length%tilesPerRow != 0) {
+            h++;
+        }
+        return new Dimension(w*PIXEL_WIDTH, h*PIXEL_HEIGHT);
+    }
 
     public Palette getPalette() {
         if (tiles == null || tiles.length == 0) {
             return null;
         }
         return tiles[0].getPalette();
+    }
+
+    public void setPalette(Palette palette) {
+        if (tiles == null || tiles.length == 0) {
+            return;
+        }
+        for (int i = 0; i < tiles.length; i++) {
+            tiles[i].setPalette(palette);
+        }
+        clearIndexedColorImage(false);
     }
     
     public BufferedImage getIndexedColorImage() {

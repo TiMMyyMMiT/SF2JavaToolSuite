@@ -52,6 +52,7 @@ public class Tile {
 
     public void setPalette(Palette palette) {
         this.palette = palette;
+        clearIndexedColorImage();
     }
 
     public IndexColorModel getIcm() {
