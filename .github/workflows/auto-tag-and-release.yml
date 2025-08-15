@@ -59,26 +59,70 @@ jobs:
             echo "should_run=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build projects
+      - name: Build projects with dependencies
         if: steps.detect_changes.outputs.should_run == 'true'
         id: build_projects
         shell: bash
         run: |
           echo "Starting build process..."
-
           mkdir -p built-jars
 
           read -a CHANGED_PROJECTS <<< "$CHANGED_PROJECTS"
 
-          # Build changed apps
-          echo "Build changed projects"
           for proj in "${CHANGED_PROJECTS[@]}"; do
-            echo "Building project $proj..."
+            echo "-----------------------------"
+            echo "Processing project: $proj"
+            prop_file="$proj/nbproject/project.properties"
 
-            mkdir -p "$proj/build/classes"
-            mkdir -p "$proj/dist/lib"
-            mkdir -p "$proj/lib"
+            if [ ! -f "$prop_file" ]; then
+              echo "project.properties not found for $proj"
+              continue
+            fi
 
+            declare -A project_refs
+            declare -A file_refs
+
+            # Extract project.* and file.reference.* entries
+            while IFS='=' read -r key val; do
+              key=$(echo "$key" | xargs)
+              val=$(echo "$val" | xargs)
+
+              if [[ "$key" =~ ^project\.(.+)$ ]]; then
+                dep="${BASH_REMATCH[1]}"
+                project_refs["$dep"]="$val"
+              elif [[ "$key" =~ ^file\.reference\.(.+)\.jar$ ]]; then
+                file_refs["${BASH_REMATCH[1]}"]="$val"
+              fi
+            done < <(grep -E '^(project\.|file\.reference\..*\.jar)=' "$prop_file")
+
+            echo "Detected project dependencies: ${!project_refs[@]}"
+            echo "Detected file dependencies: ${!file_refs[@]}"
+
+            # Step 1: Build all project.* dependencies
+            for dep in "${!project_refs[@]}"; do
+              dep_path="${project_refs[$dep]}"
+              echo "Building dependency '$dep' at $dep_path"
+              if [ -d "$dep_path" ]; then
+                ant -v -f "$dep_path" -Dplatforms.JDK_17.home="$JAVA_HOME" -Dnb.internal.action.name=rebuild clean jar
+              else
+                echo "Warning: Dependency path not found: $dep_path"
+              fi
+            done
+
+            # Step 2: Copy prebuilt jars (file.reference.*)
+            for jar in "${!file_refs[@]}"; do
+              jar_path="${file_refs[$jar]}"
+              echo "Copying prebuilt jar '$jar' from $jar_path"
+              if [ -f "$jar_path" ]; then
+                mkdir -p "$proj/lib"
+                cp "$jar_path" "$proj/lib/"
+              else
+                echo "Warning: Prebuilt jar not found at $jar_path"
+              fi
+            done
+
+            # Step 3: Build the main project
+            echo "Building project $proj with package-for-store..."
             ant -v -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" package-for-store
 
             jar_name=$(basename "$proj")
