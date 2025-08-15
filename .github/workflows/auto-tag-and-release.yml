@@ -83,54 +83,56 @@ jobs:
             declare -A reference_paths
             declare -A file_references
 
-            # Step 1: Load all relevant keys
+            # Step 1: Load relevant keys
             while IFS='=' read -r key val; do
               key=$(echo "$key" | xargs)
               val=$(echo "$val" | xargs)
 
               if [[ "$key" =~ ^project\.(.+)$ ]]; then
-                project_paths["${BASH_REMATCH[1]}"]="$val"
+                dep="${BASH_REMATCH[1]}"
+                project_paths["$dep"]="$val"  # Keep relative
               elif [[ "$key" =~ ^reference\.(.+)\.jar$ ]]; then
                 reference_paths["${BASH_REMATCH[1]}"]="$val"
               elif [[ "$key" =~ ^file\.reference\.(.+)\.jar$ ]]; then
-                file_references["${BASH_REMATCH[1]}"]="$val"
+                jar="${BASH_REMATCH[1]}"
+                file_references["$jar"]="$val"  # Keep relative
               fi
             done < "$prop_file"
 
             echo "Detected reference JARs: ${!reference_paths[@]}"
             echo "Detected file dependencies: ${!file_references[@]}"
 
-            # Step 2: Build all dependencies that are reference.*.jar and come from a project.*
+            # Step 2: Build project dependencies
             for ref in "${!reference_paths[@]}"; do
               jar_path="${reference_paths[$ref]}"
-
-              # Check if jar path contains a project variable like ${project.X}
               if [[ "$jar_path" =~ \$\{project\.([^\}]+)\} ]]; then
-                project_key="${BASH_REMATCH[1]}"
-                dep_path="${project_paths[$project_key]}"
-                if [ -n "$dep_path" ]; then
-                  echo "Building dependency project '$project_key' at path '$dep_path'"
+                dep_key="${BASH_REMATCH[1]}"
+                dep_rel_path="${project_paths[$dep_key]}"
+                if [ -n "$dep_rel_path" ]; then
+                  dep_path="$proj/$dep_rel_path"
+                  echo "Building dependency project '$dep_key' at path '$dep_path'"
                   if [ -d "$dep_path" ]; then
                     ant -v -f "$dep_path" -Dplatforms.JDK_17.home="$JAVA_HOME" -Dnb.internal.action.name=rebuild clean jar
                   else
-                    echo "Warning: Project path '$dep_path' does not exist for $project_key"
+                    echo "Warning: Project path '$dep_path' does not exist for $dep_key"
                   fi
                 else
-                  echo "Warning: No project path defined for $project_key"
+                  echo "Warning: No project path defined for $dep_key"
                 fi
               fi
             done
 
-            # Step 3: Copy file.reference.* jars (external libs)
+            # Step 3: Copy prebuilt jars
             for jar in "${!file_references[@]}"; do
-              file_path="${file_references[$jar]}"
-              file_path="${file_path//\\//}"  # convert Windows-style slashes if needed
-              echo "Copying prebuilt jar '$jar' from $file_path"
-              if [ -f "$file_path" ]; then
+              rel_path="${file_references[$jar]}"
+              rel_path="${rel_path//\\//}"  # fix Windows-style slashes
+              jar_path="$proj/$rel_path"
+              echo "Copying prebuilt jar '$jar' from $jar_path"
+              if [ -f "$jar_path" ]; then
                 mkdir -p "$proj/lib"
-                cp "$file_path" "$proj/lib/"
+                cp "$jar_path" "$proj/lib/"
               else
-                echo "Warning: Prebuilt jar not found at $file_path"
+                echo "Warning: Prebuilt jar not found at $jar_path"
               fi
             done
 
