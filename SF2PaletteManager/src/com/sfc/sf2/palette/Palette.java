@@ -17,6 +17,7 @@ public class Palette {
     private String name;
     private CRAMColor[] colors;
     
+    private boolean firstColorTransparent;
     private IndexColorModel icm;
     
     public Palette() {
@@ -28,6 +29,7 @@ public class Palette {
         setName("New Palette");
         setColors(colors, firstColorTransparent);
     }
+    
     public Palette(String name, CRAMColor[] colors, boolean firstColorTransparent) {
         setName(name);
         setColors(colors, firstColorTransparent);
@@ -47,10 +49,11 @@ public class Palette {
 
     public void setColors(CRAMColor[] palette, boolean firstColorTransparent) {
         this.colors = palette;
+        this.firstColorTransparent = firstColorTransparent;
         if (firstColorTransparent) {
             ensureUniqueTransparencyColor();
         }
-        icm = buildICM(colors, firstColorTransparent);
+        rebuildIcm();
     }
     
     public int getColorsCount() {
@@ -59,6 +62,10 @@ public class Palette {
 
     public IndexColorModel getIcm() {
         return icm;
+    }
+    
+    public void rebuildIcm() {
+        icm = buildICM(colors, firstColorTransparent);
     }
     
     /*
@@ -72,7 +79,7 @@ public class Palette {
         for (int i=1;i<colors.length;i++) {
             color = colors[i].CRAMColor();
             if (zero.getRed()==color.getRed() && zero.getGreen()==color.getGreen() && zero.getBlue()==color.getBlue()) {
-                colors[0] = CRAMColor.fromPremadeCramColor(new Color(0xFF00FFFF));
+                colors[0] = new CRAMColor(0xFF00FF00);
                 return;
             }
         }

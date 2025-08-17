@@ -13,7 +13,9 @@ import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
 import com.sfc.sf2.helpers.FileHelpers;
+import com.sfc.sf2.helpers.PaletteHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
 import com.sfc.sf2.palette.io.PalettePackage;
@@ -29,6 +31,8 @@ import java.util.ArrayList;
  * @author wiz
  */
 public class WeaponSpriteManager extends AbstractManager {
+    private static final int[] insertToIndices = new int[] { 14, 15 };
+    private static final int[] insertFromIndices = new int[] { 0, 1 };
 
     private final PaletteDisassemblyProcessor paletteDisassemblyProcessor = new PaletteDisassemblyProcessor();
     private final WeaponSpriteDisassemblyProcessor weaponDisassemblyProcessor = new WeaponSpriteDisassemblyProcessor();
@@ -51,7 +55,7 @@ public class WeaponSpriteManager extends AbstractManager {
        
     public void importDisassembly(Path paletteEntriesPath, Path filePath) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassembly");
-        ImportPalettesFromEntries(paletteEntriesPath);
+        ImportPalettesFromEntries(paletteEntriesPath, null);
         int index = FileHelpers.getNumberFromFileName(filePath.toFile());
         WeaponSpritePackage pckg = new WeaponSpritePackage(index, basePalette);
         weaponsprite = weaponDisassemblyProcessor.importDisassembly(filePath, pckg);
@@ -67,10 +71,10 @@ public class WeaponSpriteManager extends AbstractManager {
     
     public void importImage(Path paletteEntriesPath, Path filePath) throws IOException, RawImageException, AsmException {
         Console.logger().finest("ENTERING importImage");
-        ImportPalettesFromEntries(paletteEntriesPath);
         int index = FileHelpers.getNumberFromFileName(filePath.toFile());
         WeaponSpritePackage pckg = new WeaponSpritePackage(index, null);
         weaponsprite = weaponSpriteRawImageProcessor.importRawImage(filePath, pckg);
+        ImportPalettesFromEntries(paletteEntriesPath, weaponsprite.getPalette());
         Console.logger().finest("EXITING importImage");
     }
     
@@ -82,18 +86,26 @@ public class WeaponSpriteManager extends AbstractManager {
         Console.logger().finest("EXITING exportImage");
     }
     
-    private void ImportPalettesFromEntries(Path entriesPath) throws IOException, AsmException {
+    private void ImportPalettesFromEntries(Path entriesPath, Palette fromImage) throws IOException, AsmException {
         Console.logger().finest("ENTERING ImportPalettesFromEntries");
+        createBasePalette();
         EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
         Console.logger().info("Weapon palettes entries successfully imported. Entries found : " + entriesData.entriesCount());
         ArrayList<Palette> palettesList = new ArrayList<>();
+        if (fromImage != null) {
+            fromImage.setName("From Image");
+            palettesList.add(fromImage);
+        }
         int palettesCount = 0;
         int failedToLoad = 0;
         for (int i = 0; i < entriesData.entriesCount(); i++) {
             Path palettePath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
             try {
-                PalettePackage pckg = new PalettePackage(palettePath.getFileName().toString(), true);
-                palettesList.add(paletteDisassemblyProcessor.importDisassembly(palettePath, pckg));
+                PalettePackage pckg = new PalettePackage(palettePath.getFileName().toString(), false);
+                Palette palette = paletteDisassemblyProcessor.importDisassembly(palettePath, pckg);
+                palette = PaletteHelpers.combinePalettes(basePalette, palette, insertToIndices, insertFromIndices);
+                palette.setName(String.format("%02d", i));
+                palettesList.add(palette);
                 palettesCount++;
             } catch (Exception e) {
                 failedToLoad++;
@@ -102,11 +114,23 @@ public class WeaponSpriteManager extends AbstractManager {
         }
         palettes = new Palette[palettesList.size()];
         palettes = palettesList.toArray(palettes);
-        basePalette = palettes[0];
         Console.logger().info(palettes.length + " palettes with " + palettesCount + " frames successfully imported from entries file : " + entriesPath);
         Console.logger().info((entriesData.entriesCount() - entriesData.uniquePathsCount()) + " duplicate palette entries found.");
         if (failedToLoad > 0) {
             Console.logger().severe(failedToLoad + " palettes failed to import. See logs above");
+        }
+    }
+    
+    private void createBasePalette() {
+        if (basePalette == null) {
+            Console.logger().info("Creating base palette.");
+            CRAMColor[] baseColors = new CRAMColor[16];
+            baseColors[0] = new CRAMColor(0xFF00FF00);
+            baseColors[1] = CRAMColor.WHITE;
+            for (int i = 2; i < baseColors.length; i++) {
+                baseColors[i] = CRAMColor.BLACK;
+            }
+            basePalette = new Palette(baseColors, true);
         }
     }
 

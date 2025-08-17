@@ -47,8 +47,8 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
             selectedPalette = 0;
             jComboBox1.setSelectedIndex(0);
         }
-        weaponSpriteLayout.setWeaponSprite(weaponspriteManager.getWeaponsprite());
-        weaponSpriteLayout.setPalette(weaponspriteManager.getPalettes()[selectedPalette]);
+        weaponSpriteLayoutPanel.setWeaponSprite(weaponspriteManager.getWeaponsprite());
+        weaponSpriteLayoutPanel.setPalette(weaponspriteManager.getPalettes()[selectedPalette]);
         
         super.updateEditorData();
     }
@@ -57,8 +57,8 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
     protected void repaintEditorLayout() {
         super.repaintEditorLayout();
         
-        weaponSpriteLayout.revalidate();
-        weaponSpriteLayout.repaint();
+        weaponSpriteLayoutPanel.revalidate();
+        weaponSpriteLayoutPanel.repaint();
     }
     
     /**
@@ -100,7 +100,7 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        weaponSpriteLayout = new com.sfc.sf2.weaponsprite.gui.WeaponSpriteLayout();
+        weaponSpriteLayoutPanel = new com.sfc.sf2.weaponsprite.gui.WeaponSpriteLayoutPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -274,7 +274,7 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
         jLabel9.setText("<html>Export data to a new image file. <br> Recommended to save as PNG or GIF.<br> Exported color format : 4BPP / 16 indexed colors.<br>Transparent color at index 0.<br>White and black at indexes 1 and 2. WeaponSprite-specific colors at indexes 14 and 15.</html>");
         jLabel9.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        fileButton4.setFilePath(".\\weaponsprite00.png");
+        fileButton4.setFilePath(".\\export\\weaponsprite00.png");
         fileButton4.setLabelText("Image file :");
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
@@ -370,31 +370,32 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiles"));
 
-        javax.swing.GroupLayout weaponSpriteLayoutLayout = new javax.swing.GroupLayout(weaponSpriteLayout);
-        weaponSpriteLayout.setLayout(weaponSpriteLayoutLayout);
-        weaponSpriteLayoutLayout.setHorizontalGroup(
-            weaponSpriteLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout weaponSpriteLayoutPanelLayout = new javax.swing.GroupLayout(weaponSpriteLayoutPanel);
+        weaponSpriteLayoutPanel.setLayout(weaponSpriteLayoutPanelLayout);
+        weaponSpriteLayoutPanelLayout.setHorizontalGroup(
+            weaponSpriteLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 422, Short.MAX_VALUE)
         );
-        weaponSpriteLayoutLayout.setVerticalGroup(
-            weaponSpriteLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        weaponSpriteLayoutPanelLayout.setVerticalGroup(
+            weaponSpriteLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 410, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(weaponSpriteLayout);
+        jScrollPane2.setViewportView(weaponSpriteLayoutPanel);
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
 
         jLabel4.setText("Palette : ");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0" }));
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
             }
         });
 
         jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "x1", "x2", "x3", "x4" }));
+        jComboBox7.setSelectedIndex(1);
         jComboBox7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox7ActionPerformed(evt);
@@ -471,7 +472,7 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addGap(2, 2, 2))
         );
         jPanel1Layout.setVerticalGroup(
@@ -539,7 +540,7 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
         Path weaponSpritePath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
         if (!PathHelpers.createPathIfRequred(weaponSpritePath)) return;
         try {
-            weaponspriteManager.exportDisassembly(weaponSpritePath, weaponSpriteLayout.getWeaponSprite());
+            weaponspriteManager.exportDisassembly(weaponSpritePath, weaponSpriteLayoutPanel.getWeaponSprite());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Weapon sprite disasm could not be exported to : " + weaponSpritePath);
@@ -550,7 +551,7 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
         Path weaponSpritePath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         if (!PathHelpers.createPathIfRequred(weaponSpritePath)) return;
         try {
-            weaponspriteManager.exportImage(weaponSpritePath, weaponSpriteLayout.getWeaponSprite());
+            weaponspriteManager.exportImage(weaponSpritePath, weaponSpriteLayoutPanel.getWeaponSprite());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Weapon sprite image could not be exported to : " + weaponSpritePath);
@@ -580,32 +581,32 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Weapon sprite disasm could not be imported from : " + weaponSpritePath);
         }
-        updateEditorData();  
+        updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
 
-    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        if(jComboBox1.getSelectedItem()!=null){
-            weaponSpriteLayout.setPalette(weaponspriteManager.getPalettes()[jComboBox1.getSelectedIndex()]);
-            repaintEditorLayout();
-        }
-    }//GEN-LAST:event_jComboBox1ItemStateChanged
-
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
-        weaponSpriteLayout.setDisplayScale(jComboBox7.getSelectedIndex()+1);
+        weaponSpriteLayoutPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
         repaintEditorLayout();
     }//GEN-LAST:event_jComboBox7ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        weaponSpriteLayout.setShowGrid(jCheckBox1.isSelected());
+        weaponSpriteLayoutPanel.setShowGrid(jCheckBox1.isSelected());
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
-        weaponSpriteLayout.setBGColor(colorPicker1.getColor());
+        weaponSpriteLayoutPanel.setBGColor(colorPicker1.getColor());
         SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveGlobalSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        if (jComboBox1.getSelectedItem() != null) {
+            weaponSpriteLayoutPanel.setPalette(weaponspriteManager.getPalettes()[jComboBox1.getSelectedIndex()]);
+            repaintEditorLayout();
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
     
     /**
      * To create a new Main Editor, copy the below code
@@ -663,7 +664,7 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private com.sfc.sf2.weaponsprite.gui.WeaponSpriteLayout weaponSpriteLayout;
+    private com.sfc.sf2.weaponsprite.gui.WeaponSpriteLayoutPanel weaponSpriteLayoutPanel;
     // End of variables declaration//GEN-END:variables
 
 }

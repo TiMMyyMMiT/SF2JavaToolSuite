@@ -8,6 +8,7 @@ package com.sfc.sf2.weaponsprite.gui;
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
 import static com.sfc.sf2.weaponsprite.WeaponSprite.FRAME_TILE_HEIGHT;
@@ -19,15 +20,15 @@ import java.awt.Graphics;
  *
  * @author wiz
  */
-public class WeaponSpriteLayout extends AbstractLayoutPanel {
+public class WeaponSpriteLayoutPanel extends AbstractLayoutPanel {
     
     private WeaponSprite weaponsprite;
     private Palette palette;
     
-    public WeaponSpriteLayout() {
+    public WeaponSpriteLayoutPanel() {
         super();
         tilesPerRow = FRAME_TILE_WIDTH;
-        setGridDimensions(PIXEL_WIDTH, PIXEL_HEIGHT, -1, FRAME_TILE_HEIGHT);
+        setGridDimensions(PIXEL_WIDTH, PIXEL_HEIGHT, -1, FRAME_TILE_HEIGHT*PIXEL_HEIGHT);
     }
     
     @Override
@@ -42,9 +43,12 @@ public class WeaponSpriteLayout extends AbstractLayoutPanel {
 
     @Override
     protected void buildImage(Graphics graphics) {
+        
         int frameHeight = FRAME_TILE_HEIGHT*PIXEL_HEIGHT;
+        Tileset[] frames = weaponsprite.getFrames();
         for(int f = 0; f < weaponsprite.getFrames().length; f++) {
-            graphics.drawImage(weaponsprite.getFrames()[f].getIndexedColorImage(), 0, f*frameHeight, null);
+            frames[f].setPalette(palette);
+            graphics.drawImage(frames[f].getIndexedColorImage(), 0, f*frameHeight, null);
         }
     }
     

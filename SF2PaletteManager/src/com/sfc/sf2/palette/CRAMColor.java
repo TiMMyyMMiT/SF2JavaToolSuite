@@ -23,6 +23,10 @@ public class CRAMColor {
         setColor(color);
     }
     
+    public CRAMColor(int rgb) {
+        setColor(new Color(rgb));
+    }
+    
     public CRAMColor(int r, int g, int b) {
         setColor(new Color(r, g, b, 255));
     }
