@@ -6,7 +6,7 @@
 package com.sfc.sf2.palette.io;
 
 import com.sfc.sf2.core.io.AbstractRawImageProcessor;
-import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
@@ -19,12 +19,12 @@ import java.awt.image.WritableRaster;
 public class PaletteRawImageProcessor extends AbstractRawImageProcessor<Palette, PalettePackage> {
 
     @Override
-    protected Palette parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws DisassemblyException {
+    protected Palette parseImageData(WritableRaster raster, IndexColorModel icm, PalettePackage pckg) throws RawImageException {
         return new Palette(pckg.name(), Palette.fromICM(icm), pckg.firstColorTransparent());
     }
 
     @Override
-    protected BufferedImage packageImageData(Palette item, PalettePackage pckg) throws DisassemblyException {
+    protected BufferedImage packageImageData(Palette item, PalettePackage pckg) throws RawImageException {
         BufferedImage image = new BufferedImage(item.getColors().length, 1, BufferedImage.TYPE_BYTE_INDEXED, item.getIcm());
         WritableRaster raster = image.getRaster();
         int[] colors = new int[item.getColors().length];

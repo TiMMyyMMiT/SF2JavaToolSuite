@@ -26,7 +26,7 @@ public class BackgroundDisassemblyProcessor extends AbstractDisassemblyProcessor
     @Override
     protected Background parseDisassemblyData(byte[] data, BackgroundPackage pckg) throws DisassemblyException {
         if (data.length <= 2) {
-            Console.logger().severe("File ignored because of too small length (must be a dummy file) " + data.length);
+            throw new DisassemblyException("File ignored because of too small length (must be a dummy file) " + data.length);
         }
         short tileset1Offset = BinaryHelpers.getWord(data, 0);
         short tileset2Offset = (short)(BinaryHelpers.getWord(data, 2)+2);

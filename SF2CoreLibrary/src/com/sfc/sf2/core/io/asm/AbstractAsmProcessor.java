@@ -41,12 +41,18 @@ public abstract class AbstractAsmProcessor<TType extends Object> {
         Console.logger().finest("ENTERING exportAsmData : " + filePath);
         File asmFile = filePath.toFile();
         FileWriter writer = new FileWriter(asmFile, false);writer.write("; ASM FILE ");
+        //Header
         writer.write(PathHelpers.getIncbinPath().relativize(filePath).toString());
         writer.write(" :\n");
+        writer.write("; --- : ");
+        writer.write(getHeaderName(item));
+        writer.write("\n");
+        //Data
         packageAsmData(writer, item);
         writer.close();
         Console.logger().finest("EXITING exportAsmData");
     }
-
+    
+    protected abstract String getHeaderName(TType item);
     protected abstract void packageAsmData(FileWriter writer, TType item) throws IOException, AsmException;
 }

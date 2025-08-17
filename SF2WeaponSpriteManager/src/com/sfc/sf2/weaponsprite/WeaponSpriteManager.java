@@ -5,87 +5,109 @@
  */
 package com.sfc.sf2.weaponsprite;
 
-import com.sfc.sf2.graphics.GraphicsManager;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.RawImageException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.core.io.asm.EntriesAsmData;
+import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
+import com.sfc.sf2.helpers.FileHelpers;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.weaponsprite.io.DisassemblyManager;
-import com.sfc.sf2.weaponsprite.io.RawImageManager;
-import java.awt.Color;
+import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
+import com.sfc.sf2.palette.io.PalettePackage;
+import com.sfc.sf2.weaponsprite.io.WeaponSpriteDisassemblyProcessor;
+import com.sfc.sf2.weaponsprite.io.WeaponSpritePackage;
+import com.sfc.sf2.weaponsprite.io.WeaponSpriteRawImageProcessor;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  *
  * @author wiz
  */
-public class WeaponSpriteManager {
+public class WeaponSpriteManager extends AbstractManager {
 
-    private final GraphicsManager graphicsManager = new GraphicsManager();
+    private final PaletteDisassemblyProcessor paletteDisassemblyProcessor = new PaletteDisassemblyProcessor();
+    private final WeaponSpriteDisassemblyProcessor weaponDisassemblyProcessor = new WeaponSpriteDisassemblyProcessor();
+    private final WeaponSpriteRawImageProcessor weaponSpriteRawImageProcessor = new WeaponSpriteRawImageProcessor();
+    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+    
     private WeaponSprite weaponsprite;
     private Palette basePalette;
     private Palette[] palettes;
-       
-    public void importDisassembly(String paletteEntriesPath, String filepath){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importDisassembly() - Importing disassembly ...");
-        ImportPalettes(paletteEntriesPath);
-        weaponsprite = DisassemblyManager.importDisassembly(filepath, basePalette);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importDisassembly() - Disassembly imported.");
-    }
-    
-    public void exportDisassembly(String graphicsPath){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportDisassembly(weaponsprite, graphicsPath);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importDisassembly() - Disassembly exported.");        
-    }   
-    
-    public void importRom(String romFilePath, String paletteOffset, String paletteLength, String graphicsOffset, String graphicsLength){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importOriginalRom() - Importing original ROM ...");
-        graphicsManager.importRom(romFilePath, paletteOffset, paletteLength, graphicsOffset, graphicsLength,GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importOriginalRom() - Original ROM imported.");
-    }
-    
-    public void exportRom(String originalRomFilePath, String graphicsOffset){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.exportOriginalRom() - Exporting original ROM ...");
-        graphicsManager.exportRom(originalRomFilePath, graphicsOffset, GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.exportOriginalRom() - Original ROM exported.");        
-    }      
-    
-    public void importPng(String paletteEntriesPath, String filepath){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importPng() - Importing PNG ...");
-        ImportPalettes(paletteEntriesPath);
-        weaponsprite = RawImageManager.importImage(filepath);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importPng() - PNG imported.");
-    }
-    
-    public void exportPng(String filepath){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.exportPng() - Exporting PNG ...");
-        RawImageManager.exportImage(weaponsprite, filepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.exportPng() - PNG exported.");       
-    }
-    
-    public void importGif(String paletteEntriesPath, String filepath){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importGif() - Importing GIF ...");
-        ImportPalettes(paletteEntriesPath);
-        weaponsprite = RawImageManager.importImage(filepath);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.importGif() - GIF imported.");
-    }
-    
-    public void exportGif(String filepath){
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.exportGif() - Exporting GIF ...");
-        RawImageManager.exportImage(weaponsprite, filepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.exportGif() - GIF exported.");       
-    }
-    
-    private void ImportPalettes(String palettesEntriesPath) {
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.ImportPalettes() - Importing palettes ...");
-        if (basePalette == null) {
-            Color[] baseColors = new Color[16];
-            baseColors[0] = new Color(0xFF00FF00);
-            baseColors[1] = Color.WHITE;
-            for (int i = 2; i < baseColors.length; i++) {
-                baseColors[i] = Color.BLACK;
-            }
-            basePalette = new Palette("Base Palette", baseColors);        
+
+    @Override
+    public void clearData() {
+        basePalette = null;
+        palettes = null;
+        if (weaponsprite != null) {
+            weaponsprite.clearIndexedColorImage(true);
+            weaponsprite = null;
         }
-        palettes = DisassemblyManager.importPalettes(basePalette, palettesEntriesPath);
-        System.out.println("com.sfc.sf2.weaponsprite.WeaponSpriteManager.ImportPalettes() - palettes imported.");
+    }
+       
+    public void importDisassembly(Path paletteEntriesPath, Path filePath) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassembly");
+        ImportPalettesFromEntries(paletteEntriesPath);
+        int index = FileHelpers.getNumberFromFileName(filePath.toFile());
+        WeaponSpritePackage pckg = new WeaponSpritePackage(index, basePalette);
+        weaponsprite = weaponDisassemblyProcessor.importDisassembly(filePath, pckg);
+        Console.logger().finest("EXITING importDisassembly");
+    }
+    
+    public void exportDisassembly(Path filePath, WeaponSprite weaponsprite) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.weaponsprite = weaponsprite;
+        weaponDisassemblyProcessor.exportDisassembly(filePath, weaponsprite, null);
+        Console.logger().finest("EXITING exportDisassembly");       
+    }
+    
+    public void importImage(Path paletteEntriesPath, Path filePath) throws IOException, RawImageException, AsmException {
+        Console.logger().finest("ENTERING importImage");
+        ImportPalettesFromEntries(paletteEntriesPath);
+        int index = FileHelpers.getNumberFromFileName(filePath.toFile());
+        WeaponSpritePackage pckg = new WeaponSpritePackage(index, null);
+        weaponsprite = weaponSpriteRawImageProcessor.importRawImage(filePath, pckg);
+        Console.logger().finest("EXITING importImage");
+    }
+    
+    public void exportImage(Path filePath, WeaponSprite weaponsprite) throws IOException, RawImageException {
+        Console.logger().finest("ENTERING exportImage");
+        this.weaponsprite = weaponsprite;
+        WeaponSpritePackage pckg = new WeaponSpritePackage(0, basePalette);
+        weaponSpriteRawImageProcessor.exportRawImage(filePath, weaponsprite, pckg);
+        Console.logger().finest("EXITING exportImage");
+    }
+    
+    private void ImportPalettesFromEntries(Path entriesPath) throws IOException, AsmException {
+        Console.logger().finest("ENTERING ImportPalettesFromEntries");
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
+        Console.logger().info("Weapon palettes entries successfully imported. Entries found : " + entriesData.entriesCount());
+        ArrayList<Palette> palettesList = new ArrayList<>();
+        int palettesCount = 0;
+        int failedToLoad = 0;
+        for (int i = 0; i < entriesData.entriesCount(); i++) {
+            Path palettePath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
+            try {
+                PalettePackage pckg = new PalettePackage(palettePath.getFileName().toString(), true);
+                palettesList.add(paletteDisassemblyProcessor.importDisassembly(palettePath, pckg));
+                palettesCount++;
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Palette could not be imported : " + palettePath + " : " + e);
+            }
+        }
+        palettes = new Palette[palettesList.size()];
+        palettes = palettesList.toArray(palettes);
+        basePalette = palettes[0];
+        Console.logger().info(palettes.length + " palettes with " + palettesCount + " frames successfully imported from entries file : " + entriesPath);
+        Console.logger().info((entriesData.entriesCount() - entriesData.uniquePathsCount()) + " duplicate palette entries found.");
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " palettes failed to import. See logs above");
+        }
     }
 
     public WeaponSprite getWeaponsprite() {
