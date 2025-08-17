@@ -5,70 +5,64 @@
  */
 package com.sfc.sf2.specialSprites;
 
-import com.sfc.sf2.graphics.GraphicsManager;
-import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.specialSprites.io.DisassemblyManager;
+import java.nio.file.Path;
 
 /**
  *
  * @author TiMMy
  */
-public class SpecialSpriteManager { 
+public class SpecialSpriteManager extends AbstractManager { 
 
-    private GraphicsManager graphicsManager = new GraphicsManager();
-    private Tile[] tiles;
+    private Tileset tileset;
     private Palette palette;
-       
-    public void importDisassembly(String graphicsFilePath, int blockRows, int blockColumns, int tilesPerBlock, String paletteFilepath) {
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Importing disassembly ...");
+    
+    @Override
+    public void clearData() {
+        palette = null;
+        if (tileset != null) {
+            tileset.clearIndexedColorImage(true);
+            tileset = null;
+        }
+    }
+    
+    public void importDisassembly(Path graphicsFilePath, int blockRows, int blockColumns, int tilesPerBlock, Path paletteFilepath) {
+        /*System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Importing disassembly ...");
         palette = DisassemblyManager.importDisassembly(graphicsFilePath, graphicsManager, blockRows, blockColumns, tilesPerBlock, paletteFilepath);
         tiles = graphicsManager.getTiles();
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Disassembly imported.");
+        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Disassembly imported.");*/
     }
     
-    public void exportDisassembly(String graphicsFilePath, int blockRows, int blockColumns, int tilesPerBlock, boolean savePaletteInFile) {
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Exporting disassembly ...");
+    public void exportDisassembly(Path graphicsFilePath, Tileset tileset, int blockRows, int blockColumns, int tilesPerBlock, boolean savePaletteInFile) {
+        /*System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Exporting disassembly ...");
         DisassemblyManager.exportDisassembly(graphicsFilePath, savePaletteInFile ? palette : null, tiles, blockRows, blockColumns, tilesPerBlock);
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Disassembly exporting.");
+        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Disassembly exporting.");*/
     }
     
-    public void importPng(String filepath) {
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Importing disassembly ...");
+    public void importImage(Path filepath) {
+        /*System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Importing disassembly ...");
         graphicsManager.importPng(filepath);
         tiles = graphicsManager.getTiles();
         palette = tiles[0].getPalette();
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Disassembly imported.");
+        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Disassembly imported.");*/
     }
     
-    public void exportPng(String filepath, int tilesPerRow) {
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Exporting disassembly ...");
+    public void exportImage(Path filepath, Tileset tileset, int tilesPerRow) {
+        /*System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Exporting disassembly ...");
         graphicsManager.setTiles(tiles);
         graphicsManager.exportPng(filepath, tilesPerRow);
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Disassembly exporting.");     
-    }
-    
-    public void importGif(String filepath) {
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Importing disassembly ...");
-        graphicsManager.importGif(filepath);
-        tiles = graphicsManager.getTiles();
-        palette = tiles[0].getPalette();
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.importDisassembly() - Disassembly imported.");
-    }
-    
-    public void exportGif(String filepath, int tilesPerRow) {
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Exporting disassembly ...");
-        graphicsManager.setTiles(tiles);
-        graphicsManager.exportGif(filepath, tilesPerRow);
-        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Disassembly exporting.");   
+        System.out.println("com.sfc.sf2.spellGraphic.SpecialSpriteManager.exportDisassembly() - Disassembly exporting.");*/
     }
 
-    public Tile[] getTiles() {
-        return tiles;
+    public Tileset getTileset() {
+        return tileset;
     }
 
-    public void setTiles(Tile[] tiles) {
-        this.tiles = tiles;
+    public void setTileset(Tileset tileset) {
+        this.tileset = tileset;
     }
 
     public Palette getPalette() {

@@ -5,13 +5,8 @@
  */
 package com.sfc.sf2.specialSprites.io;
 
-import com.sfc.sf2.graphics.GraphicsManager;
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.graphics.compressed.StackGraphicsDecoder;
-import com.sfc.sf2.graphics.compressed.StackGraphicsEncoder;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.palette.graphics.PaletteDecoder;
-import com.sfc.sf2.palette.graphics.PaletteEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class DisassemblyManager {
     
-    public static Palette importDisassembly(String filepath, GraphicsManager graphicsManager, int blockRows, int blockColumns, int tilesPerBlock, String paletteFilepath) {
+    /*public static Palette importDisassembly(String filepath, GraphicsManager graphicsManager, int blockRows, int blockColumns, int tilesPerBlock, String paletteFilepath) {
         System.out.println("com.sfc.sf2.specialSprites.io.disassemblyManager.importDisassembly() - Importing disassembly file ...");
         Palette palette = null;
         try {
@@ -108,7 +103,7 @@ public class DisassemblyManager {
            12 15 18 30 33 36            . 72
         */
         // \/ Edit these variables \/
-        int blockColumnCount = blockColumns;
+    /*    int blockColumnCount = blockColumns;
         int blockRowCount = blockRows;
         //int tilesPerBlock = tilesPerBlock;
         // /\ Edit these variables /\
@@ -141,5 +136,5 @@ public class DisassemblyManager {
             newTiles[bc*(blockTotalTiles*blockRowCount) + br*blockTotalTiles + tc*tilesPerBlock + tr] = tiles[i];
         }
         return newTiles;
-    }
+    }*/
 }
