@@ -8,6 +8,7 @@ package com.sfc.sf2.mapsprite.io;
 import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.io.AbstractTilesetRawImageProcessor;
+import com.sfc.sf2.mapsprite.MapSpriteManager;
 import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
@@ -26,7 +27,7 @@ public class MapSpriteRawImageProcessor extends AbstractTilesetRawImageProcessor
         if (palette == null) {
             palette = new Palette(pckg.name(), Palette.fromICM(icm), true);
         }
-        Tileset[] frames = parseTileset(raster, 3, palette);
+        Tileset[] frames = parseTileset(raster, 3, 3, palette);
         for (int i = 0; i < frames.length; i++) {
             frames[i].setName(pckg.name());
         }        
@@ -35,8 +36,15 @@ public class MapSpriteRawImageProcessor extends AbstractTilesetRawImageProcessor
 
     @Override
     protected BufferedImage packageImageData(Tileset[] item, MapSpritePackage pckg) throws RawImageException {
-        BufferedImage image = setupImage(item);
-        writeTileset(image.getRaster(), item);
+        MapSpriteManager.MapSpriteExportMode exportMode = pckg.exportMode();
+        BufferedImage image = null;
+        if (exportMode == exportMode.INDIVIDUAL_FILES) {
+            image = setupImage(item[0]);
+            writeTileset(image.getRaster(), item[0]);
+        } else {
+            image = setupImage(item, 2);
+            writeTileset(image.getRaster(), item, 2);
+        }
         return image;
     }
     

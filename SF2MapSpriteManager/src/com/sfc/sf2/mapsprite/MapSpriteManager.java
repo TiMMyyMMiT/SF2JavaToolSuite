@@ -62,7 +62,7 @@ public class MapSpriteManager extends AbstractManager {
         mapSprites = new MapSprite[1];
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
         int[] indices = getIndicesFromFilename(graphicsFilePath.getFileName());
-        MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), palette);
+        MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), palette, null);
         Tileset[] frames = mapSpriteDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
         MapSprite newSprite = new MapSprite(indices[0]);
         newSprite.addFrame(frames[0], indices[1], 0);
@@ -87,7 +87,7 @@ public class MapSpriteManager extends AbstractManager {
             Path tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
             try {
                 int[] indices = getIndicesFromFilename(tilesetPath.getFileName());
-                MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), palette);
+                MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), palette, null);
                 Tileset[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
                 frameCount+=2;
                 if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
@@ -153,7 +153,7 @@ public class MapSpriteManager extends AbstractManager {
             Path tilesetPath = file.toPath();
             try {
                 int[] indices = getIndicesFromFilename(tilesetPath.getFileName());
-                MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), palette);
+                MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), palette, null);
                 Tileset[] frames = mapSpriteRawImageProcessor.importRawImage(tilesetPath, pckg);
                 frameCount+=frames.length;
                 if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
@@ -192,15 +192,16 @@ public class MapSpriteManager extends AbstractManager {
         for (MapSprite mapSprite : mapSprites) {
             try {
                 int index = mapSprite.getIndex();
+                MapSpritePackage pckg = new MapSpritePackage(null, mapSprite.getPalette(), exportMode);
                 switch (exportMode) {
                     case INDIVIDUAL_FILES:
                         for (int i = 0; i < 6; i++) {
                             Tileset[] frames = new Tileset[1];
                             frames[0] = mapSprite.getFrame(i/2, i%2);
                             if (frames[0] != null) {
-                                filePath = basePath.resolve(String.format("mapsprite%03d-%d-%d%s", index, i/2, i%2, AbstractRawImageProcessor.GetFileExtensionString(format)));
-                                mapSpriteRawImageProcessor.exportRawImage(filePath, frames, null);
                                 files++;
+                                filePath = basePath.resolve(String.format("mapsprite%03d-%d-%d%s", index, i/2, i%2, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                                mapSpriteRawImageProcessor.exportRawImage(filePath, frames, pckg);
                             }
                         }
                     break;
@@ -210,16 +211,16 @@ public class MapSpriteManager extends AbstractManager {
                             frames[0] = mapSprite.getFrame(i, 0);
                             frames[1] = mapSprite.getFrame(i, 1);
                             if (frames[0] != null && frames[1] != null) {
-                                filePath = basePath.resolve(String.format("mapsprite%03d-%d%s", index, i, AbstractRawImageProcessor.GetFileExtensionString(format)));
-                                mapSpriteRawImageProcessor.exportRawImage(filePath, frames, null);
                                 files++;
+                                filePath = basePath.resolve(String.format("mapsprite%03d-%d%s", index, i, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                                mapSpriteRawImageProcessor.exportRawImage(filePath, frames, pckg);
                             }
                         }
                         break;
                     case FILE_PER_SPRITE:
-                        filePath = basePath.resolve(String.format("mapsprite%03d%s", index, AbstractRawImageProcessor.GetFileExtensionString(format)));
-                        mapSpriteRawImageProcessor.exportRawImage(filePath, mapSprite.getFrames(), null);
                         files++;
+                        filePath = basePath.resolve(String.format("mapsprite%03d%s", index, AbstractRawImageProcessor.GetFileExtensionString(format)));
+                        mapSpriteRawImageProcessor.exportRawImage(filePath, mapSprite.getFrames(), pckg);
                         break;
                     default:
                         throw new ExecutionControl.NotImplementedException("Export format " + exportMode + "not supported.");

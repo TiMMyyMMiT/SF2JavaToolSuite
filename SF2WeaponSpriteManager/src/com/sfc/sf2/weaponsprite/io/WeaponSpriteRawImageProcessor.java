@@ -25,7 +25,7 @@ public class WeaponSpriteRawImageProcessor extends AbstractTilesetRawImageProces
     protected WeaponSprite parseImageData(WritableRaster raster, IndexColorModel icm, WeaponSpritePackage pckg) throws RawImageException {
         checkImageDimensions(raster);
         Palette palette = new Palette("Imported Palette", Palette.fromICM(icm), true);
-        Tileset[] frames = parseTileset(raster, WeaponSprite.FRAME_TILE_HEIGHT, palette);
+        Tileset[] frames = parseTileset(raster, WeaponSprite.FRAME_TILE_WIDTH, WeaponSprite.FRAME_TILE_HEIGHT, palette);
         if(frames.length == 0) {
             throw new RawImageException("ERROR Weapon sprite image could not be loaded. Less than 1 frame loaded.");
         } else if (frames.length != 4) {
@@ -37,8 +37,8 @@ public class WeaponSpriteRawImageProcessor extends AbstractTilesetRawImageProces
     @Override
     protected BufferedImage packageImageData(WeaponSprite item, WeaponSpritePackage pckg) throws RawImageException {
         Tileset[] frames = item.getFrames();
-        BufferedImage image = setupImage(frames);
-        writeTileset(image.getRaster(), frames);
+        BufferedImage image = setupImage(frames, 1);
+        writeTileset(image.getRaster(), frames, 1);
         return image;
     }
 }

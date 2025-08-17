@@ -33,8 +33,8 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
         tiles_frame1 = TileHelpers.reorderTilesSequentially(tiles_frame1, 1, 1, 3);
         tiles_frame2 = TileHelpers.reorderTilesSequentially(tiles_frame2, 1, 1, 3);
         Tileset[] tilesets = new Tileset[2];
-        tilesets[0] = new Tileset(pckg.name(), tiles_frame1, 6);
-        tilesets[1] = new Tileset(pckg.name(), tiles_frame2, 6);
+        tilesets[0] = new Tileset(pckg.name(), tiles_frame1, 3);
+        tilesets[1] = new Tileset(pckg.name(), tiles_frame2, 3);
         return tilesets;
     }
 

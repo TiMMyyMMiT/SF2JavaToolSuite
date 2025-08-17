@@ -5,8 +5,8 @@
  */
 package com.sfc.sf2.graphics.io;
 
-import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.AbstractRawImageProcessor;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
@@ -22,11 +22,21 @@ import java.awt.image.WritableRaster;
  */
 public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPackage extends Object> extends AbstractRawImageProcessor<TType, TPackage> {
     
-    protected void checkImageDimensions(WritableRaster raster) {
+    protected void checkImageDimensions(WritableRaster raster) throws RawImageException {
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
         if (imageWidth%PIXEL_WIDTH != 0 || imageHeight%PIXEL_HEIGHT != 0) {
-            Console.logger().warning("Warning : image dimensions are not a multiple of 8 (pixels per tile). Some data may be lost");
+            throw new RawImageException("Warning : image dimensions are not a multiple of 8 (pixels per tile).");
+        }
+    }
+    
+    protected void checkImageDimensions(WritableRaster raster, int tileWidthOfTileset, int tileHeightOfTileset) throws RawImageException {
+        checkImageDimensions(raster);
+        if (raster.getWidth()%(tileWidthOfTileset*PIXEL_WIDTH) != 0) {
+            throw new RawImageException("Warning : image dimensions are wrong size. Width is " + raster.getWidth() + " but expected a multiple of " + (tileWidthOfTileset*PIXEL_WIDTH));
+        }
+        if (raster.getHeight()%(tileHeightOfTileset*PIXEL_HEIGHT) != 0) {
+            throw new RawImageException("Warning : image dimensions are wrong size. Height is " + raster.getHeight() + " but expected a multiple of " + (tileHeightOfTileset*PIXEL_HEIGHT));
         }
     }
     
@@ -34,23 +44,31 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
         return parseTileset(raster, 0, 0, raster.getWidth()/PIXEL_WIDTH, raster.getHeight()/PIXEL_HEIGHT, palette);
     }
     
-    protected Tileset[] parseTileset(WritableRaster raster, int tilesetHeight, Palette palette) {
-        int tilesetCount = raster.getHeight()/PIXEL_HEIGHT/tilesetHeight;
+    protected Tileset[] parseTileset(WritableRaster raster, int tileWidthOfTileset, int tileHeightOfTileset, Palette palette) {
+        int tilesPerRow = raster.getWidth()/PIXEL_WIDTH;
+        int tilesPerColumn = raster.getHeight()/PIXEL_HEIGHT;
+        int tilesetsPerRow = tilesPerRow/tileWidthOfTileset;
+        int tilesetsPerColumn = tilesPerColumn/tileHeightOfTileset;
+        
+        int tilesetCount = (tilesetsPerRow*tilesetsPerColumn);
         Tileset[] tilesets = new Tileset[tilesetCount];
-        for (int i = 0; i < tilesetCount; i++) {
-            tilesets[i] = parseTileset(raster, 0, tilesetHeight*i, raster.getWidth()/PIXEL_WIDTH, raster.getHeight()/PIXEL_HEIGHT, palette);
+        for (int j = 0; j < tilesetsPerColumn; j++) {
+            for (int i = 0; i < tilesetsPerRow; i++) {
+                tilesets[i+j*tilesetsPerRow] = parseTileset(raster, i*tileWidthOfTileset, j*tileHeightOfTileset, tileWidthOfTileset, tileHeightOfTileset, palette);
+            }
         }
         return tilesets;
     }
     
-    protected Tileset parseTileset(WritableRaster raster, int tileX, int tileY, int tileW, int tileH, Palette palette) {
-        Tile[] tiles = new Tile[tileW*tileH];
+    protected Tileset parseTileset(WritableRaster raster, int tileX, int tileY, int tilesPerRow, int tilesPerColumn, Palette palette) {
+        Tile[] tiles = new Tile[tilesPerRow*tilesPerColumn];
         int tileId = 0;
-        for(int t = 0; t < tiles.length; t++) {
+        //Console.logger().finest("Building tileset from coordinates "+tileX+":"+tileY+":"+(tileX+tilesPerRow)+":"+(tileY+tilesPerColumn));
+        for (int t = 0; t < tiles.length; t++) {
             int[] pixels = new int[PIXEL_WIDTH*PIXEL_WIDTH];
-            int x = tileX + (t%tileW)*PIXEL_WIDTH;
-            int y = tileY + (t/tileW)*PIXEL_HEIGHT;
-            //onsole.logger().finest("Building tile from coordinates "+x+":"+y);
+            int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
+            int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
+            //Console.logger().finest("Building tile from coordinates "+x+":"+y);
             Tile tile = new Tile();
             tile.setId(tileId);
             tile.setPalette(palette);
@@ -60,7 +78,7 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
             tiles[tileId] = tile;   
             tileId++;
         }
-        return new Tileset(null, tiles, tileW);
+        return new Tileset(null, tiles, tilesPerRow);
     }
     
     protected BufferedImage setupImage(Tileset tileset) {
@@ -76,32 +94,55 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
         return new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_BYTE_BINARY, icm);
     }
     
-    protected BufferedImage setupImage(Tileset[] tilesets) {
-        int tilesPerRow = tilesets[0].getTilesPerRow();
-        int height = 0;
-        for (int i = 0; i < tilesets.length; i++) {
-            int h = tilesets[i].getTiles().length/tilesPerRow;
-            if (tilesets[i].getTiles().length % tilesPerRow != 0) {
-                h++;
+    protected BufferedImage setupImage(Tileset[] tilesets, int tilesetsPerRow) {
+        Palette palette = null;
+        int tilesetTilesWidth = 1;
+        int tilesetTilesheight = 1;
+        for (Tileset tileset : tilesets) {
+            if (tileset != null) {
+                palette = tileset.getPalette();
+                tilesetTilesWidth = tileset.getTilesPerRow();
+                tilesetTilesheight = (tileset.getTiles().length/tilesetTilesWidth);
+                if (tileset.getTiles().length % tilesetTilesWidth != 0) {
+                    tilesetTilesheight++;
+                }
+                break;
             }
-            height += h;
         }
-        return new BufferedImage(tilesPerRow*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, tilesets[0].getPalette().getIcm());
+        
+        int width = tilesetsPerRow*tilesetTilesWidth;
+        int height = (tilesets.length/tilesetsPerRow);
+        if (tilesets.length % tilesetsPerRow != 0) {
+            height++;
+        }
+        height *= tilesetTilesheight;
+        return new BufferedImage(width*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_BINARY, palette.getIcm());
     }
     
     protected void writeTileset(WritableRaster raster, Tileset tileset) {
         writeTileset(raster, tileset, 0, tileset.getTiles().length, 0, 0, tileset.getTilesPerRow());
     }
     
-    protected void writeTileset(WritableRaster raster, Tileset[] tilesets) {
-        int tilesPerRow = tilesets[0].getTilesPerRow();
-        int height = 0;
-        for (int i = 0; i < tilesets.length; i++) {
-            height = tilesets[i].getTiles().length/tilesPerRow;
-            if (tilesets[i].getTiles().length % tilesPerRow != 0) {
-                height++;
+    protected void writeTileset(WritableRaster raster, Tileset[] tilesets, int tilesetsPerRow) {
+        int tilesetTilesWidth = 1;
+        int tilesetTilesheight = 1;
+        for (Tileset tileset : tilesets) {
+            if (tileset != null) {
+                tilesetTilesWidth = tileset.getTilesPerRow();
+                tilesetTilesheight = (tileset.getTiles().length/tilesetTilesWidth);
+                if (tileset.getTiles().length % tilesetTilesWidth != 0) {
+                    tilesetTilesheight++;
+                }
+                break;
             }
-            writeTileset(raster, tilesets[i], 0, tilesets[i].getTiles().length, 0, height*PIXEL_HEIGHT, tilesets[i].getTilesPerRow());
+        }
+        
+        for (int i = 0; i < tilesets.length; i++) {
+            if (tilesets[i] != null) {
+                int x = (i % tilesetsPerRow)*tilesetTilesWidth;
+                int y = (i/tilesetsPerRow)*tilesetTilesheight;
+                writeTileset(raster, tilesets[i], 0, tilesets[i].getTiles().length, x, y, tilesets[i].getTilesPerRow());
+            }
         }
     }
     
@@ -109,8 +150,8 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
         Tile[] tiles = tileset.getTiles();
         for (int t = tileStart; t < tileEnd; t++) {
             if (tiles[t] != null) {
-                int x = tileX + t%tilesPerRow*PIXEL_WIDTH;
-                int y = tileY + t/tilesPerRow*PIXEL_HEIGHT;
+                int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
+                int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
                 raster.setPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, tiles[t].getPixels());
             }
         }

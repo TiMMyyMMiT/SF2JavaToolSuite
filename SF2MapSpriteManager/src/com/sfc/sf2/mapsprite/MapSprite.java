@@ -65,7 +65,10 @@ public class MapSprite {
         if (frames == null) {
             return null;
         }
-        return frames[0].getPalette();
+        for (int i = 0; i < frames.length; i++) {
+            if (frames[i] != null) return frames[i].getPalette();
+        }
+        return null;
     }
     
     public int getSpritesWidth() {
