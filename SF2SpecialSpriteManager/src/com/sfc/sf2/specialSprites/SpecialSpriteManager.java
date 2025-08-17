@@ -44,7 +44,7 @@ public class SpecialSpriteManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassembly");
         Palette optionalPalette = null;
         if (paletteFilepath != null) {
-            optionalPalette = paletteManager.importDisassembly(paletteFilepath, true);
+            optionalPalette = paletteManager.importDisassemblyFromPartial(paletteFilepath, 0, 32, true);
         }
         SpecialSpritePackage pckg = new SpecialSpritePackage(PathHelpers.filenameFromPath(filePath), blockRows, blockColumns, tilesPerBlock, optionalPalette);
         tileset = specialSpriteDisassemblyProcessor.importDisassembly(filePath, pckg);

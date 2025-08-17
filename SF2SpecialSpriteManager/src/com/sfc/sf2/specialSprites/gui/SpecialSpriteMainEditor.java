@@ -36,8 +36,8 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     
     @Override
     protected void updateEditorData() {
-        tilesetLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
-        tilesetLayoutPanel.setTileset(specialSpriteManager.getTileset());
+        specialSpriteLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
+        specialSpriteLayoutPanel.setTileset(specialSpriteManager.getTileset());
         
         super.updateEditorData();
     }
@@ -46,8 +46,8 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     protected void repaintEditorLayout() {
         super.repaintEditorLayout();
         
-        tilesetLayoutPanel.revalidate();
-        tilesetLayoutPanel.repaint();
+        specialSpriteLayoutPanel.revalidate();
+        specialSpriteLayoutPanel.repaint();
     }    
 
     /**
@@ -104,7 +104,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tilesetLayoutPanel = new com.sfc.sf2.graphics.gui.TilesetLayoutPanel();
+        specialSpriteLayoutPanel = new com.sfc.sf2.specialSprites.gui.SpecialSpriteLayoutPanel();
         jPanel20 = new javax.swing.JPanel();
         jComboBox7 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
@@ -471,18 +471,18 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tiles"));
 
-        javax.swing.GroupLayout tilesetLayoutPanelLayout = new javax.swing.GroupLayout(tilesetLayoutPanel);
-        tilesetLayoutPanel.setLayout(tilesetLayoutPanelLayout);
-        tilesetLayoutPanelLayout.setHorizontalGroup(
-            tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout specialSpriteLayoutPanelLayout = new javax.swing.GroupLayout(specialSpriteLayoutPanel);
+        specialSpriteLayoutPanel.setLayout(specialSpriteLayoutPanelLayout);
+        specialSpriteLayoutPanelLayout.setHorizontalGroup(
+            specialSpriteLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 525, Short.MAX_VALUE)
         );
-        tilesetLayoutPanelLayout.setVerticalGroup(
-            tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 448, Short.MAX_VALUE)
+        specialSpriteLayoutPanelLayout.setVerticalGroup(
+            specialSpriteLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(tilesetLayoutPanel);
+        jScrollPane2.setViewportView(specialSpriteLayoutPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -492,7 +492,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
 
         jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("View"));
@@ -571,13 +571,11 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel28)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(jLabel55)
-                        .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCheckBox1)
-                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))))
+                    .addComponent(jLabel55)
+                    .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1)
+                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addContainerGap())
         );
 
@@ -646,7 +644,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
             int blockRows = (int)jSpinner3.getValue();
             int blockColumns = (int)jSpinner2.getValue();
             int tilesPerBlock = (int)jSpinner5.getValue();
-            specialSpriteManager.exportDisassembly(graphicPath, tilesetLayoutPanel.getTileset(), blockRows, blockColumns, tilesPerBlock, jCheckBox2.isSelected());
+            specialSpriteManager.exportDisassembly(graphicPath, specialSpriteLayoutPanel.getTileset(), blockRows, blockColumns, tilesPerBlock, jCheckBox2.isSelected());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Special sprite disasm could not be exported to : " + graphicPath);
@@ -657,7 +655,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
         Path graphicPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
         if (!PathHelpers.createPathIfRequred(graphicPath)) return;
         try {
-            specialSpriteManager.exportImage(graphicPath, tilesetLayoutPanel.getTileset(), (int)jSpinner1.getValue());
+            specialSpriteManager.exportImage(graphicPath, specialSpriteLayoutPanel.getTileset(), (int)jSpinner1.getValue());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Special sprite image could not be exported to : " + graphicPath);
@@ -698,17 +696,17 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
-        tilesetLayoutPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
+        specialSpriteLayoutPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
         repaintEditorLayout();
     }//GEN-LAST:event_jComboBox7ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        tilesetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+        specialSpriteLayoutPanel.setShowGrid(jCheckBox1.isSelected());
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        tilesetLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
+        specialSpriteLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
         repaintEditorLayout();
     }//GEN-LAST:event_jSpinner1StateChanged
 
@@ -734,7 +732,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
-        tilesetLayoutPanel.setBGColor(colorPicker1.getColor());
+        specialSpriteLayoutPanel.setBGColor(colorPicker1.getColor());
         SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveGlobalSettingsFile();
         repaintEditorLayout();
@@ -811,7 +809,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private com.sfc.sf2.graphics.gui.TilesetLayoutPanel tilesetLayoutPanel;
+    private com.sfc.sf2.specialSprites.gui.SpecialSpriteLayoutPanel specialSpriteLayoutPanel;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -6,8 +6,6 @@
 package com.sfc.sf2.graphics.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
-import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
-import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import java.awt.Dimension;
 import java.awt.Graphics;
