@@ -36,7 +36,7 @@ public class MapSpriteManager extends AbstractManager {
     public enum MapSpriteExportMode {
         INDIVIDUAL_FILES,
         FILE_PER_DIRECTION,
-        FILE_PER_SPRITE,
+        FILE_PER_SET,
     }
     
     private final PaletteManager paletteManager = new PaletteManager();
@@ -217,7 +217,7 @@ public class MapSpriteManager extends AbstractManager {
                             }
                         }
                         break;
-                    case FILE_PER_SPRITE:
+                    case FILE_PER_SET:
                         files++;
                         filePath = basePath.resolve(String.format("mapsprite%03d%s", index, AbstractRawImageProcessor.GetFileExtensionString(format)));
                         mapSpriteRawImageProcessor.exportRawImage(filePath, mapSprite.getFrames(), pckg);
