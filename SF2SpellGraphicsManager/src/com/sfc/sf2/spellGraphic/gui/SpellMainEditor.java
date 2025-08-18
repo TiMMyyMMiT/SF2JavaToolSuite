@@ -1214,6 +1214,7 @@ public class SpellMainEditor extends AbstractMainEditor {
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         spellLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
+        repaintEditorLayout();
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jPanelColor14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelColor14MouseClicked
