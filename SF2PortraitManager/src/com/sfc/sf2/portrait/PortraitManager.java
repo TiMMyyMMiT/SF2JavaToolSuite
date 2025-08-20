@@ -56,7 +56,7 @@ public class PortraitManager extends AbstractManager {
     
     public void importImage(Path portraitPath, Path metadataPath) throws IOException, DisassemblyException, RawImageException {
         Console.logger().finest("ENTERING importImage");
-        Tileset tileset = tilesetManager.importImage(portraitPath);
+        Tileset tileset = tilesetManager.importImage(portraitPath, true);
         portrait = new Portrait(tileset.getName(), tileset);
         Console.logger().info("Portrait successfully imported from : " + portraitPath);
         try {

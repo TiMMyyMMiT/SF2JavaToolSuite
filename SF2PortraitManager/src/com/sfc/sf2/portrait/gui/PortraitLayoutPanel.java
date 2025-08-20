@@ -37,6 +37,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel implements MouseLis
         
     public PortraitLayoutPanel() {
         setGridDimensions(8, 8);
+        setCoordsDimensions(8, 8, 0);
         addMouseListener(this);
         addMouseMotionListener(this);
     }

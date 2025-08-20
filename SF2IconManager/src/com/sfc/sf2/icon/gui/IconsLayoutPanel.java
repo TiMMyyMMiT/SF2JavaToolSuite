@@ -25,6 +25,7 @@ public class IconsLayoutPanel extends AbstractLayoutPanel {
     public IconsLayoutPanel() {
         super();
         setGridDimensions(ICON_TILE_WIDTH*PIXEL_WIDTH, ICON_TILE_HEIGHT*PIXEL_HEIGHT);
+        setCoordsDimensions(ICON_TILE_WIDTH*PIXEL_WIDTH, ICON_TILE_HEIGHT*PIXEL_HEIGHT, 6);
     }
     
     @Override
