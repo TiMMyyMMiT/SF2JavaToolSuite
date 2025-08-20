@@ -5,60 +5,62 @@
  */
 package com.sfc.sf2.battlesprite.gui;
 
-import com.sfc.sf2.battlesprite.BattleSpriteManager;
 import com.sfc.sf2.battlesprite.BattleSprite;
-import com.sfc.sf2.battlesprite.layout.BattleSpriteLayout;
-import java.awt.GridLayout;
+import com.sfc.sf2.battlesprite.BattleSpriteManager;
+import com.sfc.sf2.core.gui.AbstractMainEditor;
+import com.sfc.sf2.palette.Palette;
 import java.io.File;
-import java.io.PrintStream;
-import java.net.URISyntaxException;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 /**
  *
  * @author wiz
  */
-public class MainEditor extends javax.swing.JFrame {
-
+public class BattleSpriteMainEditor extends AbstractMainEditor {
+    
     BattleSpriteManager battleSpriteManager = new BattleSpriteManager();
-    BattleSpriteLayout battleSpriteLayout = new BattleSpriteLayout();
     
-    /**
-     * Creates new form NewApplication
-     */
-    public MainEditor() {
-        try {
-            initComponents();
-            initConsole(jTextArea1);
-            System.setProperty("java.util.logging.SimpleFormatter.format",
-                    "%2$s - %5$s%6$s%n");
-            initLogger("com.sfc.sf2.graphics", Level.WARNING);
-            File workingDirectory = new File(MainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-            System.setProperty("user.dir", workingDirectory.toString());
-            jFileChooser1.setCurrentDirectory(workingDirectory);
-            jFileChooser2.setCurrentDirectory(workingDirectory);
-            jTabbedPane1.remove(jPanel18);
-            jPanel2.removeAll();
-            jPanel2.add(battleSpriteLayout);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(MainEditor.class.getName()).log(Level.SEVERE, null, ex);
+    public BattleSpriteMainEditor() {
+        super();
+        initComponents();
+        initCore(console1);
+    }
+    
+    @Override
+    protected void initEditor() {
+        super.initEditor();
+        
+        //colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+    }
+    
+    @Override
+    protected void updateEditorData() {
+        jComboBox1.removeAllItems();
+        BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
+        battleSpriteLayoutPanel.setBattleSprite(battleSprite);
+        battleSpriteLayoutPanel.setPreviewAnimSpeed(false);
+        jCheckBox3.setSelected(false);
+        if (battleSprite != null) {
+            for (int i=0; i < battleSprite.getPalettes().length; i++) {
+                jComboBox1.addItem(String.valueOf(i));
+            }
+            jComboBox1.setSelectedIndex(0);
+            jSpinner4.setValue(battleSprite.getAnimSpeed());
+            jSpinner3.setValue(battleSprite.getStatusOffsetX());
+            jSpinner2.setValue(battleSprite.getStatusOffsetY());
         }
+        
+        super.updateEditorData();
     }
     
-    private void initLogger(String name, Level level){
-        Logger log = Logger.getLogger(name);
-        log.setUseParentHandlers(false);
-        log.setLevel(level);
-        ConsoleHandler ch = new ConsoleHandler();
-        ch.setLevel(level);        
-        log.addHandler(ch);                
-
+    @Override
+    protected void repaintEditorLayout() {
+        super.repaintEditorLayout();
+        
+        battleSpriteLayoutPanel.revalidate();
+        battleSpriteLayoutPanel.repaint();
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -134,7 +136,7 @@ public class MainEditor extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
+        battleSpriteLayoutPanel = new com.sfc.sf2.battlesprite.gui.BattleSpriteLayoutPanel();
         jPanel19 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -152,9 +154,7 @@ public class MainEditor extends javax.swing.JFrame {
         jCheckBox5 = new javax.swing.JCheckBox();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
@@ -691,18 +691,18 @@ public class MainEditor extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Frames"));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout battleSpriteLayoutPanelLayout = new javax.swing.GroupLayout(battleSpriteLayoutPanel);
+        battleSpriteLayoutPanel.setLayout(battleSpriteLayoutPanelLayout);
+        battleSpriteLayoutPanelLayout.setHorizontalGroup(
+            battleSpriteLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 413, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        battleSpriteLayoutPanelLayout.setVerticalGroup(
+            battleSpriteLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 348, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(jPanel2);
+        jScrollPane2.setViewportView(battleSpriteLayoutPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -712,7 +712,7 @@ public class MainEditor extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
 
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Properties"));
@@ -917,30 +917,7 @@ public class MainEditor extends javax.swing.JFrame {
         );
 
         jSplitPane1.setTopComponent(jPanel15);
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-        jPanel7.setToolTipText("");
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-        );
-
-        jSplitPane1.setBottomComponent(jPanel7);
+        jSplitPane1.setBottomComponent(console1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -950,7 +927,7 @@ public class MainEditor extends javax.swing.JFrame {
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -964,12 +941,12 @@ public class MainEditor extends javax.swing.JFrame {
             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(793, 693));
+        setSize(new java.awt.Dimension(856, 737));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        battleSpriteManager.exportDisassembly(jTextField13.getText());
+        //battleSpriteManager.exportDisassembly(jTextField13.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton27ActionPerformed
@@ -981,12 +958,12 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton27ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        battleSpriteManager.exportPng(jTextField15.getText(), jComboBox1.getSelectedIndex());
+        //battleSpriteManager.exportImage(jTextField15.getText(), jComboBox1.getSelectedIndex());
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        battleSpriteManager.importPng(jTextField11.getText(), jCheckBox1.isSelected());
-        updateInterface(jTextField11);
+        //battleSpriteManager.importImage(jTextField11.getText(), jCheckBox1.isSelected());
+        //updateEditorData(jTextField11);
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
@@ -998,8 +975,8 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton17ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        battleSpriteManager.importDisassembly(jTextField9.getText());
-        updateInterface(jTextField9);
+        //battleSpriteManager.importDisassembly(jTextField9.getText());
+        //updateEditorData(jTextField9);
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
@@ -1020,8 +997,8 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if(jComboBox1.getSelectedItem()!=null){
-            battleSpriteLayout.setCurrentPalette(jComboBox1.getSelectedIndex());
-            repaintTilesPanel();
+            battleSpriteLayoutPanel.setCurrentPalette(jComboBox1.getSelectedIndex());
+            repaintEditorLayout();
         }  
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -1034,8 +1011,8 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton19ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        battleSpriteManager.importGif(jTextField12.getText(), jCheckBox2.isSelected());
-        updateInterface(jTextField12);
+        //battleSpriteManager.importGif(jTextField12.getText(), jCheckBox2.isSelected());
+        //updateEditorData(jTextField12);
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
@@ -1047,12 +1024,12 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton28ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-        battleSpriteManager.exportGif(jTextField16.getText(), jComboBox1.getSelectedIndex());
+        //battleSpriteManager.exportGif(jTextField16.getText(), jComboBox1.getSelectedIndex());
     }//GEN-LAST:event_jButton16ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-        battleSpriteManager.importSFCDBank(jTextField10.getText(), jTextField14.getText(), jTextField17.getText(), (int)jSpinner1.getValue());
-        updateInterface(jTextField10);
+        //battleSpriteManager.importSFCDBank(jTextField10.getText(), jTextField14.getText(), jTextField17.getText(), (int)jSpinner1.getValue());
+        //updateEditorData(jTextField10);
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
@@ -1068,31 +1045,31 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton23ActionPerformed
 
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        battleSpriteLayout.setShowStatusMarker(jCheckBox4.isSelected());
-        repaintTilesPanel();
+        battleSpriteLayoutPanel.setShowStatusMarker(jCheckBox4.isSelected());
+        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        battleSpriteLayout.setPreviewAnimSpeed(jCheckBox3.isSelected());
-        repaintTilesPanel();
+        battleSpriteLayoutPanel.setPreviewAnimSpeed(jCheckBox3.isSelected());
+        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
-        battleSpriteLayout.setShowGrid(jCheckBox5.isSelected());
-        repaintTilesPanel();
+        battleSpriteLayoutPanel.setShowGrid(jCheckBox5.isSelected());
+        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        battleSpriteLayout.setDisplaySize(jComboBox2.getSelectedIndex()+1);
-        repaintTilesPanel();
+        battleSpriteLayoutPanel.setDisplayScale(jComboBox2.getSelectedIndex()+1);
+        repaintEditorLayout();
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jSpinner4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner4StateChanged
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setAnimSpeed((int)jSpinner4.getValue());
-            if (battleSpriteLayout.getPreviewAnimSpeed())
-                battleSpriteLayout.setPreviewAnimSpeed(true);   //Force timer to reset
+            if (battleSpriteLayoutPanel.getPreviewAnimSpeed())
+                battleSpriteLayoutPanel.setPreviewAnimSpeed(true);   //Force timer to reset
         }
     }//GEN-LAST:event_jSpinner4StateChanged
 
@@ -1100,7 +1077,7 @@ public class MainEditor extends javax.swing.JFrame {
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setStatusOffsetX((byte)jSpinner3.getValue());
-            repaintTilesPanel();
+            repaintEditorLayout();
         }
     }//GEN-LAST:event_jSpinner3StateChanged
 
@@ -1108,79 +1085,29 @@ public class MainEditor extends javax.swing.JFrame {
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setStatusOffsetY((byte)jSpinner2.getValue());
-            repaintTilesPanel();
+            repaintEditorLayout();
         }
     }//GEN-LAST:event_jSpinner2StateChanged
 
-    private void updateInterface(JTextField inputPathLabel) {
-        jComboBox1.removeAllItems();
-        for(int i=0;i<battleSpriteManager.getBattleSprite().getPalettes().length;i++){
-            jComboBox1.addItem(String.valueOf(i));
-        }
-        jPanel2.setLayout(new GridLayout(1,1));
-        battleSpriteLayout.setBattleSprite(battleSpriteManager.getBattleSprite());
-        battleSpriteLayout.setPreviewAnimSpeed(false);
-        jCheckBox3.setSelected(false);
-        jSpinner4.setValue(battleSpriteManager.getBattleSprite().getAnimSpeed());
-        jSpinner3.setValue(battleSpriteManager.getBattleSprite().getStatusOffsetX());
-        jSpinner2.setValue(battleSpriteManager.getBattleSprite().getStatusOffsetY());
-        String outputBasePath = inputPathLabel.getText();
-        outputBasePath = outputBasePath.substring(0, outputBasePath.lastIndexOf("."));
-        jTextField13.setText(outputBasePath + ".bin");
-        jTextField15.setText(outputBasePath);
-        jTextField16.setText(outputBasePath);
-        
-        repaintTilesPanel();
-    }
-    
-    private void repaintTilesPanel() {
-        battleSpriteLayout.revalidate();
-        battleSpriteLayout.repaint();
-        jPanel2.setSize(battleSpriteLayout.getSize());
-    }
-    
     /**
-     * @param args the command line arguments
+     * To create a new Main Editor, copy the below code
+     * Don't forget to change the new main class (below)
      */
     public static void main(String args[]) {
-        /* Set the Windows look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Windows is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
+        AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainEditor().setVisible(true);
+                new BattleSpriteMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
             }
         });
     }
-    
-    private static void initConsole(JTextArea textArea){
-        PrintStream con=new PrintStream(new TextAreaOutputStream(textArea));
-        System.setOut(con);
-        System.setErr(con);
-    }
+    /**
+     * To create a new Main Editor, copy the above code
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.sfc.sf2.battlesprite.gui.BattleSpriteLayoutPanel battleSpriteLayoutPanel;
+    private com.sfc.sf2.core.gui.controls.Console console1;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
@@ -1240,15 +1167,12 @@ public class MainEditor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
@@ -1258,7 +1182,6 @@ public class MainEditor extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
