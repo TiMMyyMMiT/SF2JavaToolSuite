@@ -8,7 +8,6 @@ package com.sfc.sf2.battlesprite;
 import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
 import com.sfc.sf2.battlesprite.io.BattleSpriteDisassemblyProcessor;
 import com.sfc.sf2.battlesprite.io.BattleSpriteMetadataProcessor;
-import com.sfc.sf2.battlesprite.io.BattleSpritePackage;
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.AbstractRawImageProcessor;
@@ -17,8 +16,8 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
-import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.FileHelpers;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
 import java.io.File;
@@ -83,6 +82,7 @@ public class BattleSpriteManager extends AbstractManager {
         for (int f=0; f < files.length; f++) {
             Palette palette = paletteManager.importDisassembly(files[f].toPath(), true);
             palettes[f] = palette;
+            palette.setName(String.format("%02d", f));
         }
         Palette defaultPalette = useImagePalette || palettes.length == 0 || palettes[0] == null ? null : palettes[0];
         files = FileHelpers.findAllFilesInDirectory(filePath, filename + "-frame-", extension);
@@ -92,6 +92,7 @@ public class BattleSpriteManager extends AbstractManager {
             if (useImagePalette && defaultPalette == null) {
                 defaultPalette = frame.getPalette();
                 palettes[palettes.length-1] = defaultPalette;
+                defaultPalette.setName("From Image");
             }
             frame.setPalette(defaultPalette);
             frames[f] = frame;
@@ -106,9 +107,13 @@ public class BattleSpriteManager extends AbstractManager {
         return battlesprite;
     }
     
-    public void exportImage(Path filePath, BattleSprite battlesprite, int selectedPalette, FileFormat format) throws IOException, DisassemblyException, RawImageException {
+    public void exportImage(Path filePath, BattleSprite battlesprite, int selectedPalette) throws IOException, DisassemblyException, RawImageException {
         Console.logger().finest("ENTERING exportImage");
         this.battlesprite = battlesprite;
+        FileFormat format = AbstractRawImageProcessor.fileExtensionToFormat(filePath);
+        if (format == FileFormat.UNKNOWN) {
+            format = FileFormat.PNG;
+        }
         Tileset[] frames = battlesprite.getFrames();
         String filename = filePath.getFileName().toString();
         int frameIndex = filename.indexOf("-frame-");

@@ -112,22 +112,15 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jPanel5" pref="400" max="32767" attributes="0"/>
                               <Component id="jPanel3" alignment="1" pref="400" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel24" pref="388" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                              </Group>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jPanel3" min="-2" pref="237" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jLabel24" min="-2" pref="132" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jPanel5" min="-2" pref="157" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                  <Component id="jPanel3" pref="182" max="32767" attributes="0"/>
+                                  <EmptySpace pref="144" max="32767" attributes="0"/>
+                                  <Component id="jPanel5" pref="218" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -150,7 +143,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTabbedPane1" pref="0" max="32767" attributes="0"/>
+                                      <Component id="jTabbedPane1" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -159,7 +152,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jTabbedPane1" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -181,18 +174,12 @@
                                   <Layout>
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField9" pref="240" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton15" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="fileButton1" pref="0" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel2" pref="270" max="32767" attributes="0"/>
+                                                      <Component id="jLabel2" pref="284" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jButton18" min="-2" max="-2" attributes="0"/>
                                                   </Group>
@@ -203,18 +190,15 @@
                                     </DimensionLayout>
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField9" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton15" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jButton18" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel2" min="-2" pref="75" max="-2" attributes="0"/>
+                                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -234,31 +218,19 @@
                                         <Property name="verticalAlignment" type="int" value="1"/>
                                       </Properties>
                                     </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField9">
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton1">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value=".\u005callies\u005callybattlesprite01.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="filePath" type="java.lang.String" value=".\u005callies\u005callybattlesprite00.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="File :"/>
                                       </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel10">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton15">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton15ActionPerformed"/>
-                                      </Events>
                                     </Component>
                                   </SubComponents>
                                 </Container>
                                 <Container class="javax.swing.JPanel" name="jPanel9">
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="PNG">
-                                        <Property name="tabTitle" type="java.lang.String" value="PNG"/>
+                                      <JTabbedPaneConstraints tabName="Image">
+                                        <Property name="tabTitle" type="java.lang.String" value="Image"/>
                                       </JTabbedPaneConstraints>
                                     </Constraint>
                                   </Constraints>
@@ -267,29 +239,20 @@
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" attributes="0">
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField11" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton17" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" attributes="0">
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Group type="102" attributes="0">
-                                                              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace min="0" pref="69" max="32767" attributes="0"/>
-                                                          </Group>
+                                                          <Component id="jLabel3" pref="284" max="32767" attributes="0"/>
                                                           <Group type="102" alignment="0" attributes="0">
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jLabel3" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                           </Group>
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jButton12" min="-2" max="-2" attributes="0"/>
                                                   </Group>
+                                                  <Component id="fileButton2" pref="0" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
@@ -297,45 +260,24 @@
                                     </DimensionLayout>
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField11" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton2" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jButton12" min="-2" max="-2" attributes="0"/>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel3" min="-2" pref="75" max="-2" attributes="0"/>
+                                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
                                   </Layout>
                                   <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel11">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Path prefix :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField11">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value=".\u005callies\u005callybattlesprite01" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton17">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton17ActionPerformed"/>
-                                      </Events>
-                                    </Component>
                                     <Component class="javax.swing.JButton" name="jButton12">
                                       <Properties>
                                         <Property name="text" type="java.lang.String" value="Import"/>
@@ -346,7 +288,7 @@
                                     </Component>
                                     <Component class="javax.swing.JLabel" name="jLabel3">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Write the path prefix to find BattleSprite palettes and frames.&lt;br&gt;Required PNG Format : 4BPP / 16 indexed colors.&lt;br/&gt;Transparency color at index 0.&lt;/html&gt;"/>
+                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Select an existing frame file (&quot;battlespriteXX-frame-X&quot;), or write the path prefix, to find BattleSprite palettes and frames. Image files can be PNG or GIF.&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16). &lt;/html&gt;"/>
                                         <Property name="verticalAlignment" type="int" value="1"/>
                                       </Properties>
                                     </Component>
@@ -355,259 +297,10 @@
                                         <Property name="text" type="java.lang.String" value="Use 1st PNG&apos;s palette as 1st palette"/>
                                       </Properties>
                                     </Component>
-                                  </SubComponents>
-                                </Container>
-                                <Container class="javax.swing.JPanel" name="jPanel6">
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="GIF">
-                                        <Property name="tabTitle" type="java.lang.String" value="GIF"/>
-                                      </JTabbedPaneConstraints>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField12" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton19" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" attributes="0">
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Group type="102" attributes="0">
-                                                              <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace min="0" pref="76" max="32767" attributes="0"/>
-                                                          </Group>
-                                                          <Group type="102" alignment="0" attributes="0">
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="jLabel7" pref="0" max="32767" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton14" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField12" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton19" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jButton14" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel7" min="-2" pref="74" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel12">
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton2">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value="Path prefix :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField12">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value=".\u005callies\u005callybattlesprite01" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton19">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton19ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JCheckBox" name="jCheckBox2">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Use 1st GIF&apos;s palette as 1st palette"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton14">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Import"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton14ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel7">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Write the path prefix to find BattleSprite palettes and frames.&lt;br&gt;Required GIF Format : 4BPP / 16 indexed colors.&lt;br/&gt;Transparency color at index 0.&lt;/html&gt;"/>
-                                        <Property name="verticalAlignment" type="int" value="1"/>
-                                      </Properties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                                <Container class="javax.swing.JPanel" name="jPanel18">
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="SFCD Bank">
-                                        <Property name="tabTitle" type="java.lang.String" value="SFCD Bank"/>
-                                      </JTabbedPaneConstraints>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField10" pref="240" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton22" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField17" min="-2" pref="47" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jSpinner1" min="-2" pref="56" max="-2" attributes="0"/>
-                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField14" min="-2" pref="48" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
-                                                      <Component id="jButton21" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel8" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton23" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField10" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton22" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jButton21" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField14" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jLabel8" min="-2" pref="75" max="-2" attributes="0"/>
-                                                  <Component id="jButton23" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JButton" name="jButton21">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Import"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton21ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField10">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="C:\u005cSEGADEV\u005cSFCD\u005cSFCD-assets\u005cBANKD00\u005cBANKD00.X" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel17">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton22">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton22ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel18">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Loading offset : 0x"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField14">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="10000"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel19">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Point table offset : 0x"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField17">
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel20">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Index"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JSpinner" name="jSpinner1">
-                                      <Properties>
-                                        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                                          <SpinnerModel initial="0" maximum="256" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
-                                        </Property>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton23">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Mass Export"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton23ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel8">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Select an SFCD bank file.&lt;br/&gt;Mass export loads all entries up to index&lt;br/&gt;and exports them in both binary and PNG.&lt;/html&gt;"/>
-                                        <Property name="verticalAlignment" type="int" value="1"/>
+                                        <Property name="filePath" type="java.lang.String" value=".\u005callies\u005callybattlesprite00" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Image prefix :"/>
                                       </Properties>
                                     </Component>
                                   </SubComponents>
@@ -633,14 +326,14 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTabbedPane2" pref="378" max="32767" attributes="0"/>
+                                      <Component id="jTabbedPane2" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTabbedPane2" alignment="0" pref="134" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane2" alignment="0" pref="195" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                           </Layout>
@@ -661,18 +354,12 @@
                                   <Layout>
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
+                                          <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="fileButton3" pref="0" max="32767" attributes="0"/>
                                                   <Group type="102" attributes="0">
-                                                      <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField13" pref="236" max="32767" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                                      <Component id="jButton20" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="jLabel1" pref="270" max="32767" attributes="0"/>
+                                                      <Component id="jLabel1" pref="284" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                                                   </Group>
@@ -684,15 +371,12 @@
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField13" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton20" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton3" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="3" attributes="0">
                                                   <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel1" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
+                                                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <EmptySpace max="32767" attributes="0"/>
                                           </Group>
@@ -714,31 +398,19 @@
                                         <Property name="verticalAlignment" type="int" value="1"/>
                                       </Properties>
                                     </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel14">
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton3">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value="File :"/>
+                                        <Property name="filePath" type="java.lang.String" value=".\u005callies\u005callybattlesprite00.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="File :"/>
                                       </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField13">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value=".\u005callies\u005callybattlesprite01.bin" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton20">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton20ActionPerformed"/>
-                                      </Events>
                                     </Component>
                                   </SubComponents>
                                 </Container>
                                 <Container class="javax.swing.JPanel" name="jPanel14">
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="PNG">
-                                        <Property name="tabTitle" type="java.lang.String" value="PNG"/>
+                                      <JTabbedPaneConstraints tabName="Image">
+                                        <Property name="tabTitle" type="java.lang.String" value="Image"/>
                                       </JTabbedPaneConstraints>
                                     </Constraint>
                                   </Constraints>
@@ -746,18 +418,12 @@
                                   <Layout>
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField15" pref="201" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton27" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="fileButton4" pref="0" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="jLabel9" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="jLabel9" pref="284" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jButton13" min="-2" max="-2" attributes="0"/>
                                                   </Group>
@@ -769,15 +435,12 @@
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField15" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton27" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton4" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jButton13" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel9" min="-2" pref="75" max="-2" attributes="0"/>
+                                                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <EmptySpace max="32767" attributes="0"/>
                                           </Group>
@@ -785,24 +448,6 @@
                                     </DimensionLayout>
                                   </Layout>
                                   <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel15">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Path prefix :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField15">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value=".\u005callies\u005callybattlesprite01" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton27">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton27ActionPerformed"/>
-                                      </Events>
-                                    </Component>
                                     <Component class="javax.swing.JButton" name="jButton13">
                                       <Properties>
                                         <Property name="text" type="java.lang.String" value="Export"/>
@@ -813,94 +458,15 @@
                                     </Component>
                                     <Component class="javax.swing.JLabel" name="jLabel9">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Creates one PNG file per frame, and one binary file per palette.&lt;br&gt;Exported PNG Format : 4BPP / 16 indexed colors.&lt;br/&gt;Transparency color at index 0.&lt;/html&gt;"/>
+                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Select an existing frame file, or write the path prefix (&quot;battlespriteXX&quot;)&lt;br&gt;&#xa;Creates one image file per frame, one binary file per palette (if more than one), and one metadata file.&lt;br&gt;&#xa;Recommended to save as PNG or GIF. Exported color format : 4BPP / 16 indexed colors. Transparent color at index 0.&lt;/html&gt;"/>
                                         <Property name="verticalAlignment" type="int" value="1"/>
                                       </Properties>
                                     </Component>
-                                  </SubComponents>
-                                </Container>
-                                <Container class="javax.swing.JPanel" name="jPanel17">
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="GIF">
-                                        <Property name="tabTitle" type="java.lang.String" value="GIF"/>
-                                      </JTabbedPaneConstraints>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jTextField16" pref="201" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton28" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <Component id="jLabel13" pref="0" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton16" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField16" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jButton16" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel13" min="-2" pref="75" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel16">
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton4">
                                       <Properties>
-                                        <Property name="text" type="java.lang.String" value="Path prefix :"/>
+                                        <Property name="filePath" type="java.lang.String" value=".\u005callies\u005callybattlesprite00" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Path prefix :"/>
                                       </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField16">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value=".\u005callies\u005callybattlesprite01" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton28">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton28ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel13">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Creates one GIF file per frame, and one binary file per palette.&lt;br&gt;Exported GIF Format : 4BPP / 16 indexed colors.&lt;br/&gt;Transparency color at index 0.&lt;/html&gt;"/>
-                                        <Property name="verticalAlignment" type="int" value="1"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton16">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Export"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton16ActionPerformed"/>
-                                      </Events>
                                     </Component>
                                   </SubComponents>
                                 </Container>
@@ -908,12 +474,6 @@
                             </Container>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JLabel" name="jLabel24">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Help :&lt;br&gt;&#xa;&lt;b&gt;Idle anim speed :&lt;/b&gt; The rate that the idle anim (first 2 frames) updates.&lt;br&gt;&#xa;Lower is faster.&lt;br&gt;&#xa;&lt;br&gt;&#xa;&lt;b&gt;Status marker offset :&lt;/b&gt; Indicates where status effects will be drawn.&lt;br&gt;&#xa;X,Y offset from the frame top-left corner of the battle sprite.&lt;br&gt;&#xa;Should be placed on the head of the battle sprite.&lt;br&gt;&#xa;&lt;/html&gt;"/>
-                            <Property name="verticalAlignment" type="int" value="1"/>
-                          </Properties>
-                        </Component>
                       </SubComponents>
                     </Container>
                     <Container class="javax.swing.JPanel" name="jPanel10">
@@ -958,7 +518,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane2" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -982,7 +542,7 @@
                                     </DimensionLayout>
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <EmptySpace min="0" pref="348" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="357" max="32767" attributes="0"/>
                                       </Group>
                                     </DimensionLayout>
                                   </Layout>
@@ -1042,19 +602,23 @@
                                                           <Component id="jSpinner3" min="-2" pref="68" max="-2" attributes="0"/>
                                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                           <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jSpinner2" min="-2" pref="68" max="-2" attributes="0"/>
                                                       </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jSpinner4" min="-2" pref="91" max="-2" attributes="0"/>
-                                                      </Group>
+                                                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="jSpinner4" max="32767" attributes="0"/>
+                                                      <Component id="jSpinner2" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jCheckBox3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jCheckBox4" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jCheckBox3" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jCheckBox4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="infoButton2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="infoButton1" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -1065,11 +629,12 @@
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jCheckBox3" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jSpinner4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="infoButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
@@ -1080,6 +645,7 @@
                                               <Component id="jLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jCheckBox4" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="infoButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
@@ -1153,6 +719,18 @@
                                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinner4StateChanged"/>
                                   </Events>
                                 </Component>
+                                <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
+                                  <Properties>
+                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Idle anim speed :&lt;/b&gt; The rate that the idle anim (first 2 frames) updates.&lt;br&gt; Lower is faster.&lt;/html&gt;"/>
+                                    <Property name="text" type="java.lang.String" value=""/>
+                                  </Properties>
+                                </Component>
+                                <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton2">
+                                  <Properties>
+                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Status marker offset :&lt;/b&gt; Indicates where status effects will be drawn from (e.g. sleep effect).&lt;br&gt;X,Y offset from the frame top-left corner of the battle sprite.&lt;br&gt;Generally placed around the head of the battle sprite.&lt;br&gt;&lt;/html&gt;"/>
+                                    <Property name="text" type="java.lang.String" value=""/>
+                                  </Properties>
+                                </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel12">
@@ -1173,6 +751,10 @@
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="colorPicker1" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="jCheckBox5" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
@@ -1185,13 +767,17 @@
                                 <DimensionLayout dim="1">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="2" attributes="0">
                                               <Component id="jComboBox2" alignment="2" min="-2" max="-2" attributes="0"/>
                                               <Component id="jCheckBox5" alignment="2" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel21" alignment="2" min="-2" max="-2" attributes="0"/>
                                               <Component id="jComboBox1" alignment="2" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel4" alignment="2" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" alignment="2" groupAlignment="2" attributes="0">
+                                                  <Component id="jLabel55" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="colorPicker1" alignment="2" min="-2" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
@@ -1248,6 +834,29 @@
                                 <Component class="javax.swing.JLabel" name="jLabel21">
                                   <Properties>
                                     <Property name="text" type="java.lang.String" value="Scale :"/>
+                                  </Properties>
+                                </Component>
+                                <Container class="com.sfc.sf2.core.gui.controls.ColorPicker" name="colorPicker1">
+                                  <Events>
+                                    <EventHandler event="colorChanged" listener="com.sfc.sf2.core.gui.controls.ColorPicker$ColorChangedListener" parameters="java.awt.event.ActionEvent" handler="colorPicker1ColorChanged"/>
+                                  </Events>
+
+                                  <Layout>
+                                    <DimensionLayout dim="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+                                      </Group>
+                                    </DimensionLayout>
+                                    <DimensionLayout dim="1">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+                                      </Group>
+                                    </DimensionLayout>
+                                  </Layout>
+                                </Container>
+                                <Component class="javax.swing.JLabel" name="jLabel55">
+                                  <Properties>
+                                    <Property name="text" type="java.lang.String" value="BG :"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>

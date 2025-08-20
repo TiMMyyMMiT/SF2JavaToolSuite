@@ -109,13 +109,16 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
                 } else {
                     currentAnimFrame = 1;
                 }
+                redraw();
                 revalidate();
-                repaint();
               }
             };
             idleTimer = new Timer();
             idleTimer.schedule(task, 0, battleSprite.getAnimSpeed()*1000/60);
-        }     
+        } else {
+            redraw();
+            revalidate();
+        }    
     }
     
     @Override
@@ -145,6 +148,7 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
 
     public void setShowStatusMarker(boolean showStatusMarker) {
         this.showStatusMarker = showStatusMarker;
+        redraw();
     }
 
     public boolean getPreviewAnimSpeed() {
