@@ -64,28 +64,27 @@ public class BattleSpriteManager extends AbstractManager {
     public BattleSprite importImage(Path filePath, boolean useImagePalette) throws IOException, RawImageException, DisassemblyException {
         Console.logger().finest("ENTERING importImage");
         String filename = filePath.getFileName().toString();
-        String extension = ".png";
+        filePath = filePath.getParent();
+        FileFormat format = AbstractRawImageProcessor.fileExtensionToFormat(filePath);
+        if (format == FileFormat.UNKNOWN) {
+            format = FileFormat.PNG;
+        }
         int dotIndex = filename.indexOf('.');
         int frameIndex = filename.indexOf("-frame-");
-        if (dotIndex != -1) {
-            extension = filename.substring(dotIndex+1);
-        }
-        if (frameIndex != -1) {
+        if (frameIndex >= 0) {
             filename = filename.substring(0, frameIndex);
-            filePath = filePath.getParent();
-        } else {
+        } else if (dotIndex >= 0) {
             filename = filename.substring(0, dotIndex);
-            filePath = filePath.getParent();
         }
-        File[] files = FileHelpers.findAllFilesInDirectory(filePath, filename + "-palette-", extension);
+        File[] files = FileHelpers.findAllFilesInDirectory(filePath, filename + "-palette-", ".bin");
         Palette[] palettes = new Palette[useImagePalette ? files.length+1 : files.length];
         for (int f=0; f < files.length; f++) {
             Palette palette = paletteManager.importDisassembly(files[f].toPath(), true);
             palettes[f] = palette;
-            palette.setName(String.format("%02d", f));
+            palette.setName(Integer.toString(f));
         }
         Palette defaultPalette = useImagePalette || palettes.length == 0 || palettes[0] == null ? null : palettes[0];
-        files = FileHelpers.findAllFilesInDirectory(filePath, filename + "-frame-", extension);
+        files = FileHelpers.findAllFilesInDirectory(filePath, filename + "-frame-", AbstractRawImageProcessor.GetFileExtensionString(format));
         Tileset[] frames = new Tileset[files.length];
         for (int f=0; f < files.length; f++) {
             Tileset frame = tilesetManager.importImage(files[f].toPath(), true);
@@ -100,7 +99,7 @@ public class BattleSpriteManager extends AbstractManager {
         BattleSpriteType type = frames[0].getTiles().length > 144 ? BattleSpriteType.ENEMY : BattleSpriteType.ALLY;
         battlesprite = new BattleSprite(type, frames, palettes);
         
-        Path metaPath = filePath.resolve(".meta");
+        Path metaPath = filePath.resolve(filename + ".meta");
         battleSpriteMetadataProcessor.importMetadata(metaPath, battlesprite);
         Console.logger().info("Battle Sprite successfully imported from : " + filePath);
         Console.logger().finest("EXITING importImage");
@@ -116,17 +115,18 @@ public class BattleSpriteManager extends AbstractManager {
         }
         Tileset[] frames = battlesprite.getFrames();
         String filename = filePath.getFileName().toString();
+        filePath = filePath.getParent();
         int frameIndex = filename.indexOf("-frame-");
-        if (frameIndex != -1) {
+        if (frameIndex >= 0) {
             filename = filename.substring(0, frameIndex);
-            filePath = filePath.getParent();
         } else {
             int dotIndex = filename.indexOf('.');
-            filename = filename.substring(0, dotIndex);
-            filePath = filePath.getParent();
+            if (dotIndex >= 0) {
+                filename = filename.substring(0, dotIndex);
+            }
         }
         for (int i=0; i < frames.length; i++) {
-            Path framePath = filePath.resolve("-frame-" + String.valueOf(i) + AbstractRawImageProcessor.GetFileExtensionString(format));
+            Path framePath = filePath.resolve(filename + "-frame-" + String.valueOf(i) + AbstractRawImageProcessor.GetFileExtensionString(format));
             tilesetManager.exportImage(framePath, frames[i]);
         }
         Palette[] palettes = battlesprite.getPalettes();
@@ -137,7 +137,7 @@ public class BattleSpriteManager extends AbstractManager {
             }
             Console.logger().info(palettes.length + " Battle Sprite palettes successfully exported");
         }
-        Path metaPath = filePath.resolve(".meta");
+        Path metaPath = filePath.resolve(filename + ".meta");
         battleSpriteMetadataProcessor.exportMetadata(metaPath, battlesprite);
         Console.logger().info("Battle Sprite metadata successfully exported to : " + metaPath);
         Console.logger().info("Battle Sprite successfully exported to : " + filePath);

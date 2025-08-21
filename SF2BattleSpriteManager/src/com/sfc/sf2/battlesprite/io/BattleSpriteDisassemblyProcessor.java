@@ -28,7 +28,7 @@ public class BattleSpriteDisassemblyProcessor extends AbstractDisassemblyProcess
     
     @Override
     protected BattleSprite parseDisassemblyData(byte[] data, EmptyPackage pckg) throws DisassemblyException {
-        if (data.length<42) {
+        if (data.length < 42) {
             throw new DisassemblyException("File ignored because of too small length (must be a dummy file) " + data.length);
         }
         int animSpeed = BinaryHelpers.getWord(data, 0);
@@ -48,12 +48,12 @@ public class BattleSpriteDisassemblyProcessor extends AbstractDisassemblyProcess
         
         BattleSpriteType type = null;
         ArrayList<Tileset> frameList = new ArrayList<>();
-        for(int i=0;(6+i*2)<palettesOffset;i++){
+        for (int i=0; (6+i*2) < palettesOffset; i++) {
             int frameOffset = 6+i*2 + BinaryHelpers.getWord(data, 6+i*2);
             int dataLength = 0;
-            if((6+(i+1)*2)<palettesOffset){
+            if ((6+(i+1)*2) < palettesOffset) {
                 dataLength = 6+i*2 + BinaryHelpers.getWord(data, 6+(i+1)*2)+2 - frameOffset;
-            }else{
+            } else {
                 dataLength = data.length - frameOffset;
             }
             byte[] tileData = new byte[dataLength];
