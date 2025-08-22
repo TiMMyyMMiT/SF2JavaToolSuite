@@ -60,8 +60,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         battleSpriteAnimationLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
         
         battlespriteanimationManager.getBattleSpriteAnimation().setLayout(battleSpriteAnimationLayoutPanel);
-        jTable1.setModel(new BattleSpriteAnimationProperties1TableModel(battlespriteanimationManager.getBattleSpriteAnimation()));
-        jTable2.setModel(new BattleSpriteAnimationFramesTableModel(battlespriteanimationManager.getBattleSpriteAnimation()));
+        //jTable1.setModel(new BattleSpriteAnimationPropertiesTableModel(battlespriteanimationManager.getBattleSpriteAnimation()));
+        //jTable2.setModel(new BattleSpriteAnimationFramesTableModel(battlespriteanimationManager.getBattleSpriteAnimation()));
         jSpinner1.setValue(0);
         
         super.updateEditorData();
@@ -84,8 +84,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jFileChooser2 = new javax.swing.JFileChooser();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -135,8 +133,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
-
-        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2BattleSpriteAnimationEditor");
@@ -562,13 +558,14 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.String.class, java.lang.String.class
+                java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Boolean.class, java.lang.Byte.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Byte.class, java.lang.Byte.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        jTable1.setToolTipText("");
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane3.setViewportView(jTable1);
 
@@ -590,11 +587,11 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
 
             },
             new String [] {
-                "Index", "Duration", "X", "Y", "Weapon Frame", "H Flip", "V Flip", "Z", "Weapon X", "Weapon Y"
+                "Index", "Duration", "X", "Y", "Weapon Frame", "H Flip", "V Flip", "Behind", "Weapon X", "Weapon Y"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.String.class, java.lang.String.class
+                java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Byte.class, java.lang.Byte.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -877,8 +874,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel23;

@@ -17,49 +17,18 @@ public class BattleSpriteAnimation {
     private BattleSpriteType type;    
     private BattleSpriteAnimationFrame[] frames;
     
-    private int frameNumber;
-    private int spellInitFrame;
-    private int spellAnim;
-    private int endSpellAnim;
-    
-    private int idle1WeaponFrame;
-    private int idle1WeaponZ;
-    private int idle1WeaponX;
-    private int idle1WeaponY;   
+    private byte spellInitFrame;
+    private byte spellAnim;
+    private boolean endSpellAnim; 
     
     private BattleSpriteAnimationLayoutPanel layout;
 
-    /**
-     * For creating Ally animations
-     */
-    public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, int frameNumber, int spellInitFrame, int spellAnim, int endSpellAnim, int idle1WeaponFrame, int idle1WeaponZ, int idle1WeaponX, int idle1WeaponY) {
-        this.type = BattleSpriteType.ALLY;
-        this.frames = frames;
-        this.frameNumber = frameNumber;
-        this.spellInitFrame = spellInitFrame;
-        this.spellAnim = spellAnim;
-        this.endSpellAnim = endSpellAnim;
-        this.idle1WeaponFrame = idle1WeaponFrame;
-        this.idle1WeaponZ = idle1WeaponZ;
-        this.idle1WeaponX = idle1WeaponX;
-        this.idle1WeaponY = idle1WeaponY;
-        layout = null;
-    }
-    
-    /**
-     * For creating Enemy animations
-     */
-    public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, int frameNumber, int spellInitFrame, int spellAnim, int endSpellAnim) {
+    public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, byte spellInitFrame, byte spellAnim, boolean endSpellAnim) {
         this.type = BattleSpriteType.ENEMY;
         this.frames = frames;
-        this.frameNumber = frameNumber;
         this.spellInitFrame = spellInitFrame;
         this.spellAnim = spellAnim;
         this.endSpellAnim = endSpellAnim;
-        this.idle1WeaponFrame = -1;
-        this.idle1WeaponZ = -1;
-        this.idle1WeaponX = -1;
-        this.idle1WeaponY = -1;
         layout = null;
     }
 
@@ -79,68 +48,32 @@ public class BattleSpriteAnimation {
         this.frames = frames;
     }
 
-    public int getFrameNumber() {
-        return frameNumber;
+    public byte getFrameCount() {
+        return (byte)frames.length;
     }
 
-    public void setFrameNumber(int frameNumber) {
-        this.frameNumber = frameNumber;
-    }
-
-    public int getSpellInitFrame() {
+    public byte getSpellInitFrame() {
         return spellInitFrame;
     }
 
-    public void setSpellInitFrame(int spellInitFrame) {
+    public void setSpellInitFrame(byte spellInitFrame) {
         this.spellInitFrame = spellInitFrame;
     }
 
-    public int getSpellAnim() {
+    public byte getSpellAnim() {
         return spellAnim;
     }
 
-    public void setSpellAnim(int spellAnim) {
+    public void setSpellAnim(byte spellAnim) {
         this.spellAnim = spellAnim;
     }
 
-    public int getEndSpellAnim() {
+    public boolean getEndSpellAnim() {
         return endSpellAnim;
     }
 
-    public void setEndSpellAnim(int endSpellAnim) {
+    public void setEndSpellAnim(boolean endSpellAnim) {
         this.endSpellAnim = endSpellAnim;
-    }
-
-    public int getIdle1WeaponFrame() {
-        return idle1WeaponFrame;
-    }
-
-    public void setIdle1WeaponFrame(int idle1WeaponFrame) {
-        this.idle1WeaponFrame = idle1WeaponFrame;
-    }
-
-    public int getIdle1WeaponZ() {
-        return idle1WeaponZ;
-    }
-
-    public void setIdle1WeaponZ(int idle1WeaponZ) {
-        this.idle1WeaponZ = idle1WeaponZ;
-    }
-
-    public int getIdle1WeaponX() {
-        return idle1WeaponX;
-    }
-
-    public void setIdle1WeaponX(int idle1WeaponX) {
-        this.idle1WeaponX = idle1WeaponX;
-    }
-
-    public int getIdle1WeaponY() {
-        return idle1WeaponY;
-    }
-
-    public void setIdle1WeaponY(int idle1WeaponY) {
-        this.idle1WeaponY = idle1WeaponY;
     }
 
     public BattleSpriteAnimationLayoutPanel getLayout() {
@@ -149,5 +82,15 @@ public class BattleSpriteAnimation {
 
     public void setLayout(BattleSpriteAnimationLayoutPanel layout) {
         this.layout = layout;
+    }
+    
+    @Override
+    public BattleSpriteAnimation clone() {
+        return new BattleSpriteAnimation(frames, spellInitFrame, spellAnim, endSpellAnim);
+    }
+        
+    public static BattleSpriteAnimation EmptyAnimation() {
+        BattleSpriteAnimationFrame[] frames = new BattleSpriteAnimationFrame[] { BattleSpriteAnimationFrame.EmptyFrame() };
+        return new BattleSpriteAnimation(frames, (byte)0, (byte)0, true);
     }
 }

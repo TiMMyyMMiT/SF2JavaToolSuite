@@ -11,26 +11,30 @@ package com.sfc.sf2.battlesprite.animation;
  */
 public class BattleSpriteAnimationFrame {
     
-    private int index;
-    private int duration;
-    private int x;
-    private int y;
+    private byte index;
+    private byte duration;
+    private byte x;
+    private byte y;
     
-    private int weaponFrame;
-    private int weaponZ;
-    private int weaponX;
-    private int weaponY;
+    private byte weaponFrame;
+    private boolean weaponFlipH;
+    private boolean weaponFlipV;
+    private boolean weaponBehind;
+    private byte weaponX;
+    private byte weaponY;
 
     /**
      * For creating Ally animations
      */
-    public BattleSpriteAnimationFrame(int index, int duration, int x, int y, int weaponFrame, int weaponZ, int weaponX, int weaponY) {
+    public BattleSpriteAnimationFrame(byte index, byte duration, byte x, byte y, byte weaponFrame, boolean weaponFlipH, boolean weaponFlipV, boolean weaponBehind, byte weaponX, byte weaponY) {
         this.index = index;
         this.duration = duration;
         this.x = x;
         this.y = y;
         this.weaponFrame = weaponFrame;
-        this.weaponZ = weaponZ;
+        this.weaponFlipH = weaponFlipH;
+        this.weaponFlipV = weaponFlipV;
+        this.weaponBehind = weaponBehind;
         this.weaponX = weaponX;
         this.weaponY = weaponY;
     }
@@ -38,78 +42,105 @@ public class BattleSpriteAnimationFrame {
     /**
      * For creating Enemy animations
      */
-    public BattleSpriteAnimationFrame(int index, int duration, int x, int y) {
+    public BattleSpriteAnimationFrame(byte index, byte duration, byte x, byte y) {
         this.index = index;
         this.duration = duration;
         this.x = x;
         this.y = y;
         this.weaponFrame = -1;
-        this.weaponZ = -1;
+        this.weaponFlipH = false;
+        this.weaponFlipV = false;
+        this.weaponBehind = false;
         this.weaponX = -1;
         this.weaponY = -1;
     }
     
-    public int getIndex() {
+    public byte getIndex() {
         return index;
     }
 
-    public void setIndex(int index) {
+    public void setIndex(byte index) {
         this.index = index;
     }
 
-    public int getDuration() {
+    public byte getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(byte duration) {
         this.duration = duration;
     }
 
-    public int getX() {
+    public byte getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(byte x) {
         this.x = x;
     }
 
-    public int getY() {
+    public byte getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(byte y) {
         this.y = y;
     }
 
-    public int getWeaponFrame() {
+    public byte getWeaponFrame() {
         return weaponFrame;
     }
 
-    public void setWeaponFrame(int weaponFrame) {
+    public void setWeaponFrame(byte weaponFrame) {
         this.weaponFrame = weaponFrame;
     }
 
-    public int getWeaponZ() {
-        return weaponZ;
+    public boolean getWeaponFlipH() {
+        return weaponFlipH;
     }
 
-    public void setWeaponZ(int weaponZ) {
-        this.weaponZ = weaponZ;
+    public void setWeaponFlipH(boolean weaponFlipX) {
+        this.weaponFlipH = weaponFlipX;
     }
 
-    public int getWeaponX() {
+    public boolean getWeaponFlipV() {
+        return weaponFlipV;
+    }
+
+    public void setWeaponFlipV(boolean weaponFlipY) {
+        this.weaponFlipV = weaponFlipY;
+    }
+
+    public boolean getWeaponBehind() {
+        return weaponBehind;
+    }
+
+    public void setWeaponBehind(boolean weaponBehind) {
+        this.weaponBehind = weaponBehind;
+    }
+
+    public byte getWeaponX() {
         return weaponX;
     }
 
-    public void setWeaponX(int weaponX) {
+    public void setWeaponX(byte weaponX) {
         this.weaponX = weaponX;
     }
 
-    public int getWeaponY() {
+    public byte getWeaponY() {
         return weaponY;
     }
 
-    public void setWeaponY(int weaponY) {
+    public void setWeaponY(byte weaponY) {
         this.weaponY = weaponY;
+    }
+    
+    @Override
+    public BattleSpriteAnimationFrame clone() {
+        return new BattleSpriteAnimationFrame(index, duration, x, y, weaponFrame, weaponFlipH, weaponFlipV, weaponBehind, weaponX, weaponY);
+    }
+        
+    public static BattleSpriteAnimationFrame EmptyFrame() {
+        return new BattleSpriteAnimationFrame((byte)0, (byte)20, (byte)0, (byte)0);
     }
 }

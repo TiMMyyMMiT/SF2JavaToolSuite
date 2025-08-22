@@ -22,43 +22,46 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
     protected BattleSpriteAnimation parseDisassemblyData(byte[] data, BattleSpriteAnimationPackage pckg) throws DisassemblyException {
         
         if (pckg.type() == BattleSprite.BattleSpriteType.ALLY) {
-            int frameNumber = BinaryHelpers.getByte(data, 0);
-            int initFrame = BinaryHelpers.getByte(data, 1);
-            int spellAnim = BinaryHelpers.getByte(data, 2);
-            int endSpellAnim = BinaryHelpers.getByte(data, 3);
-            int idle1WeaponFrame = BinaryHelpers.getByte(data, 4);
-            int idle1WeaponZ = BinaryHelpers.getByte(data, 5);
-            int idle1WeaponX = BinaryHelpers.getByte(data, 6);
-            int idle1WeaponY = BinaryHelpers.getByte(data, 7);
+            byte frameCount = BinaryHelpers.getByte(data, 0);
+            byte initFrame = BinaryHelpers.getByte(data, 1);
+            byte spellAnim = BinaryHelpers.getByte(data, 2);
+            boolean endSpellAnim = BinaryHelpers.getByte(data, 3) != 0;
+            //byte idle1WeaponFrame = BinaryHelpers.getByte(data, 4);
+            //byte idle1WeaponZ = BinaryHelpers.getByte(data, 5);
+            //byte idle1WeaponX = BinaryHelpers.getByte(data, 6);
+            //byte idle1WeaponY = BinaryHelpers.getByte(data, 7);
             
-            BattleSpriteAnimationFrame[] frames = new BattleSpriteAnimationFrame[frameNumber];
-            for (int i=0; i < frames.length; i++) {
-                int index = BinaryHelpers.getByte(data, 8+i*8+0);
-                int duration = BinaryHelpers.getByte(data, 8+i*8+1);
-                int x = BinaryHelpers.getByte(data, 8+i*8+2);
-                int y = BinaryHelpers.getByte(data, 8+i*8+3);
-                int weaponFrame = BinaryHelpers.getByte(data, 8+i*8+4);
-                int weaponZ = BinaryHelpers.getByte(data, 8+i*8+5);
-                int weaponX = BinaryHelpers.getByte(data, 8+i*8+6);
-                int weaponY = BinaryHelpers.getByte(data, 8+i*8+7);
-                frames[i] = new BattleSpriteAnimationFrame(index, duration, x, y, weaponFrame, weaponZ, weaponX, weaponY);
+            BattleSpriteAnimationFrame[] frames = new BattleSpriteAnimationFrame[frameCount];
+            for (byte i=0; i < frames.length; i++) {
+                byte index = BinaryHelpers.getByte(data, 8+i*8+0);
+                byte duration = BinaryHelpers.getByte(data, 8+i*8+1);
+                byte x = BinaryHelpers.getByte(data, 8+i*8+2);
+                byte y = BinaryHelpers.getByte(data, 8+i*8+3);
+                byte weaponData = BinaryHelpers.getByte(data, 8+i*8+4);
+                byte weaponFrame = (byte)(weaponData&0xF);
+                boolean weaponFlipX = (weaponData&0x10) != 0;
+                boolean weaponFlipY = (weaponData&0x20) != 0;
+                boolean behind = BinaryHelpers.getByte(data, 8+i*8+5) != 0;
+                byte weaponX = BinaryHelpers.getByte(data, 8+i*8+6);
+                byte weaponY = BinaryHelpers.getByte(data, 8+i*8+7);                
+                frames[i] = new BattleSpriteAnimationFrame(index, duration, x, y, weaponFrame, weaponFlipX, weaponFlipY, behind, weaponX, weaponY);
             }
-            return new BattleSpriteAnimation(frames, frameNumber, initFrame, spellAnim, endSpellAnim, idle1WeaponFrame, idle1WeaponZ, idle1WeaponX, idle1WeaponY);
+            return new BattleSpriteAnimation(frames, initFrame, spellAnim, endSpellAnim);
         } else {
-            int frameNumber = BinaryHelpers.getByte(data, 0);
-            int initFrame = BinaryHelpers.getByte(data, 1);
-            int spellAnim = BinaryHelpers.getByte(data, 2);
-            int endSpellAnim = BinaryHelpers.getByte(data, 3);
+            byte frameCount = BinaryHelpers.getByte(data, 0);
+            byte initFrame = BinaryHelpers.getByte(data, 1);
+            byte spellAnim = BinaryHelpers.getByte(data, 2);
+            boolean endSpellAnim = BinaryHelpers.getByte(data, 3) != 0;
 
-            BattleSpriteAnimationFrame[] frames = new BattleSpriteAnimationFrame[frameNumber];
-            for (int i=0; i < frames.length; i++) {
-                int index = BinaryHelpers.getByte(data, 4+i*4+0);
-                int duration = BinaryHelpers.getByte(data, 4+i*4+1);
-                int x = BinaryHelpers.getByte(data, 4+i*4+2);
-                int y = BinaryHelpers.getByte(data, 4+i*4+3);
+            BattleSpriteAnimationFrame[] frames = new BattleSpriteAnimationFrame[frameCount];
+            for (byte i=0; i < frames.length; i++) {
+                byte index = BinaryHelpers.getByte(data, 4+i*4+0);
+                byte duration = BinaryHelpers.getByte(data, 4+i*4+1);
+                byte x = BinaryHelpers.getByte(data, 4+i*4+2);
+                byte y = BinaryHelpers.getByte(data, 4+i*4+3);
                 frames[i] = new BattleSpriteAnimationFrame(index, duration, x, y);
             }
-            return new BattleSpriteAnimation(frames, frameNumber, initFrame, spellAnim, endSpellAnim);
+            return new BattleSpriteAnimation(frames, initFrame, spellAnim, endSpellAnim);
         }
     }
 
@@ -66,43 +69,46 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
     protected byte[] packageDisassemblyData(BattleSpriteAnimation item, BattleSpriteAnimationPackage pckg) throws DisassemblyException {
         
         if (pckg.type() == BattleSprite.BattleSpriteType.ALLY) {
-            int frameNumber = item.getFrames().length;
-            byte[] animationFileBytes = new byte[8 + frameNumber*8];
+            byte frameCount = (byte)item.getFrameCount();
+            byte[] animationFileBytes = new byte[8 + frameCount*8];
 
-            animationFileBytes[0] = (byte)(frameNumber);
-            animationFileBytes[1] = (byte)(item.getSpellInitFrame());
-            animationFileBytes[2] = (byte)(item.getSpellAnim());
-            animationFileBytes[3] = (byte)(item.getEndSpellAnim());
-            animationFileBytes[4] = (byte)(item.getIdle1WeaponFrame());
-            animationFileBytes[5] = (byte)(item.getIdle1WeaponZ());
-            animationFileBytes[6] = (byte)(item.getIdle1WeaponX());
-            animationFileBytes[7] = (byte)(item.getIdle1WeaponY());
+            animationFileBytes[0] = frameCount;
+            animationFileBytes[1] = item.getSpellInitFrame();
+            animationFileBytes[2] = item.getSpellAnim();
+            animationFileBytes[3] = (byte)(item.getEndSpellAnim() ? 1 : 0);
+            //animationFileBytes[4] = item.getIdle1WeaponFrame();
+            //animationFileBytes[5] = item.getIdle1WeaponZ();
+            //animationFileBytes[6] = item.getIdle1WeaponX();
+            //animationFileBytes[7] = item.getIdle1WeaponY();
 
-            for (int i=0; i < frameNumber; i++) {
-                animationFileBytes[8+i*8+0] = (byte)(item.getFrames()[i].getIndex());
-                animationFileBytes[8+i*8+1] = (byte)(item.getFrames()[i].getDuration());
-                animationFileBytes[8+i*8+2] = (byte)(item.getFrames()[i].getX());
-                animationFileBytes[8+i*8+3] = (byte)(item.getFrames()[i].getY());
-                animationFileBytes[8+i*8+4] = (byte)(item.getFrames()[i].getWeaponFrame());
-                animationFileBytes[8+i*8+5] = (byte)(item.getFrames()[i].getWeaponZ());
-                animationFileBytes[8+i*8+6] = (byte)(item.getFrames()[i].getWeaponX());
-                animationFileBytes[8+i*8+7] = (byte)(item.getFrames()[i].getWeaponY());
+            for (byte i=0; i < frameCount; i++) {
+                BattleSpriteAnimationFrame frame = item.getFrames()[i];
+                animationFileBytes[8+i*8+0] = frame.getIndex();
+                animationFileBytes[8+i*8+1] = frame.getDuration();
+                animationFileBytes[8+i*8+2] = frame.getX();
+                animationFileBytes[8+i*8+3] = frame.getY();
+                byte weaponData = (byte)(frame.getWeaponFrame() + (frame.getWeaponFlipH() ? 0x10 : 0) + (frame.getWeaponFlipV() ? 0x20 : 0));
+                animationFileBytes[8+i*8+4] = weaponData;
+                animationFileBytes[8+i*8+5] = (byte)(frame.getWeaponBehind() ? 1 : 0);
+                animationFileBytes[8+i*8+6] = frame.getWeaponX();
+                animationFileBytes[8+i*8+7] = frame.getWeaponY();
             }
             return animationFileBytes;
         } else {
-            int frameNumber = item.getFrames().length;
-            byte[] animationFileBytes = new byte[4 + frameNumber*4];
+            byte frameCount = (byte)item.getFrameCount();
+            byte[] animationFileBytes = new byte[4 + frameCount*4];
 
-            animationFileBytes[0] = (byte)(frameNumber);
-            animationFileBytes[1] = (byte)(item.getSpellInitFrame());
-            animationFileBytes[2] = (byte)(item.getSpellAnim());
-            animationFileBytes[3] = (byte)(item.getEndSpellAnim());
+            animationFileBytes[0] = frameCount;
+            animationFileBytes[1] = item.getSpellInitFrame();
+            animationFileBytes[2] = item.getSpellAnim();
+            animationFileBytes[3] = (byte)(item.getEndSpellAnim() ? 1 : 0);
 
-            for (int i=0; i < frameNumber; i++) {
-                animationFileBytes[4+i*4+0] = (byte)(item.getFrames()[i].getIndex());
-                animationFileBytes[4+i*4+1] = (byte)(item.getFrames()[i].getDuration());
-                animationFileBytes[4+i*4+2] = (byte)(item.getFrames()[i].getX());
-                animationFileBytes[4+i*4+3] = (byte)(item.getFrames()[i].getY());
+            for (byte i=0; i < frameCount; i++) {
+                BattleSpriteAnimationFrame frame = item.getFrames()[i];
+                animationFileBytes[4+i*4+0] = frame.getIndex();
+                animationFileBytes[4+i*4+1] = frame.getDuration();
+                animationFileBytes[4+i*4+2] = frame.getX();
+                animationFileBytes[4+i*4+3] = frame.getY();
             }
             return animationFileBytes;
         }

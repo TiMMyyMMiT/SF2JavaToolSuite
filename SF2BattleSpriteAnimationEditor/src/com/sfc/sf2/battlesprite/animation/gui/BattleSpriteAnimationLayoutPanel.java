@@ -49,11 +49,11 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
     private int currentFrameX = 0;
     private int currentFrameY = 0;
     private int currentWeaponspriteFrame = 0;
-    private int currentWeaponZ = 1;
-    private int currentWeaponX = 0;
-    private int currentWeaponY = 0;
     private int weaponHFlip = 1;
     private int weaponVFlip = 1;
+    private boolean currentWeaponBehind = false;
+    private int currentWeaponX = 0;
+    private int currentWeaponY = 0;
     private boolean hideWeapon = false;
 
     @Override
@@ -78,7 +78,7 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
         if (battlesprite.getType() == BattleSpriteType.ENEMY) {
             drawBattleSpriteFrame(g, frame, BATTLESPRITE_ENEMY_BASE_X+currentFrameX, BATTLESPRITE_ENEMY_BASE_Y+currentFrameY, tilesPerRow);
         } else {
-            if (currentWeaponZ == 2) {
+            if (currentWeaponBehind) {
                 drawBattleSpriteFrame(g, frame, BATTLESPRITE_ALLY_BASE_X+currentFrameX, BATTLESPRITE_ALLY_BASE_Y+currentFrameY, tilesPerRow);
                 if (!hideWeapon && weaponsprite!=null) {
                     g.drawImage(weaponsprite.getFrames()[currentWeaponspriteFrame].getIndexedColorImage(), WEAPONSPRITE_BASE_X+currentFrameX+currentWeaponX, WEAPONSPRITE_BASE_Y+currentFrameY+currentWeaponY,
@@ -145,8 +145,8 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
         this.currentWeaponspriteFrame = currentWeaponFrame;
     }
 
-    public void setCurrentWeaponZ(int currentWeaponZ) {
-        this.currentWeaponZ = currentWeaponZ;
+    public void setCurrentWeaponBehind(boolean currentWeaponBehind) {
+        this.currentWeaponBehind = currentWeaponBehind;
     }
 
     public void setCurrentWeaponX(int currentWeaponX) {
@@ -186,27 +186,27 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
     }
     
     public void updateDisplayProperties() {
-        if(this.currentAnimationFrame==0){
+        if (this.currentAnimationFrame == 0) {
             this.currentBattlespriteFrame = 0;
             this.currentFrameX = 0;
             this.currentFrameY = 0;
-            this.currentWeaponspriteFrame = animation.getIdle1WeaponFrame()&0xF;
-            this.currentWeaponZ = animation.getIdle1WeaponZ();
+            /*this.currentWeaponspriteFrame = animation.getIdle1WeaponFrame()&0xF;
+            this.currentWeaponBehind = animation.getIdle1WeaponZ();
             this.currentWeaponX = animation.getIdle1WeaponX();
             this.currentWeaponY = animation.getIdle1WeaponY();
             this.weaponHFlip = ((animation.getIdle1WeaponFrame()&0x10)!=0) ? -1 : 1;
-            this.weaponVFlip = ((animation.getIdle1WeaponFrame()&0x20)!=0) ? -1 : 1;
-        }else{
+            this.weaponVFlip = ((animation.getIdle1WeaponFrame()&0x20)!=0) ? -1 : 1;*/
+        } else {
             int bsFrame = animation.getFrames()[this.currentAnimationFrame-1].getIndex();
-            if(bsFrame == 0xF){
+            if (bsFrame == 0xF) {
                 this.currentBattlespriteFrame = getPreviousBattlespriteFrame(this.currentAnimationFrame-1);
-            }else{
+            } else {
                 this.currentBattlespriteFrame = bsFrame;
             }
             this.currentFrameX = animation.getFrames()[this.currentAnimationFrame-1].getX();
             this.currentFrameY = animation.getFrames()[this.currentAnimationFrame-1].getY();
             this.currentWeaponspriteFrame = animation.getFrames()[this.currentAnimationFrame-1].getWeaponFrame()&0xF;
-            this.currentWeaponZ = animation.getFrames()[this.currentAnimationFrame-1].getWeaponZ();
+            this.currentWeaponBehind = animation.getFrames()[this.currentAnimationFrame-1].getWeaponBehind();
             this.currentWeaponX = animation.getFrames()[this.currentAnimationFrame-1].getWeaponX();
             this.currentWeaponY = animation.getFrames()[this.currentAnimationFrame-1].getWeaponY();
             this.weaponHFlip = ((animation.getFrames()[this.currentAnimationFrame-1].getWeaponFrame()&0x10)!=0) ? -1 : 1;
