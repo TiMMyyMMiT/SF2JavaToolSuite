@@ -5,27 +5,11 @@
  */
 package com.sfc.sf2.battlesprite.animation;
 
-import com.sfc.sf2.graphics.Tile;
-import java.awt.Color;
-
 /**
  *
  * @author wiz
  */
 public class BattleSpriteAnimationFrame {
-    
-    public static final int TYPE_ALLY = 0;
-    public static final int TYPE_ENEMY = 1;
-    
-    private int type;
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
     
     private int index;
     private int duration;
@@ -35,14 +19,42 @@ public class BattleSpriteAnimationFrame {
     private int weaponFrame;
     private int weaponZ;
     private int weaponX;
-    private int weaponY;   
+    private int weaponY;
 
-    public int getType() {
-        return type;
+    /**
+     * For creating Ally animations
+     */
+    public BattleSpriteAnimationFrame(int index, int duration, int x, int y, int weaponFrame, int weaponZ, int weaponX, int weaponY) {
+        this.index = index;
+        this.duration = duration;
+        this.x = x;
+        this.y = y;
+        this.weaponFrame = weaponFrame;
+        this.weaponZ = weaponZ;
+        this.weaponX = weaponX;
+        this.weaponY = weaponY;
+    }
+    
+    /**
+     * For creating Enemy animations
+     */
+    public BattleSpriteAnimationFrame(int index, int duration, int x, int y) {
+        this.index = index;
+        this.duration = duration;
+        this.x = x;
+        this.y = y;
+        this.weaponFrame = -1;
+        this.weaponZ = -1;
+        this.weaponX = -1;
+        this.weaponY = -1;
+    }
+    
+    public int getIndex() {
+        return index;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public int getDuration() {

@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.battlesprite.animation;
 
+import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
 import com.sfc.sf2.battlesprite.animation.gui.BattleSpriteAnimationLayoutPanel;
 
 /**
@@ -12,12 +13,8 @@ import com.sfc.sf2.battlesprite.animation.gui.BattleSpriteAnimationLayoutPanel;
  * @author wiz
  */
 public class BattleSpriteAnimation {
-    
-    public static final int TYPE_ALLY = 0;
-    public static final int TYPE_ENEMY = 1;
-    
-    private int type;
-    
+        
+    private BattleSpriteType type;    
     private BattleSpriteAnimationFrame[] frames;
     
     private int frameNumber;
@@ -32,11 +29,45 @@ public class BattleSpriteAnimation {
     
     private BattleSpriteAnimationLayoutPanel layout;
 
-    public int getType() {
+    /**
+     * For creating Ally animations
+     */
+    public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, int frameNumber, int spellInitFrame, int spellAnim, int endSpellAnim, int idle1WeaponFrame, int idle1WeaponZ, int idle1WeaponX, int idle1WeaponY) {
+        this.type = BattleSpriteType.ALLY;
+        this.frames = frames;
+        this.frameNumber = frameNumber;
+        this.spellInitFrame = spellInitFrame;
+        this.spellAnim = spellAnim;
+        this.endSpellAnim = endSpellAnim;
+        this.idle1WeaponFrame = idle1WeaponFrame;
+        this.idle1WeaponZ = idle1WeaponZ;
+        this.idle1WeaponX = idle1WeaponX;
+        this.idle1WeaponY = idle1WeaponY;
+        layout = null;
+    }
+    
+    /**
+     * For creating Enemy animations
+     */
+    public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, int frameNumber, int spellInitFrame, int spellAnim, int endSpellAnim) {
+        this.type = BattleSpriteType.ENEMY;
+        this.frames = frames;
+        this.frameNumber = frameNumber;
+        this.spellInitFrame = spellInitFrame;
+        this.spellAnim = spellAnim;
+        this.endSpellAnim = endSpellAnim;
+        this.idle1WeaponFrame = -1;
+        this.idle1WeaponZ = -1;
+        this.idle1WeaponX = -1;
+        this.idle1WeaponY = -1;
+        layout = null;
+    }
+
+    public BattleSpriteType getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(BattleSpriteType type) {
         this.type = type;
     }
 

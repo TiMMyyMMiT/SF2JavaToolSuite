@@ -17,7 +17,6 @@ import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.helpers.FileHelpers;
-import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
 import java.io.File;
@@ -39,6 +38,8 @@ public class BattleSpriteManager extends AbstractManager {
     
     @Override
     public void clearData() {
+        tilesetManager.clearData();
+        paletteManager.clearData();
         if (battlesprite != null) {
             battlesprite.clearIndexedColorImage(true);
             battlesprite = null;

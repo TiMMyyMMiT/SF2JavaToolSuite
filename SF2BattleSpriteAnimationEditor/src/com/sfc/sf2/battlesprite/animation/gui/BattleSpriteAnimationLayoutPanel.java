@@ -176,6 +176,10 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
     public void setWeaponVFlip(boolean weaponVFlip) {
         this.weaponVFlip = weaponVFlip ? -1 : 1;
     }
+    
+    public BattleSpriteAnimation getAnimation() {
+        return animation;
+    }
 
     public void setAnimation(BattleSpriteAnimation animation) {
         this.animation = animation;
