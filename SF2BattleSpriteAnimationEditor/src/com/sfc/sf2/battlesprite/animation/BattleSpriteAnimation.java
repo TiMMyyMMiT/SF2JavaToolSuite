@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.battlesprite.animation;
 
-import com.sfc.sf2.battlesprite.animation.layout.BattleSpriteAnimationLayout;
+import com.sfc.sf2.battlesprite.animation.gui.BattleSpriteAnimationLayoutPanel;
 
 /**
  *
@@ -30,7 +30,7 @@ public class BattleSpriteAnimation {
     private int idle1WeaponX;
     private int idle1WeaponY;   
     
-    private BattleSpriteAnimationLayout layout;
+    private BattleSpriteAnimationLayoutPanel layout;
 
     public int getType() {
         return type;
@@ -112,11 +112,11 @@ public class BattleSpriteAnimation {
         this.idle1WeaponY = idle1WeaponY;
     }
 
-    public BattleSpriteAnimationLayout getLayout() {
+    public BattleSpriteAnimationLayoutPanel getLayout() {
         return layout;
     }
 
-    public void setLayout(BattleSpriteAnimationLayout layout) {
+    public void setLayout(BattleSpriteAnimationLayoutPanel layout) {
         this.layout = layout;
     }
 }

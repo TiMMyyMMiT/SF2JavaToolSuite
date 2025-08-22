@@ -99,8 +99,8 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel {
         tableData[row][col] = value;
         updateFrameProperties();
         animation.getLayout().updateDisplayProperties();
-        animation.getLayout().getPanel().revalidate();
-        animation.getLayout().getPanel().repaint();
+        animation.getLayout().revalidate();
+        animation.getLayout().repaint();
     }    
  
     @Override

@@ -72,8 +72,8 @@ public class BattleSpriteAnimationProperties1TableModel extends AbstractTableMod
         tableData[row][col] = value;
         updateProperties();
         animation.getLayout().updateDisplayProperties();
-        animation.getLayout().getPanel().revalidate();
-        animation.getLayout().getPanel().repaint();
+        animation.getLayout().revalidate();
+        animation.getLayout().repaint();
     }    
  
     @Override
