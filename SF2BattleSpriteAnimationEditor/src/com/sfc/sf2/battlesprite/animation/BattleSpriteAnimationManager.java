@@ -48,14 +48,16 @@ public class BattleSpriteAnimationManager extends AbstractManager {
         try {
             backgroundManager.importDisassembly(backgroundPath);
             groundManager.importDisassembly(groundBasePalettePath, groundPalettePath, groundPath);
+            Console.logger().info("Ground and background loaded");
         } catch (Exception e) {
-            Console.logger().severe("ERROR Environment could not be loaded : " + e);
+            Console.logger().severe("ERROR Environment could not be imported : " + e);
         }
         battlespriteManager.importDisassembly(battlespritePath);
         BattleSpriteType type = battlespriteManager.getBattleSprite().getType();
         try {
             if(type == BattleSprite.BattleSpriteType.ALLY && weaponPalettesPath.getNameCount() > 0 && weaponPath.getNameCount() > 0) {
                 weaponspriteManager.importDisassembly(weaponPalettesPath, weaponPath);
+                Console.logger().info("Weapon imported");
             }
         } catch (Exception e) {
             Console.logger().severe("ERROR Weapon could not be loaded : " + e);

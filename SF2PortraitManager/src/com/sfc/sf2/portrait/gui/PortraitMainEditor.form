@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="com.sfc.sf2.portrait.models.PortraitDataTableModel" name="portraitDataModelEyes">
+    </Component>
+    <Component class="com.sfc.sf2.portrait.models.PortraitDataTableModel" name="portraitDataModelMouth">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="SF2PortraitManager"/>
@@ -321,7 +327,7 @@
                               </Border>
                             </Property>
                             <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new com.sfc.sf2.portrait.models.PortraitDataTableModel()" type="code"/>
+                              <Connection component="portraitDataModelEyes" type="bean"/>
                             </Property>
                             <Property name="selectionMode" type="int" value="0"/>
                           </Properties>
@@ -334,7 +340,7 @@
                               </Border>
                             </Property>
                             <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new com.sfc.sf2.portrait.models.PortraitDataTableModel()" type="code"/>
+                              <Connection component="portraitDataModelMouth" type="bean"/>
                             </Property>
                             <Property name="selectionMode" type="int" value="0"/>
                           </Properties>

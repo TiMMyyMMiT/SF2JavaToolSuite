@@ -9,21 +9,19 @@ import com.sfc.sf2.battlesprite.BattleSprite;
 import static com.sfc.sf2.battlesprite.BattleSprite.BATTLE_SPRITE_TILE_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
-import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
 import com.sfc.sf2.graphics.Tileset;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  *
  * @author wiz
  */
-public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
+public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     
     public BattleSpriteLayoutPanel() {
         super();
@@ -35,10 +33,6 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
     
     private boolean showStatusMarker = false;
     
-    Timer idleTimer = new Timer();
-    int currentAnimFrame = 0;
-    boolean previewAnimSpeed = false;
-    
     @Override
     protected boolean hasData() {
         return battleSprite != null && (currentPalette >= 0 && currentPalette < battleSprite.getPalettes().length);
@@ -48,7 +42,7 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
     protected Dimension getImageDimensions() {
         int width = battleSprite.getTilesPerRow()*PIXEL_WIDTH;
         int height = 0;
-        if (previewAnimSpeed) {
+        if (isAnimating()) {
             height = BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT;
         } else {
             height = battleSprite.getFrames().length*BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT;
@@ -59,7 +53,7 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
     @Override
     protected void buildImage(Graphics graphics) {
         Graphics2D g2 = (Graphics2D)graphics;
-        if (previewAnimSpeed) {
+        if (isAnimating()) {
             drawAnimPreview(g2);
         } else {
             drawBattleSprites(g2);
@@ -67,7 +61,7 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
     }
     
     public void drawAnimPreview(Graphics2D graphics) {
-        Tileset tileset = battleSprite.getFrames()[currentAnimFrame];
+        Tileset tileset = battleSprite.getFrames()[getCurrentAnimationFrame()];
         graphics.drawImage(tileset.getIndexedColorImage(), 0, 0, null);
     }
     
@@ -97,34 +91,6 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
         graphics.drawLine(x-5, y+5, x+5, y-5);
         graphics.setColor(Color.WHITE);
     }
-
-    private void animateIdle() {
-        idleTimer.cancel();
-        idleTimer.purge();
-        if (previewAnimSpeed) {
-            TimerTask task = new TimerTask() {
-              public void run() {
-                if (currentAnimFrame == 1) {
-                    currentAnimFrame = 0;
-                } else {
-                    currentAnimFrame = 1;
-                }
-                redraw();
-                revalidate();
-              }
-            };
-            idleTimer = new Timer();
-            idleTimer.schedule(task, 0, battleSprite.getAnimSpeed()*1000/60);
-        } else {
-            redraw();
-            revalidate();
-        }    
-    }
-    
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(getWidth(), getHeight());
-    }
     
     public BattleSprite getBattleSprite() {
         return battleSprite;
@@ -149,14 +115,5 @@ public class BattleSpriteLayoutPanel extends AbstractLayoutPanel {
     public void setShowStatusMarker(boolean showStatusMarker) {
         this.showStatusMarker = showStatusMarker;
         redraw();
-    }
-
-    public boolean getPreviewAnimSpeed() {
-        return previewAnimSpeed;
-    }
-
-    public void setPreviewAnimSpeed(boolean previewAnimSpeed) {
-        this.previewAnimSpeed = previewAnimSpeed;
-        animateIdle();
     }
 }

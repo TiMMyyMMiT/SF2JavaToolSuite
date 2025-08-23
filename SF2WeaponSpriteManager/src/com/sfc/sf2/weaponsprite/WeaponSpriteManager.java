@@ -17,7 +17,7 @@ import com.sfc.sf2.helpers.PaletteHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
-import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
+import com.sfc.sf2.palette.PaletteManager;
 import com.sfc.sf2.palette.io.PalettePackage;
 import com.sfc.sf2.weaponsprite.io.WeaponSpriteDisassemblyProcessor;
 import com.sfc.sf2.weaponsprite.io.WeaponSpritePackage;
@@ -34,7 +34,7 @@ public class WeaponSpriteManager extends AbstractManager {
     private static final int[] insertToIndices = new int[] { 14, 15 };
     private static final int[] insertFromIndices = new int[] { 0, 1 };
 
-    private final PaletteDisassemblyProcessor paletteDisassemblyProcessor = new PaletteDisassemblyProcessor();
+    private final PaletteManager paletteManager = new PaletteManager();
     private final WeaponSpriteDisassemblyProcessor weaponDisassemblyProcessor = new WeaponSpriteDisassemblyProcessor();
     private final WeaponSpriteRawImageProcessor weaponSpriteRawImageProcessor = new WeaponSpriteRawImageProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
@@ -53,13 +53,24 @@ public class WeaponSpriteManager extends AbstractManager {
         }
     }
        
-    public void importDisassembly(Path paletteEntriesPath, Path filePath) throws IOException, DisassemblyException, AsmException {
+    public void importDisassembly(Path palettePath, Path filePath) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassembly");
+        createBasePalette();
+        Palette palette = paletteManager.importDisassembly(palettePath, false);
+        palette = PaletteHelpers.combinePalettes(basePalette, palette, insertToIndices, insertFromIndices);
+        int index = FileHelpers.getNumberFromFileName(filePath.toFile());
+        WeaponSpritePackage pckg = new WeaponSpritePackage(index, palette);
+        weaponsprite = weaponDisassemblyProcessor.importDisassembly(filePath, pckg);
+        Console.logger().finest("EXITING importDisassembly");
+    }
+       
+    public void importDisassemblyAndPalettes(Path paletteEntriesPath, Path filePath) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassemblyAndPalettes");
         ImportPalettesFromEntries(paletteEntriesPath, null);
         int index = FileHelpers.getNumberFromFileName(filePath.toFile());
         WeaponSpritePackage pckg = new WeaponSpritePackage(index, basePalette);
         weaponsprite = weaponDisassemblyProcessor.importDisassembly(filePath, pckg);
-        Console.logger().finest("EXITING importDisassembly");
+        Console.logger().finest("EXITING importDisassemblyAndPalettes");
     }
     
     public void exportDisassembly(Path filePath, WeaponSprite weaponsprite) throws IOException, DisassemblyException {
@@ -101,8 +112,7 @@ public class WeaponSpriteManager extends AbstractManager {
         for (int i = 0; i < entriesData.entriesCount(); i++) {
             Path palettePath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
             try {
-                PalettePackage pckg = new PalettePackage(palettePath.getFileName().toString(), false);
-                Palette palette = paletteDisassemblyProcessor.importDisassembly(palettePath, pckg);
+                Palette palette = paletteManager.importDisassembly(palettePath, false);
                 palette = PaletteHelpers.combinePalettes(basePalette, palette, insertToIndices, insertFromIndices);
                 palette.setName(String.format("%02d", i));
                 palettesList.add(palette);
@@ -123,7 +133,7 @@ public class WeaponSpriteManager extends AbstractManager {
     
     private void createBasePalette() {
         if (basePalette == null) {
-            Console.logger().info("Creating base palette.");
+            Console.logger().finest("Creating base palette.");
             CRAMColor[] baseColors = new CRAMColor[16];
             baseColors[0] = new CRAMColor(0xFF00FF00);
             baseColors[1] = CRAMColor.WHITE;

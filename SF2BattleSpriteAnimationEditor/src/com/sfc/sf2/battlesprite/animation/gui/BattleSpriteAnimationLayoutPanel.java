@@ -9,21 +9,23 @@ import com.sfc.sf2.background.Background;
 import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
-import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationFrame;
+import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
 import com.sfc.sf2.graphics.Tile;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.ground.Ground;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 /**
  *
  * @author wiz
  */
-public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
+public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     
     private static final Dimension IMAGE_SIZE = new Dimension(256, 224);
     
@@ -45,16 +47,14 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
     private BattleSpriteAnimation animation;
     
     private int currentAnimationFrame = 0;
-    private int currentBattlespriteFrame = 0;
-    private int currentFrameX = 0;
-    private int currentFrameY = 0;
-    private int currentWeaponspriteFrame = 0;
-    private int weaponHFlip = 1;
-    private int weaponVFlip = 1;
-    private boolean currentWeaponBehind = false;
-    private int currentWeaponX = 0;
-    private int currentWeaponY = 0;
+    private int currentBattleSpriteFrame = 0;
     private boolean hideWeapon = false;
+    
+    public BattleSpriteAnimationLayoutPanel() {
+        super();
+        bgCheckerPattern = false;
+        setBGColor(Color.BLACK);
+    }
 
     @Override
     protected boolean hasData() {
@@ -68,38 +68,56 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected void buildImage(Graphics graphics) {
-        Tileset frame = battlesprite.getFrames()[currentBattlespriteFrame];
-        int tilesPerRow = battlesprite.getTilesPerRow();
-        BufferedImage image = new BufferedImage(256, 224, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
-        
-        g.drawImage(background.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
-        g.drawImage(ground.getTileset().getIndexedColorImage(), GROUND_BASE_X, GROUND_BASE_Y, null);
-        if (battlesprite.getType() == BattleSpriteType.ENEMY) {
-            drawBattleSpriteFrame(g, frame, BATTLESPRITE_ENEMY_BASE_X+currentFrameX, BATTLESPRITE_ENEMY_BASE_Y+currentFrameY, tilesPerRow);
+        BattleSpriteAnimationFrame animFrame = animation.getFrames()[currentAnimationFrame];
+        Tileset spriteFrame = null;
+        if (isAnimating()) {
+            spriteFrame = battlesprite.getFrames()[getCurrentAnimationFrame()];
         } else {
-            if (currentWeaponBehind) {
-                drawBattleSpriteFrame(g, frame, BATTLESPRITE_ALLY_BASE_X+currentFrameX, BATTLESPRITE_ALLY_BASE_Y+currentFrameY, tilesPerRow);
-                if (!hideWeapon && weaponsprite!=null) {
-                    g.drawImage(weaponsprite.getFrames()[currentWeaponspriteFrame].getIndexedColorImage(), WEAPONSPRITE_BASE_X+currentFrameX+currentWeaponX, WEAPONSPRITE_BASE_Y+currentFrameY+currentWeaponY,
-                            WeaponSprite.FRAME_TILE_WIDTH*PIXEL_WIDTH*weaponHFlip, WeaponSprite.FRAME_TILE_HEIGHT*Tile.PIXEL_HEIGHT*weaponVFlip, null);
-                }
-            } else {
-                if (!hideWeapon && weaponsprite != null) {
-                    g.drawImage(weaponsprite.getFrames()[currentWeaponspriteFrame].getIndexedColorImage(), WEAPONSPRITE_BASE_X+currentFrameX+currentWeaponX, WEAPONSPRITE_BASE_Y+currentFrameY+currentWeaponY,
-                            WeaponSprite.FRAME_TILE_WIDTH*PIXEL_WIDTH*weaponHFlip, WeaponSprite.FRAME_TILE_HEIGHT*Tile.PIXEL_HEIGHT*weaponVFlip, null);
-                }
-                drawBattleSpriteFrame(g, frame, BATTLESPRITE_ALLY_BASE_X+currentFrameX, BATTLESPRITE_ALLY_BASE_Y+currentFrameY, tilesPerRow);
+            spriteFrame = battlesprite.getFrames()[currentBattleSpriteFrame];
+        }
+        int tilesPerRow = battlesprite.getTilesPerRow();        
+        graphics.drawImage(background.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
+        graphics.drawImage(ground.getTileset().getIndexedColorImage(), GROUND_BASE_X, GROUND_BASE_Y, null);
+        if (battlesprite.getType() == BattleSpriteType.ENEMY) {
+            drawBattleSpriteFrame(graphics, spriteFrame, BATTLESPRITE_ENEMY_BASE_X+animFrame.getX(), BATTLESPRITE_ENEMY_BASE_Y+animFrame.getY(), tilesPerRow);
+        } else {
+            boolean showWeapon = !hideWeapon && weaponsprite != null;
+            boolean weaponBehind = animFrame.getWeaponBehind();
+            if (showWeapon && weaponBehind) {
+                drawWeapon(graphics, animFrame);
+            }
+            drawBattleSpriteFrame(graphics, spriteFrame, BATTLESPRITE_ALLY_BASE_X+animFrame.getX(), BATTLESPRITE_ALLY_BASE_Y+animFrame.getY(), tilesPerRow);
+            if (showWeapon && !weaponBehind) {
+                drawWeapon(graphics, animFrame);
             }
         }
     }
     
+    private void drawWeapon(Graphics graphics, BattleSpriteAnimationFrame frame) {
+        int x = WEAPONSPRITE_BASE_X+frame.getX()+frame.getWeaponX();
+        int y = WEAPONSPRITE_BASE_Y+frame.getY()+frame.getWeaponY();
+        int w = WeaponSprite.FRAME_TILE_WIDTH*PIXEL_WIDTH * (frame.getWeaponFlipH() ? -1 : 1);
+        int h = WeaponSprite.FRAME_TILE_HEIGHT*PIXEL_HEIGHT * (frame.getWeaponFlipV() ? -1 : 1);
+        graphics.drawImage(weaponsprite.getFrames()[frame.getWeaponFrame()].getIndexedColorImage(), x, y, w, h, null);
+    }
+    
     private void drawBattleSpriteFrame(Graphics graphics, Tileset frame, int xOffset, int yOffset, int tilesPerRow) {
-        Tile[] tiles = frame.getTiles();
-        for (int t = 0; t < tiles.length; t++) {
-            int x = (t%tilesPerRow)*8 + xOffset;
-            int y = (t/tilesPerRow)*8 + yOffset;
-            graphics.drawImage(tiles[t].getIndexedColorImage(), x, y, null);
+        graphics.drawImage(frame.getIndexedColorImage(), xOffset, yOffset, null);
+    }
+
+    @Override
+    protected void animationFrameUpdated(int frame) {
+        super.animationFrameUpdated(frame);
+        setFrame(frame);
+    }
+    
+    @Override
+    protected int getFrameSpeed(int frame) {
+        if (hasData()) {
+            return animation.getFrames()[frame].getDuration();
+        } else {
+            stopAnimation();
+            return 0;
         }
     }
 
@@ -115,66 +133,12 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
 
     public void setBattlesprite(BattleSprite battlesprite) {
         this.battlesprite = battlesprite;
+        redraw();
     }
 
     public void setWeaponsprite(WeaponSprite weaponsprite) {
         this.weaponsprite = weaponsprite;
-    }
-
-    public void setCurrentBattlespriteFrame(int currentBattlespriteFrame) {
-        this.currentBattlespriteFrame = currentBattlespriteFrame;
-    }
-
-    public int getCurrentFrameX() {
-        return currentFrameX;
-    }
-
-    public void setCurrentFrameX(int currentFrameX) {
-        this.currentFrameX = currentFrameX;
-    }
-
-    public int getCurrentFrameY() {
-        return currentFrameY;
-    }
-
-    public void setCurrentFrameY(int currentFrameY) {
-        this.currentFrameY = currentFrameY;
-    }
-
-    public void setCurrentWeaponFrame(int currentWeaponFrame) {
-        this.currentWeaponspriteFrame = currentWeaponFrame;
-    }
-
-    public void setCurrentWeaponBehind(boolean currentWeaponBehind) {
-        this.currentWeaponBehind = currentWeaponBehind;
-    }
-
-    public void setCurrentWeaponX(int currentWeaponX) {
-        this.currentWeaponX = currentWeaponX;
-    }
-
-    public int getCurrentWeaponY() {
-        return currentWeaponY;
-    }
-
-    public void setCurrentWeaponY(int currentWeaponY) {
-        this.currentWeaponY = currentWeaponY;
-    }
-
-    public boolean isWeaponHFlip() {
-        return weaponHFlip < 0;
-    }
-
-    public void setWeaponHFlip(boolean weaponHFlip) {
-        this.weaponHFlip = weaponHFlip ? -1 : 1;
-    }
-
-    public boolean isWeaponVFlip() {
-        return weaponVFlip < 0;
-    }
-
-    public void setWeaponVFlip(boolean weaponVFlip) {
-        this.weaponVFlip = weaponVFlip ? -1 : 1;
+        redraw();
     }
     
     public BattleSpriteAnimation getAnimation() {
@@ -184,49 +148,20 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel {
     public void setAnimation(BattleSpriteAnimation animation) {
         this.animation = animation;
     }
-    
-    public void updateDisplayProperties() {
-        if (this.currentAnimationFrame == 0) {
-            this.currentBattlespriteFrame = 0;
-            this.currentFrameX = 0;
-            this.currentFrameY = 0;
-            /*this.currentWeaponspriteFrame = animation.getIdle1WeaponFrame()&0xF;
-            this.currentWeaponBehind = animation.getIdle1WeaponZ();
-            this.currentWeaponX = animation.getIdle1WeaponX();
-            this.currentWeaponY = animation.getIdle1WeaponY();
-            this.weaponHFlip = ((animation.getIdle1WeaponFrame()&0x10)!=0) ? -1 : 1;
-            this.weaponVFlip = ((animation.getIdle1WeaponFrame()&0x20)!=0) ? -1 : 1;*/
-        } else {
-            int bsFrame = animation.getFrames()[this.currentAnimationFrame-1].getIndex();
-            if (bsFrame == 0xF) {
-                this.currentBattlespriteFrame = getPreviousBattlespriteFrame(this.currentAnimationFrame-1);
-            } else {
-                this.currentBattlespriteFrame = bsFrame;
+
+    public void setFrame(int currentFrame) {
+        if (animation == null) return;
+        if (this.currentAnimationFrame != currentFrame) {
+            currentAnimationFrame = currentFrame;
+            //If frame is marked with 0xF then find previous 'valid' frame
+            int bsFrame = animation.getFrames()[currentFrame].getIndex();
+            while (bsFrame == 0xF && currentFrame > 0) {
+                currentFrame--;
+                bsFrame = animation.getFrames()[currentFrame].getIndex();
             }
-            this.currentFrameX = animation.getFrames()[this.currentAnimationFrame-1].getX();
-            this.currentFrameY = animation.getFrames()[this.currentAnimationFrame-1].getY();
-            this.currentWeaponspriteFrame = animation.getFrames()[this.currentAnimationFrame-1].getWeaponFrame()&0xF;
-            this.currentWeaponBehind = animation.getFrames()[this.currentAnimationFrame-1].getWeaponBehind();
-            this.currentWeaponX = animation.getFrames()[this.currentAnimationFrame-1].getWeaponX();
-            this.currentWeaponY = animation.getFrames()[this.currentAnimationFrame-1].getWeaponY();
-            this.weaponHFlip = ((animation.getFrames()[this.currentAnimationFrame-1].getWeaponFrame()&0x10)!=0) ? -1 : 1;
-            this.weaponVFlip = ((animation.getFrames()[this.currentAnimationFrame-1].getWeaponFrame()&0x20)!=0) ? -1 : 1;
+            this.currentBattleSpriteFrame = bsFrame;
+            redraw();
         }
-    }
-    
-    private int getPreviousBattlespriteFrame(int initAnimFrame) {
-        while (animation.getFrames()[initAnimFrame].getIndex()==0xF) {
-            initAnimFrame--;
-        }
-        return animation.getFrames()[initAnimFrame].getIndex();
-    }
-
-    public int getCurrentAnimationFrame() {
-        return currentAnimationFrame;
-    }
-
-    public void setCurrentAnimationFrame(int currentAnimationFrame) {
-        this.currentAnimationFrame = currentAnimationFrame;
     }
 
     public boolean isHideWeapon() {

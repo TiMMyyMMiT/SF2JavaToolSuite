@@ -41,10 +41,10 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         jComboBox1.removeAllItems();
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         battleSpriteLayoutPanel.setBattleSprite(battleSprite);
-        battleSpriteLayoutPanel.setPreviewAnimSpeed(false);
+        battleSpriteLayoutPanel.stopAnimation();
         jCheckBox3.setSelected(false);
-        Palette[] palettes = battleSprite.getPalettes();
         if (battleSprite != null) {
+            Palette[] palettes = battleSprite.getPalettes();
             for (int i=0; i < palettes.length; i++) {
                 jComboBox1.addItem(palettes[i].getName());
             }
@@ -712,8 +712,15 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        battleSpriteLayoutPanel.setPreviewAnimSpeed(jCheckBox3.isSelected());
-        repaintEditorLayout();
+        BattleSprite battleSprite = battleSpriteLayoutPanel.getBattleSprite();
+        if (battleSprite != null) {
+            if (jCheckBox3.isSelected()) {
+                battleSpriteLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true);
+                repaintEditorLayout();
+            } else {
+                battleSpriteLayoutPanel.stopAnimation();
+            }
+        }
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
@@ -730,8 +737,9 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setAnimSpeed((int)jSpinner4.getValue());
-            if (battleSpriteLayoutPanel.getPreviewAnimSpeed())
-                battleSpriteLayoutPanel.setPreviewAnimSpeed(true);   //Force timer to reset
+            if (battleSpriteLayoutPanel.isAnimating()) {
+                battleSpriteLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true);
+            }
         }
     }//GEN-LAST:event_jSpinner4StateChanged
 

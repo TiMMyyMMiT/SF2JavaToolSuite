@@ -14,26 +14,18 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.nio.file.Path;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
+import javax.swing.event.TableModelEvent;
 
 /**
  *
  * @author wiz
  */
-public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implements ActionListener {
+public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     
     BattleSpriteAnimationManager battlespriteanimationManager = new BattleSpriteAnimationManager();
-    
-    Timer idleTimer = new Timer();
-    javax.swing.Timer swingTimer;
-    int currentAnimFrame = 0;
-    boolean animPlaying = false;
-    
+        
     public BattleSpriteAnimationMainEditor() {
         super();
         initComponents();
@@ -46,22 +38,25 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         
         accordionPanelEnvironment.setExpanded(false);
         accordionPanelWeapon.setExpanded(false);
+        tableFrames.addTableModelListener(this::onTableFrameDataChanged);
     }
     
     @Override
     protected void updateEditorData() {
+        BattleSpriteAnimation animation = battlespriteanimationManager.getBattleSpriteAnimation();
         battleSpriteAnimationLayoutPanel.setBackground(battlespriteanimationManager.getBackgroundManager().getBackgrounds()[0]);
         battleSpriteAnimationLayoutPanel.setGround(battlespriteanimationManager.getGroundManager().getGround());
         battleSpriteAnimationLayoutPanel.setBattlesprite(battlespriteanimationManager.getBattlespriteManager().getBattleSprite());
         battleSpriteAnimationLayoutPanel.setWeaponsprite(battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite());
-        battleSpriteAnimationLayoutPanel.setAnimation(battlespriteanimationManager.getBattleSpriteAnimation());
-        battleSpriteAnimationLayoutPanel.updateDisplayProperties();
+        battleSpriteAnimationLayoutPanel.setAnimation(animation);
         battleSpriteAnimationLayoutPanel.setHideWeapon(jCheckBox1.isSelected());
         battleSpriteAnimationLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
         
-        battlespriteanimationManager.getBattleSpriteAnimation().setLayout(battleSpriteAnimationLayoutPanel);
-        //jTable1.setModel(new BattleSpriteAnimationPropertiesTableModel(battlespriteanimationManager.getBattleSpriteAnimation()));
-        //jTable2.setModel(new BattleSpriteAnimationFramesTableModel(battlespriteanimationManager.getBattleSpriteAnimation()));
+        if (animation != null) {
+            animation.setLayout(battleSpriteAnimationLayoutPanel);
+            //battleSpriteAnimationFramesModel.addTableModelListener(this::animationFrameDataChanged);
+            battleSpriteAnimationFramesModel.setTableData(animation.getFrames());
+        }
         jSpinner1.setValue(0);
         
         super.updateEditorData();
@@ -84,6 +79,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        battleSpriteAnimationFramesModel = new com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationFramesTableModel();
+        battleSpriteAnimationModel = new com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationPropertiesTableModel();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -127,11 +124,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         jSpinner1 = new javax.swing.JSpinner();
         jLabel8 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel9 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableFrames = new com.sfc.sf2.core.gui.controls.Table();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -322,16 +315,13 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -351,7 +341,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         );
         battleSpriteAnimationLayoutPanelLayout.setVerticalGroup(
             battleSpriteAnimationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(battleSpriteAnimationLayoutPanel);
@@ -360,7 +350,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,11 +462,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
         });
 
         jCheckBox2.setText("Idle");
-        jCheckBox2.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox2StateChanged(evt);
-            }
-        });
         jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox2ActionPerformed(evt);
@@ -549,78 +534,38 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Properties"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Frame Number", "Spell init frame", "Spell Index", "End Spell Anim", "Idle Weapon Frame 1", "H Flip", "V Flip", "Idle Z 1", "Idle Weapon X 1", "Idle Weapon Y 1"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Boolean.class, java.lang.Byte.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Byte.class, java.lang.Byte.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jTable1.setToolTipText("");
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane3.setViewportView(jTable1);
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+            .addGap(0, 53, Short.MAX_VALUE)
         );
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Frames"));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Index", "Duration", "X", "Y", "Weapon Frame", "H Flip", "V Flip", "Behind", "Weapon X", "Weapon Y"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Byte.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Byte.class, java.lang.Byte.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane4.setViewportView(jTable2);
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-        );
+        tableFrames.setBorder(javax.swing.BorderFactory.createTitledBorder("Frames"));
+        tableFrames.setModel(battleSpriteAnimationFramesModel);
+        tableFrames.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableFrames.setMinimumSize(new java.awt.Dimension(260, 150));
+        tableFrames.setPreferredSize(new java.awt.Dimension(260, 200));
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel10Layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -631,10 +576,11 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jSplitPane2.setRightComponent(jPanel10);
@@ -650,7 +596,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
             .addComponent(jSplitPane2)
         );
 
-        jSplitPane1.setLeftComponent(jPanel15);
+        jSplitPane1.setTopComponent(jPanel15);
         jSplitPane1.setBottomComponent(console1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
@@ -749,12 +695,12 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        if(!animPlaying){
-            if((int)jSpinner1.getModel().getValue()<=battlespriteanimationManager.getBattleSpriteAnimation().getFrames().length){
-                battleSpriteAnimationLayoutPanel.setCurrentAnimationFrame((int)jSpinner1.getModel().getValue());
-                battleSpriteAnimationLayoutPanel.updateDisplayProperties();
-            repaintEditorLayout();
-            }else{
+        if (battleSpriteAnimationLayoutPanel.hasData() && !battleSpriteAnimationLayoutPanel.isAnimating()) {
+            int frame = (int)jSpinner1.getModel().getValue();
+            if (frame <= battlespriteanimationManager.getBattleSpriteAnimation().getFrames().length) {
+                battleSpriteAnimationLayoutPanel.setFrame(frame);
+                repaintEditorLayout();
+            } else {
                 jSpinner1.getModel().setValue(battlespriteanimationManager.getBattleSpriteAnimation().getFrames().length);
             }
         }
@@ -766,75 +712,44 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        animateIdle();
+        BattleSprite battleSprite = battlespriteanimationManager.getBattlespriteManager().getBattleSprite();
+        BattleSpriteAnimation anim; 
+        if (battleSprite != null && battleSpriteAnimationLayoutPanel.hasData()) {
+            if (jCheckBox2.isSelected()) {
+                battleSpriteAnimationLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true, false);
+            } else {
+                battleSpriteAnimationLayoutPanel.stopAnimation();
+            }
+        }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void animateIdle(){
-        if(jCheckBox2.isSelected()){
-            TimerTask task = new TimerTask() {
-              int frame = 1;
-              public void run() {
-                if(frame==1){
-                    frame=0;
-                }else{
-                    frame=1;
-                }
-                battleSpriteAnimationLayoutPanel.setCurrentAnimationFrame(frame);
-                battleSpriteAnimationLayoutPanel.updateDisplayProperties();
-                repaintEditorLayout();
-              }
-            };
-            idleTimer = new Timer();
-            idleTimer.schedule(task, 0, battlespriteanimationManager.getBattleSpriteAnimation().getFrames()[0].getDuration()*1000/60); 
-        }else{              
-            idleTimer.cancel();
-            idleTimer.purge();
-            battleSpriteAnimationLayoutPanel.setCurrentAnimationFrame((int)jSpinner1.getModel().getValue());
-            battleSpriteAnimationLayoutPanel.updateDisplayProperties();
-            repaintEditorLayout();
-        }        
-    }
     
-    private void jCheckBox2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox2StateChanged
-
-    }//GEN-LAST:event_jCheckBox2StateChanged
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jCheckBox2.setSelected(false);
-        animPlaying = true;
-        idleTimer.cancel();
-        idleTimer.purge();        
-        currentAnimFrame = 1; 
-        jSpinner1.getModel().setValue(currentAnimFrame);
-        battleSpriteAnimationLayoutPanel.setCurrentAnimationFrame(currentAnimFrame);
-        battleSpriteAnimationLayoutPanel.updateDisplayProperties();
-        BattleSpriteAnimation anim = battlespriteanimationManager.getBattleSpriteAnimation();
-        int duration = anim.getFrames()[0].getDuration();
-        swingTimer = new javax.swing.Timer(duration*1000/60, this);
-        swingTimer.setInitialDelay(duration*1000/60);
-        swingTimer.start();
-        
-        repaintEditorLayout();
+        if (battleSpriteAnimationLayoutPanel.hasData()) {
+            int speed = battlespriteanimationManager.getBattleSpriteAnimation().getFrames()[0].getDuration();
+            int frames = battlespriteanimationManager.getBattleSpriteAnimation().getFrameCount()-1;
+            battleSpriteAnimationLayoutPanel.startAnimation(speed, frames, false, true);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        swingTimer.stop();
-        if(currentAnimFrame<=battlespriteanimationManager.getBattleSpriteAnimation().getFrames().length){
-            jSpinner1.getModel().setValue(currentAnimFrame);
-            battleSpriteAnimationLayoutPanel.setCurrentAnimationFrame(currentAnimFrame);
-            battleSpriteAnimationLayoutPanel.updateDisplayProperties();
-            repaintEditorLayout();   
-            int duration = battlespriteanimationManager.getBattleSpriteAnimation().getFrames()[currentAnimFrame-1].getDuration();
-            swingTimer = new javax.swing.Timer(duration*1000/60, this);
-            swingTimer.setInitialDelay(duration*1000/60);
-            swingTimer.start(); 
-            currentAnimFrame++;
-        }else{
-            swingTimer.stop();
-            animPlaying = false;
-        }
+    int qwe = 0;
+    private void onTableFrameDataChanged(TableModelEvent evt) {
+        Console.logger().info(String.format("Table data changed : %d. Row: (%d-%d), Column: %d", evt.getType(), evt.getFirstRow(), evt.getLastRow(), evt.getColumn()));
+        qwe++;
     }
+    
+    /*private void animationFrameDataChanged(TableModelEvent evt) {
+        
+        if (selectedEyesRow != tableEyes.jTable.getSelectedRow()) {
+            selectedEyesRow = tableEyes.jTable.getSelectedRow();
+            Portrait portrait = portraitLayoutPanel.getPortrait();
+            if (portrait != null) {
+                portrait.setEyeTiles(eyeTable.getTableData(int[][].class));
+                portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
+            }
+            repaintEditorLayout();
+        }
+    }*/
     
     /**
      * To create a new Main Editor, copy the below code
@@ -855,7 +770,9 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanelEnvironment;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanelWeapon;
+    private com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationFramesTableModel battleSpriteAnimationFramesModel;
     private com.sfc.sf2.battlesprite.animation.gui.BattleSpriteAnimationLayoutPanel battleSpriteAnimationLayoutPanel;
+    private com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationPropertiesTableModel battleSpriteAnimationModel;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
@@ -893,14 +810,10 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor implemen
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private com.sfc.sf2.core.gui.controls.Table tableFrames;
     // End of variables declaration//GEN-END:variables
 }

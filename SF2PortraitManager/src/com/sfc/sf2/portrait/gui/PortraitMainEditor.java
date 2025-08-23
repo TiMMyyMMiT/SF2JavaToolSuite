@@ -83,6 +83,8 @@ public class PortraitMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        portraitDataModelEyes = new com.sfc.sf2.portrait.models.PortraitDataTableModel();
+        portraitDataModelMouth = new com.sfc.sf2.portrait.models.PortraitDataTableModel();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -261,11 +263,11 @@ public class PortraitMainEditor extends AbstractMainEditor {
         );
 
         tableEyes.setBorder(javax.swing.BorderFactory.createTitledBorder("Eyes"));
-        tableEyes.setModel(new com.sfc.sf2.portrait.models.PortraitDataTableModel());
+        tableEyes.setModel(portraitDataModelEyes);
         tableEyes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         tableMouth.setBorder(javax.swing.BorderFactory.createTitledBorder("Mouth"));
-        tableMouth.setModel(new com.sfc.sf2.portrait.models.PortraitDataTableModel());
+        tableMouth.setModel(portraitDataModelMouth);
         tableMouth.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -721,6 +723,8 @@ public class PortraitMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private com.sfc.sf2.portrait.models.PortraitDataTableModel portraitDataModelEyes;
+    private com.sfc.sf2.portrait.models.PortraitDataTableModel portraitDataModelMouth;
     private com.sfc.sf2.portrait.gui.PortraitLayoutPanel portraitLayoutPanel;
     private com.sfc.sf2.core.gui.controls.Table tableEyes;
     private com.sfc.sf2.core.gui.controls.Table tableMouth;

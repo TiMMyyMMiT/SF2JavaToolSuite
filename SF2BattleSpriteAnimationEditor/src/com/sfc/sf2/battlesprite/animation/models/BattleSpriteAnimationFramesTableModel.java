@@ -25,6 +25,18 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
             default: return Byte.class;
         }
     }
+ 
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        if (row == 0 && column <= 3) {
+            return false;   //Core data for first frame cannot be edited
+        }
+        if ((byte)getValueAt(row, 4) == -1 && column >= 4) {
+            return false;   //Enemy weapon data cannot be edited
+        } else {
+            return true;
+        }
+    }
 
     @Override
     protected BattleSpriteAnimationFrame createBlankItem(int row) {

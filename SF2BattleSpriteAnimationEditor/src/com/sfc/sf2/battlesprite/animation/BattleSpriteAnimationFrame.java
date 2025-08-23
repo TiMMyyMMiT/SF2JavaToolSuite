@@ -141,6 +141,6 @@ public class BattleSpriteAnimationFrame {
     }
         
     public static BattleSpriteAnimationFrame EmptyFrame() {
-        return new BattleSpriteAnimationFrame((byte)0, (byte)20, (byte)0, (byte)0);
+        return new BattleSpriteAnimationFrame((byte)0, (byte)0, (byte)0, (byte)0);
     }
 }
