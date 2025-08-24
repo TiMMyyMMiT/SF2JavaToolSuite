@@ -23,6 +23,8 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
     private int speed;
     private boolean loop;
     
+    ActionListener animationUpdated;
+    
     public boolean isAnimating() {
         return animPlaying;
     }
@@ -33,6 +35,18 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
 
     public void setCurrentAnimationFrame(int currentAnimationFrame) {
         this.currentAnimFrame = currentAnimationFrame;
+    }
+    
+    protected int getFrameSpeed(int frame) {
+        return speed;
+    }
+    
+    public void setFrameUpdatedListener(ActionListener l) {
+        animationUpdated = l;
+    }
+    
+    public void removeFrameUpdatedListener() {
+        animationUpdated = null;
     }
     
     public void startAnimation(int speed) {
@@ -66,17 +80,14 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
             animPlaying = false;
             idleTimer.stop();
             idleTimer = null;
-            currentAnimFrame = 0;
-            animationFrameUpdated(0);
         }
-    }
-    
-    protected int getFrameSpeed(int frame) {
-        return speed;
     }
     
     protected void animationFrameUpdated(int frame) {
         redraw();
+        if (animationUpdated != null) {
+            animationUpdated.actionPerformed(new ActionEvent(this, frame, null));
+        }
     }
 
     @Override
@@ -94,7 +105,9 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
         }
         animationFrameUpdated(currentAnimFrame);
         if (variableAnimationSpeed) {
-            idleTimer.setInitialDelay(getFrameSpeed(currentAnimFrame)*1000/60);
+            int delay = getFrameSpeed(currentAnimFrame)*1000/60;
+            idleTimer.setInitialDelay(delay);
+            idleTimer.setDelay(delay);
             idleTimer.restart();
         }
     }

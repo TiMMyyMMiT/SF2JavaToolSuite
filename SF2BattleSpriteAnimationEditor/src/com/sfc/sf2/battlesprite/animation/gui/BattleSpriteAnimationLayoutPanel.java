@@ -70,11 +70,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     protected void buildImage(Graphics graphics) {
         BattleSpriteAnimationFrame animFrame = animation.getFrames()[currentAnimationFrame];
         Tileset spriteFrame = null;
-        if (isAnimating()) {
-            spriteFrame = battlesprite.getFrames()[getCurrentAnimationFrame()];
-        } else {
-            spriteFrame = battlesprite.getFrames()[currentBattleSpriteFrame];
-        }      
+        spriteFrame = battlesprite.getFrames()[currentBattleSpriteFrame];   
         graphics.drawImage(background.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
         graphics.drawImage(ground.getTileset().getIndexedColorImage(), GROUND_BASE_X, GROUND_BASE_Y, null);
         if (battlesprite.getType() == BattleSpriteType.ENEMY) {
@@ -164,13 +160,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
         if (animation == null) return;
         if (this.currentAnimationFrame != currentFrame) {
             currentAnimationFrame = currentFrame;
-            //If frame is marked with 0xF then find previous 'valid' frame
-            int bsFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
-            while (bsFrame == 0xF && currentFrame > 0) {
-                currentFrame--;
-                bsFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
-            }
-            this.currentBattleSpriteFrame = bsFrame;
+            this.currentBattleSpriteFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
             redraw();
         }
     }

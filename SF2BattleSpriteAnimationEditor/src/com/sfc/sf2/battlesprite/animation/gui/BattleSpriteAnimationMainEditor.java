@@ -14,6 +14,7 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
+import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.SpinnerNumberModel;
@@ -41,6 +42,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         accordionPanelEnvironment.setExpanded(false);
         accordionPanelWeapon.setExpanded(false);
         
+        battleSpriteAnimationLayoutPanel.setFrameUpdatedListener(this::onAnimationFrameUpdated);
         tableFrames.addTableModelListener(this::onTableFrameDataChanged);
         TableColumnModel columns = tableFrames.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(50);
@@ -73,8 +75,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
             battleSpriteAnimationFramesModel.setTableData(animation.getFrames());
             int maxFrames = animation.getFrames().length-1;
             ((SpinnerNumberModel)jSpinner1.getModel()).setMaximum(maxFrames);
-            ((SpinnerNumberModel)jSpinner2.getModel()).setMaximum(maxFrames);
-            ((SpinnerNumberModel)jSpinner3.getModel()).setMaximum(maxFrames);
             jSpinner2.setValue(animation.getSpellInitFrame());
             jSpinner3.setValue(animation.getSpellAnim());
             jCheckBox3.setSelected(animation.getEndSpellAnim());
@@ -574,7 +574,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
 
         jLabel3.setText("Spell initial frame :");
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Byte.valueOf((byte)0), Byte.valueOf((byte)0), Byte.valueOf((byte)12), Byte.valueOf((byte)1)));
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Byte.valueOf((byte)0), Byte.valueOf((byte)0), Byte.valueOf((byte)20), Byte.valueOf((byte)1)));
         jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinner2StateChanged(evt);
@@ -583,7 +583,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
 
         jLabel4.setText("Spell anim :");
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(Byte.valueOf((byte)0), Byte.valueOf((byte)0), Byte.valueOf((byte)12), Byte.valueOf((byte)1)));
+        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(Byte.valueOf((byte)-1), Byte.valueOf((byte)-1), Byte.valueOf((byte)127), Byte.valueOf((byte)1)));
         jSpinner3.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinner3StateChanged(evt);
@@ -600,14 +600,14 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         infoButton1.setMessageText("<html>When a spell (or spell-like ability is cast) the <b>Spell initial frame</b> indicates the animation frame when the spell is triggered.</html>");
         infoButton1.setText("");
 
-        infoButton2.setMessageText("<html>A normal attack can trigger a specific <b>Spell Anim</b> to trigger on the <b>Spell initial frame</b>.</html>");
+        infoButton2.setMessageText("<html>A normal attack can trigger a specific <b>Spell Anim</b> to trigger on the <b>Spell initial frame</b>.<br>Values are linked to SF2Enums \"enum SpellAnimations\".</html>");
         infoButton2.setText("");
 
         infoButton3.setText("");
 
         jLabel9.setText("Anim frame help :");
 
-        infoButton4.setMessageText("<html><b>Frame:</b> The frame number (cannot be edited).<br><b>Battlesprite: </b> The battlesprite to show during this frame.<br><b>Delay:</b> The speed of the animation. Lower numbers animate faster.<br><b>X/Y:</b> The X and Y position offset when rendering the battle sprite.<br><b>Weapon Index:</b> The index of the weapon sprite frame to render.<br><b>H/V Flip:</b> Whether or not the weapon sprite is flipped Horizontally or Vertically.<br><b>Behnd:</b> Whether the weapon is rendered in front of or behind the batttle sprite.<br><b>Weapon X/Y:</b> The X and Y position offset when rendering the weapon.</html>");
+        infoButton4.setMessageText("<html><b>Frame:</b> The frame number (cannot be edited).<br><b>Battlesprite: </b> The battlesprite to show during this frame.<br><b>Duration:</b> The speed of the animation. Lower numbers animate faster.<br><b>X/Y:</b> The X and Y position offset when rendering the battle sprite.<br><b>Weapon Index:</b> The index of the weapon sprite frame to render.<br><b>H/V Flip:</b> Whether or not the weapon sprite is flipped Horizontally or Vertically.<br><b>Behnd:</b> Whether the weapon is rendered in front of or behind the batttle sprite.<br><b>Weapon X/Y:</b> The X and Y position offset when rendering the weapon.</html>");
         infoButton4.setText("");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -848,6 +848,10 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         }
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
+    private void onAnimationFrameUpdated(ActionEvent e) {
+        jSpinner1.setValue(e.getID());
+    }
+    
     private void onTableFrameDataChanged(TableModelEvent evt) {
         int frame = battleSpriteAnimationLayoutPanel.getFrame();
         if (frame >= evt.getFirstRow() && frame <= evt.getLastRow()) {

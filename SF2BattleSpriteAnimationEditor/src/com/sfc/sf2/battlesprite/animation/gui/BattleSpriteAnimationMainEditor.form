@@ -851,7 +851,7 @@
                             <Component class="javax.swing.JSpinner" name="jSpinner2">
                               <Properties>
                                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                                  <SpinnerModel initial="0" maximum="12" minimum="0" numberType="java.lang.Byte" stepSize="1" type="number"/>
+                                  <SpinnerModel initial="0" maximum="20" minimum="0" numberType="java.lang.Byte" stepSize="1" type="number"/>
                                 </Property>
                               </Properties>
                               <Events>
@@ -866,7 +866,7 @@
                             <Component class="javax.swing.JSpinner" name="jSpinner3">
                               <Properties>
                                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                                  <SpinnerModel initial="0" maximum="12" minimum="0" numberType="java.lang.Byte" stepSize="1" type="number"/>
+                                  <SpinnerModel initial="-1" maximum="127" minimum="-1" numberType="java.lang.Byte" stepSize="1" type="number"/>
                                 </Property>
                               </Properties>
                               <Events>
@@ -889,7 +889,7 @@
                             </Component>
                             <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton2">
                               <Properties>
-                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;A normal attack can trigger a specific &lt;b&gt;Spell Anim&lt;/b&gt; to trigger on the &lt;b&gt;Spell initial frame&lt;/b&gt;.&lt;/html&gt;"/>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;A normal attack can trigger a specific &lt;b&gt;Spell Anim&lt;/b&gt; to trigger on the &lt;b&gt;Spell initial frame&lt;/b&gt;.&lt;br&gt;Values are linked to SF2Enums &quot;enum SpellAnimations&quot;.&lt;/html&gt;"/>
                                 <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>
@@ -905,7 +905,7 @@
                             </Component>
                             <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton4">
                               <Properties>
-                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Frame:&lt;/b&gt; The frame number (cannot be edited).&lt;br&gt;&lt;b&gt;Battlesprite: &lt;/b&gt; The battlesprite to show during this frame.&lt;br&gt;&lt;b&gt;Delay:&lt;/b&gt; The speed of the animation. Lower numbers animate faster.&lt;br&gt;&lt;b&gt;X/Y:&lt;/b&gt; The X and Y position offset when rendering the battle sprite.&lt;br&gt;&lt;b&gt;Weapon Index:&lt;/b&gt; The index of the weapon sprite frame to render.&lt;br&gt;&lt;b&gt;H/V Flip:&lt;/b&gt; Whether or not the weapon sprite is flipped Horizontally or Vertically.&lt;br&gt;&lt;b&gt;Behnd:&lt;/b&gt; Whether the weapon is rendered in front of or behind the batttle sprite.&lt;br&gt;&lt;b&gt;Weapon X/Y:&lt;/b&gt; The X and Y position offset when rendering the weapon.&lt;/html&gt;"/>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Frame:&lt;/b&gt; The frame number (cannot be edited).&lt;br&gt;&lt;b&gt;Battlesprite: &lt;/b&gt; The battlesprite to show during this frame.&lt;br&gt;&lt;b&gt;Duration:&lt;/b&gt; The speed of the animation. Lower numbers animate faster.&lt;br&gt;&lt;b&gt;X/Y:&lt;/b&gt; The X and Y position offset when rendering the battle sprite.&lt;br&gt;&lt;b&gt;Weapon Index:&lt;/b&gt; The index of the weapon sprite frame to render.&lt;br&gt;&lt;b&gt;H/V Flip:&lt;/b&gt; Whether or not the weapon sprite is flipped Horizontally or Vertically.&lt;br&gt;&lt;b&gt;Behnd:&lt;/b&gt; Whether the weapon is rendered in front of or behind the batttle sprite.&lt;br&gt;&lt;b&gt;Weapon X/Y:&lt;/b&gt; The X and Y position offset when rendering the weapon.&lt;/html&gt;"/>
                                 <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>
