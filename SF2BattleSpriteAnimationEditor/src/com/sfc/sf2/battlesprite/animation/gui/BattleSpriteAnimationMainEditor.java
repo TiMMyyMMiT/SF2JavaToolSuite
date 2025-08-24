@@ -808,9 +808,11 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         if (battleSpriteAnimationLayoutPanel.hasData() && !battleSpriteAnimationLayoutPanel.isAnimating()) {
             int frame = (int)jSpinner1.getModel().getValue();
-            battleSpriteAnimationLayoutPanel.setFrame(frame);
-            tableFrames.jTable.setRowSelectionInterval(frame, frame);
-            repaintEditorLayout();
+            if (frame >= 0) {
+                battleSpriteAnimationLayoutPanel.setFrame(frame);
+                tableFrames.jTable.setRowSelectionInterval(frame, frame);
+                repaintEditorLayout();
+            }
         }
     }//GEN-LAST:event_jSpinner1StateChanged
 

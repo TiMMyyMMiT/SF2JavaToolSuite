@@ -11,7 +11,6 @@ import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationFrame;
 import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
-import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
@@ -157,7 +156,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     }
 
     public void setFrame(int currentFrame) {
-        if (animation == null) return;
+        if (animation == null || currentFrame < 0) return;
         if (this.currentAnimationFrame != currentFrame) {
             currentAnimationFrame = currentFrame;
             this.currentBattleSpriteFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
