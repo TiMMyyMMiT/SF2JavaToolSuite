@@ -238,6 +238,6 @@ public class Table extends javax.swing.JPanel {
     private javax.swing.JButton jButtonRemove;
     private javax.swing.JButton jButtonUp;
     private javax.swing.JScrollPane jScrollPane;
-    private com.sfc.sf2.core.models.JDisableableTable jTable;
+    public com.sfc.sf2.core.models.JDisableableTable jTable;
     // End of variables declaration//GEN-END:variables
 }
