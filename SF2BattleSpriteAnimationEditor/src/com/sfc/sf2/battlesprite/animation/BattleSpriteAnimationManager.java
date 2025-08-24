@@ -108,8 +108,4 @@ public class BattleSpriteAnimationManager extends AbstractManager {
     public WeaponSprite getWeaponsprite() {
         return weaponspriteManager.getWeaponsprite();
     }
-
-    public BattleSpriteAnimation getBattlespriteAnimation() {
-        return battlespriteAnimation;
-    }
 }
