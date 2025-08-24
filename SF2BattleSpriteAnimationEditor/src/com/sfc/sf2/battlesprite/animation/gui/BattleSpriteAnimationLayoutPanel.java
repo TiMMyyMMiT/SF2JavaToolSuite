@@ -74,19 +74,18 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
             spriteFrame = battlesprite.getFrames()[getCurrentAnimationFrame()];
         } else {
             spriteFrame = battlesprite.getFrames()[currentBattleSpriteFrame];
-        }
-        int tilesPerRow = battlesprite.getTilesPerRow();        
+        }      
         graphics.drawImage(background.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
         graphics.drawImage(ground.getTileset().getIndexedColorImage(), GROUND_BASE_X, GROUND_BASE_Y, null);
         if (battlesprite.getType() == BattleSpriteType.ENEMY) {
-            drawBattleSpriteFrame(graphics, spriteFrame, BATTLESPRITE_ENEMY_BASE_X+animFrame.getX(), BATTLESPRITE_ENEMY_BASE_Y+animFrame.getY(), tilesPerRow);
+            drawBattleSpriteFrame(graphics, spriteFrame, BATTLESPRITE_ENEMY_BASE_X+animFrame.getX(), BATTLESPRITE_ENEMY_BASE_Y+animFrame.getY());
         } else {
             boolean showWeapon = !hideWeapon && weaponsprite != null;
             boolean weaponBehind = animFrame.getWeaponBehind();
             if (showWeapon && weaponBehind) {
                 drawWeapon(graphics, animFrame);
             }
-            drawBattleSpriteFrame(graphics, spriteFrame, BATTLESPRITE_ALLY_BASE_X+animFrame.getX(), BATTLESPRITE_ALLY_BASE_Y+animFrame.getY(), tilesPerRow);
+            drawBattleSpriteFrame(graphics, spriteFrame, BATTLESPRITE_ALLY_BASE_X+animFrame.getX(), BATTLESPRITE_ALLY_BASE_Y+animFrame.getY());
             if (showWeapon && !weaponBehind) {
                 drawWeapon(graphics, animFrame);
             }
@@ -96,12 +95,20 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     private void drawWeapon(Graphics graphics, BattleSpriteAnimationFrame frame) {
         int x = WEAPONSPRITE_BASE_X+frame.getX()+frame.getWeaponX();
         int y = WEAPONSPRITE_BASE_Y+frame.getY()+frame.getWeaponY();
-        int w = WeaponSprite.FRAME_TILE_WIDTH*PIXEL_WIDTH * (frame.getWeaponFlipH() ? -1 : 1);
-        int h = WeaponSprite.FRAME_TILE_HEIGHT*PIXEL_HEIGHT * (frame.getWeaponFlipV() ? -1 : 1);
+        int w = WeaponSprite.FRAME_TILE_WIDTH*PIXEL_WIDTH;
+        int h = WeaponSprite.FRAME_TILE_HEIGHT*PIXEL_HEIGHT;
+        if (frame.getWeaponFlipH()) {
+            x += WeaponSprite.FRAME_TILE_WIDTH*PIXEL_WIDTH;
+            w *= -1;
+        }
+        if (frame.getWeaponFlipV()) {
+            y += WeaponSprite.FRAME_TILE_HEIGHT*PIXEL_HEIGHT;
+            h *= -1;
+        }
         graphics.drawImage(weaponsprite.getFrames()[frame.getWeaponFrame()].getIndexedColorImage(), x, y, w, h, null);
     }
     
-    private void drawBattleSpriteFrame(Graphics graphics, Tileset frame, int xOffset, int yOffset, int tilesPerRow) {
+    private void drawBattleSpriteFrame(Graphics graphics, Tileset frame, int xOffset, int yOffset) {
         graphics.drawImage(frame.getIndexedColorImage(), xOffset, yOffset, null);
     }
 
@@ -174,5 +181,6 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
 
     public void setHideWeapon(boolean hideWeapon) {
         this.hideWeapon = hideWeapon;
+        redraw();
     }
 }
