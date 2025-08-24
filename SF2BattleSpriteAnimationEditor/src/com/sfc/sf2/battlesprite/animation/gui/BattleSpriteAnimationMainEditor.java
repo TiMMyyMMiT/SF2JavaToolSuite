@@ -16,6 +16,7 @@ import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableColumnModel;
 
@@ -60,6 +61,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
             animation.setLayout(battleSpriteAnimationLayoutPanel);
             //battleSpriteAnimationFramesModel.addTableModelListener(this::animationFrameDataChanged);
             battleSpriteAnimationFramesModel.setTableData(animation.getFrames());
+            ((SpinnerNumberModel)jSpinner1.getModel()).setMaximum(animation.getFrames().length-1);
         }
         jSpinner1.setValue(0);
         
@@ -703,12 +705,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         if (battleSpriteAnimationLayoutPanel.hasData() && !battleSpriteAnimationLayoutPanel.isAnimating()) {
             int frame = (int)jSpinner1.getModel().getValue();
-            if (frame <= battlespriteanimationManager.getBattleSpriteAnimation().getFrames().length) {
-                battleSpriteAnimationLayoutPanel.setFrame(frame);
-                repaintEditorLayout();
-            } else {
-                jSpinner1.getModel().setValue(battlespriteanimationManager.getBattleSpriteAnimation().getFrames().length);
-            }
+            battleSpriteAnimationLayoutPanel.setFrame(frame);
+            repaintEditorLayout();
         }
     }//GEN-LAST:event_jSpinner1StateChanged
 
