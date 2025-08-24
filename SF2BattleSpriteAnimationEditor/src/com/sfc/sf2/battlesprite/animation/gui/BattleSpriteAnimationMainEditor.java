@@ -597,14 +597,17 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
             }
         });
 
+        infoButton1.setMessageText("<html>When a spell (or spell-like ability is cast) the <b>Spell initial frame</b> indicates the animation frame when the spell is triggered.</html>");
         infoButton1.setText("");
 
+        infoButton2.setMessageText("<html>A normal attack can trigger a specific <b>Spell Anim</b> to trigger on the <b>Spell initial frame</b>.</html>");
         infoButton2.setText("");
 
         infoButton3.setText("");
 
         jLabel9.setText("Anim frame help :");
 
+        infoButton4.setMessageText("<html><b>Frame:</b> The frame number (cannot be edited).<br><b>Battlesprite: </b> The battlesprite to show during this frame.<br><b>Delay:</b> The speed of the animation. Lower numbers animate faster.<br><b>X/Y:</b> The X and Y position offset when rendering the battle sprite.<br><b>Weapon Index:</b> The index of the weapon sprite frame to render.<br><b>H/V Flip:</b> Whether or not the weapon sprite is flipped Horizontally or Vertically.<br><b>Behnd:</b> Whether the weapon is rendered in front of or behind the batttle sprite.<br><b>Weapon X/Y:</b> The X and Y position offset when rendering the weapon.</html>");
         infoButton4.setText("");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
