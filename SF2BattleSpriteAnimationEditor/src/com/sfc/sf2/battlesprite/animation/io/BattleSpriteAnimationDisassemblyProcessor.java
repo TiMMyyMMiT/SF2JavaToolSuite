@@ -34,7 +34,7 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
             byte idleWeaponFrame = (byte)(weaponData&0xF);
             boolean idleWeaponFlipX = (weaponData&0x10) != 0;
             boolean idleWeaponFlipY = (weaponData&0x20) != 0;
-            boolean idleWeaponBehind = BinaryHelpers.getByte(data, 5) != 0;
+            boolean idleWeaponBehind = BinaryHelpers.getByte(data, 5) == 1;
             byte idleWeaponX = BinaryHelpers.getByte(data, 6);
             byte idleWeaponY = BinaryHelpers.getByte(data, 7);
             frames[0] = new BattleSpriteAnimationFrame((byte)0, (byte)0, (byte)0, (byte)0, idleWeaponFrame, idleWeaponFlipX, idleWeaponFlipY, idleWeaponBehind, idleWeaponX, idleWeaponY);
@@ -55,7 +55,7 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
                 byte weaponFrame = (byte)(weaponData&0xF);
                 boolean weaponFlipX = (weaponData&0x10) != 0;
                 boolean weaponFlipY = (weaponData&0x20) != 0;
-                boolean behind = BinaryHelpers.getByte(data, i*offset+5) != 0;
+                boolean behind = BinaryHelpers.getByte(data, i*offset+5) == 1;
                 byte weaponX = BinaryHelpers.getByte(data, i*offset+6);
                 byte weaponY = BinaryHelpers.getByte(data, i*offset+7);
                 frames[i] = new BattleSpriteAnimationFrame(battleSpriteIndex, duration, x, y, weaponFrame, weaponFlipX, weaponFlipY, behind, weaponX, weaponY);
@@ -84,7 +84,7 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
             frame = item.getFrames()[0];
             weaponData = (byte)(frame.getWeaponFrame() + (frame.getWeaponFlipH() ? 0x10 : 0) + (frame.getWeaponFlipV() ? 0x20 : 0));
             animationFileBytes[4] = weaponData;
-            animationFileBytes[5] = (byte)(frame.getWeaponBehind() ? 1 : 0);
+            animationFileBytes[5] = (byte)(frame.getWeaponBehind() ? 1 : 2);
             animationFileBytes[6] = frame.getWeaponX();
             animationFileBytes[7] = frame.getWeaponY();
         }
