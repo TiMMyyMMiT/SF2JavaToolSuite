@@ -6,7 +6,6 @@
 package com.sfc.sf2.battlesprite.animation;
 
 import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
-import com.sfc.sf2.battlesprite.animation.gui.BattleSpriteAnimationLayoutPanel;
 
 /**
  *
@@ -19,9 +18,7 @@ public class BattleSpriteAnimation {
     
     private byte spellInitFrame;
     private byte spellAnim;
-    private boolean endSpellAnim; 
-    
-    private BattleSpriteAnimationLayoutPanel layout;
+    private boolean endSpellAnim;
 
     public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, byte spellInitFrame, byte spellAnim, boolean endSpellAnim) {
         this.type = BattleSpriteType.ENEMY;
@@ -29,7 +26,6 @@ public class BattleSpriteAnimation {
         this.spellInitFrame = spellInitFrame;
         this.spellAnim = spellAnim;
         this.endSpellAnim = endSpellAnim;
-        layout = null;
     }
 
     public BattleSpriteType getType() {
@@ -74,14 +70,6 @@ public class BattleSpriteAnimation {
 
     public void setEndSpellAnim(boolean endSpellAnim) {
         this.endSpellAnim = endSpellAnim;
-    }
-
-    public BattleSpriteAnimationLayoutPanel getLayout() {
-        return layout;
-    }
-
-    public void setLayout(BattleSpriteAnimationLayoutPanel layout) {
-        this.layout = layout;
     }
     
     @Override

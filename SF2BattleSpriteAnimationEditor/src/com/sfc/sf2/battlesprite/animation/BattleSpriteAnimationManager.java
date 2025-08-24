@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.battlesprite.animation;
 
+import com.sfc.sf2.background.Background;
 import com.sfc.sf2.background.BackgroundManager;
 import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
@@ -15,7 +16,10 @@ import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.ground.Ground;
 import com.sfc.sf2.ground.GroundManager;
+import com.sfc.sf2.palette.Palette;
+import com.sfc.sf2.weaponsprite.WeaponSprite;
 import com.sfc.sf2.weaponsprite.WeaponSpriteManager;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -56,7 +60,7 @@ public class BattleSpriteAnimationManager extends AbstractManager {
         BattleSpriteType type = battlespriteManager.getBattleSprite().getType();
         try {
             if(type == BattleSprite.BattleSpriteType.ALLY && weaponPalettesPath.getNameCount() > 0 && weaponPath.getNameCount() > 0) {
-                weaponspriteManager.importDisassembly(weaponPalettesPath, weaponPath);
+                weaponspriteManager.importDisassemblyAndPalettes(weaponPalettesPath, weaponPath);
                 Console.logger().info("Weapon imported");
             }
         } catch (Exception e) {
@@ -85,43 +89,27 @@ public class BattleSpriteAnimationManager extends AbstractManager {
         this.battlespriteAnimation = battlespriteanimation;
     }
 
-    public BackgroundManager getBackgroundManager() {
-        return backgroundManager;
+    public Background getBackground() {
+        return backgroundManager.getBackgrounds()[0];
     }
 
-    /*public void setBackgroundManager(BackgroundManager backgroundManager) {
-        this.backgroundManager = backgroundManager;
-    }*/
-
-    public GroundManager getGroundManager() {
-        return groundManager;
+    public Ground getGround() {
+        return groundManager.getGround();
     }
 
-    /*public void setGroundManager(GroundManager groundManager) {
-        this.groundManager = groundManager;
-    }*/
-
-    public BattleSpriteManager getBattlespriteManager() {
-        return battlespriteManager;
+    public BattleSprite getBattleSprite() {
+        return battlespriteManager.getBattleSprite();
     }
 
-    /*public void setBattlespriteManager(BattleSpriteManager battlespriteManager) {
-        this.battlespriteManager = battlespriteManager;
-    }*/
-
-    public WeaponSpriteManager getWeaponspriteManager() {
-        return weaponspriteManager;
+    public Palette[] getWeaponPalettes() {
+        return weaponspriteManager.getPalettes();
     }
 
-    /*public void setWeaponspriteManager(WeaponSpriteManager weaponspriteManager) {
-        this.weaponspriteManager = weaponspriteManager;
-    }*/
+    public WeaponSprite getWeaponsprite() {
+        return weaponspriteManager.getWeaponsprite();
+    }
 
-    public BattleSpriteAnimation getBattlespriteanimation() {
+    public BattleSpriteAnimation getBattlespriteAnimation() {
         return battlespriteAnimation;
-    }
-
-    public void setBattlespriteanimation(BattleSpriteAnimation battlespriteanimation) {
-        this.battlespriteAnimation = battlespriteanimation;
     }
 }

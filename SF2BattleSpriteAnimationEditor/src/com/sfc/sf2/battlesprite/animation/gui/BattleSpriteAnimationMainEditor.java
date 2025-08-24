@@ -49,17 +49,27 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     @Override
     protected void updateEditorData() {
         BattleSpriteAnimation animation = battlespriteanimationManager.getBattleSpriteAnimation();
-        battleSpriteAnimationLayoutPanel.setBackground(battlespriteanimationManager.getBackgroundManager().getBackgrounds()[0]);
-        battleSpriteAnimationLayoutPanel.setGround(battlespriteanimationManager.getGroundManager().getGround());
-        battleSpriteAnimationLayoutPanel.setBattlesprite(battlespriteanimationManager.getBattlespriteManager().getBattleSprite());
-        battleSpriteAnimationLayoutPanel.setWeaponsprite(battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite());
+        battleSpriteAnimationLayoutPanel.setBackground(battlespriteanimationManager.getBackground());
+        battleSpriteAnimationLayoutPanel.setGround(battlespriteanimationManager.getGround());
+        battleSpriteAnimationLayoutPanel.setBattlesprite(battlespriteanimationManager.getBattleSprite());
+        battleSpriteAnimationLayoutPanel.setWeaponsprite(battlespriteanimationManager.getWeaponsprite());
         battleSpriteAnimationLayoutPanel.setAnimation(animation);
         battleSpriteAnimationLayoutPanel.setHideWeapon(jCheckBox1.isSelected());
         battleSpriteAnimationLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
         
         if (animation != null) {
-            animation.setLayout(battleSpriteAnimationLayoutPanel);
-            //battleSpriteAnimationFramesModel.addTableModelListener(this::animationFrameDataChanged);
+            Palette[] battleSpritePalettes = battlespriteanimationManager.getBattleSprite().getPalettes();
+            jComboBox2.removeAllItems();
+            for (int i=0; i < battleSpritePalettes.length; i++) {
+                jComboBox2.addItem(battleSpritePalettes[i].getName());
+            }
+            jComboBox2.setSelectedIndex(0);
+            Palette[] weaponPalettes = battlespriteanimationManager.getWeaponPalettes();
+            jComboBox3.removeAllItems();
+            for (int i=0; i < weaponPalettes.length; i++) {
+                jComboBox3.addItem(weaponPalettes[i].getName());
+            }
+            jComboBox3.setSelectedIndex(0);
             battleSpriteAnimationFramesModel.setTableData(animation.getFrames());
             ((SpinnerNumberModel)jSpinner1.getModel()).setMaximum(animation.getFrames().length-1);
         }
@@ -206,8 +216,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
 
         accordionPanelWeapon.setBorder(javax.swing.BorderFactory.createTitledBorder("Weapon"));
 
-        fileButton5.setFilePath("..\\weapons\\palettes\\weaponpalette08.bin");
-        fileButton5.setLabelText("Weapon palette :");
+        fileButton5.setFilePath("..\\weapons\\palettes\\entries.asm");
+        fileButton5.setLabelText("Weapon palettes :");
 
         fileButton6.setFilePath("..\\weapons\\weaponsprite04.bin");
         fileButton6.setLabelText("Weapon :");
@@ -299,7 +309,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fileButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
                 .addContainerGap())
@@ -320,8 +330,11 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,7 +360,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         );
         battleSpriteAnimationLayoutPanelLayout.setVerticalGroup(
             battleSpriteAnimationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 397, Short.MAX_VALUE)
+            .addGap(0, 333, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(battleSpriteAnimationLayoutPanel);
@@ -356,11 +369,11 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
         );
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
@@ -562,16 +575,14 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -587,7 +598,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -649,12 +660,12 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         Path groundBasePalettePath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         Path groundPalettePath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         Path groundPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
-        Path weaponPalettePath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
+        Path weaponPalettesPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
         Path weaponPath = PathHelpers.getBasePath().resolve(fileButton6.getFilePath());
         Path battleSpritePath = PathHelpers.getBasePath().resolve(fileButton7.getFilePath());
         Path animationPath = PathHelpers.getBasePath().resolve(fileButton8.getFilePath());
         try {
-            battlespriteanimationManager.importDisassembly(bgPath, groundBasePalettePath, groundPalettePath, groundPath, battleSpritePath, weaponPalettePath, weaponPath, animationPath);
+            battlespriteanimationManager.importDisassembly(bgPath, groundBasePalettePath, groundPalettePath, groundPath, battleSpritePath, weaponPalettesPath, weaponPath, animationPath);
         } catch (Exception ex) {
             battlespriteanimationManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
@@ -664,31 +675,23 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        if(jComboBox2.getSelectedIndex()>=0 && battleSpriteAnimationLayoutPanel!=null){
-            BattleSprite battlesprite = battlespriteanimationManager.getBattlespriteManager().getBattleSprite();
-            Palette[] palettes = battlesprite.getPalettes();
-            Tileset[] frames = battlesprite.getFrames();
-            for(int i=0;i<frames.length;i++){
-                for(int j=0;j<frames[i].getTiles().length;j++){
-                    frames[i].getTiles()[j].setPalette(palettes[jComboBox2.getSelectedIndex()]);
-                }
+        if (jComboBox2.getSelectedIndex() >= 0 && battleSpriteAnimationLayoutPanel != null) {
+            BattleSprite battlesprite = battlespriteanimationManager.getBattleSprite();
+            if (battlesprite != null) {
+                Palette[] palettes = battlesprite.getPalettes();
+                battlesprite.setRenderPalette(palettes[jComboBox2.getSelectedIndex()]);
+                battleSpriteAnimationLayoutPanel.setBattlesprite(battlesprite);
+                repaintEditorLayout();
             }
-            battleSpriteAnimationLayoutPanel.setBattlesprite(battlesprite);
-            repaintEditorLayout();
         } 
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        if(jComboBox3.getSelectedIndex()>=0 && battleSpriteAnimationLayoutPanel!=null){
-            WeaponSprite weaponsprite = battlespriteanimationManager.getWeaponspriteManager().getWeaponsprite();
-            if(weaponsprite!=null){
-                Palette[] palettes = battlespriteanimationManager.getWeaponspriteManager().getPalettes();
-                Tileset[] frames = weaponsprite.getFrames();
-                for (int f = 0; f < frames.length; f++) {
-                    for(int i=0; i < frames[f].getTiles().length; i++) {
-                        frames[f].getTiles()[i].setPalette(palettes[jComboBox3.getSelectedIndex()]);
-                    }
-                }
+        if (jComboBox3.getSelectedIndex() >= 0 && battleSpriteAnimationLayoutPanel != null) {
+            WeaponSprite weaponsprite = battlespriteanimationManager.getWeaponsprite();
+            if (weaponsprite != null) {
+                Palette[] palettes = battlespriteanimationManager.getWeaponPalettes();
+                weaponsprite.setPalette(palettes[jComboBox3.getSelectedIndex()]);
                 battleSpriteAnimationLayoutPanel.setWeaponsprite(weaponsprite);
                 repaintEditorLayout();
             }
@@ -716,7 +719,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        BattleSprite battleSprite = battlespriteanimationManager.getBattlespriteManager().getBattleSprite();
+        BattleSprite battleSprite = battlespriteanimationManager.getBattleSprite();
         if (battleSprite != null && battleSpriteAnimationLayoutPanel.hasData()) {
             if (jCheckBox2.isSelected()) {
                 battleSpriteAnimationLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true, false);
@@ -742,19 +745,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
             repaintEditorLayout();
         }
     }
-    
-    /*private void animationFrameDataChanged(TableModelEvent evt) {
-        
-        if (selectedEyesRow != tableEyes.jTable.getSelectedRow()) {
-            selectedEyesRow = tableEyes.jTable.getSelectedRow();
-            Portrait portrait = portraitLayoutPanel.getPortrait();
-            if (portrait != null) {
-                portrait.setEyeTiles(eyeTable.getTableData(int[][].class));
-                portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
-            }
-            repaintEditorLayout();
-        }
-    }*/
     
     /**
      * To create a new Main Editor, copy the below code
