@@ -38,6 +38,11 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
             return true;
         }
     }
+ 
+    @Override
+    public boolean isRowLocked(int row) {
+        return row == 0;
+    }
 
     @Override
     protected BattleSpriteAnimationFrame createBlankItem(int row) {

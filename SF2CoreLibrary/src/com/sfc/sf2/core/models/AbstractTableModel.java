@@ -86,7 +86,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     
     public boolean addRow(int row) {
         if (rowLimit > -1 && tableItems.size() >= rowLimit) {
-            Console.logger().finest("Cannot create new row because already at limit");
+            Console.logger().warning("WARNING Cannot create new row because already at limit");
             return false;
         }
         if (tableItems.isEmpty() || row < 0 || row >= tableItems.size()) {
@@ -117,7 +117,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     
     private void cloneRow(int row, int addOffset) {
         if (rowLimit > -1 && tableItems.size() >= rowLimit) {
-            Console.logger().finest("Cannot clone item because already at limit");
+            Console.logger().warning("WARNING Cannot clone item because already at limit");
             return;
         }
         T item;
@@ -131,7 +131,11 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     
     public SelectionInterval removeRows(int start, int end) {
         for (int i = end; i >= start; i--) {
-            removeRow(i);
+            if (isRowLocked(i)) {
+                Console.logger().warning("WARNING Cannot delete item because row " + i + " is locked");
+            } else {
+                removeRow(i);
+            }
         }
         fireTableRowsDeleted(start, end);
         if (tableItems.isEmpty()) {
@@ -157,8 +161,17 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     
     public SelectionInterval shiftUp(int start, int end) {
         if (start <= 0) {
-            Console.logger().finest("Cannot shift up because selection is already at the top");
+            Console.logger().warning("WARNING Cannot shift up because selection is already at the top");
             return new SelectionInterval(start, end);
+        } else if (isRowLocked(start-1)) {
+            Console.logger().warning("WARNING Cannot shift items up row " + (start-1) + " is locked");
+            return new SelectionInterval(start, end);
+        }
+        for (int i = start; i <= end; i++) {
+            if (isRowLocked(i)) {
+                Console.logger().warning("WARNING Cannot shift items up because row " + i + " is locked");
+                return new SelectionInterval(start, end);
+            }
         }
         shiftItemsUp(start, end);
         fireTableRowsDeleted(start, end);
@@ -172,8 +185,17 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     
     public SelectionInterval shiftDown(int start, int end) {
         if (end >= tableItems.size()-1) {
-            Console.logger().finest("Cannot shift down because selection is already at the bottom");
+            Console.logger().warning("WARNING Cannot shift down because selection is already at the bottom");
             return new SelectionInterval(start, end);
+        } else if (isRowLocked(end+1)) {
+            Console.logger().warning("WARNING Cannot shift items up row " + (end+1) + " is locked");
+            return new SelectionInterval(start, end);
+        }
+        for (int i = start; i <= end; i++) {
+            if (isRowLocked(i)) {
+                Console.logger().warning("WARNING Cannot shift items up because row " + i + " is locked");
+                return new SelectionInterval(start, end);
+            }
         }
         shiftItemsDown(start, end);
         fireTableRowsDeleted(start, end);
@@ -188,6 +210,10 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     @Override
     public boolean isCellEditable(int row, int column) {
         return true;
+    }
+ 
+    public boolean isRowLocked(int row) {
+        return false;
     }
     
     @Override
