@@ -10,7 +10,6 @@ import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationManager;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.weaponsprite.WeaponSprite;
@@ -102,7 +101,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     private void initComponents() {
 
         battleSpriteAnimationFramesModel = new com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationFramesTableModel();
-        battleSpriteAnimationModel = new com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationPropertiesTableModel();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -882,7 +880,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanelWeapon;
     private com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationFramesTableModel battleSpriteAnimationFramesModel;
     private com.sfc.sf2.battlesprite.animation.gui.BattleSpriteAnimationLayoutPanel battleSpriteAnimationLayoutPanel;
-    private com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationPropertiesTableModel battleSpriteAnimationModel;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;

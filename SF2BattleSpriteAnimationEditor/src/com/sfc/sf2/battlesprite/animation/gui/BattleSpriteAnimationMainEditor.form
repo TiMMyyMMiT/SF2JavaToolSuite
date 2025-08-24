@@ -4,8 +4,6 @@
   <NonVisualComponents>
     <Component class="com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationFramesTableModel" name="battleSpriteAnimationFramesModel">
     </Component>
-    <Component class="com.sfc.sf2.battlesprite.animation.models.BattleSpriteAnimationPropertiesTableModel" name="battleSpriteAnimationModel">
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>

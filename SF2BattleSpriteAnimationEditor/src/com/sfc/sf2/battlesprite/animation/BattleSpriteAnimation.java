@@ -20,8 +20,8 @@ public class BattleSpriteAnimation {
     private byte spellAnim;
     private boolean endSpellAnim;
 
-    public BattleSpriteAnimation(BattleSpriteAnimationFrame[] frames, byte spellInitFrame, byte spellAnim, boolean endSpellAnim) {
-        this.type = BattleSpriteType.ENEMY;
+    public BattleSpriteAnimation(BattleSpriteType type, BattleSpriteAnimationFrame[] frames, byte spellInitFrame, byte spellAnim, boolean endSpellAnim) {
+        this.type = type;
         this.frames = frames;
         this.spellInitFrame = spellInitFrame;
         this.spellAnim = spellAnim;
@@ -74,11 +74,11 @@ public class BattleSpriteAnimation {
     
     @Override
     public BattleSpriteAnimation clone() {
-        return new BattleSpriteAnimation(frames, spellInitFrame, spellAnim, endSpellAnim);
+        return new BattleSpriteAnimation(type, frames, spellInitFrame, spellAnim, endSpellAnim);
     }
         
-    public static BattleSpriteAnimation EmptyAnimation() {
+    public static BattleSpriteAnimation EmptyAnimation(BattleSpriteType type) {
         BattleSpriteAnimationFrame[] frames = new BattleSpriteAnimationFrame[] { BattleSpriteAnimationFrame.EmptyFrame() };
-        return new BattleSpriteAnimation(frames, (byte)0, (byte)0, true);
+        return new BattleSpriteAnimation(type, frames, (byte)0, (byte)0, true);
     }
 }
