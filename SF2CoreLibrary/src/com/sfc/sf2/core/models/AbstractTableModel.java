@@ -77,68 +77,112 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
             return;
         }
         tableItems.set(row, setValue(tableItems.get(row), col, value));
-        fireTableDataChanged();
+        fireTableCellUpdated(row, col);
     }
     
     public boolean canAddMoreRows() {
         return rowLimit == -1 || tableItems.size() < rowLimit;
     }
     
-    public void addRow(int row) {
-        if (rowLimit == -1 || tableItems.size() < rowLimit) {
-            if (row < 0 || tableItems.size() == 0) {
-                tableItems.add(createBlankItem(tableItems.size()));
-            } else {
-                tableItems.add(row+1, createBlankItem(row+1));
-            }
-            fireTableDataChanged();
+    public boolean addRow(int row) {
+        if (rowLimit > -1 && tableItems.size() >= rowLimit) {
+            Console.logger().finest("Cannot create new row because already at limit");
+            return false;
+        }
+        if (tableItems.isEmpty() || row < 0 || row >= tableItems.size()) {
+            tableItems.add(createBlankItem(tableItems.size()));
+            fireTableRowsInserted(0, 0);
+            return true;
+        } else {
+            tableItems.add(row+1, createBlankItem(row+1));
+            fireTableRowsInserted(row+1, row+1);
+            return true;
         }
     }
     
-    public void cloneRow(int row, int addOffset) {
-        if (rowLimit == -1 || tableItems.size() < rowLimit) {
-            T item;
-            if (tableItems.size() == 0 || row < 0 || row >= tableItems.size()) {
-                item = createBlankItem(row);
-            } else {
-                item = cloneItem(tableItems.get(row));
-            }
-            tableItems.add(row+addOffset, item);
-            fireTableDataChanged();
+    public SelectionInterval cloneRows(int start, int end) {
+        for (int i = end; i >= start; i--) {
+            cloneRow(i, end+1);
+        }
+        fireTableRowsInserted(start, end);
+        int dif = end - start;
+        start = end+1;
+        end = start+dif;
+        if (start >= tableItems.size())
+            start = tableItems.size()-1;
+        if (end >= tableItems.size())
+            end = tableItems.size()-1;
+        return new SelectionInterval(start, end);
+    }
+    
+    private void cloneRow(int row, int addOffset) {
+        if (rowLimit > -1 && tableItems.size() >= rowLimit) {
+            Console.logger().finest("Cannot clone item because already at limit");
+            return;
+        }
+        T item;
+        if (tableItems.isEmpty() || row < 0 || row >= tableItems.size()) {
+            item = createBlankItem(row);
+        } else {
+            item = cloneItem(tableItems.get(row));
+        }
+        tableItems.add(addOffset, item);
+    }
+    
+    public SelectionInterval removeRows(int start, int end) {
+        for (int i = end; i >= start; i--) {
+            removeRow(i);
+        }
+        fireTableRowsDeleted(start, end);
+        if (tableItems.isEmpty()) {
+            return new SelectionInterval(-1, -1);
+        } else {
+            int selection = start;
+            if (selection >= tableItems.size())
+                selection = tableItems.size()-1;
+            return new SelectionInterval(selection, selection);
         }
     }
     
-    public void removeRow(int row) {
-        if (tableItems.size() > 0) {
+    private void removeRow(int row) {
+        if (!tableItems.isEmpty()) {
             if (row >= 0) {
                 tableItems.remove(row);
+                fireTableRowsDeleted(row, row);
             } else {
                 tableItems.remove(tableItems.size()-1);
             }
-            fireTableDataChanged();
         }
     }
     
-    public boolean shiftUp(int row, int range) {
-        if (row < 1 || row+range > tableItems.size()) {
-            Console.logger().finest("Cannot shift up because selection is out of range");
-            return false;
+    public SelectionInterval shiftUp(int start, int end) {
+        if (start <= 0) {
+            Console.logger().finest("Cannot shift up because selection is already at the top");
+            return new SelectionInterval(start, end);
         }
-        T item = tableItems.remove(row-1);
-        tableItems.add(row+range-1, item);
-        fireTableDataChanged();
-        return true;
+        shiftItemsUp(start, end);
+        fireTableRowsDeleted(start, end);
+        return new SelectionInterval(start-1, end-1);
     }
     
-    public boolean shiftDown(int row, int range) {
-        if (row < 0 || row+range+1 > tableItems.size()) {
-            Console.logger().finest("Cannot shift down because selection is out of range");
-            return false;
+    private void shiftItemsUp(int start, int end) {
+        T item = tableItems.remove(start-1);
+        tableItems.add(end, item);
+    }
+    
+    public SelectionInterval shiftDown(int start, int end) {
+        if (end >= tableItems.size()-1) {
+            Console.logger().finest("Cannot shift down because selection is already at the bottom");
+            return new SelectionInterval(start, end);
         }
-        T item = tableItems.remove(row+range);
-        tableItems.add(row, item);
-        fireTableDataChanged();
-        return true;
+        shiftItemsDown(start, end);
+        fireTableRowsDeleted(start, end);
+        return new SelectionInterval(start+1, end+1);
+    }
+    
+    private void shiftItemsDown(int start, int end) {
+        T item = tableItems.remove(end+1);
+        tableItems.add(start, item);
     }
  
     @Override
