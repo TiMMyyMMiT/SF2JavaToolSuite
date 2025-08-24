@@ -92,8 +92,8 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
         for (byte i=1; i < frameCount; i++) {
             frame = item.getFrames()[i];
             byte battleSpriteIndex = frame.getBattleSpriteIndex();
-            if (battleSpriteIndex == item.getFrames()[i-1].getBattleSpriteIndex()) {
-                battleSpriteIndex = 0xF;    //Disasm stores value 0xF to mean "same as previous frame"
+            if (i >= 2 && battleSpriteIndex == item.getFrames()[i-1].getBattleSpriteIndex()) {
+                battleSpriteIndex = 0xF;    //Disasm stores value 0xF to mean "same as previous frame" (ignore frames 0-1 because frame 0 is core data)
             }
             animationFileBytes[i*offset+0] = battleSpriteIndex;
             animationFileBytes[i*offset+1] = frame.getDuration();
