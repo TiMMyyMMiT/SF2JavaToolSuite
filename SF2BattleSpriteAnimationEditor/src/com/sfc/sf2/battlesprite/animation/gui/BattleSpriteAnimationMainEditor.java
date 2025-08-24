@@ -16,7 +16,9 @@ import com.sfc.sf2.weaponsprite.WeaponSprite;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableColumnModel;
 
@@ -43,6 +45,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         
         battleSpriteAnimationLayoutPanel.setFrameUpdatedListener(this::onAnimationFrameUpdated);
         tableFrames.addTableModelListener(this::onTableFrameDataChanged);
+        tableFrames.addListSelectionListener(this::onTableFrameSelectionChanged);
         TableColumnModel columns = tableFrames.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(50);
     }
@@ -386,7 +389,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         );
         battleSpriteAnimationLayoutPanelLayout.setVerticalGroup(
             battleSpriteAnimationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 359, Short.MAX_VALUE)
+            .addGap(0, 362, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(battleSpriteAnimationLayoutPanel);
@@ -691,11 +694,11 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -806,6 +809,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         if (battleSpriteAnimationLayoutPanel.hasData() && !battleSpriteAnimationLayoutPanel.isAnimating()) {
             int frame = (int)jSpinner1.getModel().getValue();
             battleSpriteAnimationLayoutPanel.setFrame(frame);
+            tableFrames.jTable.setRowSelectionInterval(frame, frame);
             repaintEditorLayout();
         }
     }//GEN-LAST:event_jSpinner1StateChanged
@@ -858,6 +862,16 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
 
     private void onAnimationFrameUpdated(ActionEvent e) {
         jSpinner1.setValue(e.getID());
+        tableFrames.jTable.setRowSelectionInterval(e.getID(), e.getID());
+    }
+    
+    private void onTableFrameSelectionChanged(ListSelectionEvent evt) {
+        if (evt.getValueIsAdjusting() || evt.getSource() == null) return;
+        int selection = ((ListSelectionModel)evt.getSource()).getAnchorSelectionIndex();
+        if (selection != (int)jSpinner1.getValue()) {
+            jSpinner1.setValue(selection);
+            repaintEditorLayout();
+        }
     }
     
     private void onTableFrameDataChanged(TableModelEvent evt) {

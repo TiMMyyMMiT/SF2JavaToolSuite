@@ -296,9 +296,6 @@
                         <Property name="messageText" type="java.lang.String" value="&lt;html&gt;This is a test message. See how the info buttons can teach you.&lt;br&gt;You can set the &lt;b&gt;&quot;messageText&quot;&lt;/b&gt; field to make a message popup by default, or you can listen to the &lt;b&gt;ActionPerformed&lt;/b&gt; event.&lt;br&gt;&lt;br&gt;&lt;i&gt;If the text has any newlines then html tags don&apos;t seem to work.&lt;/i&gt;&lt;br&gt;&lt;br&gt;The bad news is that &lt;a href=&quot;https://github.com/ShiningForceCentral&quot;&gt;hyperlinks do not work!&lt;/a&gt;&lt;/html&gt;"/>
                         <Property name="text" type="java.lang.String" value=""/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="infoButton1ActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton1">
                       <Properties>
