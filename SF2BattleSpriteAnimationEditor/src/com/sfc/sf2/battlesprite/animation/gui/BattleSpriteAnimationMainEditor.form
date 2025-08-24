@@ -146,10 +146,14 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jButton18" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="fileButton7" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Component id="fileButton7" alignment="0" pref="372" max="32767" attributes="0"/>
                                           <Component id="accordionPanelWeapon" alignment="0" max="32767" attributes="0"/>
                                           <Component id="accordionPanelEnvironment" alignment="1" max="32767" attributes="0"/>
-                                          <Component id="fileButton8" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="fileButton8" pref="340" max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="infoButton5" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
@@ -165,7 +169,10 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="fileButton7" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
+                                          <Component id="infoButton5" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="jButton18" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -328,6 +335,12 @@
                               <Properties>
                                 <Property name="filePath" type="java.lang.String" value=".\u005callies\u005canimations\u005callyanimation000.bin" containsInvalidXMLChars="true"/>
                                 <Property name="labelText" type="java.lang.String" value="Battle sprite animation :"/>
+                              </Properties>
+                            </Component>
+                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton5">
+                              <Properties>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;By default, ally animations 0-39 are &lt;i&gt;attack&lt;/&gt; animations, 40-79 are &lt;i&gt;dodge&lt;/&gt; animations, 80+ for &lt;i&gt;special&lt;/&gt; animations.&lt;br&gt;See &lt;b&gt;SF2Enums&lt;/b&gt; &quot;; enum AllyBattleAnimations&quot;.&lt;br&gt;&lt;br&gt;By default, enemy animations 0-59 are &lt;i&gt;attack&lt;/&gt; animations, 60-117 are &lt;i&gt;dodge&lt;/&gt; animations, 118+ for &lt;i&gt;special&lt;/&gt; animations.&lt;br&gt;See &lt;b&gt;SF2Enums&lt;/b&gt; &quot;; enum EnemyBattleAnimations&quot;.&lt;/html&gt;"/>
+                                <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>
                           </SubComponents>
