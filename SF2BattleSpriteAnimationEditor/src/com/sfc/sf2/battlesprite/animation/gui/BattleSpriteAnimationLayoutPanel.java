@@ -148,16 +148,20 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     public void setAnimation(BattleSpriteAnimation animation) {
         this.animation = animation;
     }
+    
+    public int getFrame() {
+        return currentAnimationFrame;
+    }
 
     public void setFrame(int currentFrame) {
         if (animation == null) return;
         if (this.currentAnimationFrame != currentFrame) {
             currentAnimationFrame = currentFrame;
             //If frame is marked with 0xF then find previous 'valid' frame
-            int bsFrame = animation.getFrames()[currentFrame].getIndex();
+            int bsFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
             while (bsFrame == 0xF && currentFrame > 0) {
                 currentFrame--;
-                bsFrame = animation.getFrames()[currentFrame].getIndex();
+                bsFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
             }
             this.currentBattleSpriteFrame = bsFrame;
             redraw();

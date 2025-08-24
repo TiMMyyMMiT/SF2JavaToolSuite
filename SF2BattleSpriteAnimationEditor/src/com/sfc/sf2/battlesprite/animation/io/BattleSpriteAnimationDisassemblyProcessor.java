@@ -43,7 +43,7 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
         }
 
         for (byte i=1; i < frames.length; i++) {
-            byte index = BinaryHelpers.getByte(data, i*offset+0);
+            byte battleSpriteIndex = BinaryHelpers.getByte(data, i*offset+0);
             byte duration = BinaryHelpers.getByte(data, i*offset+1);
             byte x = BinaryHelpers.getByte(data, i*offset+2);
             byte y = BinaryHelpers.getByte(data, i*offset+3);
@@ -55,9 +55,9 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
                 boolean behind = BinaryHelpers.getByte(data, i*offset+5) != 0;
                 byte weaponX = BinaryHelpers.getByte(data, i*offset+6);
                 byte weaponY = BinaryHelpers.getByte(data, i*offset+7);
-                frames[i] = new BattleSpriteAnimationFrame(index, duration, x, y, weaponFrame, weaponFlipX, weaponFlipY, behind, weaponX, weaponY);
+                frames[i] = new BattleSpriteAnimationFrame(battleSpriteIndex, duration, x, y, weaponFrame, weaponFlipX, weaponFlipY, behind, weaponX, weaponY);
             } else {
-                frames[i] = new BattleSpriteAnimationFrame(index, duration, x, y);
+                frames[i] = new BattleSpriteAnimationFrame(battleSpriteIndex, duration, x, y);
             }
         }
         return new BattleSpriteAnimation(frames, initFrame, spellAnim, endSpellAnim);
@@ -88,7 +88,7 @@ public class BattleSpriteAnimationDisassemblyProcessor extends AbstractDisassemb
 
         for (byte i=1; i < frameCount; i++) {
             frame = item.getFrames()[i];
-            animationFileBytes[i*offset+0] = frame.getIndex();
+            animationFileBytes[i*offset+0] = frame.getBattleSpriteIndex();
             animationFileBytes[i*offset+1] = frame.getDuration();
             animationFileBytes[i*offset+2] = frame.getX();
             animationFileBytes[i*offset+3] = frame.getY();

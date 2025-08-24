@@ -15,23 +15,24 @@ import com.sfc.sf2.core.models.AbstractTableModel;
 public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<BattleSpriteAnimationFrame> {
     
     public BattleSpriteAnimationFramesTableModel() {
-        super(new String[] { "Index", "Duration", "X", "Y", "Weapon Frame", "H Flip", "V Flip", "Behind", "Weapon X", "Weapon Y" }, 255);
+        super(new String[] { "Frame", "Battlesprite", "Duration", "X", "Y", "Weapon Frame", "H Flip", "V Flip", "Behind", "Weapon X", "Weapon Y" }, 255);
     }
 
     @Override
     public Class<?> getColumnType(int col) {
         switch (col) {
-            case 5: case 6: case 7: return Boolean.class;
+            case 6: case 7: case 8: return Boolean.class;
             default: return Byte.class;
         }
     }
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        if (row == 0 && column <= 3) {
+        if (column == 0) {
+            return false;   //Cannot edit the index row
+        } else if (row == 0 && column <= 4) {
             return false;   //Core data for first frame cannot be edited
-        }
-        if ((byte)getValueAt(row, 4) == -1 && column >= 4) {
+        } else if ((byte)getValueAt(row, 5) == -1 && column >= 5) {
             return false;   //Enemy weapon data cannot be edited
         } else {
             return true;
@@ -49,18 +50,19 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
     }
 
     @Override
-    protected Object getValue(BattleSpriteAnimationFrame item, int col) {
+    protected Object getValue(BattleSpriteAnimationFrame item, int row, int col) {
         switch (col) {
-            case 0: return item.getIndex();
-            case 1: return item.getDuration();
-            case 2: return item.getX();
-            case 3: return item.getY();
-            case 4: return item.getWeaponFrame();
-            case 5: return item.getWeaponFlipH();
-            case 6: return item.getWeaponFlipV();
-            case 7: return item.getWeaponBehind();
-            case 8: return item.getWeaponX();
-            case 9: return item.getWeaponY();
+            case 0: return row;
+            case 1: return item.getBattleSpriteIndex();
+            case 2: return item.getDuration();
+            case 3: return item.getX();
+            case 4: return item.getY();
+            case 5: return item.getWeaponFrame();
+            case 6: return item.getWeaponFlipH();
+            case 7: return item.getWeaponFlipV();
+            case 8: return item.getWeaponBehind();
+            case 9: return item.getWeaponX();
+            case 10: return item.getWeaponY();
         }
         return null;
     }
@@ -68,16 +70,17 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
     @Override
     protected BattleSpriteAnimationFrame setValue(BattleSpriteAnimationFrame item, int col, Object value) {
         switch (col) {
-            case 0: item.setIndex((byte)value); break;
-            case 1: item.setDuration((byte)value); break;
-            case 2: item.setX((byte)value); break;
-            case 3: item.setY((byte)value); break;
-            case 4: item.setWeaponFrame((byte)value); break;
-            case 5: item.setWeaponFlipH((boolean)value); break;
-            case 6: item.setWeaponFlipV((boolean)value); break;
-            case 7: item.setWeaponBehind((boolean)value); break;
-            case 8: item.setWeaponX((byte)value); break;
-            case 9: item.setWeaponY((byte)value); break;
+            case 0: break;
+            case 1: item.setBattleSpriteIndex((byte)value); break;
+            case 2: item.setDuration((byte)value); break;
+            case 3: item.setX((byte)value); break;
+            case 4: item.setY((byte)value); break;
+            case 5: item.setWeaponFrame((byte)value); break;
+            case 6: item.setWeaponFlipH((boolean)value); break;
+            case 7: item.setWeaponFlipV((boolean)value); break;
+            case 8: item.setWeaponBehind((boolean)value); break;
+            case 9: item.setWeaponX((byte)value); break;
+            case 10: item.setWeaponY((byte)value); break;
         }
         return item;
     }

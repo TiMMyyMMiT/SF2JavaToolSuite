@@ -43,7 +43,7 @@ public class BattleSpriteAnimationPropertiesTableModel extends AbstractTableMode
     }
 
     @Override
-    protected Object getValue(BattleSpriteAnimation item, int col) {
+    protected Object getValue(BattleSpriteAnimation item, int row, int col) {
         switch (col) {
             case 0: return item.getFrameCount();
             case 1: return item.getSpellInitFrame();

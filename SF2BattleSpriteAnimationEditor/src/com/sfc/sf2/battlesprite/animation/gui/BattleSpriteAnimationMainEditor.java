@@ -17,6 +17,7 @@ import com.sfc.sf2.weaponsprite.WeaponSprite;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -38,7 +39,10 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         
         accordionPanelEnvironment.setExpanded(false);
         accordionPanelWeapon.setExpanded(false);
+        
         tableFrames.addTableModelListener(this::onTableFrameDataChanged);
+        TableColumnModel columns = tableFrames.jTable.getColumnModel();
+        columns.getColumn(0).setMaxWidth(50);
     }
     
     @Override
@@ -341,7 +345,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         );
         battleSpriteAnimationLayoutPanelLayout.setVerticalGroup(
             battleSpriteAnimationLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 433, Short.MAX_VALUE)
+            .addGap(0, 397, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(battleSpriteAnimationLayoutPanel);
@@ -354,7 +358,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
         );
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
@@ -572,14 +576,16 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                .addComponent(tableFrames, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -713,7 +719,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         BattleSprite battleSprite = battlespriteanimationManager.getBattlespriteManager().getBattleSprite();
-        BattleSpriteAnimation anim; 
         if (battleSprite != null && battleSpriteAnimationLayoutPanel.hasData()) {
             if (jCheckBox2.isSelected()) {
                 battleSpriteAnimationLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true, false);
@@ -732,10 +737,12 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    int qwe = 0;
     private void onTableFrameDataChanged(TableModelEvent evt) {
-        Console.logger().info(String.format("Table data changed : %d. Row: (%d-%d), Column: %d", evt.getType(), evt.getFirstRow(), evt.getLastRow(), evt.getColumn()));
-        qwe++;
+        int frame = battleSpriteAnimationLayoutPanel.getFrame();
+        if (frame >= evt.getFirstRow() && frame <= evt.getLastRow()) {
+            battleSpriteAnimationLayoutPanel.redraw();
+            repaintEditorLayout();
+        }
     }
     
     /*private void animationFrameDataChanged(TableModelEvent evt) {

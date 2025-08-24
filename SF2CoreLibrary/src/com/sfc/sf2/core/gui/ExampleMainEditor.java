@@ -7,6 +7,7 @@ package com.sfc.sf2.core.gui;
 
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.core.gui.controls.Console;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -26,6 +27,9 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         
         //One-time setup
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        TableColumnModel columns = table1.jTable.getColumnModel();
+        columns.getColumn(0).setMaxWidth(50);
+        columns.getColumn(2).setMaxWidth(50);
     }
     
     @Override

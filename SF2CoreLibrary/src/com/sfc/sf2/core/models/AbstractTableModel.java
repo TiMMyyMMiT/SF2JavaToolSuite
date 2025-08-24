@@ -52,7 +52,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     public abstract Class<?> getColumnType(int col);
     protected abstract T createBlankItem(int row);
     protected abstract T cloneItem(T item);
-    protected abstract Object getValue(T item, int col);    
+    protected abstract Object getValue(T item, int row, int col);    
     protected abstract T setValue(T item, int col, Object value);
     
     
@@ -68,7 +68,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
         if (row < 0 || row >= tableItems.size() || col < 0 || col >= columns.length) {
             return null;
         }
-        return getValue(tableItems.get(row), col);
+        return getValue(tableItems.get(row), row, col);
     }
     
     @Override

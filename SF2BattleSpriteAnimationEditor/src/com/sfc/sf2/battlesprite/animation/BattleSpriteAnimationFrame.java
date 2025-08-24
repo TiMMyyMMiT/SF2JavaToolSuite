@@ -11,7 +11,7 @@ package com.sfc.sf2.battlesprite.animation;
  */
 public class BattleSpriteAnimationFrame {
     
-    private byte index;
+    private byte battleSpriteIndex;
     private byte duration;
     private byte x;
     private byte y;
@@ -26,8 +26,8 @@ public class BattleSpriteAnimationFrame {
     /**
      * For creating Ally animations
      */
-    public BattleSpriteAnimationFrame(byte index, byte duration, byte x, byte y, byte weaponFrame, boolean weaponFlipH, boolean weaponFlipV, boolean weaponBehind, byte weaponX, byte weaponY) {
-        this.index = index;
+    public BattleSpriteAnimationFrame(byte battleSpriteIndex, byte duration, byte x, byte y, byte weaponFrame, boolean weaponFlipH, boolean weaponFlipV, boolean weaponBehind, byte weaponX, byte weaponY) {
+        this.battleSpriteIndex = battleSpriteIndex;
         this.duration = duration;
         this.x = x;
         this.y = y;
@@ -42,8 +42,8 @@ public class BattleSpriteAnimationFrame {
     /**
      * For creating Enemy animations
      */
-    public BattleSpriteAnimationFrame(byte index, byte duration, byte x, byte y) {
-        this.index = index;
+    public BattleSpriteAnimationFrame(byte battleSpriteIndex, byte duration, byte x, byte y) {
+        this.battleSpriteIndex = battleSpriteIndex;
         this.duration = duration;
         this.x = x;
         this.y = y;
@@ -55,12 +55,12 @@ public class BattleSpriteAnimationFrame {
         this.weaponY = -1;
     }
     
-    public byte getIndex() {
-        return index;
+    public byte getBattleSpriteIndex() {
+        return battleSpriteIndex;
     }
 
-    public void setIndex(byte index) {
-        this.index = index;
+    public void setBattleSpriteIndex(byte battleSpriteIndex) {
+        this.battleSpriteIndex = battleSpriteIndex;
     }
 
     public byte getDuration() {
@@ -137,7 +137,7 @@ public class BattleSpriteAnimationFrame {
     
     @Override
     public BattleSpriteAnimationFrame clone() {
-        return new BattleSpriteAnimationFrame(index, duration, x, y, weaponFrame, weaponFlipH, weaponFlipV, weaponBehind, weaponX, weaponY);
+        return new BattleSpriteAnimationFrame(battleSpriteIndex, duration, x, y, weaponFrame, weaponFlipH, weaponFlipV, weaponBehind, weaponX, weaponY);
     }
         
     public static BattleSpriteAnimationFrame EmptyFrame() {
