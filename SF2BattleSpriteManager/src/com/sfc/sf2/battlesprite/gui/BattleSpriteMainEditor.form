@@ -699,7 +699,7 @@
                             </Component>
                             <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
                               <Properties>
-                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Idle anim speed :&lt;/b&gt; The rate that the idle anim (first 2 frames) updates.&lt;br&gt; Lower is faster.&lt;/html&gt;"/>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Idle anim speed :&lt;/b&gt; The rate that the idle anim (first 2 frames) updates.&lt;br&gt;60 = 1 second. Lower is faster.&lt;/html&gt;"/>
                                 <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>

@@ -439,7 +439,7 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
             }
         });
 
-        infoButton1.setMessageText("<html><b>Idle anim speed :</b> The rate that the idle anim (first 2 frames) updates.<br> Lower is faster.</html>");
+        infoButton1.setMessageText("<html><b>Idle anim speed :</b> The rate that the idle anim (first 2 frames) updates.<br>60 = 1 second. Lower is faster.</html>");
         infoButton1.setText("");
 
         infoButton2.setMessageText("<html><b>Status marker offset :</b> Indicates where status effects will be drawn from (e.g. sleep effect).<br>X,Y offset from the frame top-left corner of the battle sprite.<br>Generally placed around the head of the battle sprite.<br></html>");
@@ -738,6 +738,7 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         if (battleSprite != null) {
             battleSprite.setAnimSpeed((int)jSpinner4.getValue());
             if (battleSpriteLayoutPanel.isAnimating()) {
+                battleSpriteLayoutPanel.stopAnimation();
                 battleSpriteLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true);
             }
         }
