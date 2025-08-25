@@ -747,7 +747,10 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setStatusOffsetX((byte)jSpinner3.getValue());
-            repaintEditorLayout();
+            if (jCheckBox4.isSelected()) {
+                battleSpriteLayoutPanel.redraw();
+                repaintEditorLayout();
+            }
         }
     }//GEN-LAST:event_jSpinner3StateChanged
 
@@ -755,7 +758,10 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setStatusOffsetY((byte)jSpinner2.getValue());
-            repaintEditorLayout();
+            if (jCheckBox4.isSelected()) {
+                battleSpriteLayoutPanel.redraw();
+                repaintEditorLayout();
+            }
         }
     }//GEN-LAST:event_jSpinner2StateChanged
 
