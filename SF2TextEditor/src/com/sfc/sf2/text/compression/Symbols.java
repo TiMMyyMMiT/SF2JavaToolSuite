@@ -248,7 +248,7 @@ public class Symbols {
                                             "\\UNUSED",
                                             "\\UNUSED",
                                             "\\UNUSED",
-                                            "\\UNUSED",                                            
+                                            "\\UNUSED",
                                             "{DICT}",
                                             "{N}",
                                             "{D2}",
@@ -268,8 +268,4 @@ public class Symbols {
                                             "(START/EOL)",
                                             "\\UNUSED"
                                             };
-        
-    
-    
-    
 }

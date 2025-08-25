@@ -26,7 +26,7 @@ public class DisassemblyManager {
     public static final String HUFFMANTREES_FILENAME = "huffmantrees.bin";
     public static final String TEXTBANK_FILENAME = "textbankXX.bin";  
     
-    public static String[] importDisassembly(String basePath){
+    public static String[] importDisassembly(Path basePath){
         System.out.println("com.sfc.sf2.text.io.DisassemblyManager.importDisassembly() - Importing disassembly ...");
         DisassemblyManager.parseOffsets(basePath);
         DisassemblyManager.parseTrees(basePath);
@@ -43,10 +43,10 @@ public class DisassemblyManager {
         System.out.println("com.sfc.sf2.text.io.DisassemblyManager.exportDisassembly() - Disassembly exported.");        
     }    
     
-    private static void parseOffsets(String basePath){
+    private static void parseOffsets(Path basePath){
         try{
             System.out.println("com.sfc.sf2.text.io.DisassemblyManager.parseOffsets() - Parsing offsets ...");
-            Path path = Paths.get(basePath + HUFFMANTREEOFFSETS_FILENAME);
+            Path path = basePath.resolve(HUFFMANTREEOFFSETS_FILENAME);
             byte[] data = Files.readAllBytes(path);
             TextDecoder.parseOffsets(data);
             System.out.println("com.sfc.sf2.text.io.DisassemblyManager.parseOffsets() - Offsets parsed.");
@@ -55,10 +55,10 @@ public class DisassemblyManager {
         }
     }
     
-    private static void parseTrees(String basePath){
+    private static void parseTrees(Path basePath){
         try{
             System.out.println("com.sfc.sf2.text.io.DisassemblyManager.parseTrees() - Parsing trees ...");
-            Path path = Paths.get(basePath + HUFFMANTREES_FILENAME);
+            Path path = basePath.resolve(HUFFMANTREES_FILENAME);
             byte[] data = Files.readAllBytes(path);
             TextDecoder.parseTrees(data);
             System.out.println("com.sfc.sf2.text.io.DisassemblyManager.parseTrees() - Trees parsed.");            
@@ -67,13 +67,13 @@ public class DisassemblyManager {
         }
     }
     
-    private static String[] parseAllTextbanks(String basePath){
+    private static String[] parseAllTextbanks(Path basePath){
         System.out.println("com.sfc.sf2.text.io.DisassemblyManager.parseTextbank() - Parsing textbank ...");
         String[] gamescript = new String[0];        
         try{
             for(int i=0;i<100;i++){
                 String index = String.format("%02d", i);
-                Path path = Paths.get(basePath + TEXTBANK_FILENAME.replace("XX.bin", index+".bin"));
+                Path path = basePath.resolve(TEXTBANK_FILENAME.replace("XX.bin", index+".bin"));
                 byte[] data = Files.readAllBytes(path); 
                 String[] textbankStrings = TextDecoder.parseTextbank(data, i);
                 String[] workingStringArray = Arrays.copyOf(gamescript, gamescript.length + textbankStrings.length);
@@ -124,7 +124,5 @@ public class DisassemblyManager {
         } catch (IOException ex) {
             Logger.getLogger(TextManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
-
-    
+    }
 }

@@ -66,8 +66,8 @@ public class FileButton extends javax.swing.JPanel {
         jTextFieldFile = new javax.swing.JTextField();
         jButtonFile = new javax.swing.JButton();
 
-        setMinimumSize(new java.awt.Dimension(250, 26));
-        setPreferredSize(new java.awt.Dimension(400, 26));
+        setMinimumSize(new java.awt.Dimension(250, 25));
+        setPreferredSize(new java.awt.Dimension(400, 25));
 
         jLabelFile.setText("Filename :");
 
