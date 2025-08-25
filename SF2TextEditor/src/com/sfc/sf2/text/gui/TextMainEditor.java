@@ -707,7 +707,17 @@ public class TextMainEditor extends AbstractMainEditor {
     }
     
     private void onFilterChanged(ChangeEvent e) {
-        filterRows(((JTextField)e.getSource()).getText());
+        int selected = -1;
+        int row = tableText.jTable.getSelectedRow();
+        if (row != -1) {
+            selected = tableText.jTable.convertRowIndexToModel(row);
+        }
+        String text = ((JTextField)e.getSource()).getText();
+        filterRows(text);
+        if (selected != -1) {
+            selected = tableText.jTable.convertRowIndexToView(selected);
+            tableText.jTable.scrollRectToVisible(new Rectangle(tableText.jTable.getCellRect(selected, 2, true)));
+        }
     }
     
     private void filterRows(String filter) {
