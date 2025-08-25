@@ -71,7 +71,9 @@ public abstract class AbstractLayoutPanel extends JPanel {
             g.drawImage(coordsImageX, offsetX, 0, this);
             g.drawImage(coordsImageY, 0, offsetY, this);
             g.drawImage(paintImage(dims), offsetX, offsetY, this);
-            setSize(currentImage.getWidth()+offsetX, currentImage.getHeight()+offsetY);
+            Dimension size = new Dimension(currentImage.getWidth()+offsetX, currentImage.getHeight()+offsetY);
+            setSize(size);
+            setPreferredSize(size);
         }
     }
     

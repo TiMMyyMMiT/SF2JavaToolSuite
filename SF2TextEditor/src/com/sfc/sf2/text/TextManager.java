@@ -7,9 +7,16 @@ package com.sfc.sf2.text;
 
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.TilesetManager;
+import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.text.io.AsmManager;
 import com.sfc.sf2.text.io.TxtManager;
 import com.sfc.sf2.text.io.DisassemblyManager;
+import com.sfc.sf2.vwfont.FontSymbol;
+import com.sfc.sf2.vwfont.VWFontManager;
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -17,12 +24,27 @@ import java.nio.file.Path;
  * @author wiz
  */
 public class TextManager extends AbstractManager {
+    private final TilesetManager tilesetManager = new TilesetManager();
+    private final VWFontManager fontManager = new VWFontManager();
     
     private String[] gamescript;
+    private Tileset baseTiles;
+    private FontSymbol[] fontSymbols;
 
     @Override
     public void clearData() {
+        tilesetManager.clearData();
+        fontManager.clearData();
+        
         gamescript = null;
+        if (baseTiles != null) {
+            baseTiles.clearIndexedColorImage(true);
+        }
+        if (fontSymbols != null) {
+            for (int i = 0; i < fontSymbols.length; i++) {
+                fontSymbols[i].clearIndexedColorImage();
+            }
+        }
     }
        
     public String[] importDisassembly(Path basePath) {
@@ -58,11 +80,33 @@ public class TextManager extends AbstractManager {
         return gamescript;
     }
     
+    public Tileset importBaseTiles(Path palettePath, Path tilesetPath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importBaseTiles");
+        baseTiles = tilesetManager.importDisassembly(palettePath, tilesetPath, TilesetDisassemblyProcessor.TilesetCompression.STACK, 16);
+        Console.logger().finest("EXITING importBaseTiles");
+        return baseTiles;
+    }
+    
+    public FontSymbol[] importVWFonts(Path vwFontPath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importVWFonts");
+        fontSymbols = fontManager.importDisassembly(vwFontPath);
+        Console.logger().finest("EXITING importVWFonts");
+        return fontSymbols;
+    }
+    
     public String[] getGameScript() {
         return gamescript;
     }
     
     public void setGameScript(String[] gamescript) {
         this.gamescript = gamescript;
+    }
+    
+    public Tileset getBaseTiles() {
+        return baseTiles;
+    }
+    
+    public FontSymbol[] getFontSymbols() {
+        return fontSymbols;
     }
 }

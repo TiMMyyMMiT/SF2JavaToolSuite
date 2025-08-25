@@ -24,11 +24,13 @@ public class FontSymbol {
     private int width;
     private int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
     private BufferedImage indexedColorImage = null;
+    private Palette palette;
 
     public FontSymbol(int id, int[] pixels, int width) {
         this.id = id;
         this.pixels = pixels;
         this.width = width;
+        palette = DEFAULT_PALETTE;
     }
     
     public int[] getPixels() {
@@ -40,7 +42,12 @@ public class FontSymbol {
     }
     
     public Palette getPalette() {
-        return DEFAULT_PALETTE;
+        return palette;
+    }
+    
+    public void setpalette(Palette palette) {
+        this.palette = palette;
+        clearIndexedColorImage();
     }
     
     public int getId() {
@@ -61,7 +68,7 @@ public class FontSymbol {
 
     public BufferedImage getIndexColoredImage() {
         if(indexedColorImage == null) {
-            indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, DEFAULT_PALETTE.getIcm());
+            indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, palette.getIcm());
             byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
             for (int j = 0; j < PIXEL_HEIGHT; j++) {
                 for (int i = 0; i < PIXEL_WIDTH; i++) {
@@ -73,8 +80,10 @@ public class FontSymbol {
     }
     
     public void clearIndexedColorImage() {
-        indexedColorImage.flush();
-        indexedColorImage = null;
+        if (indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+        }
     }
     
     public static FontSymbol EmptySymbol() {
