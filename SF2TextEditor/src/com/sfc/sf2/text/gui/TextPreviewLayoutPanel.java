@@ -178,8 +178,9 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
                 return "00";
             case "N":
             case "W1":
-            case "W2":
                 return "\n";
+            case "W2":
+                return "";
             case "DICT":
                 return "item 1, item 2, item 3...";
             case "D1":
