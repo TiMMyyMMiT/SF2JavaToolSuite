@@ -417,7 +417,7 @@ public class TextMainEditor extends AbstractMainEditor {
                 jPanel5Layout.setVerticalGroup(
                     jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                        .addComponent(jTabbedPane2)
                         .addContainerGap())
                 );
 
@@ -490,7 +490,7 @@ public class TextMainEditor extends AbstractMainEditor {
                     }
                 });
 
-                infoButton1.setMessageText("<html>Filters the textbank by the text entered<br>Filter supports REGEX.</html>");
+                infoButton1.setMessageText("<html>Filters the textbank by the text entered<br>Filter text is not case-sensitive.<br>Filter supports REGEX.</html>");
                 infoButton1.setText("");
 
                 infoButton2.setMessageText("<html>Enter a value and press <b>enter</b> to jump to the corresponding <i>Id</i> or <i>Hex Id</i>.<br>Where a value corresponds to both an <i>Id</i> and <i>Hex Id</i>, press <b>enter</b> several times to toggle between the two.</html>");
@@ -582,7 +582,7 @@ public class TextMainEditor extends AbstractMainEditor {
                     jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGap(0, 1066, Short.MAX_VALUE)
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1066, Short.MAX_VALUE))
+                        .addComponent(jSplitPane2))
                 );
                 jPanel16Layout.setVerticalGroup(
                     jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -599,7 +599,7 @@ public class TextMainEditor extends AbstractMainEditor {
                 layout.setHorizontalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1066, Short.MAX_VALUE)
+                        .addComponent(jSplitPane1)
                         .addGap(0, 0, 0))
                 );
                 layout.setVerticalGroup(
@@ -724,7 +724,7 @@ public class TextMainEditor extends AbstractMainEditor {
         RowFilter<TableModel, Object> rf = null;
         //If current expression doesn't parse, don't update.
         try {
-            rf = RowFilter.regexFilter(filter, 2);
+            rf = RowFilter.regexFilter("(?i)"+filter, 2);
         } catch (java.util.regex.PatternSyntaxException e) {
             return;
         }
