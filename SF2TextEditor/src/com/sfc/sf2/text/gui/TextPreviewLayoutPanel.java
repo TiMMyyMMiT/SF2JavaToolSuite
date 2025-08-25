@@ -95,20 +95,27 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     void writeText(Graphics graphics) {
         graphics.setColor(Color.WHITE);
+        char c;
         int x = FONT_START_X;
         int y = FONT_START_HEIGHT;
         int next;
         for (int i = 0; i < text.length(); i++) {
-            FontSymbol symbol = findSymbol(text.charAt(i));
-            if (symbol == null) { symbol = EMPTY_SYMBOL; }
-            next = x+symbol.getWidth()+1;
-            if (next >= FONT_END_X) {   //Symbol will overrun
+            c = text.charAt(i);
+            if (c == '\n') {
                 y += FONT_LINE_HEIGHT;
                 x = FONT_START_X;
+            } else {
+                FontSymbol symbol = findSymbol(c);
+                if (symbol == null) { symbol = EMPTY_SYMBOL; }
                 next = x+symbol.getWidth()+1;
+                if (next >= FONT_END_X) {   //Symbol will overrun
+                    y += FONT_LINE_HEIGHT;
+                    x = FONT_START_X;
+                    next = x+symbol.getWidth()+1;
+                }
+                graphics.drawImage(symbol.getIndexColoredImage(), x, y, null);
+                x = next;
             }
-            graphics.drawImage(symbol.getIndexColoredImage(), x, y, null);
-            x = next;
         }
     }
     
@@ -122,8 +129,72 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         return EMPTY_SYMBOL;
     }
     
+    private String parseTags(String text) {
+        if (text == null) return null;
+        char c;
+        int i = 0;
+        int tagStart, tagEnd;
+        while (i < text.length()) {
+            c = text.charAt(i);
+            if (c == '{') {
+                tagStart = i;
+                do {
+                    i++;
+                    c = text.charAt(i);
+                } while (c != '}' && i < text.length());
+                tagEnd = i+1;
+                String replace = parseTag(text.substring(tagStart+1, tagEnd-1));
+                text = text.substring(0, tagStart) + replace + text.substring(tagEnd);
+                i = tagStart+replace.length();
+            } else {
+                i++;
+            }
+        }
+        return text;
+    }
+    
+    String parseTag(String tag) {
+        if (tag.startsWith("NAME;")) {  //Special case for name input
+            String numVal = tag.substring(5);
+            int val = -1;
+            try {
+                val = Integer.parseInt(numVal);
+            } catch (NumberFormatException e) {}
+            return val == -1 ? "INVALID" : "ALLY_"+val; //TODO load actual ally names
+        }
+        
+        switch (tag) {
+            case "LEADER":
+                return "BOWIE"; //TODO load actual leader name
+            case "NAME":
+                return "ALLY_X";
+            case "ITEM":
+                return "ITEM_X";
+            case "SPELL":
+                return "SPELL_X";
+            case "CLASS":
+                return "CLASS_X";
+            case "#":
+                return "00";
+            case "N":
+            case "W1":
+            case "W2":
+                return "\n";
+            case "DICT":
+                return "item 1, item 2, item 3...";
+            case "D1":
+            case "D2":
+            case "D3":
+            case "COLOR":
+            case "CLEAR":
+            case "START/EOL)":
+            default:
+                return "";
+        }
+    }
+    
     public void setText(String text) {
-        this.text = text;
+        this.text = parseTags(text);
         redraw();
     }
     
