@@ -86,8 +86,9 @@ public class FontSymbol {
         }
     }
     
+    private static final int[] EMPTY_PIXELS = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
     public static FontSymbol EmptySymbol() {
-        FontSymbol emptySymbol = new FontSymbol(-1, null, 2);
+        FontSymbol emptySymbol = new FontSymbol(-1, EMPTY_PIXELS, 2);
         return emptySymbol;
     }
 }

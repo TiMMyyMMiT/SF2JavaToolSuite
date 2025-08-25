@@ -12,6 +12,7 @@ import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
+import com.sfc.sf2.text.compression.Symbols;
 import com.sfc.sf2.vwfont.FontSymbol;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -62,20 +63,34 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     @Override
     protected void buildImage(Graphics graphics) {
         buildFrame(graphics);
-        writeText(graphics);
+        if (text != null) {
+            writeText(graphics);
+        }
     }
     
     void buildFrame(Graphics graphics) {
         Tile[] tiles = baseTiles.getTiles();
-        graphics.drawImage(tiles[PANEL_TILE_CORNER].getIndexedColorImage(), 0, 0, null);
-        graphics.drawImage(tiles[PANEL_TILE_CORNER].getIndexedColorImage(), PREVIEW_WIDTH-PIXEL_WIDTH, 0, null);
-        graphics.drawImage(tiles[PANEL_TILE_CORNER].getIndexedColorImage(), 0, PREVIEW_HEIGHT-PIXEL_HEIGHT, null);
-        graphics.drawImage(tiles[PANEL_TILE_CORNER].getIndexedColorImage(), PREVIEW_WIDTH-PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT, null);
-        graphics.drawImage(tiles[PANEL_TILE_HORIZONTAL].getIndexedColorImage(), PIXEL_WIDTH, 0, PREVIEW_WIDTH-PIXEL_WIDTH*2, PIXEL_HEIGHT, null);
-        graphics.drawImage(tiles[PANEL_TILE_HORIZONTAL].getIndexedColorImage(), PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT, PREVIEW_WIDTH-PIXEL_WIDTH*2, PIXEL_HEIGHT, null);
-        graphics.drawImage(tiles[PANEL_TILE_VERTICAL].getIndexedColorImage(), 0, PIXEL_HEIGHT, PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT*2, null);
-        graphics.drawImage(tiles[PANEL_TILE_VERTICAL].getIndexedColorImage(), PREVIEW_WIDTH-PIXEL_WIDTH, PIXEL_HEIGHT, PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT*2, null);
-        graphics.drawImage(tiles[PANEL_TILE_FILL].getIndexedColorImage(), PIXEL_WIDTH, PIXEL_HEIGHT, PREVIEW_WIDTH-PIXEL_WIDTH*2, PREVIEW_HEIGHT-PIXEL_HEIGHT*2, null);
+        drawTile(graphics, tiles[PANEL_TILE_CORNER], 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, false, false);
+        drawTile(graphics, tiles[PANEL_TILE_CORNER], PREVIEW_WIDTH-PIXEL_WIDTH, 0, PIXEL_WIDTH, PIXEL_HEIGHT, true, false);
+        drawTile(graphics, tiles[PANEL_TILE_CORNER], 0, PREVIEW_HEIGHT-PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT, false, true);
+        drawTile(graphics, tiles[PANEL_TILE_CORNER], PREVIEW_WIDTH-PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT, true, true);
+        drawTile(graphics, tiles[PANEL_TILE_HORIZONTAL], PIXEL_WIDTH, 0, PREVIEW_WIDTH-PIXEL_WIDTH*2, PIXEL_HEIGHT, false, false);
+        drawTile(graphics, tiles[PANEL_TILE_HORIZONTAL], PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT, PREVIEW_WIDTH-PIXEL_WIDTH*2, PIXEL_HEIGHT, false, true);
+        drawTile(graphics, tiles[PANEL_TILE_VERTICAL], 0, PIXEL_HEIGHT, PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT*2, false, false);
+        drawTile(graphics, tiles[PANEL_TILE_VERTICAL], PREVIEW_WIDTH-PIXEL_WIDTH, PIXEL_HEIGHT, PIXEL_WIDTH, PREVIEW_HEIGHT-PIXEL_HEIGHT*2, true, false);
+        drawTile(graphics, tiles[PANEL_TILE_FILL], PIXEL_WIDTH, PIXEL_HEIGHT, PREVIEW_WIDTH-PIXEL_WIDTH*2, PREVIEW_HEIGHT-PIXEL_HEIGHT*2, false, false);
+    }
+    
+    void drawTile(Graphics graphics, Tile tile, int x, int y, int width, int height, boolean flipH, boolean flipV) {
+        if (flipH) {
+            width *= -1;
+            x -= width;
+        }
+        if (flipV) {
+            height *= -1;
+            y -= height;
+        }
+        graphics.drawImage(tile.getIndexedColorImage(), x, y, width, height, null);
     }
     
     void writeText(Graphics graphics) {
@@ -83,9 +98,8 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         int x = FONT_START_X;
         int y = FONT_START_HEIGHT;
         int next;
-        text = "Testing symbols and such. String needs to be longer for testing.";
         for (int i = 0; i < text.length(); i++) {
-            FontSymbol symbol = fontSymbols[i%fontSymbols.length];  //TODO Get proper symbols
+            FontSymbol symbol = findSymbol(text.charAt(i));
             if (symbol == null) { symbol = EMPTY_SYMBOL; }
             next = x+symbol.getWidth()+1;
             if (next >= FONT_END_X) {   //Symbol will overrun
@@ -96,6 +110,16 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
             graphics.drawImage(symbol.getIndexColoredImage(), x, y, null);
             x = next;
         }
+    }
+    
+    private FontSymbol findSymbol(char symbolChar) {
+        String c = Character.toString(symbolChar);
+        for (int i = 0; i < Symbols.TABLE.length; i++) {
+            if (Symbols.TABLE[i].equals(c)) {
+                return fontSymbols[i-1];
+            }
+        }
+        return EMPTY_SYMBOL;
     }
     
     public void setText(String text) {

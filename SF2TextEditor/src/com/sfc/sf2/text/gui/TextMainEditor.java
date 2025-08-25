@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -44,16 +46,13 @@ public class TextMainEditor extends AbstractMainEditor {
         
         sorter = new TableRowSorter<>(textTableModel);
         tableText.jTable.setRowSorter(sorter);
+        tableText.addListSelectionListener(this::onSelectionChanged);
+        tableText.addTableModelListener(this::onTableDataChanged);
         TableColumnModel columns = tableText.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(50);
         columns.getColumn(1).setMaxWidth(50);
         
-        ListenersHelpers.addTextFieldChangeListener(jTextField1, new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                onFilterChanged(((JTextField)e.getSource()).getText());
-            }
-        });
+        ListenersHelpers.addTextFieldChangeListener(jTextField1, this::onFilterChanged);
     }
     
     @Override
@@ -437,7 +436,7 @@ public class TextMainEditor extends AbstractMainEditor {
                     jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                         .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
@@ -446,9 +445,9 @@ public class TextMainEditor extends AbstractMainEditor {
                 jSplitPane2.setLeftComponent(jPanel17);
 
                 jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Preview"));
-                jPanel7.setMaximumSize(new java.awt.Dimension(580, 145));
-                jPanel7.setMinimumSize(new java.awt.Dimension(580, 145));
-                jPanel7.setPreferredSize(new java.awt.Dimension(580, 145));
+                jPanel7.setMaximumSize(new java.awt.Dimension(590, 160));
+                jPanel7.setMinimumSize(new java.awt.Dimension(590, 160));
+                jPanel7.setPreferredSize(new java.awt.Dimension(590, 160));
 
                 textPreviewLayoutPanel.setBackground(new java.awt.Color(30, 30, 30));
 
@@ -473,7 +472,7 @@ public class TextMainEditor extends AbstractMainEditor {
                 );
                 jPanel7Layout.setVerticalGroup(
                     jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 122, Short.MAX_VALUE)
+                    .addGap(0, 137, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(textPreviewLayoutPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
@@ -511,7 +510,7 @@ public class TextMainEditor extends AbstractMainEditor {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0))
@@ -561,7 +560,7 @@ public class TextMainEditor extends AbstractMainEditor {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
@@ -581,15 +580,15 @@ public class TextMainEditor extends AbstractMainEditor {
                 jPanel16.setLayout(jPanel16Layout);
                 jPanel16Layout.setHorizontalGroup(
                     jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 1048, Short.MAX_VALUE)
+                    .addGap(0, 1066, Short.MAX_VALUE)
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jSplitPane2))
+                        .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1066, Short.MAX_VALUE))
                 );
                 jPanel16Layout.setVerticalGroup(
                     jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGap(0, 500, Short.MAX_VALUE)
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+                        .addComponent(jSplitPane2))
                 );
 
                 jSplitPane1.setTopComponent(jPanel16);
@@ -600,15 +599,15 @@ public class TextMainEditor extends AbstractMainEditor {
                 layout.setHorizontalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1048, Short.MAX_VALUE)
+                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1066, Short.MAX_VALUE)
                         .addGap(0, 0, 0))
                 );
                 layout.setVerticalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 655, Short.MAX_VALUE)
                 );
 
-                setSize(new java.awt.Dimension(1064, 638));
+                setSize(new java.awt.Dimension(1082, 638));
                 setLocationRelativeTo(null);
             }// </editor-fold>//GEN-END:initComponents
 
@@ -707,8 +706,8 @@ public class TextMainEditor extends AbstractMainEditor {
         }
     }
     
-    private void onFilterChanged(String text) {
-        filterRows(text);
+    private void onFilterChanged(ChangeEvent e) {
+        filterRows(((JTextField)e.getSource()).getText());
     }
     
     private void filterRows(String filter) {
@@ -720,6 +719,26 @@ public class TextMainEditor extends AbstractMainEditor {
             return;
         }
         sorter.setRowFilter(rf);
+    }
+    
+    private void onSelectionChanged(ListSelectionEvent e) {
+        int row = tableText.jTable.getSelectedRow();
+        if (row == -1) {
+            textPreviewLayoutPanel.setText(null);
+        } else {
+            textPreviewLayoutPanel.setText((String)tableText.jTable.getValueAt(row, 2));
+        }
+        repaintEditorLayout();
+    }
+    
+    private void onTableDataChanged(TableModelEvent e) {
+        int row = tableText.jTable.getSelectedRow();
+        if (row == -1) {
+            textPreviewLayoutPanel.setText(null);
+        } else {
+            textPreviewLayoutPanel.setText(textTableModel.getRow(row));
+        }
+        repaintEditorLayout();
     }
     
     /**
