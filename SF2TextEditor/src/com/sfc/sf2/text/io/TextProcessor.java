@@ -5,14 +5,8 @@
  */
 package com.sfc.sf2.text.io;
 
-import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractMetadataProcessor;
 import com.sfc.sf2.core.io.AbstractTextProcessor;
-import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.TextFileException;
-import com.sfc.sf2.core.io.asm.AbstractAsmProcessor;
-import com.sfc.sf2.core.io.asm.AsmException;
-import com.sfc.sf2.text.TextManager;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
