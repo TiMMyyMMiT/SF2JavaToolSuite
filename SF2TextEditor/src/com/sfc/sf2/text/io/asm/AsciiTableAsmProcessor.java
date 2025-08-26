@@ -17,11 +17,11 @@ import java.util.ArrayList;
  *
  * @author TiMMy
  */
-public class AsciiTableAsmProcessor extends AbstractAsmProcessor<byte[]> {
+public class AsciiTableAsmProcessor extends AbstractAsmProcessor<int[]> {
 
     @Override
-    protected byte[] parseAsmData(BufferedReader reader) throws IOException, AsmException {
-        ArrayList<Byte> bytesList = new ArrayList<>();
+    protected int[] parseAsmData(BufferedReader reader) throws IOException, AsmException {
+        ArrayList<Integer> bytesList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("table_666E:")) {   //Found start of list
@@ -34,12 +34,12 @@ public class AsciiTableAsmProcessor extends AbstractAsmProcessor<byte[]> {
                     }
                     line = StringHelpers.trimAndRemoveComments(line);
                     line = line.replace("dc.b ", "");
-                    bytesList.add(StringHelpers.getValueByte(line));
+                    bytesList.add(StringHelpers.getValueInt(line));
                 } while((line = reader.readLine()) != null);
                 break;  //End of list
             }
         }
-        byte[] data = new byte[bytesList.size()];
+        int[] data = new int[bytesList.size()];
         for (int i = 0; i < data.length; i++) {
             data[i] = bytesList.get(i);
         }
@@ -47,12 +47,12 @@ public class AsciiTableAsmProcessor extends AbstractAsmProcessor<byte[]> {
     }
 
     @Override
-    protected String getHeaderName(byte[] item) {
+    protected String getHeaderName(int[] item) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    protected void packageAsmData(FileWriter writer, byte[] item) throws IOException, AsmException {
+    protected void packageAsmData(FileWriter writer, int[] item) throws IOException, AsmException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

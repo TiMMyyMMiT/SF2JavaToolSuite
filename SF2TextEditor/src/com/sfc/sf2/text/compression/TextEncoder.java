@@ -94,13 +94,13 @@ public class TextEncoder {
             int symbolsPointer = 0;
             byte[] symbols = new byte[string.length()+1];
             while(stringPointer<string.length()){
-                for(int k=0;k<Symbols.TABLE().length;k++){
+                for(int k=0;k<Symbols.count();k++){
                     if(((previousSymbol&0xFF)!=0xFC) && ((previousSymbol&0xFF)!=0xFD)){
-                        if(string.substring(stringPointer).indexOf(Symbols.TABLE()[k])==0){
+                        if(string.substring(stringPointer).indexOf(Symbols.fromInt(k))==0){
                             byte symbol = (byte)k;
                             symbols[symbolsPointer] = symbol;
                             symbolsPointer++;
-                            stringPointer = stringPointer + Symbols.TABLE()[k].length();
+                            stringPointer = stringPointer + Symbols.fromInt(k).length();
                             previousSymbol = symbol;
                             break;
                         }                            
@@ -113,7 +113,7 @@ public class TextEncoder {
                         previousSymbol = symbol;
                         break;                        
                     }
-                    if(k+1==Symbols.TABLE().length){
+                    if(k+1==Symbols.count()){
                         System.err.println("Current character "+string.charAt(stringPointer)+" is not recognized as the beginning of a known symbol, and will be ignored.");
                         stringPointer++;
                     }
@@ -182,7 +182,7 @@ public class TextEncoder {
                     node.isLeaf = true;
                     node.symbol = symbol;
                     node.weight = map.get(symbol);
-                    node.symbolString = Symbols.TABLE()[symbol];
+                    node.symbolString = Symbols.fromInt(symbol);
                     nodeList.add(node);
                     huffmanTreeNodeIndex++;
                 }
@@ -242,13 +242,13 @@ public class TextEncoder {
             int symbolsPointer = 0;
             byte[] symbols = new byte[string.length()+1];
             while(stringPointer<string.length()){
-                for(int k=0;k<Symbols.TABLE().length;k++){
+                for(int k=0;k<Symbols.count();k++){
                     if(((previousSymbol&0xFF)!=0xFC) && ((previousSymbol&0xFF)!=0xFD)){
-                        if(string.substring(stringPointer).indexOf(Symbols.TABLE()[k])==0){
+                        if(string.substring(stringPointer).indexOf(Symbols.fromInt(k))==0){
                             byte symbol = (byte)k;
                             symbols[symbolsPointer] = symbol;
                             symbolsPointer++;
-                            stringPointer = stringPointer + Symbols.TABLE()[k].length();
+                            stringPointer = stringPointer + Symbols.fromInt(k).length();
                             previousSymbol = symbol;
                             break;
                         }                            
@@ -261,7 +261,7 @@ public class TextEncoder {
                         previousSymbol = symbol;
                         break;                        
                     }
-                    if(k+1==Symbols.TABLE().length){
+                    if(k+1==Symbols.count()){
                         System.err.println("Current character "+string.charAt(stringPointer)+" is not recognized as the beginning of a known symbol, and will be ignored.");
                         stringPointer++;
                     }
@@ -377,7 +377,7 @@ public class TextEncoder {
             while(index.length()<2){
                 index = "0"+index;
             }
-            sb.append(index).append(":'").append(Symbols.TABLE()[key]).append("'=").append(map.get(key)).append(", ");
+            sb.append(index).append(":'").append(Symbols.fromInt(key)).append("'=").append(map.get(key)).append(", ");
         }
         sb.delete(sb.length()-2,sb.length());
         sb.append("]");

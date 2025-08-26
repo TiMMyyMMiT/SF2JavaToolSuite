@@ -100,7 +100,7 @@ public class TextDecoder {
                 if((PREVIOUS_SYMBOL&0xFF)== 0xFC || (PREVIOUS_SYMBOL&0xFF) == 0xFD){
                     symbolString = ";" + Integer.toString((int)symbol) + "}";
                 }else{
-                    symbolString = Symbols.TABLE()[(int)symbol&0xFF];
+                    symbolString = Symbols.fromInt((int)symbol&0xFF);
                 }
                 string.append(symbolString);
             }

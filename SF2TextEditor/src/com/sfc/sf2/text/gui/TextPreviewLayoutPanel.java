@@ -166,14 +166,12 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
     
     private FontSymbol findSymbol(char symbolChar) {
-        String c = Character.toString(symbolChar);
-        String[] table = Symbols.TABLE();
-        for (int i = 0; i < table.length; i++) {
-            if (table[i].equals(c)) {
-                return fontSymbols[i-1];
-            }
+        int value = Symbols.fromChar(symbolChar);
+        if (value >= 0 && value < fontSymbols.length) {
+            return fontSymbols[value];
+        } else {
+            return EMPTY_SYMBOL;
         }
-        return EMPTY_SYMBOL;
     }
     
     private String parseTags(String text, int tagStart) {

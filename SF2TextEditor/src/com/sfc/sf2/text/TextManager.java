@@ -37,7 +37,7 @@ public class TextManager extends AbstractManager {
     private String[] gamescript;
     private Tileset baseTiles;
     private FontSymbol[] fontSymbols;
-    private byte[] asciiToSymbolMap;
+    private int[] asciiToSymbolMap;
     private String[] allyNames;
 
     @Override
@@ -103,7 +103,7 @@ public class TextManager extends AbstractManager {
         return fontSymbols;
     }
     
-    public byte[] importAsciiMap(Path asciiMapPath) throws IOException, FileNotFoundException, AsmException {
+    public int[] importAsciiMap(Path asciiMapPath) throws IOException, FileNotFoundException, AsmException {
         Console.logger().finest("ENTERING importAsciiMap");
         asciiToSymbolMap = asciiAsmProcessor.importAsmData(asciiMapPath);
         Console.logger().finest("EXITING importAsciiMap");
@@ -137,7 +137,7 @@ public class TextManager extends AbstractManager {
         return fontSymbols;
     }
     
-    public byte[] getAsciiToSymbolMap() {
+    public int[] getAsciiToSymbolMap() {
         return asciiToSymbolMap;
     }
     
