@@ -8,20 +8,27 @@ package com.sfc.sf2.core.gui;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.GraphicsHelpers;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 /**
  *
  * @author TiMMy
  */
-public abstract class AbstractLayoutPanel extends JPanel {
+public abstract class AbstractLayoutPanel extends JPanel implements MouseMotionListener {
     private static final int COORDS_PADDING_X = 6;
     private static final int COORDS_PADDING_Y = 6;
     private static final int COORDS_PADDING_SCALE = 2;
@@ -47,10 +54,45 @@ public abstract class AbstractLayoutPanel extends JPanel {
     private int coordsY = -1;
     private int verticalPadding = 0;
     
+    protected boolean showCoordsInTitle = true;
+    private int lastX;
+    private int lastY;
+    private JComponent coordsContainer;
+    private TitledBorder coordsTitle;
+    private String origTitle;
+    
     protected Color bgColor = Color.WHITE;
 
     public AbstractLayoutPanel() {
+        super();
         bgColor = SettingsManager.getGlobalSettings().getTransparentBGColor();
+        addMouseMotionListener(this);
+        java.awt.EventQueue.invokeLater(() -> { getCoordsTitle(); });
+    }
+    
+    private void getCoordsTitle() {
+        if (!showCoords) return;
+        try {
+            Border border = null;
+            Container parent = this;
+            for (int i = 0; i < 3; i++) {
+                parent = parent.getParent();
+                if (parent instanceof JScrollPane) {
+                    coordsContainer = (JComponent)parent;
+                    border = ((JScrollPane)coordsContainer).getViewportBorder();
+                } else if (parent instanceof JComponent) {
+                    coordsContainer = (JComponent)parent;
+                    border = coordsContainer.getBorder();
+                }
+                if (border != null && border instanceof TitledBorder) {
+                    coordsTitle = (TitledBorder)border;
+                    break;
+                }
+            }
+        } catch (Exception e) { }
+        if (coordsTitle != null) {
+            origTitle = coordsTitle.getTitle();
+        }
     }
     
     @Override
@@ -194,7 +236,11 @@ public abstract class AbstractLayoutPanel extends JPanel {
     }
     
     protected Dimension getCoordsPadding() {
-        return new Dimension(COORDS_PADDING_X+displayScale*COORDS_PADDING_SCALE, COORDS_PADDING_Y+displayScale*COORDS_PADDING_SCALE);
+        if (showCoords) {
+            return new Dimension(COORDS_PADDING_X+displayScale*COORDS_PADDING_SCALE, COORDS_PADDING_Y+displayScale*COORDS_PADDING_SCALE);
+        } else {
+            return new Dimension();
+        }
     }
     
     @Override
@@ -240,6 +286,25 @@ public abstract class AbstractLayoutPanel extends JPanel {
     public void setShowGrid(boolean showGrid) {
         this.showGrid = showGrid;
         this.redraw = true;
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) { }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if (!hasData() || !showCoordsInTitle || coordsTitle == null) return;
+        Dimension coordsPadding = getCoordsPadding();
+        int x = e.getX() - coordsPadding.width;
+        int y = e.getY() - coordsPadding.height;
+        x /= (getDisplayScale() * gridWidth);
+        y /= (getDisplayScale() * gridHeight);
+        if (lastX != x || lastY != y) {
+            lastX = x;
+            lastY = y;
+            coordsTitle.setTitle(String.format("%s : (%d, %d)", origTitle, x, y));
+            coordsContainer.repaint();
+        }
     }
 }
 
