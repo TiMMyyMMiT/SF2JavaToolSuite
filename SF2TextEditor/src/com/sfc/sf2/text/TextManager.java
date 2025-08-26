@@ -8,14 +8,19 @@ package com.sfc.sf2.text;
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
+import com.sfc.sf2.text.io.asm.AsciiTableAsmProcessor;
 import com.sfc.sf2.text.io.AsmManager;
 import com.sfc.sf2.text.io.TxtManager;
 import com.sfc.sf2.text.io.DisassemblyManager;
+import com.sfc.sf2.text.io.asm.AllyNamesAsmProcessor;
 import com.sfc.sf2.vwfont.FontSymbol;
 import com.sfc.sf2.vwfont.VWFontManager;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -26,10 +31,14 @@ import java.nio.file.Path;
 public class TextManager extends AbstractManager {
     private final TilesetManager tilesetManager = new TilesetManager();
     private final VWFontManager fontManager = new VWFontManager();
+    private final AsciiTableAsmProcessor asciiAsmProcessor = new AsciiTableAsmProcessor();
+    private final AllyNamesAsmProcessor allyNamesAsmProcessor = new AllyNamesAsmProcessor();
     
     private String[] gamescript;
     private Tileset baseTiles;
     private FontSymbol[] fontSymbols;
+    private byte[] asciiToSymbolMap;
+    private String[] allyNames;
 
     @Override
     public void clearData() {
@@ -94,6 +103,24 @@ public class TextManager extends AbstractManager {
         return fontSymbols;
     }
     
+    public byte[] importAsciiMap(Path asciiMapPath) throws IOException, FileNotFoundException, AsmException {
+        Console.logger().finest("ENTERING importAsciiMap");
+        asciiToSymbolMap = asciiAsmProcessor.importAsmData(asciiMapPath);
+        Console.logger().finest("EXITING importAsciiMap");
+        return asciiToSymbolMap;
+    }
+    
+    public String[] importAllyNames(Path allyNamesPath) throws IOException, FileNotFoundException, AsmException {
+        Console.logger().finest("ENTERING importAllyNames");
+        EntriesAsmData data = allyNamesAsmProcessor.importAsmData(allyNamesPath);
+        allyNames = new String[data.uniqueEntriesCount()];
+        for (int i = 0; i < allyNames.length; i++) {
+            allyNames[i] = data.getUniqueEntries(i);
+        }
+        Console.logger().finest("EXITING importAllyNames");
+        return allyNames;
+    }
+    
     public String[] getGameScript() {
         return gamescript;
     }
@@ -108,5 +135,13 @@ public class TextManager extends AbstractManager {
     
     public FontSymbol[] getFontSymbols() {
         return fontSymbols;
+    }
+    
+    public byte[] getAsciiToSymbolMap() {
+        return asciiToSymbolMap;
+    }
+    
+    public String[] getAllyNames() {
+        return allyNames;
     }
 }

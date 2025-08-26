@@ -34,14 +34,15 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     private static final int FONT_START_HEIGHT = PIXEL_HEIGHT;
     private static final int FONT_LINE_HEIGHT = PIXEL_HEIGHT*2;
-    private static final int FONT_START_X = 12;
-    private static final int FONT_END_X = PREVIEW_WIDTH-12;
+    private static final int FONT_START_X = 14;
+    private static final int FONT_END_X = PREVIEW_WIDTH-PIXEL_WIDTH-14;
     private static final FontSymbol EMPTY_SYMBOL = FontSymbol.EmptySymbol();
     private static final Palette PREVIEW_PALETTE = new Palette(new CRAMColor[] { CRAMColor.BLACK, CRAMColor.WHITE, CRAMColor.LIGHT_GRAY }, true);
     
     private String text;
     Tileset baseTiles;
     FontSymbol[] fontSymbols;
+    String[] allyNames;
     
     public TextPreviewLayoutPanel() {
         super();
@@ -121,8 +122,9 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     private FontSymbol findSymbol(char symbolChar) {
         String c = Character.toString(symbolChar);
-        for (int i = 0; i < Symbols.TABLE.length; i++) {
-            if (Symbols.TABLE[i].equals(c)) {
+        String[] table = Symbols.TABLE();
+        for (int i = 0; i < table.length; i++) {
+            if (table[i].equals(c)) {
                 return fontSymbols[i-1];
             }
         }
@@ -160,12 +162,20 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
             try {
                 val = Integer.parseInt(numVal);
             } catch (NumberFormatException e) {}
-            return val == -1 ? "INVALID" : "ALLY_"+val; //TODO load actual ally names
+            if (allyNames == null || val < 0 || val >= allyNames.length) {
+                return "ALLY_" + val;
+            } else {
+                return allyNames[val];
+            }
         }
         
         switch (tag) {
             case "LEADER":
-                return "BOWIE"; //TODO load actual leader name
+                if (allyNames == null || allyNames.length == 0) {
+                    return "LEADER";
+                } else {
+                    return allyNames[0];
+                }
             case "NAME":
                 return "ALLY_X";
             case "ITEM":
@@ -208,5 +218,9 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         for (int i = 0; i < fontSymbols.length; i++) {
             fontSymbols[i].setpalette(PREVIEW_PALETTE);
         }
+    }
+    
+    public void setAllyNames(String[] allyNames) {
+        this.allyNames = allyNames;
     }
 }

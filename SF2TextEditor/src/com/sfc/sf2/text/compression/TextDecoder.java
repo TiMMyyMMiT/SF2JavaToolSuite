@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.text.compression;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -26,13 +27,13 @@ public class TextDecoder {
             huffmanTreeOffsets = new short[data.length/2];
             ByteBuffer wrappedData = ByteBuffer.wrap(data);
             wrappedData.asShortBuffer().get(huffmanTreeOffsets);
-            System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - huffmanTreeOffsets : "
-                + "\n" + Arrays.toString(huffmanTreeOffsets));
+            /*Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - huffmanTreeOffsets : "
+                + "\n" + Arrays.toString(huffmanTreeOffsets));*/
             trees = new HuffmanTree[huffmanTreeOffsets.length];
     }
     
     public static void parseTrees(byte[] data){
-        System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseTrees() - Parsing trees ...");
+        Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseTrees() - Parsing trees ...");
         for(int i = 0;i<huffmanTreeOffsets.length;i++){
             if(huffmanTreeOffsets[i]==-1){
                 trees[i] = null;
@@ -41,19 +42,19 @@ public class TextDecoder {
             }
         }
         logTrees();
-        System.out.println("sfc.segahr.BusinessLayer.parseTrees() - Trees parsed.");            
+        //Console.logger().finest("sfc.segahr.BusinessLayer.parseTrees() - Trees parsed.");            
     }  
     
     private static void logTrees(){
-        System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - Parsed trees :");
+        Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - Parsed trees :");
         for(int i = 0;i<trees.length;i++){
             if(trees[i] != null){
-                System.out.println(trees[i].toString());
+                Console.logger().finest(trees[i].toString());
             }else{
-                System.out.println("No tree for index " + i);
+                Console.logger().finest("No tree for index " + i);
             }
         }
-        System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - End of parsed trees :");
+        //Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - End of parsed trees :");
     }        
     
     public static String[] parseTextbank(byte[] data, int textbankIndex){
@@ -71,8 +72,8 @@ public class TextDecoder {
             while(stringIndex.length()<4){
                 stringIndex = "0"+stringIndex;
             }
-            System.out.println("$"+stringIndex+"("+lineLength+")="+s);
-            //System.out.println(Arrays.toString(Arrays.copyOfRange(data,bankPointer+1,(bankPointer+data[bankPointer]+1))));
+            //Console.logger().finest("$"+stringIndex+"("+lineLength+")="+s);
+            //Console.logger().finest(Arrays.toString(Arrays.copyOfRange(data,bankPointer+1,(bankPointer+data[bankPointer]+1))));
             textbankStrings[i] = s;
             bankPointer += (data[bankPointer]&0xFF)+1;
             if(bankPointer+1>=data.length){
@@ -92,20 +93,20 @@ public class TextDecoder {
         while(true){
             byte symbol = parseNextSymbol(trees[(int)PREVIOUS_SYMBOL&0xFF],data,offset,bitsString);
             if((symbol&0xFF) == 0xFE){
-                //System.out.println(sb.toString());
+                //Console.logger().finest(sb.toString());
                 break;
             }else{
                 String symbolString;
                 if((PREVIOUS_SYMBOL&0xFF)== 0xFC || (PREVIOUS_SYMBOL&0xFF) == 0xFD){
                     symbolString = ";" + Integer.toString((int)symbol) + "}";
                 }else{
-                    symbolString = Symbols.TABLE[(int)symbol&0xFF];
+                    symbolString = Symbols.TABLE()[(int)symbol&0xFF];
                 }
                 string.append(symbolString);
             }
             PREVIOUS_SYMBOL = symbol;
         }
-        System.out.println(bitsString.toString());
+        //Console.logger().finest(bitsString.toString());
         return string.toString();
     }     
     

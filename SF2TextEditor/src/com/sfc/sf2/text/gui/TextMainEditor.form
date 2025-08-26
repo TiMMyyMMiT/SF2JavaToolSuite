@@ -97,8 +97,8 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jPanel5" alignment="0" pref="400" max="32767" attributes="0"/>
-                                  <Component id="jPanel3" alignment="0" pref="400" max="32767" attributes="0"/>
+                                  <Component id="jPanel5" alignment="0" pref="438" max="32767" attributes="0"/>
+                                  <Component id="jPanel3" alignment="0" pref="438" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -171,7 +171,22 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="fileButton4" alignment="0" pref="0" max="32767" attributes="0"/>
                                           <Component id="fileButton5" alignment="1" pref="0" max="32767" attributes="0"/>
-                                          <Component id="fileButton6" alignment="0" pref="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="fileButton6" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="fileButton7" pref="0" max="32767" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="infoButton3" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="infoButton4" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="fileButton8" min="-2" pref="334" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="infoButton5" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
@@ -185,7 +200,20 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="fileButton5" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="fileButton6" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="fileButton6" min="-2" max="-2" attributes="0"/>
+                                          <Component id="infoButton4" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="fileButton7" min="-2" max="-2" attributes="0"/>
+                                          <Component id="infoButton3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
+                                          <Component id="infoButton5" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -207,7 +235,36 @@
                             <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton6">
                               <Properties>
                                 <Property name="filePath" type="java.lang.String" value="..\u005c..\u005cgraphics\u005ctech\u005cfonts\u005cvariablewidthfont.bin" containsInvalidXMLChars="true"/>
-                                <Property name="labelText" type="java.lang.String" value="VW font ::"/>
+                                <Property name="labelText" type="java.lang.String" value="VW font :"/>
+                              </Properties>
+                            </Component>
+                            <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton7">
+                              <Properties>
+                                <Property name="filePath" type="java.lang.String" value="..\u005c..\u005c..\u005ccode\u005ccommon\u005cscripting\u005ctext\u005ctextfunctions.asm" containsInvalidXMLChars="true"/>
+                                <Property name="labelText" type="java.lang.String" value="ASCII table :"/>
+                              </Properties>
+                            </Component>
+                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton3">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" value="&lt;html&gt;Loads in table_666E so that ASCII characters (raw text) can be converted into VWFont symbols.&lt;/html&gt;"/>
+                              </Properties>
+                            </Component>
+                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton4">
+                              <Properties>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Loads in the games &lt;i&gt;variable width font&lt;/i&gt; for rendering in the preview&lt;/html&gt;"/>
+                                <Property name="text" type="java.lang.String" value=""/>
+                              </Properties>
+                            </Component>
+                            <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton8">
+                              <Properties>
+                                <Property name="filePath" type="java.lang.String" value="..\u005c..\u005cstats\u005callies\u005callynames.asm" containsInvalidXMLChars="true"/>
+                                <Property name="labelText" type="java.lang.String" value="Ally names :"/>
+                              </Properties>
+                            </Component>
+                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton5">
+                              <Properties>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Imports the namelist for allies to replace the {LEADER} and {NAME;x} tag in the preview.&lt;br&gt;Load &lt;i&gt;allynames.asm&lt;/i&gt; or &lt;i&gt;allynames-capitalized.asm&lt;/i&gt;&lt;/html&gt;"/>
+                                <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>
                           </SubComponents>
@@ -604,7 +661,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jPanel7" pref="637" max="32767" attributes="0"/>
+                                  <Component id="jPanel7" pref="599" max="32767" attributes="0"/>
                                   <Component id="jPanel1" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
