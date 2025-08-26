@@ -12,6 +12,7 @@ import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.portrait.Portrait;
 import com.sfc.sf2.portrait.PortraitManager;
 import com.sfc.sf2.portrait.models.PortraitDataTableModel;
+import com.sfc.sf2.portrait.settings.PortraitSettings;
 import java.util.logging.Level;
 import java.nio.file.Path;
 
@@ -21,15 +22,17 @@ import java.nio.file.Path;
  */
 public class PortraitMainEditor extends AbstractMainEditor {
     
-    PortraitManager portraitManager = new PortraitManager();
+    private final PortraitSettings portraitSettings = new PortraitSettings();
+    private final PortraitManager portraitManager = new PortraitManager();
     
-    PortraitDataTableModel eyeTable;
-    PortraitDataTableModel mouthTable;
-    int selectedEyesRow;
-    int selectedMouthsRow;
+    private PortraitDataTableModel eyeTable;
+    private PortraitDataTableModel mouthTable;
+    private int selectedEyesRow;
+    private int selectedMouthsRow;
     
     public PortraitMainEditor() {
         super();
+        SettingsManager.registerSettingsStore("portrait", portraitSettings);
         initComponents();
         initCore(console1);
     }
@@ -46,6 +49,8 @@ public class PortraitMainEditor extends AbstractMainEditor {
         portraitLayoutPanel.setMouthAnimTable(mouthTable);
         tableEyes.addListSelectionListener(this::eyesListSelectionChanged);
         tableMouth.addListSelectionListener(this::mouthListSelectionChanged);
+        
+        jComboBox1.setSelectedIndex(portraitSettings.getZoom()-1);
     }
     
     @Override
@@ -630,9 +635,11 @@ public class PortraitMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton18ActionPerformed
     
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (portraitLayoutPanel != null) {
+        if (portraitLayoutPanel != null && portraitSettings.getZoom() != jComboBox1.getSelectedIndex()+1) {
             portraitLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
             repaintEditorLayout();
+            portraitSettings.setZoom(jComboBox1.getSelectedIndex()+1);
+            SettingsManager.saveSettingsFile();
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
