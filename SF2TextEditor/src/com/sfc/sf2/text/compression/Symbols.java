@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
 public class Symbols {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">  
@@ -287,7 +287,7 @@ public class Symbols {
     }
     
     public static int fromChar(char val) {
-        return fromString(Character.toString(val))-1;
+        return fromString(Character.toString(val));
     }
     
     public static int fromString(String val) {

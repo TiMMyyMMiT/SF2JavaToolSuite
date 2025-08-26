@@ -24,18 +24,18 @@ import java.util.Set;
  */
 public class TextEncoder {
     
-    private static Map<Integer,Integer>[] newSymbolCounters;
-    private static HuffmanTreeNode[] newHuffmanTreeTopNodes;
-    private static byte[][] newHuffmanSymbols;
-    private static byte[][] newHuffmanTrees;
-    private static byte[] newHuffmanTreesFileBytes;
-    private static byte[] newHuffmantreeOffsetsFileBytes;
+    private Map<Integer,Integer>[] newSymbolCounters;
+    private HuffmanTreeNode[] newHuffmanTreeTopNodes;
+    private byte[][] newHuffmanSymbols;
+    private byte[][] newHuffmanTrees;
+    private byte[] newHuffmanTreesFileBytes;
+    private byte[] newHuffmantreeOffsetsFileBytes;
     
-    private static byte[][] newStringBytes;
-    private static byte[] newTextbank;
-    private static byte[][] newTextbanks;     
+    private byte[][] newStringBytes;
+    private byte[] newTextbank;
+    private byte[][] newTextbanks;     
     
-    public static HuffmanTreeNode makeTree(List<HuffmanTreeNode> nodes){
+    public HuffmanTreeNode makeTree(List<HuffmanTreeNode> nodes){
         if(nodes.isEmpty()){
             return null;
         } else if(nodes.size()==1){
@@ -64,7 +64,7 @@ public class TextEncoder {
         }
     }
     
-    public static void attributeCodes(HuffmanTreeNode node,StringBuilder bitString){
+    public void attributeCodes(HuffmanTreeNode node,StringBuilder bitString){
         if(bitString == null){
             bitString = new StringBuilder();
         }
@@ -76,15 +76,15 @@ public class TextEncoder {
         }
     }
     
-    public static void produceTrees(String[] gamescript){
+    public void produceTrees(String[] gamescript){
         //Console.logger().finest("sfc.segahr.BusinessLayer.produceTrees() - Producing trees ...");  
         countSymbols(gamescript);
         makeTrees();
         produceTreeFileBytes();
         //Console.logger().finest("sfc.segahr.BusinessLayer.produceTrees() - Trees produced.");
-    }  
+    }
     
-    private static void countSymbols(String[] gamescript){
+    private void countSymbols(String[] gamescript){
         //Console.logger().finest("sfc.segahr.BusinessLayer.countSymbols() - Counting symbols ...");
         Map<Integer,Map<Integer,Integer>> symbolCounters = new HashMap<>();
         byte previousSymbol = (byte)0xFE;
@@ -160,7 +160,7 @@ public class TextEncoder {
         //Console.logger().finest("sfc.segahr.BusinessLayer.countSymbols() - Symbols counted.");        
     }
     
-    private static void makeTrees(){
+    private void makeTrees(){
         Console.logger().finest("sfc.segahr.BusinessLayer.makeTrees() - Making trees ...");
         newHuffmanTrees = new byte[newSymbolCounters.length][];
         newHuffmanSymbols = new byte[newSymbolCounters.length][];
@@ -186,8 +186,8 @@ public class TextEncoder {
                     nodeList.add(node);
                     huffmanTreeNodeIndex++;
                 }
-                HuffmanTreeNode topNode = TextEncoder.makeTree(nodeList);
-                TextEncoder.attributeCodes(topNode,null);
+                HuffmanTreeNode topNode = makeTree(nodeList);
+                attributeCodes(topNode,null);
                 //Console.logger().finest("\tHuffman Tree : "+topNode);
                 String treeBitString = topNode.getTreeBitString(null);
                 //Console.logger().finest("\tTree Bit String : "+treeBitString);
@@ -208,7 +208,7 @@ public class TextEncoder {
         //Console.logger().finest("sfc.segahr.BusinessLayer.makeTrees() - Trees made.");
     }
     
-    public static void produceTreeFileBytes(){
+    public void produceTreeFileBytes(){
         //Console.logger().finest("sfc.segahr.BusinessLayer.produceTreeFileBytes() - Producing Tree File Bytes ...");
         newHuffmanTreesFileBytes = new byte[0];
         newHuffmantreeOffsetsFileBytes =new byte[255*2];
@@ -229,9 +229,9 @@ public class TextEncoder {
             treePointer += newHuffmanTrees[i].length;
         }
         //Console.logger().finest("sfc.segahr.BusinessLayer.produceTreeFileBytes() - Tree File Bytes produced.");
-    }  
+    }
     
-    public static void produceTextbanks(String[] gamescript){
+    public void produceTextbanks(String[] gamescript){
         //Console.logger().finest("sfc.segahr.BusinessLayer.produceTextbanks() - Producing text banks ...");
         newStringBytes = new byte[gamescript.length][];
         byte previousSymbol = (byte)0xFE;
@@ -310,22 +310,22 @@ public class TextEncoder {
             }
         }
         //Console.logger().finest("sfc.segahr.BusinessLayer.produceTextbanks() - Text banks produced.");
-    }    
+    }
     
-    public static byte[] getNewHuffmanTreesFileBytes() {
+    public byte[] getNewHuffmanTreesFileBytes() {
         return newHuffmanTreesFileBytes;
     }
 
-    public static byte[] getNewHuffmantreeOffsetsFileBytes() {
+    public byte[] getNewHuffmantreeOffsetsFileBytes() {
         return newHuffmantreeOffsetsFileBytes;
     }
 
-    public static byte[][] getNewTextbanks() {
+    public byte[][] getNewTextbanks() {
         return newTextbanks;
-    }    
+    }
 
     
-    public static <K, V extends Comparable<? super V>> Map<K, V> 
+    public <K, V extends Comparable<? super V>> Map<K, V> 
     sortByValueDesc( Map<K, V> map )
     {
         List<Map.Entry<K, V>> list =
@@ -347,7 +347,7 @@ public class TextEncoder {
         return result;
     }
     
-   public static <K, V extends Comparable<? super V>> Map<K, V> 
+   public <K, V extends Comparable<? super V>> Map<K, V> 
     sortByValueAsc( Map<K, V> map )
     {
         List<Map.Entry<K, V>> list =
@@ -367,9 +367,9 @@ public class TextEncoder {
             result.put( entry.getKey(), entry.getValue() );
         }
         return result;
-    }    
+    }
     
-    private static String symbolCountersToString(Map<Integer,Integer> map){
+    private String symbolCountersToString(Map<Integer,Integer> map){
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for(Integer key : map.keySet()){
@@ -382,6 +382,5 @@ public class TextEncoder {
         sb.delete(sb.length()-2,sb.length());
         sb.append("]");
         return sb.toString();
-    }    
-    
+    }
 }
