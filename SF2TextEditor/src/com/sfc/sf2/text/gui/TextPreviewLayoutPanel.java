@@ -17,6 +17,7 @@ import com.sfc.sf2.vwfont.FontSymbol;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -40,9 +41,13 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     private static final Palette PREVIEW_PALETTE = new Palette(new CRAMColor[] { CRAMColor.BLACK, CRAMColor.WHITE, CRAMColor.LIGHT_GRAY }, true);
     
     private String text;
-    Tileset baseTiles;
-    FontSymbol[] fontSymbols;
-    String[] allyNames;
+    private int linesOffset = 0;
+    private boolean linesAbove = false;
+    private boolean linesBelow = false;
+    
+    private Tileset baseTiles;
+    private FontSymbol[] fontSymbols;
+    private String[] allyNames;
     
     public TextPreviewLayoutPanel() {
         super();
@@ -66,6 +71,13 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         buildFrame(graphics);
         if (text != null) {
             writeText(graphics);
+            graphics.setColor(Color.LIGHT_GRAY);
+            if (linesAbove) {
+                graphics.fillArc(PREVIEW_WIDTH-20, -5, 20, 20, -90-25, 50);
+            }
+            if (linesBelow) {
+                graphics.fillArc(PREVIEW_WIDTH-20, PREVIEW_HEIGHT-15, 20, 20, 90-25, 50);
+            }
         }
     }
     
@@ -95,29 +107,47 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
     
     void writeText(Graphics graphics) {
-        graphics.setColor(Color.WHITE);
+        linesAbove = false;
+        linesBelow = false;
+        int width = FONT_END_X-FONT_START_X;
+        int height = FONT_LINE_HEIGHT*3;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
+        g.setColor(Color.WHITE);
         char c;
-        int x = FONT_START_X;
-        int y = FONT_START_HEIGHT;
         int next;
+        boolean newline;
+        int x = 0;
+        int y = FONT_LINE_HEIGHT*(-linesOffset);
+        if (y < 0) {
+            linesAbove = true;
+        }
         for (int i = 0; i < text.length(); i++) {
+            newline = false;
             c = text.charAt(i);
             if (c == '\n') {
+                newline = true;
                 y += FONT_LINE_HEIGHT;
-                x = FONT_START_X;
+                x = 0;
             } else {
                 FontSymbol symbol = findSymbol(c);
                 if (symbol == null) { symbol = EMPTY_SYMBOL; }
                 next = x+symbol.getWidth()+1;
-                if (next >= FONT_END_X) {   //Symbol will overrun
+                if (next >= width) {   //Symbol will overrun
+                    newline = true;
                     y += FONT_LINE_HEIGHT;
-                    x = FONT_START_X;
+                    x = 0;
                     next = x+symbol.getWidth()+1;
                 }
-                graphics.drawImage(symbol.getIndexColoredImage(), x, y, null);
+                g.drawImage(symbol.getIndexColoredImage(), x, y, null);
                 x = next;
             }
+            if (newline && y >= height) {
+                linesBelow = true;
+            }
         }
+        g.dispose();
+        graphics.drawImage(image, FONT_START_X, FONT_START_HEIGHT, null);
     }
     
     private FontSymbol findSymbol(char symbolChar) {
@@ -132,7 +162,6 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
     
     private String parseTags(String text) {
-        if (text == null) return null;
         char c;
         int i = 0;
         int tagStart, tagEnd;
@@ -151,6 +180,9 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
             } else {
                 i++;
             }
+        }
+        if (text.charAt(text.length()-1) == '\n') {
+            text = text.substring(0, text.length()-1);
         }
         return text;
     }
@@ -205,7 +237,14 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
     
     public void setText(String text) {
-        this.text = parseTags(text);
+        if (text == null) {
+            this.text = text;
+            redraw();
+            return;
+        }
+        text = parseTags(text);
+        this.text = text;
+        linesOffset = 0;
         redraw();
     }
     
@@ -222,5 +261,22 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     public void setAllyNames(String[] allyNames) {
         this.allyNames = allyNames;
+    }
+    
+    public int getLinesOffset() {
+        return linesOffset;
+    }
+    
+    public void setLinesOffset(int linesOffset) {
+        this.linesOffset = linesOffset;
+        redraw();
+    }
+    
+    public boolean hasLinesBelow() {
+        return linesBelow;
+    }
+    
+    public boolean hasLinesAbove() {
+        return linesAbove;
     }
 }
