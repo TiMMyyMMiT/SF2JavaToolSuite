@@ -46,8 +46,10 @@ public class FontSymbol {
     }
     
     public void setpalette(Palette palette) {
-        this.palette = palette;
-        clearIndexedColorImage();
+        if (this.palette != palette) {
+            this.palette = palette;
+            clearIndexedColorImage();
+        }
     }
     
     public int getId() {

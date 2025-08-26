@@ -10,6 +10,8 @@ import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.helpers.PaletteHelpers;
+import com.sfc.sf2.helpers.StringHelpers;
 import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.text.compression.Symbols;
@@ -18,6 +20,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 /**
  *
@@ -40,7 +43,10 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     private static final FontSymbol EMPTY_SYMBOL = FontSymbol.EmptySymbol();
     private static final Palette PREVIEW_PALETTE = new Palette(new CRAMColor[] { CRAMColor.BLACK, CRAMColor.WHITE, CRAMColor.LIGHT_GRAY }, true);
     
+    private final HashMap<Integer, Palette> recolorPalettes = new HashMap<>();
+    
     private String text;
+    private Palette textPalette;
     private int linesOffset = 0;
     private boolean linesAbove = false;
     private boolean linesBelow = false;
@@ -113,10 +119,11 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         int height = FONT_LINE_HEIGHT*3;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
-        g.setColor(Color.WHITE);
+        textPalette = PREVIEW_PALETTE;
         char c;
         int next;
         boolean newline;
+        String text = this.text;
         int x = 0;
         int y = FONT_LINE_HEIGHT*(-linesOffset);
         if (y < 0) {
@@ -125,22 +132,30 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         for (int i = 0; i < text.length(); i++) {
             newline = false;
             c = text.charAt(i);
-            if (c == '\n') {
-                newline = true;
-                y += FONT_LINE_HEIGHT;
-                x = 0;
-            } else {
-                FontSymbol symbol = findSymbol(c);
-                if (symbol == null) { symbol = EMPTY_SYMBOL; }
-                next = x+symbol.getWidth()+1;
-                if (next >= width) {   //Symbol will overrun
+            switch (c) {
+                case '\n':
                     newline = true;
                     y += FONT_LINE_HEIGHT;
                     x = 0;
+                    break;
+                case '{':
+                    text = parseTags(text, i);
+                    i--;    //Reread where '{' was
+                    continue;
+                default:
+                    FontSymbol symbol = findSymbol(c);
+                    if (symbol == null) { symbol = EMPTY_SYMBOL; }
                     next = x+symbol.getWidth()+1;
-                }
-                g.drawImage(symbol.getIndexColoredImage(), x, y, null);
-                x = next;
+                    if (next >= width) {   //Symbol will overrun
+                        newline = true;
+                        y += FONT_LINE_HEIGHT;
+                        x = 0;
+                        next = x+symbol.getWidth()+1;
+                    }
+                    symbol.setpalette(textPalette);
+                    g.drawImage(symbol.getIndexColoredImage(), x, y, null);
+                    x = next;
+                    break;
             }
             if (newline && y >= height) {
                 linesBelow = true;
@@ -161,26 +176,18 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         return EMPTY_SYMBOL;
     }
     
-    private String parseTags(String text) {
+    private String parseTags(String text, int tagStart) {
         char c;
-        int i = 0;
-        int tagStart, tagEnd;
-        while (i < text.length()) {
+        int tagEnd;
+        int i = tagStart;
+        do {
+            i++;
             c = text.charAt(i);
-            if (c == '{') {
-                tagStart = i;
-                do {
-                    i++;
-                    c = text.charAt(i);
-                } while (c != '}' && i < text.length());
-                tagEnd = i+1;
-                String replace = parseTag(text.substring(tagStart+1, tagEnd-1));
-                text = text.substring(0, tagStart) + replace + text.substring(tagEnd);
-                i = tagStart+replace.length();
-            } else {
-                i++;
-            }
-        }
+        } while (c != '}' && i < text.length());
+        tagEnd = i+1;
+        String replace = parseTag(text.substring(tagStart+1, tagEnd-1));
+        text = text.substring(0, tagStart) + replace + text.substring(tagEnd);
+        i = tagStart+replace.length();
         if (text.charAt(text.length()-1) == '\n') {
             text = text.substring(0, text.length()-1);
         }
@@ -189,16 +196,30 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     String parseTag(String tag) {
         if (tag.startsWith("NAME;")) {  //Special case for name input
-            String numVal = tag.substring(5);
             int val = -1;
             try {
-                val = Integer.parseInt(numVal);
+                val = StringHelpers.getValueInt(tag.substring(5));
             } catch (NumberFormatException e) {}
             if (allyNames == null || val < 0 || val >= allyNames.length) {
                 return "ALLY_" + val;
             } else {
                 return allyNames[val];
             }
+        } else if (tag.startsWith("COLOR;")) {
+            int val = -1;
+            try {
+                val = StringHelpers.getValueInt(tag.substring(6));
+            } catch (NumberFormatException e) {}
+            if (val < 1 || val >= 15) {
+                val = 0;
+            }
+            if (recolorPalettes.containsKey(val)) {
+                textPalette = recolorPalettes.get(val);
+            } else {
+                textPalette = PaletteHelpers.combinePalettes(textPalette, baseTiles.getTiles()[0].getPalette(), new int[] {1}, new int[] {val});
+                recolorPalettes.put(val, textPalette);
+            }
+            return "";
         }
         
         switch (tag) {
@@ -228,7 +249,6 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
             case "D1":
             case "D2":
             case "D3":
-            case "COLOR":
             case "CLEAR":
             case "START/EOL)":
             default:
@@ -237,15 +257,11 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
     
     public void setText(String text) {
-        if (text == null) {
+        if (text == null || this.text == null || !this.text.equals(text)) {
             this.text = text;
+            linesOffset = 0;
             redraw();
-            return;
         }
-        text = parseTags(text);
-        this.text = text;
-        linesOffset = 0;
-        redraw();
     }
     
     public void setBaseTiles(Tileset baseTiles) {
