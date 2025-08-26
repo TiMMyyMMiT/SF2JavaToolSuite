@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.text.compression;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -14,25 +15,24 @@ import java.util.Arrays;
  */
 public class TextDecoder {
     
-    private static byte PREVIOUS_SYMBOL;
-    private static int STRING_BYTE_COUNTER;    
-    private static int STRING_BIT_COUNTER; 
+    private byte previousSymbol;
+    private int stringByteCounter;    
+    private int stringBitCounter; 
     
-    private static short[] huffmanTreeOffsets;    
-    private static HuffmanTree[] trees;
+    private short[] huffmanTreeOffsets;    
+    private HuffmanTree[] trees;
     
-    
-    public static void parseOffsets(byte[] data){
+    public void parseOffsets(byte[] data){
             huffmanTreeOffsets = new short[data.length/2];
             ByteBuffer wrappedData = ByteBuffer.wrap(data);
             wrappedData.asShortBuffer().get(huffmanTreeOffsets);
-            System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - huffmanTreeOffsets : "
-                + "\n" + Arrays.toString(huffmanTreeOffsets));
+            /*Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - huffmanTreeOffsets : "
+                + "\n" + Arrays.toString(huffmanTreeOffsets));*/
             trees = new HuffmanTree[huffmanTreeOffsets.length];
     }
     
-    public static void parseTrees(byte[] data){
-        System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseTrees() - Parsing trees ...");
+    public void parseTrees(byte[] data){
+        Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseTrees() - Parsing trees ...");
         for(int i = 0;i<huffmanTreeOffsets.length;i++){
             if(huffmanTreeOffsets[i]==-1){
                 trees[i] = null;
@@ -41,26 +41,26 @@ public class TextDecoder {
             }
         }
         logTrees();
-        System.out.println("sfc.segahr.BusinessLayer.parseTrees() - Trees parsed.");            
+        //Console.logger().finest("sfc.segahr.BusinessLayer.parseTrees() - Trees parsed.");            
     }  
     
-    private static void logTrees(){
-        System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - Parsed trees :");
+    private void logTrees(){
+        Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - Parsed trees :");
         for(int i = 0;i<trees.length;i++){
             if(trees[i] != null){
-                System.out.println(trees[i].toString());
+                Console.logger().finest(trees[i].toString());
             }else{
-                System.out.println("No tree for index " + i);
+                Console.logger().finest("No tree for index " + i);
             }
         }
-        System.out.println("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - End of parsed trees :");
-    }        
+        //Console.logger().finest("com.sfc.sf2.text.compression.HuffmanTree.parseOffsets() - End of parsed trees :");
+    }
     
-    public static String[] parseTextbank(byte[] data, int textbankIndex){
+    public String[] parseTextbank(byte[] data, int textbankIndex){
         return parseTextbank(data, textbankIndex, 256);
     }
     
-    public static String[] parseTextbank(byte[] data, int textbankIndex, int linesToParse){
+    public String[] parseTextbank(byte[] data, int textbankIndex, int linesToParse){
         short bankPointer = 0;
         String[] textbankStrings = new String[linesToParse];
         int i;
@@ -71,8 +71,8 @@ public class TextDecoder {
             while(stringIndex.length()<4){
                 stringIndex = "0"+stringIndex;
             }
-            System.out.println("$"+stringIndex+"("+lineLength+")="+s);
-            //System.out.println(Arrays.toString(Arrays.copyOfRange(data,bankPointer+1,(bankPointer+data[bankPointer]+1))));
+            //Console.logger().finest("$"+stringIndex+"("+lineLength+")="+s);
+            //Console.logger().finest(Arrays.toString(Arrays.copyOfRange(data,bankPointer+1,(bankPointer+data[bankPointer]+1))));
             textbankStrings[i] = s;
             bankPointer += (data[bankPointer]&0xFF)+1;
             if(bankPointer+1>=data.length){
@@ -83,33 +83,33 @@ public class TextDecoder {
         return textbankStrings;
     }
     
-    private static String parseString(byte[] data, short offset){
+    private String parseString(byte[] data, short offset){
         StringBuilder string = new StringBuilder();
         StringBuilder bitsString = new StringBuilder();
-        PREVIOUS_SYMBOL = (byte)0xFE;
-        STRING_BYTE_COUNTER = 0;
-        STRING_BIT_COUNTER = 0;
+        previousSymbol = (byte)0xFE;
+        stringByteCounter = 0;
+        stringBitCounter = 0;
         while(true){
-            byte symbol = parseNextSymbol(trees[(int)PREVIOUS_SYMBOL&0xFF],data,offset,bitsString);
+            byte symbol = parseNextSymbol(trees[(int)previousSymbol&0xFF],data,offset,bitsString);
             if((symbol&0xFF) == 0xFE){
-                //System.out.println(sb.toString());
+                //Console.logger().finest(sb.toString());
                 break;
             }else{
                 String symbolString;
-                if((PREVIOUS_SYMBOL&0xFF)== 0xFC || (PREVIOUS_SYMBOL&0xFF) == 0xFD){
+                if((previousSymbol&0xFF)== 0xFC || (previousSymbol&0xFF) == 0xFD){
                     symbolString = ";" + Integer.toString((int)symbol) + "}";
                 }else{
-                    symbolString = Symbols.TABLE[(int)symbol&0xFF];
+                    symbolString = Symbols.fromInt((int)symbol&0xFF);
                 }
                 string.append(symbolString);
             }
-            PREVIOUS_SYMBOL = symbol;
+            previousSymbol = symbol;
         }
-        System.out.println(bitsString.toString());
+        //Console.logger().finest(bitsString.toString());
         return string.toString();
-    }     
+    }
     
-    private static byte parseNextSymbol(HuffmanTree huffmanTree, byte[] data, short offset, StringBuilder bitsString){
+    private byte parseNextSymbol(HuffmanTree huffmanTree, byte[] data, short offset, StringBuilder bitsString){
         byte symbol;
         int symbolsSkipCounter = 0;
         int nonLeafCounter;
@@ -128,13 +128,13 @@ public class TextDecoder {
             int treeBit = (treeByte >> (7-treeBitCounter)) & 1;
             treeBitCounter++;
             if(treeBit == 0){
-                if(STRING_BIT_COUNTER>7){
-                    STRING_BYTE_COUNTER++;
-                    STRING_BIT_COUNTER = 0;
+                if(stringBitCounter>7){
+                    stringByteCounter++;
+                    stringBitCounter = 0;
                 }
-                stringByte = data[offset+STRING_BYTE_COUNTER];
-                int stringBit = (stringByte >> (7-STRING_BIT_COUNTER)) & 1;
-                STRING_BIT_COUNTER++;
+                stringByte = data[offset+stringByteCounter];
+                int stringBit = (stringByte >> (7-stringBitCounter)) & 1;
+                stringBitCounter++;
                 if(stringBit == 0){
                     bitsString.append("0");
                 }else{
@@ -165,6 +165,4 @@ public class TextDecoder {
         symbol = huffmanTree.symbols[huffmanTree.symbols.length-1-symbolsSkipCounter];
         return symbol;
     }
-    
-    
 }

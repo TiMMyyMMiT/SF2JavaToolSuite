@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.text.compression;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,18 +24,18 @@ import java.util.Set;
  */
 public class TextEncoder {
     
-    private static Map<Integer,Integer>[] newSymbolCounters;
-    private static HuffmanTreeNode[] newHuffmanTreeTopNodes;
-    private static byte[][] newHuffmanSymbols;
-    private static byte[][] newHuffmanTrees;
-    private static byte[] newHuffmanTreesFileBytes;
-    private static byte[] newHuffmantreeOffsetsFileBytes;
+    private Map<Integer,Integer>[] newSymbolCounters;
+    private HuffmanTreeNode[] newHuffmanTreeTopNodes;
+    private byte[][] newHuffmanSymbols;
+    private byte[][] newHuffmanTrees;
+    private byte[] newHuffmanTreesFileBytes;
+    private byte[] newHuffmantreeOffsetsFileBytes;
     
-    private static byte[][] newStringBytes;
-    private static byte[] newTextbank;
-    private static byte[][] newTextbanks;     
+    private byte[][] newStringBytes;
+    private byte[] newTextbank;
+    private byte[][] newTextbanks;     
     
-    public static HuffmanTreeNode makeTree(List<HuffmanTreeNode> nodes){
+    public HuffmanTreeNode makeTree(List<HuffmanTreeNode> nodes){
         if(nodes.isEmpty()){
             return null;
         } else if(nodes.size()==1){
@@ -63,7 +64,7 @@ public class TextEncoder {
         }
     }
     
-    public static void attributeCodes(HuffmanTreeNode node,StringBuilder bitString){
+    public void attributeCodes(HuffmanTreeNode node,StringBuilder bitString){
         if(bitString == null){
             bitString = new StringBuilder();
         }
@@ -75,31 +76,31 @@ public class TextEncoder {
         }
     }
     
-    public static void produceTrees(String[] gamescript){
-        System.out.println("sfc.segahr.BusinessLayer.produceTrees() - Producing trees ...");  
+    public void produceTrees(String[] gamescript){
+        //Console.logger().finest("sfc.segahr.BusinessLayer.produceTrees() - Producing trees ...");  
         countSymbols(gamescript);
         makeTrees();
         produceTreeFileBytes();
-        System.out.println("sfc.segahr.BusinessLayer.produceTrees() - Trees produced.");
-    }  
+        //Console.logger().finest("sfc.segahr.BusinessLayer.produceTrees() - Trees produced.");
+    }
     
-    private static void countSymbols(String[] gamescript){
-        System.out.println("sfc.segahr.BusinessLayer.countSymbols() - Counting symbols ...");
+    private void countSymbols(String[] gamescript){
+        //Console.logger().finest("sfc.segahr.BusinessLayer.countSymbols() - Counting symbols ...");
         Map<Integer,Map<Integer,Integer>> symbolCounters = new HashMap<>();
         byte previousSymbol = (byte)0xFE;
         for (String string : gamescript) {
-            //System.out.println(string);
+            //Console.logger().finest(string);
             int stringPointer = 0;
             int symbolsPointer = 0;
             byte[] symbols = new byte[string.length()+1];
             while(stringPointer<string.length()){
-                for(int k=0;k<Symbols.TABLE.length;k++){
+                for(int k=0;k<Symbols.count();k++){
                     if(((previousSymbol&0xFF)!=0xFC) && ((previousSymbol&0xFF)!=0xFD)){
-                        if(string.substring(stringPointer).indexOf(Symbols.TABLE[k])==0){
+                        if(string.substring(stringPointer).indexOf(Symbols.fromInt(k))==0){
                             byte symbol = (byte)k;
                             symbols[symbolsPointer] = symbol;
                             symbolsPointer++;
-                            stringPointer = stringPointer + Symbols.TABLE[k].length();
+                            stringPointer = stringPointer + Symbols.fromInt(k).length();
                             previousSymbol = symbol;
                             break;
                         }                            
@@ -112,7 +113,7 @@ public class TextEncoder {
                         previousSymbol = symbol;
                         break;                        
                     }
-                    if(k+1==Symbols.TABLE.length){
+                    if(k+1==Symbols.count()){
                         System.err.println("Current character "+string.charAt(stringPointer)+" is not recognized as the beginning of a known symbol, and will be ignored.");
                         stringPointer++;
                     }
@@ -122,7 +123,7 @@ public class TextEncoder {
             if(symbolsPointer<stringPointer){
                 symbols = Arrays.copyOf(symbols,symbolsPointer+1);
             }
-            //System.out.println("Symbol bytes : "+Arrays.toString(symbols));
+            //Console.logger().finest("Symbol bytes : "+Arrays.toString(symbols));
             previousSymbol = (byte)0xFE;
             for(int l=0;l<symbols.length;l++){
                 if(!symbolCounters.containsKey(previousSymbol&0xFF)){
@@ -153,14 +154,14 @@ public class TextEncoder {
             while(index.length()<2){
                 index = "0"+index;
             }
-            System.out.println("Counters after character " + index + ":'" + Symbols.TABLE[i&0xFF] 
-                    + "' : "+((symbolCounters.get(i)!=null)?symbolCountersToString(symbolCounters.get(i)):"Unused symbol, no tree !"));
+            /*Console.logger().finest("Counters after character " + index + ":'" + Symbols.TABLE()[i&0xFF] 
+                    + "' : "+((symbolCounters.get(i)!=null)?symbolCountersToString(symbolCounters.get(i)):"Unused symbol, no tree !"));*/
         }
-        System.out.println("sfc.segahr.BusinessLayer.countSymbols() - Symbols counted.");        
+        //Console.logger().finest("sfc.segahr.BusinessLayer.countSymbols() - Symbols counted.");        
     }
     
-    private static void makeTrees(){
-        System.out.println("sfc.segahr.BusinessLayer.makeTrees() - Making trees ...");
+    private void makeTrees(){
+        Console.logger().finest("sfc.segahr.BusinessLayer.makeTrees() - Making trees ...");
         newHuffmanTrees = new byte[newSymbolCounters.length][];
         newHuffmanSymbols = new byte[newSymbolCounters.length][];
         newHuffmanTreeTopNodes = new HuffmanTreeNode[newSymbolCounters.length];
@@ -171,9 +172,9 @@ public class TextEncoder {
                 ((Set<Integer>)map.keySet()).toArray(symbols);
                 Integer[] weights = new Integer[map.size()];
                 ((Collection<Integer>)map.values()).toArray(weights);
-                System.out.println("Symbol '"+Symbols.TABLE[i]+"' ("+i+") data :");
-                System.out.println("\tsymbols : "+Arrays.toString(symbols));
-                System.out.println("\tweights : "+Arrays.toString(weights));
+                //Console.logger().finest("Symbol '"+Symbols.TABLE()[i]+"' ("+i+") data :");
+                //Console.logger().finest("\tsymbols : "+Arrays.toString(symbols));
+                //Console.logger().finest("\tweights : "+Arrays.toString(weights));
                 int huffmanTreeNodeIndex = 0;
                 List<HuffmanTreeNode> nodeList = new ArrayList<>();
                 for(Integer symbol : map.keySet()){
@@ -181,19 +182,19 @@ public class TextEncoder {
                     node.isLeaf = true;
                     node.symbol = symbol;
                     node.weight = map.get(symbol);
-                    node.symbolString = Symbols.TABLE[symbol];
+                    node.symbolString = Symbols.fromInt(symbol);
                     nodeList.add(node);
                     huffmanTreeNodeIndex++;
                 }
-                HuffmanTreeNode topNode = TextEncoder.makeTree(nodeList);
-                TextEncoder.attributeCodes(topNode,null);
-                System.out.println("\tHuffman Tree : "+topNode);
+                HuffmanTreeNode topNode = makeTree(nodeList);
+                attributeCodes(topNode,null);
+                //Console.logger().finest("\tHuffman Tree : "+topNode);
                 String treeBitString = topNode.getTreeBitString(null);
-                System.out.println("\tTree Bit String : "+treeBitString);
+                //Console.logger().finest("\tTree Bit String : "+treeBitString);
                 byte[] treeSymbolBytes = topNode.makeTreeSymbolBytes();
-                System.out.println("\tTree Symbols : " + Arrays.toString(treeSymbolBytes));
+                //Console.logger().finest("\tTree Symbols : " + Arrays.toString(treeSymbolBytes));
                 byte[] treeBytes = HuffmanTreeNode.makeTreeBytes(treeBitString);
-                System.out.println("\tTree Bytes : " + Arrays.toString(treeBytes));
+                //Console.logger().finest("\tTree Bytes : " + Arrays.toString(treeBytes));
                 newHuffmanSymbols[i] = treeSymbolBytes;
                 newHuffmanTrees[i] = treeBytes;
                 newHuffmanTreeTopNodes[i] = topNode;
@@ -201,14 +202,14 @@ public class TextEncoder {
                 newHuffmanSymbols[i] = new byte[0];
                 newHuffmanTrees[i] = new byte[0];
                 newHuffmanTreeTopNodes[i] = null;
-                System.out.println("Symbol '"+Symbols.TABLE[i]+"' ("+i+") data :\n\t"+Arrays.toString(newHuffmanTrees[i]));
+                //Console.logger().finest("Symbol '"+Symbols.TABLE()[i]+"' ("+i+") data :\n\t"+Arrays.toString(newHuffmanTrees[i]));
             }
         }
-        System.out.println("sfc.segahr.BusinessLayer.makeTrees() - Trees made.");
+        //Console.logger().finest("sfc.segahr.BusinessLayer.makeTrees() - Trees made.");
     }
     
-    public static void produceTreeFileBytes(){
-        System.out.println("sfc.segahr.BusinessLayer.produceTreeFileBytes() - Producing Tree File Bytes ...");
+    public void produceTreeFileBytes(){
+        //Console.logger().finest("sfc.segahr.BusinessLayer.produceTreeFileBytes() - Producing Tree File Bytes ...");
         newHuffmanTreesFileBytes = new byte[0];
         newHuffmantreeOffsetsFileBytes =new byte[255*2];
         short treePointer = 0;
@@ -227,27 +228,27 @@ public class TextEncoder {
             }
             treePointer += newHuffmanTrees[i].length;
         }
-        System.out.println("sfc.segahr.BusinessLayer.produceTreeFileBytes() - Tree File Bytes produced.");
-    }  
+        //Console.logger().finest("sfc.segahr.BusinessLayer.produceTreeFileBytes() - Tree File Bytes produced.");
+    }
     
-    public static void produceTextbanks(String[] gamescript){
-        System.out.println("sfc.segahr.BusinessLayer.produceTextbanks() - Producing text banks ...");
+    public void produceTextbanks(String[] gamescript){
+        //Console.logger().finest("sfc.segahr.BusinessLayer.produceTextbanks() - Producing text banks ...");
         newStringBytes = new byte[gamescript.length][];
         byte previousSymbol = (byte)0xFE;
         for(int i = 0;i<gamescript.length;i++){
             String string = gamescript[i];
-            //System.out.println(string);
+            //Console.logger().finest(string);
             int stringPointer = 0;
             int symbolsPointer = 0;
             byte[] symbols = new byte[string.length()+1];
             while(stringPointer<string.length()){
-                for(int k=0;k<Symbols.TABLE.length;k++){
+                for(int k=0;k<Symbols.count();k++){
                     if(((previousSymbol&0xFF)!=0xFC) && ((previousSymbol&0xFF)!=0xFD)){
-                        if(string.substring(stringPointer).indexOf(Symbols.TABLE[k])==0){
+                        if(string.substring(stringPointer).indexOf(Symbols.fromInt(k))==0){
                             byte symbol = (byte)k;
                             symbols[symbolsPointer] = symbol;
                             symbolsPointer++;
-                            stringPointer = stringPointer + Symbols.TABLE[k].length();
+                            stringPointer = stringPointer + Symbols.fromInt(k).length();
                             previousSymbol = symbol;
                             break;
                         }                            
@@ -260,7 +261,7 @@ public class TextEncoder {
                         previousSymbol = symbol;
                         break;                        
                     }
-                    if(k+1==Symbols.TABLE.length){
+                    if(k+1==Symbols.count()){
                         System.err.println("Current character "+string.charAt(stringPointer)+" is not recognized as the beginning of a known symbol, and will be ignored.");
                         stringPointer++;
                     }
@@ -270,7 +271,7 @@ public class TextEncoder {
             if(symbolsPointer<stringPointer){
                 symbols = Arrays.copyOf(symbols,symbolsPointer+1);
             }
-            //System.out.println("Symbol bytes : "+Arrays.toString(symbols));
+            //Console.logger().finest("Symbol bytes : "+Arrays.toString(symbols));
             previousSymbol = (byte)0xFE;
             StringBuilder sb = new StringBuilder();
             for(int l=0;l<symbols.length;l++){
@@ -286,8 +287,7 @@ public class TextEncoder {
                 stringBytes[m/8] = b;
             }
             newStringBytes[i] = stringBytes;
-            System.out.println(string+"\n"+sb.toString()+"->"+Arrays.toString(stringBytes));
-            
+            //Console.logger().finest(string+"\n"+sb.toString()+"->"+Arrays.toString(stringBytes));
         }
         
         byte[] textbankBytes = new byte[0];
@@ -309,23 +309,23 @@ public class TextEncoder {
                 textbankIndex++;
             }
         }
-        System.out.println("sfc.segahr.BusinessLayer.produceTextbanks() - Text banks produced.");
-    }    
+        //Console.logger().finest("sfc.segahr.BusinessLayer.produceTextbanks() - Text banks produced.");
+    }
     
-    public static byte[] getNewHuffmanTreesFileBytes() {
+    public byte[] getNewHuffmanTreesFileBytes() {
         return newHuffmanTreesFileBytes;
     }
 
-    public static byte[] getNewHuffmantreeOffsetsFileBytes() {
+    public byte[] getNewHuffmantreeOffsetsFileBytes() {
         return newHuffmantreeOffsetsFileBytes;
     }
 
-    public static byte[][] getNewTextbanks() {
+    public byte[][] getNewTextbanks() {
         return newTextbanks;
-    }    
+    }
 
     
-    public static <K, V extends Comparable<? super V>> Map<K, V> 
+    public <K, V extends Comparable<? super V>> Map<K, V> 
     sortByValueDesc( Map<K, V> map )
     {
         List<Map.Entry<K, V>> list =
@@ -347,7 +347,7 @@ public class TextEncoder {
         return result;
     }
     
-   public static <K, V extends Comparable<? super V>> Map<K, V> 
+   public <K, V extends Comparable<? super V>> Map<K, V> 
     sortByValueAsc( Map<K, V> map )
     {
         List<Map.Entry<K, V>> list =
@@ -367,9 +367,9 @@ public class TextEncoder {
             result.put( entry.getKey(), entry.getValue() );
         }
         return result;
-    }    
+    }
     
-    private static String symbolCountersToString(Map<Integer,Integer> map){
+    private String symbolCountersToString(Map<Integer,Integer> map){
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for(Integer key : map.keySet()){
@@ -377,11 +377,10 @@ public class TextEncoder {
             while(index.length()<2){
                 index = "0"+index;
             }
-            sb.append(index).append(":'").append(Symbols.TABLE[key]).append("'=").append(map.get(key)).append(", ");
+            sb.append(index).append(":'").append(Symbols.fromInt(key)).append("'=").append(map.get(key)).append(", ");
         }
         sb.delete(sb.length()-2,sb.length());
         sb.append("]");
         return sb.toString();
-    }    
-    
+    }
 }
