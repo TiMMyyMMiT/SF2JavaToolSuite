@@ -65,8 +65,9 @@ public abstract class AbstractLayoutPanel extends JPanel {
                     coordsImageX = paintCoordsImage(true, dims.width, coordsX);
                     coordsImageY = paintCoordsImage(false, dims.height, coordsY);
                 }
-                offsetX = COORDS_PADDING_X+verticalPadding+COORDS_PADDING_SCALE*displayScale;
-                offsetY = COORDS_PADDING_Y+COORDS_PADDING_SCALE*displayScale;
+                Dimension coordsPadding = getCoordsPadding();
+                offsetX = verticalPadding+coordsPadding.width;
+                offsetY = coordsPadding.height;
             }
             g.drawImage(coordsImageX, offsetX, 0, this);
             g.drawImage(coordsImageY, 0, offsetY, this);
@@ -190,6 +191,10 @@ public abstract class AbstractLayoutPanel extends JPanel {
         g.dispose();
         image.flush();
         return newImage;
+    }
+    
+    protected Dimension getCoordsPadding() {
+        return new Dimension(COORDS_PADDING_X+displayScale*COORDS_PADDING_SCALE, COORDS_PADDING_Y+displayScale*COORDS_PADDING_SCALE);
     }
     
     @Override
