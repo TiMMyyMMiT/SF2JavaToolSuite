@@ -297,8 +297,8 @@ public abstract class AbstractLayoutPanel extends JPanel implements MouseMotionL
         Dimension coordsPadding = getCoordsPadding();
         int x = e.getX() - coordsPadding.width;
         int y = e.getY() - coordsPadding.height;
-        x /= (getDisplayScale() * gridWidth);
-        y /= (getDisplayScale() * gridHeight);
+        x /= (getDisplayScale() * coordsX);
+        y /= (getDisplayScale() * coordsY);
         if (lastX != x || lastY != y) {
             lastX = x;
             lastY = y;
