@@ -24,7 +24,7 @@ import java.awt.Graphics;
  */
 public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
-    private static final int PREVIEW_WIDTH = 290;
+    private static final int PREVIEW_WIDTH = 232;
     private static final int PREVIEW_HEIGHT = 64;
     
     private static final int PANEL_TILE_CORNER = 6*16;
@@ -34,8 +34,8 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     private static final int FONT_START_HEIGHT = PIXEL_HEIGHT;
     private static final int FONT_LINE_HEIGHT = PIXEL_HEIGHT*2;
-    private static final int FONT_START_X = 14;
-    private static final int FONT_END_X = PREVIEW_WIDTH-PIXEL_WIDTH-14;
+    private static final int FONT_START_X = 10;
+    private static final int FONT_END_X = PREVIEW_WIDTH-10;
     private static final FontSymbol EMPTY_SYMBOL = FontSymbol.EmptySymbol();
     private static final Palette PREVIEW_PALETTE = new Palette(new CRAMColor[] { CRAMColor.BLACK, CRAMColor.WHITE, CRAMColor.LIGHT_GRAY }, true);
     

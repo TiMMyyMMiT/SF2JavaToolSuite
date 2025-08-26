@@ -124,6 +124,7 @@ public class TextMainEditor extends AbstractMainEditor {
         jPanel18 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         textPreviewLayoutPanel = new com.sfc.sf2.text.gui.TextPreviewLayoutPanel();
+        jPanel8 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
@@ -160,7 +161,8 @@ public class TextMainEditor extends AbstractMainEditor {
         fileButton7.setFilePath("..\\..\\..\\code\\common\\scripting\\text\\textfunctions.asm");
         fileButton7.setLabelText("ASCII table :");
 
-        infoButton3.setText("<html>Loads in table_666E so that ASCII characters (raw text) can be converted into VWFont symbols.</html>");
+        infoButton3.setMessageText("<html>Loads in <i>table_666E</i> from <i>textfunctions.asm</i>, so that ASCII characters (raw text) can be converted into VWFont symbols.</html>");
+        infoButton3.setText("");
 
         infoButton4.setMessageText("<html>Loads in the games <i>variable width font</i> for rendering in the preview</html>");
         infoButton4.setText("");
@@ -459,7 +461,7 @@ public class TextMainEditor extends AbstractMainEditor {
                 jPanel5Layout.setVerticalGroup(
                     jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jTabbedPane2)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
                         .addContainerGap())
                 );
 
@@ -487,9 +489,9 @@ public class TextMainEditor extends AbstractMainEditor {
                 jSplitPane2.setLeftComponent(jPanel17);
 
                 jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Preview"));
-                jPanel7.setMaximumSize(new java.awt.Dimension(590, 160));
-                jPanel7.setMinimumSize(new java.awt.Dimension(590, 160));
-                jPanel7.setPreferredSize(new java.awt.Dimension(590, 160));
+                jPanel7.setMaximumSize(new java.awt.Dimension(470, 150));
+                jPanel7.setMinimumSize(new java.awt.Dimension(470, 150));
+                jPanel7.setPreferredSize(new java.awt.Dimension(470, 150));
 
                 textPreviewLayoutPanel.setBackground(new java.awt.Color(30, 30, 30));
 
@@ -497,7 +499,7 @@ public class TextMainEditor extends AbstractMainEditor {
                 textPreviewLayoutPanel.setLayout(textPreviewLayoutPanelLayout);
                 textPreviewLayoutPanelLayout.setHorizontalGroup(
                     textPreviewLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 593, Short.MAX_VALUE)
+                    .addGap(0, 490, Short.MAX_VALUE)
                 );
                 textPreviewLayoutPanelLayout.setVerticalGroup(
                     textPreviewLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -514,9 +516,22 @@ public class TextMainEditor extends AbstractMainEditor {
                 );
                 jPanel7Layout.setVerticalGroup(
                     jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 137, Short.MAX_VALUE)
+                    .addGap(0, 127, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(textPreviewLayoutPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                );
+
+                jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Controls"));
+
+                javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+                jPanel8.setLayout(jPanel8Layout);
+                jPanel8Layout.setHorizontalGroup(
+                    jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGap(0, 61, Short.MAX_VALUE)
+                );
+                jPanel8Layout.setVerticalGroup(
+                    jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGap(0, 127, Short.MAX_VALUE)
                 );
 
                 jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Text"));
@@ -552,7 +567,7 @@ public class TextMainEditor extends AbstractMainEditor {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0))
@@ -591,7 +606,7 @@ public class TextMainEditor extends AbstractMainEditor {
                         .addGap(0, 0, 0)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tableText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tableText, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
                         .addContainerGap())
                 );
 
@@ -601,16 +616,21 @@ public class TextMainEditor extends AbstractMainEditor {
                     jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel18Layout.createSequentialGroup()
+                                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                 );
                 jPanel18Layout.setVerticalGroup(
                     jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
@@ -622,7 +642,7 @@ public class TextMainEditor extends AbstractMainEditor {
                 jPanel16.setLayout(jPanel16Layout);
                 jPanel16Layout.setHorizontalGroup(
                     jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 1066, Short.MAX_VALUE)
+                    .addGap(0, 1015, Short.MAX_VALUE)
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jSplitPane2))
                 );
@@ -649,7 +669,7 @@ public class TextMainEditor extends AbstractMainEditor {
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 );
 
-                setSize(new java.awt.Dimension(1082, 638));
+                setSize(new java.awt.Dimension(1031, 638));
                 setLocationRelativeTo(null);
             }// </editor-fold>//GEN-END:initComponents
 
@@ -865,6 +885,7 @@ public class TextMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
