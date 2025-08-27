@@ -13,246 +13,8 @@ import java.util.HashMap;
  * @author TiMMy
  */
 public class Symbols {
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">  
-    private static final String[] DEFAULT_TABLE = {
-        "\\UNUSED",
-        " ",
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-        "_",
-        "-",
-        ".",
-        ",",
-        "!",
-        "?",
-        "<", /* Represents character '“' (ALT 0147) for easier writing in game script */
-        ">", /* Represents character '”' (ALT 0148) for easier writing in game script*/
-        "'",
-        "(",
-        ")",
-        "#",
-        "%",
-        "&",
-        "+",
-        "/",
-        ":",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
-        "\\UNUSED",
+    // <editor-fold defaultstate="collapsed" desc="TAGS_SYMBOL_TABLE">  
+    private static final String[] TAGS_SYMBOL_TABLE = {
         "{DICT}",
         "{N}",
         "{D2}",
@@ -270,58 +32,94 @@ public class Symbols {
         "{NAME",
         "{COLOR",
         "(START/EOL)",
-        "\\UNUSED"
+        "\\UNUSED",
     };
     // </editor-fold>
     
-    private static String[] symbolTable;
-    private static final HashMap<String, Integer> stringMap = new HashMap<>();
+    private static final int[] asciiToSymbolTable = new int[256];
+    private static final int[] symbolToAsciiTable = new int[256];
+    private static final String[] symbolToStringTable = new String[256];
+    private static final HashMap<String, Integer> stringToSymbolMap = new HashMap<>();
     
-    static {
-        symbolTable = DEFAULT_TABLE;
-        for (int i = 0; i < DEFAULT_TABLE.length; i++) {
-            if (!stringMap.containsKey(DEFAULT_TABLE[i])) {
-                stringMap.put(DEFAULT_TABLE[i], i);
-            }
+    public static int charToSymbol(char c) {
+        return asciiToSymbol((int)c);
+    }
+    
+    public static int asciiToSymbol(int ascii) {
+        if (ascii < 0 || ascii >= asciiToSymbolTable.length) {
+            return 0;
+        } else {
+            return asciiToSymbolTable[ascii];
         }
     }
     
-    public static int fromChar(char val) {
-        return fromString(Character.toString(val));
-    }
-    
-    public static int fromString(String val) {
-        if (stringMap.containsKey(val)) {
-            return stringMap.get(val);
+    public static int symbolToAscii(int symbol) {
+        if (symbol < 0 || symbol >= symbolToAsciiTable.length) {
+            return 0;
+        } else {
+            return symbolToAsciiTable[symbol];
         }
-        return 1;
     }
     
-    public static String fromInt(int val) {
-        return symbolTable[val];
+    public static String asciiToString(int ascii) {
+        return symbolToString(asciiToSymbol(ascii));
+    }
+    
+    public static String symbolToString(int symbol) {
+        if (symbol < 0 || symbol >= symbolToStringTable.length) {
+            return null;
+        } else {
+            return symbolToStringTable[symbol];
+        }
+    }
+    
+    public static int stringToSymbol(String string) {
+        if (stringToSymbolMap.containsKey(string)) {
+            return stringToSymbolMap.get(string);
+        } else {
+            return 1;
+        }
+    }
+    
+    public static int stringToAscii(String string) {
+        return symbolToAscii(stringToSymbol(string));
     }
     
     public static int count() {
-        return symbolTable.length;
+        return symbolToStringTable.length;
     }
     
     public static void setImportedTable(int[] importedTable) {
+        if (importedTable == null || importedTable.length == 0) return;
+        for (int i = 0; i < asciiToSymbolTable.length; i++) {
+            asciiToSymbolTable[i] = -1;
+            symbolToAsciiTable[i] = -1;
+            symbolToStringTable[i] = null;
+        }
+        stringToSymbolMap.clear();
+        putSymbol(0, 0, "\\UNUSED");    //Hidden
+        putSymbol(32, 1, " ");          //Space
         char c;
-        String s;
-        stringMap.clear();
         for (int i = 0; i < importedTable.length; i++) {
             if (i >= 238) {
-                stringMap.put(DEFAULT_TABLE[i], i);   //For tags, use default table
+                putSymbol(i, i, TAGS_SYMBOL_TABLE[i-238]);  //For tags, use default table
             } else if (importedTable[i] != 1) {
                 c = (char)i;
                      if (c == '“') c = '<';
                 else if (c == '”') c = '>';
-                s = Character.toString(c);
-                symbolTable[i] = s;
-                if (!stringMap.containsKey(s)) {
-                    stringMap.put(s, importedTable[i]);
-                }
+                putSymbol(i, importedTable[i], Character.toString(c));
             }
+        }
+    }
+    
+    private static void putSymbol(int ascii, int symbol, String string) {
+        asciiToSymbolTable[ascii] = symbol;
+        if (!stringToSymbolMap.containsKey(string)) {
+            stringToSymbolMap.put(string, symbol);
+        }
+        if (symbolToAsciiTable[symbol] == -1) {   //If data is not already set for this symbol
+            symbolToAsciiTable[symbol] = ascii;
+            symbolToStringTable[symbol] = string;
         }
     }
 }

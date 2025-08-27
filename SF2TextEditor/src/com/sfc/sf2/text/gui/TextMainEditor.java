@@ -12,6 +12,7 @@ import com.sfc.sf2.helpers.listeners.ListenersHelpers;
 import com.sfc.sf2.text.TextManager;
 import com.sfc.sf2.text.compression.Symbols;
 import java.awt.Rectangle;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.JTextField;
@@ -42,6 +43,12 @@ public class TextMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
+        //Handle old Ascii map path and new path
+        File file = PathHelpers.getBasePath().resolve("asciitotextsymbolmap.asm").toFile();
+        if (file.exists()) {
+            fileButton7.setFilePath(file.toString());
+        }
+        
         accordionPanel2.setExpanded(false);
         
         sorter = new TableRowSorter<>(textTableModel);
@@ -58,7 +65,6 @@ public class TextMainEditor extends AbstractMainEditor {
     @Override
     protected void updateEditorData() {
         textTableModel.setTableData(textManager.getGameScript());
-        Symbols.setImportedTable(textManager.getAsciiToSymbolMap());
         textPreviewLayoutPanel.setBaseTiles(textManager.getBaseTiles());
         textPreviewLayoutPanel.setFontSymbols(textManager.getFontSymbols());
         textPreviewLayoutPanel.setAllyNames(textManager.getAllyNames());
@@ -196,8 +202,8 @@ public class TextMainEditor extends AbstractMainEditor {
                             .addComponent(infoButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(infoButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(accordionPanel2Layout.createSequentialGroup()
-                        .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(infoButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -718,7 +724,8 @@ public class TextMainEditor extends AbstractMainEditor {
         Path basePath = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
         if (!PathHelpers.createPathIfRequred(basePath)) return;
         try {
-            textManager.exportDisassembly(basePath, textManager.getGameScript());
+            String[] data = textTableModel.getTableData(String[].class);
+            textManager.exportDisassembly(basePath, data);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Text disasms could not be exported to : " + basePath);
@@ -729,7 +736,8 @@ public class TextMainEditor extends AbstractMainEditor {
         Path textPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         if (!PathHelpers.createPathIfRequred(textPath)) return;
         try {
-            textManager.exportTxt(textPath, textManager.getGameScript());
+            String[] data = textTableModel.getTableData(String[].class);
+            textManager.exportTxt(textPath, data);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Text file could not be exported to : " + textPath);
@@ -813,6 +821,7 @@ public class TextMainEditor extends AbstractMainEditor {
         Path allyNamesPath = PathHelpers.getBasePath().resolve(fileButton8.getFilePath());
         try {
             textManager.importAsciiMap(asciiTablePath);
+            Symbols.setImportedTable(textManager.getAsciiToSymbolMap());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Ascii table asm could not be imported from : " + asciiTablePath);
@@ -921,7 +930,6 @@ public class TextMainEditor extends AbstractMainEditor {
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton36;
-    private javax.swing.JButton jButtonDown;
     private javax.swing.JButton jButtonDown1;
     private javax.swing.JButton jButtonUp;
     private javax.swing.JLabel jLabel1;

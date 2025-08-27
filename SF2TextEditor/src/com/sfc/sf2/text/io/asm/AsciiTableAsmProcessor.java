@@ -24,8 +24,8 @@ public class AsciiTableAsmProcessor extends AbstractAsmProcessor<int[]> {
         ArrayList<Integer> bytesList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
-            if (line.startsWith("table_666E:")) {   //Found start of list
-                line = line.substring(11);
+            if (line.startsWith("table_666E:") || line.startsWith("table_AsciiToTextSymbolMap")) {   //Found start of list
+                line = line.substring(line.indexOf(':')+1);
                 do {
                     if (line.length() == 0) {
                         continue;   //empty line
@@ -38,6 +38,9 @@ public class AsciiTableAsmProcessor extends AbstractAsmProcessor<int[]> {
                 } while((line = reader.readLine()) != null);
                 break;  //End of list
             }
+        }
+        if (bytesList.size() == 0) {
+            throw new AsmException("Ascii table data was not found.");
         }
         int[] data = new int[bytesList.size()];
         for (int i = 0; i < data.length; i++) {
