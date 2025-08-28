@@ -15,6 +15,9 @@ import com.sfc.sf2.portrait.models.PortraitDataTableModel;
 import com.sfc.sf2.portrait.settings.PortraitSettings;
 import java.util.logging.Level;
 import java.nio.file.Path;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -49,6 +52,12 @@ public class PortraitMainEditor extends AbstractMainEditor {
         portraitLayoutPanel.setMouthAnimTable(mouthTable);
         tableEyes.addListSelectionListener(this::eyesListSelectionChanged);
         tableMouth.addListSelectionListener(this::mouthListSelectionChanged);
+        tableEyes.addTableModelListener(this::eyesListValueChanged);
+        tableMouth.addTableModelListener(this::mouthListValueChanged);
+        TableColumnModel columns = tableEyes.jTable.getColumnModel();
+        columns.getColumn(0).setMaxWidth(40);
+        columns = tableMouth.jTable.getColumnModel();
+        columns.getColumn(0).setMaxWidth(40);
         
         jComboBox1.setSelectedIndex(portraitSettings.getZoom()-1);
     }
@@ -270,10 +279,12 @@ public class PortraitMainEditor extends AbstractMainEditor {
         tableEyes.setBorder(javax.swing.BorderFactory.createTitledBorder("Eyes"));
         tableEyes.setModel(portraitDataModelEyes);
         tableEyes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableEyes.setSpinnerNumberEditor(true);
 
         tableMouth.setBorder(javax.swing.BorderFactory.createTitledBorder("Mouth"));
         tableMouth.setModel(portraitDataModelMouth);
         tableMouth.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableMouth.setSpinnerNumberEditor(true);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -650,8 +661,30 @@ public class PortraitMainEditor extends AbstractMainEditor {
         repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
-    private void eyesListSelectionChanged(javax.swing.event.ListSelectionEvent evt) {
-        if (selectedEyesRow != tableEyes.jTable.getSelectedRow()) {
+    private void eyesListSelectionChanged(ListSelectionEvent evt) {
+        if (evt.getValueIsAdjusting() && selectedEyesRow == tableEyes.jTable.getSelectedRow()) return;
+        selectedEyesRow = tableEyes.jTable.getSelectedRow();
+        Portrait portrait = portraitLayoutPanel.getPortrait();
+        if (portrait != null) {
+            portrait.setEyeTiles(eyeTable.getTableData(int[][].class));
+            portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
+        }
+        repaintEditorLayout();
+    }
+    
+    private void mouthListSelectionChanged(ListSelectionEvent evt) {
+        if (evt.getValueIsAdjusting() && selectedMouthsRow == tableMouth.jTable.getSelectedRow()) return;
+        selectedMouthsRow = tableMouth.jTable.getSelectedRow();
+        Portrait portrait = portraitLayoutPanel.getPortrait();
+        if (portrait != null) {
+            portrait.setMouthTiles(mouthTable.getTableData(int[][].class));
+            portraitLayoutPanel.setSelectedMouthTile(selectedMouthsRow);
+        }
+        repaintEditorLayout();
+    }                                         
+
+    private void eyesListValueChanged(TableModelEvent evt) {
+        if (selectedEyesRow == tableEyes.jTable.getSelectedRow()) {
             selectedEyesRow = tableEyes.jTable.getSelectedRow();
             Portrait portrait = portraitLayoutPanel.getPortrait();
             if (portrait != null) {
@@ -662,8 +695,8 @@ public class PortraitMainEditor extends AbstractMainEditor {
         }
     }
     
-    private void mouthListSelectionChanged(javax.swing.event.ListSelectionEvent evt) {
-        if (selectedMouthsRow != tableMouth.jTable.getSelectedRow()) {
+    private void mouthListValueChanged(TableModelEvent evt) {
+        if (selectedMouthsRow == tableMouth.jTable.getSelectedRow()) {
             selectedMouthsRow = tableMouth.jTable.getSelectedRow();
             Portrait portrait = portraitLayoutPanel.getPortrait();
             if (portrait != null) {

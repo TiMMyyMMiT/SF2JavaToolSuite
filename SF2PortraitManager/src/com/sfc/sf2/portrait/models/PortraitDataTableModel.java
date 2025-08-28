@@ -14,17 +14,22 @@ import com.sfc.sf2.core.models.AbstractTableModel;
 public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
 
     public PortraitDataTableModel() {
-        super(new String[] { "X", "Y", "X'", "Y'" }, 12);
+        super(new String[] { "Row", "X", "Y", "X'", "Y'" }, 12);
     }
 
     @Override
     public Class<?> getColumnType(int col) {
         return Integer.class;
     }
+ 
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return column > 0;
+    }
 
     @Override
     protected int[] createBlankItem(int row) {
-        return new int[columns.length];
+        return new int[getColumnCount()];
     }
 
     @Override
@@ -36,12 +41,18 @@ public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
 
     @Override
     protected Object getValue(int[] item, int row, int col) {
-        return item[col];
+        if (col == 0) {
+            return row;
+        } else {
+            return item[col-1];
+        }
     }
 
     @Override
     protected int[] setValue(int[] item, int col, Object value) {
-        item[col] = (int)value;
+        if (col > 0) {
+            item[col-1] = (int)value;
+        }
         return item;
     }
 }

@@ -330,6 +330,7 @@
                               <Connection component="portraitDataModelEyes" type="bean"/>
                             </Property>
                             <Property name="selectionMode" type="int" value="0"/>
+                            <Property name="spinnerNumberEditor" type="boolean" value="true"/>
                           </Properties>
                         </Component>
                         <Component class="com.sfc.sf2.core.gui.controls.Table" name="tableMouth">
@@ -343,6 +344,7 @@
                               <Connection component="portraitDataModelMouth" type="bean"/>
                             </Property>
                             <Property name="selectionMode" type="int" value="0"/>
+                            <Property name="spinnerNumberEditor" type="boolean" value="true"/>
                           </Properties>
                         </Component>
                       </SubComponents>
