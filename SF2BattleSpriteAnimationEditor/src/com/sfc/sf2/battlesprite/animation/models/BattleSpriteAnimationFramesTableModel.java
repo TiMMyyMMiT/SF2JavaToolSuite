@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.battlesprite.animation.models;
 
+import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationFrame;
 import com.sfc.sf2.core.models.AbstractTableModel;
 
@@ -32,7 +33,7 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
             return false;   //Cannot edit the index row
         } else if (row == 0 && column <= 4) {
             return false;   //Core data for first frame cannot be edited
-        } else if ((byte)getValueAt(row, 5) == -1 && column >= 5) {
+        } else if (column >= 5 && getRow(row).getType() == BattleSprite.BattleSpriteType.ENEMY) {
             return false;   //Enemy weapon data cannot be edited
         } else {
             return true;

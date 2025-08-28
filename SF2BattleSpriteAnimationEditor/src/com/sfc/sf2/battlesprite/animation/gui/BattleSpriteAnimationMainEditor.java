@@ -669,6 +669,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         tableFrames.setBorder(javax.swing.BorderFactory.createTitledBorder("Animation frames"));
         tableFrames.setModel(battleSpriteAnimationFramesModel);
         tableFrames.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tableFrames.setSingleClickText(false);
+        tableFrames.setSpinnerNumberEditor(true);
         tableFrames.setMinimumSize(new java.awt.Dimension(260, 150));
         tableFrames.setPreferredSize(new java.awt.Dimension(260, 200));
 

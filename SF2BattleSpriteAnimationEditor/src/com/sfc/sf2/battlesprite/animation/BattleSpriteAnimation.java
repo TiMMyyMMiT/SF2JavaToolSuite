@@ -13,7 +13,7 @@ import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
  */
 public class BattleSpriteAnimation {
         
-    private BattleSpriteType type;    
+    private BattleSpriteType type;
     private BattleSpriteAnimationFrame[] frames;
     
     private byte spellInitFrame;
