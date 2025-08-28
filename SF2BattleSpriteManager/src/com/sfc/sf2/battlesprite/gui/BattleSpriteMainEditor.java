@@ -716,10 +716,11 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         if (battleSprite != null) {
             if (jCheckBox3.isSelected()) {
                 battleSpriteLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true);
-                repaintEditorLayout();
             } else {
                 battleSpriteLayoutPanel.stopAnimation();
+                battleSpriteLayoutPanel.redraw();
             }
+            repaintEditorLayout();
         }
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
