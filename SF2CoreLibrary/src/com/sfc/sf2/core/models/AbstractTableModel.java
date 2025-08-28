@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTableModel {
 
-    protected String[] columns;
+    private String[] columns;
     
     private List<T> tableItems = new ArrayList();
     private int rowLimit;
@@ -54,7 +54,6 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     protected abstract T cloneItem(T item);
     protected abstract Object getValue(T item, int row, int col);    
     protected abstract T setValue(T item, int col, Object value);
-    
     
     public T getRow(int row) {
         if (row < 0 || row >= tableItems.size()) {
