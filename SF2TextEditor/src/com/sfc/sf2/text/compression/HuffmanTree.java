@@ -54,7 +54,7 @@ public class HuffmanTree {
     
     @Override
     public String toString(){
-        return "HuffmanTree " + index + " for symbol \'" + Symbols.fromInt(index) + "\' : "
+        return "HuffmanTree " + index + " for symbol \'" + Symbols.asciiToSymbol(index) + "\' : "
                 + "\n\tSymbols (" + symbols.length + ") : " + printSymbols()
                 + "\n\tTree : " + printTree();
     }
@@ -62,7 +62,7 @@ public class HuffmanTree {
     private String printSymbols(){
         StringBuilder sb = new StringBuilder();
         for(int i = 0;i<symbols.length;i++){
-            sb.append(symbols[i]).append(":\'").append(Symbols.fromInt((int)symbols[i]&0xFF)).append("\' ");
+            sb.append(symbols[i]).append(":\'").append(Symbols.asciiToSymbol((int)symbols[i]&0xFF)).append("\' ");
         }
         return sb.toString();
     }

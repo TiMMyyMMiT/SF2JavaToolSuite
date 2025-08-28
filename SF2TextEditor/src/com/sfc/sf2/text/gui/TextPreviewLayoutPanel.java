@@ -166,7 +166,7 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
     
     private FontSymbol findSymbol(char symbolChar) {
-        int value = Symbols.fromChar(symbolChar)-1;
+        int value = Symbols.charToSymbol(symbolChar)-1; //Minus 1 because VWFonts disasm does not acount for hidden value at index 0
         if (value >= 0 && value < fontSymbols.length) {
             return fontSymbols[value];
         } else {

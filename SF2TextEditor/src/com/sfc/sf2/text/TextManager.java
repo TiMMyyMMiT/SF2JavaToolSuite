@@ -9,6 +9,7 @@ import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.BinaryDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.MetadataException;
 import com.sfc.sf2.core.io.TextFileException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
@@ -18,6 +19,7 @@ import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.FileHelpers;
 import com.sfc.sf2.text.compression.TextDecoder;
 import com.sfc.sf2.text.compression.TextEncoder;
+import com.sfc.sf2.text.io.AsciiReplaceProcessor;
 import com.sfc.sf2.text.io.asm.AsciiTableAsmProcessor;
 import com.sfc.sf2.text.io.AsmManager;
 import com.sfc.sf2.text.io.TextProcessor;
@@ -30,6 +32,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -45,12 +50,14 @@ public class TextManager extends AbstractManager {
     private final BinaryDisassemblyProcessor binaryDisassemblyProcessor = new BinaryDisassemblyProcessor();
     private final AsciiTableAsmProcessor asciiAsmProcessor = new AsciiTableAsmProcessor();
     private final AllyNamesAsmProcessor allyNamesAsmProcessor = new AllyNamesAsmProcessor();
+    private final AsciiReplaceProcessor asciiReplaceProcessor = new AsciiReplaceProcessor();
     private final TextProcessor textProcessor = new TextProcessor();
     
     private String[] gamescript;
     private Tileset baseTiles;
     private FontSymbol[] fontSymbols;
     private int[] asciiToSymbolMap;
+    private HashMap<Character, Character> asciiReplaceMap;
     private String[] allyNames;
 
     @Override
@@ -67,6 +74,12 @@ public class TextManager extends AbstractManager {
                 fontSymbols[i].clearIndexedColorImage();
             }
         }
+        if (asciiReplaceMap != null) {
+            asciiReplaceMap.clear();
+            asciiReplaceMap = null;
+        }
+        asciiToSymbolMap = null;
+        allyNames = null;
     }
        
     public String[] importDisassembly(Path basePath) throws IOException, DisassemblyException {
@@ -143,6 +156,7 @@ public class TextManager extends AbstractManager {
     public String[] importTxt(Path filePath) throws IOException, TextFileException {
         Console.logger().finest("ENTERING importTxt");
         gamescript = textProcessor.importTextData(filePath);
+        asciiReplace(gamescript);
         Console.logger().info(gamescript.length + " lines of text successfully imported from : " + filePath);
         Console.logger().finest("EXITING importTxt");
         return gamescript;
@@ -185,6 +199,14 @@ public class TextManager extends AbstractManager {
         return asciiToSymbolMap;
     }
     
+    public HashMap<Character, Character> importAsciiReplaceMap(Path replacePath) throws IOException, MetadataException {
+        Console.logger().finest("ENTERING importAsciiReplaceMap");
+        asciiReplaceMap = new HashMap<Character, Character>();
+        asciiReplaceProcessor.importMetadata(replacePath, asciiReplaceMap);
+        Console.logger().finest("EXITING importAsciiReplaceMap");
+        return asciiReplaceMap;
+    }
+    
     public String[] importAllyNames(Path allyNamesPath) throws IOException, FileNotFoundException, AsmException {
         Console.logger().finest("ENTERING importAllyNames");
         EntriesAsmData data = allyNamesAsmProcessor.importAsmData(allyNamesPath);
@@ -194,6 +216,19 @@ public class TextManager extends AbstractManager {
         }
         Console.logger().finest("EXITING importAllyNames");
         return allyNames;
+    }
+    
+    private void asciiReplace(String[] data) {
+        if (data == null || asciiReplaceMap == null || asciiReplaceMap.size() == 0) return;
+        String replaceFrom = "";
+        String replaceTo = "";
+        for (Map.Entry<Character, Character> entry : asciiReplaceMap.entrySet()) {
+            replaceFrom += entry.getKey();
+            replaceTo += entry.getValue();
+        }
+        for (int i = 0; i < data.length; i++) {
+            data[i] = StringUtils.replaceChars(data[i], replaceFrom, replaceTo);
+        }
     }
     
     public String[] getGameScript() {
@@ -214,6 +249,10 @@ public class TextManager extends AbstractManager {
     
     public int[] getAsciiToSymbolMap() {
         return asciiToSymbolMap;
+    }
+    
+    public HashMap<Character, Character> getAsciiReplaceMap() {
+        return asciiReplaceMap;
     }
     
     public String[] getAllyNames() {
