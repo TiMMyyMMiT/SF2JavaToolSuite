@@ -24,10 +24,12 @@ public class TextProcessor extends AbstractTextProcessor<String[]> {
         String line;
         boolean newFormat = false;
         while ((line = reader.readLine()) != null) {
+            //Ignore commented lines
             if (line.charAt(0) == ';') {
                 newFormat = true;
                 continue;
             }
+            //remove the IDs
             int index = newFormat ? 8 : 4;
             if (line.charAt(index) != '=') {
                 index = line.lastIndexOf('=');
