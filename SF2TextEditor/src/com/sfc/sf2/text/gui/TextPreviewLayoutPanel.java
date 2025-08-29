@@ -268,8 +268,10 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     public void setFontSymbols(FontSymbol[] fontSymbols) {
         this.fontSymbols = fontSymbols;
-        for (int i = 0; i < fontSymbols.length; i++) {
-            fontSymbols[i].setpalette(PREVIEW_PALETTE);
+        if (this.fontSymbols != null) {
+            for (int i = 0; i < fontSymbols.length; i++) {
+                fontSymbols[i].setpalette(PREVIEW_PALETTE);
+            }
         }
     }
     
