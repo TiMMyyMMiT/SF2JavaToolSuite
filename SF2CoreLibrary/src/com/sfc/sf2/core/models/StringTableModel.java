@@ -18,7 +18,7 @@ public class StringTableModel extends AbstractTableModel<String> {
     @Override
     public Class<?> getColumnType(int col) {
         switch (col) {
-            case 0: return String.class;
+            case 1: return String.class;
             default: return Integer.class;
         }
     }

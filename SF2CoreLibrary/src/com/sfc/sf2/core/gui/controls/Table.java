@@ -7,15 +7,17 @@ package com.sfc.sf2.core.gui.controls;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
 import com.sfc.sf2.core.models.SelectionInterval;
+import com.sfc.sf2.core.models.SpinnerTableEditor;
 import java.beans.BeanProperty;
 import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelListener;
 
 /**
  *
  * @author TiMMy
- * TODO: Can we add some improved interactions? 1) Drag to reorder 2) Deselect by clicking empty space
  */
 public class Table extends javax.swing.JPanel {
 
@@ -47,6 +49,14 @@ public class Table extends javax.swing.JPanel {
         preferred = true, visualUpdate = true, description = "The selection mode used by the row and column selection models.")
     public void setSelectionMode(int mode) {
         jTable.setSelectionMode(mode);
+    }
+    
+    @BeanProperty(preferred = true, visualUpdate = false, description = "Sets text fields in the table as single-click to edit, rather than having to double-click.")
+    public void setSingleClickText(boolean singleClick) {
+        JTextField textField = new JTextField();
+        DefaultCellEditor singleclick = new DefaultCellEditor(textField);
+        singleclick.setClickCountToStart(singleClick ? 1 : 2);
+        jTable.setDefaultEditor(String.class, singleclick);
     }
 
     /**
