@@ -24,6 +24,7 @@ public class SpinnerTableEditor extends AbstractCellEditor implements TableCellE
     public SpinnerTableEditor(AbstractSpinnerModel model) {
         super();
         spinner.setModel(model);
+        spinner.setUI(new LeftRightSpinnerUI());
     }
 
     @Override

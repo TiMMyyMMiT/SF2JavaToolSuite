@@ -29,6 +29,7 @@ public class SpinnerTableRenderer implements TableCellRenderer {
         text.setBorder(null);
         text.setDisabledTextColor(null);
         spinner.setModel(model);
+        spinner.setUI(new LeftRightSpinnerUI());
     }
 
     @Override
