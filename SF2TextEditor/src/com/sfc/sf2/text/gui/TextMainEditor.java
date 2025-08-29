@@ -12,14 +12,21 @@ import com.sfc.sf2.helpers.listeners.ListenersHelpers;
 import com.sfc.sf2.text.TextManager;
 import com.sfc.sf2.text.compression.Symbols;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -55,6 +62,7 @@ public class TextMainEditor extends AbstractMainEditor {
         tableText.jTable.setRowSorter(sorter);
         tableText.addListSelectionListener(this::onSelectionChanged);
         tableText.addTableModelListener(this::onTableDataChanged);
+        tableText.jTable.addPropertyChangeListener("tableCellEditor", this::onTableEditorStarted);
         TableColumnModel columns = tableText.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(50);
         columns.getColumn(1).setMaxWidth(50);
@@ -935,6 +943,21 @@ public class TextMainEditor extends AbstractMainEditor {
         repaintEditorLayout();
     }
     
+    private void onTableEditorStarted(PropertyChangeEvent evt) {
+        TableCellEditor editor = tableText.jTable.getCellEditor();
+        if (editor != null && editor instanceof DefaultCellEditor) {
+            JTextField textEditor = (JTextField)((DefaultCellEditor)editor).getComponent();
+            ListenersHelpers.addTextFieldChangeListener(textEditor, new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    String text = ((JTextField)e.getSource()).getText();
+                    textPreviewLayoutPanel.setText(text);
+                    repaintEditorLayout();
+                }
+            });
+        }
+    }
+    
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)
@@ -1011,5 +1034,4 @@ public class TextMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.text.gui.TextPreviewLayoutPanel textPreviewLayoutPanel;
     private com.sfc.sf2.text.models.TextTableModel textTableModel;
     // End of variables declaration//GEN-END:variables
-
 }
