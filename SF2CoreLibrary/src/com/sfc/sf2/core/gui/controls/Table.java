@@ -7,7 +7,6 @@ package com.sfc.sf2.core.gui.controls;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
 import com.sfc.sf2.core.models.SelectionInterval;
-import com.sfc.sf2.core.models.SpinnerTableEditor;
 import java.beans.BeanProperty;
 import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;

@@ -81,7 +81,6 @@ public final class ExampleMainEditor extends AbstractMainEditor {
 
         table1.setBorder(javax.swing.BorderFactory.createTitledBorder("Table test"));
         table1.setSingleClickText(true);
-        table1.setSpinnerTextEditor(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
