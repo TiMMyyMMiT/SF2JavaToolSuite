@@ -8,6 +8,7 @@ package com.sfc.sf2.battlesprite.animation.gui;
 import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationManager;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
+import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationFrame;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
@@ -879,9 +880,14 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     }
     
     private void onTableFrameDataChanged(TableModelEvent evt) {
-        int frame = battleSpriteAnimationLayoutPanel.getFrame();
-        if (frame >= evt.getFirstRow() && frame <= evt.getLastRow()) {
+        int row = tableFrames.jTable.getSelectedRow();
+        if (row >= evt.getFirstRow() && row <= evt.getLastRow()) {
             battleSpriteAnimationLayoutPanel.redraw();
+            repaintEditorLayout();
+        }
+        BattleSpriteAnimation animation = battleSpriteAnimationLayoutPanel.getAnimation();
+        if (battleSpriteAnimationFramesModel.getRowCount() != animation.getFrameCount()) {
+            animation.setFrames(battleSpriteAnimationFramesModel.getTableData(BattleSpriteAnimationFrame[].class));
             repaintEditorLayout();
         }
     }

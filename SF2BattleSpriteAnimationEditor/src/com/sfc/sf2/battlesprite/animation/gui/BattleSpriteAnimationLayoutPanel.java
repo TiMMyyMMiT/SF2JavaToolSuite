@@ -46,7 +46,6 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     private BattleSpriteAnimation animation;
     
     private int currentAnimationFrame = 0;
-    private int currentBattleSpriteFrame = 0;
     private boolean hideWeapon = false;
     
     public BattleSpriteAnimationLayoutPanel() {
@@ -69,7 +68,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     protected void buildImage(Graphics graphics) {
         BattleSpriteAnimationFrame animFrame = animation.getFrames()[currentAnimationFrame];
         Tileset spriteFrame = null;
-        spriteFrame = battlesprite.getFrames()[currentBattleSpriteFrame];   
+        spriteFrame = battlesprite.getFrames()[animFrame.getBattleSpriteIndex()];   
         graphics.drawImage(background.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
         graphics.drawImage(ground.getTileset().getIndexedColorImage(), GROUND_BASE_X, GROUND_BASE_Y, null);
         if (battlesprite.getType() == BattleSpriteType.ENEMY) {
@@ -159,7 +158,6 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
         if (animation == null || currentFrame < 0) return;
         if (this.currentAnimationFrame != currentFrame) {
             currentAnimationFrame = currentFrame;
-            this.currentBattleSpriteFrame = animation.getFrames()[currentFrame].getBattleSpriteIndex();
             redraw();
         }
     }
