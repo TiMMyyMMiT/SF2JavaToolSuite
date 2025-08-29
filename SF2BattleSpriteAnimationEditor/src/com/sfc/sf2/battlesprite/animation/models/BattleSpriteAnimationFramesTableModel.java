@@ -8,6 +8,7 @@ package com.sfc.sf2.battlesprite.animation.models;
 import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationFrame;
 import com.sfc.sf2.core.models.AbstractTableModel;
+import com.sfc.sf2.weaponsprite.WeaponSprite;
 
 /**
  *
@@ -89,5 +90,30 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
             case 10: item.setWeaponY((byte)value); break;
         }
         return item;
+    }
+
+    @Override
+    protected Comparable<?> getMinLimit(BattleSpriteAnimationFrame item, int col) {
+        switch (col) {
+            case 3:
+            case 4:
+            case 9:
+            case 10:
+                return Byte.MIN_VALUE;
+            default:
+                return (byte)0;
+        }
+    }
+
+    @Override
+    protected Comparable<?> getMaxLimit(BattleSpriteAnimationFrame item, int col) {
+        switch (col) {
+            case 1:
+                return (byte)(item.getBattleSpriteAnim().getFrameCount()-1);
+            case 5:
+                return (byte)(WeaponSprite.WEAPONSPRITE_FRAMES_LENGTH-1);
+            default:
+                return Byte.MAX_VALUE;
+        }
     }
 }

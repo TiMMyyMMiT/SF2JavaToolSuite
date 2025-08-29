@@ -55,4 +55,14 @@ public class StringTableModel extends AbstractTableModel<String> {
         }
         return null;
     }
+
+    @Override
+    protected Comparable<?> getMinLimit(String item, int col) {
+        return -1;
+    }
+
+    @Override
+    protected Comparable<?> getMaxLimit(String item, int col) {
+        return -1;
+    }
 }

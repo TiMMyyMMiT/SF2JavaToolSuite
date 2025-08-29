@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.core.models.spinner;
 
+import com.sfc.sf2.core.models.AbstractTableModel;
 import java.awt.*;
 import java.text.ParseException;
 import java.util.*;
@@ -29,6 +30,13 @@ public class SpinnerTableEditor extends AbstractCellEditor implements TableCellE
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        AbstractTableModel model = (AbstractTableModel)table.getModel();
+        SpinnerNumberModel spinnerModel = (SpinnerNumberModel)spinner.getModel();
+        if (model != null && spinnerModel != null) {
+            spinnerModel.setMinimum(model.getMinValue(row, column));
+            spinnerModel.setMaximum(model.getMaxValue(row, column));
+            spinnerModel.setStepSize(model.getSpinnerStep(column));
+        }
         spinner.setValue(value);
         return spinner;
     }

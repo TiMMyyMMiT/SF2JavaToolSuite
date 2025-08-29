@@ -22,10 +22,10 @@ public class BattleSpriteAnimation {
 
     public BattleSpriteAnimation(BattleSpriteType type, BattleSpriteAnimationFrame[] frames, byte spellInitFrame, byte spellAnim, boolean endSpellAnim) {
         this.type = type;
-        this.frames = frames;
         this.spellInitFrame = spellInitFrame;
         this.spellAnim = spellAnim;
         this.endSpellAnim = endSpellAnim;
+        setFrames(frames);
     }
 
     public BattleSpriteType getType() {
@@ -42,6 +42,11 @@ public class BattleSpriteAnimation {
 
     public void setFrames(BattleSpriteAnimationFrame[] frames) {
         this.frames = frames;
+        if (frames != null) {
+            for (int i = 0; i < frames.length; i++) {
+                frames[i].setBattleSpriteAnim(this);
+            }
+        }
     }
 
     public byte getFrameCount() {
