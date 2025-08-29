@@ -38,8 +38,8 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     private static final int FONT_START_HEIGHT = PIXEL_HEIGHT;
     private static final int FONT_LINE_HEIGHT = PIXEL_HEIGHT*2;
-    private static final int FONT_START_X = 10;
-    private static final int FONT_END_X = PREVIEW_WIDTH-10;
+    private static final int FONT_START_X = PIXEL_WIDTH+2;
+    private static final int FONT_END_X = PREVIEW_WIDTH-FONT_START_X;
     private static final FontSymbol EMPTY_SYMBOL = FontSymbol.EmptySymbol();
     private static final Palette PREVIEW_PALETTE = new Palette(new CRAMColor[] { CRAMColor.BLACK, CRAMColor.WHITE, CRAMColor.LIGHT_GRAY }, true);
     

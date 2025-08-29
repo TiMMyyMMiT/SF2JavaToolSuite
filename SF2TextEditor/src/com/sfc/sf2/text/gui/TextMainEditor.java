@@ -840,6 +840,11 @@ public class TextMainEditor extends AbstractMainEditor {
         try {
             textManager.importAsciiReplaceMap(asciiReplacePath);
             Symbols.setReplaceMap(textManager.getAsciiReplaceMap());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Ascii replacer table could not be imported from : " + asciiReplacePath);
+        }
+        try {
             textManager.importAsciiMap(asciiTablePath);
             Symbols.setImportedTable(textManager.getAsciiToSymbolMap());
         } catch (Exception ex) {
