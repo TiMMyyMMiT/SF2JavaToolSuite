@@ -7,7 +7,6 @@ package com.sfc.sf2.map.block.io;
 
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.graphics.compressed.StackGraphicsDecoder;
 import com.sfc.sf2.map.block.Tileset;
 import com.sfc.sf2.palette.Palette;
 import java.io.File;
@@ -58,7 +57,7 @@ public class DisassemblyManager {
         inputBitCursor = 16;
         inputWord = 0;
 
-        try{
+        /*try{
             palette = com.sfc.sf2.palette.io.DisassemblyManager.importDisassembly(palettePath);
             if (palette == null) {
                 throw new IOException("ERROR - Could not load palette : " + palettePath);
@@ -123,7 +122,7 @@ public class DisassemblyManager {
         }catch(Exception e){
              System.err.println("com.sfc.sf2.mapblock.io.PngManager.importPng() - Error while parsing graphics data : "+e);
              e.printStackTrace();
-        }         
+        }*/
                 
         System.out.println("com.sfc.sf2.mapblock.io.DisassemblyManager.importDisassembly() - Disassembly imported.");
         return blocks;
@@ -136,7 +135,7 @@ public class DisassemblyManager {
         String[] tilesetPaths = {"","","","",""};
         
         int[] indexes;
-        try {
+        /*try {
             indexes = parseTilesetsFile(tilesetsFilePath); 
             int paletteIndex = indexes[0];
             
@@ -170,7 +169,7 @@ public class DisassemblyManager {
         } catch(Exception e) {
              System.err.println("com.sfc.sf2.mapblock.io.DisassemblyManager.importDisassemblyFromEntryFiles() - Error while parsing map data : "+e);
              e.printStackTrace();
-        }                
+        }*/
         System.out.println("com.sfc.sf2.mapblock.io.DisassemblyManager.importDisassemblyFromEntryFiles() - Disassembly imported.");
         return mapBlocks;
     }

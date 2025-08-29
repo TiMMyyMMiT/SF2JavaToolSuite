@@ -6,6 +6,8 @@
 package com.sfc.sf2.map.block;
 
 import com.sfc.sf2.graphics.Tile;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -34,7 +36,7 @@ public class MapBlock {
     private BufferedImage indexedColorImage = null;
     private BufferedImage explorationFlagImage;
     private BufferedImage interactionFlagImage;
-    private int[][] cachedPixels;
+    private int[] cachedPixels;
     
     public int getIndex() {
         return index;
@@ -85,30 +87,30 @@ public class MapBlock {
         }
     }
 
-    public int[][] getPixels() {
+    public int[] getPixels() {
         if (cachedPixels != null) {
             return cachedPixels;
         }
-        cachedPixels = new int[PIXEL_WIDTH][PIXEL_HEIGHT];
+        cachedPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
         updatePixels();
         return cachedPixels;
     }
     
     public void updatePixels(){
-        for(int i=0;i<TILE_WIDTH;i++){
-            for(int j=0;j<TILE_HEIGHT;j++){
+        for (int i=0;i<TILE_WIDTH;i++) {
+            for (int j=0;j<TILE_HEIGHT;j++) {
                 updateIndexedColorPixels(tiles[i*TILE_WIDTH+j].getPixels(), j*Tile.PIXEL_WIDTH, i*Tile.PIXEL_HEIGHT);
             }
         }
     }
     
-    private void updateIndexedColorPixels(int[][] pixels, int x, int y){
+    private void updateIndexedColorPixels(int[] pixels, int x, int y) {
         if (cachedPixels == null) {
-            cachedPixels = new int[PIXEL_WIDTH][PIXEL_HEIGHT];
+            cachedPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
         }
-        for(int i=0;i<pixels.length;i++){
-            for(int j=0;j<pixels[i].length;j++){
-                this.cachedPixels[x+i][y+j] = pixels[i][j];
+        for (int j=0;j<PIXEL_HEIGHT;j++) {
+            for (int i=0;i<PIXEL_WIDTH;i++) {
+                this.cachedPixels[x+i+(y+j)*PIXEL_WIDTH] = pixels[i+j*PIXEL_WIDTH];
             }
         }
     }
@@ -118,22 +120,15 @@ public class MapBlock {
         cachedPixels = null;
     }
 
-    public BufferedImage getIndexedColorImage(){
-        if(indexedColorImage==null && getPalette() != null) {
+    public BufferedImage getIndexedColorImage() {
+        if (indexedColorImage == null && getPalette() != null) {
             indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, getPalette().getIcm());
-            drawIndexedColorPixels(indexedColorImage, getPixels(), 0, 0);
-        }
-        return indexedColorImage;        
-    }
-    
-    public void drawIndexedColorPixels(BufferedImage image, int[][] pixels, int x, int y){
-        byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
-        int width = image.getWidth();
-        for(int i=0;i<pixels.length;i++){
-            for(int j=0;j<pixels[i].length;j++){
-                data[(y+j)*width+x+i] = (byte)(pixels[i][j]);
+            byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
+            for (int i=0; i < cachedPixels.length; i++) {
+                data[i] = (byte)(cachedPixels[i]);
             }
         }
+        return indexedColorImage;
     }
 
     public BufferedImage getExplorationFlagImage() {
@@ -154,35 +149,35 @@ public class MapBlock {
     
     @Override
     public boolean equals(Object obj){
-        if(this==obj){
+        if (this==obj) {
             return true;
         }
-        if(obj==null || obj.getClass() != this.getClass()){
+        if (obj==null || obj.getClass() != this.getClass()) {
             return false;
         }
         MapBlock mb = (MapBlock) obj;
-        for(int i=0;i<this.tiles.length;i++){
-            if(!this.tiles[i].equalsWithPriority(mb.getTiles()[i])){
+        for (int i=0;i<this.tiles.length;i++) {
+            if (!this.tiles[i].equalsWithPriority(mb.getTiles()[i])) {
                 return false;
             }
         }
         return true;
     }
     
-    public boolean equalsIgnoreTiles(Object other){
+    public boolean equalsIgnoreTiles(Object other) {
         if (other == null) return false;
         if (other == this) return true;
-        if (!(other instanceof MapBlock))return false;
+        if (!(other instanceof MapBlock)) return false;
         MapBlock block = (MapBlock)other;
-        if(this.index == block.getIndex() && this.flags == block.getFlags()){
+        if (this.index == block.getIndex() && this.flags == block.getFlags()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
     
     @Override 
-    public MapBlock clone(){
+    public MapBlock clone() {
         MapBlock clone = new MapBlock();
         clone.setIndex(this.index);
         clone.setFlags(this.flags);

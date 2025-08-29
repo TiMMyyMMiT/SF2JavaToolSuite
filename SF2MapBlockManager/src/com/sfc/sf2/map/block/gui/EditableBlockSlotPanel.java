@@ -7,7 +7,6 @@ package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.map.block.layout.MapBlockLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

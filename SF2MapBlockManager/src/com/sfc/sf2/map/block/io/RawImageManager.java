@@ -19,12 +19,9 @@ public class RawImageManager {
     private static int importedImageBlockWidth = 64;
     private static Tile[] importedTiles;
     
-    private static final Logger LOG = Logger.getLogger(com.sfc.sf2.graphics.io.RawImageManager.class.getName());
-    
     public static MapBlock[] importImage(String filepath) {
-        LOG.entering(LOG.getName(),"importBlocksImage");
         MapBlock[] blocks = null;
-        try{
+        /*try{
             Tile[] tiles = com.sfc.sf2.graphics.io.RawImageManager.importImage(filepath);
             importedTiles = tiles;
             if(tiles == null || tiles.length == 0){
@@ -51,13 +48,12 @@ public class RawImageManager {
             
         }catch(Exception e){
              LOG.throwing(LOG.getName(), "importBlocksImage", e);
-        }        
-        LOG.exiting(LOG.getName(),"importBlocksImage");        
+        }*/    
         return blocks;
     }
     
     public static void exportRawImage(MapBlock[] blocks, String filepath, int blocksPerRow, int fileFormat){
-        try {
+        /*try {
             LOG.entering(LOG.getName(),"exportBlocksImage");
             int tilesPerRow = blocksPerRow*3;
             int rows = blocks.length*9/tilesPerRow;
@@ -75,7 +71,7 @@ public class RawImageManager {
             com.sfc.sf2.graphics.io.RawImageManager.exportImage(tiles, filepath, tilesPerRow, fileFormat);
         } catch (Exception ex) {
             LOG.throwing(LOG.getName(),"exportBlocksImage", ex);
-        }
+        }*/
     }
     
     public static int getImportedImageBlockWidth() {
