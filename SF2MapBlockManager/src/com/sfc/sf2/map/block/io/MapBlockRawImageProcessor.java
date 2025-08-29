@@ -7,14 +7,12 @@ package com.sfc.sf2.map.block.io;
 
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.map.block.MapBlock;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  *
  * @author TiMMy
  */
-public class RawImageManager {
+public class MapBlockRawImageProcessor {
     
     private static int importedImageBlockWidth = 64;
     private static Tile[] importedTiles;

@@ -11,15 +11,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author TiMMy
  */
-public class MetaManager {
+public class MapBlockMetaProcessor {
         
     public static void importBlockHpTilesFile(String filepath, MapBlock[] blocks, int blocksPerRow) {
         /*try {

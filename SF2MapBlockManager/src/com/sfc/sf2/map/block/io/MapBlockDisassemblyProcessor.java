@@ -6,8 +6,8 @@
 package com.sfc.sf2.map.block.io;
 
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.map.block.Tileset;
 import com.sfc.sf2.palette.Palette;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +28,9 @@ import java.util.logging.Logger;
  *
  * @author wiz
  */
-public class DisassemblyManager {
+public class MapBlockDisassemblyProcessor {
+    public static final int TILESET_TILES = 128;
+    public static final int MAP_TILESETS_TILES = TILESET_TILES*5;
         
     private byte[] inputData;
     private short inputWord = 0;
@@ -45,7 +47,7 @@ public class DisassemblyManager {
     private Short[] bottomTileHistory = new Short[0x800];
     
     public MapBlock[] importDisassembly(String palettePath, String[] tilesetPaths, String blocksPath){
-        return DisassemblyManager.this.importDisassembly(palettePath, tilesetPaths, blocksPath, null, 0, 0, 0);
+        return MapBlockDisassemblyProcessor.this.importDisassembly(palettePath, tilesetPaths, blocksPath, null, 0, 0, 0);
     }
     
     public MapBlock[] importDisassembly(String palettePath, String[] tilesetPaths, String blocksPath, String animTilesetPath, int animTilesetStart, int animTilesetLength, int animTilesetDest){
@@ -91,9 +93,9 @@ public class DisassemblyManager {
                 byte[] animTilesetData = Files.readAllBytes(animtilesetpath);
                 if(animTilesetData.length>2){
                     Tile[] tileset = new StackGraphicsDecoder().decodeStackGraphics(animTilesetData, palette);
-                    int dest = animTilesetDest-(Tileset.TILESET_TILES*2);
-                    int tilsetIndex = dest/Tileset.TILESET_TILES;
-                    dest = dest%Tileset.TILESET_TILES;
+                    int dest = animTilesetDest-(TILESET_TILES*2);
+                    int tilsetIndex = dest/TILESET_TILES;
+                    dest = dest%TILESET_TILES;
                     System.arraycopy(tileset, animTilesetStart, tilesets[tilsetIndex], dest, animTilesetLength);
                 }else{
                     System.out.println("com.sfc.sf2.mapblock.io.DisassemblyManager.parseGraphics() - File ignored because of wrong length " + animTilesetData.length + " : " + animTilesetPath);
@@ -104,7 +106,7 @@ public class DisassemblyManager {
                     Tile[] tiles = tilesets[t].getTiles();
                     for(int i = 0; i < tiles.length; i++) {
                         if(tiles[i] != null ){
-                            tiles[i].setId(t*Tileset.TILESET_TILES+i);
+                            tiles[i].setId(t*TILESET_TILES+i);
                         }
                     }
                 }
@@ -196,7 +198,7 @@ public class DisassemblyManager {
                 }
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MapBlockDisassemblyProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return filepaths;
     }
@@ -222,7 +224,7 @@ public class DisassemblyManager {
                 }
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MapBlockDisassemblyProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return filepaths;
     }
@@ -269,7 +271,7 @@ public class DisassemblyManager {
                 indexes[5] = (int)(data[5]);                
             }        
         } catch (IOException ex) {
-            Logger.getLogger(DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MapBlockDisassemblyProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return indexes;
     }
@@ -561,7 +563,7 @@ public class DisassemblyManager {
             Files.write(graphicsFilePath,blockBytes);
             System.out.println(blocks.length+" Blocks / "+ blockBytes.length + " bytes into " + graphicsFilePath);
         } catch (Exception ex) {
-            Logger.getLogger(DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MapBlockDisassemblyProcessor.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
             System.out.println(ex);
         }            
@@ -615,9 +617,9 @@ public class DisassemblyManager {
                         nextTilesetTile = getTile(index);
                     }else{
                         int index = previousTile.getId()+1;
-                        if(index>=Tileset.MAP_TILESETS_TILES){
+                        if(index>=MAP_TILESETS_TILES){
                             //System.err.println("WARNING - While pointing to previous tile from tileset, had to put tile value "+(tileset.length-1)+" instead of this one : "+index);
-                            index = Tileset.MAP_TILESETS_TILES-1;
+                            index = MAP_TILESETS_TILES-1;
                         }
                         nextTilesetTile = getTile(index);
                     }
@@ -755,7 +757,7 @@ public class DisassemblyManager {
         String value = null;
         for(int i=0;i<32;i++){
             int index = previousTile.getId() - i;
-            if(index>0 && index<Tileset.MAP_TILESETS_TILES){
+            if(index>0 && index<MAP_TILESETS_TILES){
                 Tile relativeTile = getTile(index);
                 if (relativeTile != null) {
                     if(tile.getId() == relativeTile.getId()){
@@ -773,7 +775,7 @@ public class DisassemblyManager {
         }
         for(int i=0;i<32;i++){
             int index = previousTile.getId() + i;
-            if(index>0 && index<Tileset.MAP_TILESETS_TILES){
+            if(index>0 && index<MAP_TILESETS_TILES){
                 Tile relativeTile = getTile(index);
                 if (relativeTile != null) {
                     if(tile.getId() == relativeTile.getId()){
@@ -812,12 +814,12 @@ public class DisassemblyManager {
     }
     
     private Tile getTile(int index) {
-        int tilesetIndex = index/Tileset.TILESET_TILES;
-        int tileIndex = index%Tileset.TILESET_TILES;
+        int tilesetIndex = index/TILESET_TILES;
+        int tileIndex = index%TILESET_TILES;
         if (tilesets[tilesetIndex] == null) return null;
         if (tilesetIndex < 0 || tilesetIndex >= tilesets.length) return null;
-        if (tileIndex < 0 || tileIndex >= Tileset.TILESET_TILES) return null;
-        return tilesets[tilesetIndex].getTiles()[index%Tileset.TILESET_TILES];
+        if (tileIndex < 0 || tileIndex >= TILESET_TILES) return null;
+        return tilesets[tilesetIndex].getTiles()[index%TILESET_TILES];
     }
     
     private static boolean isSameTile(Tile a, Tile b){

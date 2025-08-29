@@ -6,7 +6,7 @@
 package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.map.block.Tileset;
+import com.sfc.sf2.graphics.Tileset;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
 import javax.swing.JPanel;
 
 /**

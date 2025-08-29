@@ -6,19 +6,10 @@
 package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
-import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockManager;
-import com.sfc.sf2.map.block.Tileset;
-import java.awt.GridLayout;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

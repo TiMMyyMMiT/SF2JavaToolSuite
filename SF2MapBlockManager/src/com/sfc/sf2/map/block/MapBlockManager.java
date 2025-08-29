@@ -5,10 +5,11 @@
  */
 package com.sfc.sf2.map.block;
 
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
-import com.sfc.sf2.map.block.io.DisassemblyManager;
-import com.sfc.sf2.map.block.io.MetaManager;
-import com.sfc.sf2.map.block.io.RawImageManager;
+import com.sfc.sf2.map.block.io.MapBlockDisassemblyProcessor;
+import com.sfc.sf2.map.block.io.MapBlockMetaProcessor;
+import com.sfc.sf2.map.block.io.MapBlockRawImageProcessor;
 import com.sfc.sf2.palette.PaletteManager;
 
 /**
@@ -18,7 +19,7 @@ import com.sfc.sf2.palette.PaletteManager;
 public class MapBlockManager {
     private final PaletteManager paletteManager = new PaletteManager();
     private final TilesetManager tilesetManager = new TilesetManager();
-    private final DisassemblyManager disassemblyManager = new DisassemblyManager();
+    private final MapBlockDisassemblyProcessor disassemblyManager = new MapBlockDisassemblyProcessor();
     
     private Tileset[] tilesets;
     private MapBlock[] blocks;
