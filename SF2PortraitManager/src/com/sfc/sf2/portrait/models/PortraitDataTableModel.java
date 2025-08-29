@@ -55,4 +55,24 @@ public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
         }
         return item;
     }
+
+    @Override
+    protected Comparable<?> getMinLimit(int[] item, int col) {
+        switch (col) {
+            case 3:
+                return 6;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    protected Comparable<?> getMaxLimit(int[] item, int col) {
+        switch (col) {
+            case 1:
+                return 5;
+            default:
+                return 7;
+        }
+    }
 }
