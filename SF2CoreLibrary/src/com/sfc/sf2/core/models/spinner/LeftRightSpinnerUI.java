@@ -6,14 +6,17 @@
 package com.sfc.sf2.core.models.spinner;
 
 import com.formdev.flatlaf.ui.FlatArrowButton;
+import com.formdev.flatlaf.ui.FlatRoundBorder;
 import com.formdev.flatlaf.ui.FlatSpinnerUI;
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JSpinner.DefaultEditor;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
 
 /**
@@ -22,40 +25,49 @@ import javax.swing.plaf.ComponentUI;
  */
 public class LeftRightSpinnerUI extends FlatSpinnerUI {
 
-  public static ComponentUI createUI(JComponent c) {
-    return new LeftRightSpinnerUI();
-  }
+    private static EmptyBorder nextBorder = new EmptyBorder(0, 0, 0, 5);
+    private static EmptyBorder prevBorder = new EmptyBorder(0, 5, 0, 0);
+    
+    public static ComponentUI createUI(JComponent c) {
+        return new LeftRightSpinnerUI();
+    }
 
-  @Override
-  protected Component createNextButton() {
-    Component c = createArrowButton(SwingConstants.NORTH);
-    c.setName("Spinner.nextButton");
-    installNextButtonListeners(c);
-    return c;
-  }
+    @Override
+    protected Component createNextButton() {
+        JButton b = createArrowButton(SwingConstants.NORTH);
+        b.setName("Spinner.nextButton");
+        b.setBorder(nextBorder);
+        installNextButtonListeners(b);
+        return b;
+    }
 
-  @Override
-  protected Component createPreviousButton() {
-    Component c = createArrowButton(SwingConstants.SOUTH);
-    c.setName("Spinner.previousButton");
-    installPreviousButtonListeners(c);
-    return c;
-  }
+    @Override
+    protected Component createPreviousButton() {
+        JButton b = createArrowButton(SwingConstants.SOUTH);
+        b.setName("Spinner.previousButton");
+        b.setBorder(prevBorder);
+        installPreviousButtonListeners(b);
+        return b;
+    }
 
-  // copied from BasicSpinnerUI
-  private Component createArrowButton(int direction) {
-    JButton b = new FlatArrowButton(direction, "Spinner", getForeground(true), getForeground(false), buttonHoverArrowColor, focusedBackground, buttonPressedArrowColor, focusedBackground);
-    return b;
-  }
+    // copied from BasicSpinnerUI
+    private JButton createArrowButton(int direction) {
+        JButton b = new FlatArrowButton(direction, "Spinner", getForeground(true), getForeground(false), buttonHoverArrowColor, focusedBackground, buttonPressedArrowColor, focusedBackground);
+        b.setMinimumSize(new Dimension(10, 5));
+        return b;
+    }
 
-  @Override
-  public void installUI(JComponent c) {
-    super.installUI(c);
-    c.removeAll();
-    GridBagLayout layout = new GridBagLayout();
-    c.setLayout(layout);
-    c.add(createEditor(), new GridBagConstraints(1, 0, 1, 1, 0.5, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    c.add(createNextButton(), new GridBagConstraints(2, 0, 1, 1, 0.1, 1, GridBagConstraints.LINE_END, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 5), 0, 0));
-    c.add(createPreviousButton(), new GridBagConstraints(0, 0, 1, 1, 0.1, 1, GridBagConstraints.LINE_START, GridBagConstraints.VERTICAL, new Insets(0, 5, 0, 0), 0, 0));
-  }
+    @Override
+    public void installUI(JComponent c) {
+        super.installUI(c);
+        c.removeAll();
+        c.setLayout(new BorderLayout(-3, 0));
+        JComponent editor = createEditor();
+        c.add(editor, BorderLayout.CENTER);
+        c.add(createNextButton(), BorderLayout.EAST);
+        c.add(createPreviousButton(), BorderLayout.WEST);
+        JTextField textField = ((DefaultEditor)editor).getTextField();
+        JComponent container = (JComponent)editor.getParent();
+        container.setMinimumSize(new Dimension(30, 26));
+    }
 }

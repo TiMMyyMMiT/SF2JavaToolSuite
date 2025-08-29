@@ -16,7 +16,7 @@ import com.sfc.sf2.core.models.AbstractTableModel;
 public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<BattleSpriteAnimationFrame> {
     
     public BattleSpriteAnimationFramesTableModel() {
-        super(new String[] { "Frame", "Battlesprite", "Duration", "X", "Y", "Weapon Frame", "H Flip", "V Flip", "Behind", "Weapon X", "Weapon Y" }, 255);
+        super(new String[] { "Frame", "Battlesprite", "Duration", "X", "Y", "Wpn Frame", "H.Flip", "V.Flip", "Behind", "Wpn X", "Wpn Y" }, 255);
     }
 
     @Override
