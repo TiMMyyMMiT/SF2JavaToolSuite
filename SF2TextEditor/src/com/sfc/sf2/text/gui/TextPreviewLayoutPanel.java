@@ -179,15 +179,25 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         int tagEnd;
         int i = tagStart;
         do {
-            i++;
             c = text.charAt(i);
-        } while (c != '}' && i < text.length());
-        tagEnd = i+1;
-        String replace = parseTag(text.substring(tagStart+1, tagEnd-1));
-        text = text.substring(0, tagStart) + replace + text.substring(tagEnd);
-        i = tagStart+replace.length();
-        if (text.charAt(text.length()-1) == '\n') {
-            text = text.substring(0, text.length()-1);
+            i++;
+        } while (c != ' ' && c != '}' && (c != '{' || i == tagStart+1) && i < text.length());
+        tagEnd = i;
+        if (c == ' ' || c == '{' || (c != '}' && tagEnd >= text.length())) {
+            //No closing tag
+            if (tagEnd >= text.length()) {
+                return text.substring(0, tagStart) + "##";
+            } else {
+                text = text.substring(0, tagStart) + "##" + text.substring(tagEnd-1);
+            }
+        } else {
+            //Properly formed tag
+            String replace = parseTag(text.substring(tagStart+1, tagEnd-1));
+            text = text.substring(0, tagStart) + replace + text.substring(tagEnd);
+            i = tagStart+replace.length();
+            if (text.charAt(text.length()-1) == '\n') {
+                text = text.substring(0, text.length()-1);
+            }
         }
         return text;
     }
@@ -250,7 +260,7 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
             case "CLEAR":
             case "START/EOL)":
             default:
-                return "";
+                return "##";
         }
     }
     
