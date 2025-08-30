@@ -22,7 +22,7 @@ public class MapBlockManager {
     private final MapBlockDisassemblyProcessor disassemblyManager = new MapBlockDisassemblyProcessor();
     
     private Tileset[] tilesets;
-    private MapBlock[] blocks;
+    private MapBlockset mapBlockset;
        
     public void importDisassembly(String incbinPath, String paletteEntriesPath, String tilesetEntriesPath, String tilesetsFilePath, String blocksPath) {
         /*System.out.println("com.sfc.sf2.mapblock.MapBlockManager.importDisassembly() - Importing disassembly ...");
@@ -69,12 +69,12 @@ public class MapBlockManager {
         System.out.println("com.sfc.sf2.mapblock.MapBlockManager.exportPng() - PNG exported.");*/
     }
 
-    public MapBlock[] getBlocks() {
-        return blocks;
+    public MapBlockset getMapBlockset() {
+        return mapBlockset;
     }
 
-    public void setBlocks(MapBlock[] blocks) {
-        this.blocks = blocks;
+    public void setMapBlockset(MapBlockset mapBlockset) {
+        this.mapBlockset = mapBlockset;
     }
 
     public Tileset[] getTilesets() {

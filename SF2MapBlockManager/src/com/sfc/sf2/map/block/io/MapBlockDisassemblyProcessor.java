@@ -5,6 +5,8 @@
  */
 package com.sfc.sf2.map.block.io;
 
+import com.sfc.sf2.graphics.Block;
+import static com.sfc.sf2.graphics.Block.TILES_COUNT;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
@@ -523,9 +525,7 @@ public class MapBlockDisassemblyProcessor {
         }
         MapBlock[] blocks = new MapBlock[outputTiles.length/9];
         for(int i=0;i<blocks.length;i++){
-            MapBlock block = new MapBlock();
-            block.setIndex(i);
-            block.setTiles(Arrays.copyOfRange(outputTiles,i*9, i*9+9));
+            MapBlock block = new MapBlock(i, 0, Arrays.copyOfRange(outputTiles,i*TILES_COUNT, i*TILES_COUNT+TILES_COUNT));
             blocks[i] = block;
         }
         return blocks;

@@ -19,19 +19,16 @@ public class Block extends Tileset {
     public static final int PIXEL_WIDTH = TILE_WIDTH*Tile.PIXEL_WIDTH;
     public static final int PIXEL_HEIGHT = TILE_HEIGHT*Tile.PIXEL_HEIGHT;
     
-    private int index;
-    private int blocksPerRow;
+    protected int index;
     
-    public Block(int index, Tile[] tiles, int blocksPerRow) {
-        super(String.format("Block-%02d", index), tiles, blocksPerRow*TILE_WIDTH);
+    public Block(int index, Tile[] tiles) {
+        super(String.format("Block-%02d", index), tiles, TILE_WIDTH);
         this.index = index;
-        this.blocksPerRow = blocksPerRow;
     }
     
     public Block(int index, Tileset tileset) {
         super(tileset.getName(), tileset.getTiles(), tileset.tilesPerRow);
         this.index = index;
-        blocksPerRow = tileset.tilesPerRow/TILE_WIDTH;
     }
     
     public int getIndex() {
@@ -42,27 +39,24 @@ public class Block extends Tileset {
         this.index = index;
     }
     
-    public int getBlocksPerRow() {
-        return blocksPerRow;
-    }
-
-    public void setBlocksPerRow(int blocksPerRow) {
-        setTilesPerRow(blocksPerRow*TILE_WIDTH);
-        this.blocksPerRow = blocksPerRow;
-    }  
-    
-    @Override
-    public Dimension getDimensions(int blocksPerRow) {
-        this.setBlocksPerRow(blocksPerRow);
-        return getDimensions();
-    }
-    
     @Override 
     public Block clone() {
-        return new Block(index, tiles.clone(), blocksPerRow);
+        return new Block(index, tiles.clone());
     }
     
-    public static Block EmptyBlock(int index, Palette palette, int blocksPerRow) {
-        return new Block(index, EmptyTilset(palette, blocksPerRow*TILE_WIDTH));
+    public boolean isEmpty() {
+        if (tiles == null || tiles.length == 0) {
+            return true;
+        }
+        for (int i = 0; i < tiles.length; i++) {
+            if (!tiles[i].isTileEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static Block EmptyBlock(int index, Palette palette) {
+        return new Block(index, EmptyTilset(palette, TILE_WIDTH));
     }
 }

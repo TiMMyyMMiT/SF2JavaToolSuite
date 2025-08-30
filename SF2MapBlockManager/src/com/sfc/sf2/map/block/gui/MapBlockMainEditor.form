@@ -2,13 +2,6 @@
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="jFileChooser1">
-    </Component>
-    <Component class="javax.swing.JFileChooser" name="jFileChooser2">
-      <Properties>
-        <Property name="fileSelectionMode" type="int" value="1"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
     </Component>
   </NonVisualComponents>
@@ -111,7 +104,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <EmptySpace min="0" pref="750" max="32767" attributes="0"/>
                               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                  <Component id="jSplitPane3" alignment="0" pref="750" max="32767" attributes="0"/>
+                                  <Component id="jSplitPane3" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -133,6 +126,11 @@
                           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
                           <SubComponents>
                             <Container class="javax.swing.JPanel" name="jPanel31">
+                              <Properties>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[300, 300]"/>
+                                </Property>
+                              </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
                                   <JSplitPaneConstraints position="left"/>
@@ -150,7 +148,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jPanel32" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace type="unrelated" pref="31" max="32767" attributes="0"/>
                                           <Component id="jPanel17" min="-2" pref="217" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -406,17 +404,12 @@
                                                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                                   <Component id="jButton18" min="-2" max="-2" attributes="0"/>
                                                               </Group>
-                                                              <Group type="102" attributes="0">
-                                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                                      <Component id="fileButton6" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                                      <Component id="fileButton7" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                                      <Component id="fileButton8" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                                      <Component id="fileButton9" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                                      <Component id="fileButton10" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                                      <Component id="fileButton11" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                                  </Group>
-                                                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                                              </Group>
+                                                              <Component id="fileButton6" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton7" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton8" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton9" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton10" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton11" alignment="0" pref="0" max="32767" attributes="0"/>
                                                           </Group>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                       </Group>
@@ -857,17 +850,17 @@
 
                                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                                       <SubComponents>
-                                        <Container class="javax.swing.JPanel" name="jPanel18">
+                                        <Container class="com.sfc.sf2.map.block.gui.MapBlockSetLayoutPanel" name="mapBlockSetLayoutPanel">
 
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="367" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="427" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                           </Layout>
@@ -1139,17 +1132,17 @@
 
                                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                                   <SubComponents>
-                                    <Container class="javax.swing.JPanel" name="jPanel8">
+                                    <Container class="com.sfc.sf2.map.block.gui.TilesetsLayoutPanel" name="tilesetsLayoutPanel">
 
                                       <Layout>
                                         <DimensionLayout dim="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <EmptySpace min="0" pref="938" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="276" max="32767" attributes="0"/>
                                           </Group>
                                         </DimensionLayout>
                                         <DimensionLayout dim="1">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <EmptySpace min="0" pref="176" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="139" max="32767" attributes="0"/>
                                           </Group>
                                         </DimensionLayout>
                                       </Layout>

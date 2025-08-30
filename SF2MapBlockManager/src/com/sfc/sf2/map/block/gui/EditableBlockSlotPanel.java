@@ -22,14 +22,14 @@ import java.awt.image.DataBufferByte;
  * @author TiMMy
  */
 public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListener, MouseMotionListener {
-    
-    private MapBlockLayout mapBlockLayout;
-    private TileSlotPanel leftTileSlotPanel;
-    private TileSlotPanel rightTileSlotPanel;
-    
     public static final int MODE_PAINT_TILE = 0;
     public static final int MODE_TOGGLE_PRIORITY = 1;
     public static final int MODE_TOGGLE_FLIP = 2;
+    
+    private MapBlockSetLayoutPanel mapBlockLayout;
+    private TileSlotPanel leftTileSlotPanel;
+    private TileSlotPanel rightTileSlotPanel;
+    
     private int currentMode = 0;
     
     private boolean drawGrid;
@@ -84,7 +84,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         }
     }
     
-    public void setMapBlockLayout(MapBlockLayout mapBlockLayout) {
+    public void setMapBlockLayout(MapBlockSetLayoutPanel mapBlockLayout) {
         this.mapBlockLayout = mapBlockLayout;
     }
     
@@ -218,8 +218,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     }
     
     private void onBlockUpdated() {
-        block.clearIndexedColorImage();
-        mapBlockLayout.mapBlocksChanged();
+        block.clearIndexedColorImage(false);
+        mapBlockLayout.redraw();
         mapBlockLayout.revalidate();
         mapBlockLayout.repaint();
         this.image = null;

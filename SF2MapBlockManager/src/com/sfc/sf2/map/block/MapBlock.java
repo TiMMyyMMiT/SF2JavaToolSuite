@@ -5,46 +5,28 @@
  */
 package com.sfc.sf2.map.block;
 
+import com.sfc.sf2.graphics.Block;
 import com.sfc.sf2.graphics.Tile;
-import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
-import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.IndexColorModel;
 
 /**
  *
  * @author wiz
  */
-public class MapBlock {
-    
+public class MapBlock extends Block {
     public static final int MAP_FLAG_MASK_EVENTS = 0x3C00;
     public static final int MAP_FLAG_MASK_NAV = 0xC000;
-    
-    public static final int TILE_WIDTH = 3;
-    public static final int TILE_HEIGHT = 3;
-    public static final int PIXEL_WIDTH = TILE_WIDTH*Tile.PIXEL_WIDTH;
-    public static final int PIXEL_HEIGHT = TILE_HEIGHT*Tile.PIXEL_HEIGHT;
-    
-    private int index;
-    
+       
     private int flags;
     
-    private Tile[] tiles;
-    
-    private BufferedImage indexedColorImage = null;
     private BufferedImage explorationFlagImage;
     private BufferedImage interactionFlagImage;
-    private int[] cachedPixels;
     
-    public int getIndex() {
-        return index;
+    public MapBlock(int index, int flags, Tile[] tiles) {
+        super(index, tiles);
+        this.flags = flags;
     }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }  
 
     public int getFlags() {
         return flags;
@@ -52,83 +34,6 @@ public class MapBlock {
 
     public void setFlags(int flags) {
         this.flags = flags;
-    }
-
-    public Tile[] getTiles() {
-        return tiles;
-    }
-
-    public void setTiles(Tile[] tiles) {
-        this.tiles = tiles;
-    }
-    
-    public Palette getPalette() {
-        if (tiles == null) {
-            return null;
-        } else {
-            return tiles[0].getPalette();
-        }
-    }
-
-    public void setPaletteForTiles(Palette palette) {
-        if (tiles != null) {
-            for (int i = 0; i < tiles.length; i++) {
-                tiles[i].setPalette(palette);
-            }
-        }
-    }
-
-    public IndexColorModel getIcm() {
-        Palette palette = getPalette();
-        if (palette == null) {
-            return null;
-        } else {
-            return palette.getIcm();
-        }
-    }
-
-    public int[] getPixels() {
-        if (cachedPixels != null) {
-            return cachedPixels;
-        }
-        cachedPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
-        updatePixels();
-        return cachedPixels;
-    }
-    
-    public void updatePixels(){
-        for (int i=0;i<TILE_WIDTH;i++) {
-            for (int j=0;j<TILE_HEIGHT;j++) {
-                updateIndexedColorPixels(tiles[i*TILE_WIDTH+j].getPixels(), j*Tile.PIXEL_WIDTH, i*Tile.PIXEL_HEIGHT);
-            }
-        }
-    }
-    
-    private void updateIndexedColorPixels(int[] pixels, int x, int y) {
-        if (cachedPixels == null) {
-            cachedPixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
-        }
-        for (int j=0;j<PIXEL_HEIGHT;j++) {
-            for (int i=0;i<PIXEL_WIDTH;i++) {
-                this.cachedPixels[x+i+(y+j)*PIXEL_WIDTH] = pixels[i+j*PIXEL_WIDTH];
-            }
-        }
-    }
-    
-    public void clearIndexedColorImage() {
-        indexedColorImage = null;
-        cachedPixels = null;
-    }
-
-    public BufferedImage getIndexedColorImage() {
-        if (indexedColorImage == null && getPalette() != null) {
-            indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, getPalette().getIcm());
-            byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
-            for (int i=0; i < cachedPixels.length; i++) {
-                data[i] = (byte)(cachedPixels[i]);
-            }
-        }
-        return indexedColorImage;
     }
 
     public BufferedImage getExplorationFlagImage() {
@@ -147,28 +52,23 @@ public class MapBlock {
         this.interactionFlagImage = interactionFlagImage;
     }
     
-    @Override
-    public boolean equals(Object obj){
-        if (this==obj) {
+    public boolean equalsIgnoreTiles(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof MapBlock)) return false;
+        MapBlock block = (MapBlock)obj;
+        if (this.index == block.getIndex() && this.flags == block.getFlags()) {
             return true;
-        }
-        if (obj==null || obj.getClass() != this.getClass()) {
+        } else {
             return false;
         }
-        MapBlock mb = (MapBlock) obj;
-        for (int i=0;i<this.tiles.length;i++) {
-            if (!this.tiles[i].equalsWithPriority(mb.getTiles()[i])) {
-                return false;
-            }
-        }
-        return true;
     }
     
-    public boolean equalsIgnoreTiles(Object other) {
-        if (other == null) return false;
-        if (other == this) return true;
-        if (!(other instanceof MapBlock)) return false;
-        MapBlock block = (MapBlock)other;
+    public boolean equalsWithPriority(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof MapBlock)) return false;
+        MapBlock block = (MapBlock)obj;
         if (this.index == block.getIndex() && this.flags == block.getFlags()) {
             return true;
         } else {
@@ -178,12 +78,13 @@ public class MapBlock {
     
     @Override 
     public MapBlock clone() {
-        MapBlock clone = new MapBlock();
-        clone.setIndex(this.index);
-        clone.setFlags(this.flags);
-        clone.setTiles(this.tiles.clone());
+        MapBlock clone = new MapBlock(index, flags, tiles.clone());
         clone.setExplorationFlagImage(this.explorationFlagImage);
         clone.setInteractionFlagImage(this.interactionFlagImage);
         return clone;
+    }
+    
+    public static MapBlock EmptyMapBlock(int index, int flags, Palette palette) {
+        return new MapBlock(index, 0, EmptyTilset(palette, TILE_WIDTH).getTiles());
     }
 }

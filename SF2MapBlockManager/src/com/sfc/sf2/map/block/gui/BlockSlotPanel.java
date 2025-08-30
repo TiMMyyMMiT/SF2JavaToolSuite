@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class BlockSlotPanel extends JPanel {
     
     MapBlock block;
-    BufferedImage overrideImage;
+    BufferedImage overrideImage;    //Required to render a non-block
     
     @Override
     protected void paintComponent(Graphics g) {

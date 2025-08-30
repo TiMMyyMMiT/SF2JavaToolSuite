@@ -128,15 +128,12 @@ public class Tileset {
     
     @Override
     public boolean equals(Object obj) {
-        if (this==obj) {
-            return true;
-        }
-        if (obj==null || obj.getClass() != this.getClass()) {
-            return false;
-        }
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj instanceof Tileset)) return false;
         Tileset tileset = (Tileset)obj;
         for (int i=0; i < this.tiles.length; i++) {
-            if (!this.tiles[i].equalsWithPriority(tileset.getTiles()[i])) {
+            if (!this.tiles[i].equals(tileset.getTiles()[i])) {
                 return false;
             }
         }
