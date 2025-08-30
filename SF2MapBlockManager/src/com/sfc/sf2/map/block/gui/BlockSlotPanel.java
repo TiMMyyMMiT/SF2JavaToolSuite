@@ -5,34 +5,38 @@
  */
 package com.sfc.sf2.map.block.gui;
 
+import com.sfc.sf2.core.gui.AbstractBasicPanel;
 import com.sfc.sf2.map.block.MapBlock;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import javax.swing.JPanel;
 
 /**
  *
  * @author wiz
  */
-public class BlockSlotPanel extends JPanel {
+public class BlockSlotPanel extends AbstractBasicPanel {
     
-    MapBlock block;
-    BufferedImage overrideImage;    //Required to render a non-block
-    
+    protected MapBlock block;
+    private BufferedImage overrideImage;    //Required to render a non-block
+
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (overrideImage != null) {
-            g.drawImage(overrideImage, 0, 0, this.getWidth(), this.getHeight(), null);
-        } else if (block != null) {
-            g.drawImage(block.getIndexedColorImage(), 0, 0, this.getWidth(), this.getHeight(), null);
-        }
+    protected boolean hasData() {
+        return block != null || overrideImage != null;
     }
-    
+
     @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(getWidth(), getHeight());
+    protected Dimension getImageDimensions() {
+        return getSize();
+    }
+
+    @Override
+    protected void buildImage(Graphics graphics) {
+        if (overrideImage != null) {
+            graphics.drawImage(overrideImage, 0, 0, this.getWidth(), this.getHeight(), null);
+        } else if (block != null) {
+            graphics.drawImage(block.getIndexedColorImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+        }
     }
     
     public MapBlock getBlock() {
@@ -42,7 +46,7 @@ public class BlockSlotPanel extends JPanel {
     public void setBlock(MapBlock block) {
         this.block = block;
         overrideImage = null;
-        this.validate();
+        redraw();
         this.repaint();
     }
     
@@ -53,7 +57,7 @@ public class BlockSlotPanel extends JPanel {
     public void setOverrideImage(BufferedImage overrideImage) {
         this.overrideImage = overrideImage;
         block = null;
-        this.validate();
+        redraw();
         this.repaint();
     }
 }

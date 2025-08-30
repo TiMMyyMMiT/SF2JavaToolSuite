@@ -8,14 +8,12 @@ package com.sfc.sf2.map.block.gui;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.map.block.MapBlock;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 
 /**
  *
@@ -30,56 +28,30 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     private TileSlotPanel leftTileSlotPanel;
     private TileSlotPanel rightTileSlotPanel;
     
-    private int currentMode = 0;
-    
-    private boolean drawGrid;
+    private int currentMode = 0;    
     private boolean showPriorityFlag;
     
-    BufferedImage image;
+    BufferedImage priorityImage;
     
     public EditableBlockSlotPanel() {
        addMouseListener(this);
        addMouseMotionListener(this);
     }
-    
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (image == null) {
-            image = new BufferedImage(3*8, 3*8, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D)image.getGraphics();
-            if (block != null) {
-                g2.drawImage(block.getIndexedColorImage(), 0, 0, 3*8, 3*8, null);
-                if (showPriorityFlag) {
-                    Tile[] tiles = block.getTiles();
-                    for (int t = 0; t < tiles.length; t++) {
-                        if (tiles[t].isHighPriority()) {
-                            g2.setColor(Color.BLACK);
-                            g2.fillRect((t%3)*8+2, (t/3)*8+2, 4, 4);
-                            g2.setColor(Color.YELLOW);
-                            g2.fillRect((t%3)*8+3, (t/3)*8+3, 2, 2);
-                        }
+    protected void buildImage(Graphics graphics) {
+        super.paintComponent(graphics);
+        if (priorityImage == null) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            if (showPriorityFlag) {
+                Tile[] tiles = block.getTiles();
+                for (int t = 0; t < tiles.length; t++) {
+                    if (tiles[t].isHighPriority()) {
+                        g2.setColor(Color.BLACK);
+                        g2.fillRect((t%3)*8+2, (t/3)*8+2, 4, 4);
+                        g2.setColor(Color.YELLOW);
+                        g2.fillRect((t%3)*8+3, (t/3)*8+3, 2, 2);
                     }
                 }
-            }
-            if (drawGrid) {
-                g2.setColor(Color.BLACK);
-                for (int i = 0; i <= 4; i++) {
-                    g2.drawLine(i*8, 0, i*8, 4*8);
-                    g2.drawLine(0, i*8, 4*8, i*8);
-                }
-            }
-            g2.dispose();
-            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
-        }
-    }
-    
-    public void drawIndexedColorPixels(BufferedImage image, int[][] pixels, int x, int y){
-        byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
-        int width = image.getWidth();
-        for(int i=0;i<pixels.length;i++){
-            for(int j=0;j<pixels[i].length;j++){
-                data[(y+j)*width+x+i] = (byte)(pixels[i][j]);
             }
         }
     }
@@ -96,24 +68,13 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         this.currentMode = currentMode;
     }
     
-    public boolean getDrawGrid() {
-        return drawGrid;
-    }
-
-    public void setDrawGrid(boolean drawGrid) {
-        this.drawGrid = drawGrid;
-        image = null;
-        this.validate();
-        this.repaint();
-    }
-    
     public boolean getShowPriority() {
         return showPriorityFlag;
     }
 
     public void setShowPriority(boolean showPriorityFlag) {
         this.showPriorityFlag = showPriorityFlag;
-        image = null;
+        priorityImage = null;
         this.validate();
         this.repaint();
     }
@@ -136,17 +97,17 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
 
     @Override
     public void setBlock(MapBlock block) {
+        priorityImage = null;
         super.setBlock(block);
-        image = null;
     }
     
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(getWidth(), getHeight());
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
+    private void onBlockUpdated() {
+        block.clearIndexedColorImage(false);
+        mapBlockLayout.redraw();
+        mapBlockLayout.revalidate();
+        mapBlockLayout.repaint();
+        this.priorityImage = null;
+        this.repaint();
     }
 
     @Override
@@ -165,7 +126,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
                     Tile leftSlotTile = leftTileSlotPanel.getTile();
                     if (leftSlotTile != null) {
                         Tile[] tiles = block.getTiles();
-                        tiles[x + y*3] = cloneTile(leftSlotTile, tiles[x + y*3].isHighPriority());
+                        tiles[x + y*3] = leftSlotTile.clone(tiles[x + y*3].isHighPriority(), leftSlotTile.ishFlip(), leftSlotTile.isvFlip(), leftSlotTile.getPalette());
                         onBlockUpdated();
                     }
                 }
@@ -173,7 +134,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
                     Tile rightSlotTile = rightTileSlotPanel.getTile();
                     if (rightSlotTile != null) {
                         Tile[] tiles = block.getTiles();
-                        tiles[x + y*3] = cloneTile(rightSlotTile, tiles[x + y*3].isHighPriority());
+                        tiles[x + y*3] = rightSlotTile.clone(tiles[x + y*3].isHighPriority(), rightSlotTile.ishFlip(), rightSlotTile.isvFlip(), rightSlotTile.getPalette());
                         onBlockUpdated();
                     }
                 }
@@ -205,45 +166,17 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
                 break;
         }
     }
-    
-    private Tile cloneTile(Tile tile, boolean isHighPriority) {
-        Tile newTile = new Tile();
-        newTile.setId(tile.getId());
-        newTile.setPalette(tile.getPalette());
-        newTile.setPixels(tile.getPixels());
-        newTile.setHighPriority(isHighPriority);
-        newTile.sethFlip(tile.ishFlip());
-        newTile.setvFlip(tile.isvFlip());
-        return newTile;
-    }
-    
-    private void onBlockUpdated() {
-        block.clearIndexedColorImage(false);
-        mapBlockLayout.redraw();
-        mapBlockLayout.revalidate();
-        mapBlockLayout.repaint();
-        this.image = null;
-        this.revalidate();
-        this.repaint();
-    }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
+    public void mouseClicked(MouseEvent e) { }
     @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
+    public void mouseReleased(MouseEvent e) { }
     @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
+    public void mouseEntered(MouseEvent e) { }
     @Override
-    public void mouseDragged(MouseEvent e) {
-    }
-
+    public void mouseExited(MouseEvent e) { }
     @Override
-    public void mouseMoved(MouseEvent e) {
-    }
+    public void mouseDragged(MouseEvent e) { }
+    @Override
+    public void mouseMoved(MouseEvent e) { }
 }
