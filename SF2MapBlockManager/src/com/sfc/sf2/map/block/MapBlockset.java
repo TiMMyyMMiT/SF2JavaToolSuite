@@ -121,9 +121,9 @@ public class MapBlockset {
         if (obj == null) return false;
         if (obj == this) return true;
         if (!(obj instanceof MapBlockset)) return false;
-        MapBlockset blockSet = (MapBlockset)obj;
+        MapBlockset blockset = (MapBlockset)obj;
         for (int i=0; i < this.blocks.length; i++) {
-            if (!this.blocks[i].equalsWithPriority(blockSet.getBlocks()[i])) {
+            if (!this.blocks[i].equalsWithPriority(blockset.getBlocks()[i])) {
                 return false;
             }
         }
@@ -134,7 +134,7 @@ public class MapBlockset {
         return new MapBlockset(this.blocks.clone(), this.blocksPerRow);
     }
     
-    public boolean isBlockSetEmpty() {
+    public boolean isBlocksetEmpty() {
         if (blocks == null || blocks.length == 0) {
             return true;
         }
@@ -146,7 +146,7 @@ public class MapBlockset {
         return true;
     }
     
-    public static MapBlockset EmptyMapBlockSet(Palette palette, int blocksPerRow) {
+    public static MapBlockset EmptyMapBlockset(Palette palette, int blocksPerRow) {
         MapBlock emptyBlock = MapBlock.EmptyMapBlock(-1, 0, palette);
         MapBlock[] blocks = new MapBlock[128];
         for(int i=0; i < blocks.length; i++) {

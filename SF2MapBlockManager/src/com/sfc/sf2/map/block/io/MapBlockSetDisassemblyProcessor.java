@@ -18,7 +18,7 @@ import static com.sfc.sf2.map.block.compression.MapBlocksetDecoder.TILESET_TILES
  *
  * @author TiMMy
  */
-public class MapBlockSetDisassemblyProcessor extends AbstractDisassemblyProcessor<MapBlockset, MapBlockPackage> {
+public class MapBlocksetDisassemblyProcessor extends AbstractDisassemblyProcessor<MapBlockset, MapBlockPackage> {
     
     @Override
     protected MapBlockset parseDisassemblyData(byte[] data, MapBlockPackage pckg) throws DisassemblyException {

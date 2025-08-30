@@ -23,7 +23,7 @@ import java.awt.event.MouseMotionListener;
  *
  * @author wiz
  */
-public class MapBlockSetLayoutPanel extends AbstractLayoutPanel implements MouseListener, MouseMotionListener {
+public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements MouseListener, MouseMotionListener {
     
     private static final int DEFAULT_BLOCKS_PER_ROW = 8;
     
@@ -36,7 +36,7 @@ public class MapBlockSetLayoutPanel extends AbstractLayoutPanel implements Mouse
     private MapBlockset blockset;
     private boolean showPriority = false;
 
-    public MapBlockSetLayoutPanel() {
+    public MapBlocksetLayoutPanel() {
         super();
         tilesPerRow = DEFAULT_BLOCKS_PER_ROW;
         setGridDimensions(MapBlock.PIXEL_WIDTH, MapBlock.PIXEL_HEIGHT);
@@ -76,11 +76,11 @@ public class MapBlockSetLayoutPanel extends AbstractLayoutPanel implements Mouse
         }
     }
 
-    public MapBlockset getBlockSet() {
+    public MapBlockset getBlockset() {
         return blockset;
     }
 
-    public void setBlockSet(MapBlockset blockset) {
+    public void setBlockset(MapBlockset blockset) {
         this.blockset = blockset;
         this.redraw();
     }
@@ -128,14 +128,14 @@ public class MapBlockSetLayoutPanel extends AbstractLayoutPanel implements Mouse
         int y = e.getY() / (getDisplayScale()*PIXEL_HEIGHT);
         int blockIndex = x+y*getBlocksPerRow();
         if(e.getButton()==MouseEvent.BUTTON1){
-            MapBlockSetLayoutPanel.selectedBlockIndex0 = blockIndex;
+            MapBlocksetLayoutPanel.selectedBlockIndex0 = blockIndex;
             if(leftSlotBlockPanel!=null){
                 leftSlotBlockPanel.setBlock(blockset.getBlocks()[blockIndex]);
                 leftSlotBlockPanel.revalidate();
                 leftSlotBlockPanel.repaint(); 
             }
         }else if(e.getButton()==MouseEvent.BUTTON3){
-            MapBlockSetLayoutPanel.selectedBlockIndex1 = blockIndex;
+            MapBlocksetLayoutPanel.selectedBlockIndex1 = blockIndex;
             if(rightSlotBlockPanel!=null){
                 rightSlotBlockPanel.setBlock(blockset.getBlocks()[blockIndex]);
                 rightSlotBlockPanel.revalidate();

@@ -11,7 +11,7 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
-import com.sfc.sf2.map.block.io.MapBlockSetDisassemblyProcessor;
+import com.sfc.sf2.map.block.io.MapBlocksetDisassemblyProcessor;
 import com.sfc.sf2.map.block.io.MapBlockPackage;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
@@ -25,7 +25,7 @@ import java.nio.file.Path;
 public class MapBlockManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
     private final TilesetManager tilesetManager = new TilesetManager();
-    private final MapBlockSetDisassemblyProcessor blockSetDisassemblyProcessor = new MapBlockSetDisassemblyProcessor();
+    private final MapBlocksetDisassemblyProcessor blocksetDisassemblyProcessor = new MapBlocksetDisassemblyProcessor();
     
     private Tileset[] tilesets;
     private MapBlockset mapBlockset;
@@ -67,7 +67,7 @@ public class MapBlockManager extends AbstractManager {
             }
         }
         MapBlockPackage pckg = new MapBlockPackage(tilesets, palette);
-        mapBlockset = blockSetDisassemblyProcessor.importDisassembly(blocksPath, pckg);
+        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksPath, pckg);
         Console.logger().finest("EXITING importDisassembly");
     }
        

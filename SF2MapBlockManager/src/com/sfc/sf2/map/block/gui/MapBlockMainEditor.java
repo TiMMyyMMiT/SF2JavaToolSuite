@@ -23,12 +23,12 @@ import java.util.logging.Level;
  */
 public class MapBlockMainEditor extends AbstractMainEditor {
     
-    MapBlockSettings mapBlockSettings = new MapBlockSettings();
+    MapBlockSettings MapBlockSettings = new MapBlockSettings();
     MapBlockManager mapblockManager = new MapBlockManager();
     
     public MapBlockMainEditor() {
         super();
-        SettingsManager.registerSettingsStore("mapBlock", mapBlockSettings);
+        SettingsManager.registerSettingsStore("mapBlock", MapBlockSettings);
         initComponents();
         initCore(console1);
     }
@@ -37,19 +37,19 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
-        colorPickerBlockset.setColor(mapBlockSettings.getBlocksetBGColor());
-        jSpinner1.setValue(mapBlockSettings.getBlocksetBlocksPerRow());
-        jComboBox1.setSelectedIndex(mapBlockSettings.getBlocksetScale());
-        colorPickerTileset.setColor(mapBlockSettings.getTilesetBGColor());
-        jSpinner4.setValue(mapBlockSettings.getTilesetTilesPerRow());
-        jComboBox4.setSelectedIndex(mapBlockSettings.getTilesetScale());
-        colorPickerBlocks.setColor(mapBlockSettings.getBlockBGColor());
+        colorPickerBlockset.setColor(MapBlockSettings.getBlocksetBGColor());
+        jSpinner1.setValue(MapBlockSettings.getBlocksetBlocksPerRow());
+        jComboBox1.setSelectedIndex(MapBlockSettings.getBlocksetScale());
+        colorPickerTileset.setColor(MapBlockSettings.getTilesetBGColor());
+        jSpinner4.setValue(MapBlockSettings.getTilesetTilesPerRow());
+        jComboBox4.setSelectedIndex(MapBlockSettings.getTilesetScale());
+        colorPickerBlocks.setColor(MapBlockSettings.getBlockBGColor());
         
-        editableBlockSlotPanel.setMapBlockSetLayout(mapBlockSetLayoutPanel);
+        editableBlockSlotPanel.setMapBlocksetLayout(mapBlocksetLayoutPanel);
         editableBlockSlotPanel.setLeftTileSlotPanel(tileSlotPanelLeft);
         editableBlockSlotPanel.setRightTileSlotPanel(tileSlotPanelRight);
-        mapBlockSetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
-        mapBlockSetLayoutPanel.setRightSlotBlockPanel(editableBlockSlotPanel);
+        mapBlocksetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
+        mapBlocksetLayoutPanel.setRightSlotBlockPanel(editableBlockSlotPanel);
         tilesetsLayoutPanel.setLeftSlotTilePanel(tileSlotPanelLeft);
         tilesetsLayoutPanel.setRightSlotBlockPanel(tileSlotPanelRight);
         tilesetsLayoutPanel.setBlockSlotPanel(editableBlockSlotPanel);
@@ -60,12 +60,12 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         Tileset[] tilesets = mapblockManager.getTilesets();
         MapBlockset mapBlockset = mapblockManager.getMapBlockset();
         if (mapBlockset != null) {
-            mapBlockSetLayoutPanel.setBlockSet(mapBlockset);            
-            mapBlockSetLayoutPanel.setBlocksPerRow(((int)jSpinner1.getModel().getValue()));
-            mapBlockSetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
-            mapBlockSetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
-            mapBlockSetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex());
-            mapBlockSetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
+            mapBlocksetLayoutPanel.setBlockset(mapBlockset);            
+            mapBlocksetLayoutPanel.setBlocksPerRow(((int)jSpinner1.getModel().getValue()));
+            mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
+            mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+            mapBlocksetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex());
+            mapBlocksetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
             
             editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
             editableBlockSlotPanel.setShowGrid(jCheckBox5.isSelected());
@@ -97,8 +97,8 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     protected void repaintEditorLayout() {
         super.repaintEditorLayout();
         
-        mapBlockSetLayoutPanel.revalidate();
-        mapBlockSetLayoutPanel.repaint();
+        mapBlocksetLayoutPanel.revalidate();
+        mapBlocksetLayoutPanel.repaint();
         tilesetsLayoutPanel.revalidate();
         tilesetsLayoutPanel.repaint();
     }
@@ -163,7 +163,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        mapBlockSetLayoutPanel = new com.sfc.sf2.map.block.gui.MapBlockSetLayoutPanel();
+        mapBlocksetLayoutPanel = new com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -629,18 +629,18 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 jScrollPane3.setPreferredSize(new java.awt.Dimension(300, 300));
 
-                javax.swing.GroupLayout mapBlockSetLayoutPanelLayout = new javax.swing.GroupLayout(mapBlockSetLayoutPanel);
-                mapBlockSetLayoutPanel.setLayout(mapBlockSetLayoutPanelLayout);
-                mapBlockSetLayoutPanelLayout.setHorizontalGroup(
-                    mapBlockSetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                javax.swing.GroupLayout mapBlocksetLayoutPanelLayout = new javax.swing.GroupLayout(mapBlocksetLayoutPanel);
+                mapBlocksetLayoutPanel.setLayout(mapBlocksetLayoutPanelLayout);
+                mapBlocksetLayoutPanelLayout.setHorizontalGroup(
+                    mapBlocksetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGap(0, 417, Short.MAX_VALUE)
                 );
-                mapBlockSetLayoutPanelLayout.setVerticalGroup(
-                    mapBlockSetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                mapBlocksetLayoutPanelLayout.setVerticalGroup(
+                    mapBlocksetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGap(0, 427, Short.MAX_VALUE)
                 );
 
-                jScrollPane3.setViewportView(mapBlockSetLayoutPanel);
+                jScrollPane3.setViewportView(mapBlocksetLayoutPanel);
 
                 javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
                 jPanel1.setLayout(jPanel1Layout);
@@ -1284,7 +1284,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        /*mapblockManager.setBlocks(mapBlockSetLayoutPanel.getBlocks());
+        /*mapblockManager.setBlocks(mapBlocksetLayoutPanel.getBlocks());
         mapblockManager.exportDisassembly(jTextField14.getText());*/
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -1319,7 +1319,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             blocksetPath = toolPath.resolve(bPath).normalize();
         }
         System.out.println(blocksetPath.toString());
-        mapblockManager.setBlocks(mapBlockSetLayoutPanel.getBlocks());
+        mapblockManager.setBlocks(mapBlocksetLayoutPanel.getBlocks());
         mapblockManager.exportDisassembly(blocksetPath.toString());*/
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -1402,30 +1402,30 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
         if (jComboBox4.getSelectedIndex() >= 0 && tilesetsLayoutPanel != null) {
             int scale = (int)jComboBox4.getSelectedIndex();
-            if (scale != mapBlockSettings.getTilesetScale()) {
+            if (scale != MapBlockSettings.getTilesetScale()) {
                 tilesetsLayoutPanel.setDisplayScale(scale);
                 repaintEditorLayout();
-                mapBlockSettings.setTilesetScale(scale);
+                MapBlockSettings.setTilesetScale(scale);
                 SettingsManager.saveSettingsFile();
             }
         }
     }//GEN-LAST:event_jComboBox4ItemStateChanged
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        if (jComboBox1.getSelectedIndex() >= 0 && mapBlockSetLayoutPanel != null) {
+        if (jComboBox1.getSelectedIndex() >= 0 && mapBlocksetLayoutPanel != null) {
             int scale = (int)jComboBox1.getSelectedIndex();
-            if (scale != mapBlockSettings.getBlocksetScale()) {
-                mapBlockSetLayoutPanel.setBlocksPerRow(scale);
+            if (scale != MapBlockSettings.getBlocksetScale()) {
+                mapBlocksetLayoutPanel.setBlocksPerRow(scale);
                 repaintEditorLayout();
-                mapBlockSettings.setBlocksetScale(scale);
+                MapBlockSettings.setBlocksetScale(scale);
                 SettingsManager.saveSettingsFile();
             }
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox1ItemStateChanged
-        if (mapBlockSetLayoutPanel != null) {
-            mapBlockSetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+        if (mapBlocksetLayoutPanel != null) {
+            mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
             repaintEditorLayout();
         }
     }//GEN-LAST:event_jCheckBox1ItemStateChanged
@@ -1438,12 +1438,12 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox2ItemStateChanged
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        if (mapBlockSetLayoutPanel != null) {
+        if (mapBlocksetLayoutPanel != null) {
             int blocksPerRow = (int)jSpinner1.getValue();
-            if (blocksPerRow != mapBlockSettings.getBlocksetBlocksPerRow()) {
-                mapBlockSetLayoutPanel.setBlocksPerRow(blocksPerRow);
+            if (blocksPerRow != MapBlockSettings.getBlocksetBlocksPerRow()) {
+                mapBlocksetLayoutPanel.setBlocksPerRow(blocksPerRow);
                 repaintEditorLayout();
-                mapBlockSettings.setBlocksetBlocksPerRow(blocksPerRow);
+                MapBlockSettings.setBlocksetBlocksPerRow(blocksPerRow);
                 SettingsManager.saveSettingsFile();
             }
         }
@@ -1452,10 +1452,10 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jSpinner4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner4StateChanged
         if (tilesetsLayoutPanel != null) {
             int tilesPerRow = (int)jSpinner4.getValue();
-            if (tilesPerRow != mapBlockSettings.getTilesetTilesPerRow()) {
+            if (tilesPerRow != MapBlockSettings.getTilesetTilesPerRow()) {
                 tilesetsLayoutPanel.setTilesPerRow(tilesPerRow);
                 repaintEditorLayout();
-                mapBlockSettings.setTilesetTilesPerRow(tilesPerRow);
+                MapBlockSettings.setTilesetTilesPerRow(tilesPerRow);
                 SettingsManager.saveSettingsFile();
             }
         }
@@ -1466,7 +1466,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox3ItemStateChanged
 
     private void jCheckBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox4ItemStateChanged
-        mapBlockSetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
+        mapBlocksetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
             repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox4ItemStateChanged
 
@@ -1504,22 +1504,22 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void colorPickerBlocksetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksetColorChanged
-        mapBlockSetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
-        mapBlockSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
+        mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
+        MapBlockSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
         SettingsManager.saveSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPickerBlocksetColorChanged
 
     private void colorPickerTilesetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetColorChanged
         tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
-        mapBlockSettings.setTilesetBGColor(colorPickerTileset.getColor());
+        MapBlockSettings.setTilesetBGColor(colorPickerTileset.getColor());
         SettingsManager.saveSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPickerTilesetColorChanged
 
     private void colorPickerBlocksColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksColorChanged
         editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
-        mapBlockSettings.setBlockBGColor(colorPickerBlocks.getColor());
+        MapBlockSettings.setBlockBGColor(colorPickerBlocks.getColor());
         SettingsManager.saveSettingsFile();
         repaintEditorLayout();
     }//GEN-LAST:event_colorPickerBlocksColorChanged
@@ -1635,7 +1635,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private com.sfc.sf2.map.block.gui.MapBlockSetLayoutPanel mapBlockSetLayoutPanel;
+    private com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel mapBlocksetLayoutPanel;
     private com.sfc.sf2.map.block.gui.TileSlotPanel tileSlotPanelLeft;
     private com.sfc.sf2.map.block.gui.TileSlotPanel tileSlotPanelRight;
     private com.sfc.sf2.map.block.gui.TilesetsLayoutPanel tilesetsLayoutPanel;

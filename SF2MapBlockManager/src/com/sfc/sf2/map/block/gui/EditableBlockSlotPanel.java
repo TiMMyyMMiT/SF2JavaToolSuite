@@ -24,7 +24,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     public static final int MODE_TOGGLE_PRIORITY = 1;
     public static final int MODE_TOGGLE_FLIP = 2;
     
-    private MapBlockSetLayoutPanel mapBlockSetLayout;
+    private MapBlocksetLayoutPanel mapBlocksetLayout;
     private TileSlotPanel leftTileSlotPanel;
     private TileSlotPanel rightTileSlotPanel;
     
@@ -58,8 +58,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         }
     }
     
-    public void setMapBlockSetLayout(MapBlockSetLayoutPanel mapBlockSetLayout) {
-        this.mapBlockSetLayout = mapBlockSetLayout;
+    public void setMapBlocksetLayout(MapBlocksetLayoutPanel mapBlocksetLayout) {
+        this.mapBlocksetLayout = mapBlocksetLayout;
     }
     
     public int getCurrentMode() {
@@ -89,9 +89,9 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     
     private void onBlockUpdated() {
         block.clearIndexedColorImage(false);
-        mapBlockSetLayout.redraw();
-        mapBlockSetLayout.revalidate();
-        mapBlockSetLayout.repaint();
+        mapBlocksetLayout.redraw();
+        mapBlocksetLayout.revalidate();
+        mapBlocksetLayout.repaint();
         this.priorityImage = null;
         redraw();
         repaint();
