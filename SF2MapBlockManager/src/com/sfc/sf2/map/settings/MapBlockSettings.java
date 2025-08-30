@@ -99,12 +99,14 @@ public class MapBlockSettings implements AbstractSettings {
         }
         if (data.containsKey("blocksetScale")) {
             blocksetScale = Integer.parseInt(data.get("blocksetScale"));
+            if (blocksetScale <= 0) blocksetScale = 1;
         }
         if (data.containsKey("tilesetTilesPerRow")) {
             tilesetTilesPerRow = Integer.parseInt(data.get("tilesetTilesPerRow"));
         }
         if (data.containsKey("tilesetScale")) {
             tilesetScale = Integer.parseInt(data.get("tilesetScale"));
+            if (tilesetScale <= 0) tilesetScale = 1;
         }
         if (data.containsKey("blocksetBGColor")) {
             String[] colorSplit = data.get("blocksetBGColor").split(",");

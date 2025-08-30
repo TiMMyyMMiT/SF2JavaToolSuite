@@ -49,6 +49,10 @@ public class BlockSlotPanel extends AbstractBasicPanel {
     public MapBlock getBlock() {
         return block;
     }
+    
+    public int getBlockIndex() {
+        return block == null ? -1 : block.getIndex();
+    }
 
     public void setBlock(MapBlock block) {
         this.block = block;

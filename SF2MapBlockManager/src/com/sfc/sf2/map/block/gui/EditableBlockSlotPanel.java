@@ -88,7 +88,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     }
     
     private void onBlockUpdated() {
-        block.clearIndexedColorImage(false);
+        block.clearIndexedColorImage(true);
+        mapBlocksetLayout.getBlockset().clearIndexedColorImage(false);
         mapBlocksetLayout.redraw();
         mapBlocksetLayout.revalidate();
         mapBlocksetLayout.repaint();
@@ -113,6 +114,18 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         this.rightTileSlotPanel = rightTileSlotPanel;
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+    @Override
+    public void mouseExited(MouseEvent e) { }
+    @Override
+    public void mouseDragged(MouseEvent e) { }
+    @Override
+    public void mouseMoved(MouseEvent e) { }
     @Override
     public void mousePressed(MouseEvent e) {
         if (block == null)
@@ -150,8 +163,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
                 else if (e.getButton() == MouseEvent.BUTTON2) {
                     if (block.getTiles()[x + y*3].ishFlip() || block.getTiles()[x + y*3].isvFlip()) {
                         block.getTiles()[x + y*3] = Tile.clearFlip(block.getTiles()[x + y*3]);
+                        onBlockUpdated();
                     }
-                    onBlockUpdated();
                 }
                 else if (e.getButton() == MouseEvent.BUTTON3) {
                     block.getTiles()[x + y*3] = Tile.vFlip(block.getTiles()[x + y*3]);
@@ -166,17 +179,4 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
                 break;
         }
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) { }
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-    @Override
-    public void mouseEntered(MouseEvent e) { }
-    @Override
-    public void mouseExited(MouseEvent e) { }
-    @Override
-    public void mouseDragged(MouseEvent e) { }
-    @Override
-    public void mouseMoved(MouseEvent e) { }
 }

@@ -34,6 +34,7 @@ public class MapBlockset {
     
     public void setBlocks(MapBlock[] blocks) {
         this.blocks = blocks;
+        clearIndexedColorImage(false);
     }
     
     public int getBlocksPerRow() {
@@ -93,7 +94,7 @@ public class MapBlockset {
                     int tileID = i+j*width;
                     if (tileID >= blocks.length) {
                         break;
-                    } else {
+                    } else if (blocks[tileID] != null) {
                         graphics.drawImage(blocks[tileID].getIndexedColorImage(), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
                     }
                 }
@@ -114,6 +115,30 @@ public class MapBlockset {
                 blocks[i].clearIndexedColorImage(alsoClearTiles);
             }
         }
+    }
+    
+    public void insertBlock(int index, MapBlock block) {
+        if (index < 0 || index > blocks.length) return;
+        MapBlock[] newBlocks = new MapBlock[blocks.length+1];
+        System.arraycopy(blocks, 0, newBlocks, 0, index);
+        newBlocks[index] = block.clone();
+        newBlocks[index].setIndex(index);
+        for (int i = index+1; i < newBlocks.length; i++) {
+            newBlocks[i] = blocks[i-1];
+            newBlocks[i].setIndex(i);
+        }
+        setBlocks(newBlocks);
+    }
+    
+    public void removeBlock(int index) {
+        if (index < 0 || index >= blocks.length) return;
+        MapBlock[] newBlocks = new MapBlock[blocks.length-1];
+        System.arraycopy(blocks, 0, newBlocks, 0, index);
+        for (int i = index; i < newBlocks.length; i++) {
+            newBlocks[i] = blocks[i+1];
+            newBlocks[i].setIndex(i);
+        }
+        setBlocks(newBlocks);
     }
     
     @Override

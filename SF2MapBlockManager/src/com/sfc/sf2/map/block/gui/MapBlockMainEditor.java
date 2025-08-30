@@ -16,6 +16,7 @@ import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -37,19 +38,20 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
+        accordionPanel1.setExpanded(false);
+        
         colorPickerBlockset.setColor(MapBlockSettings.getBlocksetBGColor());
         jSpinner1.setValue(MapBlockSettings.getBlocksetBlocksPerRow());
-        jComboBox1.setSelectedIndex(MapBlockSettings.getBlocksetScale());
+        jComboBox1.setSelectedIndex(MapBlockSettings.getBlocksetScale()-1);
         colorPickerTileset.setColor(MapBlockSettings.getTilesetBGColor());
         jSpinner4.setValue(MapBlockSettings.getTilesetTilesPerRow());
-        jComboBox4.setSelectedIndex(MapBlockSettings.getTilesetScale());
+        jComboBox4.setSelectedIndex(MapBlockSettings.getTilesetScale()-1);
         colorPickerBlocks.setColor(MapBlockSettings.getBlockBGColor());
         
         editableBlockSlotPanel.setMapBlocksetLayout(mapBlocksetLayoutPanel);
         editableBlockSlotPanel.setLeftTileSlotPanel(tileSlotPanelLeft);
         editableBlockSlotPanel.setRightTileSlotPanel(tileSlotPanelRight);
         mapBlocksetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
-        mapBlocksetLayoutPanel.setRightSlotBlockPanel(editableBlockSlotPanel);
         tilesetsLayoutPanel.setLeftSlotTilePanel(tileSlotPanelLeft);
         tilesetsLayoutPanel.setRightSlotBlockPanel(tileSlotPanelRight);
         tilesetsLayoutPanel.setBlockSlotPanel(editableBlockSlotPanel);
@@ -64,7 +66,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             mapBlocksetLayoutPanel.setBlocksPerRow(((int)jSpinner1.getModel().getValue()));
             mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
             mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
-            mapBlocksetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex());
+            mapBlocksetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
             mapBlocksetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
             
             editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
@@ -87,7 +89,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             tilesetsLayoutPanel.setTilesPerRow(((int)jSpinner4.getModel().getValue()));
             tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
             tilesetsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-            tilesetsLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex());
+            tilesetsLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
         }
         
         super.updateEditorData();
@@ -173,8 +175,10 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         jCheckBox4 = new javax.swing.JCheckBox();
         jLabel9 = new javax.swing.JLabel();
         colorPickerBlockset = new com.sfc.sf2.core.gui.controls.ColorPicker();
-        jButton36 = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
         jButton35 = new javax.swing.JButton();
+        jButton36 = new javax.swing.JButton();
+        jButton37 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
@@ -272,10 +276,10 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
             accordionPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Palette, tilesets, & map data"));
 
-            fileButton1.setFilePath("..\\..\\..\\graphics\\maps\\mappalettes\\entries.asm");
+            fileButton1.setFilePath("..\\graphics\\maps\\mappalettes\\entries.asm");
             fileButton1.setLabelText("Palette entries :");
 
-            fileButton2.setFilePath("..\\..\\..\\graphics\\maps\\maptilesets\\entries.asm");
+            fileButton2.setFilePath("..\\graphics\\maps\\maptilesets\\entries.asm");
             fileButton2.setLabelText("Tilesets entries :");
 
             fileButton3.setFilePath("00-tilesets.asm");
@@ -419,7 +423,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel11Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                     .addContainerGap())
             );
             jPanel11Layout.setVerticalGroup(
@@ -609,7 +613,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jPanel31.setLayout(jPanel31Layout);
                 jPanel31Layout.setHorizontalGroup(
                     jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
                     .addComponent(jPanel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
                 jPanel31Layout.setVerticalGroup(
@@ -625,15 +629,13 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Blocks"));
                 jPanel1.setPreferredSize(new java.awt.Dimension(10, 300));
 
-                jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-                jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 jScrollPane3.setPreferredSize(new java.awt.Dimension(300, 300));
 
                 javax.swing.GroupLayout mapBlocksetLayoutPanelLayout = new javax.swing.GroupLayout(mapBlocksetLayoutPanel);
                 mapBlocksetLayoutPanel.setLayout(mapBlocksetLayoutPanelLayout);
                 mapBlocksetLayoutPanelLayout.setHorizontalGroup(
                     mapBlocksetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 417, Short.MAX_VALUE)
+                    .addGap(0, 435, Short.MAX_VALUE)
                 );
                 mapBlocksetLayoutPanelLayout.setVerticalGroup(
                     mapBlocksetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -646,7 +648,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jPanel1.setLayout(jPanel1Layout);
                 jPanel1Layout.setHorizontalGroup(
                     jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
                 );
                 jPanel1Layout.setVerticalGroup(
                     jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -745,14 +747,22 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                             .addComponent(jLabel4)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBox4)
-                            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                .addComponent(jLabel9)
-                                .addComponent(colorPickerBlockset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel9)
+                            .addComponent(colorPickerBlockset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
                 );
 
+                jButton35.setText("Add block");
+                jButton35.setMargin(new java.awt.Insets(2, 5, 3, 5));
+                jButton35.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jButton35ActionPerformed(evt);
+                    }
+                });
+
+                jButton36.setText("Remove block");
                 jButton36.setToolTipText("");
-                jButton36.setLabel("Remove last block");
+                jButton36.setActionCommand("Remove block");
                 jButton36.setMargin(new java.awt.Insets(2, 5, 3, 5));
                 jButton36.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -760,12 +770,36 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                     }
                 });
 
-                jButton35.setText("Add block to end");
-                jButton35.addActionListener(new java.awt.event.ActionListener() {
+                jButton37.setText("Clone selected");
+                jButton37.setMargin(new java.awt.Insets(2, 5, 3, 5));
+                jButton37.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jButton35ActionPerformed(evt);
+                        jButton37ActionPerformed(evt);
                     }
                 });
+
+                javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+                jPanel7.setLayout(jPanel7Layout);
+                jPanel7Layout.setHorizontalGroup(
+                    jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton35)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton36)
+                        .addContainerGap())
+                );
+                jPanel7Layout.setVerticalGroup(
+                    jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton35)
+                            .addComponent(jButton36)
+                            .addComponent(jButton37)))
+                );
 
                 javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
                 jPanel10.setLayout(jPanel10Layout);
@@ -774,12 +808,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                         .addGap(0, 0, 0)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                            .addGroup(jPanel10Layout.createSequentialGroup()
-                                .addComponent(jButton35, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton36)))
+                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, 0))
                 );
                 jPanel10Layout.setVerticalGroup(
@@ -787,9 +818,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton36)
-                            .addComponent(jButton35))
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 );
@@ -818,8 +847,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jPanel9.setName(""); // NOI18N
                 jPanel9.setPreferredSize(new java.awt.Dimension(340, 300));
 
-                jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-                jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 jScrollPane4.setViewportBorder(javax.swing.BorderFactory.createTitledBorder("Tileset"));
 
                 javax.swing.GroupLayout tilesetsLayoutPanelLayout = new javax.swing.GroupLayout(tilesetsLayoutPanel);
@@ -1301,9 +1328,8 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         } catch (Exception ex) {
             mapblockManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Graphic disasm could not be imported from : " + blocksPath);
+            Console.logger().severe("ERROR Map blockset disasm could not be imported from : " + blocksPath);
         }
-        updateEditorData();
         updateEditorData();
     }//GEN-LAST:event_jButton18ActionPerformed
 
@@ -1324,71 +1350,54 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
-
-        /*String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
-        System.out.println(toolPath.toString());
-        Path mPath = Paths.get(jTextField21.getText());
-        Path mapPath;
-        if(mPath.isAbsolute()){
-            mapPath = mPath;
-        }else{
-            mapPath = toolPath.resolve(mPath).normalize();
+        Path mapDirectory = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
+        Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        Path mapTilesetDataPath = mapDirectory.resolve(fileButton3.getFilePath());
+        Path mapBlocksetDataPath = mapDirectory.resolve(fileButton4.getFilePath());
+        try {
+            mapblockManager.importDisassembly(paletteEntriesPath, tilesetEntriesPath, mapTilesetDataPath, mapBlocksetDataPath);
+        } catch (Exception ex) {
+            mapblockManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map blockset disasm could not be imported from : " + mapDirectory);
         }
-        System.out.println(mapPath.toString()); 
-        Path basePath = toolPath.resolve(Paths.get(mapPath.toString(), "\\..\\..\\..\\..\\")).normalize();
-        System.out.println(basePath.toString());
-        Path pePath = Paths.get(jTextField22.getText());
-        Path paletteEntriesPath;
-        if(pePath.isAbsolute()){
-            paletteEntriesPath = pePath;
-        }else{
-            paletteEntriesPath = mapPath.resolve(pePath).normalize();
-        }
-        System.out.println(paletteEntriesPath.toString());
-        Path tePath = Paths.get(jTextField23.getText());
-        Path tilesetEntriesPath;
-        if(tePath.isAbsolute()){
-            tilesetEntriesPath = tePath;
-        }else{
-            tilesetEntriesPath = mapPath.resolve(tePath).normalize();
-        }
-        System.out.println(tilesetEntriesPath.toString());
-        Path tPath = Paths.get(jTextField24.getText());
-        Path tilesetsPath;
-        if(tPath.isAbsolute()){
-            tilesetsPath = tPath;
-        }else{
-            tilesetsPath = mapPath.resolve(tPath).normalize();
-        }
-        System.out.println(tilesetsPath.toString());
-        Path bPath = Paths.get(jTextField25.getText());
-        Path blocksetPath;
-        if(bPath.isAbsolute()){
-            blocksetPath = bPath;
-        }else{
-            blocksetPath = mapPath.resolve(bPath).normalize();
-        }
-        System.out.println(blocksetPath.toString());
-
-        mapblockManager.importDisassembly(basePath.toString(), paletteEntriesPath.toString(), tilesetEntriesPath.toString(), tilesetsPath.toString(), blocksetPath.toString());*/
         updateEditorData();
     }//GEN-LAST:event_jButton28ActionPerformed
     
     private void jButton35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton35ActionPerformed
-        MapBlockset mapBlockset = mapblockManager.getMapBlockset();
-        MapBlock[] newBlocks = new MapBlock[mapBlockset.getBlocks().length + 1];
-        System.arraycopy(mapBlockset.getBlocks(), 0, newBlocks, 0, mapBlockset.getBlocks().length);
-        newBlocks[newBlocks.length - 1] = mapBlockset.getBlocks()[3].clone();
-        mapBlockset.setBlocks(newBlocks);
+        if (mapBlocksetLayoutPanel.getBlockset() == null) return;
+        MapBlockset blockset = mapBlocksetLayoutPanel.getBlockset();
+        MapBlock block = null;
+        int index = editableBlockSlotPanel.getBlockIndex();
+        if (index >= 0 && index <= 2) {
+            Console.logger().warning("WARNING Cannot insert map blocks before first 3 slots.");
+            return;
+        }
+        if (index < 0 || index >= blockset.getBlocks().length) {
+            index = blockset.getBlocks().length;
+            block = blockset.getBlocks()[3];
+        } else {
+            index++;
+            block = blockset.getBlocks()[0];
+        }
+        blockset.insertBlock(index, block);
+        mapBlocksetLayoutPanel.setLeftSelectedIndex(index);
+        ((JScrollPane)mapBlocksetLayoutPanel.getParent().getParent()).getVerticalScrollBar().setValue((index/mapBlocksetLayoutPanel.getBlocksPerRow()-4)*MapBlock.PIXEL_HEIGHT);
         repaintEditorLayout();
     }//GEN-LAST:event_jButton35ActionPerformed
     
     private void jButton36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton36ActionPerformed
-        MapBlockset mapBlockset = mapblockManager.getMapBlockset();
-        MapBlock[] newBlocks = new MapBlock[mapBlockset.getBlocks().length + 1];
-        System.arraycopy(mapBlockset.getBlocks(), 0, newBlocks, 0, mapBlockset.getBlocks().length - 1);
-        mapBlockset.setBlocks(newBlocks);
+        if (mapBlocksetLayoutPanel.getBlockset() == null) return;
+        MapBlockset blockset = mapBlocksetLayoutPanel.getBlockset();
+        int index = editableBlockSlotPanel.getBlockIndex();
+        if (index < 0) return;
+        if (index <= 2) {
+            Console.logger().warning("WARNING Cannot delete first 3 map blocks.");
+            return;
+        }
+        blockset.removeBlock(index);
+        mapBlocksetLayoutPanel.setLeftSelectedIndex(index == 3 ? 3 : index-1);
         repaintEditorLayout();
     }//GEN-LAST:event_jButton36ActionPerformed
 
@@ -1401,7 +1410,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
     private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
         if (jComboBox4.getSelectedIndex() >= 0 && tilesetsLayoutPanel != null) {
-            int scale = (int)jComboBox4.getSelectedIndex();
+            int scale = (int)jComboBox4.getSelectedIndex()+1;
             if (scale != MapBlockSettings.getTilesetScale()) {
                 tilesetsLayoutPanel.setDisplayScale(scale);
                 repaintEditorLayout();
@@ -1413,9 +1422,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         if (jComboBox1.getSelectedIndex() >= 0 && mapBlocksetLayoutPanel != null) {
-            int scale = (int)jComboBox1.getSelectedIndex();
+            int scale = (int)jComboBox1.getSelectedIndex()+1;
             if (scale != MapBlockSettings.getBlocksetScale()) {
-                mapBlocksetLayoutPanel.setBlocksPerRow(scale);
+                mapBlocksetLayoutPanel.setDisplayScale(scale);
                 repaintEditorLayout();
                 MapBlockSettings.setBlocksetScale(scale);
                 SettingsManager.saveSettingsFile();
@@ -1524,6 +1533,22 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         repaintEditorLayout();
     }//GEN-LAST:event_colorPickerBlocksColorChanged
 
+    private void jButton37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton37ActionPerformed
+        if (mapBlocksetLayoutPanel.getBlockset() == null) return;
+        MapBlockset blockset = mapBlocksetLayoutPanel.getBlockset();
+        int index = editableBlockSlotPanel.getBlockIndex();
+        if (index < 0 || index >= blockset.getBlocks().length) return;
+        if (index <= 2) {
+            Console.logger().warning("WARNING Cannot clone from first 3 map slots.");
+            return;
+        }
+        MapBlock block = blockset.getBlocks()[index];
+        blockset.insertBlock(index+1, block);
+        mapBlocksetLayoutPanel.setLeftSelectedIndex(index+1);
+        ((JScrollPane)mapBlocksetLayoutPanel.getParent().getParent()).getVerticalScrollBar().setValue((index/mapBlocksetLayoutPanel.getBlocksPerRow()-4)*MapBlock.PIXEL_HEIGHT);
+        repaintEditorLayout();
+    }//GEN-LAST:event_jButton37ActionPerformed
+
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)
@@ -1574,6 +1599,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton35;
     private javax.swing.JButton jButton36;
+    private javax.swing.JButton jButton37;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
@@ -1622,6 +1648,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;

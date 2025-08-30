@@ -12,9 +12,11 @@ import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -27,8 +29,8 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
     
     private static final int DEFAULT_BLOCKS_PER_ROW = 8;
     
-    public static int selectedBlockIndex0;
-    public static int selectedBlockIndex1;
+    public static int selectedBlockIndexLeft;
+    public static int selectedBlockIndexRight;
     
     private BlockSlotPanel leftSlotBlockPanel;
     private BlockSlotPanel rightSlotBlockPanel;
@@ -67,12 +69,20 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
                 for (int t = 0; t < tiles.length; t++) {
                     if (tiles[t].isHighPriority()) {
                         graphics.setColor(Color.BLACK);
-                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*8+2, baseY+(t/Block.TILE_WIDTH)*8+2, 4, 4);
+                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH+2, baseY+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT+2, 4, 4);
                         graphics.setColor(Color.YELLOW);
-                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*8+3, baseY+(t/Block.TILE_WIDTH)*8+3, 2, 2);
+                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH+3, baseY+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT+3, 2, 2);
                     }
                 }
             }
+        }
+        if (selectedBlockIndexLeft >= 0) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(Color.YELLOW);
+            int baseX = (selectedBlockIndexLeft%tilesPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedBlockIndexLeft/tilesPerRow)*PIXEL_HEIGHT;
+            g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
         }
     }
 
@@ -82,6 +92,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
 
     public void setBlockset(MapBlockset blockset) {
         this.blockset = blockset;
+        selectedBlockIndexLeft = selectedBlockIndexRight = -1;
         this.redraw();
     }
     
@@ -105,6 +116,40 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
     public BlockSlotPanel getLeftSlotBlockPanel() {
         return leftSlotBlockPanel;
     }
+    
+    public int getLeftSelectedIndex() {
+        return selectedBlockIndexLeft;
+    }
+    
+    public void setLeftSelectedIndex(int index) {
+        if (leftSlotBlockPanel!=null) {
+            if (index < 3 || index >= blockset.getBlocks().length) {
+                selectedBlockIndexLeft = -1;
+                leftSlotBlockPanel.setBlock(null);
+            } else {
+                selectedBlockIndexLeft = index;
+                leftSlotBlockPanel.setBlock(blockset.getBlocks()[index]);
+            }
+            this.redraw();
+        }
+    }
+    
+    public int getRightSelectedIndex() {
+        return selectedBlockIndexRight;
+    }
+    
+    public void setRightSelectedIndex(int index) {
+        if (rightSlotBlockPanel!=null) {
+            if (index < 3 || index >= blockset.getBlocks().length) {
+                selectedBlockIndexRight = -1;
+                rightSlotBlockPanel.setBlock(null);
+            } else {
+                selectedBlockIndexRight = index;
+                rightSlotBlockPanel.setBlock(blockset.getBlocks()[index]);
+            }
+            this.redraw();
+        }
+    }
 
     public void setLeftSlotBlockPanel(BlockSlotPanel leftSlotBlockPanel) {
         this.leftSlotBlockPanel = leftSlotBlockPanel;
@@ -127,20 +172,25 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
         int x = e.getX() / (getDisplayScale()*PIXEL_WIDTH);
         int y = e.getY() / (getDisplayScale()*PIXEL_HEIGHT);
         int blockIndex = x+y*getBlocksPerRow();
-        if(e.getButton()==MouseEvent.BUTTON1){
-            MapBlocksetLayoutPanel.selectedBlockIndex0 = blockIndex;
-            if(leftSlotBlockPanel!=null){
-                leftSlotBlockPanel.setBlock(blockset.getBlocks()[blockIndex]);
-                leftSlotBlockPanel.revalidate();
-                leftSlotBlockPanel.repaint(); 
+        if (blockIndex < 0 || blockIndex >= blockset.getBlocks().length) {
+            return;
+        }
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            if (selectedBlockIndexLeft == blockIndex) {
+                setLeftSelectedIndex(-1);
+            } else {
+                setLeftSelectedIndex(blockIndex);
             }
-        }else if(e.getButton()==MouseEvent.BUTTON3){
-            MapBlocksetLayoutPanel.selectedBlockIndex1 = blockIndex;
-            if(rightSlotBlockPanel!=null){
-                rightSlotBlockPanel.setBlock(blockset.getBlocks()[blockIndex]);
-                rightSlotBlockPanel.revalidate();
-                rightSlotBlockPanel.repaint();
+            this.revalidate();
+            this.repaint();
+        }else if (e.getButton() == MouseEvent.BUTTON3) {
+            if (selectedBlockIndexRight == blockIndex) {
+                setRightSelectedIndex(-1);
+            } else {
+                setRightSelectedIndex(blockIndex);
             }
+            this.revalidate();
+            this.repaint();
         }
         //System.out.println("Blockset press "+e.getButton()+" "+x+" - "+y);
     }    

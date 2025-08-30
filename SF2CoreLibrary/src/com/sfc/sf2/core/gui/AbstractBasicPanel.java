@@ -45,6 +45,8 @@ public abstract class AbstractBasicPanel extends JPanel {
             Dimension offset = getImageOffset();
             g.drawImage(paintImage(dims), offset.width, offset.height, this);
             Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
+            if (size.width == 0) size.width = 1;
+            if (size.height == 0) size.height = 1;
             setSize(size);
             setPreferredSize(size);
         }
@@ -85,6 +87,7 @@ public abstract class AbstractBasicPanel extends JPanel {
     }
     
     protected BufferedImage resize(BufferedImage image) {
+        if (displayScale <= 1) return image;
         BufferedImage newImage = new BufferedImage(image.getWidth()*displayScale, image.getHeight()*displayScale, BufferedImage.TYPE_INT_ARGB);
         Graphics g = newImage.getGraphics();
         g.drawImage(image, 0, 0, image.getWidth()*displayScale, image.getHeight()*displayScale, null);
