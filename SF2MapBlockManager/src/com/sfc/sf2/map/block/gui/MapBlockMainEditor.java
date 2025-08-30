@@ -45,7 +45,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         jComboBox4.setSelectedIndex(mapBlockSettings.getTilesetScale());
         colorPickerBlocks.setColor(mapBlockSettings.getBlockBGColor());
         
-        editableBlockSlotPanel.setMapBlockLayout(mapBlockSetLayoutPanel);
+        editableBlockSlotPanel.setMapBlockSetLayout(mapBlockSetLayoutPanel);
+        editableBlockSlotPanel.setLeftTileSlotPanel(tileSlotPanelLeft);
+        editableBlockSlotPanel.setRightTileSlotPanel(tileSlotPanelRight);
         mapBlockSetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
         mapBlockSetLayoutPanel.setRightSlotBlockPanel(editableBlockSlotPanel);
         tilesetsLayoutPanel.setLeftSlotTilePanel(tileSlotPanelLeft);

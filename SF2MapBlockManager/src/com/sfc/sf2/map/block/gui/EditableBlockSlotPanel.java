@@ -24,7 +24,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     public static final int MODE_TOGGLE_PRIORITY = 1;
     public static final int MODE_TOGGLE_FLIP = 2;
     
-    private MapBlockSetLayoutPanel mapBlockLayout;
+    private MapBlockSetLayoutPanel mapBlockSetLayout;
     private TileSlotPanel leftTileSlotPanel;
     private TileSlotPanel rightTileSlotPanel;
     
@@ -58,8 +58,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         }
     }
     
-    public void setMapBlockLayout(MapBlockSetLayoutPanel mapBlockLayout) {
-        this.mapBlockLayout = mapBlockLayout;
+    public void setMapBlockSetLayout(MapBlockSetLayoutPanel mapBlockSetLayout) {
+        this.mapBlockSetLayout = mapBlockSetLayout;
     }
     
     public int getCurrentMode() {
@@ -89,9 +89,9 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     
     private void onBlockUpdated() {
         block.clearIndexedColorImage(false);
-        mapBlockLayout.redraw();
-        mapBlockLayout.revalidate();
-        mapBlockLayout.repaint();
+        mapBlockSetLayout.redraw();
+        mapBlockSetLayout.revalidate();
+        mapBlockSetLayout.repaint();
         this.priorityImage = null;
         redraw();
         repaint();
@@ -148,11 +148,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
                     onBlockUpdated();
                 }
                 else if (e.getButton() == MouseEvent.BUTTON2) {
-                    if (block.getTiles()[x + y*3].ishFlip()) {
-                        block.getTiles()[x + y*3] = Tile.hFlip(block.getTiles()[x + y*3]);
-                    }
-                    else if (block.getTiles()[x + y*3].ishFlip()) {
-                        block.getTiles()[x + y*3] = Tile.vFlip(block.getTiles()[x + y*3]);
+                    if (block.getTiles()[x + y*3].ishFlip() || block.getTiles()[x + y*3].isvFlip()) {
+                        block.getTiles()[x + y*3] = Tile.clearFlip(block.getTiles()[x + y*3]);
                     }
                     onBlockUpdated();
                 }

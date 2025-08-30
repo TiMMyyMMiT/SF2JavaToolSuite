@@ -70,11 +70,15 @@ public class Tile {
     }
     
     public static Tile vFlip(Tile tile) {
-        return tile.clone(tile.isHighPriority(), !tile.ishFlip(), !tile.isvFlip(), tile.getPalette());
+        return tile.clone(tile.isHighPriority(), tile.ishFlip(), !tile.isvFlip(), tile.getPalette());
     }
     
     public static Tile hFlip(Tile tile) {
         return tile.clone(tile.isHighPriority(), !tile.ishFlip(), tile.isvFlip(), tile.getPalette());
+    }
+    
+    public static Tile clearFlip(Tile tile) {
+        return tile.clone(tile.isHighPriority(), false, false, tile.getPalette());
     }
     
     public static Tile paletteSwap(Tile tile, Palette palette) {
