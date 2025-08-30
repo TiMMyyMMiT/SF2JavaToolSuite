@@ -55,7 +55,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     
     @Override
     protected void updateEditorData() {
-        mapSpriteLayoutPanel.setMapSprite(mapSpriteManager.getMapSprites());
+        mapSpriteLayoutPanel.setMapSprites(mapSpriteManager.getMapSprites());
         mapSpriteLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         mapSpriteLayoutPanel.setShowGrid(jCheckBox1.isSelected());
         
@@ -650,7 +650,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
         Path directoryPath = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
         if (!PathHelpers.createPathIfRequred(directoryPath)) return;
         try {
-            mapSpriteManager.exportAllDisassemblies(directoryPath);
+            mapSpriteManager.exportAllDisassemblies(directoryPath, mapSpriteLayoutPanel.getMapSprites());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map Sprite disasm could not be exported to : " + directoryPath);
@@ -663,7 +663,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
         try {
             FileFormat format = jRadioButton1.isSelected() ? FileFormat.PNG : FileFormat.GIF;
             MapSpriteExportMode exportMode = mapspriteSettings.getExportMode();
-            mapSpriteManager.exportAllImages(directoryPath, exportMode, format);
+            mapSpriteManager.exportAllImages(directoryPath, mapSpriteLayoutPanel.getMapSprites(), exportMode, format);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map Sprite images could not be exported to : " + directoryPath);

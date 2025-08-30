@@ -51,11 +51,11 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
         }
     }
 
-    public MapSprite[] getMapSprite() {
+    public MapSprite[] getMapSprites() {
         return mapsprites;
     }
 
-    public void setMapSprite(MapSprite[] mapsprites) {
+    public void setMapSprites(MapSprite[] mapsprites) {
         this.mapsprites = mapsprites;
     }
 }
