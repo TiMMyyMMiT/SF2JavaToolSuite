@@ -27,9 +27,7 @@ public class Tile {
     private boolean highPriority = false;
     private boolean hFlip = false;
     private boolean vFlip = false;
-    
-    private int occurrences = 0;
-    
+        
     public int[] getPixels() {
         return pixels;
     }
@@ -82,14 +80,6 @@ public class Tile {
     public static Tile paletteSwap(Tile tile, Palette palette) {
         return tile.clone(tile.isHighPriority(), tile.ishFlip(), tile.isvFlip(), palette);
     }
-
-    public int getOccurrences() {
-        return occurrences;
-    }
-
-    public void setOccurrences(int occurrences) {
-        this.occurrences = occurrences;
-    }
     
     public Palette getPalette() {
         return palette;
@@ -121,7 +111,7 @@ public class Tile {
     private void drawPixelData(byte[] imageData) {
         if (ishFlip() || isvFlip()) {
             for (int i=0; i < pixels.length; i++) {
-                int index = (ishFlip() ? PIXEL_WIDTH-(i%PIXEL_WIDTH) : i%PIXEL_WIDTH) + (ishFlip() ? PIXEL_WIDTH - PIXEL_HEIGHT-(i/PIXEL_HEIGHT) : i/PIXEL_HEIGHT)*PIXEL_WIDTH;
+                int index = (ishFlip() ? PIXEL_WIDTH-(i%PIXEL_WIDTH)-1 : i%PIXEL_WIDTH) + (isvFlip()? PIXEL_HEIGHT-(i/PIXEL_HEIGHT)-1 : i/PIXEL_HEIGHT)*PIXEL_WIDTH;
                 imageData[i] = (byte)(pixels[index]);
             }
         } else {

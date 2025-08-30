@@ -34,12 +34,14 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     BufferedImage priorityImage;
     
     public EditableBlockSlotPanel() {
-       addMouseListener(this);
-       addMouseMotionListener(this);
+        setDisplayScale(4);
+
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
     @Override
     protected void buildImage(Graphics graphics) {
-        super.paintComponent(graphics);
+        super.buildImage(graphics);
         if (priorityImage == null) {
             Graphics2D g2 = (Graphics2D)graphics;
             if (showPriorityFlag) {
@@ -75,8 +77,24 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
     public void setShowPriority(boolean showPriorityFlag) {
         this.showPriorityFlag = showPriorityFlag;
         priorityImage = null;
-        this.validate();
-        this.repaint();
+        redraw();
+        repaint();
+    }
+
+    @Override
+    public void setBlock(MapBlock block) {
+        priorityImage = null;
+        super.setBlock(block);
+    }
+    
+    private void onBlockUpdated() {
+        block.clearIndexedColorImage(false);
+        mapBlockLayout.redraw();
+        mapBlockLayout.revalidate();
+        mapBlockLayout.repaint();
+        this.priorityImage = null;
+        redraw();
+        repaint();
     }
     
     public TileSlotPanel getLeftTileSlotPanel() {
@@ -93,21 +111,6 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
 
     public void setRightTileSlotPanel(TileSlotPanel rightTileSlotPanel) {
         this.rightTileSlotPanel = rightTileSlotPanel;
-    }
-
-    @Override
-    public void setBlock(MapBlock block) {
-        priorityImage = null;
-        super.setBlock(block);
-    }
-    
-    private void onBlockUpdated() {
-        block.clearIndexedColorImage(false);
-        mapBlockLayout.redraw();
-        mapBlockLayout.revalidate();
-        mapBlockLayout.repaint();
-        this.priorityImage = null;
-        this.repaint();
     }
 
     @Override

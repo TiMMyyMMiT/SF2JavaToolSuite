@@ -88,31 +88,28 @@ public abstract class AbstractLayoutPanel extends AbstractBasicPanel implements 
         super.paintComponent(g);
         if (hasData()) {
             Dimension dims = getImageDimensions();
-            int offsetX = 0;
-            int offsetY = 0;
             if (showCoords) {
                 if (redrawing) {
                     coordsImageX = paintCoordsImage(true, dims.width, coordsX);
                     coordsImageY = paintCoordsImage(false, dims.height, coordsY);
                 }
-                g.drawImage(coordsImageX, offsetX, 0, this);
-                g.drawImage(coordsImageY, 0, offsetY, this);
+                dims = getImageOffset();
+                g.drawImage(coordsImageX, dims.width, 0, this);
+                g.drawImage(coordsImageY, 0, dims.height, this);
             }
         }
     }
     
     @Override
     protected void drawGrid(BufferedImage image) {
-        if (gridWidth >= 0 || gridHeight >= 0) {
-            GraphicsHelpers.drawGrid(image, gridWidth*getDisplayScale(), gridHeight*getDisplayScale(), 1);
-            if (thickGridWidth >= 0 || thickGridHeight >= 0) {
-                GraphicsHelpers.drawGrid(image, thickGridWidth*getDisplayScale(), thickGridHeight*getDisplayScale(), 3);
-            }
+        super.drawGrid(image);
+        if (thickGridWidth >= 0 || thickGridHeight >= 0) {
+            GraphicsHelpers.drawGrid(image, thickGridWidth*getDisplayScale(), thickGridHeight*getDisplayScale(), 3);
         }
     }
     
     private BufferedImage paintCoordsImage(boolean xAxis, int imageSize, int coordsSize) {
-        imageSize *= getDisplayScale();
+        imageSize *= getDisplayScale(); 
         coordsSize *= getDisplayScale();
         int padding = (xAxis ? COORDS_PADDING_Y : COORDS_PADDING_X+verticalPadding) + COORDS_PADDING_SCALE*getDisplayScale();
         BufferedImage image = new BufferedImage(xAxis ? imageSize : padding, xAxis ? padding : imageSize, BufferedImage.TYPE_INT_ARGB);

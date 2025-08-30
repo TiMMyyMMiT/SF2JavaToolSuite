@@ -148,7 +148,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel implements MouseLis
     
     @Override
     public void mousePressed(MouseEvent e) {
-        Dimension coordsPadding = getCoordsPadding();
+        Dimension coordsPadding = getImageOffset();
         int x = e.getX() - coordsPadding.width;
         int y = e.getY() - coordsPadding.height;
         x /= (getDisplayScale() * PIXEL_WIDTH);

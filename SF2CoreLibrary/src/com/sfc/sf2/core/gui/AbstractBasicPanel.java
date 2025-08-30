@@ -80,7 +80,7 @@ public abstract class AbstractBasicPanel extends JPanel {
     
     protected void drawGrid(BufferedImage image) {
         if (gridWidth >= 0 || gridHeight >= 0) {
-            GraphicsHelpers.drawGrid(image, gridWidth, gridHeight, 1);
+            GraphicsHelpers.drawGrid(image, gridWidth*getDisplayScale(), gridHeight*getDisplayScale(), 1);
         }
     }
     

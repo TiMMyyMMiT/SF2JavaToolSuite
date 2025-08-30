@@ -34,7 +34,9 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
     
     protected void initCore(Console console) {
         //Console
-        console.initLogger("SF2 Java Suite");
+        if (console != null) {
+            console.initLogger("SF2 Java Suite");
+        }
         //Version
         if (!SettingsManager.isRunningInEditor()) {
             String version = Manifest.getProjectVersion();
@@ -45,7 +47,9 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
         SettingsManager.loadGlobalSettings();
         SettingsManager.loadSettingsFile();
         CoreSettings core = SettingsManager.getSettingsStore("core");
-        console.setLogLevel(core.getLogLevel());
+        if (console != null) {
+            console.setLogLevel(core.getLogLevel());
+        }
         if (!SettingsManager.isRunningInEditor()) {
             //Check if settings panel should be shown
             java.awt.EventQueue.invokeLater(() -> {

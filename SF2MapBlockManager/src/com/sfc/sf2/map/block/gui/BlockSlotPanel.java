@@ -6,6 +6,8 @@
 package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.core.gui.AbstractBasicPanel;
+import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.map.block.MapBlock;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,6 +21,11 @@ public class BlockSlotPanel extends AbstractBasicPanel {
     
     protected MapBlock block;
     private BufferedImage overrideImage;    //Required to render a non-block
+    
+    public BlockSlotPanel() {
+        setDisplayScale(2);
+        setGridDimensions(8, 8);
+    }
 
     @Override
     protected boolean hasData() {
@@ -27,15 +34,15 @@ public class BlockSlotPanel extends AbstractBasicPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        return getSize();
+        return new Dimension(PIXEL_WIDTH, PIXEL_HEIGHT);
     }
 
     @Override
     protected void buildImage(Graphics graphics) {
         if (overrideImage != null) {
-            graphics.drawImage(overrideImage, 0, 0, this.getWidth(), this.getHeight(), null);
+            graphics.drawImage(overrideImage, 0, 0, null);
         } else if (block != null) {
-            graphics.drawImage(block.getIndexedColorImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+            graphics.drawImage(block.getIndexedColorImage(), 0, 0, null);
         }
     }
     
@@ -47,7 +54,7 @@ public class BlockSlotPanel extends AbstractBasicPanel {
         this.block = block;
         overrideImage = null;
         redraw();
-        this.repaint();
+        repaint();
     }
     
     public BufferedImage getOverrideImage() {
@@ -58,6 +65,6 @@ public class BlockSlotPanel extends AbstractBasicPanel {
         this.overrideImage = overrideImage;
         block = null;
         redraw();
-        this.repaint();
+        repaint();
     }
 }

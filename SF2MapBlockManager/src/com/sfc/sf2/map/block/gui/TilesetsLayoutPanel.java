@@ -36,7 +36,6 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
         super();
         tilesPerRow = DEFAULT_TILES_PER_ROW;
         setGridDimensions(PIXEL_WIDTH, PIXEL_HEIGHT);
-        setCoordsDimensions(PIXEL_WIDTH, PIXEL_HEIGHT, 0);
         
         addMouseListener(this);
         addMouseMotionListener(this);
