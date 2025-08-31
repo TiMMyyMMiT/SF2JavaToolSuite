@@ -108,7 +108,7 @@ public class MapBlockManager extends AbstractManager {
         int paletteIndex = StringHelpers.getNumberFromString(mapBlockset.getPalette().getName());
         int[] tilesetIndices = new int[tilesets.length];
         for (int i = 0; i < tilesetIndices.length; i++) {
-            tilesetIndices[i] = tilesets[i] == null ? 255 : StringHelpers.getNumberFromString(tilesets[i].getName());
+            tilesetIndices[i] = tilesets[i] == null ? -1 : StringHelpers.getNumberFromString(tilesets[i].getName());
         }
         mapilesetsAsmProcessor.exportAsmData(mapTilesetsFilePath, new MapTilesetData(paletteIndex, tilesetIndices));
         Console.logger().info("Map blocks successfully exported to : " + blocksPath);

@@ -43,11 +43,14 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
                     Console.logger().warning("WARNING Map tileset data contains wrong 'tileset' index. Tileset" + (tilesetIndex+1) + " will be ignored.");
                 } else if (tilesetIndices[tilesetIndex] != -1) {
                     Console.logger().warning("WARNING Map tileset data contains same 'tileset' index more than once. Duplicates of tileset" + (tilesetIndex+1) + " will be ignored.");
-                } else if (tilesetIndex == 255) {
-                    Console.logger().finest("Tileset at index " + (tilesetIndex+1) + " is set to 'none'. Will be ignored.");
                 } else {
                     tilesetFound = true;
-                    tilesetIndices[tilesetIndex] = StringHelpers.getValueInt(line.substring(11));
+                    int index = StringHelpers.getValueInt(line.substring(11));
+                    if (index == 255) {
+                        Console.logger().finest("Tileset at index " + (tilesetIndex+1) + " is set to 'none'. Will be ignored.");
+                        index = -1;
+                    } 
+                    tilesetIndices[tilesetIndex] = index;
                 }
             }
         }
@@ -73,7 +76,8 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
             writer.write("\t\t\tmapTileset");
             writer.write(Integer.toString(i));
             writer.write(" ");
-            writer.write(Integer.toString(item.tilesetIndices()[i]));
+            int index = item.tilesetIndices()[i];
+            writer.write(Integer.toString(index == -1 ? 255 : index));
             writer.write("\n");
         }
     }
