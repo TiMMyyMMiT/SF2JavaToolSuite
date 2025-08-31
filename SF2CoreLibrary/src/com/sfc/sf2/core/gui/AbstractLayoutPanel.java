@@ -83,28 +83,22 @@ public abstract class AbstractLayoutPanel extends AbstractBasicPanel implements 
     }
     
     @Override
-    protected void paintComponent(Graphics g) {
-        boolean redrawing = isRedrawing();
-        super.paintComponent(g);
-        if (hasData()) {
-            Dimension dims = getImageDimensions();
-            if (showCoords) {
-                if (redrawing) {
-                    coordsImageX = paintCoordsImage(true, dims.width, coordsX);
-                    coordsImageY = paintCoordsImage(false, dims.height, coordsY);
-                }
-                dims = getImageOffset();
-                g.drawImage(coordsImageX, dims.width, 0, this);
-                g.drawImage(coordsImageY, 0, dims.height, this);
-            }
+    protected void paintGrid(BufferedImage image) {
+        super.paintGrid(image);
+        if (thickGridWidth >= 0 || thickGridHeight >= 0) {
+            GraphicsHelpers.drawGrid(image, thickGridWidth*getDisplayScale(), thickGridHeight*getDisplayScale(), 3);
         }
     }
     
     @Override
-    protected void drawGrid(BufferedImage image) {
-        super.drawGrid(image);
-        if (thickGridWidth >= 0 || thickGridHeight >= 0) {
-            GraphicsHelpers.drawGrid(image, thickGridWidth*getDisplayScale(), thickGridHeight*getDisplayScale(), 3);
+    protected void paintOverGrid(Graphics graphics, int scale) {
+        Dimension dims = getImageDimensions();
+        if (showCoords) {
+            coordsImageX = paintCoordsImage(true, dims.width, coordsX);
+            coordsImageY = paintCoordsImage(false, dims.height, coordsY);
+            dims = getImageOffset();
+            graphics.drawImage(coordsImageX, dims.width, 0, this);
+            graphics.drawImage(coordsImageY, 0, dims.height, this);
         }
     }
     

@@ -58,7 +58,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
+    protected void paintImage(Graphics graphics) {
         graphics.drawImage(blockset.getIndexedColorImage(), 0, 0, null);
         if (showPriority) {
             MapBlock[] blocks = blockset.getBlocks();
@@ -76,13 +76,18 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
                 }
             }
         }
+    }
+    
+    @Override
+    protected void paintOverGrid(Graphics graphics, int scale) {
+        super.paintOverGrid(graphics, scale);
         if (selectedBlockIndexLeft >= 0) {
             Graphics2D g2 = (Graphics2D)graphics;
-            g2.setStroke(new BasicStroke(2));
+            g2.setStroke(new BasicStroke(2*scale));
             g2.setColor(Color.YELLOW);
-            int baseX = (selectedBlockIndexLeft%tilesPerRow)*PIXEL_WIDTH;
-            int baseY = (selectedBlockIndexLeft/tilesPerRow)*PIXEL_HEIGHT;
-            g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
+            int baseX = (selectedBlockIndexLeft%tilesPerRow)*PIXEL_WIDTH*scale;
+            int baseY = (selectedBlockIndexLeft/tilesPerRow)*PIXEL_HEIGHT*scale;
+            g2.drawRect(baseX-2*scale, baseY-2*scale, PIXEL_WIDTH*scale+4*scale, PIXEL_HEIGHT*scale+4*scale);
         }
     }
 

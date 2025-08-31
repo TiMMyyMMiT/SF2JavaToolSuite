@@ -38,7 +38,7 @@ public class BlockSlotPanel extends AbstractBasicPanel {
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
+    protected void paintImage(Graphics graphics) {
         if (overrideImage != null) {
             graphics.drawImage(overrideImage, 0, 0, null);
         } else if (block != null) {

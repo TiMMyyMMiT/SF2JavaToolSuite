@@ -52,7 +52,7 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
+    protected void paintImage(Graphics graphics) {
         graphics.drawImage(tilesets[selectedTileset].getIndexedColorImage(), 0, 0, null);
     }
 

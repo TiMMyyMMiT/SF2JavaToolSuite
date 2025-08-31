@@ -43,48 +43,54 @@ public abstract class AbstractBasicPanel extends JPanel {
         if (hasData()) {
             Dimension dims = getImageDimensions();
             Dimension offset = getImageOffset();
-            g.drawImage(paintImage(dims), offset.width, offset.height, this);
-            Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
-            if (size.width == 0) size.width = 1;
-            if (size.height == 0) size.height = 1;
-            setSize(size);
-            setPreferredSize(size);
+            if (redraw) {
+                if (currentImage != null) { currentImage.flush(); }
+                currentImage = paintImage(dims);
+                Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
+                if (size.width == 0) size.width = 1;
+                if (size.height == 0) size.height = 1;
+                setSize(size);
+                setPreferredSize(size);
+                redraw = false;
+            }
+            g.drawImage(AbstractBasicPanel.this.paintImage(dims), offset.width, offset.height, this);
         }
     }
     
-    public BufferedImage paintImage(Dimension dims) {
-        if (!redraw || !hasData()) return currentImage;
-        
-        if (currentImage != null) {
-            currentImage.flush();
-        }
+    private BufferedImage paintImage(Dimension dims) {
         //Setup image
         currentImage = new BufferedImage(dims.width, dims.height, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = currentImage.getGraphics();
-        //Render BG color
-        if (bgCheckerPattern) {
-            GraphicsHelpers.drawBackgroundTransparencyPattern(currentImage, bgColor, 4);
-        } else {
-            GraphicsHelpers.drawFlatBackgroundColor(currentImage, bgColor);
-        }
-        //Render main image
-        buildImage(graphics);
+        paintBG(currentImage);
+        paintImage(graphics);
         graphics.dispose();
-        //Resize
         currentImage = resize(currentImage);
-        //DrawGrid
-        if (showGrid) { drawGrid(currentImage); }
+        if (showGrid) { paintGrid(currentImage); }
+        graphics = currentImage.getGraphics();
+        paintOverGrid(graphics, displayScale);
+        graphics.dispose();
         getParent().revalidate();
-
-        redraw = false;
         return currentImage;
     }
     
-    protected void drawGrid(BufferedImage image) {
+    protected void paintBG(BufferedImage image) {
+        //Render BG color
+        if (bgCheckerPattern) {
+            GraphicsHelpers.drawBackgroundTransparencyPattern(image, bgColor, 4);
+        } else {
+            GraphicsHelpers.drawFlatBackgroundColor(image, bgColor);
+        }
+    }
+    
+    protected abstract void paintImage(Graphics graphics);
+    
+    protected void paintGrid(BufferedImage image) {
         if (gridWidth >= 0 || gridHeight >= 0) {
             GraphicsHelpers.drawGrid(image, gridWidth*getDisplayScale(), gridHeight*getDisplayScale(), 1);
         }
     }
+    
+    protected void paintOverGrid(Graphics graphics, int scale) { }
     
     protected BufferedImage resize(BufferedImage image) {
         if (displayScale <= 1) return image;
@@ -98,7 +104,6 @@ public abstract class AbstractBasicPanel extends JPanel {
     
     protected abstract boolean hasData();    
     protected abstract Dimension getImageDimensions();
-    protected abstract void buildImage(Graphics graphics);
     
     protected Dimension getImageOffset() {
         return NO_OFFSET;

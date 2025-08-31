@@ -34,7 +34,7 @@ public class TestLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
+    protected void paintImage(Graphics graphics) {
         Dimension d = getSize();
         int halfHeight = d.height/2;
         Color c = null;

@@ -99,10 +99,31 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     protected void repaintEditorLayout() {
         super.repaintEditorLayout();
         
+        repaintMapBlockLayout();
+        repaintTilesetLayout();
+    }
+    
+    protected void repaintMapBlockLayout() {
         mapBlocksetLayoutPanel.revalidate();
         mapBlocksetLayoutPanel.repaint();
+    }
+    
+    protected void repaintTilesetLayout() {
         tilesetsLayoutPanel.revalidate();
         tilesetsLayoutPanel.repaint();
+    }
+    
+    protected void repaintSelectedBlockPanel() {
+        editableBlockSlotPanel.revalidate();
+        editableBlockSlotPanel.repaint();
+        jCheckBox3.setEnabled(editableBlockSlotPanel.getCurrentMode() != EditableBlockSlotPanel.BlockSlotEditMode.MODE_TOGGLE_PRIORITY);
+    }
+    
+    protected void repaintTilesPanels() {
+        tileSlotPanelLeft.revalidate();
+        tileSlotPanelLeft.repaint();
+        tileSlotPanelRight.revalidate();
+        tileSlotPanelRight.repaint();
     }
     
     /**
@@ -762,7 +783,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
                 jButton36.setText("Remove block");
                 jButton36.setToolTipText("");
-                jButton36.setActionCommand("Remove block");
                 jButton36.setMargin(new java.awt.Insets(2, 5, 3, 5));
                 jButton36.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -997,7 +1017,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                     }
                 });
 
-                jCheckBox3.setSelected(true);
                 jCheckBox3.setText("Show priority");
                 jCheckBox3.addItemListener(new java.awt.event.ItemListener() {
                     public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1374,7 +1393,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             Console.logger().warning("WARNING Cannot insert map blocks before first 3 slots.");
             return;
         }
-        if (index < 0 || index >= blockset.getBlocks().length) {
+        if (index < 0 || index >= blockset.getBlocks().length-1) {
             index = blockset.getBlocks().length;
             block = blockset.getBlocks()[3];
         } else {
@@ -1383,7 +1402,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         }
         blockset.insertBlock(index, block);
         mapBlocksetLayoutPanel.setLeftSelectedIndex(index);
-        ((JScrollPane)mapBlocksetLayoutPanel.getParent().getParent()).getVerticalScrollBar().setValue((index/mapBlocksetLayoutPanel.getBlocksPerRow()-4)*MapBlock.PIXEL_HEIGHT);
+        if (index == blockset.getBlocks().length-1) { //Scroll to bottom
+            ((JScrollPane)mapBlocksetLayoutPanel.getParent().getParent()).getVerticalScrollBar().setValue(Integer.MAX_VALUE);
+        }
         repaintEditorLayout();
     }//GEN-LAST:event_jButton35ActionPerformed
     
@@ -1435,14 +1456,14 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox1ItemStateChanged
         if (mapBlocksetLayoutPanel != null) {
             mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
-            repaintEditorLayout();
+            repaintMapBlockLayout();
         }
     }//GEN-LAST:event_jCheckBox1ItemStateChanged
 
     private void jCheckBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox2ItemStateChanged
         if (tilesetsLayoutPanel != null) {
             tilesetsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-            repaintEditorLayout();
+            repaintTilesetLayout();
         }
     }//GEN-LAST:event_jCheckBox2ItemStateChanged
 
@@ -1451,7 +1472,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             int blocksPerRow = (int)jSpinner1.getValue();
             if (blocksPerRow != MapBlockSettings.getBlocksetBlocksPerRow()) {
                 mapBlocksetLayoutPanel.setBlocksPerRow(blocksPerRow);
-                repaintEditorLayout();
+                repaintMapBlockLayout();
                 MapBlockSettings.setBlocksetBlocksPerRow(blocksPerRow);
                 SettingsManager.saveSettingsFile();
             }
@@ -1463,7 +1484,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             int tilesPerRow = (int)jSpinner4.getValue();
             if (tilesPerRow != MapBlockSettings.getTilesetTilesPerRow()) {
                 tilesetsLayoutPanel.setTilesPerRow(tilesPerRow);
-                repaintEditorLayout();
+                repaintTilesetLayout();
                 MapBlockSettings.setTilesetTilesPerRow(tilesPerRow);
                 SettingsManager.saveSettingsFile();
             }
@@ -1472,39 +1493,46 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
     private void jCheckBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox3ItemStateChanged
         editableBlockSlotPanel.setShowPriority(jCheckBox3.isSelected());
+        repaintSelectedBlockPanel();
     }//GEN-LAST:event_jCheckBox3ItemStateChanged
 
     private void jCheckBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox4ItemStateChanged
         mapBlocksetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
-            repaintEditorLayout();
+        repaintMapBlockLayout();
     }//GEN-LAST:event_jCheckBox4ItemStateChanged
 
     private void jCheckBox5ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox5ItemStateChanged
         EditableBlockSlotPanel blockSlot = tilesetsLayoutPanel.getBlockSlotPanel();
         if (blockSlot != null) {
             blockSlot.setShowGrid(jCheckBox5.isSelected());
-            repaintEditorLayout();
+            repaintSelectedBlockPanel();
         }
     }//GEN-LAST:event_jCheckBox5ItemStateChanged
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         EditableBlockSlotPanel blockSlot = tilesetsLayoutPanel.getBlockSlotPanel();
         if (blockSlot != null) {
-            blockSlot.setCurrentMode(EditableBlockSlotPanel.MODE_TOGGLE_PRIORITY);
+            blockSlot.setCurrentMode(EditableBlockSlotPanel.BlockSlotEditMode.MODE_TOGGLE_PRIORITY);
+            blockSlot.setShowPriority(true);
+            repaintSelectedBlockPanel();
         }
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         EditableBlockSlotPanel blockSlot = tilesetsLayoutPanel.getBlockSlotPanel();
         if (blockSlot != null) {
-            blockSlot.setCurrentMode(EditableBlockSlotPanel.MODE_TOGGLE_FLIP);
+            blockSlot.setCurrentMode(EditableBlockSlotPanel.BlockSlotEditMode.MODE_TOGGLE_FLIP);
+            blockSlot.setShowPriority(jCheckBox3.isSelected());
+            repaintSelectedBlockPanel();
         }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         EditableBlockSlotPanel blockSlot = tilesetsLayoutPanel.getBlockSlotPanel();
         if (blockSlot != null) {
-            blockSlot.setCurrentMode(EditableBlockSlotPanel.MODE_PAINT_TILE);
+            blockSlot.setCurrentMode(EditableBlockSlotPanel.BlockSlotEditMode.MODE_PAINT_TILE);
+            blockSlot.setShowPriority(jCheckBox3.isSelected());
+            repaintSelectedBlockPanel();
         }
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
@@ -1516,21 +1544,21 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
         MapBlockSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
         SettingsManager.saveSettingsFile();
-        repaintEditorLayout();
+        repaintMapBlockLayout();
     }//GEN-LAST:event_colorPickerBlocksetColorChanged
 
     private void colorPickerTilesetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetColorChanged
         tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
         MapBlockSettings.setTilesetBGColor(colorPickerTileset.getColor());
         SettingsManager.saveSettingsFile();
-        repaintEditorLayout();
+        repaintTilesetLayout();
     }//GEN-LAST:event_colorPickerTilesetColorChanged
 
     private void colorPickerBlocksColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksColorChanged
         editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
         MapBlockSettings.setBlockBGColor(colorPickerBlocks.getColor());
         SettingsManager.saveSettingsFile();
-        repaintEditorLayout();
+        repaintSelectedBlockPanel();
     }//GEN-LAST:event_colorPickerBlocksColorChanged
 
     private void jButton37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton37ActionPerformed
@@ -1545,8 +1573,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         MapBlock block = blockset.getBlocks()[index];
         blockset.insertBlock(index+1, block);
         mapBlocksetLayoutPanel.setLeftSelectedIndex(index+1);
-        ((JScrollPane)mapBlocksetLayoutPanel.getParent().getParent()).getVerticalScrollBar().setValue((index/mapBlocksetLayoutPanel.getBlocksPerRow()-4)*MapBlock.PIXEL_HEIGHT);
-        repaintEditorLayout();
+        repaintMapBlockLayout();
     }//GEN-LAST:event_jButton37ActionPerformed
 
     /**

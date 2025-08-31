@@ -29,7 +29,7 @@ public class TileSlotPanel extends AbstractBasicPanel {
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
+    protected void paintImage(Graphics graphics) {
         graphics.drawImage(tile.getIndexedColorImage(), 0, 0, this.getWidth(), this.getHeight(), null);
     }
     

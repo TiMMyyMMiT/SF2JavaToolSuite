@@ -20,15 +20,17 @@ import java.awt.image.BufferedImage;
  * @author TiMMy
  */
 public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListener, MouseMotionListener {
-    public static final int MODE_PAINT_TILE = 0;
-    public static final int MODE_TOGGLE_PRIORITY = 1;
-    public static final int MODE_TOGGLE_FLIP = 2;
+    public enum BlockSlotEditMode {
+        MODE_PAINT_TILE,
+        MODE_TOGGLE_PRIORITY,
+        MODE_TOGGLE_FLIP,
+    }
     
     private MapBlocksetLayoutPanel mapBlocksetLayout;
     private TileSlotPanel leftTileSlotPanel;
     private TileSlotPanel rightTileSlotPanel;
     
-    private int currentMode = 0;    
+    private BlockSlotEditMode currentMode = BlockSlotEditMode.MODE_PAINT_TILE;
     private boolean showPriorityFlag;
     
     BufferedImage priorityImage;
@@ -40,8 +42,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         addMouseMotionListener(this);
     }
     @Override
-    protected void buildImage(Graphics graphics) {
-        super.buildImage(graphics);
+    protected void paintImage(Graphics graphics) {
+        super.paintImage(graphics);
         if (priorityImage == null) {
             Graphics2D g2 = (Graphics2D)graphics;
             if (showPriorityFlag) {
@@ -62,11 +64,11 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         this.mapBlocksetLayout = mapBlocksetLayout;
     }
     
-    public int getCurrentMode() {
+    public BlockSlotEditMode getCurrentMode() {
         return currentMode;
     }
 
-    public void setCurrentMode(int currentMode) {
+    public void setCurrentMode(BlockSlotEditMode currentMode) {
         this.currentMode = currentMode;
     }
     
@@ -78,7 +80,6 @@ public class EditableBlockSlotPanel extends BlockSlotPanel implements MouseListe
         this.showPriorityFlag = showPriorityFlag;
         priorityImage = null;
         redraw();
-        repaint();
     }
 
     @Override
