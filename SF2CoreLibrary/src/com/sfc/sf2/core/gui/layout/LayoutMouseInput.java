@@ -15,7 +15,7 @@ import java.awt.Dimension;
 public class LayoutMouseInput extends BaseMouseCoordsComponent {
         
     public LayoutMouseInput(AbstractLayoutPanel panel, GridMousePressedListener mouseButtonListener, Dimension mouseCoordsGrid) {
-        super(mouseCoordsGrid);
-        setupListeners(panel, mouseButtonListener, null);
+        super(panel, mouseCoordsGrid);
+        setupListeners(mouseButtonListener, null);
     }
 }

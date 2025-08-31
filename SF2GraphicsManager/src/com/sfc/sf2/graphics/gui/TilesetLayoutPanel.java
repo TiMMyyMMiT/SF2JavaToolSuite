@@ -6,7 +6,11 @@
 package com.sfc.sf2.graphics.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.LayoutBackground;
+import com.sfc.sf2.core.gui.layout.LayoutGrid;
+import com.sfc.sf2.core.gui.layout.LayoutScale;
 import com.sfc.sf2.graphics.Tileset;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -20,7 +24,9 @@ public class TilesetLayoutPanel extends AbstractLayoutPanel {
     
     public TilesetLayoutPanel() {
         super();
-        setGridDimensions(8, 8);
+        background = new LayoutBackground(Color.LIGHT_GRAY, 4);
+        scale = new LayoutScale(1);
+        grid = new LayoutGrid(8, 8);
     }
 
     @Override

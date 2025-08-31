@@ -52,17 +52,20 @@ public abstract class AbstractLayoutPanel extends JPanel {
         if (hasData()) {
             Dimension dims = getImageDimensions();
             Dimension offset = getImageOffset();
+            updateMouseInputs(offset);
             if (redraw) {
                 if (currentImage != null) { currentImage.flush(); }
                 if (dims.width > 0 && dims.height > 0) {
                     currentImage = paintImage(dims);
                     Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
+                    if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.buildCoordsImage(size, getDisplayScale()); }
                     setSize(size);
                     setPreferredSize(size);
                 }
                 redraw = false;
             }
             g.drawImage(currentImage, offset.width, offset.height, this);
+            if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.paintCoordsImage(g, getDisplayScale()); }
         }
     }
     
@@ -78,15 +81,11 @@ public abstract class AbstractLayoutPanel extends JPanel {
         if (BaseLayoutComponent.IsEnabled(grid))  { grid.paintGrid(currentImage, getDisplayScale()); }
         //paint after resize
         graphics = currentImage.getGraphics();
-        if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.paintCoordsImage(graphics, dims, getDisplayScale()); }
-        paintOverGrid(graphics, getDisplayScale());
         //Cleanup
         graphics.dispose();
         getParent().revalidate();
         return currentImage;
     }
-    
-    protected void paintOverGrid(Graphics graphics, int scale) { }
     
     protected Dimension getImageOffset() {
         if (coordsGrid != null && coordsGrid.isEnabled()) {
@@ -96,8 +95,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
         }
     }
     
-    private void updateMouseInputs() {
-        Dimension offset = getImageOffset();
+    private void updateMouseInputs(Dimension offset) {
         if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.updateDisplayParameters(getDisplayScale(), offset); }
         if (BaseLayoutComponent.IsEnabled(mouseInput)) { mouseInput.updateDisplayParameters(getDisplayScale(), offset); }
     }
@@ -129,7 +127,6 @@ public abstract class AbstractLayoutPanel extends JPanel {
         if (scale != null && scale.getScale() != displayScale) {
             scale.setScale(displayScale);
             redraw();
-            updateMouseInputs();
         }
     }
 

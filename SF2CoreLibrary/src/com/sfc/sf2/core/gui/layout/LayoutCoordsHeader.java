@@ -25,8 +25,8 @@ public class LayoutCoordsHeader extends BaseMouseCoordsComponent {
     private String origTitle;
 
     public LayoutCoordsHeader(AbstractLayoutPanel panel, Dimension coordsGrid) {
-        super(coordsGrid);
-        setupListeners(panel, null, this::onMouseMotion);
+        super(panel, coordsGrid);
+        setupListeners(null, this::onMouseMotion);
         java.awt.EventQueue.invokeLater(() -> { getCoordsTitle(panel); });
     }
     

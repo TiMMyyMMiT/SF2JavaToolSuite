@@ -20,9 +20,11 @@ import java.util.EventListener;
 public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent implements MouseListener, MouseMotionListener {
     
     private final Dimension mouseCoordsGrid;
+    private AbstractLayoutPanel panel;
     private GridMousePressedListener buttonListener;
     private GridMouseMoveListener motionListener;
     
+    private Dimension bounds;
     private Dimension coordsOffset;
     private int displayScale = 1;
     
@@ -31,25 +33,24 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     private int buttonHeld = -1;
     
 
-    public BaseMouseCoordsComponent(Dimension mouseCoordsGrid) {
+    public BaseMouseCoordsComponent(AbstractLayoutPanel panel, Dimension mouseCoordsGrid) {
+        this.panel = panel;
         this.mouseCoordsGrid = mouseCoordsGrid;
-            setEnabled(false);  //Disabled until listeners are setup
+        setEnabled(false);  //Disabled until listeners are setup
     }
     
-    protected void setupListeners(AbstractLayoutPanel panel, GridMousePressedListener buttonListener, GridMouseMoveListener motionListener) {
+    protected void setupListeners(GridMousePressedListener buttonListener, GridMouseMoveListener motionListener) {
         this.buttonListener = buttonListener;
         this.motionListener = motionListener;
+        setEnabled(true);
         if (buttonListener != null) {
             panel.addMouseListener(this);
-        }
-        if (motionListener != null) {
             panel.addMouseMotionListener(this);
-        }
-        if (buttonListener == null && motionListener == null) {
+        } else if (motionListener != null) {
+            panel.addMouseMotionListener(this);
+        } else {
             Console.logger().warning("WARNING Mouse coords component instantiated in " + panel.getName() + " without any callbacks. Will be disabled.");
             setEnabled(false);
-        } else {
-            setEnabled(true);
         }
     }
     
@@ -71,12 +72,17 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     }
     
     @Override
-    public void mouseClicked(MouseEvent e) { }
-    @Override
     public void mouseEntered(MouseEvent e) { }
+    @Override
+    public void mouseExited(MouseEvent e) { }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+    
     @Override
     public void mouseMoved(MouseEvent e) {
         if (motionListener == null) return;
+        if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
         if (x == lastX && y == lastY) return;
@@ -86,6 +92,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     @Override
     public void mousePressed(MouseEvent e) {
         if (buttonListener == null) return;
+        if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
         if (x == lastX && y == lastY) return;
@@ -97,7 +104,8 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (buttonListener == null) return;
+        if (buttonListener == null || buttonHeld == -1) return;
+        if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
         if (x == lastX && y == lastY) return;
@@ -108,12 +116,10 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     
     @Override
     public void mouseReleased(MouseEvent e) {
-        buttonHeld = -1;
-    }
-    
-    @Override
-    public void mouseExited(MouseEvent e) {
-        buttonHeld = -1;
+        if (buttonHeld != -1) {
+            buttonListener.mousePressed(new GridMousePressedEvent(0, 0, MouseEvent.NOBUTTON, false));
+            buttonHeld = -1;
+        }
     }
     
     public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging) { }

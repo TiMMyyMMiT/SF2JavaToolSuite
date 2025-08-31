@@ -5,7 +5,8 @@
  */
 package com.sfc.sf2.core.gui;
 
-import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
+import com.sfc.sf2.core.gui.layout.LayoutGrid;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,8 +19,8 @@ public class TestLayoutPanel extends AbstractLayoutPanel {
 
     public TestLayoutPanel() {
         super();
-        setGridDimensions(8, 8, 24, 24);
-        setCoordsDimensions(24, 24, 0);
+        grid = new LayoutGrid(8, 8, 24, 24);
+        coordsGrid = new LayoutCoordsGridDisplay(24, 24, 0);
         setShowGrid(true);
     }
     

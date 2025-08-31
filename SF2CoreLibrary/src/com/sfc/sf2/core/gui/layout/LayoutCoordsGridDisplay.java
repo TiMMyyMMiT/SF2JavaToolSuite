@@ -40,12 +40,14 @@ public class LayoutCoordsGridDisplay extends BaseLayoutComponent {
         return new Dimension(verticalPadding+COORDS_PADDING_X+displayScale*COORDS_PADDING_SCALE, COORDS_PADDING_Y+displayScale*COORDS_PADDING_SCALE);
     }
     
-    public void paintCoordsImage(Graphics graphics, Dimension displayArea, int displayScale) {
+    public void paintCoordsImage(Graphics graphics, int displayScale) {
+        graphics.drawImage(coordsImageX, verticalPadding+COORDS_PADDING_X+COORDS_PADDING_SCALE*displayScale, 0, null);
+        graphics.drawImage(coordsImageY, 0, COORDS_PADDING_Y+COORDS_PADDING_SCALE*displayScale, null);
+    }
+    
+    public void buildCoordsImage(Dimension displayArea, int displayScale) {
         coordsImageX = paintCoordsAxis(true, displayArea.width, coordsX, displayScale);
         coordsImageY = paintCoordsAxis(false, displayArea.height, coordsY, displayScale);
-        Dimension offset = getOffset(displayScale);
-        graphics.drawImage(coordsImageX, offset.width, 0, null);
-        graphics.drawImage(coordsImageY, 0, offset.height, null);
     }
     
     private BufferedImage paintCoordsAxis(boolean xAxis, int imageSize, int coordsSize, int displayScale) {
