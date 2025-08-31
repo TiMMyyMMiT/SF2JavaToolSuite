@@ -198,7 +198,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
             this.repaint();
         }
         //System.out.println("Blockset press "+e.getButton()+" "+x+" - "+y);
-    }    
+    }
 
     @Override
     public void mouseReleased(MouseEvent e) { }
