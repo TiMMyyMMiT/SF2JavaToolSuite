@@ -9,6 +9,8 @@ import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.LayoutBackground;
 import com.sfc.sf2.core.gui.layout.LayoutGrid;
 import com.sfc.sf2.core.gui.layout.LayoutScale;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,10 +25,13 @@ public class TilesetLayoutPanel extends AbstractLayoutPanel {
     private Tileset tileset;
     
     public TilesetLayoutPanel() {
-        super();
-        background = new LayoutBackground(Color.LIGHT_GRAY, 4);
-        scale = new LayoutScale(1);
-        grid = new LayoutGrid(8, 8);
+        super(
+            /*Background*/    new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2),
+            /*Scale*/         new LayoutScale(1),
+            /*Grid*/          new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT),
+            /*Coords*/        null,
+            /*Coords Header*/ null,
+            /*Input*/         null);
     }
 
     @Override

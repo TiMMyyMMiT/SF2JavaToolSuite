@@ -5,8 +5,10 @@
  */
 package com.sfc.sf2.core.gui;
 
+import com.sfc.sf2.core.gui.layout.LayoutBackground;
 import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
 import com.sfc.sf2.core.gui.layout.LayoutGrid;
+import com.sfc.sf2.core.gui.layout.LayoutScale;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,10 +20,13 @@ import java.awt.Graphics;
 public class TestLayoutPanel extends AbstractLayoutPanel {
 
     public TestLayoutPanel() {
-        super();
-        grid = new LayoutGrid(8, 8, 24, 24);
-        coordsGrid = new LayoutCoordsGridDisplay(24, 24, 0);
-        setShowGrid(true);
+        super(
+            /*Background*/    new LayoutBackground(Color.YELLOW, 8),
+            /*Scale*/         new LayoutScale(2),
+            /*Grid*/          new LayoutGrid(8, 8, 24, 24),
+            /*Coords*/        new LayoutCoordsGridDisplay(24, 24, true, 10, 0, 2),
+            /*Coords Header*/ null,
+            /*Input*/         null);
     }
     
     @Override

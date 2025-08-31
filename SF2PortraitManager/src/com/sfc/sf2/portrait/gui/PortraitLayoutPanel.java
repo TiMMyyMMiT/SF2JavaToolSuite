@@ -45,7 +45,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         
     public PortraitLayoutPanel() {
         super();
-        background = new LayoutBackground(Color.LIGHT_GRAY, 4);
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
         scale = new LayoutScale(1);
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, PORTRAIT_TILES_WIDTH*PIXEL_WIDTH, -1);
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, 0);

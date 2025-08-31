@@ -28,19 +28,26 @@ public abstract class AbstractLayoutPanel extends JPanel {
     
     protected int tilesPerRow = 8;
     
-    protected LayoutBackground background;
-    protected LayoutScale scale;
-    protected LayoutGrid grid;
-    protected LayoutCoordsGridDisplay coordsGrid;
-    protected LayoutCoordsHeader coordsHeader;
-    protected LayoutMouseInput mouseInput;
+    private final LayoutBackground background;
+    private final LayoutScale scale;
+    private final LayoutGrid grid;
+    private final LayoutCoordsGridDisplay coordsGrid;
+    private final LayoutCoordsHeader coordsHeader;
+    private final LayoutMouseInput mouseInput;
         
-    protected BufferedImage currentImage;
+    private BufferedImage currentImage;
     private boolean redraw = true;
 
-    public AbstractLayoutPanel() {
-        super();
+    public AbstractLayoutPanel(LayoutBackground background, LayoutScale scale, LayoutGrid grid, LayoutCoordsGridDisplay coordsGrid, LayoutCoordsHeader coordsHeader, LayoutMouseInput mouseInput) {
+        this.background = background;
+        this.scale = scale;
+        this.grid = grid;
+        this.coordsGrid = coordsGrid;
+        this.coordsHeader = coordsHeader;
+        this.mouseInput = mouseInput;
     }
+
+    
     
     protected abstract boolean hasData();    
     protected abstract Dimension getImageDimensions();
