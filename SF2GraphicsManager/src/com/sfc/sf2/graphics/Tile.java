@@ -157,7 +157,7 @@ public class Tile {
         if (obj == this) return true;
         if (!(obj instanceof Tile)) return false;
         Tile tile = (Tile)obj;
-        if (tile.vFlip != this.vFlip || tile.hFlip != this.hFlip) {
+        if (tile.id != this.id || tile.vFlip != this.vFlip || tile.hFlip != this.hFlip) {
             return false;
         }
         for (int i=0; i < pixels.length; i++) {
