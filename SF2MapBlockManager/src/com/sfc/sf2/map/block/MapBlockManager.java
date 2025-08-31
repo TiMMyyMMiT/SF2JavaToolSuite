@@ -115,6 +115,15 @@ public class MapBlockManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");
     }
     
+    public void exportDisassembly(Path blocksPath, MapBlockset mapBlockset, Tileset[] tilesets) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.mapBlockset = mapBlockset;
+        MapBlockPackage pckg = new MapBlockPackage(tilesets, mapBlockset.getPalette());
+        blocksetDisassemblyProcessor.exportDisassembly(blocksPath, mapBlockset, pckg);
+        Console.logger().info("Map blocks successfully exported to : " + blocksPath);
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
     public void importImage(Path filepath, Path hpFilePath){
         /*System.out.println("com.sfc.sf2.mapblock.MapBlockManager.exportGif() - Exporting GIF ...");
         blocks = RawImageManager.importImage(filepath);

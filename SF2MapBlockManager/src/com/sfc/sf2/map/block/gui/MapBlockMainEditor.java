@@ -172,10 +172,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         jLabel7 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         directoryButton2 = new com.sfc.sf2.core.gui.controls.DirectoryButton();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        fileButton12 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel28 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
@@ -511,49 +507,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 );
 
                 jTabbedPane2.addTab("Map", jPanel26);
-
-                jPanel5.setPreferredSize(new java.awt.Dimension(32, 135));
-
-                jLabel1.setText("<html>Select new target file.</html>");
-                jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-                jButton2.setText("Export");
-                jButton2.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jButton2ActionPerformed(evt);
-                    }
-                });
-
-                fileButton12.setFilePath(".\\entries\\map03\\0-blocks.bin");
-                fileButton12.setLabelText("Blocks file :");
-
-                javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-                jPanel5.setLayout(jPanel5Layout);
-                jPanel5Layout.setHorizontalGroup(
-                    jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fileButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)))
-                        .addContainerGap())
-                );
-                jPanel5Layout.setVerticalGroup(
-                    jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(fileButton12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                );
-
-                jTabbedPane2.addTab("Disassembly", jPanel5);
 
                 jLabel8.setText("<html>blockset data to a new image file and 'priority' flag data to text file.<br>Recommended to save as PNG or GIF.<br>Exported color format : 4BPP / 16 indexed colors.<br>Transparent color at index 0.</html>");
                 jLabel8.setToolTipText("");
@@ -1329,10 +1282,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 setLocationRelativeTo(null);
             }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
         Path blocksPath = PathHelpers.getBasePath().resolve(fileButton11.getFilePath());
@@ -1601,7 +1550,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton10;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton11;
-    private com.sfc.sf2.core.gui.controls.FileButton fileButton12;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton13;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton14;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
@@ -1618,7 +1566,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton4;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton5;
     private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton35;
     private javax.swing.JButton jButton36;
@@ -1633,7 +1580,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
@@ -1669,7 +1615,6 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
