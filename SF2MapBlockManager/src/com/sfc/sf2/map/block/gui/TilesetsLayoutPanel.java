@@ -43,12 +43,16 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
 
     @Override
     protected boolean hasData() {
-        return tilesets != null && selectedTileset >= 0 && selectedTileset < tilesets.length;
+        return tilesets != null && selectedTileset >= 0 && selectedTileset < tilesets.length && tilesets[selectedTileset] != null;
     }
 
     @Override
     protected Dimension getImageDimensions() {
-        return tilesets[selectedTileset].getDimensions(tilesPerRow);
+        if (tilesets[selectedTileset] == null) {
+            return new Dimension();
+        } else {
+            return tilesets[selectedTileset].getDimensions(tilesPerRow);
+        }
     }
 
     @Override

@@ -45,12 +45,12 @@ public abstract class AbstractBasicPanel extends JPanel {
             Dimension offset = getImageOffset();
             if (redraw) {
                 if (currentImage != null) { currentImage.flush(); }
-                currentImage = paintImage(dims);
-                Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
-                if (size.width == 0) size.width = 1;
-                if (size.height == 0) size.height = 1;
-                setSize(size);
-                setPreferredSize(size);
+                if (dims.width > 0 && dims.height > 0) {
+                    currentImage = paintImage(dims);
+                    Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
+                    setSize(size);
+                    setPreferredSize(size);
+                }
                 redraw = false;
             }
             g.drawImage(AbstractBasicPanel.this.paintImage(dims), offset.width, offset.height, this);
