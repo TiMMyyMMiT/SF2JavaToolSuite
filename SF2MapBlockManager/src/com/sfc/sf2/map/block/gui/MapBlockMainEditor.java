@@ -63,7 +63,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         MapBlockset mapBlockset = mapblockManager.getMapBlockset();
         if (mapBlockset != null) {
             mapBlocksetLayoutPanel.setBlockset(mapBlockset);            
-            mapBlocksetLayoutPanel.setBlocksPerRow(((int)jSpinner1.getModel().getValue()));
+            mapBlocksetLayoutPanel.setItemsPerRow(((int)jSpinner1.getModel().getValue()));
             mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
             mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
             mapBlocksetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
@@ -578,7 +578,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 );
                 jPanel17Layout.setVerticalGroup(
                     jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 );
 
                 jTabbedPane2.getAccessibleContext().setAccessibleName("tab");
@@ -952,7 +952,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jPanel9Layout.setVerticalGroup(
                     jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 );
@@ -996,7 +996,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
                 jLabel11.setText("BG :");
 
-                editableBlockSlotPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+                editableBlockSlotPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 0)));
                 editableBlockSlotPanel.setMaximumSize(new java.awt.Dimension(96, 96));
                 editableBlockSlotPanel.setMinimumSize(new java.awt.Dimension(96, 96));
                 editableBlockSlotPanel.setPreferredSize(new java.awt.Dimension(96, 96));
@@ -1060,36 +1060,36 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
                 jLabel30.setText("Right click");
 
-                tileSlotPanelLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                tileSlotPanelLeft.setMaximumSize(new java.awt.Dimension(48, 48));
-                tileSlotPanelLeft.setMinimumSize(new java.awt.Dimension(48, 48));
-                tileSlotPanelLeft.setPreferredSize(new java.awt.Dimension(48, 48));
+                tileSlotPanelLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
+                tileSlotPanelLeft.setMaximumSize(new java.awt.Dimension(32, 32));
+                tileSlotPanelLeft.setMinimumSize(new java.awt.Dimension(32, 32));
+                tileSlotPanelLeft.setPreferredSize(new java.awt.Dimension(32, 32));
 
                 javax.swing.GroupLayout tileSlotPanelLeftLayout = new javax.swing.GroupLayout(tileSlotPanelLeft);
                 tileSlotPanelLeft.setLayout(tileSlotPanelLeftLayout);
                 tileSlotPanelLeftLayout.setHorizontalGroup(
                     tileSlotPanelLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 46, Short.MAX_VALUE)
+                    .addGap(0, 30, Short.MAX_VALUE)
                 );
                 tileSlotPanelLeftLayout.setVerticalGroup(
                     tileSlotPanelLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 46, Short.MAX_VALUE)
+                    .addGap(0, 30, Short.MAX_VALUE)
                 );
 
-                tileSlotPanelRight.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                tileSlotPanelRight.setMaximumSize(new java.awt.Dimension(48, 48));
-                tileSlotPanelRight.setMinimumSize(new java.awt.Dimension(48, 48));
-                tileSlotPanelRight.setPreferredSize(new java.awt.Dimension(48, 48));
+                tileSlotPanelRight.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)));
+                tileSlotPanelRight.setMaximumSize(new java.awt.Dimension(32, 32));
+                tileSlotPanelRight.setMinimumSize(new java.awt.Dimension(32, 32));
+                tileSlotPanelRight.setPreferredSize(new java.awt.Dimension(32, 32));
 
                 javax.swing.GroupLayout tileSlotPanelRightLayout = new javax.swing.GroupLayout(tileSlotPanelRight);
                 tileSlotPanelRight.setLayout(tileSlotPanelRightLayout);
                 tileSlotPanelRightLayout.setHorizontalGroup(
                     tileSlotPanelRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 46, Short.MAX_VALUE)
+                    .addGap(0, 30, Short.MAX_VALUE)
                 );
                 tileSlotPanelRightLayout.setVerticalGroup(
                     tileSlotPanelRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGap(0, 46, Short.MAX_VALUE)
+                    .addGap(0, 30, Short.MAX_VALUE)
                 );
 
                 javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
@@ -1100,14 +1100,17 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                         .addGap(20, 20, 20)
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel22)
-                            .addComponent(tileSlotPanelLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel23Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(tileSlotPanelRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel30))
-                        .addGap(20, 20, 20))
+                                .addComponent(tileSlotPanelLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                .addComponent(jLabel30)
+                                .addGap(20, 20, 20))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                .addComponent(tileSlotPanelRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28))))
                 );
                 jPanel23Layout.setVerticalGroup(
                     jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1120,7 +1123,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tileSlotPanelLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tileSlotPanelRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(18, Short.MAX_VALUE))
                 );
 
                 buttonGroup1.add(jRadioButton1);
@@ -1152,7 +1155,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 infoButton3.setMessageText("<html>Flip each tile in the selected block. Left click to toggle horizontal flip. Right click to toggle vertical flip. Middle click to clear any flipping.</html>");
                 infoButton3.setText("");
 
-                infoButton4.setMessageText("<html>Set the priority flag for each tile. 'Priority' means that the tile is drawn above the mapSprites (i.e. above characters).<br>Examples include roof tiles or the top tiles for a wall or table.</html>");
+                infoButton4.setMessageText("<html>Set the priority flag for each tile. Left-click to set. Right-click to unset.<br>'Priority' means that the tile is drawn above the mapSprites (i.e. above characters).<br>Examples include roof tiles or the top tiles for a wall or table.</html>");
                 infoButton4.setText("");
 
                 infoButton5.setMessageText("<html> 'Paint' the selected tiles (left or right click) to the selected block.<br>Use left or right click to select a tile above then left or right click on the <i>Selected block</i> panel to apply</html>");
@@ -1211,7 +1214,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(98, Short.MAX_VALUE))
+                        .addContainerGap(99, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
@@ -1221,7 +1224,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                     jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0))
@@ -1416,7 +1419,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         if (mapBlocksetLayoutPanel != null) {
             int blocksPerRow = (int)jSpinner1.getValue();
             if (blocksPerRow != MapBlockSettings.getBlocksetBlocksPerRow()) {
-                mapBlocksetLayoutPanel.setBlocksPerRow(blocksPerRow);
+                mapBlocksetLayoutPanel.setItemsPerRow(blocksPerRow);
                 repaintMapBlockLayout();
                 MapBlockSettings.setBlocksetBlocksPerRow(blocksPerRow);
                 SettingsManager.saveSettingsFile();

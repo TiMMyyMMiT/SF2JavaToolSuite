@@ -82,9 +82,9 @@ public class MapBlockSettings implements AbstractSettings {
     
     @Override
     public void initialiseNewUser() {
-        blocksetBlocksPerRow = 8;
+        blocksetBlocksPerRow = 10;
         blocksetScale = 1;
-        tilesetTilesPerRow = 16;
+        tilesetTilesPerRow = 20;
         tilesetScale = 1;
         Color defaultColor = new Color(200, 0, 200);
         blocksetBGColor = defaultColor;

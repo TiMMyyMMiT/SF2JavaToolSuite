@@ -6,24 +6,27 @@
 package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.*;
+import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 /**
  *
  * @author TiMMy
  */
-public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseListener, MouseMotionListener {
+public class TilesetsLayoutPanel extends AbstractLayoutPanel {
     
-    private static final int DEFAULT_TILES_PER_ROW = 24;
-    public static int selectedTileIndex0;
-    public static int selectedTileIndex1;
+    private static final int DEFAULT_TILES_PER_ROW = 20;
+    public static int selectedTileIndexLeft = -1;
+    public static int selectedTileIndexRight = -1;
     
     private Tileset[] tilesets;
     private int selectedTileset = 0;
@@ -34,11 +37,13 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
     
     public TilesetsLayoutPanel() {
         super();
-        tilesPerRow = DEFAULT_TILES_PER_ROW;
-        setGridDimensions(PIXEL_WIDTH, PIXEL_HEIGHT);
-        
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
+        scale = new LayoutScale(2);
+        grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
+        coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, true, selectedTileIndexLeft, 4, 0);
+        coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, true);
+        mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
+        setItemsPerRow(DEFAULT_TILES_PER_ROW);
     }
 
     @Override
@@ -51,13 +56,30 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
         if (tilesets[selectedTileset] == null) {
             return new Dimension();
         } else {
-            return tilesets[selectedTileset].getDimensions(tilesPerRow);
+            return tilesets[selectedTileset].getDimensions(getItemsPerRow());
         }
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
+        int tilesPerRow = getItemsPerRow();
         graphics.drawImage(tilesets[selectedTileset].getIndexedColorImage(), 0, 0, null);
+        if (selectedTileIndexLeft >= 0) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(Color.RED);
+            int baseX = (selectedTileIndexLeft%tilesPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedTileIndexLeft/tilesPerRow)*PIXEL_HEIGHT;
+            g2.drawRect(baseX-1, baseY-1, PIXEL_WIDTH+2, PIXEL_HEIGHT+2);
+        }
+        if (selectedTileIndexRight >= 0) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(Color.BLUE);
+            int baseX = (selectedTileIndexRight%tilesPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedTileIndexRight/tilesPerRow)*PIXEL_HEIGHT;
+            g2.drawRect(baseX-1, baseY-1, PIXEL_WIDTH+2, PIXEL_HEIGHT+2);
+        }
     }
 
     public Tileset[] getTilesets() {
@@ -66,6 +88,10 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
 
     public void setTilesets(Tileset[] tilesets) {
         this.tilesets = tilesets;
+        selectedTileset = 0;
+        setSelectedLeftSlot(-1);
+        setSelectedRightSlot(-1);
+        this.redraw();
     }
     
     public int getSelectedTileset() {
@@ -74,6 +100,8 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
 
     public void setSelectedTileset(int selectedTileset) {
         this.selectedTileset = selectedTileset;
+        setSelectedLeftSlot(-1);
+        setSelectedRightSlot(-1);
         this.redraw();
     }
 
@@ -100,56 +128,52 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel implements MouseLis
     public void setRightSlotBlockPanel(TileSlotPanel rightSlotTilePanel) {
         this.rightSlotTilePanel = rightSlotTilePanel;
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
+    
+    private void setSelectedLeftSlot(int index) {
+        selectedTileIndexLeft = index;
+        Tile tile = index == -1 ? null : tilesets[selectedTileset].getTiles()[index];
+        leftSlotTilePanel.setTile(tile);
+        leftSlotTilePanel.revalidate();
+        leftSlotTilePanel.repaint();
+        this.revalidate();
+        this.repaint();
+        this.redraw();
+    }
+    
+    private void setSelectedRightSlot(int index) {
+        selectedTileIndexRight = index;
+        Tile tile = index == -1 ? null : tilesets[selectedTileset].getTiles()[index];
+        rightSlotTilePanel.setTile(tile);
+        rightSlotTilePanel.revalidate();
+        rightSlotTilePanel.repaint();
+        this.revalidate();
+        this.repaint();
+        this.redraw();
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        int x = e.getX() / (getDisplayScale()*PIXEL_WIDTH);
-        int y = e.getY() / (getDisplayScale()*PIXEL_HEIGHT);
-        int tileIndex = x+y*tilesPerRow;
-        if (e.getButton() == MouseEvent.BUTTON1) {
+    private void onMousePressed(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
+        int x = evt.x();
+        int y = evt.y();
+        int tileIndex = x+y*getItemsPerRow();
+        if (tilesets[selectedTileset] == null) return;
+        if (tileIndex < 0 || tileIndex >= tilesets[selectedTileset].getTiles().length) return;
+        
+        if (evt.mouseButton() == MouseEvent.BUTTON1) {
             if (leftSlotTilePanel != null) {
                 if (tilesets[selectedTileset] == null) {
-                    leftSlotTilePanel.setTile(null);
+                    setSelectedLeftSlot(-1);
                 } else {
-                    leftSlotTilePanel.setTile(tilesets[selectedTileset].getTiles()[tileIndex]);
+                    setSelectedLeftSlot(tileIndex);
                 }
-                leftSlotTilePanel.revalidate();
-                leftSlotTilePanel.repaint();
             }
-        } else if(e.getButton() == MouseEvent.BUTTON3){
+        } else if (evt.mouseButton() == MouseEvent.BUTTON3) {
             if (rightSlotTilePanel != null) {
                 if (tilesets[selectedTileset] == null) {
-                    rightSlotTilePanel.setTile(null);
+                    setSelectedRightSlot(-1);
                 } else {
-                    rightSlotTilePanel.setTile(tilesets[selectedTileset].getTiles()[tileIndex]);
+                    setSelectedRightSlot(tileIndex);
                 }
-                rightSlotTilePanel.revalidate();
-                rightSlotTilePanel.repaint();
             }
         }
-    }    
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
     }
 }
