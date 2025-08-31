@@ -46,7 +46,7 @@ public class BackgroundLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         for(int b = 0; b < backgrounds.length; b++) {
             graphics.drawImage(backgrounds[b].getTileset().getIndexedColorImage(), 0, b*BG_TILES_HEIGHT*PIXEL_HEIGHT, null);
         }

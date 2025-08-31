@@ -48,7 +48,7 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         for(int f = 0; f < invocationGraphic.getFrames().length; f++) {
             Tile[] frameTiles = invocationGraphic.getFrames()[f].getTiles();
             int yy = f*INVOCATION_TILE_HEIGHT*PIXEL_HEIGHT;

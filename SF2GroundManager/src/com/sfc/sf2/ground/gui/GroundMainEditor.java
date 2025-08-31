@@ -624,7 +624,7 @@ public class GroundMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        groundLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
+        groundLayoutPanel.setItemsPerRow((int)jSpinner2.getValue());
         repaintEditorLayout();
     }//GEN-LAST:event_jSpinner2StateChanged
 

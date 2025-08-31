@@ -50,7 +50,7 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         for (int i = 0; i < mapsprites.length; i++) {
             if (mapsprites[i] != null) {
                 graphics.drawImage(mapsprites[i].getIndexedColorImage(), 0, i*3*PIXEL_HEIGHT, null);

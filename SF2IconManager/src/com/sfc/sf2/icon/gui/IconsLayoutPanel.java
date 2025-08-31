@@ -51,7 +51,7 @@ public class IconsLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         int iconsPerRow = this.getItemsPerRow();
         int width = icons.length > iconsPerRow ? iconsPerRow : icons.length;
         for (int i = 0; i < icons.length; i++) {

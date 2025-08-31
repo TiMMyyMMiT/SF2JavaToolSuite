@@ -6,11 +6,7 @@
 package com.sfc.sf2.ground.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
-import com.sfc.sf2.core.gui.layout.LayoutBackground;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsHeader;
-import com.sfc.sf2.core.gui.layout.LayoutGrid;
-import com.sfc.sf2.core.gui.layout.LayoutScale;
+import com.sfc.sf2.core.gui.layout.*;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.ground.Ground;
@@ -32,9 +28,9 @@ public class GroundLayoutPanel extends AbstractLayoutPanel {
         scale = new LayoutScale(1);
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
         coordsGrid = null;
-        coordsHeader = new LayoutCoordsHeader(this, new Dimension(PIXEL_WIDTH, PIXEL_HEIGHT));
+        coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT);
         mouseInput = null;
-        tilesPerRow = Ground.GROUND_TILES_PER_ROW;
+        setItemsPerRow(Ground.GROUND_TILES_PER_ROW);
     }
 
     @Override
@@ -44,11 +40,11 @@ public class GroundLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        return ground.getTileset().getDimensions(tilesPerRow);
+        return ground.getTileset().getDimensions(getItemsPerRow());
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         graphics.drawImage(ground.getTileset().getIndexedColorImage(), 0, 0, null);
     }
     

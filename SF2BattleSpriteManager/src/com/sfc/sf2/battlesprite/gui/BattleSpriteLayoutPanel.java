@@ -60,7 +60,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         Graphics2D g2 = (Graphics2D)graphics;
         if (isAnimating()) {
             drawAnimPreview(g2);

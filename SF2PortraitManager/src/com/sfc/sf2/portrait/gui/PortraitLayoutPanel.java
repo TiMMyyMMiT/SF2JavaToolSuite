@@ -61,7 +61,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         portrait.clearIndexedColorImage();
         graphics.drawImage(portrait.getIndexedColorImage(true, blinking, speaking), 0, 0, null);
         graphics.setColor(Color.YELLOW);
