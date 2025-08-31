@@ -333,7 +333,10 @@ public class MapBlocksetDecoder {
                 updateHistoryMaps(tiles, i);
             } else {
                 Tile previousTile = tiles[i-1];
-                if (tile.equals(previousTile)) {
+                if (previousTile.getId() == (tile.getId())
+                    && previousTile.isHighPriority() == tile.isHighPriority()
+                    && previousTile.ishFlip() == tile.ishFlip()
+                    && previousTile.isvFlip() == tile.isvFlip()) {
                     /* Copy last output tile */
                     command = "00";
                     //System.out.println(i + " - Copy last output tile : 00");
