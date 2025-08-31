@@ -39,6 +39,7 @@ public class IconsMainEditor extends AbstractMainEditor {
         super.initEditor();
         
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        jSpinner2.setValue(iconSettings.getItemsPerRow());
         jComboBox2.removeAllItems();
         IconExportMode mode = iconSettings.getExportMode();
         IconExportMode[] exportModes = IconExportMode.values();
@@ -55,7 +56,7 @@ public class IconsMainEditor extends AbstractMainEditor {
     @Override
     protected void updateEditorData() {
         iconsLayoutPanel.setIcons(iconManager.getIcons());
-        iconsLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
+        iconsLayoutPanel.setItemsPerRow((int)jSpinner2.getValue());
         
         super.updateEditorData();
     }
@@ -757,8 +758,13 @@ public class IconsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jRadioStateChanged_Gif
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        iconsLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
-        repaintEditorLayout();
+        int itemsPerRow = (int)jSpinner2.getValue();
+        if (itemsPerRow != iconSettings.getItemsPerRow()) {
+            iconsLayoutPanel.setItemsPerRow(itemsPerRow);
+            repaintEditorLayout();
+            iconSettings.setItemsPerRow(itemsPerRow);
+            SettingsManager.saveSettingsFile();
+        }
     }//GEN-LAST:event_jSpinner2StateChanged
 
     /**

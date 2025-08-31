@@ -7,12 +7,8 @@ package com.sfc.sf2.portrait.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.gui.layout.*;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent.GridMousePressedEvent;
-import com.sfc.sf2.core.gui.layout.LayoutBackground;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
-import com.sfc.sf2.core.gui.layout.LayoutGrid;
-import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
-import com.sfc.sf2.core.gui.layout.LayoutScale;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.portrait.Portrait;
@@ -48,8 +44,8 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
         scale = new LayoutScale(1);
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, PORTRAIT_TILES_WIDTH*PIXEL_WIDTH, -1);
-        coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, 0);
-        mouseInput = new LayoutMouseInput(this, this::onMouseInput, new Dimension(8, 8));
+        coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, false);
+        mouseInput = new LayoutMouseInput(this, this::onMouseInput, PIXEL_WIDTH, PIXEL_HEIGHT);
     }
 
     @Override
@@ -193,6 +189,6 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
             revalidate();
             repaint();
         }
-        Console.logger().finest("Portrait press "+e.mouseButton()+" -- "+e.x()+" - "+e.y());
+        //Console.logger().finest("Portrait press "+e.mouseButton()+" -- "+e.x()+" - "+e.y());
     }
 }

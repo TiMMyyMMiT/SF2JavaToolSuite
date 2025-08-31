@@ -31,8 +31,8 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
     
     ActionListener animationUpdated;
 
-    public AnimatedLayoutPanel(LayoutBackground background, LayoutScale scale, LayoutGrid grid, LayoutCoordsGridDisplay coordsGrid, LayoutCoordsHeader coordsHeader, LayoutMouseInput mouseInput) {
-        super(background, scale, grid, coordsGrid, coordsHeader, mouseInput);
+    public AnimatedLayoutPanel() {
+        super();
     }
     
     public boolean isAnimating() {

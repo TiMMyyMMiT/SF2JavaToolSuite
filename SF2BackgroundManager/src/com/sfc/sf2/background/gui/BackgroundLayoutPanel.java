@@ -26,13 +26,12 @@ public class BackgroundLayoutPanel extends AbstractLayoutPanel {
     private Background[] backgrounds;
     
     public BackgroundLayoutPanel() {
-        super(
-            /*Background*/    null,
-            /*Scale*/         new LayoutScale(1),
-            /*Grid*/          new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, -1, BG_TILES_HEIGHT*PIXEL_HEIGHT),
-            /*Coords*/        new LayoutCoordsGridDisplay(0, BG_TILES_HEIGHT*PIXEL_HEIGHT, false, 10, 0, 2),
-            /*Coords Header*/ null,
-            /*Input*/         null);
+        background = null;
+        scale = new LayoutScale(1);
+        grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, -1, BG_TILES_HEIGHT*PIXEL_HEIGHT);
+        coordsGrid = new LayoutCoordsGridDisplay(0, BG_TILES_HEIGHT*PIXEL_HEIGHT, false, 0, 4, 2);
+        coordsHeader = null;
+        mouseInput = null;
         tilesPerRow = BG_TILES_WIDTH;
     }
 

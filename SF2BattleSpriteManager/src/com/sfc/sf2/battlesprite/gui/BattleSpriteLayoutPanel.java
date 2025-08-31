@@ -10,6 +10,10 @@ import static com.sfc.sf2.battlesprite.BattleSprite.BATTLE_SPRITE_TILE_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
+import com.sfc.sf2.core.gui.layout.LayoutBackground;
+import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
+import com.sfc.sf2.core.gui.layout.LayoutGrid;
+import com.sfc.sf2.core.gui.layout.LayoutScale;
 import com.sfc.sf2.graphics.Tileset;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -25,7 +29,12 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     
     public BattleSpriteLayoutPanel() {
         super();
-        setGridDimensions(8, 8, -1, BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT);
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
+        scale = new LayoutScale(1);
+        grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_WIDTH, -1, BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT);
+        coordsGrid = new LayoutCoordsGridDisplay(0, BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT, false, 0, 0, 2);
+        coordsHeader = null;
+        mouseInput = null;
     }
     
     private BattleSprite battleSprite;
@@ -51,7 +60,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
+    protected void paintImage(Graphics graphics) {
         Graphics2D g2 = (Graphics2D)graphics;
         if (isAnimating()) {
             drawAnimPreview(g2);

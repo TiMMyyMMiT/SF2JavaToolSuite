@@ -33,9 +33,9 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     private int buttonHeld = -1;
     
 
-    public BaseMouseCoordsComponent(AbstractLayoutPanel panel, Dimension mouseCoordsGrid) {
+    public BaseMouseCoordsComponent(AbstractLayoutPanel panel, int gridX, int gridY) {
         this.panel = panel;
-        this.mouseCoordsGrid = mouseCoordsGrid;
+        this.mouseCoordsGrid = new Dimension(gridX, gridY);
         setEnabled(false);  //Disabled until listeners are setup
     }
     
@@ -54,19 +54,26 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         }
     }
     
-    public void updateDisplayParameters(int displayScale, Dimension coordsOffset) {
+    public void updateDisplayParameters(int displayScale, Dimension bounds, Dimension coordsOffset) {
+        this.bounds = bounds;
         this.displayScale = displayScale;
         this.coordsOffset = coordsOffset;
     }
     
     private int getXCoord(int mouseX) {
-        int x = mouseX - coordsOffset.width;
+        int x = mouseX-coordsOffset.width;
+        if (x < 0 || x >= bounds.width-coordsOffset.width) {
+            return -1;
+        }
         x /= (displayScale * mouseCoordsGrid.width);
         return x;
     }
     
     private int getYCoord(int mouseY) {
-        int y = mouseY - coordsOffset.height;
+        int y = mouseY-coordsOffset.height;
+        if (y < 0 || y >= bounds.height-coordsOffset.height) {
+            return -1;
+        }
         y /= (displayScale * mouseCoordsGrid.height);
         return y;
     }

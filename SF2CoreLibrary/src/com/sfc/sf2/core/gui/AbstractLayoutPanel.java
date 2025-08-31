@@ -25,30 +25,23 @@ import javax.swing.JPanel;
 public abstract class AbstractLayoutPanel extends JPanel {
     
     private static final Dimension NO_OFFSET = new Dimension();
+        
+    protected LayoutBackground background;
+    protected LayoutScale scale;
+    protected LayoutGrid grid;
+    protected LayoutCoordsGridDisplay coordsGrid;
+    protected LayoutCoordsHeader coordsHeader;
+    protected LayoutMouseInput mouseInput;
     
-    protected int tilesPerRow = 8;
-    
-    private final LayoutBackground background;
-    private final LayoutScale scale;
-    private final LayoutGrid grid;
-    private final LayoutCoordsGridDisplay coordsGrid;
-    private final LayoutCoordsHeader coordsHeader;
-    private final LayoutMouseInput mouseInput;
+    private int itemsPerRow = 8;
         
     private BufferedImage currentImage;
     private boolean redraw = true;
 
-    public AbstractLayoutPanel(LayoutBackground background, LayoutScale scale, LayoutGrid grid, LayoutCoordsGridDisplay coordsGrid, LayoutCoordsHeader coordsHeader, LayoutMouseInput mouseInput) {
-        this.background = background;
-        this.scale = scale;
-        this.grid = grid;
-        this.coordsGrid = coordsGrid;
-        this.coordsHeader = coordsHeader;
-        this.mouseInput = mouseInput;
+    public AbstractLayoutPanel() {
+        super();
     }
 
-    
-    
     protected abstract boolean hasData();    
     protected abstract Dimension getImageDimensions();
     protected abstract void paintImage(Graphics graphics);
@@ -65,7 +58,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
                 if (dims.width > 0 && dims.height > 0) {
                     currentImage = paintImage(dims);
                     Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
-                    if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.buildCoordsImage(size, getDisplayScale()); }
+                    if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.buildCoordsImage(dims, getDisplayScale()); }
                     setSize(size);
                     setPreferredSize(size);
                 }
@@ -103,17 +96,18 @@ public abstract class AbstractLayoutPanel extends JPanel {
     }
     
     private void updateMouseInputs(Dimension offset) {
-        if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.updateDisplayParameters(getDisplayScale(), offset); }
-        if (BaseLayoutComponent.IsEnabled(mouseInput)) { mouseInput.updateDisplayParameters(getDisplayScale(), offset); }
+        if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.updateDisplayParameters(getDisplayScale(), getPreferredSize(), offset); }
+        if (BaseLayoutComponent.IsEnabled(mouseInput)) { mouseInput.updateDisplayParameters(getDisplayScale(), getPreferredSize(), offset); }
     }
     
-    public int getTilesPerRow() {
-        return tilesPerRow;
+    public int getItemsPerRow() {
+        return itemsPerRow;
     }
 
-    public void setTilesPerRow(int tilesPerRow) {
-        if (this.tilesPerRow != tilesPerRow) {
-            this.tilesPerRow = tilesPerRow;
+    public void setItemsPerRow(int itemsPerRow) {
+        if (this.itemsPerRow != itemsPerRow) {
+            this.itemsPerRow = itemsPerRow;
+            if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.setItemsPerRow(itemsPerRow); }
             redraw();
         }
     }

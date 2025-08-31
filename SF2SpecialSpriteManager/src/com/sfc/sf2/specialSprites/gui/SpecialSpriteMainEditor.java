@@ -36,7 +36,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     
     @Override
     protected void updateEditorData() {
-        specialSpriteLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
+        specialSpriteLayoutPanel.setItemsPerRow((int)jSpinner1.getValue());
         specialSpriteLayoutPanel.setTileset(specialSpriteManager.getTileset());
         
         super.updateEditorData();
@@ -706,7 +706,7 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        specialSpriteLayoutPanel.setTilesPerRow((int)jSpinner1.getValue());
+        specialSpriteLayoutPanel.setItemsPerRow((int)jSpinner1.getValue());
         repaintEditorLayout();
     }//GEN-LAST:event_jSpinner1StateChanged
 

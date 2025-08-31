@@ -6,7 +6,6 @@
 package com.sfc.sf2.core.gui.layout;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
-import java.awt.Dimension;
 
 /**
  *
@@ -14,8 +13,8 @@ import java.awt.Dimension;
  */
 public class LayoutMouseInput extends BaseMouseCoordsComponent {
         
-    public LayoutMouseInput(AbstractLayoutPanel panel, GridMousePressedListener mouseButtonListener, Dimension mouseCoordsGrid) {
-        super(panel, mouseCoordsGrid);
+    public LayoutMouseInput(AbstractLayoutPanel panel, GridMousePressedListener mouseButtonListener, int gridX, int gridY) {
+        super(panel, gridX, gridY);
         setupListeners(mouseButtonListener, null);
     }
 }

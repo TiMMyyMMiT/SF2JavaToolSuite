@@ -86,7 +86,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(tilesetNames));
             jComboBox5.setSelectedIndex(0);
             
-            tilesetsLayoutPanel.setTilesPerRow(((int)jSpinner4.getModel().getValue()));
+            tilesetsLayoutPanel.setItemsPerRow(((int)jSpinner4.getModel().getValue()));
             tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
             tilesetsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
             tilesetsLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
@@ -1428,7 +1428,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         if (tilesetsLayoutPanel != null) {
             int tilesPerRow = (int)jSpinner4.getValue();
             if (tilesPerRow != MapBlockSettings.getTilesetTilesPerRow()) {
-                tilesetsLayoutPanel.setTilesPerRow(tilesPerRow);
+                tilesetsLayoutPanel.setItemsPerRow(tilesPerRow);
                 repaintTilesetLayout();
                 MapBlockSettings.setTilesetTilesPerRow(tilesPerRow);
                 SettingsManager.saveSettingsFile();

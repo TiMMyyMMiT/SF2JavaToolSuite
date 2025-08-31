@@ -43,7 +43,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         Tileset tileset = tilesetManager.getTileset();
         if (tileset != null) {
             int tileWidth = (int)jSpinner2.getValue();
-            tilesetLayoutPanel.setTilesPerRow(tileWidth);
+            tilesetLayoutPanel.setItemsPerRow(tileWidth);
             tilesetLayoutPanel.setTileset(tileset);
         }
         
@@ -1261,7 +1261,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton24ActionPerformed
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        tilesetLayoutPanel.setTilesPerRow((int)jSpinner2.getValue());
+        tilesetLayoutPanel.setItemsPerRow((int)jSpinner2.getValue());
         repaintEditorLayout();
     }//GEN-LAST:event_jSpinner2StateChanged
 

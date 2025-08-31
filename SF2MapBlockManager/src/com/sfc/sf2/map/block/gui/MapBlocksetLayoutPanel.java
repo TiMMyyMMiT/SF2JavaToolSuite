@@ -106,7 +106,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
     }
 
     public void setBlocksPerRow(int blocksPerRow) {
-        setTilesPerRow(blocksPerRow);
+        setItemsPerRow(blocksPerRow);
     }
     
     public boolean getShowPriority() {

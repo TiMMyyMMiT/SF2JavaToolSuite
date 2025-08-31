@@ -8,7 +8,6 @@ package com.sfc.sf2.core.gui.layout;
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.controls.Console;
 import java.awt.Container;
-import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
@@ -23,11 +22,27 @@ public class LayoutCoordsHeader extends BaseMouseCoordsComponent {
     private JComponent coordsContainer;
     private TitledBorder coordsTitle;
     private String origTitle;
+    
+    private boolean showIndex;
+    int itemsPerRow;
 
-    public LayoutCoordsHeader(AbstractLayoutPanel panel, Dimension coordsGrid) {
-        super(panel, coordsGrid);
+    public LayoutCoordsHeader(AbstractLayoutPanel panel, int gridX, int gridY) {
+        this(panel, gridX, gridY, false);
+    }
+
+    /**
+     *
+     * @param showIndex Whether to show the index (x+y*length) or the coords (x, y)
+     */
+    public LayoutCoordsHeader(AbstractLayoutPanel panel, int gridX, int gridY, boolean showIndex) {
+        super(panel, gridX, gridY);
+        this.showIndex = showIndex;
         setupListeners(null, this::onMouseMotion);
         java.awt.EventQueue.invokeLater(() -> { getCoordsTitle(panel); });
+    }
+    
+    public void setItemsPerRow(int itemsPerRow) {
+        this.itemsPerRow = itemsPerRow;
     }
     
     private void getCoordsTitle(Container panel) {
@@ -58,10 +73,19 @@ public class LayoutCoordsHeader extends BaseMouseCoordsComponent {
     }
 
     private void onMouseMotion(GridMouseMoveEvent evt) {
-        if (evt.x() < 0 || evt.y() < 0) {
-            coordsTitle.setTitle(String.format("%s : (-, -)", origTitle));
+        if (showIndex) {
+            if (evt.x() < 0 || evt.y() < 0) {
+                coordsTitle.setTitle(String.format("%s : ( - )", origTitle));
+            } else {
+                int index = evt.x()+evt.y()*itemsPerRow;
+                coordsTitle.setTitle(String.format("%s : ( %d )", origTitle, index));
+            }
         } else {
-            coordsTitle.setTitle(String.format("%s : (%d, %d)", origTitle, evt.x(), evt.y()));
+            if (evt.x() < 0 || evt.y() < 0) {
+                coordsTitle.setTitle(String.format("%s : (-, -)", origTitle));
+            } else {
+                coordsTitle.setTitle(String.format("%s : (%d, %d)", origTitle, evt.x(), evt.y()));
+            }
         }
         coordsContainer.repaint();
     }
