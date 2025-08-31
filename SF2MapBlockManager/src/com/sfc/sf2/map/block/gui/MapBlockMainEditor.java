@@ -1330,8 +1330,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        /*mapblockManager.setBlocks(mapBlocksetLayoutPanel.getBlocks());
-        mapblockManager.exportDisassembly(jTextField14.getText());*/
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -1353,19 +1352,16 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        /*String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
-        System.out.println(toolPath.toString());       
-        Path bPath = Paths.get(jTextField26.getText()).resolve(jTextField25.getText());
-        Path blocksetPath;
-        if(bPath.isAbsolute()){
-            blocksetPath = bPath;
-        }else{
-            blocksetPath = toolPath.resolve(bPath).normalize();
+        Path mapDirectory = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
+        Path mapTilesetDataPath = mapDirectory.resolve(fileButton3.getFilePath());
+        Path mapBlocksetDataPath = mapDirectory.resolve(fileButton4.getFilePath());
+        if (!PathHelpers.createPathIfRequred(mapDirectory)) return;
+        try {
+            mapblockManager.exportDisassembly(mapTilesetDataPath, mapBlocksetDataPath, mapBlocksetLayoutPanel.getBlockset(), tilesetsLayoutPanel.getTilesets());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map block disasm could not be exported to : " + mapDirectory);
         }
-        System.out.println(blocksetPath.toString());
-        mapblockManager.setBlocks(mapBlocksetLayoutPanel.getBlocks());
-        mapblockManager.exportDisassembly(blocksetPath.toString());*/
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed

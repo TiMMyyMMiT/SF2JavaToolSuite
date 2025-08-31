@@ -43,6 +43,8 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
                     Console.logger().warning("WARNING Map tileset data contains wrong 'tileset' index. Tileset" + (tilesetIndex+1) + " will be ignored.");
                 } else if (tilesetIndices[tilesetIndex] != -1) {
                     Console.logger().warning("WARNING Map tileset data contains same 'tileset' index more than once. Duplicates of tileset" + (tilesetIndex+1) + " will be ignored.");
+                } else if (tilesetIndex == 255) {
+                    Console.logger().finest("Tileset at index " + (tilesetIndex+1) + " is set to 'none'. Will be ignored.");
                 } else {
                     tilesetFound = true;
                     tilesetIndices[tilesetIndex] = StringHelpers.getValueInt(line.substring(11));
@@ -64,7 +66,15 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
 
     @Override
     protected void packageAsmData(FileWriter writer, MapTilesetData item) throws IOException, AsmException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        writer.write("\t\t\tmapPalette  ");
+        writer.write(Integer.toString(item.paletteIndex()));
+        writer.write("\n");
+        for (int i = 0; i < item.tilesetIndices().length; i++) {
+            writer.write("\t\t\tmapTileset");
+            writer.write(Integer.toString(i));
+            writer.write(" ");
+            writer.write(Integer.toString(item.tilesetIndices()[i]));
+            writer.write("\n");
+        }
     }
-    
 }
