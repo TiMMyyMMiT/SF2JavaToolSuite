@@ -20,12 +20,20 @@ public class LayoutGrid extends BaseLayoutComponent {
     private int thickGridHeight = -1;
     
     public LayoutGrid(int gridWidth, int gridHeight) {
-        this(gridWidth, gridHeight, -1, -1);
+        setGridDimensions(gridWidth, gridHeight);
     }
     
     public LayoutGrid(int gridWidth, int gridHeight, int thickGridWidth, int thickGridHeight) {
+        setGridDimensions(gridWidth, gridHeight);
+        setThickGridDimensions(thickGridWidth, thickGridHeight);
+    }
+    
+    public void setGridDimensions(int gridWidth, int gridHeight) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
+    }
+    
+    public void setThickGridDimensions(int thickGridWidth, int thickGridHeight) {
         this.thickGridWidth = thickGridWidth;
         this.thickGridHeight = thickGridHeight;
     }

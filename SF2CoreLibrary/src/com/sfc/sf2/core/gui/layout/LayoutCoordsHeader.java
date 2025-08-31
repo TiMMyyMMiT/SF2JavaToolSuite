@@ -24,7 +24,7 @@ public class LayoutCoordsHeader extends BaseMouseCoordsComponent {
     private String origTitle;
     
     private boolean showIndex;
-    int itemsPerRow;
+    private int itemsPerRow;
 
     public LayoutCoordsHeader(AbstractLayoutPanel panel, int gridX, int gridY) {
         this(panel, gridX, gridY, false);

@@ -19,13 +19,15 @@ import java.util.EventListener;
  */
 public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent implements MouseListener, MouseMotionListener {
     
+    private static final Dimension NO_OFFSET = new Dimension();
+    
     private final Dimension mouseCoordsGrid;
     private AbstractLayoutPanel panel;
     private GridMousePressedListener buttonListener;
     private GridMouseMoveListener motionListener;
     
-    private Dimension bounds;
-    private Dimension coordsOffset;
+    private Dimension bounds = NO_OFFSET;
+    private Dimension coordsOffset = NO_OFFSET;
     private int displayScale = 1;
     
     private int lastX = -1;

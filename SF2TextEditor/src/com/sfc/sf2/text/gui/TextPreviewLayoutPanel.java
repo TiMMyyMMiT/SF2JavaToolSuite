@@ -6,6 +6,7 @@
 package com.sfc.sf2.text.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.*;
 import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
@@ -57,9 +58,12 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     
     public TextPreviewLayoutPanel() {
         super();
-        setBackground(Color.BLACK);
-        bgCheckerPattern = false;
-        this.setDisplayScale(2);
+        background = null;
+        scale = new LayoutScale(2);
+        grid = null;
+        coordsGrid = null;
+        coordsHeader = null;
+        mouseInput = null;
     }
     
     @Override
@@ -73,8 +77,8 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void buildImage(Graphics graphics) {
-        buildFrame(graphics);
+    protected void drawImage(Graphics graphics) {
+        drawFrame(graphics);
         if (text != null) {
             writeText(graphics);
             graphics.setColor(Color.LIGHT_GRAY);
@@ -87,7 +91,7 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         }
     }
     
-    void buildFrame(Graphics graphics) {
+    void drawFrame(Graphics graphics) {
         Tile[] tiles = baseTiles.getTiles();
         drawTile(graphics, tiles[PANEL_TILE_CORNER], 0, 0, PIXEL_WIDTH, PIXEL_HEIGHT, false, false);
         drawTile(graphics, tiles[PANEL_TILE_CORNER], PREVIEW_WIDTH-PIXEL_WIDTH, 0, PIXEL_WIDTH, PIXEL_HEIGHT, true, false);

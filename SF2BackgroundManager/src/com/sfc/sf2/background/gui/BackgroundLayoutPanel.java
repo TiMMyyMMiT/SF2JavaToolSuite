@@ -29,10 +29,10 @@ public class BackgroundLayoutPanel extends AbstractLayoutPanel {
         background = null;
         scale = new LayoutScale(1);
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, -1, BG_TILES_HEIGHT*PIXEL_HEIGHT);
-        coordsGrid = new LayoutCoordsGridDisplay(0, BG_TILES_HEIGHT*PIXEL_HEIGHT, false, 0, 4, 2);
+        coordsGrid = new LayoutCoordsGridDisplay(0, BG_TILES_HEIGHT*PIXEL_HEIGHT, false, 0, PIXEL_WIDTH, 2);
         coordsHeader = null;
         mouseInput = null;
-        tilesPerRow = BG_TILES_WIDTH;
+        setItemsPerRow(BG_TILES_WIDTH);
     }
 
     @Override

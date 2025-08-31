@@ -35,7 +35,7 @@ public class WeaponSpriteLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(0, FRAME_TILE_HEIGHT*PIXEL_HEIGHT, false, 0, 0, 2);
         coordsHeader = null;
         mouseInput = null;
-        tilesPerRow = FRAME_TILE_WIDTH;
+        setItemsPerRow(FRAME_TILE_WIDTH);
     }
     
     @Override
@@ -45,11 +45,11 @@ public class WeaponSpriteLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        return new Dimension(tilesPerRow*PIXEL_WIDTH, weaponsprite.getFrames().length*FRAME_TILE_HEIGHT*PIXEL_HEIGHT);
+        return new Dimension(getItemsPerRow()*PIXEL_WIDTH, weaponsprite.getFrames().length*FRAME_TILE_HEIGHT*PIXEL_HEIGHT);
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         
         int frameHeight = FRAME_TILE_HEIGHT*PIXEL_HEIGHT;
         Tileset[] frames = weaponsprite.getFrames();

@@ -44,7 +44,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
 
     protected abstract boolean hasData();    
     protected abstract Dimension getImageDimensions();
-    protected abstract void paintImage(Graphics graphics);
+    protected abstract void drawImage(Graphics graphics);
     
     @Override
     protected void paintComponent(Graphics g) {
@@ -75,7 +75,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
         Graphics graphics = currentImage.getGraphics();
         //paint
         if (BaseLayoutComponent.IsEnabled(background)) { background.paintBackground(currentImage); }
-        paintImage(graphics);
+        drawImage(graphics);
         graphics.dispose();
         if (BaseLayoutComponent.IsEnabled(scale))  { currentImage = scale.resizeImage(currentImage); }
         if (BaseLayoutComponent.IsEnabled(grid))  { grid.paintGrid(currentImage, getDisplayScale()); }

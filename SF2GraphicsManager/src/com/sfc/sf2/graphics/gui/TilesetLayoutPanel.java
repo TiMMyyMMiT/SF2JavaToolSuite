@@ -43,7 +43,7 @@ public class TilesetLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         tileset.clearIndexedColorImage(false);
         graphics.drawImage(tileset.getIndexedColorImage(), 0, 0, null);
     }

@@ -34,8 +34,8 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
         tiles_frame2 = TileHelpers.reorderTilesSequentially(tiles_frame2, 1, 1, Block.TILE_WIDTH);
         int index = pckg.indices()[0]*6+pckg.indices()[1]*2;
         Block[] blocks = new Block[2];
-        blocks[0] = new Block(index, tiles_frame1, 1);
-        blocks[1] = new Block(index+1, tiles_frame2, 1);
+        blocks[0] = new Block(index, tiles_frame1);
+        blocks[1] = new Block(index+1, tiles_frame2);
         return blocks;
     }
 
