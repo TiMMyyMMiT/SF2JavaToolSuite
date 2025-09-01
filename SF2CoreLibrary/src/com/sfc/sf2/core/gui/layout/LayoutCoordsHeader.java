@@ -14,7 +14,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 /**
- *
+ * Finds a parent {@link JComponent} of the {@code LayoutPanel} with a {@link TitledBorder} and appends the hovered tile coords
  * @author TiMMy
  */
 public class LayoutCoordsHeader extends BaseMouseCoordsComponent {

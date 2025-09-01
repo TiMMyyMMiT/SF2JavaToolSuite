@@ -16,7 +16,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * Displays item coordinates on the top and left axis of the panel image
  * @author TiMMy
  */
 public class LayoutCoordsGridDisplay extends BaseLayoutComponent {
@@ -33,10 +33,23 @@ public class LayoutCoordsGridDisplay extends BaseLayoutComponent {
     private int fontIncrease = 0;
     private boolean cumulative = false;
     
+    /**
+     * @param topSize The width of a column of items
+     * @param leftSize The height of a row of items
+     * @param cumulativeNumbers Whether horizontal numbers represent the row (non-cumulative) or the total number of items so far (cumulative)
+     */
     public LayoutCoordsGridDisplay(int topSize, int leftSize, boolean cumulativeNumbers) {
         this(topSize, leftSize, cumulativeNumbers, 0, 0, 0);
     }
     
+    /**
+     * @param topSize The width of a column of items
+     * @param leftSize The height of a row of items
+     * @param cumulativeNumbers Whether horizontal numbers represent the row (non-cumulative) or the total number of items so far (cumulative)
+     * @param topPadding Extra vertical size for the top bar (to make it thicker)
+     * @param leftPadding Extra horizontal size for the left bar (to make it thicker). Useful for large numbers
+     * @param fontIncrease Make font larger (fontSize + {@code fontIncrease})
+     */
     public LayoutCoordsGridDisplay(int topSize, int leftSize, boolean cumulativeNumbers, int topPadding, int leftPadding, int fontIncrease) {
         this.topSize = topSize;
         this.leftSize = leftSize;

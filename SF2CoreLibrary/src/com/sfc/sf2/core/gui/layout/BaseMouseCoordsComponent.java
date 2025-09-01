@@ -14,7 +14,8 @@ import java.awt.event.MouseMotionListener;
 import java.util.EventListener;
 
 /**
- *
+ * A common component to handle mouse movement and input in common ways. Handles click and drag as similar operations
+ * Be sure to call the {@code setupListeners} function (could not be in constructor).
  * @author TiMMy
  */
 public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent implements MouseListener, MouseMotionListener {
@@ -33,7 +34,6 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     private int lastX = -1;
     private int lastY = -1;
     private int buttonHeld = -1;
-    
 
     public BaseMouseCoordsComponent(AbstractLayoutPanel panel, int gridX, int gridY) {
         this.panel = panel;
