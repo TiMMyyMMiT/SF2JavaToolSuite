@@ -5,29 +5,34 @@
  */
 package com.sfc.sf2.map.layout;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.graphics.TilesetManager;
-import com.sfc.sf2.map.block.MapBlock;
+import com.sfc.sf2.map.block.MapBlockManager;
 import com.sfc.sf2.map.block.MapBlockset;
-import com.sfc.sf2.map.layout.io.DisassemblyManager;
+import com.sfc.sf2.map.layout.io.MapLayoutDisassemblyProcessor;
+import com.sfc.sf2.map.layout.io.MapLayoutPackage;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
 public class MapLayoutManager {
-       
     private final TilesetManager tilesetManager = new TilesetManager();
-    private DisassemblyManager disassemblyManager = null;
+    private final MapBlockManager mapBlockManager = new MapBlockManager();
+    private final MapLayoutDisassemblyProcessor layoutDisassemblyProcessor = new MapLayoutDisassemblyProcessor();
+    
     private MapBlockset blockset;
     private MapLayout layout;
        
-    public void importDisassembly(String palettePath, String tileset1Path, String tileset2Path, String tileset3Path, String tileset4Path, String tileset5Path, String blocksPath, String layoutPath){
-        /*System.out.println("com.sfc.sf2.maplayout.MapLayoutManager.importDisassembly() - Importing disassembly ...");
-        disassemblyManager = new DisassemblyManager();
-        layout = disassemblyManager.importDisassembly(palettePath, tileset1Path, tileset2Path, tileset3Path, tileset4Path, tileset5Path, blocksPath, layoutPath);
-        blockset = disassemblyManager.getBlockset();
-        System.out.println("com.sfc.sf2.maplayout.MapLayoutManager.importDisassembly() - Disassembly imported.");*/
+    public void importDisassembly(Path palettePath, Path[] tilesetPaths, Path blocksPath, Path layoutPath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        MapBlockset blocks = mapBlockManager.importDisassembly(palettePath, tilesetPaths, blocksPath);
+        MapLayoutPackage pckg = new MapLayoutPackage(blocks);
+        layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
+        Console.logger().finest("EXITING importDisassembly");
     }
     
     public void importDisassembly(String palettesPath, String tilesetsPath, String tilesetsFilePath, String blocksPath, String layoutPath)

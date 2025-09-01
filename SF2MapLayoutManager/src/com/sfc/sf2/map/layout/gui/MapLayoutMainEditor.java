@@ -8,6 +8,7 @@ package com.sfc.sf2.map.layout.gui;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.settings.SettingsManager;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
 import com.sfc.sf2.map.layout.MapLayoutManager;
@@ -1184,16 +1185,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         
         try {
-            String toolDir = System.getProperty("user.dir");
-            Path toolPath = Paths.get(toolDir);
-
             String mapPath = jTextField24.getText();
-            if(!mapPath.endsWith("\\")){
-                mapPath = mapPath+"\\";
-            }
-            //Path basePath = Paths.get(mapPath).toAbsolutePath();
-            System.out.println(toolPath.toString());
-            Path basePath = toolPath.resolve(Paths.get(mapPath)).normalize();
+            Path basePath = PathHelpers.getBasePath().resolve(Paths.get(mapPath)).normalize();
             System.out.println(basePath.toString());
             
             Path bPath = Paths.get(jTextField19.getText());
@@ -1241,9 +1234,9 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         
                 maplayoutManager.importDisassembly(palettePath.toString(),tilesetsPath.toString(),mapDataPath.toString(),blocksetPath.toString(),layoutPath.toString());
             } else {
-                maplayoutManager.importDisassembly(jTextField12.getText(),jTextField10.getText(),jTextField13.getText(), jTextField16.getText(),jTextField17.getText(),jTextField18.getText(),blocksetPath.toString(),layoutPath.toString());
+                maplayoutManager.importDisassembly(PathHelpers.getBasePath().resolve(jTextField12.getText()), new Path[] { PathHelpers.getBasePath().resolve(jTextField10.getText()), PathHelpers.getBasePath().resolve(jTextField13.getText()), PathHelpers.getBasePath().resolve(jTextField16.getText()), PathHelpers.getBasePath().resolve(jTextField17.getText()), PathHelpers.getBasePath().resolve(jTextField18.getText())}, basePath.resolve(blocksetPath), basePath.resolve(layoutPath));
             }
-        } catch (DisassemblyException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
