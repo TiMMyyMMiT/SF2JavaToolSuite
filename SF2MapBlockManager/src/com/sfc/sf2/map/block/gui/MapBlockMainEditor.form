@@ -153,8 +153,8 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jPanel32" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" pref="28" max="32767" attributes="0"/>
-                                          <Component id="jPanel17" min="-2" pref="217" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="32767" attributes="0"/>
+                                          <Component id="jPanel17" pref="227" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -527,12 +527,22 @@
                                   <Layout>
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jTabbedPane2" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jTabbedPane2" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="directoryButton2" pref="0" max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                     </DimensionLayout>
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jTabbedPane2" alignment="1" pref="0" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="directoryButton2" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jTabbedPane2" max="32767" attributes="0"/>
+                                          </Group>
                                       </Group>
                                     </DimensionLayout>
                                   </Layout>
@@ -556,15 +566,16 @@
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="directoryButton2" pref="0" max="32767" attributes="0"/>
                                                           <Group type="102" attributes="0">
-                                                              <Component id="jLabel7" pref="272" max="32767" attributes="0"/>
+                                                              <Component id="jLabel7" pref="246" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                                                           </Group>
+                                                          <Component id="fileButton12" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                          <Component id="fileButton15" alignment="0" pref="0" max="32767" attributes="0"/>
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
@@ -573,8 +584,10 @@
                                             <DimensionLayout dim="1">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
+                                                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                                                      <Component id="fileButton12" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="directoryButton2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="fileButton15" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="3" attributes="0">
                                                           <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -600,10 +613,17 @@
                                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
                                               </Events>
                                             </Component>
-                                            <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButton2">
+                                            <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton12">
                                               <Properties>
-                                                <Property name="directoryPath" type="java.lang.String" value=".\u005centries\u005cmap03\u005c" containsInvalidXMLChars="true"/>
-                                                <Property name="labelText" type="java.lang.String" value="Map dir :"/>
+                                                <Property name="filePath" type="java.lang.String" value="00-tilesets.asm"/>
+                                                <Property name="labelText" type="java.lang.String" value="Map tilesets :"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton15">
+                                              <Properties>
+                                                <Property name="filePath" type="java.lang.String" value="0-blocks.bin"/>
+                                                <Property name="labelText" type="java.lang.String" value="Map blockset :"/>
+                                                <Property name="toolTipText" type="java.lang.String" value=""/>
                                               </Properties>
                                             </Component>
                                           </SubComponents>
@@ -624,7 +644,7 @@
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
                                                           <Group type="102" alignment="0" attributes="0">
-                                                              <Component id="jLabel8" pref="272" max="32767" attributes="0"/>
+                                                              <Component id="jLabel8" pref="0" max="32767" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                                                           </Group>
@@ -711,6 +731,12 @@
                                         </Container>
                                       </SubComponents>
                                     </Container>
+                                    <Component class="com.sfc.sf2.core.gui.controls.DirectoryButton" name="directoryButton2">
+                                      <Properties>
+                                        <Property name="directoryPath" type="java.lang.String" value=".\u005centries\u005cmap03\u005c" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Map dir :"/>
+                                      </Properties>
+                                    </Component>
                                   </SubComponents>
                                 </Container>
                               </SubComponents>
