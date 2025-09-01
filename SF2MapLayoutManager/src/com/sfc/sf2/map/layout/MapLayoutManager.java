@@ -29,8 +29,8 @@ public class MapLayoutManager {
        
     public void importDisassembly(Path palettePath, Path[] tilesetPaths, Path blocksPath, Path layoutPath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        MapBlockset blocks = mapBlockManager.importDisassembly(palettePath, tilesetPaths, blocksPath);
-        MapLayoutPackage pckg = new MapLayoutPackage(blocks);
+        blockset = mapBlockManager.importDisassembly(palettePath, tilesetPaths, blocksPath);
+        MapLayoutPackage pckg = new MapLayoutPackage(blockset);
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
         Console.logger().finest("EXITING importDisassembly");
     }

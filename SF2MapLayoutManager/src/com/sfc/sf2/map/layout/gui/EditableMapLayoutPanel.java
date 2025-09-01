@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.map.layout.layout;
+package com.sfc.sf2.map.layout.gui;
 
+import com.sfc.sf2.core.gui.layout.*;
+import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.map.block.MapBlock;
+import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
-import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,54 +19,160 @@ import java.util.List;
  *
  * @author wiz
  */
-public class EditableMapLayout extends StaticMapLayout implements MouseListener, MouseMotionListener {
+public class EditableMapLayoutPanel extends StaticMapLayoutPanel {
         
     private static final int ACTION_CHANGE_BLOCK_VALUE = 0;
     private static final int ACTION_CHANGE_BLOCK_FLAGS = 1;
     private static final int ACTION_MASS_COPY = 2;
     
-    int lastMapX = 0;
-    int lastMapY = 0;
-    
     public static final int MODE_BLOCK = 0;
     public static final int MODE_OBSTRUCTED = 1;
     public static final int MODE_STAIRS = 2;
     
-    BlockSlotPanel leftSlot = null;
-    
+    MapBlockset mapBlockset;
+
     private int currentMode = 0;
     
+    BlockSlotPanel leftSlot = null;
     private MapBlock selectedBlockLeft;
     MapBlock[][] copiedBlocks;
     
     private List<int[]> actions = new ArrayList<int[]>();
 
-    public EditableMapLayout() {
+    public EditableMapLayoutPanel() {
         super();
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
     }
     
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);   
-        g.drawImage(buildImage(), 0, 0, this);
+    private void updateLeftSlot(MapBlock block) {
+        leftSlot.setBlock(block);
+        leftSlot.revalidate();
+        leftSlot.repaint(); 
+    }
+    
+    public void setBlockValue(int x, int y, int value) {
+        MapBlock[] blocks = layout.getBlockset().getBlocks();
+        MapBlock block = blocks[x+y*BLOCK_WIDTH];
+        if (block.getIndex()!=value) {
+            int[] action = new int[3];
+            action[0] = ACTION_CHANGE_BLOCK_VALUE;
+            action[1] = y*BLOCK_WIDTH+x;
+            action[2] = block.getIndex();
+            block.setIndex(value);
+            block.clearIndexedColorImage(false);
+            block.setTiles(mapBlockset.getBlocks()[block.getIndex()].getTiles());
+            actions.add(action);
+            redraw();
+        }
+    }
+    
+    public void setFlagValue(int x, int y, int value) {
+        MapBlock[] blocks = layout.getBlockset().getBlocks();
+        MapBlock block = blocks[x+y*BLOCK_WIDTH];
+        if (block.getFlags()!=value) {
+            int[] action = new int[3];
+            action[0] = ACTION_CHANGE_BLOCK_FLAGS;
+            action[1] = y*BLOCK_WIDTH+x;
+            int origFlags = block.getFlags();
+            action[2] = origFlags;
+            int newFlags = (0xC000 & value) + (0x3C00 & origFlags);
+            block.setFlags(newFlags);
+            block.setExplorationFlagImage(null);
+            actions.add(action);
+            redraw();
+        }
+    }
+    
+    public void revertLastAction() {
+        if (actions.size() == 0) return;
+        int[] action = actions.get(actions.size()-1);
+        switch (action[0]) {
+            case ACTION_CHANGE_BLOCK_VALUE:
+            {
+                MapBlock block = layout.getBlockset().getBlocks()[action[1]];
+                block.setIndex(action[2]);
+                block.clearIndexedColorImage(false);
+                block.setTiles(mapBlockset.getBlocks()[block.getIndex()].getTiles());
+                actions.remove(actions.size()-1);
+                redraw();
+                this.repaint();
+                break;
+            }
+            case ACTION_CHANGE_BLOCK_FLAGS:
+            {
+                MapBlock block = layout.getBlockset().getBlocks()[action[1]];
+                block.setFlags(action[2]);               
+                block.setExplorationFlagImage(null);
+                actions.remove(actions.size()-1);
+                redraw();
+                this.repaint();
+                break;
+            }
+            case ACTION_MASS_COPY:
+            {
+                int blockIndex = action[1];
+                int width = action[2];
+                int height = action[3];
+                for (int j=0; j < height; j++) {
+                    for (int i=0; i < width; i++) {
+                        int value = action[4+2 * (i+j*width)];
+                        int flags = action[4+2 * (i+j*width)+1];
+                        if (value != -1 && flags != -1) {
+                            MapBlock block = new MapBlock(value, flags, mapBlockset.getBlocks()[value].getTiles());
+                            layout.getBlockset().getBlocks()[blockIndex+j*64+i] = block;
+                        }
+                    }
+                }   actions.remove(actions.size()-1);
+                redraw();
+                this.repaint();
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    public MapBlockset getMapBlockset() {
+        return mapBlockset;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
+    public void setMapBlockset(MapBlockset mapBlockset) {
+        this.mapBlockset = mapBlockset;
     }
-    @Override
-    public void mouseEntered(MouseEvent e) {
 
+    public int getCurrentMode() {
+        return currentMode;
     }
-    @Override
-    public void mouseExited(MouseEvent e) {
 
+    public void setCurrentMode(int currentMode) {
+        this.currentMode = currentMode;
     }
-    @Override
-    public void mousePressed(MouseEvent e) {
-        int x = e.getX() / (displaySize * 3*8);
+
+    public MapBlock getSelectedBlockLeft() {
+        return selectedBlockLeft;
+    }
+
+    public void setSelectedBlockLeft(MapBlock selectedBlockLeft) {
+        this.selectedBlockLeft = selectedBlockLeft;
+    }
+
+    public BlockSlotPanel getLeftSlot() {
+        return leftSlot;
+    }
+
+    public void setLeftSlot(BlockSlotPanel leftSlot) {
+        this.leftSlot = leftSlot;
+    }
+
+    public List<int[]> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<int[]> actions) {
+        this.actions = actions;
+    }
+    
+    private void onMousePressed(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
+        /*int x = e.getX() / (displaySize * 3*8);
         int y = e.getY() / (displaySize * 3*8);
         switch (currentMode) {
             case MODE_BLOCK :
@@ -168,7 +274,7 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                         updateLeftSlot(selectedBlockLeft);
                     }else{
                         /* Mass copy */
-                        int xStart;
+                        /*int xStart;
                         int xEnd;
                         int yStart;
                         int yEnd;
@@ -207,134 +313,6 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                 break;
             default:
                 break;
-        }         
-    }
-    
-    @Override
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        
-    }
-    
-    private void updateLeftSlot(MapBlock block){
-        leftSlot.setBlock(block);
-        leftSlot.revalidate();
-        leftSlot.repaint(); 
-    }
-    
-    public void setBlockValue(int x, int y, int value){
-        MapBlock[] blocks = layout.getBlockset().getBlocks();
-        MapBlock block = blocks[y*64+x];
-        if(block.getIndex()!=value){
-            int[] action = new int[3];
-            action[0] = ACTION_CHANGE_BLOCK_VALUE;
-            action[1] = y*64+x;
-            action[2] = block.getIndex();
-            block.setIndex(value);
-            block.clearIndexedColorImage(false);
-            block.setTiles(blockset.getBlocks()[block.getIndex()].getTiles());
-            actions.add(action);
-            redraw = true;
-        }
-    }
-    
-    public void setFlagValue(int x, int y, int value){
-        MapBlock[] blocks = layout.getBlockset().getBlocks();
-        MapBlock block = blocks[y*64+x];
-        if(block.getFlags()!=value){
-            int[] action = new int[3];
-            action[0] = ACTION_CHANGE_BLOCK_FLAGS;
-            action[1] = y*64+x;
-            int origFlags = block.getFlags();
-            action[2] = origFlags;
-            int newFlags = (0xC000 & value) + (0x3C00 & origFlags);
-            block.setFlags(newFlags);
-            block.setExplorationFlagImage(null);
-            actions.add(action);
-            redraw = true;
-        }
-    }
-    
-    public void revertLastAction(){
-        if(actions.size()>0){
-            int[] action = actions.get(actions.size()-1);
-            switch (action[0]) {
-                case ACTION_CHANGE_BLOCK_VALUE:
-                    {
-                        MapBlock block = layout.getBlockset().getBlocks()[action[1]];
-                        block.setIndex(action[2]);
-                        block.clearIndexedColorImage(false);
-                        block.setTiles(blockset.getBlocks()[block.getIndex()].getTiles());
-                        actions.remove(actions.size()-1);
-                        redraw = true;
-                        this.repaint();
-                        break;
-                    }
-                case ACTION_CHANGE_BLOCK_FLAGS:
-                    {
-                        MapBlock block = layout.getBlockset().getBlocks()[action[1]];
-                        block.setFlags(action[2]);               
-                        block.setExplorationFlagImage(null);
-                        actions.remove(actions.size()-1);
-                        redraw = true;
-                        this.repaint();
-                        break;
-                    }
-                case ACTION_MASS_COPY:
-                    int blockIndex = action[1];
-                    int width = action[2];
-                    int height = action[3];
-                    for(int j=0;j<height;j++){
-                        for(int i=0;i<width;i++){
-                            int value = action[4+2*(j*width+i)];
-                            int flags = action[4+2*(j*width+i)+1];
-                            if(value != -1 && flags != -1){
-                                MapBlock block = new MapBlock(value, flags, blockset.getBlocks()[value] .getTiles());
-                                layout.getBlockset().getBlocks()[blockIndex+j*64+i] = block;
-                            }
-                        }
-                    }   actions.remove(actions.size()-1);
-                    redraw = true;
-                    this.repaint();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    public MapBlock getSelectedBlock0() {
-        return selectedBlockLeft;
-    }
-
-    public void setSelectedBlock0(MapBlock selectedBlock0) {
-        this.selectedBlockLeft = selectedBlock0;
-    }
-
-    public List<int[]> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<int[]> actions) {
-        this.actions = actions;
-    }
-
-    public int getCurrentMode() {
-        return currentMode;
-    }
-
-    public void setCurrentMode(int currentMode) {
-        this.currentMode = currentMode;
-    }
-
-    public BlockSlotPanel getLeftSlot() {
-        return leftSlot;
-    }
-
-    public void setLeftSlot(BlockSlotPanel leftSlot) {
-        this.leftSlot = leftSlot;
+        }  */       
     }
 }
