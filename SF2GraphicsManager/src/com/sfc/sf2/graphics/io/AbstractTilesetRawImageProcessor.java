@@ -93,13 +93,10 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
             int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
             int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
             //Console.logger().finest("Building tile from coordinates "+x+":"+y);
-            Tile tile = new Tile();
-            tile.setId(tileId);
-            tile.setPalette(palette);
             raster.getPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
-            tile.setPixels(pixels);
+            Tile tile = new Tile(tileId, pixels, palette);
             //Console.logger().finest(tile.toString());
-            tiles[tileId] = tile;   
+            tiles[tileId] = tile;
             tileId++;
         }
         return new Tileset(null, tiles, tilesPerRow);

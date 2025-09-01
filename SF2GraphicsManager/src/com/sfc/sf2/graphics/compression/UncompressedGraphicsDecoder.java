@@ -7,8 +7,7 @@ package com.sfc.sf2.graphics.compression;
 
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.graphics.Tile;
-import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
-import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
+import static com.sfc.sf2.graphics.Tile.*;
 import com.sfc.sf2.palette.Palette;
 
 /**
@@ -23,18 +22,17 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
         Console.logger().finest("Data length = " + input.length + ", -> expecting " + input.length/32 + " tiles to parse.");
         Tile[] tiles = new Tile[input.length/32];
         for(int i=0;i<tiles.length;i++){
-            Tile tile = new Tile();
-            tile.setId(i);
-            tile.setPalette(palette);
+            int[] pixels = new int[PIXEL_COUNT];
             for(int y=0;y<PIXEL_HEIGHT;y++){
                 for(int x=0;x<PIXEL_WIDTH;x+=2){
                     byte currentByte = input[i*32+(y*8+x)/2];
                     int firstPixel = (currentByte & 0xF0)/16;
                     int secondPixel = currentByte & 0x0F;
-                    tile.setPixel(x, y, firstPixel);
-                    tile.setPixel(x+1, y, secondPixel);
+                    pixels[x+y*PIXEL_WIDTH] = firstPixel;
+                    pixels[x+1+y*PIXEL_WIDTH] = secondPixel;
                 }
             }
+            Tile tile = new Tile(i, pixels, palette);
             //Console.logger().finest(tile.toString());
             tiles[i] = tile;
         }

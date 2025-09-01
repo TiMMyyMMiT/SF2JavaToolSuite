@@ -18,22 +18,32 @@ public class Tile {
     
     public static final int PIXEL_WIDTH = 8;
     public static final int PIXEL_HEIGHT = 8;
+    public static final int PIXEL_COUNT = PIXEL_WIDTH*PIXEL_HEIGHT;
     
     private int id;
+    protected int[] pixels = new int[PIXEL_COUNT];
     private Palette palette;
-    protected int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
-    private BufferedImage indexedColorImage = null;
-    
     private boolean highPriority = false;
     private boolean hFlip = false;
     private boolean vFlip = false;
+    
+    private BufferedImage indexedColorImage = null;
+
+    public Tile(int id, int[] pixels, Palette palette) {
+        this(id, pixels, palette, false, false, false);
+    }
+    
+    public Tile(int id, int[] pixels, Palette palette, boolean highPriority, boolean hFlip, boolean vFlip) {
+        this.id = id;
+        this.pixels = pixels;
+        this.palette = palette;
+        this.highPriority = highPriority;
+        this.hFlip = hFlip;
+        this.vFlip = vFlip;
+    }    
         
     public int[] getPixels() {
         return pixels;
-    }
-
-    public void setPixels(int[] pixels) {
-        this.pixels = pixels;
     }
     
     public int getId() {
@@ -56,8 +66,11 @@ public class Tile {
     }
 
     public void sethFlip(boolean hFlip) {
-        this.hFlip = hFlip;
-        clearIndexedColorImage();
+        if (this.hFlip != hFlip) {
+            this.hFlip = hFlip;
+            clearIndexedColorImage();
+            pixels = flipPixels(pixels, true, false);
+        }
     }
 
     public boolean isvFlip() {
@@ -65,24 +78,11 @@ public class Tile {
     }
 
     public void setvFlip(boolean vFlip) {
-        this.vFlip = vFlip;
-        clearIndexedColorImage();
-    }
-    
-    public static Tile vFlip(Tile tile) {
-        return tile.clone(tile.isHighPriority(), tile.ishFlip(), !tile.isvFlip(), tile.getPalette());
-    }
-    
-    public static Tile hFlip(Tile tile) {
-        return tile.clone(tile.isHighPriority(), !tile.ishFlip(), tile.isvFlip(), tile.getPalette());
-    }
-    
-    public static Tile clearFlip(Tile tile) {
-        return tile.clone(tile.isHighPriority(), false, false, tile.getPalette());
-    }
-    
-    public static Tile paletteSwap(Tile tile, Palette palette) {
-        return tile.clone(tile.isHighPriority(), tile.ishFlip(), tile.isvFlip(), palette);
+        if (this.vFlip != vFlip) {
+            this.vFlip = vFlip;
+            clearIndexedColorImage();
+            pixels = flipPixels(pixels, false, true);
+        }
     }
     
     public Palette getPalette() {
@@ -107,22 +107,11 @@ public class Tile {
             IndexColorModel icm = palette.getIcm();
             indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, icm);
             byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
-            drawPixelData(data);
+            for (int i=0; i < pixels.length; i++) {
+                data[i] = (byte)(pixels[i]);
+            }
         }
         return indexedColorImage;        
-    }
-    
-    private void drawPixelData(byte[] imageData) {
-        if (ishFlip() || isvFlip()) {
-            for (int i=0; i < pixels.length; i++) {
-                int index = (ishFlip() ? PIXEL_WIDTH-(i%PIXEL_WIDTH)-1 : i%PIXEL_WIDTH) + (isvFlip()? PIXEL_HEIGHT-(i/PIXEL_HEIGHT)-1 : i/PIXEL_HEIGHT)*PIXEL_WIDTH;
-                imageData[i] = (byte)(pixels[index]);
-            }
-        } else {
-            for (int i=0; i < pixels.length; i++) {
-                imageData[i] = (byte)(pixels[i]);
-            }
-        }
     }
     
     public void clearIndexedColorImage() {
@@ -130,13 +119,6 @@ public class Tile {
             indexedColorImage.flush();
             indexedColorImage = null;
         }
-    }
-    
-    public void drawIndexedColorPixels(BufferedImage image, int[][] pixels, int x, int y){
-    }
-    
-    public void setPixel(int x, int y, int colorIndex){
-        this.pixels[x+y*PIXEL_WIDTH] = colorIndex;
     }
     
     public String toString() {
@@ -177,20 +159,46 @@ public class Tile {
         return equals;
     }
     
+    public static int[] flipPixels(int[] pixels, boolean hflip, boolean vflip) {
+        if (!hflip && !vflip) return pixels;
+        int flippedPixels[] = new int[PIXEL_COUNT];
+        for (int i=0; i < pixels.length; i++) {
+            int x = i%PIXEL_WIDTH;
+            if (hflip) x = PIXEL_WIDTH-x-1;
+            int y = i/PIXEL_WIDTH;
+            if (vflip) y = PIXEL_HEIGHT-y-1;
+            flippedPixels[i] = pixels[x+y*PIXEL_WIDTH];
+        }
+        return flippedPixels;
+    }
+    
+    public static Tile vFlip(Tile tile) {
+        int[] pixels = flipPixels(tile.getPixels(), false, true);
+        return new Tile(tile.id, pixels, tile.palette, tile.highPriority, tile.hFlip, !tile.vFlip);
+    }
+    
+    public static Tile hFlip(Tile tile) {
+        int[] pixels = flipPixels(tile.getPixels(), true, false);
+        return new Tile(tile.id, pixels, tile.palette, tile.highPriority, !tile.hFlip, tile.vFlip);
+    }
+    
+    public static Tile clearFlip(Tile tile) {
+        if (!tile.hFlip && !tile.vFlip) return tile;
+        int[] pixels = flipPixels(tile.getPixels(), tile.hFlip, tile.vFlip);
+        return new Tile(tile.id, pixels, tile.palette, tile.highPriority, false, false);
+    }
+    
+    public static Tile paletteSwap(Tile tile, Palette palette) {
+        return tile.clone(tile.isHighPriority(), tile.ishFlip(), tile.isvFlip(), palette);
+    }
+    
     @Override
     public Tile clone() {
         return clone(isHighPriority(), ishFlip(), isvFlip(), getPalette());
     }
     
     public Tile clone(boolean priority, boolean hFlip, boolean vFlip, Palette newPalette) {
-        Tile newTile = new Tile();
-        newTile.setId(getId());
-        newTile.setPalette(newPalette);
-        newTile.setPixels(getPixels());
-        newTile.setHighPriority(priority);
-        newTile.sethFlip(hFlip);
-        newTile.setvFlip(vFlip);
-        return newTile;
+        return new Tile(id, pixels, newPalette, highPriority, hFlip, vFlip);
     }
     
     public boolean isTileEmpty() {
@@ -206,9 +214,6 @@ public class Tile {
     }
     
     public static Tile EmptyTile(Palette palette) {
-        Tile emptyTile = new Tile();
-        emptyTile.setPalette(palette);
-        emptyTile.setPixels(new int[PIXEL_WIDTH*PIXEL_HEIGHT]);
-        return emptyTile;
+        return new Tile(-1, new int[PIXEL_COUNT], palette);
     }
 }

@@ -91,11 +91,8 @@ public class MapBlocksetRawImageProcessor extends AbstractRawImageProcessor<MapB
                 int tX = (t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH;
                 int tY = (t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT;
                 //Console.logger().finest("Building tile from coordinates "+tX+":"+tY);
-                Tile tile = new Tile();
-                tile.setId(tileId);
-                tile.setPalette(palette);
                 raster.getPixels(bX+tX, bY+tY, Tile.PIXEL_WIDTH, Tile.PIXEL_HEIGHT, pixels);
-                tile.setPixels(pixels);
+                Tile tile = new Tile(tileId, pixels, palette, false, false, false); //NOTE System cannot know if tile is flipped or now
                 //Console.logger().finest(tile.toString());
                 tiles[tileId] = tile;   
                 tileId++;
