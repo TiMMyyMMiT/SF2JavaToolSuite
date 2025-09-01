@@ -6,7 +6,6 @@
 package com.sfc.sf2.portrait.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
-import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.*;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent.GridMousePressedEvent;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
@@ -46,6 +45,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, PORTRAIT_TILES_WIDTH*PIXEL_WIDTH, -1);
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, false);
         mouseInput = new LayoutMouseInput(this, this::onMouseInput, PIXEL_WIDTH, PIXEL_HEIGHT);
+        scroller = null;
     }
 
     @Override

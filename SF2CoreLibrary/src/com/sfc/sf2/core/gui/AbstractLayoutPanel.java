@@ -12,6 +12,7 @@ import com.sfc.sf2.core.gui.layout.LayoutScale;
 import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
 import com.sfc.sf2.core.gui.layout.LayoutCoordsHeader;
 import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
+import com.sfc.sf2.core.gui.layout.LayoutScrollNormaliser;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -32,6 +33,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     protected LayoutCoordsGridDisplay coordsGrid;
     protected LayoutCoordsHeader coordsHeader;
     protected LayoutMouseInput mouseInput;
+    protected LayoutScrollNormaliser scroller;
     
     private int itemsPerRow = 8;
         

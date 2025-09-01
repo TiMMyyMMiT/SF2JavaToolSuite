@@ -7,13 +7,10 @@ package com.sfc.sf2.battlesprite.gui;
 
 import com.sfc.sf2.battlesprite.BattleSprite;
 import static com.sfc.sf2.battlesprite.BattleSprite.BATTLE_SPRITE_TILE_HEIGHT;
-import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
-import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
-import com.sfc.sf2.core.gui.layout.LayoutBackground;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
-import com.sfc.sf2.core.gui.layout.LayoutGrid;
-import com.sfc.sf2.core.gui.layout.LayoutScale;
+import com.sfc.sf2.core.gui.layout.*;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -35,6 +32,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(0, BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT, false, 0, 0, 2);
         coordsHeader = null;
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
     }
     
     private BattleSprite battleSprite;

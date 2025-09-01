@@ -31,6 +31,7 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(Block.PIXEL_WIDTH, Block.PIXEL_HEIGHT, false, 0, PIXEL_WIDTH, 1);
         coordsHeader = new LayoutCoordsHeader(this, Block.PIXEL_WIDTH, Block.PIXEL_HEIGHT);
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
     }
 
     @Override

@@ -30,6 +30,7 @@ public class TilesetLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = null;
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT);
         mouseInput = null;
+        scroller = null;
     }
 
     @Override
