@@ -68,7 +68,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
             mapBlocksetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
             mapBlocksetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
-            
+            mapBlocksetLayoutPanel.setLeftSelectedIndex(-1);
             editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
             editableBlockSlotPanel.setShowGrid(jCheckBox5.isSelected());
             editableBlockSlotPanel.setShowPriority(jCheckBox3.isSelected());
@@ -90,6 +90,8 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
             tilesetsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
             tilesetsLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
+            tileSlotPanelLeft.setTile(null);
+            tileSlotPanelRight.setTile(null);
         }
         
         super.updateEditorData();
