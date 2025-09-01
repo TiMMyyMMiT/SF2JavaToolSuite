@@ -60,6 +60,7 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, false, 0, 0, 1);
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, false);
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(DEFAULT_BLOCKS_PER_ROW);
     }
 

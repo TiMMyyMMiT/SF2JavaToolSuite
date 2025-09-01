@@ -32,6 +32,7 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         coordsGrid = null;
         coordsHeader = null;
         mouseInput = null;
+        scroller = null;
     }
 
     @Override

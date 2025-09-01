@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * A component to support scaling panel image
  * @author TiMMy
  */
 public class LayoutScale extends BaseLayoutComponent {

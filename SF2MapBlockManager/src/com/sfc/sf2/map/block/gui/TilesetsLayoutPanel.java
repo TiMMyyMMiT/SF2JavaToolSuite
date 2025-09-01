@@ -43,6 +43,7 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, true, selectedTileIndexLeft, 4, 0);
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, true);
         mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
+        scroller = null;
         setItemsPerRow(DEFAULT_TILES_PER_ROW);
     }
 
