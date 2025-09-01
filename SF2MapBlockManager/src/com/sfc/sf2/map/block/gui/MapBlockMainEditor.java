@@ -11,7 +11,7 @@ import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.map.block.MapBlockManager;
+import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
@@ -25,7 +25,7 @@ import javax.swing.JScrollPane;
 public class MapBlockMainEditor extends AbstractMainEditor {
     
     MapBlockSettings MapBlockSettings = new MapBlockSettings();
-    MapBlockManager mapblockManager = new MapBlockManager();
+    MapBlocksetManager mapblockManager = new MapBlocksetManager();
     
     public MapBlockMainEditor() {
         super();
@@ -1347,7 +1347,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         Path mapTilesetDataPath = mapDirectory.resolve(fileButton3.getFilePath());
         Path mapBlocksetDataPath = mapDirectory.resolve(fileButton4.getFilePath());
         try {
-            mapblockManager.importDisassembly(paletteEntriesPath, tilesetEntriesPath, mapTilesetDataPath, mapBlocksetDataPath);
+            mapblockManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapTilesetDataPath, mapBlocksetDataPath);
         } catch (Exception ex) {
             mapblockManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);

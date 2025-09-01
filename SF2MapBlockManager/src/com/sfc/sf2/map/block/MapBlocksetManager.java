@@ -33,7 +33,7 @@ import java.nio.file.Path;
  *
  * @author wiz
  */
-public class MapBlockManager extends AbstractManager {
+public class MapBlocksetManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
     private final TilesetManager tilesetManager = new TilesetManager();
     private final MapBlocksetDisassemblyProcessor blocksetDisassemblyProcessor = new MapBlocksetDisassemblyProcessor();
@@ -63,11 +63,36 @@ public class MapBlockManager extends AbstractManager {
         }
     }
        
-    public MapBlockset importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapTilesetsFilePath, Path blocksPath) throws IOException, AsmException, DisassemblyException {
+    public MapBlockset importDisassembly(Path palettePath, Path[] tilesetPaths, Path blocksetPath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        Palette palette = paletteManager.importDisassembly(palettePath, true);
+        tilesets = new Tileset[tilesetPaths.length];
+        for (int i = 0; i < tilesets.length; i++) {
+            if (tilesetPaths[i] != null) {
+                tilesets[i] = tilesetManager.importDisassembly(tilesetPaths[i], palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
+            }
+        }
+        MapBlockPackage pckg = new MapBlockPackage(tilesets, palette);
+        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksetPath, pckg);
+        Console.logger().info("Map blocks successfully imported from palette and tilesets : " + blocksetPath);
+        Console.logger().finest("EXITING importDisassembly");
+        return mapBlockset;
+    }
+       
+    public MapBlockset importDisassembly(Path palettePath, Path[] tilesetsFilePath, Path blocksetPath, Path animTilesetPath, int animTilesetStart, int animTilesetLength, int animTilesetDest) {
+        Console.logger().finest("ENTERING importDisassembly");
+        //blocks = disassemblyManager.importDisassembly(palettePath, tilesetsFilePath, blocksetPath, animTilesetPath, animTilesetStart, animTilesetLength, animTilesetDest);
+        //tilesets = disassemblyManager.getTilesets();
+        //graphicsManager.setTiles(tiles);
+        Console.logger().finest("EXITING importDisassembly");
+        return mapBlockset;
+    }
+       
+    public MapBlockset importDisassemblyFromEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path tilesetsFilePath, Path blocksetPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         EntriesAsmData paletteData = entriesAsmProcessor.importAsmData(paletteEntriesPath);
         EntriesAsmData tilesetData = entriesAsmProcessor.importAsmData(tilesetEntriesPath);
-        MapTilesetData mapData = mapTilesetsAsmProcessor.importAsmData(mapTilesetsFilePath);
+        MapTilesetData mapData = mapTilesetsAsmProcessor.importAsmData(tilesetsFilePath);
         Path palettePath = PathHelpers.getIncbinPath().resolve(paletteData.getPathForEntry(mapData.paletteIndex()));
         Palette palette = paletteManager.importDisassembly(palettePath, true);
         tilesets = new Tileset[mapData.tilesetIndices().length];
@@ -78,58 +103,24 @@ public class MapBlockManager extends AbstractManager {
             }
         }
         MapBlockPackage pckg = new MapBlockPackage(tilesets, palette);
-        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksPath, pckg);
-        Console.logger().info("Map blocks successfully imported from entries paths. Map data : " + mapTilesetsFilePath);
-        Console.logger().finest("EXITING importDisassembly");
-        return mapBlockset;
-    }
-       
-    public MapBlockset importDisassembly(Path palettePath, Path[] tilesetPaths, Path blocksPath) throws IOException, DisassemblyException {
-        Console.logger().finest("ENTERING importDisassembly");
-        Palette palette = paletteManager.importDisassembly(palettePath, true);
-        tilesets = new Tileset[tilesetPaths.length];
-        for (int i = 0; i < tilesets.length; i++) {
-            if (tilesetPaths[i] != null) {
-                tilesets[i] = tilesetManager.importDisassembly(tilesetPaths[i], palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
-            }
-        }
-        MapBlockPackage pckg = new MapBlockPackage(tilesets, palette);
-        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksPath, pckg);
-        Console.logger().info("Map blocks successfully imported from palette and tilesets : " + blocksPath);
-        Console.logger().finest("EXITING importDisassembly");
-        return mapBlockset;
-    }
-       
-    public MapBlockset importDisassembly(Path palettePath, Path[] tilesetPaths, Path blocksPath, Path animTilesetPath, int animTilesetStart, int animTilesetLength, int animTilesetDest) {
-        Console.logger().finest("ENTERING importDisassembly");
-        //blocks = disassemblyManager.importDisassembly(palettePath, tilesetPaths, blocksPath, animTilesetPath, animTilesetStart, animTilesetLength, animTilesetDest);
-        //tilesets = disassemblyManager.getTilesets();
-        //graphicsManager.setTiles(tiles);
+        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksetPath, pckg);
+        Console.logger().info("Map blocks successfully imported from entries paths. Map data : " + tilesetsFilePath);
         Console.logger().finest("EXITING importDisassembly");
         return mapBlockset;
     }
     
-    public void exportDisassembly(Path mapTilesetsFilePath, Path blocksPath, MapBlockset mapBlockset, Tileset[] tilesets) throws IOException, DisassemblyException, AsmException {
+    public void exportDisassembly(Path tilesetsFilePath, Path blocksetPath, MapBlockset mapBlockset, Tileset[] mapTilesets) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.mapBlockset = mapBlockset;
-        MapBlockPackage pckg = new MapBlockPackage(tilesets, mapBlockset.getPalette());
-        blocksetDisassemblyProcessor.exportDisassembly(blocksPath, mapBlockset, pckg);
+        MapBlockPackage pckg = new MapBlockPackage(mapTilesets, mapBlockset.getPalette());
+        blocksetDisassemblyProcessor.exportDisassembly(blocksetPath, mapBlockset, pckg);
         int paletteIndex = StringHelpers.getNumberFromString(mapBlockset.getPalette().getName());
-        int[] tilesetIndices = new int[tilesets.length];
+        int[] tilesetIndices = new int[mapTilesets.length];
         for (int i = 0; i < tilesetIndices.length; i++) {
-            tilesetIndices[i] = tilesets[i] == null ? -1 : StringHelpers.getNumberFromString(tilesets[i].getName());
+            tilesetIndices[i] = mapTilesets[i] == null ? -1 : StringHelpers.getNumberFromString(mapTilesets[i].getName());
         }
-        mapTilesetsAsmProcessor.exportAsmData(mapTilesetsFilePath, new MapTilesetData(paletteIndex, tilesetIndices));
-        Console.logger().info("Map blocks successfully exported to : " + blocksPath);
-        Console.logger().finest("EXITING exportDisassembly");
-    }
-    
-    public void exportDisassembly(Path blocksPath, MapBlockset mapBlockset, Tileset[] tilesets) throws IOException, DisassemblyException, AsmException {
-        Console.logger().finest("ENTERING exportDisassembly");
-        this.mapBlockset = mapBlockset;
-        MapBlockPackage pckg = new MapBlockPackage(tilesets, mapBlockset.getPalette());
-        blocksetDisassemblyProcessor.exportDisassembly(blocksPath, mapBlockset, pckg);
-        Console.logger().info("Map blocks successfully exported to : " + blocksPath);
+        mapTilesetsAsmProcessor.exportAsmData(tilesetsFilePath, new MapTilesetData(paletteIndex, tilesetIndices));
+        Console.logger().info("Map blocks successfully exported to : " + blocksetPath);
         Console.logger().finest("EXITING exportDisassembly");
     }
     
