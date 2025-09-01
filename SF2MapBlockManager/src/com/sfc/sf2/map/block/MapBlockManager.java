@@ -8,6 +8,8 @@ package com.sfc.sf2.map.block;
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.MetadataException;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
@@ -16,8 +18,10 @@ import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.helpers.StringHelpers;
+import com.sfc.sf2.map.block.io.MapBlocksetMetaProcessor;
 import com.sfc.sf2.map.block.io.MapBlocksetDisassemblyProcessor;
 import com.sfc.sf2.map.block.io.MapBlockPackage;
+import com.sfc.sf2.map.block.io.MapBlocksetRawImageProcessor;
 import com.sfc.sf2.map.block.io.MapTilesetData;
 import com.sfc.sf2.map.block.io.MapTilesetsAsmProcessor;
 import com.sfc.sf2.palette.Palette;
@@ -33,7 +37,9 @@ public class MapBlockManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
     private final TilesetManager tilesetManager = new TilesetManager();
     private final MapBlocksetDisassemblyProcessor blocksetDisassemblyProcessor = new MapBlocksetDisassemblyProcessor();
-    private final MapTilesetsAsmProcessor mapilesetsAsmProcessor = new MapTilesetsAsmProcessor();
+    private final MapBlocksetRawImageProcessor blocksetRawImageProcessor = new MapBlocksetRawImageProcessor();
+    private final MapBlocksetMetaProcessor blocksetMetaProcessor = new MapBlocksetMetaProcessor();
+    private final MapTilesetsAsmProcessor mapTilesetsAsmProcessor = new MapTilesetsAsmProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
     
     private Tileset[] tilesets;
@@ -61,7 +67,7 @@ public class MapBlockManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassembly");
         EntriesAsmData paletteData = entriesAsmProcessor.importAsmData(paletteEntriesPath);
         EntriesAsmData tilesetData = entriesAsmProcessor.importAsmData(tilesetEntriesPath);
-        MapTilesetData mapData = mapilesetsAsmProcessor.importAsmData(mapTilesetsFilePath);
+        MapTilesetData mapData = mapTilesetsAsmProcessor.importAsmData(mapTilesetsFilePath);
         Path palettePath = PathHelpers.getIncbinPath().resolve(paletteData.getPathForEntry(mapData.paletteIndex()));
         Palette palette = paletteManager.importDisassembly(palettePath, true);
         tilesets = new Tileset[mapData.tilesetIndices().length];
@@ -110,7 +116,7 @@ public class MapBlockManager extends AbstractManager {
         for (int i = 0; i < tilesetIndices.length; i++) {
             tilesetIndices[i] = tilesets[i] == null ? -1 : StringHelpers.getNumberFromString(tilesets[i].getName());
         }
-        mapilesetsAsmProcessor.exportAsmData(mapTilesetsFilePath, new MapTilesetData(paletteIndex, tilesetIndices));
+        mapTilesetsAsmProcessor.exportAsmData(mapTilesetsFilePath, new MapTilesetData(paletteIndex, tilesetIndices));
         Console.logger().info("Map blocks successfully exported to : " + blocksPath);
         Console.logger().finest("EXITING exportDisassembly");
     }
@@ -124,18 +130,22 @@ public class MapBlockManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");
     }
     
-    public void importImage(Path filepath, Path hpFilePath){
-        /*System.out.println("com.sfc.sf2.mapblock.MapBlockManager.exportGif() - Exporting GIF ...");
-        blocks = RawImageManager.importImage(filepath);
-        MetaManager.importBlockHpTilesFile(hpFilePath, blocks, RawImageManager.getImportedImageBlockWidth());
-        System.out.println("com.sfc.sf2.mapblock.MapBlockManager.exportGif() - GIF exported.");*/
+    public void importImage(Path filepath, Path hpFilePath) throws IOException, RawImageException, MetadataException {
+        Console.logger().finest("ENTERING importImage");
+        mapBlockset = blocksetRawImageProcessor.importRawImage(filepath, null);
+        blocksetMetaProcessor.importMetadata(hpFilePath, mapBlockset);
+        Console.logger().info("Map blocks successfully imported from image : " + filepath + " and hpTiles : " + hpFilePath);
+        Console.logger().finest("EXITING importImage");
     }
     
-    public void exportImage(Path filepath, Path hpFilePath, int blocksPerRow){
-        /*System.out.println("com.sfc.sf2.mapblock.MapBlockManager.exportPng() - Exporting PNG ...");
-        RawImageManager.exportRawImage(blocks, filepath, blocksPerRow, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
-        MetaManager.exportBlockHpTilesFile(blocks, blocksPerRow, hpFilePath);
-        System.out.println("com.sfc.sf2.mapblock.MapBlockManager.exportPng() - PNG exported.");*/
+    public void exportImage(Path filepath, Path hpFilePath, int blocksPerRow, MapBlockset mapBlockset) throws IOException, RawImageException, MetadataException {
+        Console.logger().finest("ENTERING exportImage");
+        mapBlockset.setBlocksPerRow(blocksPerRow);
+        this.mapBlockset = mapBlockset;
+        blocksetRawImageProcessor.exportRawImage(filepath, mapBlockset, null);
+        blocksetMetaProcessor.exportMetadata(hpFilePath, mapBlockset);
+        Console.logger().info("Map blocks successfully exported to image : " + filepath + " and hpTiles : " + hpFilePath);
+        Console.logger().finest("EXITING exportImage");
     }
 
     public MapBlockset getMapBlockset() {

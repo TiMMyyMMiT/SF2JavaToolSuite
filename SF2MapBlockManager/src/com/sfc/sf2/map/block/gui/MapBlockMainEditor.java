@@ -525,8 +525,10 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 fileButton14.setFilePath(".\\blocksethptiles.txt");
                 fileButton14.setLabelText("Block HP tiles :");
 
+                infoButton1.setMessageText("<html>Exports an image of all of the blocks in the blockset (just like the 'blockset panel'.<br>Can be used with the Sf2MapCreator.</html>");
                 infoButton1.setText("");
 
+                infoButton2.setMessageText("<html>Exports a file containing the priority flags for the blockset.</html>");
                 infoButton2.setText("");
 
                 javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
@@ -568,7 +570,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                         .addContainerGap())
                 );
 
-                jTabbedPane2.addTab("PNG", jPanel28);
+                jTabbedPane2.addTab("Image", jPanel28);
 
                 javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
                 jPanel17.setLayout(jPanel17Layout);
@@ -578,7 +580,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
                 );
                 jPanel17Layout.setVerticalGroup(
                     jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                 );
 
                 jTabbedPane2.getAccessibleContext().setAccessibleName("tab");
@@ -1485,7 +1487,16 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        //mapblockManager.exportImage(jTextField27.getText(), jTextField28.getText(), (int)jSpinner1.getValue());
+        Path mapDirectory = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
+        Path blocksetImagePath = mapDirectory.resolve(fileButton13.getFilePath());
+        Path hpTilesPath = mapDirectory.resolve(fileButton14.getFilePath());
+        if (!PathHelpers.createPathIfRequred(mapDirectory)) return;
+        try {
+            mapblockManager.exportImage(blocksetImagePath, hpTilesPath, mapBlocksetLayoutPanel.getItemsPerRow(), mapBlocksetLayoutPanel.getBlockset());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map image & priority data could not be exported to : " + mapDirectory);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void colorPickerBlocksetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksetColorChanged
