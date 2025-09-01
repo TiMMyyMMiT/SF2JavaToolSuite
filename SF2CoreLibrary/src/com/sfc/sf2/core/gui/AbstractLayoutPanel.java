@@ -63,6 +63,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
                     if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.buildCoordsImage(dims, getDisplayScale()); }
                     setSize(size);
                     setPreferredSize(size);
+                    if (BaseLayoutComponent.IsEnabled(scroller)) { scroller.updatePanelSize(size); }
                 }
                 redraw = false;
             }

@@ -8,7 +8,6 @@ package com.sfc.sf2.core.gui.layout;
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.controls.Console;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.swing.JScrollBar;

@@ -45,6 +45,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, true, 0, 10, 1);
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, true);
         mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
+        scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(DEFAULT_BLOCKS_PER_ROW);
     }
 
