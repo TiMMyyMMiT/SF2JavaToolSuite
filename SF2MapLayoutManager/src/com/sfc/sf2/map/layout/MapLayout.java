@@ -17,6 +17,7 @@ public class MapLayout {
     
     public static final int BLOCK_WIDTH = 64;
     public static final int BLOCK_HEIGHT = 64;
+    public static final int BLOCK_COUNT = BLOCK_WIDTH*BLOCK_HEIGHT;
     
     private int index;
      
