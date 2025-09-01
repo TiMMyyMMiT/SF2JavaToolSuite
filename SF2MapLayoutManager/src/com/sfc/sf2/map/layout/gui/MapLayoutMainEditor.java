@@ -5,63 +5,57 @@
  */
 package com.sfc.sf2.map.layout.gui;
 
-import com.sfc.sf2.map.block.gui.BlockSlotPanel;
-import com.sfc.sf2.map.block.layout.MapBlockLayout;
+import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.settings.SettingsManager;
+import com.sfc.sf2.map.block.gui.BlockSlotPanel;
+import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
 import com.sfc.sf2.map.layout.MapLayoutManager;
 import com.sfc.sf2.map.layout.layout.EditableMapLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.File;
-import java.io.PrintStream;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 
 /**
  *
  * @author wiz
  */
-public class MainEditor extends javax.swing.JFrame {
+public class MapLayoutMainEditor extends AbstractMainEditor {
     
     MapLayoutManager maplayoutManager = new MapLayoutManager();
     EditableMapLayout maplayoutLayout = null;
-    MapBlockLayout mapblockLayout = null;
+    MapBlocksetLayoutPanel mapblockLayout = null;
     
-    /**
-     * Creates new form NewApplication
-     */
-    public MainEditor() {
-        try {
-            initComponents();
-            initConsole(jTextArea1);
-            System.setProperty("java.util.logging.SimpleFormatter.format",
-                    "%2$s - %5$s%6$s%n");
-            initLogger("com.sfc.sf2.graphics", Level.WARNING);
-            File workingDirectory = new File(MainEditor.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-            System.setProperty("user.dir", workingDirectory.toString());
-            jFileChooser1.setCurrentDirectory(workingDirectory);
-            jFileChooser2.setCurrentDirectory(workingDirectory);
-            jTextArea2.setCaretPosition(0);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(MainEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public MapLayoutMainEditor() {
+        super();
+        //SettingsManager.registerSettingsStore("mapBlock", MapBlockSettings);
+        initComponents();
+        initCore(console1);
     }
     
-    private void initLogger(String name, Level level){
-        Logger log = Logger.getLogger(name);
-        log.setUseParentHandlers(false);
-        log.setLevel(level);
-        ConsoleHandler ch = new ConsoleHandler();
-        ch.setLevel(level);        
-        log.addHandler(ch);                
-
+    @Override
+    protected void initEditor() {
+        super.initEditor();
+        
+        //Init
+    }
+    
+    @Override
+    protected void updateEditorData() {
+        //Update
+        
+        super.updateEditorData();
+    }
+    
+    @Override
+    protected void repaintEditorLayout() {
+        super.repaintEditorLayout();
+        
+        //Repaint
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -168,12 +162,10 @@ public class MainEditor extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jPanelColorBG = new javax.swing.JPanel();
         jSplitPane3 = new javax.swing.JSplitPane();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jPanel20 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
@@ -213,7 +205,7 @@ public class MainEditor extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -757,7 +749,7 @@ public class MainEditor extends javax.swing.JFrame {
             jPanel9Layout.setVerticalGroup(
                 jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel9Layout.createSequentialGroup()
-                    .addContainerGap(12, Short.MAX_VALUE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel26)
@@ -1054,7 +1046,7 @@ public class MainEditor extends javax.swing.JFrame {
                         .addGroup(jPanel14Layout.createSequentialGroup()
                             .addGap(23, 23, 23)
                             .addComponent(jButton1)
-                            .addContainerGap(137, Short.MAX_VALUE))))
+                            .addContainerGap())))
                 .addGroup(jPanel14Layout.createSequentialGroup()
                     .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap())
@@ -1102,7 +1094,7 @@ public class MainEditor extends javax.swing.JFrame {
             );
             jPanel8Layout.setVerticalGroup(
                 jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane4)
+                .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
             );
 
             jSplitPane2.setLeftComponent(jPanel8);
@@ -1115,37 +1107,13 @@ public class MainEditor extends javax.swing.JFrame {
             );
             jPanel15Layout.setVerticalGroup(
                 jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane2)
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
             );
 
             jSplitPane1.setLeftComponent(jPanel15);
 
-            jSplitPane3.setDividerLocation(700);
+            jSplitPane3.setDividerLocation(300);
             jSplitPane3.setOneTouchExpandable(true);
-
-            jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Console"));
-            jPanel7.setToolTipText("");
-
-            jTextArea1.setEditable(false);
-            jTextArea1.setColumns(20);
-            jTextArea1.setRows(5);
-            jScrollPane1.setViewportView(jTextArea1);
-
-            javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-            jPanel7.setLayout(jPanel7Layout);
-            jPanel7Layout.setHorizontalGroup(
-                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel7Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane1)
-                    .addContainerGap())
-            );
-            jPanel7Layout.setVerticalGroup(
-                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-            );
-
-            jSplitPane3.setBottomComponent(jPanel7);
 
             jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("Help"));
 
@@ -1164,14 +1132,15 @@ public class MainEditor extends javax.swing.JFrame {
             jPanel20.setLayout(jPanel20Layout);
             jPanel20Layout.setHorizontalGroup(
                 jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
             );
             jPanel20Layout.setVerticalGroup(
                 jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
             );
 
             jSplitPane3.setLeftComponent(jPanel20);
+            jSplitPane3.setRightComponent(console1);
 
             jSplitPane1.setRightComponent(jSplitPane3);
 
@@ -1183,7 +1152,7 @@ public class MainEditor extends javax.swing.JFrame {
             );
             jPanel13Layout.setVerticalGroup(
                 jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane1)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE)
             );
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1281,10 +1250,10 @@ public class MainEditor extends javax.swing.JFrame {
         
         jPanel6.removeAll();       
         jPanel6.setLayout(new GridLayout(1,1));
-        mapblockLayout = new MapBlockLayout();
-        mapblockLayout.setBlocksPerRow(((int)jSpinner1.getModel().getValue()));
-        mapblockLayout.setCurrentDisplaySize(jComboBox2.getSelectedIndex()+1);
-        mapblockLayout.setBlocks(maplayoutManager.getBlockset());
+        mapblockLayout = new MapBlocksetLayoutPanel();
+        mapblockLayout.setItemsPerRow(((int)jSpinner1.getModel().getValue()));
+        mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
+        mapblockLayout.setBlockset(maplayoutManager.getBlockset());
         jPanel6.add(mapblockLayout);
         jPanel6.setSize(mapblockLayout.getWidth(), mapblockLayout.getHeight());
         jPanel6.revalidate();
@@ -1453,7 +1422,7 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         if(jComboBox2.getSelectedIndex()>=0 && mapblockLayout!=null){
-            mapblockLayout.setCurrentDisplaySize(jComboBox2.getSelectedIndex()+1);
+            mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
             jPanel6.revalidate();
             jPanel6.repaint();  
         }
@@ -1485,7 +1454,7 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         if(mapblockLayout != null){
-            mapblockLayout.setBlocksPerRow((int)jSpinner1.getModel().getValue());
+            mapblockLayout.setItemsPerRow((int)jSpinner1.getModel().getValue());
             jPanel6.revalidate();
             jPanel6.repaint();
         }
@@ -1619,49 +1588,25 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanelColorBGMouseClicked
 
     /**
-     * @param args the command line arguments
+     * To create a new Main Editor, copy the below code
+     * Don't forget to change the new main class (below)
      */
     public static void main(String args[]) {
-        /* Set the Windows look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Windows is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
+        AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainEditor().setVisible(true);
+                new MapLayoutMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
             }
         });
     }
-    
-    private static void initConsole(JTextArea textArea){
-        PrintStream con=new PrintStream(new TextAreaOutputStream(textArea));
-        System.setOut(con);
-        System.setErr(con);
-    }
+    /**
+     * To create a new Main Editor, copy the above code
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private com.sfc.sf2.core.gui.controls.Console console1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton18;
@@ -1727,7 +1672,6 @@ public class MainEditor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelColorBG;
@@ -1736,7 +1680,6 @@ public class MainEditor extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1745,7 +1688,6 @@ public class MainEditor extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JSplitPane jSplitPane4;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField12;

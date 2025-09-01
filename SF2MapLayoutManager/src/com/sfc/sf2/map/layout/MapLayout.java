@@ -5,10 +5,9 @@
  */
 package com.sfc.sf2.map.layout;
 
-import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.map.block.Tileset;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.palette.Palette;
-import java.awt.image.IndexColorModel;
 
 /**
  *
@@ -22,7 +21,7 @@ public class MapLayout {
     private int index;
      
     private Tileset[] tilesets;
-    private MapBlock[] blocks;
+    private MapBlockset blockset;
     
     public int getIndex() {
         return index;
@@ -40,28 +39,19 @@ public class MapLayout {
         this.tilesets = tilesets;
     }
 
-    public MapBlock[] getBlocks() {
-        return blocks;
+    public MapBlockset getBlockset() {
+        return blockset;
     }
 
-    public void setBlocks(MapBlock[] blocks) {
-        this.blocks = blocks;
+    public void setBlockset(MapBlockset blockset) {
+        this.blockset = blockset;
     }
 
     public Palette getPalette() {
-        if (blocks == null) {
+        if (blockset == null) {
             return null;
         } else {
-            return blocks[0].getPalette();
-        }
-    }
-
-    public IndexColorModel getIcm() {
-        Palette palette = getPalette();
-        if (palette == null) {
-            return null;
-        } else {
-            return palette.getIcm();
+            return blockset.getPalette();
         }
     }
 }

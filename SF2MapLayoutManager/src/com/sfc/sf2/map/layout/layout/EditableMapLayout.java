@@ -7,7 +7,7 @@ package com.sfc.sf2.map.layout.layout;
 
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
-import com.sfc.sf2.map.block.layout.MapBlockLayout;
+import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -36,7 +36,7 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
     
     private int currentMode = 0;
     
-    private MapBlock selectedBlock0;
+    private MapBlock selectedBlockLeft;
     MapBlock[][] copiedBlocks;
     
     private List<int[]> actions = new ArrayList<int[]>();
@@ -72,10 +72,10 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
             case MODE_BLOCK :
                 switch (e.getButton()) {
                     case MouseEvent.BUTTON1:
-                        if(MapBlockLayout.selectedBlockIndex0!=-1){
-                            setBlockValue(x, y, MapBlockLayout.selectedBlockIndex0);
-                            if(selectedBlock0!=null && selectedBlock0.getIndex()==MapBlockLayout.selectedBlockIndex0){
-                                setFlagValue(x, y, selectedBlock0.getFlags());
+                        if(MapBlocksetLayoutPanel.selectedBlockIndexLeft!=-1){
+                            setBlockValue(x, y, MapBlocksetLayoutPanel.selectedBlockIndexLeft);
+                            if(selectedBlockLeft!=null && selectedBlockLeft.getIndex()==MapBlocksetLayoutPanel.selectedBlockIndexLeft){
+                                setFlagValue(x, y, selectedBlockLeft.getFlags());
                             }
                         }else{
                             int height = copiedBlocks.length;
@@ -89,16 +89,13 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                             for(int j=0;j<height;j++){
                                 for(int i=0;i<width;i++){
                                     if((blockIndex+j*64+i)<4096 && ((blockIndex%64)+i)<64){
-                                        MapBlock previousBlock = layout.getBlocks()[blockIndex+j*64+i];
+                                        MapBlock previousBlock = layout.getBlockset().getBlocks()[blockIndex+j*64+i];
                                         action[4+2*(j*width+i)] = previousBlock.getIndex();
                                         int origFlags = previousBlock.getFlags();
                                         action[4+2*(j*width+i)+1] = origFlags;
-                                        MapBlock newBlock = new MapBlock();
                                         MapBlock modelBlock = copiedBlocks[j][i];
-                                        newBlock.setIndex(modelBlock.getIndex());
-                                        newBlock.setFlags((0xC000 & modelBlock.getFlags()) + (0x3C00 & origFlags));
-                                        newBlock.setTiles(modelBlock.getTiles());
-                                        layout.getBlocks()[blockIndex+j*64+i] = newBlock; 
+                                        MapBlock newBlock = new MapBlock(modelBlock.getIndex(), (0xC000 & modelBlock.getFlags()) + (0x3C00 & origFlags), modelBlock.getTiles());
+                                        layout.getBlockset().getBlocks()[blockIndex+j*64+i] = newBlock;
                                     }else{
                                         action[4+2*(j*width+i)] = -1;
                                         action[4+2*(j*width+i)+1] = -1;
@@ -114,7 +111,7 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                         lastMapY = y;
                         break;
                     case MouseEvent.BUTTON3:
-                        setBlockValue(x, y, MapBlockLayout.selectedBlockIndex1);
+                        setBlockValue(x, y, MapBlocksetLayoutPanel.selectedBlockIndexRight);
                         break;
                     default:
                         break;
@@ -166,9 +163,9 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
             case MouseEvent.BUTTON2:
                 if(currentMode==MODE_BLOCK){                
                     if(x==lastMapX && y==lastMapY){
-                        selectedBlock0 = layout.getBlocks()[y*64+x];
-                        MapBlockLayout.selectedBlockIndex0 = selectedBlock0.getIndex();
-                        updateLeftSlot(selectedBlock0);
+                        selectedBlockLeft = layout.getBlockset().getBlocks()[y*64+x];
+                        MapBlocksetLayoutPanel.selectedBlockIndexLeft = selectedBlockLeft.getIndex();
+                        updateLeftSlot(selectedBlockLeft);
                     }else{
                         /* Mass copy */
                         int xStart;
@@ -194,11 +191,11 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                         copiedBlocks = new MapBlock[height][width];
                         for(int j=0;j<height;j++){
                             for(int i=0;i<width;i++){
-                                copiedBlocks[j][i] = layout.getBlocks()[(yStart+j)*64+xStart+i];
+                                copiedBlocks[j][i] = layout.getBlockset().getBlocks()[(yStart+j)*64+xStart+i];
                             }
                         }
 
-                        MapBlockLayout.selectedBlockIndex0 = -1;
+                        MapBlocksetLayoutPanel.selectedBlockIndexLeft = -1;
 
                         leftSlot.setBlock(null);
                         leftSlot.revalidate();
@@ -229,7 +226,7 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
     }
     
     public void setBlockValue(int x, int y, int value){
-        MapBlock[] blocks = layout.getBlocks();
+        MapBlock[] blocks = layout.getBlockset().getBlocks();
         MapBlock block = blocks[y*64+x];
         if(block.getIndex()!=value){
             int[] action = new int[3];
@@ -237,15 +234,15 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
             action[1] = y*64+x;
             action[2] = block.getIndex();
             block.setIndex(value);
-            block.clearIndexedColorImage();
-            block.setTiles(blockset[block.getIndex()].getTiles());
+            block.clearIndexedColorImage(false);
+            block.setTiles(blockset.getBlocks()[block.getIndex()].getTiles());
             actions.add(action);
             redraw = true;
         }
     }
     
     public void setFlagValue(int x, int y, int value){
-        MapBlock[] blocks = layout.getBlocks();
+        MapBlock[] blocks = layout.getBlockset().getBlocks();
         MapBlock block = blocks[y*64+x];
         if(block.getFlags()!=value){
             int[] action = new int[3];
@@ -267,10 +264,10 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
             switch (action[0]) {
                 case ACTION_CHANGE_BLOCK_VALUE:
                     {
-                        MapBlock block = layout.getBlocks()[action[1]];
+                        MapBlock block = layout.getBlockset().getBlocks()[action[1]];
                         block.setIndex(action[2]);
-                        block.clearIndexedColorImage();
-                        block.setTiles(blockset[block.getIndex()].getTiles());
+                        block.clearIndexedColorImage(false);
+                        block.setTiles(blockset.getBlocks()[block.getIndex()].getTiles());
                         actions.remove(actions.size()-1);
                         redraw = true;
                         this.repaint();
@@ -278,7 +275,7 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                     }
                 case ACTION_CHANGE_BLOCK_FLAGS:
                     {
-                        MapBlock block = layout.getBlocks()[action[1]];
+                        MapBlock block = layout.getBlockset().getBlocks()[action[1]];
                         block.setFlags(action[2]);               
                         block.setExplorationFlagImage(null);
                         actions.remove(actions.size()-1);
@@ -295,11 +292,8 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
                             int value = action[4+2*(j*width+i)];
                             int flags = action[4+2*(j*width+i)+1];
                             if(value != -1 && flags != -1){
-                                MapBlock block = new MapBlock();
-                                block.setIndex(value);
-                                block.setFlags(flags);
-                                block.setTiles(blockset[block.getIndex()].getTiles());
-                                layout.getBlocks()[blockIndex+j*64+i] = block;
+                                MapBlock block = new MapBlock(value, flags, blockset.getBlocks()[value] .getTiles());
+                                layout.getBlockset().getBlocks()[blockIndex+j*64+i] = block;
                             }
                         }
                     }   actions.remove(actions.size()-1);
@@ -313,11 +307,11 @@ public class EditableMapLayout extends StaticMapLayout implements MouseListener,
     }
 
     public MapBlock getSelectedBlock0() {
-        return selectedBlock0;
+        return selectedBlockLeft;
     }
 
     public void setSelectedBlock0(MapBlock selectedBlock0) {
-        this.selectedBlock0 = selectedBlock0;
+        this.selectedBlockLeft = selectedBlock0;
     }
 
     public List<int[]> getActions() {

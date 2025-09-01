@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.layout.layout;
 
 import com.sfc.sf2.map.block.MapBlock;
+import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.layout.MapLayout;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -14,9 +15,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
-import java.awt.image.WritableRaster;
 import javax.swing.JPanel;
 
 /**
@@ -29,7 +28,7 @@ public class StaticMapLayout extends JPanel {
     
     protected int tilesPerRow = DEFAULT_TILES_PER_ROW;
     protected MapLayout layout;
-    protected MapBlock[] blockset;
+    protected MapBlockset blockset;
     protected int displaySize = 1;
     protected int gridSize = 24;
     
@@ -70,7 +69,7 @@ public class StaticMapLayout extends JPanel {
     
     public BufferedImage buildImage(){
         if (redraw) {
-            if (layout == null || layout.getBlocks() == null) {
+            if (layout == null || layout.getBlockset() == null) {
                 currentImage = null;
             } else {
                 currentImage = buildImage(this.layout,this.tilesPerRow);
@@ -90,7 +89,7 @@ public class StaticMapLayout extends JPanel {
         System.out.println("Map render "+renderCounter);
         this.layout = layout;
         if(redraw){
-            MapBlock[] blocks = layout.getBlocks();
+            MapBlock[] blocks = layout.getBlockset().getBlocks();
             int imageHeight = 64*3*8;
             currentImage = new BufferedImage(tilesPerRow*8, imageHeight , BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = currentImage.getGraphics();
@@ -438,11 +437,11 @@ public class StaticMapLayout extends JPanel {
         this.layout = layout;
     }
 
-    public MapBlock[] getBlockset() {
+    public MapBlockset getBlockset() {
         return blockset;
     }
 
-    public void setBlockset(MapBlock[] blockset) {
+    public void setBlockset(MapBlockset blockset) {
         this.blockset = blockset;
     }
 
