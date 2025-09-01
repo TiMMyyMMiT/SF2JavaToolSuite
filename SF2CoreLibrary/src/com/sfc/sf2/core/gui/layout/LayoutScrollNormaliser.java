@@ -33,7 +33,7 @@ public class LayoutScrollNormaliser extends BaseLayoutComponent implements Compo
                 parent = parent.getParent();
                 if (parent instanceof JScrollPane) {
                     verticalScrollBar = ((JScrollPane)parent).getVerticalScrollBar();
-                    return;
+                    break;
                 }
             }
         } catch (Exception e) { }
