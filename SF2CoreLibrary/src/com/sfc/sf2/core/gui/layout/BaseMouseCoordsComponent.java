@@ -104,7 +104,6 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
-        if (x == lastX && y == lastY) return;
         lastX = x;
         lastY = y;
         buttonHeld = e.getButton();
