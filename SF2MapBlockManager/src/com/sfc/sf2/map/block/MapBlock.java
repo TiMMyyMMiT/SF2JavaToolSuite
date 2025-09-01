@@ -35,22 +35,6 @@ public class MapBlock extends Block {
     public void setFlags(int flags) {
         this.flags = flags;
     }
-
-    public BufferedImage getExplorationFlagImage() {
-        return explorationFlagImage;
-    }
-
-    public void setExplorationFlagImage(BufferedImage explorationFlagImage) {
-        this.explorationFlagImage = explorationFlagImage;
-    }
-
-    public BufferedImage getInteractionFlagImage() {
-        return interactionFlagImage;
-    }
-
-    public void setInteractionFlagImage(BufferedImage interactionFlagImage) {
-        this.interactionFlagImage = interactionFlagImage;
-    }
     
     public boolean equalsIgnoreTiles(Object obj) {
         if (obj == null) return false;
@@ -79,8 +63,6 @@ public class MapBlock extends Block {
     @Override 
     public MapBlock clone() {
         MapBlock clone = new MapBlock(index, flags, tiles.clone());
-        clone.setExplorationFlagImage(this.explorationFlagImage);
-        clone.setInteractionFlagImage(this.interactionFlagImage);
         return clone;
     }
     
