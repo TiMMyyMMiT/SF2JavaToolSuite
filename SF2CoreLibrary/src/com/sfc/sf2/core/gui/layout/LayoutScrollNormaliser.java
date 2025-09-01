@@ -8,7 +8,6 @@ package com.sfc.sf2.core.gui.layout;
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.controls.Console;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.swing.JScrollBar;
@@ -20,7 +19,7 @@ import javax.swing.JScrollPane;
  */
 public class LayoutScrollNormaliser extends BaseLayoutComponent implements ComponentListener {
     
-    JScrollBar verticalScrollBar;
+    JScrollPane scrollPane;
     
     public LayoutScrollNormaliser(AbstractLayoutPanel panel) {
         java.awt.EventQueue.invokeLater(() -> { findScrollPane(panel); });
@@ -32,12 +31,12 @@ public class LayoutScrollNormaliser extends BaseLayoutComponent implements Compo
             for (int i = 0; i < 3; i++) {
                 parent = parent.getParent();
                 if (parent instanceof JScrollPane) {
-                    verticalScrollBar = ((JScrollPane)parent).getVerticalScrollBar();
+                    scrollPane = (JScrollPane)parent;
                     break;
                 }
             }
         } catch (Exception e) { }
-        if (verticalScrollBar == null) {
+        if (scrollPane == null) {
             Console.logger().warning("LayoutScrollNormaliser could not find vertical scroll bar for " + panel.getName() + ". LayoutScrollNormaliser will be disabled");
             setEnabled(false);
         } else {
@@ -47,7 +46,8 @@ public class LayoutScrollNormaliser extends BaseLayoutComponent implements Compo
 
     @Override
     public void componentResized(ComponentEvent e) {
-        verticalScrollBar.setUnitIncrement(e.getComponent().getSize().height/50);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(e.getComponent().getSize().width/50);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(e.getComponent().getSize().height/50);
     }
     
     @Override
