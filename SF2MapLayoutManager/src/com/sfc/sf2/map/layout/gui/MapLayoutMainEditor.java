@@ -38,6 +38,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setLeftSlot(blockSlotPanelLeft);
         mapBlocksetPanel.setLeftSlotBlockPanel(blockSlotPanelLeft);
         mapBlocksetPanel.setRightSlotBlockPanel(blockSlotPanelRight);
+        mapBlocksetPanel.setLeftSlotColor(Color.YELLOW);
+        mapBlocksetPanel.setRightSlotColor(Color.MAGENTA);
     }
     
     @Override
@@ -866,7 +868,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
 
             jLabel7.setText("Right click :");
 
-            blockSlotPanelLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)));
+            blockSlotPanelLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 0)));
             blockSlotPanelLeft.setMaximumSize(new java.awt.Dimension(48, 48));
             blockSlotPanelLeft.setMinimumSize(new java.awt.Dimension(48, 48));
             blockSlotPanelLeft.setPreferredSize(new java.awt.Dimension(48, 48));
@@ -882,7 +884,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                 .addGap(0, 46, Short.MAX_VALUE)
             );
 
-            blockSlotPanelRight.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)));
+            blockSlotPanelRight.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 255)));
             blockSlotPanelRight.setMaximumSize(new java.awt.Dimension(48, 48));
             blockSlotPanelRight.setMinimumSize(new java.awt.Dimension(48, 48));
 

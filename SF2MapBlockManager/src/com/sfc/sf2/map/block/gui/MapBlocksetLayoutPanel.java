@@ -33,6 +33,8 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     
     private BlockSlotPanel leftSlotBlockPanel;
     private BlockSlotPanel rightSlotBlockPanel;
+    private Color leftSlotColor = Color.YELLOW;
+    private Color rightSlotColor = Color.GREEN;
     
     private MapBlockset blockset;
     private boolean showPriority = false;
@@ -82,9 +84,17 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
         if (selectedBlockIndexLeft >= 0) {
             Graphics2D g2 = (Graphics2D)graphics;
             g2.setStroke(new BasicStroke(2));
-            g2.setColor(Color.YELLOW);
+            g2.setColor(leftSlotColor);
             int baseX = (selectedBlockIndexLeft%tilesPerRow)*PIXEL_WIDTH;
             int baseY = (selectedBlockIndexLeft/tilesPerRow)*PIXEL_HEIGHT;
+            g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
+        }
+        if (selectedBlockIndexRight >= 0) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(rightSlotColor);
+            int baseX = (selectedBlockIndexRight%tilesPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedBlockIndexRight/tilesPerRow)*PIXEL_HEIGHT;
             g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
         }
     }
@@ -156,6 +166,14 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
 
     public void setRightSlotBlockPanel(BlockSlotPanel rightSlotBlockPanel) {
         this.rightSlotBlockPanel = rightSlotBlockPanel;
+    }
+
+    public void setLeftSlotColor(Color leftSlotColor) {
+        this.leftSlotColor = leftSlotColor;
+    }
+
+    public void setRightSlotColor(Color rightSlotColor) {
+        this.rightSlotColor = rightSlotColor;
     }
 
     private void onMousePressed(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
