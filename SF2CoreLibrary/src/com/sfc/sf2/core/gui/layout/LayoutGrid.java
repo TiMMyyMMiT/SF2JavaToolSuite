@@ -9,7 +9,7 @@ import com.sfc.sf2.helpers.GraphicsHelpers;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * Displays a grid with an optional thicker grid
  * @author TiMMy
  */
 public class LayoutGrid extends BaseLayoutComponent {

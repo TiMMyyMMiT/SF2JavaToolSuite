@@ -32,6 +32,7 @@ public class FontSymbolLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, true);
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, true);
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(DEFAULT_SYMBOLS_PER_ROW);
     }
 

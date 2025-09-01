@@ -6,7 +6,8 @@
 package com.sfc.sf2.core.gui.layout;
 
 /**
- *
+ * Layout components was a way to extend the LayoutPanels without making simbple panels too complex
+ * Layout components are semi-decoupled (i.e. The AbstractLayoutPanel defines the logic of how they are used but any component may be null)
  * @author TiMMy
  */
 public abstract class BaseLayoutComponent {

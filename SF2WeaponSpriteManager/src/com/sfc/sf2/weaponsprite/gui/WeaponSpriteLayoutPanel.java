@@ -35,6 +35,7 @@ public class WeaponSpriteLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(0, FRAME_TILE_HEIGHT*PIXEL_HEIGHT, false, 0, 0, 2);
         coordsHeader = null;
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(FRAME_TILE_WIDTH);
     }
     

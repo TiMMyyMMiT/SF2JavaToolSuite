@@ -8,7 +8,8 @@ package com.sfc.sf2.core.gui.layout;
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 
 /**
- *
+ * A component to handle mouse clicks in common ways. Handles click and drag as similar operations
+ * Be sure to call the {@code setupListeners} function (could not be in constructor).
  * @author TiMMy
  */
 public class LayoutMouseInput extends BaseMouseCoordsComponent {

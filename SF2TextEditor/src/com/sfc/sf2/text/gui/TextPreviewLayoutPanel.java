@@ -64,6 +64,7 @@ public class TextPreviewLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = null;
         coordsHeader = null;
         mouseInput = null;
+        scroller = null;
     }
     
     @Override

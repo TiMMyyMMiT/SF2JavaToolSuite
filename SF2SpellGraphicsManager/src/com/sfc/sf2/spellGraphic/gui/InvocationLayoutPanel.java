@@ -33,6 +33,7 @@ public class InvocationLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(0, INVOCATION_TILE_HEIGHT*PIXEL_HEIGHT, false, 0, 0, 2);
         coordsHeader = null;
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
     }
 
     @Override

@@ -30,6 +30,7 @@ public class GroundLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = null;
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT);
         mouseInput = null;
+        scroller = null;
         setItemsPerRow(Ground.GROUND_TILES_PER_ROW);
     }
 

@@ -12,6 +12,7 @@ import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
 import com.sfc.sf2.core.gui.layout.LayoutGrid;
 import com.sfc.sf2.core.gui.layout.LayoutScale;
+import com.sfc.sf2.core.gui.layout.LayoutScrollNormaliser;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import java.awt.Dimension;
@@ -32,6 +33,7 @@ public class BackgroundLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(0, BG_TILES_HEIGHT*PIXEL_HEIGHT, false, 0, PIXEL_WIDTH, 2);
         coordsHeader = null;
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(BG_TILES_WIDTH);
     }
 

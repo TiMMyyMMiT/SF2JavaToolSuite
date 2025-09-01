@@ -24,6 +24,7 @@ public class TestLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(24, 24, true, 4, 10, 2);
         coordsHeader = new LayoutCoordsHeader(this, 24, 24);
         mouseInput = null;
+        scroller = null;
     }
     
     @Override

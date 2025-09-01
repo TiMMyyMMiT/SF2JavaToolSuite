@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * Handles rendering flat or checkered background image under panel image
  * @author TiMMy
  */
 public class LayoutBackground extends BaseLayoutComponent {
@@ -36,7 +36,7 @@ public class LayoutBackground extends BaseLayoutComponent {
 
     /**
      * Creates a background with a checker pattern. Scaled with image scale
-     * @param checkerPatternGridSize The size, in pixels to render the checkers (recommended to set as half of your grid units)
+     * @param checkerPatternGridSize The size, in pixels to render the checkers (recommended to set as half of your grid units).<br>Set to 0 to have a flat background
      */
     public LayoutBackground(Color bgColor, int checkerPatternGridSize) {
         this.bgColor = bgColor;

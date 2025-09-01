@@ -32,6 +32,7 @@ public class IconsLayoutPanel extends AbstractLayoutPanel {
         coordsGrid = new LayoutCoordsGridDisplay(ICON_TILE_WIDTH*PIXEL_WIDTH, ICON_TILE_HEIGHT*PIXEL_HEIGHT, true);
         coordsHeader = new LayoutCoordsHeader(this, ICON_TILE_WIDTH*PIXEL_WIDTH, ICON_TILE_HEIGHT*PIXEL_HEIGHT, true);
         mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
     }
     
     @Override
