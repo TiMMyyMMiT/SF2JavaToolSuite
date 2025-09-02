@@ -6,65 +6,50 @@
 package com.sfc.sf2.battle.mapcoords.layout;
 
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
-import com.sfc.sf2.map.layout.MapLayout;
-import com.sfc.sf2.map.layout.layout.StaticMapLayout;
+import com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 /**
  *
  * @author wiz
  */
-public class BattleMapCoordsLayout extends StaticMapLayout {
+public class BattleMapCoordsLayout extends StaticMapLayoutPanel {
     
-    protected BattleMapCoords coords;    
-    protected boolean drawCoords = true;
-    
-    public BattleMapCoordsLayout() {
-        super();
-    }
+    protected BattleMapCoords battleCoords;
+    protected boolean showBattleCoords = true;
     
     @Override
-    public BufferedImage buildImage(MapLayout layout, int tilesPerRow) {
-        BufferedImage image = super.buildImage(layout, tilesPerRow);
-        Graphics graphics = image.getGraphics();
-        if (drawCoords) {
-            drawCoords(image);
-        }
-        graphics.dispose();
-        return image;
-    }
-    
-    private void drawCoords(BufferedImage image){
-        Graphics2D g2 = (Graphics2D)image.getGraphics();
-        g2.setStroke(new BasicStroke(3)); 
+    protected void drawImage(Graphics graphics) {
+        Graphics2D g2 = (Graphics2D)graphics;
+        g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.YELLOW);
-        int width = coords.getWidth();
-        int heigth = coords.getHeight();
-        g2.drawRect(coords.getX()*24+3, coords.getY()*24+3, width*24-6, heigth*24-6);
+        int width = battleCoords.getWidth();
+        int heigth = battleCoords.getHeight();
+        g2.drawRect(battleCoords.getX()*24+3, battleCoords.getY()*24+3, width*24-6, heigth*24-6);
         g2.setColor(Color.ORANGE);
-        if (coords.getTrigX() < 64 && coords.getTrigY() < 64) {
-            g2.drawRect(coords.getTrigX()*24+3, coords.getTrigY()*24+3, 1*24-6, 1*24-6);
+        if (battleCoords.getTrigX() < 64 && battleCoords.getTrigY() < 64) {
+            g2.drawRect(battleCoords.getTrigX()*24+3, battleCoords.getTrigY()*24+3, 1*24-6, 1*24-6);
         }
     }
 
-    public void setDrawCoords(boolean drawCoords) {
-        this.drawCoords = drawCoords;
-        this.redraw = true;
+    public BattleMapCoords getBattleCoords() {
+        return battleCoords;
     }
 
-    public BattleMapCoords getCoords() {
-        return coords;
+    public void setBattleCoords(BattleMapCoords battleCoords) {
+        this.battleCoords = battleCoords;
+        redraw();
     }
 
-    public void setCoords(BattleMapCoords coords) {
-        this.coords = coords;
+    public boolean getShowBattleCoords() {
+        return showBattleCoords;
     }
-    
-    public void updateCoordsDisplay(){
-        this.redraw = true;
+
+    public void setShowBattleCoords(boolean showBattleCoords) {
+        this.showBattleCoords = showBattleCoords;
+        redraw();
     }
 }

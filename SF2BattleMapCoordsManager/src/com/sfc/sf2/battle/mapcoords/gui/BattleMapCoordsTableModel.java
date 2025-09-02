@@ -86,8 +86,7 @@ public class BattleMapCoordsTableModel extends AbstractTableModel {
         tableData[row][col] = (Integer)value;
         updateProperties();
         if(row<coords.length){
-            layout.setCoords(coords[row]);
-            layout.updateCoordsDisplay();
+            layout.setBattleCoords(coords[row]);
             layout.revalidate();
             layout.repaint();
         }
