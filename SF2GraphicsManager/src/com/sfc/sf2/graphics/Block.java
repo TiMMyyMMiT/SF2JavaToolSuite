@@ -6,7 +6,6 @@
 package com.sfc.sf2.graphics;
 
 import com.sfc.sf2.palette.Palette;
-import java.awt.Dimension;
 
 /**
  *

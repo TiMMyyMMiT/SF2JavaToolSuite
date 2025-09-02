@@ -10,10 +10,9 @@ import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.block.MapBlock;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 /**
@@ -21,6 +20,7 @@ import java.awt.event.MouseEvent;
  * @author TiMMy
  */
 public class EditableBlockSlotPanel extends BlockSlotPanel {
+    
     public enum BlockSlotEditMode {
         MODE_PAINT_TILE,
         MODE_TOGGLE_PRIORITY,
@@ -48,17 +48,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel {
     @Override
     protected void drawImage(Graphics graphics) {
         super.drawImage(graphics);
-        Graphics2D g2 = (Graphics2D)graphics;
         if (showPriorityFlag) {
-            Tile[] tiles = block.getTiles();
-            for (int t = 0; t < tiles.length; t++) {
-                if (tiles[t].isHighPriority()) {
-                    g2.setColor(Color.BLACK);
-                    g2.fillRect((t%3)*PIXEL_WIDTH+2, (t/3)*PIXEL_HEIGHT+2, 4, 4);
-                    g2.setColor(Color.YELLOW);
-                    g2.fillRect((t%3)*PIXEL_WIDTH+3, (t/3)*PIXEL_HEIGHT+3, 2, 2);
-                }
-            }
+            MapBlockHelpers.drawTilePriorities(graphics, block.getTiles(), 0, 0);
         }
     }
     

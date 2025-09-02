@@ -118,7 +118,7 @@ public class MapBlockSettings implements AbstractSettings {
         }
         if (data.containsKey("blockBGColor")) {
             String[] colorSplit = data.get("blockBGColor").split(",");
-            tilesetBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
+            blockBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
         }
     }
 

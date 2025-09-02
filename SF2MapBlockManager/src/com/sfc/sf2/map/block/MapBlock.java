@@ -8,7 +8,7 @@ package com.sfc.sf2.map.block;
 import com.sfc.sf2.graphics.Block;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.palette.Palette;
-import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 /**
  *
@@ -19,9 +19,6 @@ public class MapBlock extends Block {
     public static final int MAP_FLAG_MASK_NAV = 0xC000;
        
     private int flags;
-    
-    private BufferedImage explorationFlagImage;
-    private BufferedImage interactionFlagImage;
     
     public MapBlock(int index, int flags, Tile[] tiles) {
         super(index, tiles);
@@ -34,22 +31,6 @@ public class MapBlock extends Block {
 
     public void setFlags(int flags) {
         this.flags = flags;
-    }
-
-    public BufferedImage getExplorationFlagImage() {
-        return explorationFlagImage;
-    }
-
-    public void setExplorationFlagImage(BufferedImage explorationFlagImage) {
-        this.explorationFlagImage = explorationFlagImage;
-    }
-
-    public BufferedImage getInteractionFlagImage() {
-        return interactionFlagImage;
-    }
-
-    public void setInteractionFlagImage(BufferedImage interactionFlagImage) {
-        this.interactionFlagImage = interactionFlagImage;
     }
     
     public boolean equalsIgnoreTiles(Object obj) {
@@ -79,8 +60,6 @@ public class MapBlock extends Block {
     @Override 
     public MapBlock clone() {
         MapBlock clone = new MapBlock(index, flags, tiles.clone());
-        clone.setExplorationFlagImage(this.explorationFlagImage);
-        clone.setInteractionFlagImage(this.interactionFlagImage);
         return clone;
     }
     
