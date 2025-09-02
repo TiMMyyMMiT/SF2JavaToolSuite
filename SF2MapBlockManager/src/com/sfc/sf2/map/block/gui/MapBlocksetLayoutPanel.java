@@ -11,6 +11,7 @@ import com.sfc.sf2.graphics.Block;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import java.awt.BasicStroke;
@@ -63,38 +64,25 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected void drawImage(Graphics graphics) {
-        int tilesPerRow = getItemsPerRow();
+        int blocksPerRow = getItemsPerRow();
         graphics.drawImage(blockset.getIndexedColorImage(), 0, 0, null);
         if (showPriority) {
-            MapBlock[] blocks = blockset.getBlocks();
-            for (int i=0; i < blocks.length; i++) {
-                int baseX = (i%tilesPerRow)*PIXEL_WIDTH;
-                int baseY = (i/tilesPerRow)*PIXEL_HEIGHT;
-                Tile[] tiles = blocks[i].getTiles();
-                for (int t = 0; t < tiles.length; t++) {
-                    if (tiles[t].isHighPriority()) {
-                        graphics.setColor(Color.BLACK);
-                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH+2, baseY+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT+2, 4, 4);
-                        graphics.setColor(Color.YELLOW);
-                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH+3, baseY+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT+3, 2, 2);
-                    }
-                }
-            }
+            MapBlockHelpers.drawTilePriorities(graphics, blockset.getBlocks(), blocksPerRow);
         }
         if (selectedBlockIndexLeft >= 0) {
             Graphics2D g2 = (Graphics2D)graphics;
             g2.setStroke(new BasicStroke(2));
             g2.setColor(leftSlotColor);
-            int baseX = (selectedBlockIndexLeft%tilesPerRow)*PIXEL_WIDTH;
-            int baseY = (selectedBlockIndexLeft/tilesPerRow)*PIXEL_HEIGHT;
+            int baseX = (selectedBlockIndexLeft%blocksPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedBlockIndexLeft/blocksPerRow)*PIXEL_HEIGHT;
             g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
         }
         if (selectedBlockIndexRight >= 0) {
             Graphics2D g2 = (Graphics2D)graphics;
             g2.setStroke(new BasicStroke(2));
             g2.setColor(rightSlotColor);
-            int baseX = (selectedBlockIndexRight%tilesPerRow)*PIXEL_WIDTH;
-            int baseY = (selectedBlockIndexRight/tilesPerRow)*PIXEL_HEIGHT;
+            int baseX = (selectedBlockIndexRight%blocksPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedBlockIndexRight/blocksPerRow)*PIXEL_HEIGHT;
             g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
         }
     }

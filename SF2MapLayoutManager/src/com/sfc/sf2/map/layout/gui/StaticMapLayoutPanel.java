@@ -11,6 +11,7 @@ import com.sfc.sf2.graphics.Block;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
@@ -18,15 +19,12 @@ import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 /**
  *
  * @author TiMMy
  */
 public class StaticMapLayoutPanel extends AbstractLayoutPanel {
-    private static final Color PRIORITY_COLOR = new Color(255, 255, 0, 100);
-    private static final Color PRIORITY_DARKEN_COLOR = new Color(0, 0, 0, 100);
     private static final int DEFAULT_BLOCKS_PER_ROW = MapLayout.BLOCK_WIDTH;
     private static final Dimension mapDimensions = new Dimension(BLOCK_WIDTH*PIXEL_WIDTH, BLOCK_HEIGHT*PIXEL_HEIGHT);
         
@@ -66,12 +64,14 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
                 drawBlock(blocks[y * BLOCK_WIDTH + x], graphics, x*PIXEL_WIDTH, y*PIXEL_HEIGHT);
             }
         }
+        if (showPriority) {
+            MapBlockHelpers.drawTilePriorities(graphics, blocks, BLOCK_WIDTH);
+        }
     }
     
     protected void drawBlock(MapBlock block, Graphics graphics, int x, int y) {
+        graphics.drawImage(block.getIndexedColorImage(), x, y, null);
         
-        BufferedImage blockImage = block.getIndexedColorImage();
-        graphics.drawImage(blockImage, x, y, null);
         if (showExplorationFlags) {
             int explorationFlags = block.getFlags()&0xC000;
             graphics.drawImage(MapLayoutFlagImages.getBlockExplorationFlagImage(explorationFlags), x, y, null); 
@@ -79,17 +79,6 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
         if (showInteractionFlags) {
             int interactionFlags = block.getFlags()&0x3C00;
             graphics.drawImage(MapLayoutFlagImages.getBlockInteractionFlagImage(interactionFlags), x, y, null); 
-        }
-        if (showPriority) {
-            Tile[] tiles = block.getTiles();
-            for (int t = 0; t < tiles.length; t++) {
-                if (tiles[t].isHighPriority()) {
-                    graphics.setColor(PRIORITY_COLOR);
-                } else {
-                    graphics.setColor(PRIORITY_DARKEN_COLOR);
-                }
-                graphics.fillRect(x+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH, y+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT, Tile.PIXEL_WIDTH, Tile.PIXEL_HEIGHT);
-            }
         }
     }
 
