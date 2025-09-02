@@ -530,7 +530,11 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     }
     
     private void onTableFrameDataChanged(TableModelEvent e) {
-        
+        int row = tableCoords.jTable.getSelectedRow();
+        if (row != -1 && row == selectedCoords) {
+            battleMapCoordsLayoutPanel.redraw();
+            repaintEditorLayout();
+        }
     }
 
     private void onTableFrameSelectionChanged(ListSelectionEvent e) {

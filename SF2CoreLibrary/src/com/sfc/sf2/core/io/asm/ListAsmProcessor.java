@@ -37,6 +37,9 @@ public abstract class ListAsmProcessor<TItem> extends AbstractAsmProcessor<TItem
      * @param listItemIdentifier The String that indicates that the line of the file is an item of the list
      */
     public ListAsmProcessor(Class<TItem[]> collectionClass, String listNameIdentifier, String listItemIdentifier) {
+        if (!listNameIdentifier.endsWith(":")) {
+            listNameIdentifier += ":";
+        }
         this.collectionClass = collectionClass;
         this.listNameIdentifier = listNameIdentifier;
         this.listItemIdentifier = listItemIdentifier;

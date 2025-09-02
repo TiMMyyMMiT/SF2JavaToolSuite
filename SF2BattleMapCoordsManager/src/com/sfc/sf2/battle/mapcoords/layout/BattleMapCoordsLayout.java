@@ -6,6 +6,11 @@
 package com.sfc.sf2.battle.mapcoords.layout;
 
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
+import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
+import com.sfc.sf2.map.layout.MapLayout;
+import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
+import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -28,11 +33,22 @@ public class BattleMapCoordsLayout extends StaticMapLayoutPanel {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.YELLOW);
         int width = battleCoords.getWidth();
-        int heigth = battleCoords.getHeight();
-        g2.drawRect(battleCoords.getX()*24+3, battleCoords.getY()*24+3, width*24-6, heigth*24-6);
-        g2.setColor(Color.ORANGE);
-        if (battleCoords.getTrigX() < 64 && battleCoords.getTrigY() < 64) {
-            g2.drawRect(battleCoords.getTrigX()*24+3, battleCoords.getTrigY()*24+3, 1*24-6, 1*24-6);
+        int height = battleCoords.getHeight();
+        g2.drawRect(battleCoords.getX()*PIXEL_WIDTH, battleCoords.getY()*PIXEL_HEIGHT, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
+        g2.setColor(Color.WHITE);
+        int trigX = battleCoords.getTrigX();
+        int trigY = battleCoords.getTrigY();
+        if (trigX < BLOCK_WIDTH || trigY < BLOCK_HEIGHT) {
+            width = 1;
+            height = 1;
+            if (trigX >= BLOCK_WIDTH) {
+                trigX = 0;
+                width = BLOCK_WIDTH;
+            } else if (trigY >= BLOCK_HEIGHT) {
+                trigY = 0;
+                height = BLOCK_HEIGHT;
+            }
+            g2.drawRect(trigX*PIXEL_WIDTH, trigY*PIXEL_HEIGHT, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
         }
     }
 

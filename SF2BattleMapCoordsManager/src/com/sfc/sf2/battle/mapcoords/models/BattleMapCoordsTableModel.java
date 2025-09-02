@@ -59,13 +59,13 @@ public class BattleMapCoordsTableModel extends AbstractTableModel<BattleMapCoord
             else if (oldVal > newVal) newVal = MapLayout.BLOCK_WIDTH-1;
         }
         switch (col) {
-            case 1: item.setMap(newVal);
-            case 2: item.setX(newVal);
-            case 3: item.setY(newVal);
-            case 4: item.setWidth(newVal);
-            case 5: item.setHeight(newVal);
-            case 6: item.setTrigX(newVal);
-            case 7: item.setTrigY(newVal);
+            case 1: item.setMap(newVal); break;
+            case 2: item.setX(newVal); break;
+            case 3: item.setY(newVal); break;
+            case 4: item.setWidth(newVal); break;
+            case 5: item.setHeight(newVal); break;
+            case 6: item.setTrigX(newVal); break;
+            case 7: item.setTrigY(newVal); break;
         }
         return item;
     }
