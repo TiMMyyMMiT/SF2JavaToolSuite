@@ -54,9 +54,9 @@ public class MapLayoutManager extends AbstractManager {
     
     public MapLayout importDisassemblyFromMapEntry(Path paletteEntriesPath, Path tilesetEntriesPath, MapEntryData mapEntry) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromMapEntry");
-        Path tilesetsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getTilesetsPath());
-        Path blocksetPath = PathHelpers.getIncbinPath().resolve(mapEntry.getBlocksPath());
-        Path layoutPath = PathHelpers.getIncbinPath().resolve(mapEntry.getLayoutPath());
+        Path layoutPath = mapEntry.getLayoutPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getLayoutPath());
+        Path blocksetPath = mapEntry.getBlocksPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getBlocksPath());
+        Path tilesetsPath = mapEntry.getTilesetsPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getTilesetsPath());
         importDisassemblyFromEntryFiles(paletteEntriesPath, tilesetEntriesPath, tilesetsPath, blocksetPath, layoutPath);
         Console.logger().finest("EXITING importDisassemblyFromMapEntry");
         return layout;

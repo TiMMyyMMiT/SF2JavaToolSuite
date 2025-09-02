@@ -23,6 +23,7 @@ public class BattleMapCoordsLayout extends StaticMapLayoutPanel {
     
     @Override
     protected void drawImage(Graphics graphics) {
+        super.drawImage(graphics);
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.YELLOW);

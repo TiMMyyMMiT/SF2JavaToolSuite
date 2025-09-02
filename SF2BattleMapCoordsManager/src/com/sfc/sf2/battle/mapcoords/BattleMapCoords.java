@@ -86,7 +86,7 @@ public class BattleMapCoords {
     }
     
     public static BattleMapCoords EmptyBattleMapCoords() {
-        return new BattleMapCoords((int)0, (int)10, (int)10, (int)10, (int)10, (int)0, (int)0);
+        return new BattleMapCoords(3, 10, 10, 10, 10, 255, 255);
     }
 
     @Override

@@ -53,7 +53,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     protected abstract T createBlankItem(int row);
     protected abstract T cloneItem(T item);
     protected abstract Object getValue(T item, int row, int col);
-    protected abstract T setValue(T item, int col, Object value);
+    protected abstract T setValue(T item, int row, int col, Object value);
     protected abstract Comparable<?> getMinLimit(T item, int col);
     protected abstract Comparable<?> getMaxLimit(T item, int col);
     
@@ -95,7 +95,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
         if (row < 0 || row >= tableItems.size() || col < 0 || col >= columns.length) {
             return;
         }
-        tableItems.set(row, setValue(tableItems.get(row), col, value));
+        tableItems.set(row, setValue(tableItems.get(row), row, col, value));
         fireTableCellUpdated(row, col);
     }
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.battle.mapcoords.gui;
+package com.sfc.sf2.battle.mapcoords.models;
 
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.core.models.AbstractTableModel;
@@ -50,17 +50,29 @@ public class BattleMapCoordsTableModel extends AbstractTableModel<BattleMapCoord
     }
 
     @Override
-    protected BattleMapCoords setValue(BattleMapCoords item, int col, Object value) {
+    protected BattleMapCoords setValue(BattleMapCoords item, int row, int col, Object value) {
+        int newVal = (int)value;
+        if (col >= 6 && newVal >= MapLayout.BLOCK_WIDTH) {
+            //For triggers, valid values are 0-63. 255 is a n/a sentinel
+            int oldVal = (int)getValue(item, row, col);
+            if (oldVal <= newVal) newVal = 255;
+            else if (oldVal > newVal) newVal = MapLayout.BLOCK_WIDTH-1;
+        }
         switch (col) {
-            case 1: item.setMap((int)value);
-            case 2: item.setX((int)value);
-            case 3: item.setY((int)value);
-            case 4: item.setWidth((int)value);
-            case 5: item.setHeight((int)value);
-            case 6: item.setTrigX((int)value);
-            case 7: item.setTrigY((int)value);
+            case 1: item.setMap(newVal);
+            case 2: item.setX(newVal);
+            case 3: item.setY(newVal);
+            case 4: item.setWidth(newVal);
+            case 5: item.setHeight(newVal);
+            case 6: item.setTrigX(newVal);
+            case 7: item.setTrigY(newVal);
         }
         return item;
+    }
+ 
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return column > 0;
     }
 
     @Override
@@ -70,6 +82,10 @@ public class BattleMapCoordsTableModel extends AbstractTableModel<BattleMapCoord
 
     @Override
     protected Comparable<?> getMaxLimit(BattleMapCoords item, int col) {
-        return 255;
+        if (col <= 1 || col >= 6) {
+            return 255;
+        } else {
+            return MapLayout.BLOCK_WIDTH-1;
+        }
     }
 }

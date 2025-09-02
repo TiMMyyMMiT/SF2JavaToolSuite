@@ -11,7 +11,6 @@ import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
-import com.sfc.sf2.map.layout.MapLayout;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.event.ListSelectionEvent;
@@ -31,7 +30,6 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     
     public BattleCoordsMainEditor() {
         super();
-        //SettingsManager.registerSettingsStore("mapLayout", mapLayoutSettings);
         initComponents();
         initCore(console1);
     }
@@ -46,25 +44,28 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         tableCoords.addTableModelListener(this::onTableFrameDataChanged);
         tableCoords.addListSelectionListener(this::onTableFrameSelectionChanged);
         TableColumnModel columns = tableCoords.jTable.getColumnModel();
-        columns.getColumn(0).setMaxWidth(50);
+        columns.getColumn(0).setMaxWidth(30);
     }
     
     @Override
     protected void updateEditorData() {
-        MapLayout layout = battlemapcoordsManager.getMapLayout();
-        if (layout != null) {
-            coords = battlemapcoordsManager.getCoords();
-            battleMapCoordsLayoutPanel.setMapLayout(layout);
-            battleMapCoordsLayoutPanel.setBattleCoords(coords[selectedCoords]);
+        coords = battlemapcoordsManager.getCoords();
+        battleMapCoordsTableModel.setTableData(coords);
 
-            battleMapCoordsLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-            battleMapCoordsLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-            battleMapCoordsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-            battleMapCoordsLayoutPanel.setBGColor(colorPicker1.getColor());
-            battleMapCoordsLayoutPanel.setShowBattleCoords(true);
-        }
+        battleMapCoordsLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        battleMapCoordsLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleMapCoordsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        battleMapCoordsLayoutPanel.setBGColor(colorPicker1.getColor());
+        battleMapCoordsLayoutPanel.setShowBattleCoords(true);
         
         super.updateEditorData();
+    }
+    
+    private void UpdateMapLoaded() {
+        battleMapCoordsLayoutPanel.setMapLayout(battlemapcoordsManager.getMapLayout());
+        battleMapCoordsLayoutPanel.setBattleCoords(coords[selectedCoords]);
+        
+        repaintEditorLayout();
     }
     
     @Override
@@ -84,7 +85,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        battleMapCoordsTableModel = new com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsTableModel();
+        battleMapCoordsTableModel = new com.sfc.sf2.battle.mapcoords.models.BattleMapCoordsTableModel();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -124,7 +125,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setOneTouchExpandable(true);
 
-        jSplitPane2.setDividerLocation(400);
+        jSplitPane2.setDividerLocation(500);
         jSplitPane2.setOneTouchExpandable(true);
 
         jPanel8.setPreferredSize(new java.awt.Dimension(400, 400));
@@ -263,20 +264,20 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
-                    .addComponent(tableCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                    .addComponent(tableCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addComponent(tableCoords, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -285,11 +286,11 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
         );
 
         jSplitPane2.setLeftComponent(jPanel8);
@@ -306,7 +307,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         battleMapCoordsLayoutPanel.setLayout(battleMapCoordsLayoutPanelLayout);
         battleMapCoordsLayoutPanelLayout.setHorizontalGroup(
             battleMapCoordsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 563, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
         );
         battleMapCoordsLayoutPanelLayout.setVerticalGroup(
             battleMapCoordsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,7 +379,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 264, Short.MAX_VALUE)
                 .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel59)
@@ -396,13 +397,11 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
                 .addGap(0, 0, 0)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jCheckBox1)
-                    .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(jLabel8)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabel59)
-                            .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBox2))))
+                    .addComponent(jLabel8)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel59)
+                    .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox2))
                 .addContainerGap())
         );
 
@@ -413,14 +412,14 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -438,14 +437,14 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
             .addComponent(jSplitPane2)
         );
 
-        jSplitPane1.setLeftComponent(jPanel15);
+        jSplitPane1.setTopComponent(jPanel15);
         jSplitPane1.setBottomComponent(console1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1178, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -463,7 +462,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1016, 885));
+        setSize(new java.awt.Dimension(1194, 885));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -482,7 +481,9 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         Path battleCoordsPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         try {
-            battlemapcoordsManager.importDisassembly(mapEntriesPath, battleCoordsPath);
+            coords = battlemapcoordsManager.importDisassembly(mapEntriesPath, battleCoordsPath);
+            selectedCoords = 0;
+            loadMap(0);
         } catch (Exception ex) {
             battlemapcoordsManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
@@ -513,12 +514,31 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
     
+    private void loadMap(int index) {
+        if (index < 0 || index >= coords.length) return;
+        Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        try {
+            battlemapcoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, coords[index].getMap());
+        } catch (Exception ex) {
+            battlemapcoordsManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Battle map disasm could not be imported for index : " + index);
+        }
+        selectedCoords = index;
+        UpdateMapLoaded();
+    }
+    
     private void onTableFrameDataChanged(TableModelEvent e) {
         
     }
 
     private void onTableFrameSelectionChanged(ListSelectionEvent e) {
-        
+        int row = tableCoords.jTable.getSelectedRow();
+        if (row != -1) {
+            loadMap(row);
+            repaintEditorLayout();
+        }
     }
     
     /**
@@ -540,7 +560,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.battle.mapcoords.layout.BattleMapCoordsLayout battleMapCoordsLayoutPanel;
-    private com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsTableModel battleMapCoordsTableModel;
+    private com.sfc.sf2.battle.mapcoords.models.BattleMapCoordsTableModel battleMapCoordsTableModel;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
