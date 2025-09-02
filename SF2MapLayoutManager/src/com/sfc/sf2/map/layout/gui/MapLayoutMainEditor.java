@@ -37,21 +37,28 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         colorPicker2.setColor(mapLayoutSettings.getTilesetBGColor());
         jComboBox7.setSelectedIndex(mapLayoutSettings.getBlocksetScale()-1);
         jComboBox9.setSelectedIndex(mapLayoutSettings.getTilesetScale()-1);
+        
+        accordionPanel1.setExpanded(false);
     }
     
     @Override
     protected void updateEditorData() {
         
         mapLayoutPanel.setMapLayout(maplayoutManager.getLayout());
-        mapLayoutPanel.setDrawExplorationFlags(jCheckBox1.isSelected());
-        mapLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        mapLayoutPanel.setBGColor(colorPicker2.getColor());
-        //editableMapLayoutPanel.setDrawInteractionFlags(jCheckBox3.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
         mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
+        mapLayoutPanel.setBGColor(colorPicker2.getColor());
+        mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
+        
         mapBlocksetPanel.setBlockset(maplayoutManager.getBlockset());
         mapBlocksetPanel.setItemsPerRow(((int)jSpinner2.getModel().getValue()));
+        mapBlocksetPanel.setShowGrid(jCheckBox3.isSelected());
         mapBlocksetPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
         mapBlocksetPanel.setBGColor(colorPicker1.getColor());
+        mapBlocksetPanel.setShowPriority(jCheckBox6.isSelected());
         
         super.updateEditorData();
         repaintBlocksetLayout();
@@ -141,9 +148,11 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         jLabel54 = new javax.swing.JLabel();
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jLabel55 = new javax.swing.JLabel();
+        jCheckBox6 = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
         jPanel25 = new javax.swing.JPanel();
         jComboBox9 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
@@ -596,6 +605,13 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
 
                 jLabel55.setText("BG :");
 
+                jCheckBox6.setText("Priority");
+                jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jCheckBox6ActionPerformed(evt);
+                    }
+                });
+
                 javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
                 jPanel23.setLayout(jPanel23Layout);
                 jPanel23Layout.setHorizontalGroup(
@@ -610,14 +626,17 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel55)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel23Layout.createSequentialGroup()
                                 .addComponent(jCheckBox3)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                                .addComponent(jCheckBox6)))
+                        .addContainerGap())
                 );
                 jPanel23Layout.setVerticalGroup(
                     jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -632,25 +651,32 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jCheckBox3)
                             .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
+                            .addComponent(jLabel7)
+                            .addComponent(jCheckBox6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
 
                 jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Flags"));
 
                 jCheckBox1.setSelected(true);
-                jCheckBox1.setText("Exploration flags");
+                jCheckBox1.setText("Exploration");
                 jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jCheckBox1ActionPerformed(evt);
                     }
                 });
 
-                jCheckBox2.setSelected(true);
-                jCheckBox2.setText("Interaction flags");
+                jCheckBox2.setText("Interactions");
                 jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jCheckBox2ActionPerformed(evt);
+                    }
+                });
+
+                jCheckBox4.setText("Priority");
+                jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jCheckBox4ActionPerformed(evt);
                     }
                 });
 
@@ -663,7 +689,9 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                         .addComponent(jCheckBox1)
                         .addGap(18, 18, 18)
                         .addComponent(jCheckBox2)
-                        .addContainerGap(68, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBox4)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
                 jPanel2Layout.setVerticalGroup(
                     jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -671,7 +699,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCheckBox1)
-                            .addComponent(jCheckBox2))
+                            .addComponent(jCheckBox2)
+                            .addComponent(jCheckBox4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
 
@@ -901,7 +930,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox7ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        mapBlocksetPanel.setShowGrid(jCheckBox1.isSelected());
+        mapBlocksetPanel.setShowGrid(jCheckBox3.isSelected());
         repaintBlocksetLayout();
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
@@ -925,7 +954,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox9ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
-        mapLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
@@ -937,14 +966,24 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_colorPicker2ColorChanged
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        mapLayoutPanel.setDrawExplorationFlags(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        mapLayoutPanel.setDrawInteractionFlags(jCheckBox2.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
         repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
+        repaintEditorLayout();
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+        mapBlocksetPanel.setShowPriority(jCheckBox6.isSelected());
+        repaintBlocksetLayout();
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     /**
      * To create a new Main Editor, copy the below code
@@ -993,7 +1032,9 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JComboBox<String> jComboBox7;
     private javax.swing.JComboBox<String> jComboBox9;
