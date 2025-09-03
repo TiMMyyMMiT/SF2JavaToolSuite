@@ -88,6 +88,7 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
 
     public void setMapLayout(MapLayout layout) {
         this.layout = layout;
+        redraw();
     }
 
     public boolean getShowExplorationFlags() {
