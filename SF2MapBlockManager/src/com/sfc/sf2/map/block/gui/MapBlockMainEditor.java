@@ -58,7 +58,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     }
     
     @Override
-    protected void updateEditorData() {
+    protected void onDataLoaded() {
         Tileset[] tilesets = mapblockManager.getTilesets();
         MapBlockset mapBlockset = mapblockManager.getMapBlockset();
         if (mapBlockset != null) {
@@ -94,7 +94,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             tileSlotPanelRight.setTile(null);
         }
         
-        super.updateEditorData();
+        super.onDataLoaded();
     }
     
     @Override
@@ -1324,7 +1324,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map blockset disasm could not be imported from : " + blocksPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -1353,7 +1353,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map blockset disasm could not be imported from : " + mapDirectory);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton28ActionPerformed
     
     private void jButton35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton35ActionPerformed

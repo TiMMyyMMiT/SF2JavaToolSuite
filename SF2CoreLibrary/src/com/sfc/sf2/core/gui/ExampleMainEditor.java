@@ -33,16 +33,10 @@ public final class ExampleMainEditor extends AbstractMainEditor {
     }
     
     @Override
-    protected void updateEditorData() {
-        //Set data that is updated when content is imported
+    protected void onDataLoaded() {
+        super.onDataLoaded();
         
-        super.updateEditorData();
-    }
-    
-    @Override
-    protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
-        //Set layout panels to update
+        //Set data that is updated when content is imported
     }
 
     /**
@@ -301,7 +295,6 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         Console.logger().info("Color changed : " + colorPicker1.getColor());
         SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveGlobalSettingsFile();
-        repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
     
     /**

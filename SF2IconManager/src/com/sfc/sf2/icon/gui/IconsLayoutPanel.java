@@ -68,5 +68,6 @@ public class IconsLayoutPanel extends AbstractLayoutPanel {
     
     public void setIcons(Icon[] icons) {
         this.icons = icons;
+        redraw();
     }
 }

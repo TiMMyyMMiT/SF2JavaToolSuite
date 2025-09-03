@@ -44,7 +44,10 @@ public class PortraitMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
+        portraitLayoutPanel.setShowGrid(jCheckBox3.isSelected());                                           
+        portraitLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        portraitLayoutPanel.setBGColor(colorPicker1.getBackground());
         
         eyeTable = (PortraitDataTableModel)tableEyes.getModel();
         mouthTable = (PortraitDataTableModel)tableMouth.getModel();
@@ -63,7 +66,9 @@ public class PortraitMainEditor extends AbstractMainEditor {
     }
     
     @Override
-    protected void updateEditorData() {        
+    protected void onDataLoaded() {
+        super.onDataLoaded();
+        
         portraitLayoutPanel.setPortrait(portraitManager.getPortrait());
         jCheckBox1.setSelected(portraitLayoutPanel.getBlinking());
         jCheckBox2.setSelected(portraitLayoutPanel.getSpeaking());
@@ -79,13 +84,6 @@ public class PortraitMainEditor extends AbstractMainEditor {
             mouthTable.setTableData(portrait.getMouthTiles());
             selectedEyesRow = selectedMouthsRow = -1;
         }
-        super.updateEditorData();
-    }
-    
-    @Override
-    protected void repaintEditorLayout() {
-        portraitLayoutPanel.revalidate();
-        portraitLayoutPanel.repaint();
     }
     
     /**
@@ -637,17 +635,14 @@ public class PortraitMainEditor extends AbstractMainEditor {
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         portraitLayoutPanel.setSpeaking(jCheckBox2.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         portraitLayoutPanel.setBlinking(jCheckBox1.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         portraitLayoutPanel.setShowGrid(jCheckBox3.isSelected());
-        repaintEditorLayout();
     }                                                                                 
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
@@ -660,7 +655,7 @@ public class PortraitMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Portrait image or meta could not be imported from : " + imagePath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -672,13 +667,12 @@ public class PortraitMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Portrait disasm could not be imported from : " + portraitPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
     
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if (portraitLayoutPanel != null && portraitSettings.getZoom() != jComboBox1.getSelectedIndex()+1) {
             portraitLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-            repaintEditorLayout();
             portraitSettings.setZoom(jComboBox1.getSelectedIndex()+1);
             SettingsManager.saveSettingsFile();
         }
@@ -688,7 +682,6 @@ public class PortraitMainEditor extends AbstractMainEditor {
         portraitLayoutPanel.setBGColor(colorPicker1.getColor());
         SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveGlobalSettingsFile();
-        repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
     private void eyesListSelectionChanged(ListSelectionEvent evt) {
@@ -699,7 +692,6 @@ public class PortraitMainEditor extends AbstractMainEditor {
             portrait.setEyeTiles(eyeTable.getTableData(int[][].class));
             portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
         }
-        repaintEditorLayout();
     }
     
     private void mouthListSelectionChanged(ListSelectionEvent evt) {
@@ -710,7 +702,6 @@ public class PortraitMainEditor extends AbstractMainEditor {
             portrait.setMouthTiles(mouthTable.getTableData(int[][].class));
             portraitLayoutPanel.setSelectedMouthTile(selectedMouthsRow);
         }
-        repaintEditorLayout();
     }                                         
 
     private void eyesListValueChanged(TableModelEvent evt) {
@@ -721,7 +712,6 @@ public class PortraitMainEditor extends AbstractMainEditor {
                 portrait.setEyeTiles(eyeTable.getTableData(int[][].class));
                 portraitLayoutPanel.setSelectedEyeTile(selectedEyesRow);
             }
-            repaintEditorLayout();
         }
     }
     
@@ -733,7 +723,6 @@ public class PortraitMainEditor extends AbstractMainEditor {
                 portrait.setMouthTiles(mouthTable.getTableData(int[][].class));
                 portraitLayoutPanel.setSelectedMouthTile(selectedMouthsRow);
             }
-            repaintEditorLayout();
         }
     }
     
