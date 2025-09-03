@@ -44,6 +44,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         scale = new LayoutScale(1);
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, PORTRAIT_TILES_WIDTH*PIXEL_WIDTH, -1);
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, false);
+        coordsHeader = null;
         mouseInput = new LayoutMouseInput(this, this::onMouseInput, PIXEL_WIDTH, PIXEL_HEIGHT);
         scroller = null;
     }

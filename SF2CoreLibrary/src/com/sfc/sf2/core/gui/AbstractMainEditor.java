@@ -62,24 +62,11 @@ public abstract class AbstractMainEditor extends javax.swing.JFrame {
     }
     
     protected void initEditor() {
-        //TODO define a default layout class (or support multiple in the main editor
-        //jPanel2.removeAll();
-        //jPanel2.setLayout(new GridLayout(1, 1));
-        //jPanel2.add(defaultLayout);
-    }
-    
-    protected void updateEditorData() {
-        //TODO define a default layout class (or support multiple in the main editor
-        //defaultLayout.setTilesPerRow(tileWidth);
-        //defaultLayout.setTiles(tiles);
         
-        repaintEditorLayout();
     }
     
-    protected void repaintEditorLayout() {
-        //TODO define a default layout class (or support multiple in the main editor
-        //defaultLayout.revalidate();
-        //defaultLayout.repaint();
+    protected void onDataLoaded() {
+        
     }
     
     public static void programSetup() {

@@ -35,25 +35,17 @@ public class VWFontMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
-        colorPicker1.setColor(fontSettings.getTransparentBGColor());
-    }
-    
-    @Override
-    protected void updateEditorData() {
-        fontSymbolLayoutPanel.setFontSymbols(fontManager.getFontSymbols());
         fontSymbolLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         fontSymbolLayoutPanel.setShowGrid(jCheckBox1.isSelected());
+        colorPicker1.setColor(fontSettings.getTransparentBGColor());
         fontSymbolLayoutPanel.setBGColor(colorPicker1.getColor());
-        
-        super.updateEditorData();
     }
     
     @Override
-    protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
+    protected void onDataLoaded() {
+        super.onDataLoaded();
         
-        fontSymbolLayoutPanel.revalidate();
-        fontSymbolLayoutPanel.repaint(); 
+        fontSymbolLayoutPanel.setFontSymbols(fontManager.getFontSymbols());
     }
 
     /**
@@ -505,7 +497,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Font symbol images could not be imported from : " + directoryPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -517,24 +509,21 @@ public class VWFontMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Font symbol disasm could not be imported from : " + disasmPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         fontSymbolLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        repaintEditorLayout();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         fontSymbolLayoutPanel.setShowGrid(jCheckBox1.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
         fontSymbolLayoutPanel.setBGColor(colorPicker1.getColor());
         fontSettings.setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveSettingsFile();
-        repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
     
     /**
