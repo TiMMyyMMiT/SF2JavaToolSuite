@@ -12,21 +12,20 @@ package com.sfc.sf2.core.models;
 public class StringTableModel extends AbstractTableModel<String> {
 
     public StringTableModel() {
-        super(new String[] { "String", "Length" }, -1);
+        super(new String[] { "Index", "String", "Length" }, -1);
     }
     
     @Override
     public Class<?> getColumnType(int col) {
         switch (col) {
-            case 0: return String.class;
-            case 1: return Integer.class;
+            case 1: return String.class;
+            default: return Integer.class;
         }
-        return Object.class;
     }
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        return column == 0;
+        return column == 1;
     }
 
     @Override
@@ -40,10 +39,11 @@ public class StringTableModel extends AbstractTableModel<String> {
     }
 
     @Override
-    protected Object getValue(String item, int col) {
+    protected Object getValue(String item, int row, int col) {
         switch (col) {
-            case 0: return item;
-            case 1: return item.length();
+            case 0: return row;
+            case 1: return item;
+            case 2: return item.length();
         }
         return null;
     }
@@ -51,8 +51,18 @@ public class StringTableModel extends AbstractTableModel<String> {
     @Override
     protected String setValue(String item, int col, Object value) {
         switch (col) {
-            case 0: return (String)value;
+            case 1: return (String)value;
         }
         return null;
+    }
+
+    @Override
+    protected Comparable<?> getMinLimit(String item, int col) {
+        return -1;
+    }
+
+    @Override
+    protected Comparable<?> getMaxLimit(String item, int col) {
+        return -1;
     }
 }

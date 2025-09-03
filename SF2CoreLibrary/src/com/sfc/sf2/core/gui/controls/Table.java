@@ -6,19 +6,24 @@
 package com.sfc.sf2.core.gui.controls;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
+import com.sfc.sf2.core.models.SelectionInterval;
+import com.sfc.sf2.core.models.spinner.SpinnerTableEditor;
+import com.sfc.sf2.core.models.spinner.SpinnerTableRenderer;
 import java.beans.BeanProperty;
-import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelListener;
 
 /**
  *
  * @author TiMMy
- * TODO: Can we add some improved interactions? 1) Drag to reorder 2) Deselect by clicking empty space
  */
 public class Table extends javax.swing.JPanel {
 
     private AbstractTableModel tableModel;
-    int selectionMode = 1;
     
     /**
      * Creates new form Table
@@ -27,7 +32,6 @@ public class Table extends javax.swing.JPanel {
         super();
         initComponents();
         tableModel = getModel();
-        jTable.setSelectionMode(selectionMode);
     }
     
     public AbstractTableModel getModel() {
@@ -41,12 +45,43 @@ public class Table extends javax.swing.JPanel {
     }
     
     @BeanProperty(enumerationValues = {
-            "javax.swing.ListSelectionModel.SINGLE_SELECTION",
-            "javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION",
-            "javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION"},
-            preferred = true, visualUpdate = true, description = "The selection mode used by the row and column selection models.")
+        "javax.swing.ListSelectionModel.SINGLE_SELECTION",
+        "javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION",
+        "javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION"},
+        preferred = true, visualUpdate = true, description = "The selection mode used by the row and column selection models.")
     public void setSelectionMode(int mode) {
-        selectionMode = mode;
+        jTable.setSelectionMode(mode);
+    }
+    
+    @BeanProperty(preferred = true, visualUpdate = false, description = "Sets text fields in the table as single-click to edit, rather than having to double-click.")
+    public void setSingleClickText(boolean singleClick) {
+        if (singleClick) {
+            JTextField textField = new JTextField();
+            DefaultCellEditor singleclick = new DefaultCellEditor(textField);
+            singleclick.setClickCountToStart(1);
+            jTable.setDefaultEditor(String.class, singleclick);
+        } else {
+            jTable.setDefaultEditor(Byte.class, null);
+        }
+    }
+    
+    @BeanProperty(preferred = true, visualUpdate = false, description = "Sets number fields in the table as spinners, rather than just numbers.")
+    public void setSpinnerNumberEditor(boolean useSpinner) {
+        if (useSpinner) {
+            SpinnerNumberModel model = new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+            jTable.setDefaultEditor(Integer.class, new SpinnerTableEditor(model));
+            model = new SpinnerNumberModel(0, Integer.MIN_VALUE, Integer.MAX_VALUE, 1);
+            jTable.setDefaultRenderer(Integer.class, new SpinnerTableRenderer(model));
+            model = new SpinnerNumberModel(Byte.valueOf((byte)0), Byte.valueOf(Byte.MIN_VALUE), Byte.valueOf(Byte.MAX_VALUE), Byte.valueOf((byte)1));
+            jTable.setDefaultEditor(Byte.class, new SpinnerTableEditor(model));
+            model = new SpinnerNumberModel(Byte.valueOf((byte)0), Byte.valueOf(Byte.MIN_VALUE), Byte.valueOf(Byte.MAX_VALUE), Byte.valueOf((byte)1));
+            jTable.setDefaultRenderer(Byte.class, new SpinnerTableRenderer(model));
+        } else {
+            jTable.setDefaultEditor(Integer.class, null);
+            jTable.setDefaultEditor(Byte.class, null);
+            jTable.setDefaultRenderer(Integer.class, null);
+            jTable.setDefaultRenderer(Byte.class, null);
+        }
     }
 
     /**
@@ -57,7 +92,7 @@ public class Table extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane = new javax.swing.JScrollPane();
-        jTable = new javax.swing.JTable();
+        jTable = new com.sfc.sf2.core.models.JDisableableTable();
         jButtonAdd = new javax.swing.JButton();
         jButtonRemove = new javax.swing.JButton();
         jButtonClone = new javax.swing.JButton();
@@ -149,76 +184,78 @@ public class Table extends javax.swing.JPanel {
             );
         }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-        if (tableModel != null && tableModel.canAddMoreRows()) {
-            int row = jTable.getSelectedRow()+jTable.getSelectedRowCount()-1;
-            tableModel.addRow(row);
-            if (row < 0) {
-                row = tableModel.getRowCount()-2;
+    private SelectionInterval[] splitIntoIntervals(int[] selection) {
+        ArrayList<SelectionInterval> selections = new ArrayList<>();
+        int start = 0;
+        for (int i = 0; i < selection.length; i++) {
+            if (i == selection.length-1 || selection[i]+1 != selection[i+1]) {
+                selections.add(new SelectionInterval(selection[start], selection[i]));
+                start = i+1;
             }
+        }
+        SelectionInterval[] sel = new SelectionInterval[selections.size()];
+        return selections.toArray(sel);
+    }
+    
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        if (tableModel == null) return;
+        int[] rows = jTable.getSelectedRows();
+        int row = rows.length == 0 ? -1 : rows[rows.length-1];
+        if (tableModel.addRow(row)) {
             jTable.setRowSelectionInterval(row+1, row+1);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveActionPerformed
-        if (tableModel != null) {
-            int[] rows = jTable.getSelectedRows();
-            for (int i = rows.length-1; i >= 0; i--) {
-                tableModel.removeRow(rows[i]);
-            }
-            if (tableModel.getRowCount() > 0) {
-                int row = rows[0];
-                if (row >= tableModel.getRowCount()) {
-                    row = tableModel.getRowCount()-1;
-                }
-                jTable.setRowSelectionInterval(row, row);
+        if (tableModel == null) return;
+        SelectionInterval[] selection = splitIntoIntervals(jTable.getSelectedRows());
+        jTable.clearSelection();
+        int totalShift = 0;
+        for (int i = 0; i < selection.length; i++) {
+            SelectionInterval interval = tableModel.removeRows(selection[i].start()-totalShift, selection[i].end()-totalShift);
+            if (interval.start() != -1) {
+                totalShift += selection[i].end()-selection[i].start()+1;
+                jTable.addRowSelectionInterval(interval.start(), interval.end());
             }
         }
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonCloneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloneActionPerformed
-        if (tableModel != null) {
-            if (jTable.getSelectedRowCount() > 0) {
-                int[] rows = jTable.getSelectedRows();
-                for (int i = 0; i < rows.length; i++) {
-                    tableModel.cloneRow(rows[i], rows.length);
-                }
-                //TODO this could be improved to better handle non-contiguous selection (but low-priority)
-                jTable.setRowSelectionInterval(rows[0]+rows.length, rows[0]+rows.length+rows.length-1);
-            }
+        if (tableModel == null) return;
+        SelectionInterval[] selection = splitIntoIntervals(jTable.getSelectedRows());
+        jTable.clearSelection();
+        for (int i = selection.length-1; i >= 0; i--) {
+            SelectionInterval interval = tableModel.cloneRows(selection[i].start(), selection[i].end());
+            jTable.addRowSelectionInterval(interval.start(), interval.end());
         }
     }//GEN-LAST:event_jButtonCloneActionPerformed
 
     private void jButtonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpActionPerformed
-        if (tableModel != null) {
-            if (jTable.getSelectedRowCount() > 0 && !jTable.isRowSelected(0)) {
-                int[] rows = jTable.getSelectedRows();
-                if (tableModel.shiftUp(jTable.getSelectedRow(), rows.length)) {
-                    //TODO this could be improved to better handle non-contiguous selection (but low-priority)
-                    jTable.setRowSelectionInterval(rows[0]-1, rows[0]-1+rows.length-1);
-                }
-            }
+        if (tableModel == null) return;
+        SelectionInterval[] selection = splitIntoIntervals(jTable.getSelectedRows());
+        jTable.clearSelection();
+        for (int i = 0; i < selection.length; i++) {
+            SelectionInterval interval = tableModel.shiftUp(selection[i].start(), selection[i].end());
+            jTable.addRowSelectionInterval(interval.start(), interval.end());
         }
     }//GEN-LAST:event_jButtonUpActionPerformed
 
     private void jButtonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownActionPerformed
-        if (tableModel != null) {
-            if (jTable.getSelectedRowCount() > 0 && !jTable.isRowSelected(jTable.getRowCount()-1)) {
-                int[] rows = jTable.getSelectedRows();
-                if (tableModel.shiftDown(jTable.getSelectedRow(), rows.length)) {
-                    //TODO this could be improved to better handle non-contiguous selection (but low-priority)
-                    jTable.setRowSelectionInterval(rows[0]+1, rows[0]+rows.length);
-                }
-            }
+        if (tableModel == null) return;
+        SelectionInterval[] selection = splitIntoIntervals(jTable.getSelectedRows());
+        jTable.clearSelection();
+        for (int i = 0; i < selection.length; i++) {
+            SelectionInterval interval = tableModel.shiftDown(selection[i].start(), selection[i].end());
+            jTable.addRowSelectionInterval(interval.start(), interval.end());
         }
     }//GEN-LAST:event_jButtonDownActionPerformed
         
-    public synchronized void addTableModelListener(PropertyChangeListener l) {
-        jTable.addPropertyChangeListener(l);
+    public synchronized void addTableModelListener(TableModelListener l) {
+        jTable.getModel().addTableModelListener(l);
     }
 
-    public synchronized void removeTableModelListener(PropertyChangeListener l) {
-        jTable.removePropertyChangeListener(l);
+    public synchronized void removeTableModelListener(TableModelListener l) {
+        jTable.getModel().removeTableModelListener(l);
     }
     
     public synchronized void addListSelectionListener(ListSelectionListener l) {
@@ -236,6 +273,6 @@ public class Table extends javax.swing.JPanel {
     private javax.swing.JButton jButtonRemove;
     private javax.swing.JButton jButtonUp;
     private javax.swing.JScrollPane jScrollPane;
-    public javax.swing.JTable jTable;
+    public com.sfc.sf2.core.models.JDisableableTable jTable;
     // End of variables declaration//GEN-END:variables
 }

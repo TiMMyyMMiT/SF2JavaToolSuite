@@ -5,80 +5,163 @@
  */
 package com.sfc.sf2.background;
 
-import com.sfc.sf2.graphics.GraphicsManager;
-import com.sfc.sf2.graphics.Tile;
-import com.sfc.sf2.background.io.DisassemblyManager;
-import com.sfc.sf2.background.io.RawImageManager;
+import com.sfc.sf2.background.io.BackgroundDisassemblyProcessor;
+import com.sfc.sf2.background.io.BackgroundPackage;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.AbstractRawImageProcessor;
+import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.TilesetManager;
+import com.sfc.sf2.helpers.FileHelpers;
+import com.sfc.sf2.palette.PaletteManager;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  *
  * @author wiz
  */
-public class BackgroundManager {
-       
-    private final GraphicsManager graphicsManager = new GraphicsManager();
+public class BackgroundManager extends AbstractManager {
+    
+    private final PaletteManager paletteManager = new PaletteManager();
+    private final TilesetManager tilesetManager = new TilesetManager();    
+    private final BackgroundDisassemblyProcessor backgroundDisassemblyProcessor = new BackgroundDisassemblyProcessor();
+    
     private Background[] backgrounds;
+    
+    @Override
+    public void clearData() {
+        paletteManager.clearData();
+        tilesetManager.clearData();
+        if (backgrounds != null) {
+            for (int i = 0; i < backgrounds.length; i++) {
+                backgrounds[i].getTileset().clearIndexedColorImage(true);
+            }
+            backgrounds = null;
+        }
+    }
        
-    public void importDisassembly(String graphicsBasepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importDisassembly() - Importing disassembly ...");
-        backgrounds = DisassemblyManager.importDisassembly(graphicsBasepath);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importDisassembly() - Disassembly imported.");
-    }
-    
-    public void importSingleDisassembly(String filepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importDisassembly() - Importing disassembly ...");
+    public Background[] importDisassembly(Path filePath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        int index = FileHelpers.getNumberFromFileName(filePath.toFile());
         backgrounds = new Background[1];
-        backgrounds[0] = DisassemblyManager.importSingleBackground(filepath);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importDisassembly() - Disassembly imported.");
+        backgrounds[0] = backgroundDisassemblyProcessor.importDisassembly(filePath, new BackgroundPackage(index));
+        Console.logger().finest("EXITING importDisassembly");
+        return backgrounds;
     }
     
-    public void exportDisassembly(String basepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportDisassembly(backgrounds, basepath);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importDisassembly() - Disassembly exported.");
+    public Background[] importAllDisassemblies(Path basePath) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importAllDisassemblies");
+        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "background", ".bin");
+        Console.logger().info(files.length + " Backgrounds found.");
+        ArrayList<Background> bgsList = new ArrayList<>();
+        int failedToLoad = 0;
+        for (File file : files) {
+            Path bgPath = file.toPath();
+            try {
+                int index = FileHelpers.getNumberFromFileName(file);
+                Background bg = backgroundDisassemblyProcessor.importDisassembly(bgPath, new BackgroundPackage(index));
+                bgsList.add(bg);
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Background could not be imported : " + bgPath + " : " + e);
+            }
+        }
+        backgrounds = new Background[bgsList.size()];
+        backgrounds = bgsList.toArray(backgrounds);
+        Console.logger().info(backgrounds.length + " backgrounds successfully imported from disasm : " + basePath);
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " backgrounds failed to import. See logs above");
+        }
+        Console.logger().finest("EXITING importAllDisassemblies");
+        return backgrounds;
     }
     
-    public void importRom(String romFilePath, String paletteOffset, String paletteLength, String graphicsOffset, String graphicsLength){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importOriginalRom() - Importing original ROM ...");
-        graphicsManager.importRom(romFilePath, paletteOffset, paletteLength, graphicsOffset, graphicsLength,GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importOriginalRom() - Original ROM imported.");
+    public void exportDisassembly(Path path, Background background) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        backgroundDisassemblyProcessor.exportDisassembly(path, background, null);
+        Console.logger().finest("EXITING exportDisassembly");
     }
     
-    public void exportRom(String originalRomFilePath, String graphicsOffset){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.exportOriginalRom() - Exporting original ROM ...");
-        graphicsManager.exportRom(originalRomFilePath, graphicsOffset, GraphicsManager.COMPRESSION_BASIC);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.exportOriginalRom() - Original ROM exported.");        
+    public void exportAllDisassemblies(Path basePath, Background[] backgrounds) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportAllDisassemblies");
+        this.backgrounds = backgrounds;
+        int failedToSave = 0;
+        Path bgPath = null;
+        int fileCount = 0;
+        for (Background background : backgrounds) {
+            try {
+                bgPath = basePath.resolve(String.format("background%02d%s", background.getIndex(), ".bin"));
+                backgroundDisassemblyProcessor.exportDisassembly(bgPath, background, null);
+                fileCount++;
+            } catch (Exception e) {
+                failedToSave++;
+                Console.logger().warning("Background could not be exported : " + bgPath + " : " + e);
+            }
+        }
+        Console.logger().info((fileCount - failedToSave) + " backgrounds successfully exported.");
+        if (failedToSave > 0) {
+            Console.logger().severe(failedToSave + " backgrounds failed to export. See logs above");
+        }
+        Console.logger().finest("EXITING exportAllDisassemblies");
     }
     
-    public void importPng(String basepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importPng() - Importing PNG ...");
-        backgrounds = RawImageManager.importImages(basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importPng() - PNG imported.");
+    public Background[] importAllImages(Path basePath, FileFormat format) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importAllImages");
+        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "background", AbstractRawImageProcessor.GetFileExtensionString(format));
+        Console.logger().info(files.length + " background images found.");
+        ArrayList<Background> bgsList = new ArrayList<>();
+        int failedToLoad = 0;
+        for (File file : files) {
+            Path bgPath = file.toPath();
+            try {
+                int index = FileHelpers.getNumberFromFileName(file);
+                Tileset tileset = tilesetManager.importImage(bgPath, false);
+                Background background = new Background(index, tileset);
+                bgsList.add(background);
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Background could not be imported : " + bgPath + " : " + e);
+            }
+        }
+        backgrounds = new Background[bgsList.size()];
+        backgrounds = bgsList.toArray(backgrounds);
+        Console.logger().info(backgrounds.length + " backgrounds successfully imported from images : " + basePath);
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " backgrounds failed to import. See logs above");
+        }
+        Console.logger().finest("EXITING importAllImages");
+        return backgrounds;
     }
     
-    public void exportPng(String basepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.exportPng() - Exporting PNG ...");
-        RawImageManager.exportImages(backgrounds, basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.exportPng() - PNG exported.");       
-    }
-    
-    public void importGif(String basepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importGif() - Importing PNG ...");
-        backgrounds = RawImageManager.importImages(basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.importGif() - PNG imported.");
-    }
-    
-    public void exportGif(String basepath){
-        System.out.println("com.sfc.sf2.background.BackgroundManager.exportGif() - Exporting GIF ...");
-        RawImageManager.exportImages(backgrounds, basepath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_GIF);
-        System.out.println("com.sfc.sf2.background.BackgroundManager.exportGif() - GIF exported.");       
+    public void exportAllImages(Path basePath, Background[] backgrounds, FileFormat format) {
+        Console.logger().finest("ENTERING exportAllImages");
+        this.backgrounds = backgrounds;
+        int failedToSave = 0;
+        Path filePath = null;
+        int fileCount = 0;
+        for (Background background : backgrounds) {
+            try {
+                filePath = basePath.resolve(String.format("background%02d%s", background.getIndex(), AbstractRawImageProcessor.GetFileExtensionString(format)));
+                tilesetManager.exportImage(filePath, background.getTileset());
+                fileCount++;
+            }catch (Exception e) {
+                failedToSave++;
+                Console.logger().warning("Background could not be exported : " + filePath + " : " + e);
+            }
+        }
+        Console.logger().info((fileCount - failedToSave) + " backgrounds successfully exported.");
+        if (failedToSave > 0) {
+            Console.logger().severe(failedToSave + " backgrounds failed to export. See logs above");
+        }
+        Console.logger().finest("EXITING exportAllImages");
     }
 
     public Background[] getBackgrounds() {
         return backgrounds;
-    }
-
-    public void setBackgrounds(Background[] backgrounds) {
-        this.backgrounds = backgrounds;
     }
 }

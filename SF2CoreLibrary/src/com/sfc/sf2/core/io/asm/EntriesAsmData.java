@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
  * @author TiMMy
  */
 public class EntriesAsmData {
@@ -20,12 +19,40 @@ public class EntriesAsmData {
     private final ArrayList<Integer> entryIndices = new ArrayList<>();
     private final ArrayList<Integer> uniqueEntryIndices = new ArrayList<>();
     
+    private String headerName;
+    private String pointerListName;
+    private boolean isDoubleList;
+    
+    public String getHeaderName() {
+        return headerName;
+    }
+    
+    public void setHeadername(String headerName) {
+        this.headerName = headerName;
+    }
+    
+    public String getPointerListName() {
+        return pointerListName;
+    }
+    
+    public void setPointerListName(String pointerListName) {
+        this.pointerListName = pointerListName;
+    }
+    
+    public boolean getIsDoubleList() {
+        return isDoubleList;
+    }
+    
+    public void setIsDoubleList(boolean isDoubleList) {
+        this.isDoubleList = isDoubleList;
+    }
+    
     public int entriesCount() {
         return entryIndices.size();
     }
     
-    public int uniquePathsCount() {
-        return entryIndices.size();
+    public int uniqueEntriesCount() {
+        return uniqueEntryIndices.size();
     }
     
     public String getEntry(int index) {

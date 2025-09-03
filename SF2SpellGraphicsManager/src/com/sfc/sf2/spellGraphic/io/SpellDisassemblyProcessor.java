@@ -12,7 +12,6 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.compression.StackGraphicsDecoder;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteDecoder;
-import java.awt.Color;
 import com.sfc.sf2.helpers.BinaryHelpers;
 import com.sfc.sf2.palette.CRAMColor;
 

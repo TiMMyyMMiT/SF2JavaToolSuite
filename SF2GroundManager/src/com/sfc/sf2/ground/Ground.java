@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.ground;
 
-import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 
 /**
@@ -13,31 +13,26 @@ import com.sfc.sf2.palette.Palette;
  * @author wiz
  */
 public class Ground {
+    public static final int GROUND_TILES_PER_ROW = 12;
     
-    private int index;
+    private Tileset tileset;
     
-    private Tile[] tiles;
-    
-    public int getIndex() {
-        return index;
+    public Ground(Tileset tileset) {
+        this.tileset = tileset;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }  
-
-    public Tile[] getTiles() {
-        return tiles;
+    public Tileset getTileset() {
+        return tileset;
     }
 
-    public void setTiles(Tile[] tiles) {
-        this.tiles = tiles;
+    public void setTileset(Tileset tileset) {
+        this.tileset = tileset;
     }
     
     public Palette getPalette() {
-        if (tiles == null || tiles.length == 0) {
+        if (tileset == null) {
             return null;
         }
-        return tiles[0].getPalette();
+        return tileset.getPalette();
     }
 }

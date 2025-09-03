@@ -5,10 +5,11 @@
  */
 package com.sfc.sf2.mapsprite.io;
 
+import com.sfc.sf2.mapsprite.MapSpriteManager;
 import com.sfc.sf2.palette.Palette;
 
 /**
  * 
  * @author TiMMy
  */
-public record MapSpritePackage(String name, Palette palette) { }
+public record MapSpritePackage(String name, int[] indices, Palette palette, MapSpriteManager.MapSpriteExportMode exportMode) { }

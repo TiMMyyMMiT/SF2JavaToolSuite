@@ -68,6 +68,12 @@ public class PaletteManager extends AbstractManager {
         return palettes;
     }
     
+    public Palette importDisassemblyFromPartial(Path filePath, int offset, int length, boolean firstColorTransparent) throws IOException, DisassemblyException {
+        byte[] data = binaryDisassemblyProcessor.importDisassembly(filePath, null);
+        byte[] paletteData = Arrays.copyOfRange(data, offset, offset+length);
+        return new Palette(PathHelpers.filenameFromPath(filePath), PaletteDecoder.decodePalette(paletteData), true);
+    }
+    
     public void exportDisassembly(Path filePath, Palette palette) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.palette = palette;

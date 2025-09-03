@@ -6,9 +6,11 @@
 package com.sfc.sf2.graphics.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.*;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -22,7 +24,18 @@ public class TilesetLayoutPanel extends AbstractLayoutPanel {
     
     public TilesetLayoutPanel() {
         super();
-        setGridDimensions(8, 8);
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH);
+        scale = new LayoutScale(1);
+        grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
+        coordsGrid = null;
+        coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT);
+        mouseInput = null;
+        scroller = new LayoutScrollNormaliser(this);
+    }
+
+    @Override
+    protected Dimension getImageDimensions() {
+        return tileset.getDimensions(getItemsPerRow());
     }
 
     @Override
@@ -31,15 +44,7 @@ public class TilesetLayoutPanel extends AbstractLayoutPanel {
     }
 
     @Override
-    protected Dimension getImageDimensions() {
-        tileset.setTilesPerRow(tilesPerRow);
-        int width = tileset.getTilesPerRow()*PIXEL_WIDTH;
-        int height = (int)Math.ceil((double)tileset.getTiles().length/tileset.getTilesPerRow())*PIXEL_HEIGHT;
-        return new Dimension(width, height);
-    }
-
-    @Override
-    protected void buildImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         tileset.clearIndexedColorImage(false);
         graphics.drawImage(tileset.getIndexedColorImage(), 0, 0, null);
     }
