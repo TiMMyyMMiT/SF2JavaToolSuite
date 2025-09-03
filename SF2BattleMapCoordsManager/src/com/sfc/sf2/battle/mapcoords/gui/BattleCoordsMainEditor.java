@@ -39,7 +39,14 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         super.initEditor();
         
         accordionPanel1.setExpanded(false);
+        
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        
+        battleMapCoordsLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        battleMapCoordsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        battleMapCoordsLayoutPanel.setBGColor(colorPicker1.getColor());
+        battleMapCoordsLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleMapCoordsLayoutPanel.setShowBattleCoords(true);
         
         tableCoords.addTableModelListener(this::onTableFrameDataChanged);
         tableCoords.addListSelectionListener(this::onTableFrameSelectionChanged);
@@ -48,32 +55,16 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     }
     
     @Override
-    protected void updateEditorData() {
+    protected void onDataLoaded() {
+        super.onDataLoaded();
+        
         coords = battlemapcoordsManager.getCoords();
         battleMapCoordsTableModel.setTableData(coords);
-
-        battleMapCoordsLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        battleMapCoordsLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        battleMapCoordsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        battleMapCoordsLayoutPanel.setBGColor(colorPicker1.getColor());
-        battleMapCoordsLayoutPanel.setShowBattleCoords(true);
-        
-        super.updateEditorData();
     }
     
     private void UpdateMapLoaded() {
         battleMapCoordsLayoutPanel.setMapLayout(battlemapcoordsManager.getMapLayout());
         battleMapCoordsLayoutPanel.setBattleCoords(coords[selectedCoords]);
-        
-        repaintEditorLayout();
-    }
-    
-    @Override
-    protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
-        
-        battleMapCoordsLayoutPanel.revalidate();
-        battleMapCoordsLayoutPanel.repaint();
     }
     
     /**
@@ -489,29 +480,25 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Battle coords disasm could not be imported from : " + battleCoordsPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         battleMapCoordsLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        repaintEditorLayout();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         battleMapCoordsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
         battleMapCoordsLayoutPanel.setBGColor(colorPicker1.getColor());
         SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
         SettingsManager.saveGlobalSettingsFile();
-        repaintEditorLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         battleMapCoordsLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
     
     private void loadMap(int index) {
@@ -533,7 +520,6 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         int row = tableCoords.jTable.getSelectedRow();
         if (row != -1 && row == selectedCoords) {
             battleMapCoordsLayoutPanel.redraw();
-            repaintEditorLayout();
         }
     }
 
@@ -541,7 +527,6 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         int row = tableCoords.jTable.getSelectedRow();
         if (row != -1) {
             loadMap(row);
-            repaintEditorLayout();
         }
     }
     
