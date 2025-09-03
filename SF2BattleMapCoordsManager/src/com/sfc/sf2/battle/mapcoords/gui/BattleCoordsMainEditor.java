@@ -60,6 +60,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         
         coords = battlemapcoordsManager.getCoords();
         battleMapCoordsTableModel.setTableData(coords);
+        tableCoords.jTable.setRowSelectionInterval(0, 0);
     }
     
     private void UpdateMapLoaded() {
@@ -355,7 +356,6 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
 
         jLabel59.setText("BG :");
 
-        jCheckBox1.setSelected(true);
         jCheckBox1.setText("Exploration flags");
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -505,12 +505,19 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         if (index < 0 || index >= coords.length) return;
         Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        int mapId = -1;
         try {
-            battlemapcoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, coords[index].getMap());
+            mapId = coords[index].getMap();
+            if (battlemapcoordsManager.doesMapDataExist(mapId)) {
+                battlemapcoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
+            } else {
+                battlemapcoordsManager.setMapLayout(null);
+                Console.logger().warning(String.format("Battle map was not found for map%02d", mapId));
+            }
         } catch (Exception ex) {
-            battlemapcoordsManager.clearData();
+            battlemapcoordsManager.setMapLayout(null);
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Battle map disasm could not be imported for index : " + index);
+            Console.logger().severe(String.format("ERROR Battle map disasm could not be imported for map%02d", mapId));
         }
         selectedCoords = index;
         UpdateMapLoaded();
@@ -519,13 +526,20 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     private void onTableFrameDataChanged(TableModelEvent e) {
         int row = tableCoords.jTable.getSelectedRow();
         if (row != -1 && row == selectedCoords) {
-            battleMapCoordsLayoutPanel.redraw();
+            if (e.getColumn() == 1) {
+                loadMap(row);
+            } else {
+                battleMapCoordsLayoutPanel.redraw();
+            }
         }
     }
 
     private void onTableFrameSelectionChanged(ListSelectionEvent e) {
         int row = tableCoords.jTable.getSelectedRow();
-        if (row != -1) {
+        if (row == -1) {
+            battlemapcoordsManager.setMapLayout(null);
+            UpdateMapLoaded();
+        } else {
             loadMap(row);
         }
     }

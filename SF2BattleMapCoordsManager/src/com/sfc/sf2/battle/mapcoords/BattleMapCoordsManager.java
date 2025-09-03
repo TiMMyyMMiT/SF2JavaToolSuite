@@ -33,7 +33,13 @@ public class BattleMapCoordsManager extends AbstractManager {
 
     @Override
     public void clearData() {
-        
+        mapLayoutManager.clearData();
+        if (battleMapLayout != null) {
+            battleMapLayout.getBlockset().clearIndexedColorImage(true);
+            battleMapLayout = null;
+        }
+        coords = null;
+        mapEntries = null;
     }
     
     public BattleMapCoords[] importDisassembly(Path mapEntriesPath, Path battleMapCoordsPath) throws IOException, AsmException {
@@ -52,7 +58,7 @@ public class BattleMapCoordsManager extends AbstractManager {
         }
         MapEntryData mapEntry = mapEntries[mapId];
         battleMapLayout = mapLayoutManager.importDisassemblyFromMapEntry(paletteEntriesPath, tilesetsEntriesPath, mapEntry);
-        Console.logger().info("Map data imported for map : " + mapEntry.getMapId());
+        Console.logger().info(String.format("Map data imported for for map%02d", mapId));
         Console.logger().finest("EXITING importMap");
         return battleMapLayout;
     }
@@ -63,6 +69,10 @@ public class BattleMapCoordsManager extends AbstractManager {
         coordsAsmProcessor.exportAsmData(battleMapCoordsPath, coords);
         Console.logger().info("Battle coords successfully exported to : " + battleMapCoordsPath);
         Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public boolean doesMapDataExist(int mapID) {
+        return mapEntries != null && mapID >= 0 && mapID < mapEntries.length && mapEntries[mapID] != null;
     }
 
     public BattleMapCoords[] getCoords() {
@@ -75,5 +85,9 @@ public class BattleMapCoordsManager extends AbstractManager {
 
     public MapLayout getMapLayout() {
         return battleMapLayout;
+    }
+
+    public void setMapLayout(MapLayout battleMapLayout) {
+        this.battleMapLayout = battleMapLayout;
     }
 }
