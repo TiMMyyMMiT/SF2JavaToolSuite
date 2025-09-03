@@ -41,17 +41,17 @@ public class TextMainEditor extends AbstractMainEditor {
         super();
         initComponents();
         initCore(console1);
-    }
-    
-    @Override
-    protected void initEditor() {
-        super.initEditor();
         
         //Handle old Ascii map path and new path
         File file = PathHelpers.getBasePath().resolve("asciitotextsymbolmap.asm").toFile();
         if (file.exists()) {
             fileButton7.setFilePath(file.toString());
         }
+    }
+    
+    @Override
+    protected void initEditor() {
+        super.initEditor();
         
         accordionPanel2.setExpanded(false);
         
@@ -68,21 +68,13 @@ public class TextMainEditor extends AbstractMainEditor {
     }
     
     @Override
-    protected void updateEditorData() {
+    protected void onDataLoaded() {
+        super.onDataLoaded();
+        
         textTableModel.setTableData(textManager.getGameScript());
         textPreviewLayoutPanel.setBaseTiles(textManager.getBaseTiles());
         textPreviewLayoutPanel.setFontSymbols(textManager.getFontSymbols());
         textPreviewLayoutPanel.setAllyNames(textManager.getAllyNames());
-        
-        super.updateEditorData();
-    }
-    
-    @Override
-    protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
-        
-        textPreviewLayoutPanel.revalidate();
-        textPreviewLayoutPanel.repaint();
     }
 
     /**
@@ -792,7 +784,7 @@ public class TextMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Text file could not be imported from : " + textPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -806,7 +798,7 @@ public class TextMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Text disasms could not be imported from : " + basePath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton36ActionPerformed
@@ -818,7 +810,7 @@ public class TextMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Text ASM could not be imported from : " + asmPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton36ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -841,14 +833,12 @@ public class TextMainEditor extends AbstractMainEditor {
     private void jButtonDown1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDown1ActionPerformed
         if (textPreviewLayoutPanel.hasLinesBelow()) {
             textPreviewLayoutPanel.setLinesOffset(textPreviewLayoutPanel.getLinesOffset()+1);
-            repaintEditorLayout();
         }
     }//GEN-LAST:event_jButtonDown1ActionPerformed
 
     private void jButtonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpActionPerformed
         if (textPreviewLayoutPanel.hasLinesAbove()) {
             textPreviewLayoutPanel.setLinesOffset(textPreviewLayoutPanel.getLinesOffset()-1);
-            repaintEditorLayout();
         }
     }//GEN-LAST:event_jButtonUpActionPerformed
 
@@ -929,7 +919,6 @@ public class TextMainEditor extends AbstractMainEditor {
         } else {
             textPreviewLayoutPanel.setText((String)tableText.jTable.getValueAt(row, 2));
         }
-        repaintEditorLayout();
     }
     
     private void onTableDataChanged(TableModelEvent e) {
@@ -939,7 +928,6 @@ public class TextMainEditor extends AbstractMainEditor {
         } else {
             textPreviewLayoutPanel.setText(textTableModel.getRow(row));
         }
-        repaintEditorLayout();
     }
     
     private void onTableEditorStarted(PropertyChangeEvent evt) {
@@ -951,7 +939,6 @@ public class TextMainEditor extends AbstractMainEditor {
                 public void stateChanged(ChangeEvent e) {
                     String text = ((JTextField)e.getSource()).getText();
                     textPreviewLayoutPanel.setText(text);
-                    repaintEditorLayout();
                 }
             });
         }

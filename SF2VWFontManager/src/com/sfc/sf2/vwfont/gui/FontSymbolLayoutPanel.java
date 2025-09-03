@@ -75,5 +75,6 @@ public class FontSymbolLayoutPanel extends AbstractLayoutPanel {
 
     public void setFontSymbols(FontSymbol[] symbols) {
         this.symbols = symbols;
+        redraw();
     }
 }

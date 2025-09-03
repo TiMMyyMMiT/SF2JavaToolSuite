@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.core.gui;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.BaseLayoutComponent;
 import com.sfc.sf2.core.gui.layout.LayoutBackground;
 import com.sfc.sf2.core.gui.layout.LayoutGrid;
@@ -52,17 +53,23 @@ public abstract class AbstractLayoutPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (hasData()) {
-            Dimension dims = getImageDimensions();
+            //Console.logger().finest("Layout panel repainted");
             Dimension offset = getImageOffset();
             updateMouseInputs(offset);
             if (redraw) {
+                Dimension dims = getImageDimensions();
+                //Console.logger().finest("Layout content rebuilt");
                 if (currentImage != null) { currentImage.flush(); }
                 if (dims.width > 0 && dims.height > 0) {
                     currentImage = paintImage(dims);
                     Dimension size = new Dimension(currentImage.getWidth()+offset.width, currentImage.getHeight()+offset.height);
                     if (BaseLayoutComponent.IsEnabled(coordsGrid)) { coordsGrid.buildCoordsImage(dims, getDisplayScale()); }
-                    setSize(size);
-                    setPreferredSize(size);
+                    if (!size.equals(this.getSize())) {
+                        setSize(size);
+                        setPreferredSize(size);
+                        validate();
+                        //Console.logger().finest("Layout panel resized");
+                    }
                 }
                 redraw = false;
             }
@@ -120,6 +127,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
 
     public void redraw() {
         this.redraw = true;
+        repaint();
     }
 
     public int getDisplayScale() {
