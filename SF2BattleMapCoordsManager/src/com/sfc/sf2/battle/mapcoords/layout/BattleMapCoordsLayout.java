@@ -8,7 +8,6 @@ package com.sfc.sf2.battle.mapcoords.layout;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
-import com.sfc.sf2.map.layout.MapLayout;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel;

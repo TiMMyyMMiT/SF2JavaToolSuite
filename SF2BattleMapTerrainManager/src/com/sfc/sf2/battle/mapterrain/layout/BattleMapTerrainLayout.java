@@ -7,64 +7,43 @@ package com.sfc.sf2.battle.mapterrain.layout;
 
 import com.sfc.sf2.battle.mapcoords.layout.BattleMapCoordsLayout;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
-import com.sfc.sf2.map.layout.MapLayout;
+import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent.GridMousePressedEvent;
+import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
+import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
 
 /**
  *
  * @author wiz
  */
-public class BattleMapTerrainLayout extends BattleMapCoordsLayout implements MouseListener, MouseMotionListener {
+public class BattleMapTerrainLayout extends BattleMapCoordsLayout {
     
     protected BattleMapTerrain terrain;    
     protected boolean drawTerrain = true;
     
-    private BufferedImage terrainImage;
-    
     public BattleMapTerrainLayout() {
         super();
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        mouseInput = new LayoutMouseInput(this, this::onMouseInteraction, PIXEL_WIDTH, PIXEL_HEIGHT);
     }
     
     @Override
-    public BufferedImage buildImage(MapLayout layout, int tilesPerRow) {
-        BufferedImage image = super.buildImage(layout, tilesPerRow);
-        Graphics graphics = image.getGraphics();
-        if (drawTerrain) {
-            graphics.drawImage(drawTerrain(), 0, 0, null);
-        }
-        graphics.dispose();
-        return image;
-    }
-    
-    private BufferedImage drawTerrain(){
-        if (terrainImage == null) {
-            terrainImage = new BufferedImage(3*8*64, 3*8*64, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) terrainImage.getGraphics();
-            byte[] data = terrain.getData();
-            int width = coords.getWidth();
-            int height = coords.getHeight();
-            int x = coords.getX();
-            int y = coords.getY();
-            for (int i=0; i<height; i++){
-                for (int j=0; j<width; j++){
-                    int value = data[i*48+j];
-                    g2.drawString(String.valueOf(value), (x+j)*3*8+8, (y+i)*3*8+16);
-                }
+    protected void drawImage(Graphics graphics) {
+        super.drawImage(graphics);
+        if (!drawTerrain) return;
+        
+        byte[] data = terrain.getData();
+        int x = battleCoords.getX();
+        int y = battleCoords.getY();
+        int width = battleCoords.getWidth();
+        int height = battleCoords.getHeight();
+        for (int j=0; j<height; j++) {
+            for (int i=0; i<width; i++) {
+                int value = data[i+j*48];
+                graphics.drawString(String.valueOf(value), (x+i)*3*8+8, (y+j)*3*8+16);
             }
         }
-        return terrainImage;
-    }
-
-    public void setDrawTerrain(boolean drawTerrain) {
-        this.drawTerrain = drawTerrain;
-        this.redraw = true;
     }
 
     public BattleMapTerrain getTerrain() {
@@ -73,35 +52,23 @@ public class BattleMapTerrainLayout extends BattleMapCoordsLayout implements Mou
 
     public void setTerrain(BattleMapTerrain terrain) {
         this.terrain = terrain;
+        redraw();
+    }
+
+    public void setDrawTerrain(boolean drawTerrain) {
+        this.drawTerrain = drawTerrain;
+        redraw();
     }
     
-    public void updateTerrainDisplay(){
-        terrainImage = null;
-        this.redraw = true;
-    }
-    
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-    @Override
-    public void mousePressed(MouseEvent e) {
-        int x = e.getX() / (displaySize * 3*8);
-        int y = e.getY() / (displaySize * 3*8);
-        int startX = coords.getX();
-        int startY = coords.getY();
-        int width = coords.getWidth();
-        int height = coords.getHeight();
-        if(x>=startX && x<=startX+width
-                && y>=startY && y<=startY+height){
-            switch (e.getButton()) {
+    private void onMouseInteraction(GridMousePressedEvent evt) {
+        int x = evt.x();
+        int y = evt.y();
+        int startX = battleCoords.getX();
+        int startY = battleCoords.getY();
+        int width = battleCoords.getWidth();
+        int height = battleCoords.getHeight();
+        if(x >= startX && x <= startX+width && y >= startY && y <= startY+height) {
+            switch (evt.mouseButton()) {
                 case MouseEvent.BUTTON1:
                     terrain.getData()[(startY+y)*48+startX+x]++;
                     break;
@@ -110,24 +77,9 @@ public class BattleMapTerrainLayout extends BattleMapCoordsLayout implements Mou
                     break;
                 default:
                     break;
-            } 
-            terrainImage = null;
-            redraw = true;
-            this.revalidate();
-            this.repaint();
+            }
+            redraw();
         }
         //System.out.println("Map press "+e.getButton()+" "+x+" - "+y);
-    }
-    @Override
-    public void mouseReleased(MouseEvent e) {        
-    }
-    
-    @Override
-    public void mouseDragged(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        
     }
 }

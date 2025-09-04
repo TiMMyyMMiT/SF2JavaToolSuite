@@ -23,7 +23,7 @@ public class BattleMapTerrainManager {
     private String[][] mapEntries = null;
     
     public void importDisassembly(String palettesPath, String tilesetsPath, String basePath, String mapEntriesPath, String terrainEntriesPath, String battleMapCoordsPath, int battleIndex){
-        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Importing disassembly ...");
+        /*System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Importing disassembly ...");
         mapEntries = disassemblyManager.importMapEntryFile(basePath, mapEntriesPath);
         mapCoordsManager.importDisassembly(basePath, mapEntriesPath, battleMapCoordsPath);
         coords = mapCoordsManager.getCoords()[battleIndex];
@@ -35,7 +35,7 @@ public class BattleMapTerrainManager {
         }
         int mapIndex = coords.getMap();
         mapCoordsManager.importLayoutDisassembly(coords, palettesPath, tilesetsPath);
-        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Disassembly imported.");
+        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Disassembly imported.");*/
     }
     
     public void exportDisassembly(String battleMapTerrainPath){
