@@ -20,7 +20,4 @@ public class BattleMapTerrain {
     public void setData(byte[] data) {
         this.data = data;
     }
-
- 
-    
 }
