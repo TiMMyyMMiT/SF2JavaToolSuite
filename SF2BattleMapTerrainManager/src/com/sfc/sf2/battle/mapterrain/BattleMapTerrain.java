@@ -13,6 +13,10 @@ public class BattleMapTerrain {
     
     private byte[] data;
 
+    public BattleMapTerrain(byte[] data) {
+        this.data = data;
+    }
+
     public byte[] getData() {
         return data;
     }

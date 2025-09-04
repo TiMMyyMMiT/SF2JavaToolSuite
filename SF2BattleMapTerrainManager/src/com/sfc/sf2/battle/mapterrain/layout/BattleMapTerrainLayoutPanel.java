@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
  *
  * @author wiz
  */
-public class BattleMapTerrainLayout extends BattleMapCoordsLayout {
+public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     
     protected BattleMapTerrain terrain;    
     protected boolean drawTerrain = true;
@@ -29,7 +29,7 @@ public class BattleMapTerrainLayout extends BattleMapCoordsLayout {
     private final ImageIcon obstructedIcon;
     private final ImageIcon[] terrainIcons;
     
-    public BattleMapTerrainLayout() {
+    public BattleMapTerrainLayoutPanel() {
         super();
         mouseInput = new LayoutMouseInput(this, this::onMouseInteraction, PIXEL_WIDTH, PIXEL_HEIGHT);
         

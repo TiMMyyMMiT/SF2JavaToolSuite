@@ -6,19 +6,22 @@
 package com.sfc.sf2.battle.mapterrain.gui;
 
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrainManager;
-import com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayout;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
+import com.sfc.sf2.helpers.PathHelpers;
+import java.nio.file.Path;
+import java.util.logging.Level;
 
 /**
  *
  * @author wiz
  */
-public class MainEditor extends AbstractMainEditor {
+public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     
     BattleMapTerrainManager battlemapterrainManager = new BattleMapTerrainManager();
     
-    public MainEditor() {
+    public BattleMapTerrainMainEditor() {
         super();
         initComponents();
         initCore(console1);
@@ -32,21 +35,21 @@ public class MainEditor extends AbstractMainEditor {
         
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         
-        battleMapTerrainLayout.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        battleMapTerrainLayout.setShowGrid(jCheckBox2.isSelected());
-        battleMapTerrainLayout.setDrawTerrain(jCheckBox3.isSelected());
-        battleMapTerrainLayout.setBGColor(colorPicker1.getColor());
-        battleMapTerrainLayout.setShowExplorationFlags(jCheckBox1.isSelected());
-        battleMapTerrainLayout.setShowBattleCoords(true);
+        battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        battleMapTerrainLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
+        battleMapTerrainLayoutPanel.setBGColor(colorPicker1.getColor());
+        battleMapTerrainLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleMapTerrainLayoutPanel.setShowBattleCoords(true);
     }
     
     @Override
     protected void onDataLoaded() {
         super.onDataLoaded();
         
-        battleMapTerrainLayout.setMapLayout(battlemapterrainManager.getMapLayout());
-        battleMapTerrainLayout.setBattleCoords(battlemapterrainManager.getCoords());
-        battleMapTerrainLayout.setTerrain(battlemapterrainManager.getTerrain());
+        battleMapTerrainLayoutPanel.setMapLayout(battlemapterrainManager.getMapLayout());
+        battleMapTerrainLayoutPanel.setBattleCoords(battlemapterrainManager.getCoords());
+        battleMapTerrainLayoutPanel.setTerrain(battlemapterrainManager.getTerrain());
     }
     
     /**
@@ -65,7 +68,7 @@ public class MainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        battleMapTerrainLayout = new com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayout();
+        battleMapTerrainLayoutPanel = new com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayoutPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -107,28 +110,28 @@ public class MainEditor extends AbstractMainEditor {
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        javax.swing.GroupLayout battleMapTerrainLayoutLayout = new javax.swing.GroupLayout(battleMapTerrainLayout);
-        battleMapTerrainLayout.setLayout(battleMapTerrainLayoutLayout);
-        battleMapTerrainLayoutLayout.setHorizontalGroup(
-            battleMapTerrainLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
+        javax.swing.GroupLayout battleMapTerrainLayoutPanelLayout = new javax.swing.GroupLayout(battleMapTerrainLayoutPanel);
+        battleMapTerrainLayoutPanel.setLayout(battleMapTerrainLayoutPanelLayout);
+        battleMapTerrainLayoutPanelLayout.setHorizontalGroup(
+            battleMapTerrainLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 557, Short.MAX_VALUE)
         );
-        battleMapTerrainLayoutLayout.setVerticalGroup(
-            battleMapTerrainLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 612, Short.MAX_VALUE)
+        battleMapTerrainLayoutPanelLayout.setVerticalGroup(
+            battleMapTerrainLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 590, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(battleMapTerrainLayout);
+        jScrollPane2.setViewportView(battleMapTerrainLayoutPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
@@ -258,11 +261,11 @@ public class MainEditor extends AbstractMainEditor {
         fileButton3.setFilePath(".\\global\\battlemapcoords.asm");
         fileButton3.setLabelText("Battlemap coords :");
 
-        directoryButton1.setDirectoryPath("..\\graphics\\maps\\mappalettes\\mappalette");
-        directoryButton1.setLabelText("Map palettes :");
+        directoryButton1.setDirectoryPath("..\\graphics\\maps\\mappalettes\\entries.asm");
+        directoryButton1.setLabelText("Map palette entries :");
 
-        directoryButton2.setDirectoryPath("..\\graphics\\maps\\maptilesets\\maptileset");
-        directoryButton2.setLabelText("Map tilesets :");
+        directoryButton2.setDirectoryPath("..\\graphics\\maps\\maptilesets\\entries.asm");
+        directoryButton2.setLabelText("Map tileset entries :");
 
         fileButton1.setFilePath("..\\maps\\entries.asm");
         fileButton1.setLabelText("Map entries :");
@@ -409,7 +412,7 @@ public class MainEditor extends AbstractMainEditor {
             .addComponent(jSplitPane2)
         );
 
-        jSplitPane1.setLeftComponent(jPanel15);
+        jSplitPane1.setTopComponent(jPanel15);
         jSplitPane1.setBottomComponent(console1);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
@@ -439,31 +442,48 @@ public class MainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        /*String mapTerrainPath = jTextField15.getText();
-        battlemapterrainManager.exportDisassembly(mapTerrainPath);*/
+        Path terrainPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        if (!PathHelpers.createPathIfRequred(terrainPath)) return;
+        try {
+            battlemapterrainManager.exportDisassembly(terrainPath, battleMapTerrainLayoutPanel.getTerrain());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Terrrain disasm could not be exported to : " + terrainPath);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        /*battlemapterrainManager.importDisassembly(jTextField21.getText(), jTextField22.getText(), jTextField23.getText(),jTextField19.getText(),jTextField24.getText(),jTextField20.getText(),(int)jSpinner1.getValue());
-        onDataLoaded();*/
+        Path palettesPath = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
+        Path tilesetsPath = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
+        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path terrainEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        Path coordsPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        int battleIndex = (int)jSpinner1.getValue();
+        try {
+            battlemapterrainManager.importDisassembly(palettesPath, tilesetsPath, mapEntriesPath, terrainEntriesPath, coordsPath, battleIndex);
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Terrrain disasm could not be imported from : " + coordsPath);
+        }
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if (jComboBox1.getSelectedIndex()>=0) {
-            battleMapTerrainLayout.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+            battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        battleMapTerrainLayout.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleMapTerrainLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        battleMapTerrainLayout.setShowGrid(jCheckBox2.isSelected());
+        battleMapTerrainLayoutPanel.setShowGrid(jCheckBox2.isSelected());
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        battleMapTerrainLayout.setDrawTerrain(jCheckBox3.isSelected());
+        battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     /**
@@ -474,7 +494,7 @@ public class MainEditor extends AbstractMainEditor {
         AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
+                new BattleMapTerrainMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
             }
         });
     }
@@ -484,7 +504,7 @@ public class MainEditor extends AbstractMainEditor {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
-    private com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayout battleMapTerrainLayout;
+    private com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayoutPanel battleMapTerrainLayoutPanel;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButton1;
