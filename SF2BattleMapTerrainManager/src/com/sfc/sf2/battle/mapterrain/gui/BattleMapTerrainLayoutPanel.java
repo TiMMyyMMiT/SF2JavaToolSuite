@@ -127,7 +127,7 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
         this.selectedTerrainType = (byte)(selectedTerrainType);
     }
     
-    private void onMouseInteraction(GridMousePressedEvent evt) {
+    protected void onMouseInteraction(GridMousePressedEvent evt) {
         if (evt.mouseButton() != MouseEvent.BUTTON1) return;
         if (battleCoords == null) return;
         int x = evt.x();

@@ -13,6 +13,11 @@ public class AIPoint {
     private int x;
     private int y;
 
+    public AIPoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public int getX() {
         return x;
     }
@@ -29,5 +34,12 @@ public class AIPoint {
         this.y = y;
     }
     
+    @Override
+    public AIPoint clone() {
+        return new AIPoint(x, y);
+    }
     
+    public static AIPoint emptyAIPoint() {
+        return new AIPoint(0, 0);
+    }
 }
