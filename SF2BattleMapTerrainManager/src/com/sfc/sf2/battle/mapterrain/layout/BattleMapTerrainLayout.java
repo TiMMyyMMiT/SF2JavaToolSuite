@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.battle.mapterrain.layout;
 
-import com.sfc.sf2.battle.mapcoords.layout.BattleMapCoordsLayout;
+import com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsLayout;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
 import com.sfc.sf2.map.layout.MapLayout;
 import java.awt.Graphics;

@@ -100,7 +100,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        battleMapCoordsLayoutPanel = new com.sfc.sf2.battle.mapcoords.layout.BattleMapCoordsLayout();
+        battleMapCoordsLayoutPanel = new com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsLayout();
         jPanel25 = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
@@ -562,7 +562,7 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
-    private com.sfc.sf2.battle.mapcoords.layout.BattleMapCoordsLayout battleMapCoordsLayoutPanel;
+    private com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsLayout battleMapCoordsLayoutPanel;
     private com.sfc.sf2.battle.mapcoords.models.BattleMapCoordsTableModel battleMapCoordsTableModel;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
