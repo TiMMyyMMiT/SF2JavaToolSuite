@@ -61,7 +61,7 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
         int height = battleCoords.getHeight();
         
         graphics.setColor(DARKEN);
-        graphics.fillRect(coordsX*PIXEL_WIDTH, coordsY*PIXEL_HEIGHT, width*PIXEL_WIDTH, width*PIXEL_HEIGHT);
+        graphics.fillRect(coordsX*PIXEL_WIDTH, coordsY*PIXEL_HEIGHT, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
         graphics.setColor(Color.BLACK);
         if (drawTerrainAsText) {
             drawTerrainText(graphics, data, coordsX, coordsY, width, height);
