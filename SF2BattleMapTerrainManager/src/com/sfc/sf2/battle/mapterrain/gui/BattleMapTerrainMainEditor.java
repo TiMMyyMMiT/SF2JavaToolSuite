@@ -37,9 +37,10 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         
         battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         battleMapTerrainLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleMapTerrainLayoutPanel.setBGColor(colorPicker1.getColor());
         battleMapTerrainLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
+        battleMapTerrainLayoutPanel.setDrawTerrainText(jComboBox2.getSelectedIndex() != 0);
         battleMapTerrainLayoutPanel.setShowBattleCoords(true);
     }
     
@@ -68,7 +69,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        battleMapTerrainLayoutPanel = new com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayoutPanel();
+        battleMapTerrainLayoutPanel = new com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -77,6 +78,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         jCheckBox3 = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -118,7 +120,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         );
         battleMapTerrainLayoutPanelLayout.setVerticalGroup(
             battleMapTerrainLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addGap(0, 592, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(battleMapTerrainLayoutPanel);
@@ -169,6 +171,12 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
 
         jLabel8.setText("BG :");
 
+        colorPicker1.addColorChangedListener(new com.sfc.sf2.core.gui.controls.ColorPicker.ColorChangedListener() {
+            public void colorChanged(java.awt.event.ActionEvent evt) {
+                colorPicker1ColorChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout colorPicker1Layout = new javax.swing.GroupLayout(colorPicker1);
         colorPicker1.setLayout(colorPicker1Layout);
         colorPicker1Layout.setHorizontalGroup(
@@ -180,6 +188,13 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
             .addGap(0, 22, Short.MAX_VALUE)
         );
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Icons", "Text" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
@@ -189,6 +204,8 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                 .addComponent(jCheckBox1)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBox3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jCheckBox2)
                 .addGap(18, 18, 18)
@@ -212,8 +229,9 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBox1)
                         .addComponent(jCheckBox3)
-                        .addComponent(jCheckBox2)))
-                .addContainerGap(8, Short.MAX_VALUE))
+                        .addComponent(jCheckBox2)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -469,7 +487,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedIndex()>=0) {
+        if (jComboBox1.getSelectedIndex() >= 0) {
             battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
@@ -485,6 +503,18 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
         battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ActionPerformed
+
+    private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
+        battleMapTerrainLayoutPanel.setBGColor(colorPicker1.getColor());
+        SettingsManager.getGlobalSettings().setTransparentBGColor(colorPicker1.getColor());
+        SettingsManager.saveGlobalSettingsFile();
+    }//GEN-LAST:event_colorPicker1ColorChanged
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        if (jComboBox2.getSelectedIndex() >= 0) {
+            battleMapTerrainLayoutPanel.setDrawTerrainText(jComboBox2.getSelectedIndex() != 0);
+        }
+    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     /**
      * To create a new Main Editor, copy the below code
@@ -504,7 +534,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
-    private com.sfc.sf2.battle.mapterrain.layout.BattleMapTerrainLayoutPanel battleMapTerrainLayoutPanel;
+    private com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel battleMapTerrainLayoutPanel;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButton1;
@@ -519,6 +549,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
