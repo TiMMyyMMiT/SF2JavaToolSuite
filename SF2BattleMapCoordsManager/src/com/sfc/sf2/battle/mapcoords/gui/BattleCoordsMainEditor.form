@@ -434,7 +434,7 @@
 
                               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                               <SubComponents>
-                                <Container class="com.sfc.sf2.battle.mapcoords.layout.BattleMapCoordsLayout" name="battleMapCoordsLayoutPanel">
+                                <Container class="com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsLayout" name="battleMapCoordsLayoutPanel">
 
                                   <Layout>
                                     <DimensionLayout dim="0">

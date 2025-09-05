@@ -1347,7 +1347,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         blockset.insertBlock(index, block);
         mapBlocksetLayoutPanel.setLeftSelectedIndex(index);
         if (index == blockset.getBlocks().length-1) { //Scroll to bottom
-            ((JScrollPane)mapBlocksetLayoutPanel.getParent().getParent()).getVerticalScrollBar().setValue(Integer.MAX_VALUE);
+            mapBlocksetLayoutPanel.scrollToPosition(Integer.MAX_VALUE, Integer.MAX_VALUE);
         }
     }//GEN-LAST:event_jButton35ActionPerformed
     

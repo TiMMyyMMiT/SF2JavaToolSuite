@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sfc.sf2.battle.mapcoords.layout;
+package com.sfc.sf2.battle.mapcoords.gui;
 
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
@@ -56,8 +56,11 @@ public class BattleMapCoordsLayout extends StaticMapLayoutPanel {
     }
 
     public void setBattleCoords(BattleMapCoords battleCoords) {
-        this.battleCoords = battleCoords;
-        redraw();
+        if (this.battleCoords != battleCoords) {
+            this.battleCoords = battleCoords;
+            redraw();
+            scrollToPosition((battleCoords.getX()-1)*PIXEL_WIDTH, (battleCoords.getY()-1)*PIXEL_HEIGHT);
+        }
     }
 
     public boolean getShowBattleCoords() {
