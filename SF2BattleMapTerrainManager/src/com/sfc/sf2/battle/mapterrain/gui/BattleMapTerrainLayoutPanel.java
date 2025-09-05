@@ -12,7 +12,6 @@ import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
@@ -30,6 +29,7 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     protected boolean drawTerrainAsText;
     
     private final ImageIcon[] terrainIcons;
+    private byte selectedTerrainType;
     
     public BattleMapTerrainLayoutPanel() {
         super();
@@ -122,31 +122,28 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
             redraw();
         }
     }
+
+    public void setSelectedTerrainType(int selectedTerrainType) {
+        this.selectedTerrainType = (byte)(selectedTerrainType);
+    }
     
     private void onMouseInteraction(GridMousePressedEvent evt) {
+        if (evt.mouseButton() != MouseEvent.BUTTON1) return;
+        if (battleCoords == null) return;
         int x = evt.x();
         int y = evt.y();
         int startX = battleCoords.getX();
         int startY = battleCoords.getY();
         int width = battleCoords.getWidth();
         int height = battleCoords.getHeight();
-        if(x >= startX && x <= startX+width && y >= startY && y <= startY+height) {
-            switch (evt.mouseButton()) {
-                case MouseEvent.BUTTON1:
-                    if (terrain.getData()[(startY+y)*48+startX+x] < 8) {
-                        terrain.getData()[(startY+y)*48+startX+x]++;
-                    }
-                    break;
-                case MouseEvent.BUTTON3:
-                    if (terrain.getData()[(startY+y)*48+startX+x] > -1) {
-                        terrain.getData()[(startY+y)*48+startX+x]--;
-                    }
-                    break;
-                default:
-                    break;
-            }
+        if (((x < startX || x > startX+width) || y < startY) || y > startY+height) {
+            return;
+        }
+        x -= startX;
+        y -=startY;
+        if (terrain.getData()[x+y*48] != selectedTerrainType) {
+            terrain.getData()[x+y*48] = selectedTerrainType;
             redraw();
         }
-        //System.out.println("Map press "+e.getButton()+" "+x+" - "+y);
     }
 }
