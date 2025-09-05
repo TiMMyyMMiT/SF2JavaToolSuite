@@ -42,6 +42,10 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
         mouseInput = null;
         scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(DEFAULT_BLOCKS_PER_ROW);
+        
+        setSize(mapDimensions);
+        setMinimumSize(mapDimensions);
+        setPreferredSize(mapDimensions);
     }
 
     @Override
