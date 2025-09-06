@@ -14,6 +14,7 @@ import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
+import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagImages;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

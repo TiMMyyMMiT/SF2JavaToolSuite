@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
  */
-package com.sfc.sf2.map.layout.gui;
+package com.sfc.sf2.map.layout.gui.resources;
 
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;

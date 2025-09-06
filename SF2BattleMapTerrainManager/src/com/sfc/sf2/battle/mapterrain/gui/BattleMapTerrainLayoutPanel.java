@@ -7,46 +7,29 @@ package com.sfc.sf2.battle.mapterrain.gui;
 
 import com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsLayout;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
+import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent.GridMousePressedEvent;
 import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import javax.swing.ImageIcon;
 
 /**
  *
  * @author TiMMy
  */
 public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
-    private static Color DARKEN = new Color(0, 0, 0, 50);
-    private static Color TEXT_DARKEN = new Color(0, 0, 0, 150);
     
     protected BattleMapTerrain terrain;
     protected boolean drawTerrain;
     protected boolean drawTerrainAsText;
     
-    private final ImageIcon[] terrainIcons;
     private byte selectedTerrainType;
     
     public BattleMapTerrainLayoutPanel() {
         super();
         mouseInput = new LayoutMouseInput(this, this::onMouseInteraction, PIXEL_WIDTH, PIXEL_HEIGHT);
-        
-        terrainIcons = new ImageIcon[10];
-        ClassLoader loader = getClass().getClassLoader();
-        terrainIcons[0] = new ImageIcon(loader.getResource("terrain/icons/XX_Obstructed.png"));
-        terrainIcons[1] = new ImageIcon(loader.getResource("terrain/icons/00_Wall.png"));
-        terrainIcons[2] = new ImageIcon(loader.getResource("terrain/icons/01_Plains.png"));
-        terrainIcons[3] = new ImageIcon(loader.getResource("terrain/icons/02_Path.png"));
-        terrainIcons[4] = new ImageIcon(loader.getResource("terrain/icons/03_Grass.png"));
-        terrainIcons[5] = new ImageIcon(loader.getResource("terrain/icons/04_Forest.png"));
-        terrainIcons[6] = new ImageIcon(loader.getResource("terrain/icons/05_Hills.png"));
-        terrainIcons[7] = new ImageIcon(loader.getResource("terrain/icons/06_Desert.png"));
-        terrainIcons[8] = new ImageIcon(loader.getResource("terrain/icons/07_Mountain.png"));
-        terrainIcons[9] = new ImageIcon(loader.getResource("terrain/icons/08_Water.png"));
     }
     
     @Override
@@ -60,9 +43,8 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
         int width = battleCoords.getWidth();
         int height = battleCoords.getHeight();
         
-        graphics.setColor(DARKEN);
+        graphics.setColor(BattleTerrainIcons.TERRAIN_DARKEN);
         graphics.fillRect(coordsX*PIXEL_WIDTH, coordsY*PIXEL_HEIGHT, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
-        graphics.setColor(Color.BLACK);
         if (drawTerrainAsText) {
             drawTerrainText(graphics, data, coordsX, coordsY, width, height);
         } else {
@@ -71,13 +53,14 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     }
     
     private void drawTerrainIcons(Graphics graphics, byte[] data, int coordsX, int coordsY, int width, int height) {
+        graphics.setColor(BattleTerrainIcons.TERRAIN_BG);
         for (int j=0; j<height; j++) {
             for (int i=0; i<width; i++) {
                 int x = (coordsX+i)*PIXEL_WIDTH;
                 int y = (coordsY+j)*PIXEL_HEIGHT;
-                int value = data[i+j*48]+1;
+                int value = data[i+j*48];
                 graphics.fillRect(x+6, y+6, PIXEL_WIDTH-12, PIXEL_HEIGHT-12);
-                graphics.drawImage(terrainIcons[value].getImage(), x+8, y+8, null);
+                graphics.drawImage(BattleTerrainIcons.getTerrainIcon(value).getImage(), x+8, y+8, null);
             }
         }
     }
@@ -88,9 +71,9 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
                 int x = (coordsX+i)*PIXEL_WIDTH;
                 int y = (coordsY+j)*PIXEL_HEIGHT;
                 int value = data[i+j*48];
-                graphics.setColor(TEXT_DARKEN);
+                graphics.setColor(BattleTerrainIcons.TERRAIN_TEXT_BG);
                 graphics.fillRect(x+6, y+5, PIXEL_WIDTH-12, PIXEL_HEIGHT-11);
-                graphics.setColor(Color.WHITE);
+                graphics.setColor(BattleTerrainIcons.getTerrainTextColor(value));
                 if (value < 0) {
                     graphics.drawString(Integer.toString(value), x+8, y+16);
                 } else {
