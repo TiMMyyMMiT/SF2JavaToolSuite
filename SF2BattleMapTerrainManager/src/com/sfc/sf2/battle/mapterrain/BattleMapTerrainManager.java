@@ -39,11 +39,11 @@ public class BattleMapTerrainManager extends AbstractManager {
         terrain = null;
     }
     
-    public void importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
+    public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
         coords = mapCoordsManager.getCoords()[battleIndex];
-        EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath);
+        EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath, null);
         int mapId = coords.getMap();
         mapCoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
         if (battleIndex < terrainEntries.entriesCount()) {
@@ -51,6 +51,7 @@ public class BattleMapTerrainManager extends AbstractManager {
             terrain = terrainDisassemblyProcessor.importDisassembly(path, null);
         }
         Console.logger().finest("EXITING importDisassembly");
+        return terrain;
     }
     
     public void exportDisassembly(Path battleMapTerrainPath, BattleMapTerrain terrain) throws IOException, DisassemblyException {

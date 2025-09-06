@@ -20,54 +20,42 @@ public class EnemyEnums {
     private LinkedHashMap<String, Integer> aiOrders;
     private LinkedHashMap<String, Integer> spawnParams;
 
-    public LinkedHashMap<String, Integer> getEnemies() {
-        return enemies;
+    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders, LinkedHashMap<String, Integer> spawnParams) {
+        this.enemies = enemies;
+        this.items = items;
+        this.aiCommandSets = aiCommandSets;
+        this.aiOrders = aiOrders;
+        this.spawnParams = spawnParams;
     }
 
-    public void setEemies(LinkedHashMap<String, Integer> enemies) {
-        this.enemies = enemies;
+    public LinkedHashMap<String, Integer> getEnemies() {
+        return enemies;
     }
 
     public LinkedHashMap<String, Integer> getItems() {
         return items;
     }
-
-    public void setItems(LinkedHashMap<String, Integer> items) {
-        this.items = items;
-    }
-
+    
     public LinkedHashMap<String, Integer> getCommandSets() {
         return aiCommandSets;
-    }
-
-    public void setCommandSets(LinkedHashMap<String, Integer> aiCommandSets) {
-        this.aiCommandSets = aiCommandSets;
     }
 
     public LinkedHashMap<String, Integer> getOrders() {
         return aiOrders;
     }
 
-    public void setOrders(LinkedHashMap<String, Integer> aiOrders) {
-        this.aiOrders = aiOrders;
-    }
-
     public LinkedHashMap<String, Integer> getSpawnParams() {
         return spawnParams;
-    }
-
-    public void setSpawnParams(LinkedHashMap<String, Integer> spawnParams) {
-        this.spawnParams = spawnParams;
     }
     
     //Helper functions
     
     public static String toEnumString(String data, Map<String, Integer> en) {
-        try{
+        try {
             short number = Short.parseShort(data);
             return toEnumString(number, en);
         }
-        catch (NumberFormatException ex){
+        catch (NumberFormatException ex) {
             //Not a number
             return data;
         }
@@ -92,11 +80,10 @@ public class EnemyEnums {
     }
     
     public static short toEnumShort(String data, Map<String, Integer> en) {
-        try{
+        try {
             short number = Short.parseShort(data);
             return number;
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             //Not a number
         }
         
@@ -111,11 +98,10 @@ public class EnemyEnums {
     }
     
     public static String stringToItemString(String data, Map<String, Integer> items) {
-        try{
+        try {
             short number = Short.parseShort(data);
             return itemNumToString(number, items);
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             //Not a number
             return toEnumString(data, items);
         }
@@ -124,7 +110,7 @@ public class EnemyEnums {
     public static String itemNumToString(short data, Map<String, Integer> items) {
         String s = "";
         
-        if (data >= 0x1000){  //If flags
+        if (data >= 0x1000) {  //If flags
             for (Map.Entry<String, Integer> entry : items.entrySet()) {
                 if (entry.getValue() > 0x1000 && (data&entry.getValue()) != 0){
                     s = appendItem(s, entry.getKey());
@@ -159,11 +145,10 @@ public class EnemyEnums {
     }
     
     public static String stringToAiOrderString(String data, Map<String, Integer> orders) {
-        try{
+        try {
             byte number = Byte.parseByte(data);
             return aiOrderNumToString(number, orders);
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             //Not a number
             return toEnumString(data, orders);
         }
@@ -173,11 +158,10 @@ public class EnemyEnums {
         byte value1;
         byte value2;
         
-        if (data == 0xFF){
+        if (data == 0xFF) {
             value1 = data;
             value2 = 0;
-        }
-        else{
+        } else {
             value1 = (byte)(data&0xF0);
             value2 = (byte)(data&0x0F);
         }

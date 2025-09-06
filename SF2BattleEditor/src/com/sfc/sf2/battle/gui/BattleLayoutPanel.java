@@ -50,10 +50,6 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     protected int selectedAIRegion = -1;
     protected int selectedAIPoint = -1;
     protected int applicableTerrainValue = -1;
-    private int lastMouseX = 0;
-    private int lastMouseY = 0;
-    int lastMapX = 0;
-    int lastMapY = 0;
     
     protected TitledBorder titledBorder = null;
     protected JPanel titledPanel = null;

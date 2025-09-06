@@ -9,11 +9,28 @@ package com.sfc.sf2.battle;
  *
  * @author wiz
  */
-public class SpriteSet {
+public class BattleSpriteset {
+    private int index;
     private Ally[] allies;
     private Enemy[] enemies;
     private AIRegion[] aiRegions;
     private AIPoint[] aiPoints;
+
+    public BattleSpriteset(int index, Ally[] allies, Enemy[] enemies, AIRegion[] aiRegions, AIPoint[] aiPoints) {
+        this.index = index;
+        this.allies = allies;
+        this.enemies = enemies;
+        this.aiRegions = aiRegions;
+        this.aiPoints = aiPoints;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public Ally[] getAllies() {
         return allies;

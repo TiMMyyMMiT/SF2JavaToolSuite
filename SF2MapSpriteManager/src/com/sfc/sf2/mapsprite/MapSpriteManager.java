@@ -78,7 +78,7 @@ public class MapSpriteManager extends AbstractManager {
     public MapSprite[] importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
-        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
         Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
         ArrayList<MapSprite> spritesList = new ArrayList<>();
         MapSprite lastMapSprite = null;

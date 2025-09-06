@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.block.io;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.core.io.asm.AbstractAsmProcessor;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.StringHelpers;
@@ -17,10 +18,10 @@ import java.io.IOException;
  *
  * @author TiMMy
  */
-public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData> {
+public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData, EmptyPackage> {
 
     @Override
-    protected MapTilesetData parseAsmData(BufferedReader reader) throws IOException, AsmException {
+    protected MapTilesetData parseAsmData(BufferedReader reader, EmptyPackage pckg) throws IOException, AsmException {
         String line;
         int paletteIndex = -1;
         boolean tilesetFound = false;
@@ -68,7 +69,7 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
     }
 
     @Override
-    protected void packageAsmData(FileWriter writer, MapTilesetData item) throws IOException, AsmException {
+    protected void packageAsmData(FileWriter writer, MapTilesetData item, EmptyPackage pckg) throws IOException, AsmException {
         writer.write("\t\t\tmapPalette  ");
         writer.write(Integer.toString(item.paletteIndex()));
         writer.write("\n");

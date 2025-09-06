@@ -44,8 +44,8 @@ public class BattleMapCoordsManager extends AbstractManager {
     
     public BattleMapCoords[] importDisassembly(Path mapEntriesPath, Path battleMapCoordsPath) throws IOException, AsmException {
         Console.logger().finest("ENTERING importDisassembly");
-        mapEntries = mapEntriesAsmProcessor.importAsmData(mapEntriesPath);
-        coords = coordsAsmProcessor.importAsmData(battleMapCoordsPath);
+        mapEntries = mapEntriesAsmProcessor.importAsmData(mapEntriesPath, null);
+        coords = coordsAsmProcessor.importAsmData(battleMapCoordsPath, null);
         Console.logger().info("Battle map coords successfully imported from : " + battleMapCoordsPath);
         Console.logger().finest("EXITING importDisassembly");
         return coords;
@@ -66,7 +66,7 @@ public class BattleMapCoordsManager extends AbstractManager {
     public void exportDisassembly(Path battleMapCoordsPath, BattleMapCoords[] coords) throws IOException, AsmException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.coords = coords;
-        coordsAsmProcessor.exportAsmData(battleMapCoordsPath, coords);
+        coordsAsmProcessor.exportAsmData(battleMapCoordsPath, coords, null);
         Console.logger().info("Battle coords successfully exported to : " + battleMapCoordsPath);
         Console.logger().finest("EXITING exportDisassembly");
     }

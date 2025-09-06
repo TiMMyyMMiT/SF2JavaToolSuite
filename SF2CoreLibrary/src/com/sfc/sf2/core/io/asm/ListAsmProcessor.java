@@ -6,6 +6,7 @@
 package com.sfc.sf2.core.io.asm;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.helpers.StringHelpers;
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  * </pre> 
  * @author TiMMy
  */
-public abstract class ListAsmProcessor<TItem> extends AbstractAsmProcessor<TItem[]> {
+public abstract class ListAsmProcessor<TItem> extends AbstractAsmProcessor<TItem[], EmptyPackage> {
 
     private final Class<TItem[]> collectionClass;
     private final String listNameIdentifier;
@@ -46,7 +47,7 @@ public abstract class ListAsmProcessor<TItem> extends AbstractAsmProcessor<TItem
     }
     
     @Override
-    protected TItem[] parseAsmData(BufferedReader reader) throws IOException, AsmException {
+    protected TItem[] parseAsmData(BufferedReader reader, EmptyPackage pckg) throws IOException, AsmException {
         ArrayList<TItem> itemsList = new ArrayList<>();
         String line;
         int index = 0;
@@ -88,7 +89,7 @@ public abstract class ListAsmProcessor<TItem> extends AbstractAsmProcessor<TItem
     protected abstract TItem parseItem(int index, String itemData);
 
     @Override
-    protected void packageAsmData(FileWriter writer, TItem[] item) throws IOException, AsmException {
+    protected void packageAsmData(FileWriter writer, TItem[] item, EmptyPackage pckg) throws IOException, AsmException {
         writer.write(listNameIdentifier);
         writer.write("\n");
         for (int i = 0; i < item.length; i++) {

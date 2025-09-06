@@ -6,8 +6,16 @@
 package com.sfc.sf2.battle.gui;
 
 import com.sfc.sf2.battle.BattleManager;
+import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
+import com.sfc.sf2.battle.EnemyEnums;
+import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.helpers.PathHelpers;
+import java.nio.file.Path;
+import java.util.logging.Level;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableColumnModel;
@@ -19,7 +27,6 @@ import javax.swing.table.TableColumnModel;
 public class MainEditor extends AbstractMainEditor {
     
     BattleManager battleManager = new BattleManager();
-    BattleLayoutPanel battleLayout = new BattleLayoutPanel();
     
     public MainEditor() {
         super();
@@ -68,20 +75,18 @@ public class MainEditor extends AbstractMainEditor {
     protected void onDataLoaded() {
         super.onDataLoaded();
         
-        /*battleLayout.setBattle(battleManager.getBattle());
-        battleLayout.setTerrain(battleManager.getBattle().getTerrain());
-        battleLayout.setCoords(battleManager.getBattleCoords());
-        battleLayout.setMapLayout(battleManager.getMapLayout());
-        battleLayout.setBlockset(battleManager.getMapLayout().getBlocks());
+        battleLayoutPanel.setBattle(battleManager.getBattle());
+        battleLayoutPanel.setTerrain(battleManager.getBattle().getTerrain());
+        battleLayoutPanel.setBattleCoords(battleManager.getBattleCoords());
+        battleLayoutPanel.setMapLayout(battleManager.getMapLayout());
         
-        battleLayout.setDrawTerrain(jCheckBox3.isSelected());
-        battleLayout.setDrawSprites(jCheckBox4.isSelected());        
-        battleLayout.setCurrentDisplaySize(jComboBox1.getSelectedIndex()+1);
-        battleLayout.setDrawExplorationFlags(jCheckBox1.isSelected());
-        battleLayout.setShowGrid(jCheckBox2.isSelected());
-        battleLayout.setDrawTerrain(jCheckBox3.isSelected());
-        
-        battleLayout.setBGColor(jPanelColorBG.getBackground());
+        battleLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        battleLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        battleLayoutPanel.setBGColor(colorPicker1.getColor());
+        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
+        battleLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
+        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());        
         
         BattleMapCoords coords = battleManager.getBattleCoords();
         jSpinner1.setValue(coords.getMap());
@@ -91,7 +96,27 @@ public class MainEditor extends AbstractMainEditor {
         jSpinner6.setValue(coords.getHeight());
         jSpinner7.setValue(coords.getTrigX());
         jSpinner8.setValue(coords.getTrigY());
-        */
+        
+        BattleSpriteset spriteset = battleManager.getBattle().getSpriteset();
+        if (spriteset == null) {
+            allyPropertiesTableModel.setTableData(null);
+            enemyPropertiesTableModel.setTableData(null);
+            aIRegionPropertiesTableModel.setTableData(null);
+            aIPointPropertiesTableModel.setTableData(null);
+        } else {
+            allyPropertiesTableModel.setTableData(spriteset.getAllies());
+            enemyPropertiesTableModel.setTableData(spriteset.getEnemies());
+            aIRegionPropertiesTableModel.setTableData(spriteset.getAiRegions());
+            aIPointPropertiesTableModel.setTableData(spriteset.getAiPoints());
+        }
+        
+        EnemyEnums enemyEnums = battleManager.getEnemyEnums();
+        jComboBox_Name.setModel(new DefaultComboBoxModel<>(enemyEnums.getEnemies().keySet().toArray(new String[enemyEnums.getEnemies().size()])));
+        jComboBox_AI.setModel(new DefaultComboBoxModel<>(enemyEnums.getCommandSets().keySet().toArray(new String[enemyEnums.getCommandSets().size()])));
+        jComboBox_Spawn.setModel(new DefaultComboBoxModel<>(enemyEnums.getSpawnParams().keySet().toArray(new String[enemyEnums.getSpawnParams().size()])));
+        jComboBox_Order1.setModel(new DefaultComboBoxModel<>(enemyEnums.getOrders().keySet().toArray(new String[enemyEnums.getOrders().size()])));
+        jComboBox_Order2.setModel(new DefaultComboBoxModel<>(enemyEnums.getOrders().keySet().toArray(new String[enemyEnums.getOrders().size()])));
+        jComboBox_Items.setModel(new DefaultComboBoxModel<>(enemyEnums.getItems().keySet().toArray(new String[enemyEnums.getItems().size()])));
     }
     
     /**
@@ -120,11 +145,11 @@ public class MainEditor extends AbstractMainEditor {
         fileButton3 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton4 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton5 = new com.sfc.sf2.core.gui.controls.FileButton();
+        fileButton9 = new com.sfc.sf2.core.gui.controls.FileButton();
         accordionPanel2 = new com.sfc.sf2.core.gui.controls.AccordionPanel();
         fileButton6 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton7 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton8 = new com.sfc.sf2.core.gui.controls.FileButton();
-        fileButton9 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel16 = new javax.swing.JPanel();
         jSpinner4 = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
@@ -219,7 +244,6 @@ public class MainEditor extends AbstractMainEditor {
 
         jSplitPane1.setDividerLocation(720);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane1.setMinimumSize(null);
         jSplitPane1.setOneTouchExpandable(true);
 
         jSplitPane2.setDividerLocation(750);
@@ -248,6 +272,9 @@ public class MainEditor extends AbstractMainEditor {
         fileButton5.setFilePath(".\\global\\battlemapcoords.asm");
         fileButton5.setLabelText("Battle map coords :");
 
+        fileButton9.setFilePath(".\\spritesets\\entries.asm");
+        fileButton9.setLabelText("Spriteset entries :");
+
         javax.swing.GroupLayout accordionPanel1Layout = new javax.swing.GroupLayout(accordionPanel1);
         accordionPanel1.setLayout(accordionPanel1Layout);
         accordionPanel1Layout.setHorizontalGroup(
@@ -259,7 +286,8 @@ public class MainEditor extends AbstractMainEditor {
                     .addComponent(fileButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fileButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         accordionPanel1Layout.setVerticalGroup(
@@ -275,6 +303,8 @@ public class MainEditor extends AbstractMainEditor {
                 .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileButton9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -289,9 +319,6 @@ public class MainEditor extends AbstractMainEditor {
         fileButton8.setFilePath("..\\..\\sf2enums.asm");
         fileButton8.setLabelText("Mapsprite enums :");
 
-        fileButton9.setFilePath(".\\spritesets\\entries.asm");
-        fileButton9.setLabelText("Spriteset entries :");
-
         javax.swing.GroupLayout accordionPanel2Layout = new javax.swing.GroupLayout(accordionPanel2);
         accordionPanel2.setLayout(accordionPanel2Layout);
         accordionPanel2Layout.setHorizontalGroup(
@@ -299,10 +326,9 @@ public class MainEditor extends AbstractMainEditor {
             .addGroup(accordionPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(accordionPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                     .addComponent(fileButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         accordionPanel2Layout.setVerticalGroup(
@@ -314,8 +340,6 @@ public class MainEditor extends AbstractMainEditor {
                 .addComponent(fileButton7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fileButton9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -340,18 +364,23 @@ public class MainEditor extends AbstractMainEditor {
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton18)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addContainerGap(88, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton18))
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)))
                 .addContainerGap())
-            .addComponent(jLabel2)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel16Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton18)
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -455,8 +484,8 @@ public class MainEditor extends AbstractMainEditor {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -1264,14 +1293,14 @@ public class MainEditor extends AbstractMainEditor {
             .addComponent(jSplitPane2)
         );
 
-        jSplitPane1.setLeftComponent(jPanel15);
+        jSplitPane1.setTopComponent(jPanel15);
         jSplitPane1.setBottomComponent(console1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1283,145 +1312,68 @@ public class MainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        //battleManager.exportDisassembly(PATH_TEST_PREFIX+jTextField26.getText(),PATH_TEST_PREFIX+jTextField27.getText(),PATH_TEST_PREFIX+jTextField28.getText());
+        Path coordsPath = PathHelpers.getBasePath().resolve(fileButton10.getFilePath());                           
+        Path terrainPath = PathHelpers.getBasePath().resolve(fileButton11.getFilePath());                           
+        Path spritesetPath = PathHelpers.getBasePath().resolve(fileButton12.getFilePath());
+        if (!PathHelpers.createPathIfRequred(terrainPath)) return;
+        try {
+            battleManager.exportDisassembly(coordsPath, terrainPath, spritesetPath);
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Battle disasm could not be exported to : " + terrainPath);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if(jComboBox1.getSelectedIndex()>=0){
-            battleLayout.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+            battleLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        battleLayout.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
-        battleLayout.setShowGrid(jCheckBox2.isSelected());
+        battleLayoutPanel.setShowGrid(jCheckBox2.isSelected());
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        battleLayout.setDrawTerrain(jCheckBox3.isSelected());
+        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-
-        /*String mapPalettesPath = PATH_TEST_PREFIX+jTextField21.getText();
-        String mapTilesetsPath = PATH_TEST_PREFIX+jTextField22.getText();
-        String incbinPath = PATH_TEST_PREFIX+jTextField23.getText();
-        String mapEntriesPath = PATH_TEST_PREFIX+jTextField19.getText();
-        String mapCoordsPath = PATH_TEST_PREFIX+jTextField20.getText();
-        String basePalettePath = PATH_TEST_PREFIX+jTextField32.getText();
-        String mapspriteEntriesPath = PATH_TEST_PREFIX+jTextField30.getText();
-        String mapspriteEnumPath = PATH_TEST_PREFIX+jTextField31.getText();
+        Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        Path terrainEntriesPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
+        Path battleMapCoordsPath = PathHelpers.getBasePath().resolve(fileButton5.getFilePath());
+        Path spritesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton9.getFilePath());
         int battleIndex = (int)jSpinner4.getModel().getValue();
-        String terrainEntriesPath = PATH_TEST_PREFIX+jTextField24.getText();
-        String spritesetEntriesPath = PATH_TEST_PREFIX+jTextField25.getText();
         
-        battleManager.importDisassembly(incbinPath, mapEntriesPath, battleIndex);
-        battleManager.importMapCoordsDisassembly(incbinPath, mapEntriesPath, mapCoordsPath, battleIndex);
-        battleManager.importSpritesDataDisassembly(incbinPath, basePalettePath, mapspriteEntriesPath, mapspriteEnumPath, battleIndex, spritesetEntriesPath);
-        battleManager.importTerrainDisassembly(mapPalettesPath, mapTilesetsPath, incbinPath, mapEntriesPath, terrainEntriesPath, mapCoordsPath, battleIndex);
-        */
-        /*
-        allyTableModel = new AllyPropertiesTableModel(battleManager.getBattle(), battleLayout);
-        jTable2.setModel(allyTableModel);
-        jTable2.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            private int selectedRow = -1;
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                battleLayout.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-                battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ALLY);
-                if(selectedRow!=jTable2.getSelectedRow()){
-                    selectedRow = jTable2.getSelectedRow();
-                    battleLayout.setSelectedAlly(selectedRow);
-                    battleLayout.updateSpriteDisplay();
-                    jPanel2.revalidate();
-                    jPanel2.repaint();
-                }
-            }
-        });    
+        Path basePalettePath = PathHelpers.getBasePath().resolve(fileButton6.getFilePath());
+        Path mapspriteEntriesPath = PathHelpers.getBasePath().resolve(fileButton7.getFilePath());
+        Path mapspriteEnumsPath = PathHelpers.getBasePath().resolve(fileButton8.getFilePath());
         
-        EnemyData[] enemyData = battleManager.getEnemyData();
-        
-        battleLayout.setAlliesTable(allyTableModel);
-        jPanel21.validate();
-        jPanel21.repaint();
-        enemyTableModel = new EnemyPropertiesTableModel(battleManager.getBattle(), battleLayout, enemyData);
-        jTable3.setModel(enemyTableModel);
-        jTable3.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            private int selectedRow = -1;
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                battleLayout.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-                battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ENEMY);
-                if(selectedRow!=jTable3.getSelectedRow()){
-                    selectedRow = jTable3.getSelectedRow();
-                    battleLayout.setSelectedEnemy(selectedRow);
-                    UpdateEnemyControls(selectedRow);
-                    battleLayout.updateSpriteDisplay();
-                    jPanel2.revalidate();
-                    jPanel2.repaint();
-                }
-            }
-        });  
-        battleLayout.setEnemiesTable(enemyTableModel);
-        jPanel24.validate();
-        jPanel24.repaint();
-        aiRegionTableModel = new AIRegionPropertiesTableModel(battleManager.getBattle(), battleLayout);
-        jTable4.setModel(aiRegionTableModel);
-        jTable4.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            private int selectedRow = -1;
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                battleLayout.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-                battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIREGION);
-                if(selectedRow!=jTable4.getSelectedRow()){
-                    selectedRow = jTable4.getSelectedRow();
-                    battleLayout.setSelectedAIRegion(selectedRow);
-                    battleLayout.updateAIRegionDisplay();
-                    jPanel2.revalidate();
-                    jPanel2.repaint();
-                }
-            }
-        });  
-        jPanel25.validate();
-        jPanel25.repaint();
-        aiPointTableModel = new AIPointPropertiesTableModel(battleManager.getBattle(), battleLayout);
-        jTable9.setModel(aiPointTableModel);
-        jTable9.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            private int selectedRow = -1;
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                battleLayout.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-                battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIPOINT);
-                if(selectedRow!=jTable9.getSelectedRow()){
-                    selectedRow = jTable9.getSelectedRow();
-                    battleLayout.setSelectedAIPoint(selectedRow);
-                    battleLayout.updateAIPointDisplay();
-                    jPanel2.revalidate();
-                    jPanel2.repaint();
-                }
-            }
-        });  
-        jPanel26.validate();
-        jPanel26.repaint();
-        battleLayout.setTitledPanel(jPanel1);
-        
-        EnemyEnums enemyEnums = battleManager.getEnemyEnums();
-        jComboBox_Name.setModel(new DefaultComboBoxModel<>(enemyEnums.getEnemies().keySet().toArray(new String[enemyEnums.getEnemies().size()])));
-        jComboBox_AI.setModel(new DefaultComboBoxModel<>(enemyEnums.getCommandSets().keySet().toArray(new String[enemyEnums.getCommandSets().size()])));
-        jComboBox_Spawn.setModel(new DefaultComboBoxModel<>(enemyEnums.getSpawnParams().keySet().toArray(new String[enemyEnums.getSpawnParams().size()])));
-        jComboBox_Order1.setModel(new DefaultComboBoxModel<>(enemyEnums.getOrders().keySet().toArray(new String[enemyEnums.getOrders().size()])));
-        jComboBox_Order2.setModel(new DefaultComboBoxModel<>(enemyEnums.getOrders().keySet().toArray(new String[enemyEnums.getOrders().size()])));
-        jComboBox_Items.setModel(new DefaultComboBoxModel<>(enemyEnums.getItems().keySet().toArray(new String[enemyEnums.getItems().size()])));
-        */
-        jPanel17.invalidate();
-        jPanel17.repaint();
+        try {
+            battleManager.importMapspriteData(basePalettePath, mapspriteEntriesPath, mapspriteEnumsPath);
+        } catch (Exception ex) {
+            battleManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Mapsprite data could not be imported from : " + mapspriteEntriesPath + " and " + mapspriteEnumsPath);
+            return;
+        }
+        try {
+            battleManager.importDisassembly(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, terrainEntriesPath, battleMapCoordsPath, spritesetEntriesPath, battleIndex);
+        } catch (Exception ex) {
+            battleManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Battle data could not be imported for battle : " + battleIndex);
+            return;
+        }
     }//GEN-LAST:event_jButton18ActionPerformed
 
-    private void UpdateEnemyControls(int selectedRow)
-    {
+    private void UpdateEnemyControls(int selectedRow) {
         boolean enabled = selectedRow >= 0;
         jComboBox_Name.setEnabled(enabled);
         jSpinner_X.setEnabled(enabled);
@@ -1468,8 +1420,8 @@ public class MainEditor extends AbstractMainEditor {
     }
     
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        if(battleLayout!=null){
-            battleLayout.setDrawSprites(jCheckBox4.isSelected());
+        if(battleLayoutPanel!=null){
+            battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
         }
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
@@ -1483,14 +1435,14 @@ public class MainEditor extends AbstractMainEditor {
         } catch (DisassemblyException ex) {
             Logger.getLogger(MainEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        battleLayout.setMapLayout(mapLayoutManager.getLayout());
-        battleLayout.setBlockset(mapLayoutManager.getBlockset());
-        battleLayout.updateBattleDisplay();*/
+        battleLayoutPanel.setMapLayout(mapLayoutManager.getLayout());
+        battleLayoutPanel.setBlockset(mapLayoutManager.getBlockset());
+        battleLayoutPanel.updateBattleDisplay();*/
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         /*battleManager.getBattleCoords().setX((int)jSpinner2.getModel().getValue());
-        battleLayout.updateCoordsDisplay();*/  
+        battleLayoutPanel.updateCoordsDisplay();*/  
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
@@ -1519,16 +1471,16 @@ public class MainEditor extends AbstractMainEditor {
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
         int index = jTabbedPane2.getSelectedIndex();
-        if(battleLayout!=null){
+        if(battleLayoutPanel!=null){
             switch(index){
                 case 0:
-                    battleLayout.setCurrentMode(BattleLayoutPanel.MODE_NONE);
+                    battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_NONE);
                     break;
                 case 1:
-                    battleLayout.setCurrentMode(BattleLayoutPanel.MODE_TERRAIN);
+                    battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_TERRAIN);
                     break;
                 case 2:
-                    battleLayout.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
+                    battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
                     break;
             }
         }
@@ -1536,19 +1488,19 @@ public class MainEditor extends AbstractMainEditor {
 
     private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
         int index = jTabbedPane3.getSelectedIndex();
-        if(battleLayout!=null){
+        if(battleLayoutPanel!=null){
             switch(index){
                 case 0:
-                    battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ALLY);
+                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ALLY);
                     break;
                 case 1:
-                    battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ENEMY);
+                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ENEMY);
                     break;
                 case 2:
-                    battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIREGION);
+                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIREGION);
                     break;
                 case 3:
-                    battleLayout.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIPOINT);
+                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIPOINT);
                     break;
             }
         }
@@ -1568,7 +1520,7 @@ public class MainEditor extends AbstractMainEditor {
 
     private void jSpinner9StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner9StateChanged
         int newApplicableTerrainValue = (int)jSpinner9.getModel().getValue();
-        battleLayout.setApplicableTerrainValue(newApplicableTerrainValue);
+        battleLayoutPanel.setApplicableTerrainValue(newApplicableTerrainValue);
     }//GEN-LAST:event_jSpinner9StateChanged
 
     private void jSpinner_OrderTarget1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_OrderTarget1StateChanged
@@ -1635,35 +1587,82 @@ public class MainEditor extends AbstractMainEditor {
     }
     
     private void onTableAlliesDataChanged(TableModelEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstRow();
+        if (row == battleLayoutPanel.getSelectedAlly()) {
+            battleLayoutPanel.redraw();
+        }
     }
 
     private void onTableAlliesSelectionChanged(ListSelectionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstIndex();
+        if (row != battleLayoutPanel.getSelectedAlly()) {
+            battleLayoutPanel.setSelectedAlly(row);
+            battleLayoutPanel.redraw();
+        }
+        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_ALLY) {
+            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
+            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ALLY);
+            battleLayoutPanel.redraw();
+        }
     }
 
     private void onTableEnemiesDataChanged(TableModelEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstRow();
+        if (row == battleLayoutPanel.getSelectedEnemy()) {
+            battleLayoutPanel.redraw();
+        }
     }
 
     private void onTableEnemiesSelectionChanged(ListSelectionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstIndex();
+        if (row != battleLayoutPanel.getSelectedEnemy()) {
+            battleLayoutPanel.setSelectedEnemy(row);
+            UpdateEnemyControls(row);
+            battleLayoutPanel.redraw();
+        }
+        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_ENEMY) {
+            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
+            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ENEMY);
+        }
     }
 
     private void onTableAIRegionsDataChanged(TableModelEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstRow();
+        if (row == battleLayoutPanel.getSelectedAIRegion()) {
+            battleLayoutPanel.redraw();
+        }
     }
 
     private void onTableAIRegionsSelectionChanged(ListSelectionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstIndex();
+        if (row != battleLayoutPanel.getSelectedAIRegion()) {
+            battleLayoutPanel.setSelectedAIRegion(row);
+            battleLayoutPanel.redraw();
+        }
+        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_AIREGION) {
+            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
+            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIREGION);
+        }
     }
 
     private void onTableAIPointsDataChanged(TableModelEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstRow();
+        if (row == battleLayoutPanel.getSelectedAIPoint()) {
+            battleLayoutPanel.redraw();
+        }
     }
 
     private void onTableAIPointsSelectionChanged(ListSelectionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int row = e.getFirstIndex();
+        if (row != battleLayoutPanel.getSelectedAIPoint()) {
+            battleLayoutPanel.setSelectedAIPoint(row);
+            UpdateEnemyControls(row);
+            battleLayoutPanel.redraw();
+        }
+        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_AIPOINT) {
+            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
+            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIPOINT);
+        }
     }
     
     /**
