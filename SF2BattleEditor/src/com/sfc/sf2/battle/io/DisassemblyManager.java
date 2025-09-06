@@ -45,19 +45,19 @@ public class DisassemblyManager {
     private String header;
     
     public SpriteSet importSpriteset(String spritesetPath, EnemyData[] enemyData, EnemyEnums enemyEnums){
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Importing disassembly ...");
+        /*System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Importing disassembly ...");
         SpriteSet spriteset = null;
         if(spritesetPath.endsWith(".asm")){
             spriteset = importSpritesetAsm(spritesetPath, enemyData, enemyEnums);
         }else{
             spriteset = importSpritesetBin(spritesetPath, enemyData, enemyEnums);
         }
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Disassembly imported.");  
-        return spriteset;
+        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Disassembly imported.");*/
+        return null;
     }    
 
     public SpriteSet importSpritesetAsm(String spritesetPath, EnemyData[] enemyData, EnemyEnums enemyEnums){
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Importing disassembly ...");
+        /*System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Importing disassembly ...");
         SpriteSet spriteset = new SpriteSet();
         
         List<Ally> allyList = new ArrayList();            
@@ -131,13 +131,13 @@ public class DisassemblyManager {
                 else if(line.trim().startsWith(MACRO_ALLIES)){
                     inHeader = false;
                     parsedSizes = true;
-                    
+                    */
                     /*
                     index (0 to $B), X, Y
                     Unused, Unused, Unused
                     Unused, Unused, Unused, Unused, Unused, Unused, Unused
                     */
-                    
+                    /*
                     String[] params = line.trim().substring(MACRO_ALLIES.length()).trim().split(",");
                     int index = Integer.parseInt(params[0].trim());
                     int x = Integer.parseInt(params[1].trim());
@@ -155,13 +155,13 @@ public class DisassemblyManager {
                 else if(line.trim().startsWith(MACRO_ENEMIES)){
                     inHeader = false;
                     parsedSizes = true;
-                    
+                    */
                     /*
                     index, X, Y
                     aiType, extraItem
                     moveOrder1, region1, moveOrder2, region2, unknown, spawnParams
                     */
-                    
+                    /*
                     String[] params = line.trim().substring(MACRO_ENEMIES.length()).trim().split(",");
                     int x = 0, y = 0, region1 = 0, region2 = 0, unknownParam = 0;
                     String name, aiCommand = null, item = null, moveOrder1 = null, moveOrder2 = null, spawnParams = null;
@@ -256,11 +256,12 @@ public class DisassemblyManager {
         }
         
         System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Disassembly imported.");  
-        return spriteset;
+        return spriteset;*/
+                    return null;
     }
 
     public SpriteSet importSpritesetBin(String spritesetPath, EnemyData[] enemyData, EnemyEnums enemyEnums){
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Importing disassembly ...");
+        /*System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Importing disassembly ...");
         SpriteSet spriteset = new SpriteSet();
         try {
             int cursor = 0;
@@ -340,21 +341,12 @@ public class DisassemblyManager {
             Logger.getLogger(DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importAreas() - Disassembly imported.");  
-        return spriteset;
-    }
-    
-    private static short getNextWord(byte[] data, int cursor){
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        bb.put(data[cursor+1]);
-        bb.put(data[cursor]);
-        short s = bb.getShort(0);
-        //System.out.println("Next input word = $"+Integer.toString(s, 16)+" / "+Integer.toString(s, 2));
-        return s;
+        return spriteset;*/
+        return null;
     }
     
     public String[][] importMapEntryFile(String basePath, String mapEntriesFilePath){
-        String[][] entries = null;
+        /*String[][] entries = null;
         List<String> tilesetsPaths = new ArrayList();
         List<String> blocksPaths = new ArrayList();
         List<String> layoutPaths = new ArrayList();
@@ -432,12 +424,13 @@ public class DisassemblyManager {
             }
         }catch(Exception e){
              System.err.println("com.sfc.sf2.battle.DisassemblyManager.importMapEntryFile() - Error while parsing map entries data : "+e);
-        }         
-        return entries;
+        }
+        return entries;*/
+        return null;
     }
     
     public String[] importSpritesetEntriesFile(String spritesetEntriesFilePath) {
-        String[] entries = null;
+        /*String[] entries = null;
         try {
             List<Integer> entriesIndices = new ArrayList<>();
             String[] paths = null;
@@ -472,11 +465,12 @@ public class DisassemblyManager {
         }catch(Exception e){
              System.err.println("com.sfc.sf2.battlemapterrain.io.DisassemblyManager.importSpritesetEntriesFile() - Error while parsing map entries data : "+e);
         }         
-        return entries;
+        return entries;*/
+        return null;
     }
     
     public void exportSpriteSet(SpriteSet spriteset, String spritesetPath, EnemyEnums enemyEnums){
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.exportSpriteSet() - Exporting disassembly ...");
+        /*System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.exportSpriteSet() - Exporting disassembly ...");
         try { 
             if(spritesetPath.endsWith(".asm")){
                 StringBuilder asm = new StringBuilder();
@@ -496,11 +490,11 @@ public class DisassemblyManager {
             ex.printStackTrace();
             System.out.println(ex);
         }            
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.exportSpriteSet() - Disassembly exported.");         
+        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.exportSpriteSet() - Disassembly exported.");         */
     }
     
     private String produceSpriteSetAsm(SpriteSet spriteset, EnemyEnums enemyEnums){
-                
+        /*        
         Ally[] allies = spriteset.getAllies();
         Enemy[] enemies = spriteset.getEnemies();
         AIRegion[] aiRegions = spriteset.getAiRegions();
@@ -571,12 +565,13 @@ public class DisassemblyManager {
         }
         asm.append("\n");
         
-        return asm.toString();
+        return asm.toString();*/
+        return null;
     }
     
     //Lagacy? Do spritesets need binary format anymore?
     private byte[] produceSpriteSetBin(SpriteSet spriteset, EnemyEnums enemyEnums){
-        Ally[] allies = spriteset.getAllies();
+        /*Ally[] allies = spriteset.getAllies();
         Enemy[] enemies = spriteset.getEnemies();
         AIRegion[] aiRegions = spriteset.getAiRegions();
         AIPoint[] aiPoints = spriteset.getAiPoints();
@@ -636,11 +631,12 @@ public class DisassemblyManager {
             spritesetBytes[4+alliesNumber*12+enemiesNumber*12+aiRegionsNumber*12+i*2+1] = (byte)aiPoint.getY();
         }
 
-        return spritesetBytes;
+        return spritesetBytes;*/
+        return null;
     }
     
     public EnemyData[] importEnemyData(EnemyEnums enemyEnums, MapSprite[] mapsprites, String mapspriteEnumPath){
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importEnemyData() - Importing disassembly ...");
+        /*System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importEnemyData() - Importing disassembly ...");
         List<EnemyData> enemyDataList = new ArrayList(enemyEnums.getEnemies().size());
             
         try {
@@ -693,11 +689,12 @@ public class DisassemblyManager {
         
         EnemyData[] enemyData = new EnemyData[enemyDataList.size()];
         enemyData = enemyDataList.toArray(enemyData);
-        return enemyData;
+        return enemyData;*/
+        return null;
     }
     
     public EnemyEnums importEnemyEnums(String mapspriteEnumPath){
-        System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importEnemyEnums() - Importing disassembly ...");
+        /*System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importEnemyEnums() - Importing disassembly ...");
         LinkedHashMap<String, Integer> enemies = new LinkedHashMap<>();
         LinkedHashMap<String, Integer> items = new LinkedHashMap<>();
         LinkedHashMap<String, Integer> aiCommandSets = new LinkedHashMap<>();
@@ -837,21 +834,7 @@ public class DisassemblyManager {
         
         System.out.println("com.sfc.sf2.battle.io.DisassemblyManager.importEnemyEnums() - Disassembly imported.");
         
-        return enemyEnums;
-    }
-    
-    private int valueOf(String s){
-        int commentIndex = s.indexOf(";");
-        if (commentIndex > -1) {
-            s = s.substring(0, commentIndex);
-        }
-        s = s.trim();
-        if (s.startsWith("equ"))
-            s = s.substring(3).trim();
-        if(s.startsWith("$")){
-            return Integer.valueOf(s.substring(1),16);
-        }else{
-            return Integer.valueOf(s);
-        }
+        return enemyEnums;*/
+        return null;
     }
 }

@@ -5,9 +5,6 @@
  */
 package com.sfc.sf2.battle;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author wiz
@@ -25,6 +22,20 @@ public class Enemy {
     private int triggerRegion2;
     private int byte10;
     private String spawnParams;
+
+    public Enemy(EnemyData data, int x, int y, String ai, String item, String moveOrder1, int triggerRegion1, String moveOrder2, int triggerRegion2, int byte10, String spawnParams) {
+        this.data = data;
+        this.x = x;
+        this.y = y;
+        this.ai = ai;
+        this.item = item;
+        this.moveOrder1 = moveOrder1;
+        this.triggerRegion1 = triggerRegion1;
+        this.moveOrder2 = moveOrder2;
+        this.triggerRegion2 = triggerRegion2;
+        this.byte10 = byte10;
+        this.spawnParams = spawnParams;
+    }
 
     public EnemyData getEnemyData() {
         return data;
@@ -112,5 +123,14 @@ public class Enemy {
 
     public void setSpawnParams(String spawnParams) {
         this.spawnParams = spawnParams;
+    }
+
+    @Override
+    public Enemy clone() {
+        return new Enemy(data, x, y, ai, item, moveOrder1, triggerRegion1, moveOrder2, triggerRegion2, byte10, spawnParams);
+    }
+    
+    public static Enemy emptyEnemy() {
+        return new Enemy(null, 0, 0, null, null, null, -1, null, -1, 0, null);
     }
 }
