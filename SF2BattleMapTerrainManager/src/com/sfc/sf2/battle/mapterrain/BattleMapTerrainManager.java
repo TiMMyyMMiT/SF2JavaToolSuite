@@ -41,15 +41,23 @@ public class BattleMapTerrainManager extends AbstractManager {
     
     public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
-        coords = mapCoordsManager.getCoords()[battleIndex];
+        BattleMapCoords[] coords = mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
+        terrain = importDisassembly(paletteEntriesPath, tilesetEntriesPath, terrainEntriesPath, battleIndex, coords);
+        Console.logger().finest("EXITING importDisassembly");
+        return terrain;
+    }
+    
+    public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path terrainEntriesPath, int battleIndex, BattleMapCoords[] coords) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        this.coords = coords[battleIndex];
         EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath, null);
-        int mapId = coords.getMap();
+        int mapId = coords[battleIndex].getMap();
         mapCoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
         if (battleIndex < terrainEntries.entriesCount()) {
             Path path = PathHelpers.getIncbinPath().resolve(terrainEntries.getPathForEntry(battleIndex));
             terrain = terrainDisassemblyProcessor.importDisassembly(path, null);
         }
+        Console.logger().info("Terrain data " + battleIndex + " successfully imported from : " + terrainEntriesPath);
         Console.logger().finest("EXITING importDisassembly");
         return terrain;
     }

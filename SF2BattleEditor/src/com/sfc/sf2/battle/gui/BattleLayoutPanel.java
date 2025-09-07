@@ -41,7 +41,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     public static final int MODE_TERRAIN = 1;
     public static final int MODE_SPRITE = 2;
     
-    protected Battle battle;
+    private Battle battle;
     
     protected int currentMode = 0;
     protected int currentSpritesetMode = 0;

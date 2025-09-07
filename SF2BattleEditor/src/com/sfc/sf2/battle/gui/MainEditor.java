@@ -1317,7 +1317,7 @@ public class MainEditor extends AbstractMainEditor {
         Path spritesetPath = PathHelpers.getBasePath().resolve(fileButton12.getFilePath());
         if (!PathHelpers.createPathIfRequred(terrainPath)) return;
         try {
-            battleManager.exportDisassembly(coordsPath, terrainPath, spritesetPath);
+            battleManager.exportDisassembly(coordsPath, terrainPath, spritesetPath, battleLayoutPanel.getBattle());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Battle disasm could not be exported to : " + terrainPath);
