@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.settings;
 
+import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import com.sfc.sf2.core.settings.AbstractSettings;
 import java.util.HashMap;
 
@@ -14,30 +15,34 @@ import java.util.HashMap;
  */
 public class TerrainSettings implements AbstractSettings {
     
-    private int terrainDrawMode;
+    private TerrainDrawMode terrainDrawMode;
 
-    public int getTerrainDrawMode() {
+    public TerrainDrawMode getTerrainDrawMode() {
         return terrainDrawMode;
     }
 
-    public void setTerrainDrawMode(int terrainDrawMode) {
+    public void setTerrainDrawMode(TerrainDrawMode terrainDrawMode) {
         this.terrainDrawMode = terrainDrawMode;
     }
 
     @Override
     public void initialiseNewUser() {
-        terrainDrawMode = 0;
+        terrainDrawMode = TerrainDrawMode.Icons;
     }
 
     @Override
     public void decodeSettings(HashMap<String, String> data) {
         if (data.containsKey("terrainDrawMode")) {
-            terrainDrawMode = Integer.parseInt(data.get("terrainDrawMode"));
+            try {
+                terrainDrawMode = TerrainDrawMode.valueOf((String)data.get("terrainDrawMode"));
+            } catch (Exception e) {
+                initialiseNewUser();
+            }
         }
     }
 
     @Override
     public void encodeSettings(HashMap<String, String> data) {
-        data.put("terrainDrawMode", Integer.toString(terrainDrawMode));
+        data.put("terrainDrawMode", terrainDrawMode.toString());
     }
 }

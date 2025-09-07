@@ -6,6 +6,7 @@
 package com.sfc.sf2.battle.mapterrain.gui;
 
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrainManager;
+import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
@@ -14,6 +15,8 @@ import com.sfc.sf2.settings.TerrainSettings;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -37,7 +40,8 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         accordionPanel1.setExpanded(false);
         terrainKeyPanel1.setActionListener(this::onTerrainSelectionChanged);
         
-        jComboBox2.setSelectedIndex(terrainSettings.getTerrainDrawMode());
+        jComboBox2.setModel(new DefaultComboBoxModel(TerrainDrawMode.values()));
+        jComboBox2.setSelectedItem(terrainSettings.getTerrainDrawMode().ordinal());
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         
         battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
@@ -47,9 +51,9 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleMapTerrainLayoutPanel.setShowBattleCoords(true);
         
-        boolean drawText = terrainSettings.getTerrainDrawMode() != 0;
-        terrainKeyPanel1.setDrawMode(drawText);
-        battleMapTerrainLayoutPanel.setDrawTerrainText(drawText);
+        TerrainDrawMode terrainDrawMode = terrainSettings.getTerrainDrawMode();
+        terrainKeyPanel1.setDrawMode(terrainDrawMode);
+        battleMapTerrainLayoutPanel.setTerrainDrawMode(terrainDrawMode);
     }
     
     @Override
@@ -366,7 +370,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
             .addGap(0, 22, Short.MAX_VALUE)
         );
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Icons", "Text" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Icons", "Colors", "Numbers" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
@@ -530,10 +534,10 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         if (jComboBox2.getSelectedIndex() >= 0) {
-            boolean drawText = jComboBox2.getSelectedIndex() != 0;
-            terrainKeyPanel1.setDrawMode(drawText);
-            battleMapTerrainLayoutPanel.setDrawTerrainText(drawText);
-            terrainSettings.setTerrainDrawMode(jComboBox2.getSelectedIndex());
+            TerrainDrawMode terrainDrawMode = (TerrainDrawMode)jComboBox2.getSelectedItem();
+            terrainKeyPanel1.setDrawMode(terrainDrawMode);
+            battleMapTerrainLayoutPanel.setTerrainDrawMode(terrainDrawMode);
+            terrainSettings.setTerrainDrawMode(terrainDrawMode);
             SettingsManager.saveSettingsFile();
         }
     }//GEN-LAST:event_jComboBox2ActionPerformed
