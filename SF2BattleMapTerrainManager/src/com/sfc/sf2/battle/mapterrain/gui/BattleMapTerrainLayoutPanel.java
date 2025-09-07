@@ -21,9 +21,15 @@ import java.awt.event.MouseEvent;
  */
 public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     
+    public enum TerrainDrawMode {
+        Icons,
+        Colors,
+        Numbers,
+    }
+    
     protected BattleMapTerrain terrain;
     protected boolean drawTerrain;
-    protected boolean drawTerrainAsText;
+    protected TerrainDrawMode terrainDrawMode;
     
     private byte selectedTerrainType;
     
@@ -45,10 +51,16 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
         
         graphics.setColor(BattleTerrainIcons.TERRAIN_DARKEN);
         graphics.fillRect(coordsX*PIXEL_WIDTH, coordsY*PIXEL_HEIGHT, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
-        if (drawTerrainAsText) {
-            drawTerrainText(graphics, data, coordsX, coordsY, width, height);
-        } else {
-            drawTerrainIcons(graphics, data, coordsX, coordsY, width, height);
+        switch (terrainDrawMode) {
+            case Icons:
+                drawTerrainIcons(graphics, data, coordsX, coordsY, width, height);
+                break;
+            case Colors:
+                drawTerrainColors(graphics, data, coordsX, coordsY, width, height);
+                break;
+            case Numbers:
+                drawTerrainText(graphics, data, coordsX, coordsY, width, height);
+                break;
         }
     }
     
@@ -61,6 +73,21 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
                 int value = data[i+j*48];
                 graphics.fillRect(x+6, y+6, PIXEL_WIDTH-12, PIXEL_HEIGHT-12);
                 graphics.drawImage(BattleTerrainIcons.getTerrainIcon(value).getImage(), x+8, y+8, null);
+            }
+        }
+    }
+    
+    private void drawTerrainColors(Graphics graphics, byte[] data, int coordsX, int coordsY, int width, int height) {
+        graphics.setColor(BattleTerrainIcons.TERRAIN_BG);
+        for (int j=0; j<height; j++) {
+            for (int i=0; i<width; i++) {
+                int x = (coordsX+i)*PIXEL_WIDTH;
+                int y = (coordsY+j)*PIXEL_HEIGHT;
+                int value = data[i+j*48];
+                graphics.setColor(BattleTerrainIcons.TERRAIN_TEXT_BG);
+                graphics.fillRect(x+6, y+6, PIXEL_WIDTH-12, PIXEL_HEIGHT-12);
+                graphics.setColor(BattleTerrainIcons.getTerrainTextColor(value));
+                graphics.fillRect(x+8, y+8, PIXEL_WIDTH-16, PIXEL_HEIGHT-16);
             }
         }
     }
@@ -99,9 +126,9 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
         }
     }
 
-    public void setDrawTerrainText(boolean drawTerrainAsText) {
-        if (this.drawTerrainAsText != drawTerrainAsText) {
-            this.drawTerrainAsText = drawTerrainAsText;
+    public void setTerrainDrawMode(TerrainDrawMode terrainDrawMode) {
+        if (this.terrainDrawMode != terrainDrawMode) {
+            this.terrainDrawMode = terrainDrawMode;
             redraw();
         }
     }

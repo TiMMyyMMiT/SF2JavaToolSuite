@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.battle.mapterrain.gui;
 
+import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import java.awt.event.ActionListener;
 import java.beans.BeanProperty;
 
@@ -29,17 +30,17 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         this.buttonSelected = null;
     }
     
-    public void setDrawMode(boolean showText) {
-        TerrainIconPanel1.setShowNumber(showText);
-        TerrainIconPanel2.setShowNumber(showText);
-        TerrainIconPanel3.setShowNumber(showText);
-        TerrainIconPanel4.setShowNumber(showText);
-        TerrainIconPanel5.setShowNumber(showText);
-        TerrainIconPanel6.setShowNumber(showText);
-        TerrainIconPanel7.setShowNumber(showText);
-        TerrainIconPanel8.setShowNumber(showText);
-        TerrainIconPanel9.setShowNumber(showText);
-        TerrainIconPanel10.setShowNumber(showText);
+    public void setDrawMode(TerrainDrawMode terrainDrawMode) {
+        TerrainIconPanel1.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel2.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel3.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel4.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel5.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel6.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel7.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel8.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel9.setTerrainDrawMode(terrainDrawMode);
+        TerrainIconPanel10.setTerrainDrawMode(terrainDrawMode);
     }
 
     /**
@@ -88,11 +89,9 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton7.setText("");
 
         TerrainIconPanel8.setNumber(6);
-        TerrainIconPanel8.setShowNumber(false);
         TerrainIconPanel8.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         TerrainIconPanel1.setNumber(-1);
-        TerrainIconPanel1.setShowNumber(false);
         TerrainIconPanel1.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         buttonGroupTerrain.add(jRadioButtonDesert);
@@ -120,10 +119,8 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton1.setText("");
 
         TerrainIconPanel9.setNumber(7);
-        TerrainIconPanel9.setShowNumber(false);
         TerrainIconPanel9.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
-        TerrainIconPanel2.setShowNumber(false);
         TerrainIconPanel2.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         buttonGroupTerrain.add(jRadioButtonMountain);
@@ -151,11 +148,9 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton2.setText("");
 
         TerrainIconPanel10.setNumber(8);
-        TerrainIconPanel10.setShowNumber(false);
         TerrainIconPanel10.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         TerrainIconPanel3.setNumber(1);
-        TerrainIconPanel3.setShowNumber(false);
         TerrainIconPanel3.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         buttonGroupTerrain.add(jRadioButtonWater);
@@ -183,7 +178,6 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton3.setText("");
 
         TerrainIconPanel4.setNumber(2);
-        TerrainIconPanel4.setShowNumber(false);
         TerrainIconPanel4.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         jLabel2.setText("Select a terrain type to paint onto the battle map");
@@ -202,7 +196,6 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton4.setText("");
 
         TerrainIconPanel5.setNumber(3);
-        TerrainIconPanel5.setShowNumber(false);
         TerrainIconPanel5.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         buttonGroupTerrain.add(jRadioButtonGrass);
@@ -218,7 +211,6 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton5.setText("");
 
         TerrainIconPanel6.setNumber(4);
-        TerrainIconPanel6.setShowNumber(false);
         TerrainIconPanel6.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         buttonGroupTerrain.add(jRadioButtonForest);
@@ -235,7 +227,6 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton6.setText("");
 
         TerrainIconPanel7.setNumber(5);
-        TerrainIconPanel7.setShowNumber(false);
         TerrainIconPanel7.setFont(new java.awt.Font("Dialog", 0, 20)); // NOI18N
 
         buttonGroupTerrain.add(jRadioButtonHills);
