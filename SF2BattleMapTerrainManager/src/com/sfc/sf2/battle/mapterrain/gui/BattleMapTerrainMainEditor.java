@@ -15,7 +15,6 @@ import com.sfc.sf2.settings.TerrainSettings;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -40,9 +39,11 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         accordionPanel1.setExpanded(false);
         terrainKeyPanel1.setActionListener(this::onTerrainSelectionChanged);
         
-        jComboBox2.setModel(new DefaultComboBoxModel(TerrainDrawMode.values()));
-        jComboBox2.setSelectedItem(terrainSettings.getTerrainDrawMode().ordinal());
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        jComboBox2.setModel(new DefaultComboBoxModel(TerrainDrawMode.values()));
+        if (terrainSettings.getTerrainDrawMode() != null) {
+            jComboBox2.setSelectedItem(terrainSettings.getTerrainDrawMode().ordinal());
+        }
         
         battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         battleMapTerrainLayoutPanel.setShowGrid(jCheckBox2.isSelected());
