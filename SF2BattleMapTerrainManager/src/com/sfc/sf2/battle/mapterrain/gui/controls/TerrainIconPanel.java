@@ -34,11 +34,15 @@ public class TerrainIconPanel extends Component {
     @BeanProperty(preferred = true, visualUpdate = true, description = "To show the number, color, or icon representation for the terrainType.")
     public void setTerrainDrawMode(TerrainDrawMode terrainDrawMode) {
         this.terrainDrawMode = terrainDrawMode;
-        repaint();
+            repaint();
     }
     
     @Override
     public void paint(Graphics g) {
+        if (this.terrainDrawMode == null) {
+            super.paint(g);
+            return;
+        }
         Dimension dims = getSize();
         switch (terrainDrawMode) {
             case Icons:
