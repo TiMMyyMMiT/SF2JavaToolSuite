@@ -24,11 +24,11 @@ import javax.swing.table.TableColumnModel;
  *
  * @author wiz
  */
-public class MainEditor extends AbstractMainEditor {
+public class BattleEditorMainEditor extends AbstractMainEditor {
     
     BattleManager battleManager = new BattleManager();
     
-    public MainEditor() {
+    public BattleEditorMainEditor() {
         super();
         //SettingsManager.registerSettingsStore("terrain", terrainSettings);
         initComponents();
@@ -1673,7 +1673,7 @@ public class MainEditor extends AbstractMainEditor {
         AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
+                new BattleEditorMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
             }
         });
     }
