@@ -65,12 +65,12 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     }
     
     private void drawTerrainIcons(Graphics graphics, byte[] data, int coordsX, int coordsY, int width, int height) {
-        graphics.setColor(BattleTerrainIcons.TERRAIN_BG);
         for (int j=0; j<height; j++) {
             for (int i=0; i<width; i++) {
                 int x = (coordsX+i)*PIXEL_WIDTH;
                 int y = (coordsY+j)*PIXEL_HEIGHT;
                 int value = data[i+j*48];
+                graphics.setColor(BattleTerrainIcons.getBGColor(value));
                 graphics.fillRect(x+6, y+6, PIXEL_WIDTH-12, PIXEL_HEIGHT-12);
                 graphics.drawImage(BattleTerrainIcons.getTerrainIcon(value).getImage(), x+8, y+8, null);
             }
@@ -84,7 +84,7 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
                 int x = (coordsX+i)*PIXEL_WIDTH;
                 int y = (coordsY+j)*PIXEL_HEIGHT;
                 int value = data[i+j*48];
-                graphics.setColor(BattleTerrainIcons.TERRAIN_TEXT_BG);
+                graphics.setColor(BattleTerrainIcons.getBGColor(value));
                 graphics.fillRect(x+6, y+6, PIXEL_WIDTH-12, PIXEL_HEIGHT-12);
                 graphics.setColor(BattleTerrainIcons.getTerrainTextColor(value));
                 graphics.fillRect(x+8, y+8, PIXEL_WIDTH-16, PIXEL_HEIGHT-16);
@@ -98,11 +98,13 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
                 int x = (coordsX+i)*PIXEL_WIDTH;
                 int y = (coordsY+j)*PIXEL_HEIGHT;
                 int value = data[i+j*48];
-                graphics.setColor(BattleTerrainIcons.TERRAIN_TEXT_BG);
+                graphics.setColor(BattleTerrainIcons.getBGColor(value));
                 graphics.fillRect(x+6, y+5, PIXEL_WIDTH-12, PIXEL_HEIGHT-11);
                 graphics.setColor(BattleTerrainIcons.getTerrainTextColor(value));
                 if (value < 0) {
                     graphics.drawString(Integer.toString(value), x+8, y+16);
+                } else if (value >= 10) {
+                    graphics.drawString(Integer.toString(value), x+4, y+16);
                 } else {
                     graphics.drawString(Integer.toString(value), x+9, y+16);
                 }
