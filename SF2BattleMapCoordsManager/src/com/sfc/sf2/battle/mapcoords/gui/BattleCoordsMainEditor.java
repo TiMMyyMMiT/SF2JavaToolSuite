@@ -472,7 +472,8 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         Path battleCoordsPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         try {
-            coords = battlemapcoordsManager.importDisassembly(mapEntriesPath, battleCoordsPath);
+            battlemapcoordsManager.ImportMapEntries(mapEntriesPath);
+            coords = battlemapcoordsManager.importDisassembly(battleCoordsPath);
             selectedCoords = 0;
             loadMap(0);
         } catch (Exception ex) {

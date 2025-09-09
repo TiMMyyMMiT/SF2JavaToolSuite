@@ -29,6 +29,7 @@ public class BattleMapTerrainManager extends AbstractManager {
     private final BattleTerrainDisassemblyProcessor terrainDisassemblyProcessor = new BattleTerrainDisassemblyProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
 
+    private BattleMapCoords[] allCoords;
     private BattleMapCoords coords;
     private BattleMapTerrain terrain;
 
@@ -41,17 +42,11 @@ public class BattleMapTerrainManager extends AbstractManager {
     
     public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        BattleMapCoords[] coords = mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
-        terrain = importDisassembly(paletteEntriesPath, tilesetEntriesPath, terrainEntriesPath, battleIndex, coords);
-        Console.logger().finest("EXITING importDisassembly");
-        return terrain;
-    }
-    
-    public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path terrainEntriesPath, int battleIndex, BattleMapCoords[] coords) throws IOException, AsmException, DisassemblyException {
-        Console.logger().finest("ENTERING importDisassembly");
-        this.coords = coords[battleIndex];
+        allCoords = mapCoordsManager.importDisassembly(battleMapCoordsPath);
+        this.coords = allCoords[battleIndex];
         EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath, null);
-        int mapId = coords[battleIndex].getMap();
+        int mapId = coords.getMap();
+        mapCoordsManager.ImportMapEntries(mapEntriesPath);
         mapCoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
         if (battleIndex < terrainEntries.entriesCount()) {
             Path path = PathHelpers.getIncbinPath().resolve(terrainEntries.getPathForEntry(battleIndex));
@@ -80,5 +75,9 @@ public class BattleMapTerrainManager extends AbstractManager {
 
     public BattleMapCoords getCoords() {
         return coords;
+    }
+
+    public BattleMapCoords[] getAllCoords() {
+        return allCoords;
     }
 }

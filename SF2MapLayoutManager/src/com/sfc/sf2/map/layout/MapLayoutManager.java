@@ -12,6 +12,7 @@ import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.block.MapBlockset;
+import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
 import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.map.layout.io.MapLayoutDisassemblyProcessor;
 import com.sfc.sf2.map.layout.io.MapLayoutPackage;
@@ -25,9 +26,11 @@ import java.nio.file.Path;
 public class MapLayoutManager extends AbstractManager {
     private final MapBlocksetManager mapBlocksetManager = new MapBlocksetManager();
     private final MapLayoutDisassemblyProcessor layoutDisassemblyProcessor = new MapLayoutDisassemblyProcessor();
+    private final MapEntriesAsmProcessor mapEntriesAsmProcessor = new MapEntriesAsmProcessor();
     
     private MapBlockset blockset;
     private MapLayout layout;
+    private MapEntryData[] mapEntries = null;
 
     @Override
     public void clearData() {
@@ -40,6 +43,7 @@ public class MapLayoutManager extends AbstractManager {
             layout.getBlockset().clearIndexedColorImage(true);
             layout = null;
         }
+        mapEntries = null;
     }
        
     public MapLayout importDisassembly(Path palettePath, Path[] tilesetsFilePath, Path blocksetPath, Path layoutPath) throws IOException, DisassemblyException {
@@ -81,6 +85,29 @@ public class MapLayoutManager extends AbstractManager {
         layoutDisassemblyProcessor.exportDisassembly(layoutPath, layout, pckg);
         Console.logger().info("Map layout successfully exported to : " + layoutPath);
         Console.logger().finest("EXITING exportDisassembly");   
+    }
+    
+    public void ImportMapEntries(Path mapEntriesPath) throws IOException, AsmException {
+        Console.logger().finest("ENTERING importDisassembly");
+        mapEntries = mapEntriesAsmProcessor.importAsmData(mapEntriesPath, null);
+        Console.logger().info("Map entries successfully imported from : " + mapEntriesPath);
+        Console.logger().finest("EXITING importDisassembly");
+    }
+    
+    public MapLayout importMap(Path paletteEntriesPath, Path tilesetsEntriesPath, int mapId) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importMap");
+        if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
+            throw new DisassemblyException("Cannot import map " + mapId + ". Data was not found or is corrupt.");
+        }
+        MapEntryData mapEntry = mapEntries[mapId];
+        layout = importDisassemblyFromMapEntry(paletteEntriesPath, tilesetsEntriesPath, mapEntry);
+        Console.logger().info(String.format("Map data imported for for map%02d", mapId));
+        Console.logger().finest("EXITING importMap");
+        return layout;
+    }
+    
+    public boolean doesMapDataExist(int mapID) {
+        return mapEntries != null && mapID >= 0 && mapID < mapEntries.length && mapEntries[mapID] != null;
     }
 
     public MapLayout getLayout() {

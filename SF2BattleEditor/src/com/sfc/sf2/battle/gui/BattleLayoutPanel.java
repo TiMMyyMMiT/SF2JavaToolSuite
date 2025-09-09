@@ -67,6 +67,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             
     @Override
     public void drawImage(Graphics graphics) {
+        super.drawImage(graphics);
         Graphics2D g2 = (Graphics2D)graphics;
         if (drawSprites) {
             getSpritesImage(g2);

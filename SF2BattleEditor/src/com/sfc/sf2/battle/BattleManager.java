@@ -6,11 +6,12 @@
 package com.sfc.sf2.battle;
 
 import com.sfc.sf2.battle.io.BattleSpritesetAsmProcessor;
+import com.sfc.sf2.battle.io.BattleSpritesetEntriesAsmProcessor;
 import com.sfc.sf2.battle.io.BattleSpritesetPackage;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.battle.io.EnemyEnumsAsmProcessor;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
-import com.sfc.sf2.battle.mapcoords.BattleMapCoordsManager;
+import com.sfc.sf2.battle.mapcoords.io.BattleMapCoordsAsmProcessor;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrainManager;
 import com.sfc.sf2.core.AbstractManager;
@@ -19,6 +20,7 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.MapSprite;
 import com.sfc.sf2.mapsprite.MapSpriteManager;
 import com.sfc.sf2.palette.Palette;
@@ -35,38 +37,35 @@ import java.util.Map;
  */
 public class BattleManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
-    private final BattleMapCoordsManager mapCoordsManager = new BattleMapCoordsManager();
     private final BattleMapTerrainManager mapTerrainManager = new BattleMapTerrainManager();
     private final MapSpriteManager mapspriteManager = new MapSpriteManager();
     private final BattleSpritesetAsmProcessor battleSpritesetAsmProcessor = new BattleSpritesetAsmProcessor();
-    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+    private final BattleMapCoordsAsmProcessor battleCoordsAsmProcessor = new BattleMapCoordsAsmProcessor();
+    private final BattleSpritesetEntriesAsmProcessor battleSpritesetEntriesProcessor = new BattleSpritesetEntriesAsmProcessor();
     private final EnemyEnumsAsmProcessor enemyEnumsProcessor = new EnemyEnumsAsmProcessor();
     
     private Battle battle;
-    private String[][] mapEntries;
-    private String[] spritesetEntries;
     private EnemyData[] enemyData;
     private EnemyEnums enemyEnums;
 
     @Override
     public void clearData() {
-        mapCoordsManager.clearData();
         mapTerrainManager.clearData();
         mapspriteManager.clearData();
         battle = null;
-        mapEntries = null;
-        spritesetEntries = null;
         enemyData = null;
         enemyEnums = null;
     }
         
     public Battle importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, Path spritesetEntriesPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        BattleMapCoords[] coords = mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
-        BattleMapTerrain terrain = mapTerrainManager.importDisassembly(paletteEntriesPath, tilesetEntriesPath, terrainEntriesPath, battleIndex, coords);
+        BattleMapTerrain terrain = mapTerrainManager.importDisassembly(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, terrainEntriesPath, battleMapCoordsPath, battleIndex);
+        BattleMapCoords coords = mapTerrainManager.getCoords();
+        EntriesAsmData spritesetEntries = battleSpritesetEntriesProcessor.importAsmData(spritesetEntriesPath, null);
+        Path spritesetPath = PathHelpers.getIncbinPath().resolve(spritesetEntries.getPathForEntry(battleIndex));
         BattleSpritesetPackage pckg = new BattleSpritesetPackage(battleIndex, enemyData, enemyEnums);
-        BattleSpriteset spriteset = battleSpritesetAsmProcessor.importAsmData(spritesetEntriesPath, pckg);
-        battle = new Battle(battleIndex, coords[battleIndex], terrain, spriteset);
+        BattleSpriteset spriteset = battleSpritesetAsmProcessor.importAsmData(spritesetPath, pckg);
+        battle = new Battle(battleIndex, coords, terrain, spriteset);
         Console.logger().info("Battle " + battleIndex + " and spritesets imported from : " + spritesetEntriesPath);
         Console.logger().finest("EXITING importDisassembly");
         return battle;
@@ -77,7 +76,7 @@ public class BattleManager extends AbstractManager {
         if (enemyEnums == null) {
             enemyEnums = enemyEnumsProcessor.importAsmData(mapspriteEnumsPath, null);
             Palette palette = paletteManager.importDisassembly(basePalettePath, true);
-            EntriesAsmData entries = entriesAsmProcessor.importAsmData(mapspriteEntriesPath, null);
+            EntriesAsmData entries = battleSpritesetEntriesProcessor.importAsmData(mapspriteEntriesPath, null);
             enemyData = processEnemyData(enemyEnums, entries, palette);
             Console.logger().info("Mapsprite data loaded from " + mapspriteEntriesPath + " and " + mapspriteEnumsPath);
         } else {
@@ -89,9 +88,9 @@ public class BattleManager extends AbstractManager {
     public void exportDisassembly(Path mapcoordsPath, Path terrainPath, Path spritesetPath, Battle battle) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.battle = battle;
-        BattleMapCoords[] allCoords = mapCoordsManager.getCoords();
+        BattleMapCoords[] allCoords = mapTerrainManager.getAllCoords();
         allCoords[battle.getIndex()] = battle.getMapCoords();
-        mapCoordsManager.exportDisassembly(mapcoordsPath, allCoords);
+        battleCoordsAsmProcessor.exportAsmData(mapcoordsPath, allCoords, null);
         mapTerrainManager.exportDisassembly(terrainPath, battle.getTerrain());
         BattleSpritesetPackage pckg = new BattleSpritesetPackage(battle.getIndex(), enemyData, enemyEnums);
         battleSpritesetAsmProcessor.exportAsmData(spritesetPath, battle.getSpriteset(), pckg);
@@ -108,7 +107,8 @@ public class BattleManager extends AbstractManager {
 
             if (enemy.getMapSprite() == null && entry.getValue()*3 < mapspriteEntries.entriesCount()) {
                 try {
-                    MapSprite[] mapsprite = mapspriteManager.importDisassembly(mapspriteEntries.getPathForEntry(entry.getValue()*3), palette);
+                    Path mapspritePath = PathHelpers.getIncbinPath().resolve(mapspriteEntries.getPathForEntry(entry.getValue()*3));
+                    MapSprite[] mapsprite = mapspriteManager.importDisassembly(mapspritePath, palette);
                     enemy.setMapSprite(mapsprite[0]);
                 } catch (Exception e) {
                     Console.logger().warning("Map sprite could not be loaded for : " + mapspriteEntries.getPathForEntry(entry.getValue()*3));
@@ -153,14 +153,6 @@ public class BattleManager extends AbstractManager {
         EnemyData[] enemyData = new EnemyData[enemyDataList.size()];
         enemyData = enemyDataList.toArray(enemyData);
         return enemyData;
-    }
-
-    public String[][] getMapEntries() {
-        return mapEntries;
-    }
-
-    public void setMapEntries(String[][] mapEntries) {
-        this.mapEntries = mapEntries;
     }
 
     public Battle getBattle() {

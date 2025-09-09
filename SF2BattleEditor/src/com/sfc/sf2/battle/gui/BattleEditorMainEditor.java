@@ -10,8 +10,10 @@ import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.EnemyEnums;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
+import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -59,16 +61,17 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         columns = tableAIPoints.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(30);
         
-        /*jComboBox2.setSelectedIndex(terrainSettings.getTerrainDrawMode());
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         
-        battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        battleMapTerrainLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        battleMapTerrainLayoutPanel.setBGColor(colorPicker1.getColor());
-        battleMapTerrainLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
-        battleMapTerrainLayoutPanel.setDrawTerrainText(jComboBox2.getSelectedIndex() != 0);
-        battleMapTerrainLayoutPanel.setShowBattleCoords(true);*/
+        battleLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
+        battleLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        battleLayoutPanel.setBGColor(colorPicker1.getColor());
+        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
+        battleLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
+        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
+        battleLayoutPanel.setTerrainDrawMode(TerrainDrawMode.Colors);
+        battleLayoutPanel.setShowBattleCoords(true);
     }
     
     @Override
@@ -78,15 +81,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.setBattle(battleManager.getBattle());
         battleLayoutPanel.setTerrain(battleManager.getBattle().getTerrain());
         battleLayoutPanel.setBattleCoords(battleManager.getBattleCoords());
-        battleLayoutPanel.setMapLayout(battleManager.getMapLayout());
-        
-        battleLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        battleLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        battleLayoutPanel.setBGColor(colorPicker1.getColor());
-        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
-        battleLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
-        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());        
+        battleLayoutPanel.setMapLayout(battleManager.getMapLayout());       
         
         BattleMapCoords coords = battleManager.getBattleCoords();
         jSpinner1.setValue(coords.getMap());
@@ -1371,6 +1366,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             Console.logger().severe("ERROR Battle data could not be imported for battle : " + battleIndex);
             return;
         }
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void UpdateEnemyControls(int selectedRow) {

@@ -109,11 +109,13 @@ public class MapSprite {
     }
     
     public void clearIndexedColorImage(boolean alsoClearTiles) {
-        indexedColorImage.flush();
-        indexedColorImage = null;
-        if (frames != null) {
-            for (int i = 0; i < frames.length; i++) {
-                frames[i].clearIndexedColorImage(alsoClearTiles);
+        if (indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+            if (frames != null) {
+                for (int i = 0; i < frames.length; i++) {
+                    frames[i].clearIndexedColorImage(alsoClearTiles);
+                }
             }
         }
     }
