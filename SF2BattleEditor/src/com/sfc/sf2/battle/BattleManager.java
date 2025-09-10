@@ -152,6 +152,10 @@ public class BattleManager extends AbstractManager {
         enemyData = enemyDataList.toArray(enemyData);
         return enemyData;
     }
+    
+    public MapLayout loadNewMap(Path paletteEntriesPath, Path tilesetEntriesPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
+        return mapTerrainManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapIndex);
+    }
 
     public Battle getBattle() {
         return battle;

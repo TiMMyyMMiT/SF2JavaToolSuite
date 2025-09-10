@@ -63,7 +63,11 @@ public class BattleMapTerrainManager extends AbstractManager {
         terrainDisassemblyProcessor.exportDisassembly(battleMapTerrainPath, terrain, null);
         Console.logger().info("Terrain data successfully exported to : " + battleMapTerrainPath);
         Console.logger().finest("EXITING exportDisassembly");
-    }   
+    }
+    
+    public MapLayout importMap(Path paletteEntriesPath, Path tilesetsEntriesPath, int mapId) throws IOException, AsmException, DisassemblyException {
+        return mapCoordsManager.importMap(paletteEntriesPath, tilesetsEntriesPath, mapId);
+    }
 
     public BattleMapTerrain getTerrain() {
         return terrain;

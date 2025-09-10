@@ -15,6 +15,7 @@ import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.map.layout.MapLayout;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
@@ -1423,24 +1424,20 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }
     
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        if(battleLayoutPanel!=null){
-            battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
-        }
+        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        /*int newMapIndex = (int)jSpinner1.getModel().getValue();
-        battleManager.getBattleCoords().setMap(newMapIndex);
-        String[][] mapEntries = battleManager.getMapEntries();
-        final MapLayoutManager mapLayoutManager = new MapLayoutManager();
-        try {     
-            mapLayoutManager.importDisassembly(PATH_TEST_PREFIX+jTextField21.getText(), PATH_TEST_PREFIX+jTextField22.getText(), mapEntries[newMapIndex][0], mapEntries[newMapIndex][1], mapEntries[newMapIndex][2]);
-        } catch (DisassemblyException ex) {
-            Logger.getLogger(MainEditor.class.getName()).log(Level.SEVERE, null, ex);
+        Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        int newMapIndex = (int)jSpinner1.getModel().getValue();
+        try {
+            MapLayout layout = battleManager.loadNewMap(paletteEntriesPath, tilesetEntriesPath, newMapIndex);
+            battleLayoutPanel.setMapLayout(layout);
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map " + newMapIndex + " could not be imported");
         }
-        battleLayoutPanel.setMapLayout(mapLayoutManager.getLayout());
-        battleLayoutPanel.setBlockset(mapLayoutManager.getBlockset());
-        battleLayoutPanel.updateBattleDisplay();*/
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
