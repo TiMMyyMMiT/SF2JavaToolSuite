@@ -554,7 +554,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jLabel9.setText("Trigger X :");
 
-        jSpinner7.setModel(new javax.swing.SpinnerNumberModel(0, -1, 63, 1));
+        jSpinner7.setModel(new javax.swing.SpinnerNumberModel(0, 0, 255, 1));
         jSpinner7.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinner7StateChanged(evt);
@@ -563,7 +563,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jLabel11.setText("Trigger Y :");
 
-        jSpinner8.setModel(new javax.swing.SpinnerNumberModel(0, -1, 63, 1));
+        jSpinner8.setModel(new javax.swing.SpinnerNumberModel(0, 0, 255, 1));
         jSpinner8.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinner8StateChanged(evt);
@@ -1444,28 +1444,51 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        /*battleManager.getBattleCoords().setX((int)jSpinner2.getModel().getValue());
-        battleLayoutPanel.updateCoordsDisplay();*/  
+        battleManager.getBattleCoords().setX((int)jSpinner2.getModel().getValue());
+        battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
-        battleManager.getBattleCoords().setY((int)jSpinner3.getModel().getValue());
+        battleLayoutPanel.getBattleCoords().setY((int)jSpinner3.getModel().getValue());
+        battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner3StateChanged
 
     private void jSpinner5StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner5StateChanged
-        battleManager.getBattleCoords().setWidth((int)jSpinner5.getModel().getValue());
+        battleLayoutPanel.getBattleCoords().setWidth((int)jSpinner5.getModel().getValue());
+        battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner5StateChanged
 
     private void jSpinner6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner6StateChanged
-        battleManager.getBattleCoords().setHeight((int)jSpinner6.getModel().getValue());
+        battleLayoutPanel.getBattleCoords().setHeight((int)jSpinner6.getModel().getValue());
+        battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner6StateChanged
 
     private void jSpinner7StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner7StateChanged
-        battleManager.getBattleCoords().setTrigX((int)jSpinner7.getModel().getValue());
+        int oldVal = battleLayoutPanel.getBattleCoords().getTrigX();
+        int newVal = (int)jSpinner7.getModel().getValue();
+        if (oldVal < newVal && newVal >= 64) {
+            newVal = 255;
+            jSpinner7.getModel().setValue(newVal);
+        } else if (oldVal > newVal && newVal >= 64) {
+            newVal = 63;
+            jSpinner7.getModel().setValue(newVal);
+        }
+        battleLayoutPanel.getBattleCoords().setTrigX(newVal);
+        battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner7StateChanged
 
     private void jSpinner8StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner8StateChanged
-        battleManager.getBattleCoords().setTrigY((int)jSpinner8.getModel().getValue());
+        int oldVal = battleLayoutPanel.getBattleCoords().getTrigY();
+        int newVal = (int)jSpinner8.getModel().getValue();
+        if (oldVal < newVal && newVal >= 64) {
+            newVal = 255;
+            jSpinner8.getModel().setValue(newVal);
+        } else if (oldVal > newVal && newVal >= 64) {
+            newVal = 63;
+            jSpinner8.getModel().setValue(newVal);
+        }
+        battleLayoutPanel.getBattleCoords().setTrigY(newVal);
+        battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner8StateChanged
 
     private void jTabbedPane2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane2FocusGained
