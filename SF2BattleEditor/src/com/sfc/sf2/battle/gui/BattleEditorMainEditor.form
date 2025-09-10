@@ -135,8 +135,8 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jPanel3" min="-2" pref="468" max="-2" attributes="0"/>
-                                      <EmptySpace pref="91" max="32767" attributes="0"/>
+                                      <Component id="jPanel3" min="-2" pref="499" max="-2" attributes="0"/>
+                                      <EmptySpace pref="60" max="32767" attributes="0"/>
                                       <Component id="jPanel5" min="-2" pref="155" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   </Group>
@@ -286,8 +286,9 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="fileButton6" pref="294" max="32767" attributes="0"/>
-                                                  <Component id="fileButton7" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="fileButton7" pref="294" max="32767" attributes="0"/>
                                                   <Component id="fileButton8" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="fileButton13" alignment="0" pref="0" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
@@ -301,8 +302,10 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="fileButton7" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
+                                              <Component id="fileButton13" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -323,7 +326,13 @@
                                     <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton8">
                                       <Properties>
                                         <Property name="filePath" type="java.lang.String" value="..\u005c..\u005csf2enums.asm" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Mapsprite enums :"/>
+                                        <Property name="labelText" type="java.lang.String" value="Battle enums :"/>
+                                      </Properties>
+                                    </Component>
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton13">
+                                      <Properties>
+                                        <Property name="filePath" type="java.lang.String" value="..\u005cstats\u005cenemies\u005cenemymapsprites.asm" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Enemy mapsprites :"/>
                                       </Properties>
                                     </Component>
                                   </SubComponents>
@@ -344,7 +353,7 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="0" pref="82" max="32767" attributes="0"/>
+                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jSpinner4" min="-2" pref="50" max="-2" attributes="0"/>

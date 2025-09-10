@@ -9,7 +9,6 @@ import com.sfc.sf2.battle.io.BattleSpritesetAsmProcessor;
 import com.sfc.sf2.battle.io.BattleSpritesetEntriesAsmProcessor;
 import com.sfc.sf2.battle.io.BattleSpritesetPackage;
 import com.sfc.sf2.map.layout.MapLayout;
-import com.sfc.sf2.battle.io.EnemyEnumsAsmProcessor;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.battle.mapcoords.io.BattleMapCoordsAsmProcessor;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
@@ -20,9 +19,12 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
+import com.sfc.sf2.core.io.asm.SF2EnumsAsmData;
+import com.sfc.sf2.core.io.asm.SF2EnumsAsmProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.MapSprite;
 import com.sfc.sf2.mapsprite.MapSpriteManager;
+import com.sfc.sf2.mapsprite.io.EnemyMapspriteAsmProcessor;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
 import java.io.IOException;
@@ -30,6 +32,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  *
@@ -40,9 +43,11 @@ public class BattleManager extends AbstractManager {
     private final BattleMapTerrainManager mapTerrainManager = new BattleMapTerrainManager();
     private final MapSpriteManager mapspriteManager = new MapSpriteManager();
     private final BattleSpritesetAsmProcessor battleSpritesetAsmProcessor = new BattleSpritesetAsmProcessor();
-    private final BattleMapCoordsAsmProcessor battleCoordsAsmProcessor = new BattleMapCoordsAsmProcessor();
     private final BattleSpritesetEntriesAsmProcessor battleSpritesetEntriesProcessor = new BattleSpritesetEntriesAsmProcessor();
-    private final EnemyEnumsAsmProcessor enemyEnumsProcessor = new EnemyEnumsAsmProcessor();
+    private final BattleMapCoordsAsmProcessor battleCoordsAsmProcessor = new BattleMapCoordsAsmProcessor();
+    private final SF2EnumsAsmProcessor sf2EnumsAsmProcessor = new SF2EnumsAsmProcessor();
+    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+    private final EnemyMapspriteAsmProcessor enemyMapspritesAsmProcessor = new EnemyMapspriteAsmProcessor();
     
     private Battle battle;
     private EnemyData[] enemyData;
@@ -71,20 +76,6 @@ public class BattleManager extends AbstractManager {
         return battle;
     }
     
-    public void importMapspriteData(Path basePalettePath, Path mapspriteEntriesPath, Path mapspriteEnumsPath) throws IOException, AsmException, DisassemblyException {
-        Console.logger().finest("ENTERING importEnemyData");
-        if (enemyEnums == null) {
-            enemyEnums = enemyEnumsProcessor.importAsmData(mapspriteEnumsPath, null);
-            Palette palette = paletteManager.importDisassembly(basePalettePath, true);
-            EntriesAsmData entries = battleSpritesetEntriesProcessor.importAsmData(mapspriteEntriesPath, null);
-            enemyData = processEnemyData(enemyEnums, entries, palette);
-            Console.logger().info("Mapsprite data loaded from " + mapspriteEntriesPath + " and " + mapspriteEnumsPath);
-        } else {
-            Console.logger().warning("Mapsprite data already loaded.");
-        }
-        Console.logger().finest("EXITING importEnemyData");
-    }
-    
     public void exportDisassembly(Path mapcoordsPath, Path terrainPath, Path spritesetPath, Battle battle) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.battle = battle;
@@ -97,60 +88,48 @@ public class BattleManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");
     }
     
-    private EnemyData[] processEnemyData(EnemyEnums enemyEnums, EntriesAsmData mapspriteEntries, Palette palette) {
+    public void importMapspriteData(Path basePalettePath, Path mapspriteEntriesPath, Path enemyMapspritesPath, Path mapspriteEnumsPath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importEnemyData");
+        if (enemyEnums == null) {
+            SF2EnumsAsmData enumsData = new SF2EnumsAsmData("Enemies", "AiCommandsets", "AiOrders", "SpawnSettings", "Items (bitfield)", "Mapsprites");
+            enumsData = sf2EnumsAsmProcessor.importAsmData(mapspriteEnumsPath, enumsData);
+            enemyEnums = new EnemyEnums(enumsData.getSet("Enemies"), enumsData.getSet("Items (bitfield)"), enumsData.getSet("AiCommandsets"), enumsData.getSet("AiOrders"), enumsData.getSet("SpawnSettings"));
+            Palette palette = paletteManager.importDisassembly(basePalettePath, true);
+            EntriesAsmData mapspriteEntries = entriesAsmProcessor.importAsmData(mapspriteEntriesPath, null);
+            String[] enemyMapsprites = (String[])enemyMapspritesAsmProcessor.importAsmData(enemyMapspritesPath, null);
+            enemyData = processEnemyData(enemyEnums, mapspriteEntries, enemyMapsprites, enumsData.getSet("Mapsprites"), palette);
+            Console.logger().info("Mapsprite data loaded from " + mapspriteEntriesPath + " and " + mapspriteEnumsPath);
+        } else {
+            Console.logger().warning("Mapsprite data already loaded.");
+        }
+        Console.logger().finest("EXITING importEnemyData");
+    }
+    
+    private EnemyData[] processEnemyData(EnemyEnums enemyEnums, EntriesAsmData mapspriteEntries, String[] enemyMapsprites, LinkedHashMap<String, Integer> mapspriteEnumsData, Palette palette) throws IOException, DisassemblyException {
         ArrayList<EnemyData> enemyDataList = new ArrayList(enemyEnums.getEnemies().size());
         LinkedHashMap<String, Integer> enemies = enemyEnums.getEnemies();
         for (Map.Entry<String, Integer> entry : enemies.entrySet()) {
-            EnemyData enemy = new EnemyData();
-            enemy.setName(entry.getKey());
-            enemy.setID(entry.getValue());
-
-            if (enemy.getMapSprite() == null && entry.getValue()*3 < mapspriteEntries.entriesCount()) {
+            MapSprite loadedSprite = null;
+            String mapSprite = "MAPSPRITE_" + enemyMapsprites[entry.getValue()];
+            if (mapspriteEnumsData.containsKey(mapSprite)) {
+                Path mapspritePath = null;
                 try {
-                    Path mapspritePath = PathHelpers.getIncbinPath().resolve(mapspriteEntries.getPathForEntry(entry.getValue()*3));
-                    MapSprite[] mapsprite = mapspriteManager.importDisassembly(mapspritePath, palette);
-                    enemy.setMapSprite(mapsprite[0]);
-                } catch (Exception e) {
-                    Console.logger().warning("Map sprite could not be loaded for : " + mapspriteEntries.getPathForEntry(entry.getValue()*3));
-                }
-            }
-
-            while (enemyDataList.size() <= enemy.getID()) {
-                enemyDataList.add(null);
-            }
-            enemyDataList.set(entry.getValue(), enemy);
-        }
-
-        /*for (int i = mapspriteEntries.uniqueEntriesCount()) {
-            //Matches enemy id with mapsprite id. Handles special case of ENEMY_MASTER_MAGE_0, ENEMY_NECROMANCER_0, & ENEMY_BLUE_SHAMAN_0
-            String name = mapspriteEntries.getEntry(i);
-            if (enemies.containsKey(name) || enemies.containsKey(name+"_0")) {
-                int index = enemies.get(name);
-                if (index < enemyDataList.size() && enemyDataList.get(index) != null && value * 3 < mapsprites.length) {
-                    enemyDataList.get(index).setMapSprite(mapsprites[value * 3 + 2]);
-                }
-            }
-        }*/
-        /*File enumFile = new File(mapspriteEnumPath);
-        Scanner enumScan = new Scanner(enumFile);
-        while(enumScan.hasNext()){
-            String line = enumScan.nextLine();
-            if(line.trim().startsWith("; enum Mapsprites")){
-                line = enumScan.nextLine();
-                while(!line.startsWith("; enum")){
-                    if(line.startsWith("MAPSPRITE")){
-                        int valStart = line.indexOf(":");
-                        int valEnd = line.indexOf(";");
-                        if (valEnd == -1) valEnd = line.length();
-                        String key = line.substring(10, valStart);
-                        int value = valueOf(line.substring(valStart + 1, valEnd).trim());
-
+                    mapspritePath = mapspriteEntries.getPathForEntry(String.format("Mapsprite%03d_2", mapspriteEnumsData.get(mapSprite)));
+                    if (mapspritePath != null) {
+                        mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
+                        MapSprite[] sprite = mapspriteManager.importDisassembly(mapspritePath, palette);
+                        loadedSprite = sprite[0];
                     }
-                    line = enumScan.nextLine();
+                } catch (Exception e) {
+                    Console.logger().log(Level.SEVERE, null, e);
+                    Console.logger().severe("ERROR Could not import mapsprite : " + mapspritePath);
                 }
+            } else {
+                Console.logger().severe("ERROR Could not find mapsprite : " + mapSprite);
             }
-        }*/
-        EnemyData[] enemyData = new EnemyData[enemyDataList.size()];
+            enemyDataList.add(new EnemyData(entry.getValue(), entry.getKey().substring(6), loadedSprite));
+        }
+        enemyData = new EnemyData[enemyDataList.size()];
         enemyData = enemyDataList.toArray(enemyData);
         return enemyData;
     }

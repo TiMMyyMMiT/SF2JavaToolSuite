@@ -12,31 +12,25 @@ import com.sfc.sf2.mapsprite.MapSprite;
  * @author TiMMy
  */
 public class EnemyData {
-    private String name;
     private int id;
+    private String name;
     private MapSprite mapSprite;
-        
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
+    public EnemyData(int id, String name, MapSprite mapSprite) {
+        this.id = id;
         this.name = name;
+        this.mapSprite = mapSprite;
     }
 
     public int getID() {
         return id;
     }
-
-    public void setID(int id) {
-        this.id = id;
+        
+    public String getName() {
+        return name;
     }
 
     public MapSprite getMapSprite() {
         return mapSprite;
-    }
-
-    public void setMapSprite(MapSprite mapSprite) {
-        this.mapSprite = mapSprite;
     }
 }

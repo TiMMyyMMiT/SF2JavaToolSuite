@@ -62,8 +62,6 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     protected boolean drawSprites = true;
     protected boolean drawAiRegions = true;
     protected boolean drawAiPoints = true;
-    
-    private final BufferedImage[] mapspriteImages = new BufferedImage[256];
             
     @Override
     public void drawImage(Graphics graphics) {
@@ -123,10 +121,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 g2.setColor(Color.RED);
                 g2.drawString(String.valueOf(id), targetX, targetY + 16);
             } else {
-                if (mapspriteImages[id] == null) {
-                    mapspriteImages[id] = sprite.getIndexedColorImage().getSubimage(0, 0, 3 * 8, 3 * 8);
-                }
-                g2.drawImage(mapspriteImages[id], targetX, targetY, null);
+                g2.drawImage(sprite.getFrame(2,0).getIndexedColorImage(), targetX, targetY, null);
             }
             if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_ENEMY && i == selectedEnemy) {
                 g2.setColor(Color.YELLOW);

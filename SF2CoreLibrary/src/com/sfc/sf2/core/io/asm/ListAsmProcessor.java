@@ -55,10 +55,8 @@ public abstract class ListAsmProcessor<TItem> extends AbstractAsmProcessor<TItem
             if (line.startsWith(listNameIdentifier)) {   //Found start of list
                 line = line.substring(line.indexOf(':')+1);
                 do {
-                    if (line.length() == 0) {
+                    if (line.length() == 0 || line.charAt(0) == ';') {
                         continue;   //empty line
-                    } else if (line.charAt(0) == ';') {
-                        break;  //Found end of list
                     }
                     line = StringHelpers.trimAndRemoveComments(line);
                     if (line.startsWith(listItemIdentifier)) {

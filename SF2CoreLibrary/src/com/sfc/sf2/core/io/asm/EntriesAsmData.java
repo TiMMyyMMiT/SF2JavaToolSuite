@@ -79,6 +79,15 @@ public class EntriesAsmData {
         }
     }
     
+    public Path getPathForEntry(String entry) {
+        int hash = entry.hashCode();
+        if (hashMap.containsKey(hash)) {
+            return paths.get(hashMap.get(hash));
+        } else {
+            return null;
+        }
+    }
+    
     public Path getPathForUnique(int index) {
         if (index >= 0 && index < uniqueEntryIndices.size()) {
             return paths.get(uniqueEntryIndices.get(index));
@@ -92,7 +101,6 @@ public class EntriesAsmData {
         if (hashMap.containsKey(hash)) {
             int index = hashMap.get(hash);
             entryIndices.add(index);
-            
         } else {
             int index = entries.size();
             entries.add(entry);

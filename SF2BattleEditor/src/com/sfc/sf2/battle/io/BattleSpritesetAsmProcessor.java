@@ -130,19 +130,19 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                 //Line 2
                 if ((line = reader.readLine()) != null) {
                     params = line.trim().substring(MACRO_ENEMY_LINE2.length()).trim().split(",");
-                    aiCommand = EnemyEnums.toEnumString(params[0].trim(), pckg.enemyEnums().getCommandSets());
-                    item = EnemyEnums.stringToItemString(params[1].trim(), pckg.enemyEnums().getItems());
+                    aiCommand = params[0].trim();
+                    item = params[1].trim();
                 }
 
                 //Line 3
                 if ((line = reader.readLine()) != null) {
                     params = line.trim().substring(MACRO_ENEMY_LINE3.length()).trim().split(",");
-                    moveOrder1 = EnemyEnums.stringToAiOrderString(params[0].trim(), pckg.enemyEnums().getOrders());
+                    moveOrder1 = params[0].trim();
                     region1 = StringHelpers.getValueInt(params[1].trim());
-                    moveOrder2 = EnemyEnums.stringToAiOrderString(params[2].trim(), pckg.enemyEnums().getOrders());
+                    moveOrder2 = params[2].trim();
                     region2 = StringHelpers.getValueInt(params[3].trim());
                     unknownParam = StringHelpers.getValueInt(params[4].trim());
-                    spawnParams = EnemyEnums.toEnumString(params[5].trim(), pckg.enemyEnums().getSpawnParams());
+                    spawnParams = params[5].trim();
                 }
 
                 EnemyData enemyData = null;
@@ -153,12 +153,10 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                     }
                 }
                 if (enemyData == null) {
-                    EnemyData placeholder = new EnemyData();
-                    placeholder.setName(name);
-                    placeholder.setID(-1);
+                    EnemyData placeholder = new EnemyData(-1, name, null);
                     enemyData = placeholder;
                 }
-                enemyList.add(new Enemy(enemyData, x, y, name, item, moveOrder1, region1, moveOrder2, region2, y, spawnParams));
+                enemyList.add(new Enemy(enemyData, x, y, aiCommand, item, moveOrder1, region1, moveOrder2, region2, unknownParam, spawnParams));
             } else if (inHeader) {
                 if (line.trim().startsWith(MACRO_LIST_START)) {
                     inHeader = false;
