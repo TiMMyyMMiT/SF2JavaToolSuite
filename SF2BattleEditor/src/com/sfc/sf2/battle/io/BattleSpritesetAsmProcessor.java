@@ -146,11 +146,11 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                 }
 
                 EnemyData enemyData = null;
-                for (int e = 0; e < pckg.enemyData().length; e++) {
-                    if (pckg.enemyData()[e] != null && pckg.enemyData()[e].getName().equals(name)) {
-                        enemyData = pckg.enemyData()[e];
-                        break;
-                    }
+                String enemyId = "ENEMY_"+name;
+                if (pckg.enemyEnums().getEnemies().containsKey(enemyId)) {
+                    int index = pckg.enemyEnums().getEnemies().get(enemyId);
+                    if (index >= 0 && index < pckg.enemyData().length)
+                    enemyData = pckg.enemyData()[index];
                 }
                 if (enemyData == null) {
                     EnemyData placeholder = new EnemyData(-1, name, null);

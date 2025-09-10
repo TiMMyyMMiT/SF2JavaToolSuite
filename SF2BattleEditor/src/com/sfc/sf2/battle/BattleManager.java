@@ -114,7 +114,7 @@ public class BattleManager extends AbstractManager {
             if (mapspriteEnumsData.containsKey(mapSprite)) {
                 Path mapspritePath = null;
                 try {
-                    mapspritePath = mapspriteEntries.getPathForEntry(String.format("Mapsprite%03d_2", mapspriteEnumsData.get(mapSprite)));
+                    mapspritePath = mapspriteEntries.getPathForEntry(mapspriteEnumsData.get(mapSprite)*3+2);
                     if (mapspritePath != null) {
                         mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
                         MapSprite[] sprite = mapspriteManager.importDisassembly(mapspritePath, palette);
