@@ -153,7 +153,7 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                     enemyData = pckg.enemyData()[index];
                 }
                 if (enemyData == null) {
-                    EnemyData placeholder = new EnemyData(-1, name, null);
+                    EnemyData placeholder = new EnemyData(-1, name, null, false);
                     enemyData = placeholder;
                 }
                 enemyList.add(new Enemy(enemyData, x, y, aiCommand, item, moveOrder1, region1, moveOrder2, region2, unknownParam, spawnParams));

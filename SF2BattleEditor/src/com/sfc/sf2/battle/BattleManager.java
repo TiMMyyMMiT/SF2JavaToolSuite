@@ -21,12 +21,14 @@ import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
 import com.sfc.sf2.core.io.asm.SF2EnumsAsmData;
 import com.sfc.sf2.core.io.asm.SF2EnumsAsmProcessor;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.MapSprite;
 import com.sfc.sf2.mapsprite.MapSpriteManager;
 import com.sfc.sf2.mapsprite.io.EnemyMapspriteAsmProcessor;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
+import com.sfc.sf2.specialSprites.SpecialSpriteManager;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class BattleManager extends AbstractManager {
     private final PaletteManager paletteManager = new PaletteManager();
     private final BattleMapTerrainManager mapTerrainManager = new BattleMapTerrainManager();
     private final MapSpriteManager mapspriteManager = new MapSpriteManager();
+    private final SpecialSpriteManager specialSpriteManager = new SpecialSpriteManager();
     private final BattleSpritesetAsmProcessor battleSpritesetAsmProcessor = new BattleSpritesetAsmProcessor();
     private final BattleSpritesetEntriesAsmProcessor battleSpritesetEntriesProcessor = new BattleSpritesetEntriesAsmProcessor();
     private final BattleMapCoordsAsmProcessor battleCoordsAsmProcessor = new BattleMapCoordsAsmProcessor();
@@ -57,6 +60,7 @@ public class BattleManager extends AbstractManager {
     public void clearData() {
         mapTerrainManager.clearData();
         mapspriteManager.clearData();
+        specialSpriteManager.clearData();
         battle = null;
         enemyData = null;
         enemyEnums = null;
@@ -109,16 +113,31 @@ public class BattleManager extends AbstractManager {
         ArrayList<EnemyData> enemyDataList = new ArrayList(enemyEnums.getEnemies().size());
         LinkedHashMap<String, Integer> enemies = enemyEnums.getEnemies();
         for (Map.Entry<String, Integer> entry : enemies.entrySet()) {
-            MapSprite loadedSprite = null;
+            String shortName = entry.getKey().substring(6);
+            Tileset loadedSprite = null;
+            boolean isSpecialSprite = false;
             String mapSprite = "MAPSPRITE_" + enemyMapsprites[entry.getValue()];
             if (mapspriteEnumsData.containsKey(mapSprite)) {
                 Path mapspritePath = null;
                 try {
-                    mapspritePath = mapspriteEntries.getPathForEntry(mapspriteEnumsData.get(mapSprite)*3+2);
-                    if (mapspritePath != null) {
-                        mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
-                        MapSprite[] sprite = mapspriteManager.importDisassembly(mapspritePath, palette);
-                        loadedSprite = sprite[0];
+                    int mapSpriteIndex = mapspriteEnumsData.get(mapSprite);
+                    if (mapSpriteIndex > 1010) {    //Special sprite
+                        //TODO Handle correctly once: https://github.com/ShiningForceCentral/SF2DISASM/issues/57 is resolvedv
+                        String specialName = shortName.toLowerCase();
+                        if (specialName.indexOf('_') != -1) specialName = specialName.substring(0, specialName.indexOf('_'));
+                        mapspritePath = Path.of(String.format("data/graphics/specialsprites/%s.bin", specialName));
+                        if (mapspritePath != null) {
+                            mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
+                            loadedSprite = specialSpriteManager.importDisassembly(mapspritePath, 2, 4, 3, null);
+                            isSpecialSprite = true;
+                        }
+                    } else {
+                        mapspritePath = mapspriteEntries.getPathForEntry(mapSpriteIndex*3+2);
+                        if (mapspritePath != null) {
+                            mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
+                            MapSprite[] sprite = mapspriteManager.importDisassembly(mapspritePath, palette);
+                            loadedSprite = sprite[0].getFrame(2, 1);
+                        }
                     }
                 } catch (Exception e) {
                     Console.logger().log(Level.SEVERE, null, e);
@@ -127,7 +146,7 @@ public class BattleManager extends AbstractManager {
             } else {
                 Console.logger().severe("ERROR Could not find mapsprite : " + mapSprite);
             }
-            enemyDataList.add(new EnemyData(entry.getValue(), entry.getKey().substring(6), loadedSprite));
+            enemyDataList.add(new EnemyData(entry.getValue(), shortName, loadedSprite, isSpecialSprite));
         }
         enemyData = new EnemyData[enemyDataList.size()];
         enemyData = enemyDataList.toArray(enemyData);

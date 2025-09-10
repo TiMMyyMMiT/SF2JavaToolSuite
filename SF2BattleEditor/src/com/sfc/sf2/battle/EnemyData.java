@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.battle;
 
-import com.sfc.sf2.mapsprite.MapSprite;
+import com.sfc.sf2.graphics.Tileset;
 
 /**
  *
@@ -14,12 +14,14 @@ import com.sfc.sf2.mapsprite.MapSprite;
 public class EnemyData {
     private int id;
     private String name;
-    private MapSprite mapSprite;
+    private Tileset mapSprite;
+    private boolean isSpecialSprite;
 
-    public EnemyData(int id, String name, MapSprite mapSprite) {
+    public EnemyData(int id, String name, Tileset mapSprite, boolean isSpecialSprite) {
         this.id = id;
         this.name = name;
         this.mapSprite = mapSprite;
+        this.isSpecialSprite = isSpecialSprite;
     }
 
     public int getID() {
@@ -30,7 +32,11 @@ public class EnemyData {
         return name;
     }
 
-    public MapSprite getMapSprite() {
+    public Tileset getMapSprite() {
         return mapSprite;
+    }
+
+    public boolean isIsSpecialSprite() {
+        return isSpecialSprite;
     }
 }

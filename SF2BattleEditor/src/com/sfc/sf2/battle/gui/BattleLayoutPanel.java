@@ -12,15 +12,16 @@ import com.sfc.sf2.battle.Battle;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
+import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.mapsprite.MapSprite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -82,51 +83,53 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         int x = battle.getMapCoords().getX();
         int y = battle.getMapCoords().getY();
         Ally[] allies = battle.getSpriteset().getAllies();
-        for (int i = 0; i < allies.length; i++) {
+        for (int i=0; i < allies.length; i++) {
             Ally ally = allies[i];
             Font font = new Font("Courier", Font.BOLD, 16);
             g2.setFont(font);
-            int offset = (i + 1 < 10) ? 0 : -4;
-            int targetX = (x + ally.getX()) * 3 * 8 + 8 + offset;
-            int targetY = (y + ally.getY()) * 3 * 8 + 18;
-            String val = String.valueOf(i + 1);
+            int offset = (i+1 < 10) ? 0 : -4;
+            int targetX = (x+ally.getX())*PIXEL_WIDTH + 8+offset;
+            int targetY = (y+ally.getY())*PIXEL_HEIGHT + 18;
+            String val = String.valueOf(i+1);
             g2.setColor(Color.BLACK);
-            g2.drawString(val, targetX - 1, targetY - 1);
-            g2.drawString(val, targetX - 1, targetY + 1);
-            g2.drawString(val, targetX + 1, targetY - 1);
-            g2.drawString(val, targetX + 1, targetY + 1);
+            g2.drawString(val, targetX-1, targetY-1);
+            g2.drawString(val, targetX-1, targetY+1);
+            g2.drawString(val, targetX+1, targetY-1);
+            g2.drawString(val, targetX+1, targetY+1);
             g2.setColor(Color.YELLOW);
             g2.drawString(val, targetX, targetY);
             if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_ALLY && i == selectedAlly) {
                 g2.setColor(Color.YELLOW);
                 g2.setStroke(new BasicStroke(3));
-                g2.drawRect((x + ally.getX()) * 3 * 8, (y + ally.getY()) * 3 * 8, 1 * 24, 1 * 24);
+                g2.drawRect((x+ally.getX())*PIXEL_WIDTH, (y+ally.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
         Enemy[] enemies = battle.getSpriteset().getEnemies();
-        for (int i = 0; i < enemies.length; i++) {
+        for (int i=0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
-            int targetX = (x + enemy.getX()) * 3 * 8;
-            int targetY = (y + enemy.getY()) * 3 * 8;
+            int targetX = (x+enemy.getX())*PIXEL_WIDTH;
+            int targetY = (y+enemy.getY())*PIXEL_HEIGHT;
             int id = enemy.getEnemyData().getID();
-            MapSprite sprite = enemy.getEnemyData().getMapSprite();
+            Tileset sprite = enemy.getEnemyData().getMapSprite();
             if (sprite == null) {
                 targetX += 8 + ((enemy.getEnemyData().getID() + 1 < 10) ? 0 : -4);
                 targetY += 3;
                 g2.setColor(Color.BLACK);
-                g2.drawString(String.valueOf(id), targetX - 1, targetY + 16 - 1);
-                g2.drawString(String.valueOf(id), targetX - 1, targetY + 16 + 1);
-                g2.drawString(String.valueOf(id), targetX + 1, targetY + 16 - 1);
-                g2.drawString(String.valueOf(id), targetX + 1, targetY + 16 + 1);
+                g2.drawString(String.valueOf(id), targetX-1, targetY+16-1);
+                g2.drawString(String.valueOf(id), targetX-1, targetY+16+1);
+                g2.drawString(String.valueOf(id), targetX+1, targetY+16-1);
+                g2.drawString(String.valueOf(id), targetX+1, targetY+16+1);
                 g2.setColor(Color.RED);
-                g2.drawString(String.valueOf(id), targetX, targetY + 16);
+                g2.drawString(String.valueOf(id), targetX, targetY+16);
+            } else if (enemy.getEnemyData().isIsSpecialSprite()) {
+                g2.drawImage(sprite.getIndexedColorImage().getSubimage(0, 0, PIXEL_WIDTH*2, PIXEL_HEIGHT*2), targetX-PIXEL_WIDTH/2, targetY-PIXEL_HEIGHT, null);
             } else {
-                g2.drawImage(sprite.getFrame(2,0).getIndexedColorImage(), targetX, targetY, null);
+                g2.drawImage(sprite.getIndexedColorImage(), targetX, targetY, null);
             }
             if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_ENEMY && i == selectedEnemy) {
                 g2.setColor(Color.YELLOW);
                 g2.setStroke(new BasicStroke(3));
-                g2.drawRect((x + enemy.getX()) * 3 * 8, (y + enemy.getY()) * 3 * 8, 1 * 24, 1 * 24);
+                g2.drawRect((x+enemy.getX())*PIXEL_WIDTH, (y+enemy.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
         for (int i = 0; i < enemies.length; i++) {
@@ -171,7 +174,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         if (targetX >= 0 && targetY >= 0) {
             g2.setColor(Color.YELLOW);
             g2.setStroke(new BasicStroke(1));
-            g2.drawLine((mapOffsetX + enemyX) * 3 * 8 + 12, (mapOffsetY + enemyY) * 3 * 8 + 12, (mapOffsetX + targetX) * 3 * 8 + 12, (mapOffsetY + targetY) * 3 * 8 + 12);
+            g2.drawLine((mapOffsetX + enemyX)*PIXEL_WIDTH+12, (mapOffsetY + enemyY)*PIXEL_HEIGHT+12, (mapOffsetX + targetX)*PIXEL_WIDTH+12, (mapOffsetY + targetY)*PIXEL_HEIGHT+12);
         }
     }
 
@@ -179,7 +182,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         int x = battle.getMapCoords().getX();
         int y = battle.getMapCoords().getY();
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
-        for (int i = 0; i < regions.length; i++) {
+        for (int i=0; i < regions.length; i++) {
             if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_AIREGION && i == selectedAIRegion) {
                 AIRegion r = regions[i];
                 int x1 = x + r.getX1();
@@ -192,10 +195,10 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 int y4 = y + r.getY4();
                 g2.setColor(Color.GREEN);
                 g2.setStroke(new BasicStroke(3));
-                g2.drawLine(x1 * 3 * 8 + 12, y1 * 3 * 8 + 12, x2 * 3 * 8 + 12, y2 * 3 * 8 + 12);
-                g2.drawLine(x2 * 3 * 8 + 12, y2 * 3 * 8 + 12, x3 * 3 * 8 + 12, y3 * 3 * 8 + 12);
-                g2.drawLine(x3 * 3 * 8 + 12, y3 * 3 * 8 + 12, x4 * 3 * 8 + 12, y4 * 3 * 8 + 12);
-                g2.drawLine(x4 * 3 * 8 + 12, y4 * 3 * 8 + 12, x1 * 3 * 8 + 12, y1 * 3 * 8 + 12);
+                g2.drawLine(x1 * PIXEL_WIDTH + 12, y1 * PIXEL_HEIGHT + 12, x2 * PIXEL_WIDTH + 12, y2 * PIXEL_HEIGHT + 12);
+                g2.drawLine(x2 * PIXEL_WIDTH + 12, y2 * PIXEL_HEIGHT + 12, x3 * PIXEL_WIDTH + 12, y3 * PIXEL_HEIGHT + 12);
+                g2.drawLine(x3 * PIXEL_WIDTH + 12, y3 * PIXEL_HEIGHT + 12, x4 * PIXEL_WIDTH + 12, y4 * PIXEL_HEIGHT + 12);
+                g2.drawLine(x4 * PIXEL_WIDTH + 12, y4 * PIXEL_HEIGHT + 12, x1 * PIXEL_WIDTH + 12, y1 * PIXEL_HEIGHT + 12);
             }
         }
     }
@@ -211,7 +214,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 int py = y + p.getY();
                 g2.setColor(Color.GREEN);
                 g2.setStroke(new BasicStroke(3));
-                g2.drawRect(px * 3 * 8, py * 3 * 8, 3 * 8, 3 * 8);
+                g2.drawRect(px * PIXEL_WIDTH, py * PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
     }
