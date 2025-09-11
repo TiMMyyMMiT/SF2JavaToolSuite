@@ -274,6 +274,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         jTabbedPane1.addTab("Terrain", terrainKeyPanel1);
 
         table1.setBorder(javax.swing.BorderFactory.createTitledBorder("Edit land effect"));
+        table1.setButtonsVisible(true);
         jTabbedPane1.addTab("Land effect", table1);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);

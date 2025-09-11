@@ -390,6 +390,7 @@
                                         <TitledBorder title="Edit land effect"/>
                                       </Border>
                                     </Property>
+                                    <Property name="buttonsVisible" type="boolean" value="true"/>
                                   </Properties>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">

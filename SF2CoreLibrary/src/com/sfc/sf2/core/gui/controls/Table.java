@@ -38,7 +38,17 @@ public class Table extends javax.swing.JPanel {
         return (AbstractTableModel)jTable.getModel();
     }
     
-    @BeanProperty(preferred = true, visualUpdate = true, description = "The title to show on the Color Chooser popup.")
+    public boolean getButtonsVisible() {
+        return jPanelButtons.isVisible();
+    }
+    
+    @BeanProperty(preferred = true, visualUpdate = true, description = "Whether or not to show the add, remove, etc buttons.")
+    public void setButtonsVisible(boolean visible) {
+        jPanelButtons.setVisible(visible);
+        jPanelButtons.setEnabled(visible);
+    }
+    
+    @BeanProperty(preferred = true, visualUpdate = true, description = "Set the data model for the table.")
     public void setModel(AbstractTableModel model) {
         tableModel = model;
         jTable.setModel(model);
@@ -93,11 +103,12 @@ public class Table extends javax.swing.JPanel {
 
         jScrollPane = new javax.swing.JScrollPane();
         jTable = new com.sfc.sf2.core.models.JDisableableTable();
+        jPanelButtons = new javax.swing.JPanel();
         jButtonAdd = new javax.swing.JButton();
-        jButtonRemove = new javax.swing.JButton();
         jButtonClone = new javax.swing.JButton();
         jButtonUp = new javax.swing.JButton();
         jButtonDown = new javax.swing.JButton();
+        jButtonRemove = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Table"));
         setMinimumSize(new java.awt.Dimension(260, 260));
@@ -111,14 +122,6 @@ public class Table extends javax.swing.JPanel {
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
-            }
-        });
-
-        jButtonRemove.setText("Remove");
-        jButtonRemove.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRemoveActionPerformed(evt);
             }
         });
 
@@ -148,39 +151,60 @@ public class Table extends javax.swing.JPanel {
                 }
             });
 
+            jButtonRemove.setText("Remove");
+            jButtonRemove.setMargin(new java.awt.Insets(2, 2, 2, 2));
+            jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButtonRemoveActionPerformed(evt);
+                }
+            });
+
+            javax.swing.GroupLayout jPanelButtonsLayout = new javax.swing.GroupLayout(jPanelButtons);
+            jPanelButtons.setLayout(jPanelButtonsLayout);
+            jPanelButtonsLayout.setHorizontalGroup(
+                jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelButtonsLayout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(6, 6, 6)
+                    .addComponent(jButtonClone, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(12, 12, 12)
+                    .addComponent(jButtonUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(6, 6, 6)
+                    .addComponent(jButtonDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                    .addComponent(jButtonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0))
+            );
+            jPanelButtonsLayout.setVerticalGroup(
+                jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelButtonsLayout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addGroup(jPanelButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jButtonAdd)
+                        .addComponent(jButtonRemove)
+                        .addComponent(jButtonClone)
+                        .addComponent(jButtonUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(0, 0, 0))
+            );
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
             this.setLayout(layout);
             layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButtonClone, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButtonUp, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButtonDown, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap())
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGap(0, 0, 0))
+                .addComponent(jPanelButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButtonUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonAdd)
-                            .addComponent(jButtonRemove)
-                            .addComponent(jButtonClone)
-                            .addComponent(jButtonDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap())
+                    .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                    .addGap(0, 0, 0)
+                    .addComponent(jPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
         }// </editor-fold>//GEN-END:initComponents
 
@@ -272,6 +296,7 @@ public class Table extends javax.swing.JPanel {
     private javax.swing.JButton jButtonDown;
     private javax.swing.JButton jButtonRemove;
     private javax.swing.JButton jButtonUp;
+    private javax.swing.JPanel jPanelButtons;
     private javax.swing.JScrollPane jScrollPane;
     public com.sfc.sf2.core.models.JDisableableTable jTable;
     // End of variables declaration//GEN-END:variables
