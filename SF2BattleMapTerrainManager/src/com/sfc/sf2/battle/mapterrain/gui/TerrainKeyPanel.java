@@ -110,7 +110,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         TerrainIconPanel17 = new com.sfc.sf2.battle.mapterrain.gui.controls.TerrainIconPanel();
         jRadioButtonTerrain15 = new javax.swing.JRadioButton();
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("Edit terrain"));
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Terrain"));
 
         jLabel2.setText("Select a terrain type to paint onto the battle map");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);

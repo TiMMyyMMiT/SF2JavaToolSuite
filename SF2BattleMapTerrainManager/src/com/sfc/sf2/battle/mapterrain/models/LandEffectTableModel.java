@@ -6,6 +6,7 @@
 package com.sfc.sf2.battle.mapterrain.models;
 
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
+import com.sfc.sf2.battle.mapterrain.LandEffect;
 import com.sfc.sf2.battle.mapterrain.LandEffectMovementType;
 import com.sfc.sf2.core.models.AbstractTableModel;
 
@@ -16,17 +17,27 @@ import com.sfc.sf2.core.models.AbstractTableModel;
 public class LandEffectTableModel extends AbstractTableModel<LandEffectMovementType> {
 
     public LandEffectTableModel() {
-        super(BattleMapTerrain.TERRAIN_BASE_NAMES, 16);
+        super(getLabels(), 16);
+    }
+    
+    public static String[] getLabels() {
+        String[] baseLabels = BattleMapTerrain.TERRAIN_EXTENDED_NAMES;
+        String[] labels = new String[baseLabels.length+1];
+        labels[0] = "Terrain type";
+        for (int i = 0; i < baseLabels.length; i++) {
+            labels[i+1] = baseLabels[i];
+        }
+        return labels;
     }
 
     @Override
     public Class<?> getColumnType(int col) {
-        return col%2 == 0 ? Integer.class : String.class;
+        return col == 0 ? Integer.class : LandEffect.class;
     }
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        return true;
+        return column > 0;
     }
 
     @Override
@@ -41,22 +52,27 @@ public class LandEffectTableModel extends AbstractTableModel<LandEffectMovementT
 
     @Override
     protected Object getValue(LandEffectMovementType item, int row, int col) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        switch (col) {
+            case 0: return item.getMovementType();
+            default: return item.getLandEffects()[col-1];
+        }
     }
 
     @Override
     protected LandEffectMovementType setValue(LandEffectMovementType item, int row, int col, Object value) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (col > 0) {
+            item.getLandEffects()[col-1] = (LandEffect)value;
+        }
+        return item;
     }
 
     @Override
     protected Comparable<?> getMinLimit(LandEffectMovementType item, int col) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Integer.MIN_VALUE;
     }
 
     @Override
     protected Comparable<?> getMaxLimit(LandEffectMovementType item, int col) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Integer.MAX_VALUE;
     }
-    
 }

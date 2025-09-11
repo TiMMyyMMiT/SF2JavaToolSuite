@@ -81,7 +81,7 @@ public abstract class AbstractEnums {
         }
         
         String[] split = data.split("\\|");
-        int value = 0;
+        int value = -1;
         for (int i = 0; i < split.length; i++) {
             if (enumData.containsKey(split[i]))
                 value = (enumData.get(split[i])&0xFFFF);

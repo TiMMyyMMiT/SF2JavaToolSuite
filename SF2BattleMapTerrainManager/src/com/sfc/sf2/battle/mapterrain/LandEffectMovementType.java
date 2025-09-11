@@ -11,10 +11,16 @@ package com.sfc.sf2.battle.mapterrain;
  */
 public class LandEffectMovementType {
     
+    String movementType;
     LandEffect[] landEffects;
 
-    public LandEffectMovementType(LandEffect[] landEffects) {
+    public LandEffectMovementType(String movementType, LandEffect[] landEffects) {
+        this.movementType = movementType;
         this.landEffects = landEffects;
+    }
+
+    public String getMovementType() {
+        return movementType;
     }
 
     public LandEffect[] getLandEffects() {

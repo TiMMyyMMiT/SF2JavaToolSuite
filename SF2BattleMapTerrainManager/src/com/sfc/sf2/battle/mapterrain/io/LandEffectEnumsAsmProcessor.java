@@ -35,8 +35,8 @@ public class LandEffectEnumsAsmProcessor extends SF2EnumsAsmProcessor<LandEffect
                 }
             case 2:
                 //Move types are duplicated in engine so we only care about 1 set of them
-                if (line.startsWith("MOVETYPE_LOWER")) {
-                    line = line.substring(line.lastIndexOf("_") + 1);
+                if (line.startsWith("MOVETYPE_LOWER_")) {
+                    line = line.substring(15);
                     String command = line.substring(0, line.indexOf(":"));
                     int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                     asmData.put(command, value);

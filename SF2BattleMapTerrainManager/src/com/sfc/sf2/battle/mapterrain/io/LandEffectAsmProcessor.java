@@ -26,7 +26,8 @@ public class LandEffectAsmProcessor extends AbstractAsmProcessor<LandEffectMovem
     @Override
     protected LandEffectMovementType[] parseAsmData(BufferedReader reader, LandEffectEnums pckg) throws IOException, AsmException {
         ArrayList<LandEffectMovementType> landEffectsList = new ArrayList<>();
-        int setIndex = 0;
+        int setIndex= 0;
+        int effectIndex = 0;
         LandEffect[] currentEffects = new LandEffect[16];
         String line;
         while ((line = reader.readLine()) != null) {
@@ -43,11 +44,14 @@ public class LandEffectAsmProcessor extends AbstractAsmProcessor<LandEffectMovem
                     defense = line.substring(0, splitIndex);
                     moveCost = StringHelpers.getValueInt(line.substring(splitIndex+1));
                 }
-                currentEffects[setIndex] = new LandEffect(defense, moveCost);
-                setIndex++;
-                if (setIndex >= 16) {
-                    landEffectsList.add(new LandEffectMovementType(currentEffects));
-                    setIndex = 0;
+                currentEffects[effectIndex] = new LandEffect(defense, moveCost);
+                effectIndex++;
+                if (effectIndex >= 16) {
+                    String movementType = LandEffectEnums.toEnumString(setIndex, pckg.getMoveTypes());
+                    landEffectsList.add(new LandEffectMovementType(movementType, currentEffects));
+                    currentEffects = new LandEffect[16];
+                    effectIndex = 0;
+                    setIndex++;
                 }
             }
         }
@@ -72,8 +76,9 @@ public class LandEffectAsmProcessor extends AbstractAsmProcessor<LandEffectMovem
             LandEffect[] effects = item[i].getLandEffects();
             for (int e = 0; e < effects.length; e++) {
                 String effectString;
-                if (effects[e].getMoveCost() < 0) {
-                    effectString = effects[e].getDefense();
+                int effectEnumVal = LandEffectEnums.toEnumInt(effects[e].getDefense(), pckg.getDefenses());
+                if (effectEnumVal == 0xFF) {
+                    effectString = effects[e].getDefense(); //Obstructed flag
                 } else {
                     effectString = String.format("%s|%d \t", effects[e].getDefense(), effects[e].getMoveCost());
                 }
