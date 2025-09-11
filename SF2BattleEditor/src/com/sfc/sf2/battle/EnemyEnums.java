@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.battle;
 
+import com.sfc.sf2.core.AbstractEnums;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,28 +13,30 @@ import java.util.Map;
  *
  * @author TiMMy
  */
-public class EnemyEnums {
+public class EnemyEnums extends AbstractEnums {
         
     private LinkedHashMap<String, Integer> enemies;
-    private LinkedHashMap<String, Integer> items;
+    private LinkedHashMap<String, Integer> mapSprites;
     private LinkedHashMap<String, Integer> aiCommandSets;
     private LinkedHashMap<String, Integer> aiOrders;
     private LinkedHashMap<String, Integer> spawnParams;
+    private LinkedHashMap<String, Integer> items;
 
-    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders, LinkedHashMap<String, Integer> spawnParams) {
+    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> mapSprites, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders, LinkedHashMap<String, Integer> spawnParams, LinkedHashMap<String, Integer> items) {
         this.enemies = enemies;
-        this.items = items;
+        this.mapSprites = mapSprites;
         this.aiCommandSets = aiCommandSets;
         this.aiOrders = aiOrders;
         this.spawnParams = spawnParams;
+        this.items = items;
     }
 
     public LinkedHashMap<String, Integer> getEnemies() {
         return enemies;
     }
 
-    public LinkedHashMap<String, Integer> getItems() {
-        return items;
+    public LinkedHashMap<String, Integer> getMapSprites() {
+        return mapSprites;
     }
     
     public LinkedHashMap<String, Integer> getCommandSets() {
@@ -47,56 +50,12 @@ public class EnemyEnums {
     public LinkedHashMap<String, Integer> getSpawnParams() {
         return spawnParams;
     }
+
+    public LinkedHashMap<String, Integer> getItems() {
+        return items;
+    }
     
     //Helper functions
-    
-    public static String toEnumString(String data, Map<String, Integer> en) {
-        try {
-            short number = Short.parseShort(data);
-            return toEnumString(number, en);
-        }
-        catch (NumberFormatException ex) {
-            //Not a number
-            return data;
-        }
-    }
-    
-    public static String toEnumString(byte data, Map<String, Integer> en) {
-        return toEnumString((short)data, en);
-    }
-    
-    public static String toEnumString(short data, Map<String, Integer> en) {
-        int number = (int)data;
-        for (Map.Entry<String, Integer> entry : en.entrySet()) {
-            if (number == entry.getValue())
-                return entry.getKey();
-        }
-
-        return String.valueOf(data);    //Fallback
-    }
-    
-    public static byte toEnumByte(String data, Map<String, Integer> en) {
-        return (byte)(toEnumShort(data, en)&0xFF);
-    }
-    
-    public static short toEnumShort(String data, Map<String, Integer> en) {
-        try {
-            short number = Short.parseShort(data);
-            return number;
-        } catch (NumberFormatException ex) {
-            //Not a number
-        }
-        
-        String[] split = data.split("\\|");
-        short value = 0;
-        for (int i = 0; i < split.length; i++) {
-            if (en.containsKey(split[i]))
-                value = (short)(en.get(split[i])&0xFFFF);
-        }
-        
-        return value;
-    }
-    
     public static String stringToItemString(String data, Map<String, Integer> items) {
         try {
             short number = Short.parseShort(data);
@@ -125,7 +84,6 @@ public class EnemyEnums {
                 return s;
             }
         }
-
         return Short.toString(data);    //Fallback
     }
     
@@ -140,7 +98,6 @@ public class EnemyEnums {
                     value += items.get(split[i]);
             }
         }
-        
         return value;
     }
     
@@ -173,7 +130,6 @@ public class EnemyEnums {
                 return s;
             }
         }
-        
         return Byte.toString(data); //Fallback
     }
     
@@ -189,7 +145,6 @@ public class EnemyEnums {
             else
                 value += (byte)(orders.get(split[0])&0xF0);
         }
-        
         return value;
     }
     

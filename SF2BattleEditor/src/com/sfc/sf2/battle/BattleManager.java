@@ -8,6 +8,7 @@ package com.sfc.sf2.battle;
 import com.sfc.sf2.battle.io.BattleSpritesetAsmProcessor;
 import com.sfc.sf2.battle.io.BattleSpritesetEntriesAsmProcessor;
 import com.sfc.sf2.battle.io.BattleSpritesetPackage;
+import com.sfc.sf2.battle.io.EnemyEnumsAsmProcessor;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.battle.mapcoords.io.BattleMapCoordsAsmProcessor;
@@ -48,7 +49,7 @@ public class BattleManager extends AbstractManager {
     private final BattleSpritesetAsmProcessor battleSpritesetAsmProcessor = new BattleSpritesetAsmProcessor();
     private final BattleSpritesetEntriesAsmProcessor battleSpritesetEntriesProcessor = new BattleSpritesetEntriesAsmProcessor();
     private final BattleMapCoordsAsmProcessor battleCoordsAsmProcessor = new BattleMapCoordsAsmProcessor();
-    private final SF2EnumsAsmProcessor sf2EnumsAsmProcessor = new SF2EnumsAsmProcessor();
+    private final EnemyEnumsAsmProcessor enemyEnumsAsmProcessor = new EnemyEnumsAsmProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
     private final EnemyMapspriteAsmProcessor enemyMapspritesAsmProcessor = new EnemyMapspriteAsmProcessor();
     
@@ -95,13 +96,11 @@ public class BattleManager extends AbstractManager {
     public void importMapspriteData(Path basePalettePath, Path mapspriteEntriesPath, Path enemyMapspritesPath, Path mapspriteEnumsPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importEnemyData");
         if (enemyEnums == null) {
-            SF2EnumsAsmData enumsData = new SF2EnumsAsmData("Enemies", "AiCommandsets", "AiOrders", "SpawnSettings", "Items (bitfield)", "Mapsprites");
-            enumsData = sf2EnumsAsmProcessor.importAsmData(mapspriteEnumsPath, enumsData);
-            enemyEnums = new EnemyEnums(enumsData.getSet("Enemies"), enumsData.getSet("Items (bitfield)"), enumsData.getSet("AiCommandsets"), enumsData.getSet("AiOrders"), enumsData.getSet("SpawnSettings"));
+            enemyEnums = enemyEnumsAsmProcessor.importAsmData(mapspriteEnumsPath, null);
             Palette palette = paletteManager.importDisassembly(basePalettePath, true);
             EntriesAsmData mapspriteEntries = entriesAsmProcessor.importAsmData(mapspriteEntriesPath, null);
             String[] enemyMapsprites = (String[])enemyMapspritesAsmProcessor.importAsmData(enemyMapspritesPath, null);
-            enemyData = processEnemyData(enemyEnums, mapspriteEntries, enemyMapsprites, enumsData.getSet("Mapsprites"), palette);
+            enemyData = processEnemyData(enemyEnums, mapspriteEntries, enemyMapsprites, enemyEnums.getMapSprites(), palette);
             Console.logger().info("Mapsprite data loaded from " + mapspriteEntriesPath + " and " + mapspriteEnumsPath);
         } else {
             Console.logger().warning("Mapsprite data already loaded.");

@@ -5,14 +5,10 @@
  */
 package com.sfc.sf2.battle.mapterrain.compression;
 
-import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.BinaryHelpers;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *
