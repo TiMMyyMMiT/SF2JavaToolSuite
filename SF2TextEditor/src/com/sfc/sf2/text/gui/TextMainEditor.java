@@ -39,8 +39,8 @@ public class TextMainEditor extends AbstractMainEditor {
     
     public TextMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
         
         //Handle old Ascii map path and new path
         File file = PathHelpers.getBasePath().resolve("asciitotextsymbolmap.asm").toFile();

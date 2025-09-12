@@ -25,8 +25,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     public MapLayoutMainEditor() {
         super();
         SettingsManager.registerSettingsStore("mapLayout", mapLayoutSettings);
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

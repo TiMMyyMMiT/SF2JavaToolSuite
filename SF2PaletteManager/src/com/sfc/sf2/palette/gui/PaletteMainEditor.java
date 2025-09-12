@@ -5,11 +5,9 @@
  */
 package com.sfc.sf2.palette.gui;
 
-import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
-import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.PaletteManager;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -24,8 +22,8 @@ public class PaletteMainEditor extends AbstractMainEditor {
     
     public PaletteMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

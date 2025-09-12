@@ -23,8 +23,8 @@ public class SpecialSpriteMainEditor extends AbstractMainEditor {
     
     public SpecialSpriteMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

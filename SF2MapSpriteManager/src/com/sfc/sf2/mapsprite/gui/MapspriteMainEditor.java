@@ -31,8 +31,8 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     public MapspriteMainEditor() {
         super();
         SettingsManager.registerSettingsStore("mapsprite", mapspriteSettings);
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

@@ -34,8 +34,8 @@ public class SpellMainEditor extends AbstractMainEditor {
      */
     public SpellMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

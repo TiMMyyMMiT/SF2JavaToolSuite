@@ -34,8 +34,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     public BattleEditorMainEditor() {
         super();
         //SettingsManager.registerSettingsStore("terrain", terrainSettings);
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

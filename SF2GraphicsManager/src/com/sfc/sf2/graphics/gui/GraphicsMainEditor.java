@@ -27,8 +27,8 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     
     public GraphicsMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

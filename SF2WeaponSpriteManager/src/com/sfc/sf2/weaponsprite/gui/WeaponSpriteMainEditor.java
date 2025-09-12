@@ -24,8 +24,8 @@ public class WeaponSpriteMainEditor extends AbstractMainEditor {
     
     public WeaponSpriteMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

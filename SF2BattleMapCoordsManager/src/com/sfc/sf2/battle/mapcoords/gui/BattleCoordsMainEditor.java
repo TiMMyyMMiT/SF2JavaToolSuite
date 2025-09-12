@@ -30,8 +30,8 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     
     public BattleCoordsMainEditor() {
         super();
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override

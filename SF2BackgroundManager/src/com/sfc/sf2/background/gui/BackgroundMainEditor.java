@@ -29,8 +29,8 @@ public class BackgroundMainEditor extends AbstractMainEditor {
     public BackgroundMainEditor() {
         super();
         SettingsManager.registerSettingsStore("background", backgroundSettings);
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override
