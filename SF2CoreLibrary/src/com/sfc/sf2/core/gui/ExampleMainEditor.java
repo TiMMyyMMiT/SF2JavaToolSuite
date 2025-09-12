@@ -17,8 +17,8 @@ public final class ExampleMainEditor extends AbstractMainEditor {
     
     public ExampleMainEditor() {
         super();
-        initCore(console1);     //<--- This is required
         initComponents();       //<--- This is required
+        initCore(console1);     //<--- This is required
     }
     
     @Override

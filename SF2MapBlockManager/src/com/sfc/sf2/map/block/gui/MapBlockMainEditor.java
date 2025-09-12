@@ -30,8 +30,8 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     public MapBlockMainEditor() {
         super();
         SettingsManager.registerSettingsStore("mapBlock", MapBlockSettings);
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override

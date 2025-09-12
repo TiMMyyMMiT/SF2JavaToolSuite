@@ -25,8 +25,8 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
     
     public BattleSpriteMainEditor() {
         super();
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override

@@ -33,8 +33,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         
     public BattleSpriteAnimationMainEditor() {
         super();
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override

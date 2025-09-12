@@ -30,8 +30,8 @@ public class IconsMainEditor extends AbstractMainEditor {
     public IconsMainEditor() {
         super();
         SettingsManager.registerSettingsStore("icons", iconSettings);
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override
