@@ -6,8 +6,11 @@
 package com.sfc.sf2.battle.mapterrain.gui;
 
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
+import com.sfc.sf2.core.settings.SettingsManager;
+import com.sfc.sf2.settings.TerrainSettings;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.BeanProperty;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -16,12 +19,20 @@ import java.beans.BeanProperty;
 public class TerrainKeyPanel extends javax.swing.JPanel {
 
     private ActionListener buttonSelected;
+    private ActionListener modeChanged;
     
     public TerrainKeyPanel() {
         initComponents();
+        
+        if (SettingsManager.isRunningInEditor()) return;
+        jComboBox2.setModel(new DefaultComboBoxModel(TerrainDrawMode.values()));
+        TerrainSettings terrainSettings = SettingsManager.getSettingsStore("terrain");
+        if (terrainSettings.getTerrainDrawMode() != null) {
+            jComboBox2.setSelectedItem(terrainSettings.getTerrainDrawMode());
+            setDrawMode(terrainSettings.getTerrainDrawMode());
+        }
     }
     
-    @BeanProperty(preferred = true, visualUpdate = true, description = "The callback for when one of the radio buttons is toggled.")
     public void setActionListener(ActionListener buttonSelected) {
         this.buttonSelected = buttonSelected;
     }
@@ -30,7 +41,15 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         this.buttonSelected = null;
     }
     
-    public void setDrawMode(TerrainDrawMode terrainDrawMode) {
+    public void setModeChangedListener(ActionListener buttonSelected) {
+        this.modeChanged = buttonSelected;
+    }
+    
+    public void removeModeChangedListener() {
+        this.modeChanged = null;
+    }
+    
+    private void setDrawMode(TerrainDrawMode terrainDrawMode) {
         TerrainIconPanel1.setTerrainDrawMode(terrainDrawMode);
         TerrainIconPanel2.setTerrainDrawMode(terrainDrawMode);
         TerrainIconPanel3.setTerrainDrawMode(terrainDrawMode);
@@ -60,6 +79,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
 
         buttonGroupTerrain = new javax.swing.ButtonGroup();
         jLabel2 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jRadioButtonWall = new javax.swing.JRadioButton();
@@ -114,6 +134,13 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Select a terrain type to paint onto the battle map");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Icons", "Colors", "Numbers" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
 
         buttonGroupTerrain.add(jRadioButtonWall);
         jRadioButtonWall.setText("Sky / Wall");
@@ -547,7 +574,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(TerrainIconPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRadioButtonTerrain12))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Additional terrains", jPanel2);
@@ -561,14 +588,18 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel2)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1)
                 .addContainerGap())
@@ -580,6 +611,19 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
             buttonSelected.actionPerformed(evt);
         }
     }//GEN-LAST:event_onRadioButtonPressed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        if (jComboBox2.getSelectedIndex() >= 0) {
+            TerrainDrawMode terrainDrawMode = (TerrainDrawMode)jComboBox2.getSelectedItem();
+            setDrawMode(terrainDrawMode);
+            if (modeChanged != null) {
+                modeChanged.actionPerformed(new ActionEvent(terrainDrawMode, jComboBox2.getSelectedIndex(), null));
+            }
+            TerrainSettings terrainSettings = SettingsManager.getSettingsStore("terrain");
+            terrainSettings.setTerrainDrawMode(terrainDrawMode);
+            SettingsManager.saveSettingsFile();
+        }
+    }//GEN-LAST:event_jComboBox2ActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.battle.mapterrain.gui.controls.TerrainIconPanel TerrainIconPanel1;
@@ -611,6 +655,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton7;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton8;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton9;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

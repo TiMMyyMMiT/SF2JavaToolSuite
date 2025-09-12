@@ -21,7 +21,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -39,8 +38,8 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     public BattleMapTerrainMainEditor() {
         super();
         SettingsManager.registerSettingsStore("terrain", terrainSettings);
-        initComponents();
         initCore(console1);
+        initComponents();
     }
     
     @Override
@@ -49,12 +48,11 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         
         accordionPanel1.setExpanded(false);
         terrainKeyPanel1.setActionListener(this::onTerrainSelectionChanged);
+        terrainKeyPanel1.setModeChangedListener(this::onTerrainModeChanged);
+        TerrainDrawMode terrainDrawMode = terrainSettings.getTerrainDrawMode();
+        battleMapTerrainLayoutPanel.setTerrainDrawMode(terrainDrawMode);
         
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
-        jComboBox2.setModel(new DefaultComboBoxModel(TerrainDrawMode.values()));
-        if (terrainSettings.getTerrainDrawMode() != null) {
-            jComboBox2.setSelectedItem(terrainSettings.getTerrainDrawMode().ordinal());
-        }
         
         battleMapTerrainLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         battleMapTerrainLayoutPanel.setShowGrid(jCheckBox2.isSelected());
@@ -62,10 +60,6 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         battleMapTerrainLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
         battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleMapTerrainLayoutPanel.setShowBattleCoords(true);
-        
-        TerrainDrawMode terrainDrawMode = terrainSettings.getTerrainDrawMode();
-        terrainKeyPanel1.setDrawMode(terrainDrawMode);
-        battleMapTerrainLayoutPanel.setTerrainDrawMode(terrainDrawMode);
         
         tableLandEffect.setMinColumnWidth(-1, 60);
         tableLandEffect.jTable.setMinimumSize(new Dimension(tableLandEffect.jTable.getColumnCount()*60, Integer.MAX_VALUE));
@@ -150,9 +144,10 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         jCheckBox3 = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         tableLandEffect = new com.sfc.sf2.core.gui.controls.Table();
+        infoButton11 = new com.sfc.sf2.core.gui.controls.InfoButton();
+        jLabel5 = new javax.swing.JLabel();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -488,13 +483,6 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
             .addGap(0, 22, Short.MAX_VALUE)
         );
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Icons", "Colors", "Numbers" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
@@ -504,9 +492,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                 .addComponent(jCheckBox1)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBox3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                 .addComponent(jCheckBox2)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
@@ -529,8 +515,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBox1)
                         .addComponent(jCheckBox3)
-                        .addComponent(jCheckBox2)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jCheckBox2)))
                 .addContainerGap())
         );
 
@@ -561,9 +546,15 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
 
         tableLandEffect.setBorder(javax.swing.BorderFactory.createTitledBorder("Land effect"));
         tableLandEffect.setButtonsVisible(false);
+        tableLandEffect.setHorizontalScrolling(true);
         tableLandEffect.setModel(landEffectTableModel);
         tableLandEffect.setRowBorders(true);
         tableLandEffect.setSingleClickText(false);
+
+        infoButton11.setMessageText("<html>\"Land effect\" determines how each <i>movement type</i> is affected by each <i>terrain type</i>.<br>Each land effect entry determines defensive bonus and the movement cost that will affect the a unit with the specific movement type on the specific terrain.<br><br><b>Defenses:</b><br>Obstructed: Indicates that this <i>movement type</i> cannot move onto this tile.<br>LE0: By default, provides 0% defensive bonus (no bonus).<br>LE15: By default, provides 15% defensive bonus.<br>LE30: By default, provides 30% defensive bonus.<br><br><b>Movement costs:</b> Higher numbers = slower movement on that tile.</html>");
+        infoButton11.setText("");
+
+        jLabel5.setText("Land effect info");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -571,18 +562,26 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(infoButton11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(infoButton11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        tableLandEffect.getAccessibleContext().setAccessibleName("Land effect");
 
         jTabbedPane2.addTab("Land effect", jPanel4);
 
@@ -625,7 +624,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 933, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 933, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -703,16 +702,6 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         SettingsManager.saveGlobalSettingsFile();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        if (jComboBox2.getSelectedIndex() >= 0) {
-            TerrainDrawMode terrainDrawMode = (TerrainDrawMode)jComboBox2.getSelectedItem();
-            terrainKeyPanel1.setDrawMode(terrainDrawMode);
-            battleMapTerrainLayoutPanel.setTerrainDrawMode(terrainDrawMode);
-            terrainSettings.setTerrainDrawMode(terrainDrawMode);
-            SettingsManager.saveSettingsFile();
-        }
-    }//GEN-LAST:event_jComboBox2ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Path landEffectPath = PathHelpers.getBasePath().resolve(fileButton7.getFilePath());
         if (!PathHelpers.createPathIfRequred(landEffectPath)) return;
@@ -727,6 +716,11 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     private void onTerrainSelectionChanged(ActionEvent e) {
         int terrain = Integer.parseInt(e.getActionCommand());
         battleMapTerrainLayoutPanel.setSelectedTerrainType(terrain);
+    }
+    
+    private void onTerrainModeChanged(ActionEvent e) {
+        TerrainDrawMode drawMode = (TerrainDrawMode)e.getSource();
+        battleMapTerrainLayoutPanel.setTerrainDrawMode(drawMode);
     }
     
     /**
@@ -759,6 +753,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton5;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton6;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton7;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton11;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -766,11 +761,11 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
