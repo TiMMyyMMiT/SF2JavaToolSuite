@@ -36,8 +36,8 @@ public class PortraitMainEditor extends AbstractMainEditor {
     public PortraitMainEditor() {
         super();
         SettingsManager.registerSettingsStore("portrait", portraitSettings);
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override

@@ -39,8 +39,8 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     public BattleMapTerrainMainEditor() {
         super();
         SettingsManager.registerSettingsStore("terrain", terrainSettings);
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override
@@ -52,6 +52,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         terrainKeyPanel1.setModeChangedListener(this::onTerrainModeChanged);
         TerrainDrawMode terrainDrawMode = terrainSettings.getTerrainDrawMode();
         battleMapTerrainLayoutPanel.setTerrainDrawMode(terrainDrawMode);
+        terrainKeyPanel1.setDrawMode(terrainDrawMode);
         
         colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         

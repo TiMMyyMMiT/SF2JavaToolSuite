@@ -27,8 +27,8 @@ public class VWFontMainEditor extends AbstractMainEditor {
     public VWFontMainEditor() {
         super();
         SettingsManager.registerSettingsStore("font", fontSettings);
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override

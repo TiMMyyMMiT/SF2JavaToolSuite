@@ -24,8 +24,8 @@ public class GroundMainEditor extends AbstractMainEditor {
     
     public GroundMainEditor() {
         super();
-        initCore(console1);
         initComponents();
+        initCore(console1);
     }
     
     @Override
