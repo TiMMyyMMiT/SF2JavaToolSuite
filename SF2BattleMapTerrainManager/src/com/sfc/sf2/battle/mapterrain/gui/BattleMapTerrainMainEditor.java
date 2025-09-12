@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author wiz
  */
 public class BattleMapTerrainMainEditor extends AbstractMainEditor {
+
     private TerrainSettings terrainSettings = new TerrainSettings();
     private BattleMapTerrainManager battlemapterrainManager = new BattleMapTerrainManager();
     
@@ -492,7 +493,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                 .addComponent(jCheckBox1)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBox3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
                 .addComponent(jCheckBox2)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
@@ -563,7 +564,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                    .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel5)
@@ -583,13 +584,13 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                 .addContainerGap())
         );
 
-        jTabbedPane2.addTab("Land effect", jPanel4);
+        jTabbedPane2.addTab("Land Effect", jPanel4);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 645, Short.MAX_VALUE)
+            .addGap(0, 745, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jTabbedPane2))
         );
@@ -638,7 +639,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
             .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1066, 908));
+        setSize(new java.awt.Dimension(1166, 908));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

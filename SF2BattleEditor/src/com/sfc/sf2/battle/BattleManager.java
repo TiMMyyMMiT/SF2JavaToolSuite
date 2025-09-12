@@ -20,8 +20,6 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
-import com.sfc.sf2.core.io.asm.SF2EnumsAsmData;
-import com.sfc.sf2.core.io.asm.SF2EnumsAsmProcessor;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.MapSprite;

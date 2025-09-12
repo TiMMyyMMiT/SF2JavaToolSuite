@@ -409,7 +409,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Base terrains", jPanel1);
+        jTabbedPane1.addTab("Base Terrains", jPanel1);
 
         infoButton11.setMessageText("<html>The base game only utilises 9 terrains (plus \"Obstructed\") but can support up to 15.<br>The icons and colors in this context are just generic placeholders.</html> ");
         infoButton11.setText("");
@@ -577,7 +577,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Additional terrains", jPanel2);
+        jTabbedPane1.addTab("Additional Terrains", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
