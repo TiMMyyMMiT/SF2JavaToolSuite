@@ -10,7 +10,6 @@ import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.settings.TerrainSettings;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -23,14 +22,11 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
     
     public TerrainKeyPanel() {
         initComponents();
-        
-        if (SettingsManager.isRunningInEditor()) return;
-        jComboBox2.setModel(new DefaultComboBoxModel(TerrainDrawMode.values()));
-        TerrainSettings terrainSettings = SettingsManager.getSettingsStore("terrain");
-        if (terrainSettings.getTerrainDrawMode() != null) {
-            jComboBox2.setSelectedItem(terrainSettings.getTerrainDrawMode());
-            setDrawMode(terrainSettings.getTerrainDrawMode());
-        }
+    }
+    
+    public void setDrawMode(TerrainDrawMode drawMode) {
+        jComboBox2.setSelectedItem(drawMode);
+        updateDrawModePanels(drawMode);
     }
     
     public void setActionListener(ActionListener buttonSelected) {
@@ -49,7 +45,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         this.modeChanged = null;
     }
     
-    private void setDrawMode(TerrainDrawMode terrainDrawMode) {
+    private void updateDrawModePanels(TerrainDrawMode terrainDrawMode) {
         TerrainIconPanel1.setTerrainDrawMode(terrainDrawMode);
         TerrainIconPanel2.setTerrainDrawMode(terrainDrawMode);
         TerrainIconPanel3.setTerrainDrawMode(terrainDrawMode);
@@ -615,7 +611,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         if (jComboBox2.getSelectedIndex() >= 0) {
             TerrainDrawMode terrainDrawMode = (TerrainDrawMode)jComboBox2.getSelectedItem();
-            setDrawMode(terrainDrawMode);
+            updateDrawModePanels(terrainDrawMode);
             if (modeChanged != null) {
                 modeChanged.actionPerformed(new ActionEvent(terrainDrawMode, jComboBox2.getSelectedIndex(), null));
             }
