@@ -110,10 +110,10 @@ public class BattleManager extends AbstractManager {
         ArrayList<EnemyData> enemyDataList = new ArrayList(enemyEnums.getEnemies().size());
         LinkedHashMap<String, Integer> enemies = enemyEnums.getEnemies();
         for (Map.Entry<String, Integer> entry : enemies.entrySet()) {
-            String shortName = entry.getKey().substring(6);
+            String shortName = entry.getKey();
             Tileset loadedSprite = null;
             boolean isSpecialSprite = false;
-            String mapSprite = "MAPSPRITE_" + enemyMapsprites[entry.getValue()];
+            String mapSprite = enemyMapsprites[entry.getValue()];
             if (mapspriteEnumsData.containsKey(mapSprite)) {
                 Path mapspritePath = null;
                 try {
@@ -133,7 +133,7 @@ public class BattleManager extends AbstractManager {
                         if (mapspritePath != null) {
                             mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
                             MapSprite[] sprite = mapspriteManager.importDisassembly(mapspritePath, palette);
-                            loadedSprite = sprite[0].getFrame(2, 1);
+                            loadedSprite = sprite[0].getFrame(2, 0);
                         }
                     }
                 } catch (Exception e) {

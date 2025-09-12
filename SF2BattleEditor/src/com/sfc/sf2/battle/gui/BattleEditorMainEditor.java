@@ -52,6 +52,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         terrainKeyPanel1.setModeChangedListener(this::onTerrainModeChanged);
         TerrainDrawMode terrainDrawMode = terrainSettings.getTerrainDrawMode();
         battleLayoutPanel.setTerrainDrawMode(terrainDrawMode);
+        terrainKeyPanel1.setDrawMode(terrainDrawMode);
         
         tableAllies.addTableModelListener(this::onTableAlliesDataChanged);
         tableAllies.addListSelectionListener(this::onTableAlliesSelectionChanged);
