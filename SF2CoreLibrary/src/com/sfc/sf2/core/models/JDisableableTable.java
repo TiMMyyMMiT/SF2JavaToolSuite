@@ -8,7 +8,6 @@ package com.sfc.sf2.core.models;
 import com.sfc.sf2.core.settings.SettingsManager;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.border.MatteBorder;
@@ -25,6 +24,7 @@ public class JDisableableTable extends JTable {
     private static MatteBorder BORDER;
     
     private boolean drawBorder = false;
+    private boolean horizontalScrolling = false;
 
     private static void setupColors() {
         if (DISABLED_COLOR != null) return;
@@ -37,6 +37,14 @@ public class JDisableableTable extends JTable {
 
     public void setDrawBorder(boolean drawBorder) {
         this.drawBorder = drawBorder;
+    }
+
+    /**
+     * This is a fix for default JTable behaviour where they will not show the horizontal scroll bar even if the table is too small.
+     * In most cases, though, you prefer the table to resize to fit the viewport.
+     */
+    public void setHorizontalScrolling(boolean horizontalScrolling) {
+        this.horizontalScrolling = horizontalScrolling;
     }
     
     @Override
@@ -56,12 +64,18 @@ public class JDisableableTable extends JTable {
             comp.setForeground(editable ? getForeground() : DISABLED_COLOR);
             comp.setBackground(getBackground());
         }
-        comp.setBorder(drawBorder ? BORDER : null);
+        if (drawBorder) {
+            comp.setBorder(BORDER);
+        }
         return comp;
     }
 
     @Override
     public boolean getScrollableTracksViewportWidth() {
-        return getPreferredSize().width < getParent().getParent().getWidth();
+        if (horizontalScrolling) {
+            return getPreferredSize().width < getParent().getParent().getWidth();
+        } else {
+            return true;
+        }
     }
 }

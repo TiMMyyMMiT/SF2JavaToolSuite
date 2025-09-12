@@ -54,6 +54,16 @@ public class Table extends javax.swing.JPanel {
         jPanelButtons.setEnabled(visible);
     }
     
+    /**
+     * This is a fix for default JTable behaviour where they will not show the horizontal scroll bar even if the table is too small.
+     * In most cases, though, you prefer the table to resize to fit the viewport.
+     */
+    @BeanProperty(preferred = true, visualUpdate = true, description = "This is a fix for default JTable behaviour where they will not show the horizontal scroll bar even if the table is too small.\n" +
+            "In most cases, though, you prefer the table to resize to fit the viewport.")
+    public void setHorizontalScrolling(boolean horizontalScrolling) {
+        jTable.setHorizontalScrolling(horizontalScrolling);
+    }
+    
     @BeanProperty(preferred = true, visualUpdate = true, description = "Set the data model for the table.")
     public void setModel(AbstractTableModel model) {
         tableModel = model;
