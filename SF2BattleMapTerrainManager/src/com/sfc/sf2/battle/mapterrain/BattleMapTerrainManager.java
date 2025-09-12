@@ -83,7 +83,7 @@ public class BattleMapTerrainManager extends AbstractManager {
     public void exportLandEffects(Path landEffectPath, LandEffectMovementType[] landEffects) throws IOException, AsmException {
         Console.logger().finest("ENTERING exportLandEffects");
         this.landEffects = landEffects;
-        landEffectAsmProcessor.exportAsmData(landEffectPath, landEffects, null);
+        landEffectAsmProcessor.exportAsmData(landEffectPath, landEffects, landEffectEnums);
         Console.logger().info("Land effects successfully exported to : " + landEffectPath);
         Console.logger().finest("EXITING exportLandEffects");
     }

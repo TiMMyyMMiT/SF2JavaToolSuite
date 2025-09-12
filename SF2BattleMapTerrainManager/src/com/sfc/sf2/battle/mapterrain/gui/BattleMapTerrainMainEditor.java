@@ -8,6 +8,7 @@ package com.sfc.sf2.battle.mapterrain.gui;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrainManager;
 import com.sfc.sf2.battle.mapterrain.LandEffect;
 import com.sfc.sf2.battle.mapterrain.LandEffectEnums;
+import com.sfc.sf2.battle.mapterrain.LandEffectMovementType;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import com.sfc.sf2.battle.mapterrain.models.LandEffectTableEditor;
 import com.sfc.sf2.battle.mapterrain.models.LandEffectTableRenderer;
@@ -716,10 +717,10 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         Path landEffectPath = PathHelpers.getBasePath().resolve(fileButton7.getFilePath());
         if (!PathHelpers.createPathIfRequred(landEffectPath)) return;
         try {
-            battlemapterrainManager.exportDisassembly(landEffectPath, battleMapTerrainLayoutPanel.getTerrain());
+            battlemapterrainManager.exportLandEffects(landEffectPath, landEffectTableModel.getTableData(LandEffectMovementType[].class));
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Terrrain disasm could not be exported to : " + landEffectPath);
+            Console.logger().severe("ERROR Land effect disasm could not be exported to : " + landEffectPath);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
     

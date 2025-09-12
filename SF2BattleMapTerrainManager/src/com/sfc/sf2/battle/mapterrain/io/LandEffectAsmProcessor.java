@@ -68,9 +68,8 @@ public class LandEffectAsmProcessor extends AbstractAsmProcessor<LandEffectMovem
     @Override
     protected void packageAsmData(FileWriter writer, LandEffectMovementType[] item, LandEffectEnums pckg) throws IOException, AsmException {
         writer.write("table_LandEffectSettingsAndMovecosts:\n\n");
-        writer.write("Land effect settings and move costs table\n");
         writer.write("; Syntax        landEffectAndMoveCost [LANDEFFECTSETTING_]enum|moveCost\n;\n");
-        writer.write("; Note: Constant names (\"enums\"), shorthands (defined by macro), and numerical indexes are interchangeable.)\n\n");
+        writer.write("; Note: Constant names (\"enums\"), shorthands (defined by macro), and numerical indexes are interchangeable.)\n");
         for (int i = 0; i < item.length; i++) {
             writer.write(String.format("\n;%d: %s\n", i, LandEffectEnums.toEnumString(i, pckg.getMoveTypes())));
             LandEffect[] effects = item[i].getLandEffects();
@@ -84,7 +83,6 @@ public class LandEffectAsmProcessor extends AbstractAsmProcessor<LandEffectMovem
                 }
                 writer.write(String.format("\t\t\tlandEffectAndMoveCost %s\t; %d: %s\n", effectString, e, BattleMapTerrain.TERRAIN_EXTENDED_NAMES[e]));
             }
-            writer.write("\n");
         }
     }
 }

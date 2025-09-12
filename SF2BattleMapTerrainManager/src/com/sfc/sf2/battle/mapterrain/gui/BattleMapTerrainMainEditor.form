@@ -793,9 +793,6 @@
                                     <Property name="rowBorders" type="boolean" value="true"/>
                                     <Property name="singleClickText" type="boolean" value="false"/>
                                   </Properties>
-                                  <AccessibilityProperties>
-                                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Land effect"/>
-                                  </AccessibilityProperties>
                                 </Component>
                               </SubComponents>
                             </Container>
