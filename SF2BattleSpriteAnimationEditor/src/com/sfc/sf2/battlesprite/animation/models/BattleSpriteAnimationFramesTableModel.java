@@ -75,7 +75,7 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
     }
 
     @Override
-    protected BattleSpriteAnimationFrame setValue(BattleSpriteAnimationFrame item, int col, Object value) {
+    protected BattleSpriteAnimationFrame setValue(BattleSpriteAnimationFrame item, int row, int col, Object value) {
         switch (col) {
             case 0: break;
             case 1: item.setBattleSpriteIndex((byte)value); break;
