@@ -36,8 +36,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private TerrainSettings terrainSettings = new TerrainSettings();
     private BattleManager battleManager = new BattleManager();
     
-    boolean drawAiRegions;
-    boolean drawAiPoints;
+    private boolean drawSprites;
+    private boolean drawAiRegions;
+    private boolean drawAiPoints;
     
     public BattleEditorMainEditor() {
         super();
@@ -83,12 +84,13 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.setBGColor(colorPicker1.getColor());
         battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
         battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleLayoutPanel.setShowBattleCoords(true);
         
+        drawSprites = jCheckBox4.isSelected();
         drawAiRegions = jCheckBox6.isSelected();
         drawAiPoints = jCheckBox7.isSelected();
+        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected(), -1);
         battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
         battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
         
@@ -1441,7 +1443,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }
     
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
+        drawSprites = jCheckBox4.isSelected();
+        changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
@@ -1527,9 +1530,14 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             case 0:
                 battleLayoutPanel.setPaintMode(BattlePaintMode.Terrain);
                 terrainKeyPanel1.clearSelection();
+                jCheckBox4.setEnabled(true);
+                jCheckBox6.setEnabled(true);
+                jCheckBox7.setEnabled(true);
+                changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
                 break;
             case 1:
                 battleLayoutPanel.setPaintMode(BattlePaintMode.Spriteset);
+                jTabbedPane3StateChanged(null);
                 break;
         }
     }//GEN-LAST:event_jTabbedPane2StateChanged
@@ -1539,23 +1547,33 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         switch (index) {
             case 0:
                 battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.Ally);
+                changeDrawMode(true, drawAiRegions, drawAiPoints);
                 tableAllies.jTable.clearSelection();
                 break;
             case 1:
                 battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.Enemy);
+                changeDrawMode(true, drawAiRegions, drawAiPoints);
                 tableEnemies.jTable.clearSelection();
+                jCheckBox4.setSelected(true);
                 break;
             case 2:
                 battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.AiRegion);
+                changeDrawMode(drawSprites, true, drawAiPoints);
                 tableAIRegions.jTable.clearSelection();
+                jCheckBox6.setSelected(true);
                 break;
             case 3:
                 battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.AiPoint);
+                changeDrawMode(drawSprites, drawAiRegions, true);
                 tableAIPoints.jTable.clearSelection();
+                jCheckBox7.setSelected(true);
                 break;
         }
-        jCheckBox6.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.AiRegion);
-        jCheckBox7.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.AiPoint);
+        if (jTabbedPane2.getSelectedIndex() == 1) {
+            jCheckBox4.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.Ally && battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.Enemy);
+            jCheckBox6.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.AiRegion);
+            jCheckBox7.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.AiPoint);
+        }
     }//GEN-LAST:event_jTabbedPane3StateChanged
 
     private void jSpinner_Trigger1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger1StateChanged
@@ -1616,14 +1634,22 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         drawAiRegions = jCheckBox6.isSelected();
-        battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
+        changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
         drawAiPoints = jCheckBox7.isSelected();
-        battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
+        changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
+    private void changeDrawMode(boolean sprites, boolean aiRegions, boolean aiModes) {
+        jCheckBox4.setSelected(sprites);
+        jCheckBox6.setSelected(aiRegions);
+        jCheckBox7.setSelected(aiModes);
+        battleLayoutPanel.setDrawSprites(sprites, -1);
+        battleLayoutPanel.setDrawAiRegions(aiRegions, -1);
+        battleLayoutPanel.setDrawAiPoints(aiModes, -1);
+    }
     
     private void OnEnemyDataChanged(Object data, int column){
         /*int selectRow = jTable3.getSelectedRow();

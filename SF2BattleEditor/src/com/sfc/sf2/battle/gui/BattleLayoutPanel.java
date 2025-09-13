@@ -270,9 +270,10 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         return drawSprites;
     }
 
-    public void setDrawSprites(boolean drawSprites) {
-        if (this.drawSprites != drawSprites) {
+    public void setDrawSprites(boolean drawSprites, int selectedSprite) {
+        if (this.drawSprites != drawSprites || this.selectedSpritesetEntity != selectedSprite) {
             this.drawSprites = drawSprites;
+            this.selectedSpritesetEntity = selectedSprite;
             redraw();
         }
     }
