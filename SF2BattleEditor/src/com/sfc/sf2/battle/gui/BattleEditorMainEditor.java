@@ -600,7 +600,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jCheckBox5.setText("Lock unit positions");
 
-        infoButton1.setMessageText("<html>Changing the Start X and Start Y will move the allies, enemies, and regions. Toggling this on will fix those elements in position while moving the battle boundaries.<br>Will not shift AI Regions.</html>");
+        infoButton1.setMessageText("<html>Changing the Start X and Start Y will move the allies, enemies, AI regions, and AI points. Toggling this on will fix those elements to the map while moving the battle boundaries.<br><br><b>WARNING</b> Points outside of the battle area will not be saved properly. A red alert will show any points outside of the battle area.</html>");
         infoButton1.setText("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

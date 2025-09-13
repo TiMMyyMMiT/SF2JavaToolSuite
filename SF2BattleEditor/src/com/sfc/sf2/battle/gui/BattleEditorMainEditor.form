@@ -817,7 +817,7 @@
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
                                           <Properties>
-                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Changing the Start X and Start Y will move the allies, enemies, and regions. Toggling this on will fix those elements in position while moving the battle boundaries.&lt;br&gt;Will not shift AI Regions.&lt;/html&gt;"/>
+                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Changing the Start X and Start Y will move the allies, enemies, AI regions, and AI points. Toggling this on will fix those elements to the map while moving the battle boundaries.&lt;br&gt;&lt;br&gt;&lt;b&gt;WARNING&lt;/b&gt; Points outside of the battle area will not be saved properly. A red alert will show any points outside of the battle area.&lt;/html&gt;"/>
                                             <Property name="text" type="java.lang.String" value=""/>
                                           </Properties>
                                         </Component>

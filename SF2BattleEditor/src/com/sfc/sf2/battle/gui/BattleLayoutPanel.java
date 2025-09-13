@@ -11,19 +11,26 @@ import com.sfc.sf2.battle.Ally;
 import com.sfc.sf2.battle.Battle;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel;
+import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
-import com.sfc.sf2.map.block.MapBlock;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -53,6 +60,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     private boolean drawSprites = true;
     private boolean drawAiRegions = false;
     private boolean drawAiPoints = false;
+    private Image alertImage;
     
     private List<int[]> actions = new ArrayList<>();
             
@@ -73,13 +81,14 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         if (drawAiPoints) {
             drawAIPoints(g2, x, y);
         }
+        drawAlerts(g2, x, y);
     }
     
     private void drawAllies(Graphics2D g2, int battleX, int battleY) {
         Ally[] allies = battle.getSpriteset().getAllies();
         for (int i=0; i < allies.length; i++) {
             Ally ally = allies[i];
-            Font font = new Font("Courier", Font.BOLD, 16);
+            Font font = new Font("SansSerif", Font.BOLD, 16);
             g2.setFont(font);
             int offset = (i+1 < 10) ? 0 : -4;
             int targetX = (battleX+ally.getX())*PIXEL_WIDTH + 8+offset;
@@ -171,7 +180,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         if (targetX >= 0 && targetY >= 0) {
             g2.setColor(Color.YELLOW);
             g2.setStroke(new BasicStroke(1));
-            g2.drawLine((mapOffsetX + enemyX)*PIXEL_WIDTH+12, (mapOffsetY + enemyY)*PIXEL_HEIGHT+12, (mapOffsetX + targetX)*PIXEL_WIDTH+12, (mapOffsetY + targetY)*PIXEL_HEIGHT+12);
+            g2.drawLine((mapOffsetX+enemyX)*PIXEL_WIDTH+12, (mapOffsetY+enemyY)*PIXEL_HEIGHT+12, (mapOffsetX+targetX)*PIXEL_WIDTH+12, (mapOffsetY+targetY)*PIXEL_HEIGHT+12);
         }
     }
 
@@ -181,19 +190,19 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
             if (selectedSpritesetEntity == -1 || i == selectedSpritesetEntity) {
-                AIRegion r = regions[i];
-                int x1 = battleX + r.getX1();
-                int y1 = battleY + r.getY1();
-                int x2 = battleX + r.getX2();
-                int y2 = battleY + r.getY2();
-                int x3 = battleX + r.getX3();
-                int y3 = battleY + r.getY3();
-                int x4 = battleX + r.getX4();
-                int y4 = battleY + r.getY4();
-                g2.drawLine(x1 * PIXEL_WIDTH + 12, y1 * PIXEL_HEIGHT + 12, x2 * PIXEL_WIDTH + 12, y2 * PIXEL_HEIGHT + 12);
-                g2.drawLine(x2 * PIXEL_WIDTH + 12, y2 * PIXEL_HEIGHT + 12, x3 * PIXEL_WIDTH + 12, y3 * PIXEL_HEIGHT + 12);
-                g2.drawLine(x3 * PIXEL_WIDTH + 12, y3 * PIXEL_HEIGHT + 12, x4 * PIXEL_WIDTH + 12, y4 * PIXEL_HEIGHT + 12);
-                g2.drawLine(x4 * PIXEL_WIDTH + 12, y4 * PIXEL_HEIGHT + 12, x1 * PIXEL_WIDTH + 12, y1 * PIXEL_HEIGHT + 12);
+                AIRegion region = regions[i];
+                int x1 = battleX+region.getX1();
+                int y1 = battleY+region.getY1();
+                int x2 = battleX+region.getX2();
+                int y2 = battleY+region.getY2();
+                int x3 = battleX+region.getX3();
+                int y3 = battleY+region.getY3();
+                int x4 = battleX+region.getX4();
+                int y4 = battleY+region.getY4();
+                g2.drawLine(x1*PIXEL_WIDTH+12, y1*PIXEL_HEIGHT+12, x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12);
+                g2.drawLine(x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12, x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12);
+                g2.drawLine(x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12, x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12);
+                g2.drawLine(x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12, x1*PIXEL_WIDTH+ 2, y1*PIXEL_HEIGHT+12);
             }
         }
     }
@@ -207,9 +216,45 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 AIPoint p = points[i];
                 int px = battleX + p.getX();
                 int py = battleY + p.getY();
-                g2.drawRect(px * PIXEL_WIDTH, py * PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+                g2.drawRect(px*PIXEL_WIDTH, py*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
+    }
+    
+    private void drawAlerts(Graphics2D g2, int battleX, int battleY) {
+        Ally[] allies = battle.getSpriteset().getAllies();
+        for (int i=0; i < allies.length; i++) {
+            drawAlertIfOutOfBounds(g2, battleX, battleY, allies[i].getX(), allies[i].getY());
+        }
+        Enemy[] enemies = battle.getSpriteset().getEnemies();
+        for (int i=0; i < enemies.length; i++) {
+            drawAlertIfOutOfBounds(g2, battleX, battleY, enemies[i].getX(), enemies[i].getY());
+        }
+        AIRegion[] regions = battle.getSpriteset().getAiRegions();
+        for (int i=0; i < regions.length; i++) {
+            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX1(), regions[i].getY1());
+            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX2(), regions[i].getY2());
+            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX3(), regions[i].getY3());
+            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX4(), regions[i].getY4());
+        }
+        AIPoint[] points = battle.getSpriteset().getAiPoints();
+        for (int i = 0; i < points.length; i++) {
+            drawAlertIfOutOfBounds(g2, battleX, battleY, points[i].getX(), points[i].getY());
+        }
+    }
+    
+    private void drawAlertIfOutOfBounds(Graphics2D g2, int battleX, int battleY, int x, int y) {
+        if (x < 0 || x >= battleCoords.getWidth() || y < 0 || y >= battleCoords.getWidth()) {
+            g2.drawImage(getAlertImage(), (battleX+x)*PIXEL_WIDTH, (battleY+y)*PIXEL_HEIGHT, null);
+        }
+    }
+    
+    private Image getAlertImage() {
+        if (alertImage == null) {
+            ClassLoader loader = BattleTerrainIcons.class.getClassLoader();
+            alertImage = new ImageIcon(loader.getResource("battle/icons/alert.png")).getImage();
+        }
+        return alertImage;
     }
 
     public Battle getBattle() {
@@ -233,7 +278,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
 
     public void setDrawAiRegions(boolean drawAiRegions, int selectedAIRegion) {
-        if (this.drawAiRegions != drawAiRegions && this.selectedSpritesetEntity != selectedAIRegion) {
+        if (this.drawAiRegions != drawAiRegions || this.selectedSpritesetEntity != selectedAIRegion) {
             this.drawAiRegions = drawAiRegions;
             this.selectedSpritesetEntity = selectedAIRegion;
             redraw();
@@ -241,7 +286,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
 
     public void setDrawAiPoints(boolean drawAiPoints, int selectedAIPoint) {
-        if (this.drawAiPoints != drawAiPoints && this.selectedSpritesetEntity != selectedAIPoint) {
+        if (this.drawAiPoints != drawAiPoints || this.selectedSpritesetEntity != selectedAIPoint) {
             this.drawAiPoints = drawAiPoints;
             this.selectedSpritesetEntity = selectedAIPoint;
             redraw();

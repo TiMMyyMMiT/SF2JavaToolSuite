@@ -73,7 +73,16 @@ public class BattleSpriteset {
             enemies[i].setX(enemies[i].getX()+xShift);
             enemies[i].setY(enemies[i].getY()+yShift);
         }
-        //Should AI Regions move? Probably not
+        for (int i = 0; i < aiRegions.length; i++) {
+            aiRegions[i].setX1(aiRegions[i].getX1()+xShift);
+            aiRegions[i].setX2(aiRegions[i].getX2()+xShift);
+            aiRegions[i].setX3(aiRegions[i].getX3()+xShift);
+            aiRegions[i].setX4(aiRegions[i].getX4()+xShift);
+            aiRegions[i].setY1(aiRegions[i].getY1()+yShift);
+            aiRegions[i].setY2(aiRegions[i].getY2()+yShift);
+            aiRegions[i].setY3(aiRegions[i].getY3()+yShift);
+            aiRegions[i].setY4(aiRegions[i].getY4()+yShift);
+        }
         for (int i = 0; i < aiPoints.length; i++) {
             aiPoints[i].setX(aiPoints[i].getX()+xShift);
             aiPoints[i].setY(aiPoints[i].getY()+yShift);
