@@ -9,6 +9,8 @@ import com.sfc.sf2.battle.BattleManager;
 import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.EnemyEnums;
+import com.sfc.sf2.battle.gui.BattleLayoutPanel.BattlePaintMode;
+import com.sfc.sf2.battle.gui.BattleLayoutPanel.SpritesetPaintMode;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
@@ -33,6 +35,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     
     private TerrainSettings terrainSettings = new TerrainSettings();
     private BattleManager battleManager = new BattleManager();
+    
+    boolean drawAiRegions;
+    boolean drawAiPoints;
     
     public BattleEditorMainEditor() {
         super();
@@ -81,6 +86,14 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
         battleLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleLayoutPanel.setShowBattleCoords(true);
+        
+        drawAiRegions = jCheckBox6.isSelected();
+        drawAiPoints = jCheckBox7.isSelected();
+        battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
+        battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
+        
+        jTabbedPane2StateChanged(null);
+        jTabbedPane3StateChanged(null);
     }
     
     @Override
@@ -184,6 +197,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jLabel5 = new javax.swing.JLabel();
         jSpinner8 = new javax.swing.JSpinner();
         jSpinner2 = new javax.swing.JSpinner();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        infoButton1 = new com.sfc.sf2.core.gui.controls.InfoButton();
         terrainKeyPanel1 = new com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel();
         jPanel22 = new javax.swing.JPanel();
         jTabbedPane3 = new javax.swing.JTabbedPane();
@@ -238,6 +253,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jCheckBox4 = new javax.swing.JCheckBox();
         jLabel14 = new javax.swing.JLabel();
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox7 = new javax.swing.JCheckBox();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -581,44 +598,55 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
+        jCheckBox5.setText("Lock unit positions");
+
+        infoButton1.setMessageText("<html>Changing the Start X and Start Y will move the allies, enemies, and regions. Toggling this on will fix those elements in position while moving the battle boundaries.<br>Will not shift AI Regions.</html>");
+        infoButton1.setText("");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSpinner2)
-                            .addComponent(jSpinner5))))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner8, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
-                            .addComponent(jSpinner6))))
+                            .addComponent(jSpinner5, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                            .addComponent(jSpinner2)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner7, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner1)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSpinner8, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jSpinner3, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                                    .addComponent(jSpinner6)))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jCheckBox5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -627,7 +655,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jCheckBox5)
+                    .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -659,7 +689,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(terrainKeyPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 4, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -1181,6 +1211,20 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGap(0, 22, Short.MAX_VALUE)
         );
 
+        jCheckBox6.setText("AI regions");
+        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox6ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox7.setText("AI points");
+        jCheckBox7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
@@ -1192,7 +1236,11 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addComponent(jCheckBox3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBox6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel14)
@@ -1216,7 +1264,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBox1)
                         .addComponent(jCheckBox3)
-                        .addComponent(jCheckBox4)))
+                        .addComponent(jCheckBox4)
+                        .addComponent(jCheckBox6)
+                        .addComponent(jCheckBox7)))
                 .addGap(0, 0, 0))
         );
 
@@ -1255,7 +1305,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1400, Short.MAX_VALUE)
+            .addComponent(jSplitPane2)
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1276,7 +1326,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1416, 908));
+        setSize(new java.awt.Dimension(1616, 908));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1360,7 +1410,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jComboBox_Items.setEnabled(enabled);
         jTextField_ItemFlags.setEnabled(enabled);
               
-        if (selectedRow != -1){
+        if (selectedRow != -1) {
             Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
             if (enemy != null) {
                 jComboBox_Name.setSelectedItem(enemy.getEnemyData().getName());
@@ -1408,12 +1458,24 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        battleManager.getBattleCoords().setX((int)jSpinner2.getModel().getValue());
+        int newVal = (int)jSpinner2.getModel().getValue();
+        BattleMapCoords coords = battleManager.getBattleCoords();
+        if (jCheckBox5.isSelected()) {
+            int xShift = coords.getX() - newVal;
+            battleManager.getBattle().getSpriteset().shiftPositions(xShift, 0);
+        }
+        coords.setX(newVal);
         battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
-        battleLayoutPanel.getBattleCoords().setY((int)jSpinner3.getModel().getValue());
+        int newVal = (int)jSpinner3.getModel().getValue();
+        BattleMapCoords coords = battleManager.getBattleCoords();
+        if (jCheckBox5.isSelected()) {
+            int yShift = coords.getY() - newVal;
+            battleManager.getBattle().getSpriteset().shiftPositions(0, yShift);
+        }
+        coords.setY(newVal);
         battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner3StateChanged
 
@@ -1461,39 +1523,39 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
         int index = jTabbedPane2.getSelectedIndex();
-        if(battleLayoutPanel!=null){
-            switch(index){
-                case 0:
-                    battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_NONE);
-                    break;
-                case 1:
-                    battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_TERRAIN);
-                    break;
-                case 2:
-                    battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-                    break;
-            }
+        switch (index) {
+            case 0:
+                battleLayoutPanel.setPaintMode(BattlePaintMode.Terrain);
+                terrainKeyPanel1.clearSelection();
+                break;
+            case 1:
+                battleLayoutPanel.setPaintMode(BattlePaintMode.Spriteset);
+                break;
         }
     }//GEN-LAST:event_jTabbedPane2StateChanged
 
     private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
         int index = jTabbedPane3.getSelectedIndex();
-        if(battleLayoutPanel!=null){
-            switch(index){
-                case 0:
-                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ALLY);
-                    break;
-                case 1:
-                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ENEMY);
-                    break;
-                case 2:
-                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIREGION);
-                    break;
-                case 3:
-                    battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIPOINT);
-                    break;
-            }
+        switch (index) {
+            case 0:
+                battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.Ally);
+                tableAllies.jTable.clearSelection();
+                break;
+            case 1:
+                battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.Enemy);
+                tableEnemies.jTable.clearSelection();
+                break;
+            case 2:
+                battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.AiRegion);
+                tableAIRegions.jTable.clearSelection();
+                break;
+            case 3:
+                battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.AiPoint);
+                tableAIPoints.jTable.clearSelection();
+                break;
         }
+        jCheckBox6.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.AiRegion);
+        jCheckBox7.setEnabled(battleLayoutPanel.getSpritesetMode() != SpritesetPaintMode.AiPoint);
     }//GEN-LAST:event_jTabbedPane3StateChanged
 
     private void jSpinner_Trigger1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger1StateChanged
@@ -1552,6 +1614,17 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         OnEnemyDataChanged((int)jSpinner_Trigger3.getModel().getValue(), 9);
     }//GEN-LAST:event_jSpinner_Trigger3StateChanged
 
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+        drawAiRegions = jCheckBox6.isSelected();
+        battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
+
+    private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
+        drawAiPoints = jCheckBox7.isSelected();
+        battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
+    }//GEN-LAST:event_jCheckBox7ActionPerformed
+
+    
     private void OnEnemyDataChanged(Object data, int column){
         /*int selectRow = jTable3.getSelectedRow();
         if (selectRow == -1)
@@ -1579,15 +1652,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }
 
     private void onTableAlliesSelectionChanged(ListSelectionEvent e) {
-        int row = e.getFirstIndex();
+        if (e.getValueIsAdjusting()) return;
+        int row = tableAllies.jTable.getSelectedRow();
         if (row != battleLayoutPanel.getSelectedAlly()) {
             battleLayoutPanel.setSelectedAlly(row);
-            battleLayoutPanel.redraw();
-        }
-        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_ALLY) {
-            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ALLY);
-            battleLayoutPanel.redraw();
         }
     }
 
@@ -1599,15 +1667,12 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }
 
     private void onTableEnemiesSelectionChanged(ListSelectionEvent e) {
-        int row = e.getFirstIndex();
+        if (e.getValueIsAdjusting()) return;
+        int row = tableEnemies.jTable.getSelectedRow();
         if (row != battleLayoutPanel.getSelectedEnemy()) {
             battleLayoutPanel.setSelectedEnemy(row);
             UpdateEnemyControls(row);
             battleLayoutPanel.redraw();
-        }
-        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_ENEMY) {
-            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_ENEMY);
         }
     }
 
@@ -1619,14 +1684,12 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }
 
     private void onTableAIRegionsSelectionChanged(ListSelectionEvent e) {
-        int row = e.getFirstIndex();
+        if (e.getValueIsAdjusting()) return;
+        int row = tableAIRegions.jTable.getSelectedRow();
         if (row != battleLayoutPanel.getSelectedAIRegion()) {
-            battleLayoutPanel.setSelectedAIRegion(row);
-            battleLayoutPanel.redraw();
-        }
-        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_AIREGION) {
-            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIREGION);
+            battleLayoutPanel.setDrawAiRegions(true, row);
+        } else if (row == -1) {
+            battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
         }
     }
 
@@ -1638,15 +1701,13 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }
 
     private void onTableAIPointsSelectionChanged(ListSelectionEvent e) {
-        int row = e.getFirstIndex();
+        if (e.getValueIsAdjusting()) return;
+        int row = tableAIPoints.jTable.getSelectedRow();
         if (row != battleLayoutPanel.getSelectedAIPoint()) {
-            battleLayoutPanel.setSelectedAIPoint(row);
+            battleLayoutPanel.setDrawAiPoints(true, row);
             UpdateEnemyControls(row);
-            battleLayoutPanel.redraw();
-        }
-        if (battleLayoutPanel.currentMode != BattleLayoutPanel.MODE_SPRITE || battleLayoutPanel.currentSpritesetMode != BattleLayoutPanel.SPRITESETMODE_AIPOINT) {
-            battleLayoutPanel.setCurrentMode(BattleLayoutPanel.MODE_SPRITE);
-            battleLayoutPanel.setCurrentSpritesetMode(BattleLayoutPanel.SPRITESETMODE_AIPOINT);
+        } else if (row == -1) {
+            battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
         }
     }
     
@@ -1699,12 +1760,16 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton7;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton8;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton9;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton1;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox_AI;
     private javax.swing.JComboBox<String> jComboBox_Items;

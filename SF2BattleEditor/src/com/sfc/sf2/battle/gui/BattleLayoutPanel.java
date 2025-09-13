@@ -24,8 +24,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 
 /**
  *
@@ -33,63 +31,59 @@ import javax.swing.border.TitledBorder;
  */
 public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     
-    public static final int SPRITESETMODE_ALLY = 0;
-    public static final int SPRITESETMODE_ENEMY = 1;
-    public static final int SPRITESETMODE_AIREGION = 2;
-    public static final int SPRITESETMODE_AIPOINT = 3;
+    public enum BattlePaintMode {
+        None,
+        Terrain,
+        Spriteset,
+    }
     
-    public static final int MODE_NONE = 0;
-    public static final int MODE_TERRAIN = 1;
-    public static final int MODE_SPRITE = 2;
+    public enum SpritesetPaintMode {
+        Ally,
+        Enemy,
+        AiRegion,
+        AiPoint,
+    }
     
     private Battle battle;
     
-    protected int currentMode = 0;
-    protected int currentSpritesetMode = 0;
-    protected int selectedAlly = -1;
-    protected int selectedEnemy = -1;
-    protected int selectedAIRegion = -1;
-    protected int selectedAIPoint = -1;
-    protected int applicableTerrainValue = -1;
+    private BattlePaintMode paintMode = BattlePaintMode.None;
+    private SpritesetPaintMode spritesetMode = SpritesetPaintMode.Ally;
+    private int selectedSpritesetEntity = -1;
     
-    protected TitledBorder titledBorder = null;
-    protected JPanel titledPanel = null;
+    private boolean drawSprites = true;
+    private boolean drawAiRegions = false;
+    private boolean drawAiPoints = false;
     
-    protected MapBlock selectedBlockLeft;
-    protected MapBlock[][] copiedBlocks;
-    
-    protected List<int[]> actions = new ArrayList<>();
-    
-    protected boolean drawSprites = true;
-    protected boolean drawAiRegions = true;
-    protected boolean drawAiPoints = true;
+    private List<int[]> actions = new ArrayList<>();
             
     @Override
     public void drawImage(Graphics graphics) {
         super.drawImage(graphics);
         Graphics2D g2 = (Graphics2D)graphics;
+        
+        int x = battle.getMapCoords().getX();
+        int y = battle.getMapCoords().getY();
         if (drawSprites) {
-            getSpritesImage(g2);
+            drawAllies(g2, x, y);
+            drawEnemies(g2, x, y);
         }
         if (drawAiRegions) {
-            getAiRegionsImage(g2);
+            drawAIRegions(g2, x, y);
         }
         if (drawAiPoints) {
-            getAiPointsImage(g2);
+            drawAIPoints(g2, x, y);
         }
     }
     
-    private void getSpritesImage(Graphics2D g2) {
-        int x = battle.getMapCoords().getX();
-        int y = battle.getMapCoords().getY();
+    private void drawAllies(Graphics2D g2, int battleX, int battleY) {
         Ally[] allies = battle.getSpriteset().getAllies();
         for (int i=0; i < allies.length; i++) {
             Ally ally = allies[i];
             Font font = new Font("Courier", Font.BOLD, 16);
             g2.setFont(font);
             int offset = (i+1 < 10) ? 0 : -4;
-            int targetX = (x+ally.getX())*PIXEL_WIDTH + 8+offset;
-            int targetY = (y+ally.getY())*PIXEL_HEIGHT + 18;
+            int targetX = (battleX+ally.getX())*PIXEL_WIDTH + 8+offset;
+            int targetY = (battleY+ally.getY())*PIXEL_HEIGHT + 18;
             String val = String.valueOf(i+1);
             g2.setColor(Color.BLACK);
             g2.drawString(val, targetX-1, targetY-1);
@@ -98,17 +92,20 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             g2.drawString(val, targetX+1, targetY+1);
             g2.setColor(Color.YELLOW);
             g2.drawString(val, targetX, targetY);
-            if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_ALLY && i == selectedAlly) {
+            if (paintMode == BattlePaintMode.Spriteset && spritesetMode == SpritesetPaintMode.Ally && i == selectedSpritesetEntity) {
                 g2.setColor(Color.YELLOW);
                 g2.setStroke(new BasicStroke(3));
-                g2.drawRect((x+ally.getX())*PIXEL_WIDTH, (y+ally.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+                g2.drawRect((battleX+ally.getX())*PIXEL_WIDTH, (battleY+ally.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
+    }
+    
+    private void drawEnemies(Graphics2D g2, int battleX, int battleY) {
         Enemy[] enemies = battle.getSpriteset().getEnemies();
         for (int i=0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
-            int targetX = (x+enemy.getX())*PIXEL_WIDTH;
-            int targetY = (y+enemy.getY())*PIXEL_HEIGHT;
+            int targetX = (battleX+enemy.getX())*PIXEL_WIDTH;
+            int targetY = (battleY+enemy.getY())*PIXEL_HEIGHT;
             int id = enemy.getEnemyData().getID();
             Tileset sprite = enemy.getEnemyData().getMapSprite();
             if (sprite == null) {
@@ -126,20 +123,20 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             } else {
                 g2.drawImage(sprite.getIndexedColorImage(), targetX, targetY, null);
             }
-            if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_ENEMY && i == selectedEnemy) {
+            if (paintMode == BattlePaintMode.Spriteset && spritesetMode == SpritesetPaintMode.Enemy && i == selectedSpritesetEntity) {
                 g2.setColor(Color.YELLOW);
                 g2.setStroke(new BasicStroke(3));
-                g2.drawRect((x+enemy.getX())*PIXEL_WIDTH, (y+enemy.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+                g2.drawRect((battleX+enemy.getX())*PIXEL_WIDTH, (battleY+enemy.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
-            drawAiTargets(g2, x, y, enemy.getX(), enemy.getY(), enemy.getMoveOrder1());
-            drawAiTargets(g2, x, y, enemy.getX(), enemy.getY(), enemy.getMoveOrder2());
+            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder1());
+            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder2());
         }
     }
 
-    private void drawAiTargets(Graphics2D g2, int mapOffsetX, int mapOffsetY, int enemyX, int enemyY, String order) {
+    private void drawAiTarget(Graphics2D g2, int mapOffsetX, int mapOffsetY, int enemyX, int enemyY, String order) {
         int target = 0;
         int targetX = -1, targetY = -1;
         String[] orderSplit = order.split("\\|");
@@ -178,23 +175,21 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         }
     }
 
-    private void getAiRegionsImage(Graphics2D g2) {
-        int x = battle.getMapCoords().getX();
-        int y = battle.getMapCoords().getY();
+    private void drawAIRegions(Graphics2D g2, int battleX, int battleY) {
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
-            if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_AIREGION && i == selectedAIRegion) {
+            if (selectedSpritesetEntity == -1 || i == selectedSpritesetEntity) {
                 AIRegion r = regions[i];
-                int x1 = x + r.getX1();
-                int y1 = y + r.getY1();
-                int x2 = x + r.getX2();
-                int y2 = y + r.getY2();
-                int x3 = x + r.getX3();
-                int y3 = y + r.getY3();
-                int x4 = x + r.getX4();
-                int y4 = y + r.getY4();
-                g2.setColor(Color.GREEN);
-                g2.setStroke(new BasicStroke(3));
+                int x1 = battleX + r.getX1();
+                int y1 = battleY + r.getY1();
+                int x2 = battleX + r.getX2();
+                int y2 = battleY + r.getY2();
+                int x3 = battleX + r.getX3();
+                int y3 = battleY + r.getY3();
+                int x4 = battleX + r.getX4();
+                int y4 = battleY + r.getY4();
                 g2.drawLine(x1 * PIXEL_WIDTH + 12, y1 * PIXEL_HEIGHT + 12, x2 * PIXEL_WIDTH + 12, y2 * PIXEL_HEIGHT + 12);
                 g2.drawLine(x2 * PIXEL_WIDTH + 12, y2 * PIXEL_HEIGHT + 12, x3 * PIXEL_WIDTH + 12, y3 * PIXEL_HEIGHT + 12);
                 g2.drawLine(x3 * PIXEL_WIDTH + 12, y3 * PIXEL_HEIGHT + 12, x4 * PIXEL_WIDTH + 12, y4 * PIXEL_HEIGHT + 12);
@@ -203,28 +198,107 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         }
     }
 
-    private void getAiPointsImage(Graphics2D g2) {
-        int x = battle.getMapCoords().getX();
-        int y = battle.getMapCoords().getY();
+    private void drawAIPoints(Graphics2D g2, int battleX, int battleY) {
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
         AIPoint[] points = battle.getSpriteset().getAiPoints();
         for (int i = 0; i < points.length; i++) {
-            if (currentMode == MODE_SPRITE && currentSpritesetMode == SPRITESETMODE_AIPOINT && i == selectedAIPoint) {
+            if (selectedSpritesetEntity == -1 || i == selectedSpritesetEntity) {
                 AIPoint p = points[i];
-                int px = x + p.getX();
-                int py = y + p.getY();
-                g2.setColor(Color.GREEN);
-                g2.setStroke(new BasicStroke(3));
+                int px = battleX + p.getX();
+                int py = battleY + p.getY();
                 g2.drawRect(px * PIXEL_WIDTH, py * PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
     }
 
-    public MapBlock getSelectedBlockLeft() {
-        return selectedBlockLeft;
+    public Battle getBattle() {
+        return battle;
     }
 
-    public void setSelectedBlockLeft(MapBlock selectedBlockLeft) {
-        this.selectedBlockLeft = selectedBlockLeft;
+    public void setBattle(Battle battle) {
+        this.battle = battle;
+            redraw();
+    }
+
+    public boolean isDrawSprites() {
+        return drawSprites;
+    }
+
+    public void setDrawSprites(boolean drawSprites) {
+        if (this.drawSprites != drawSprites) {
+            this.drawSprites = drawSprites;
+            redraw();
+        }
+    }
+
+    public void setDrawAiRegions(boolean drawAiRegions, int selectedAIRegion) {
+        if (this.drawAiRegions != drawAiRegions && this.selectedSpritesetEntity != selectedAIRegion) {
+            this.drawAiRegions = drawAiRegions;
+            this.selectedSpritesetEntity = selectedAIRegion;
+            redraw();
+        }
+    }
+
+    public void setDrawAiPoints(boolean drawAiPoints, int selectedAIPoint) {
+        if (this.drawAiPoints != drawAiPoints && this.selectedSpritesetEntity != selectedAIPoint) {
+            this.drawAiPoints = drawAiPoints;
+            this.selectedSpritesetEntity = selectedAIPoint;
+            redraw();
+        }
+    }
+
+    public BattlePaintMode getPaintMode() {
+        return paintMode;
+    }
+
+    public void setPaintMode(BattlePaintMode battlePaintMode) {
+        if (this.paintMode != battlePaintMode) {
+            this.paintMode = battlePaintMode;
+            redraw();
+        }
+    }
+
+    public SpritesetPaintMode getSpritesetMode() {
+        return spritesetMode;
+    }
+
+    public void setSpritesetMode(SpritesetPaintMode spritesetPaintMode) {
+        if (this.spritesetMode != spritesetPaintMode) {
+            this.setPaintMode(BattlePaintMode.Spriteset);
+            this.spritesetMode = spritesetPaintMode;
+            redraw();
+        }
+    }
+
+    public int getSelectedAlly() {
+        return selectedSpritesetEntity;
+    }
+
+    public void setSelectedAlly(int selectedAlly) {
+        if (this.selectedSpritesetEntity != selectedAlly) {
+            this.selectedSpritesetEntity = selectedAlly;
+            redraw();
+        }
+    }
+
+    public int getSelectedEnemy() {
+        return selectedSpritesetEntity;
+    }
+
+    public void setSelectedEnemy(int selectedEnemy) {
+        if (this.selectedSpritesetEntity != selectedEnemy) {
+            this.selectedSpritesetEntity = selectedEnemy;
+            redraw();
+        }
+    }
+
+    public int getSelectedAIRegion() {
+        return selectedSpritesetEntity;
+    }
+
+    public int getSelectedAIPoint() {
+        return selectedSpritesetEntity;
     }
 
     public List<int[]> getActions() {
@@ -234,127 +308,34 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     public void setActions(List<int[]> actions) {
         this.actions = actions;
     }
-
-    public int getCurrentMode() {
-        return currentMode;
-    }
-
-    public void setCurrentMode(int currentMode) {
-        this.currentMode = currentMode;
-    }
-
-    public Battle getBattle() {
-        return battle;
-    }
-
-    public void setBattle(Battle battle) {
-        this.battle = battle;
-    }
-
-    public boolean isDrawSprites() {
-        return drawSprites;
-    }
-
-    public void setDrawSprites(boolean drawSprites) {
-        this.drawSprites = drawSprites;
-        this.redraw();
-    }
-
-    public int getSelectedAlly() {
-        return selectedAlly;
-    }
-
-    public void setSelectedAlly(int selectedAlly) {
-        this.selectedAlly = selectedAlly;
-    }
-
-    public int getSelectedEnemy() {
-        return selectedEnemy;
-    }
-
-    public void setSelectedEnemy(int selectedEnemy) {
-        this.selectedEnemy = selectedEnemy;
-    }
-
-    public int getSelectedAIRegion() {
-        return selectedAIRegion;
-    }
-
-    public void setSelectedAIRegion(int selectedAIRegion) {
-        this.selectedAIRegion = selectedAIRegion;
-    }
-
-    public int getSelectedAIPoint() {
-        return selectedAIPoint;
-    }
-
-    public void setSelectedAIPoint(int selectedAIPoint) {
-        this.selectedAIPoint = selectedAIPoint;
-    }
-
-    public int getCurrentSpritesetMode() {
-        return currentSpritesetMode;
-    }
-
-    public void setCurrentSpritesetMode(int currentSpritesetMode) {
-        this.currentSpritesetMode = currentSpritesetMode;
-    }
-
-    public boolean isDrawAiRegions() {
-        return drawAiRegions;
-    }
-
-    public void setDrawAiRegions(boolean drawAiRegions) {
-        this.drawAiRegions = drawAiRegions;
-    }
-
-    public boolean isDrawAiPoints() {
-        return drawAiPoints;
-    }
-
-    public void setDrawAiPoints(boolean drawAiPoints) {
-        this.drawAiPoints = drawAiPoints;
-    }
-
-    public int getApplicableTerrainValue() {
-        return applicableTerrainValue;
-    }
-
-    public void setApplicableTerrainValue(int applicableTerrainValue) {
-        this.applicableTerrainValue = applicableTerrainValue;
-    }
     
     @Override
     protected void onMouseInteraction(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
-        if (currentMode == MODE_NONE) return;
-        else if (currentMode == MODE_TERRAIN) {
+        if (paintMode == BattlePaintMode.None) return;
+        else if (paintMode == BattlePaintMode.Terrain) {
             super.onMouseInteraction(evt);
             return;
         }
+        
+        //Edit spritesets
         int x = evt.x();
         int y = evt.y();
         int startX = battle.getMapCoords().getX();
         int startY = battle.getMapCoords().getY();
         int width = battle.getMapCoords().getWidth();
         int height = battle.getMapCoords().getHeight();  
-        switch (currentMode) {
-            case MODE_SPRITE:
-                switch (evt.mouseButton()) {
-                    case MouseEvent.BUTTON1:
-                        /*if (currentSpritesetMode==SPRITESETMODE_ALLY && selectedAlly >= 0) {
-                            alliesTable.setValueAt(x-startX, selectedAlly, 1);
-                            alliesTable.setValueAt(y-startY, selectedAlly, 2);
-                            redraw();
-                        }
-                        if (currentSpritesetMode==SPRITESETMODE_ENEMY && selectedEnemy >= 0) {
-                            enemiesTable.setValueAt(x-startX, selectedEnemy, 1);
-                            enemiesTable.setValueAt(y-startY, selectedEnemy, 2);
-                            redraw();
-                        }*/
-                        break;
-                    default:
-                        break;
+        switch (evt.mouseButton()) {
+            case MouseEvent.BUTTON1:
+                /*if (currentSpritesetMode==SPRITESETMODE_ALLY && selectedAlly >= 0) {
+                    alliesTable.setValueAt(x-startX, selectedAlly, 1);
+                    alliesTable.setValueAt(y-startY, selectedAlly, 2);
+                    redraw();
                 }
+                if (currentSpritesetMode==SPRITESETMODE_ENEMY && selectedEnemy >= 0) {
+                    enemiesTable.setValueAt(x-startX, selectedEnemy, 1);
+                    enemiesTable.setValueAt(y-startY, selectedEnemy, 2);
+                    redraw();
+                }*/
                 break;
             default:
                 break;

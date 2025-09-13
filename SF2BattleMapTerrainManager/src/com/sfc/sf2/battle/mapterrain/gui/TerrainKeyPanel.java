@@ -45,6 +45,13 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         this.modeChanged = null;
     }
     
+    public void clearSelection() {
+        buttonGroupTerrain.clearSelection();
+        if (buttonSelected != null) {
+            buttonSelected.actionPerformed(new ActionEvent(this, -1, "-1"));
+        }
+    }
+    
     private void updateDrawModePanels(TerrainDrawMode terrainDrawMode) {
         TerrainIconPanel1.setTerrainDrawMode(terrainDrawMode);
         TerrainIconPanel2.setTerrainDrawMode(terrainDrawMode);
