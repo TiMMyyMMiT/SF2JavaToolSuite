@@ -9,7 +9,7 @@ import com.sfc.sf2.battle.mapterrain.BattleMapTerrainManager;
 import com.sfc.sf2.battle.mapterrain.LandEffect;
 import com.sfc.sf2.battle.mapterrain.LandEffectEnums;
 import com.sfc.sf2.battle.mapterrain.LandEffectMovementType;
-import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
+import com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel.TerrainDrawMode;
 import com.sfc.sf2.battle.mapterrain.models.LandEffectTableEditor;
 import com.sfc.sf2.battle.mapterrain.models.LandEffectTableRenderer;
 import com.sfc.sf2.core.gui.AbstractMainEditor;

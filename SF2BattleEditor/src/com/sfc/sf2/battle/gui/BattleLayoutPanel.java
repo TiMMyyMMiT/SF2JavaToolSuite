@@ -359,7 +359,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     protected void onMouseInteraction(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
         if (paintMode == BattlePaintMode.None) return;
         else if (paintMode == BattlePaintMode.Terrain) {
-            super.onMouseInteraction(evt);
+            if (isDrawTerrain()) {
+                super.onMouseInteraction(evt);
+            }
             return;
         }
         

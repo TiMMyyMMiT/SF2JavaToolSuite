@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.battle.mapterrain.gui.controls;
 
-import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
+import com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel.TerrainDrawMode;
 import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
 import java.awt.Component;
 import java.awt.Dimension;

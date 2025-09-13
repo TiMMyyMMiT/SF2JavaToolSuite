@@ -12,7 +12,7 @@ import com.sfc.sf2.battle.EnemyEnums;
 import com.sfc.sf2.battle.gui.BattleLayoutPanel.BattlePaintMode;
 import com.sfc.sf2.battle.gui.BattleLayoutPanel.SpritesetPaintMode;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
-import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
+import com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel.TerrainDrawMode;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
@@ -1529,7 +1529,6 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         switch (index) {
             case 0:
                 battleLayoutPanel.setPaintMode(BattlePaintMode.Terrain);
-                terrainKeyPanel1.clearSelection();
                 jCheckBox4.setEnabled(true);
                 jCheckBox6.setEnabled(true);
                 jCheckBox7.setEnabled(true);

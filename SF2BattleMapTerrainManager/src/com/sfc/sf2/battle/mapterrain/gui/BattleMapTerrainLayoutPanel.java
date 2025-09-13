@@ -7,6 +7,7 @@ package com.sfc.sf2.battle.mapterrain.gui;
 
 import com.sfc.sf2.battle.mapcoords.gui.BattleMapCoordsLayout;
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrain;
+import com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel.TerrainDrawMode;
 import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent.GridMousePressedEvent;
 import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
@@ -21,15 +22,9 @@ import java.awt.event.MouseEvent;
  */
 public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     
-    public enum TerrainDrawMode {
-        Icons,
-        Colors,
-        Numbers,
-    }
-    
-    protected BattleMapTerrain terrain;
-    protected boolean drawTerrain;
-    protected TerrainDrawMode terrainDrawMode;
+    private BattleMapTerrain terrain;
+    private boolean drawTerrain;
+    private TerrainDrawMode terrainDrawMode;
     
     private byte selectedTerrainType;
     
@@ -119,6 +114,10 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     public void setTerrain(BattleMapTerrain terrain) {
         this.terrain = terrain;
         redraw();
+    }
+
+    public boolean isDrawTerrain() {
+        return drawTerrain;
     }
 
     public void setDrawTerrain(boolean drawTerrain) {

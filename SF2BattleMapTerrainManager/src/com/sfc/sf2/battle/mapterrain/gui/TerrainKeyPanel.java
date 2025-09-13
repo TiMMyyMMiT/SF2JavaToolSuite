@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.battle.mapterrain.gui;
 
-import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.settings.TerrainSettings;
 import java.awt.event.ActionEvent;
@@ -17,6 +16,12 @@ import java.awt.event.ActionListener;
  */
 public class TerrainKeyPanel extends javax.swing.JPanel {
 
+    public enum TerrainDrawMode {
+        Icons,
+        Colors,
+        Numbers,
+    }
+    
     private ActionListener buttonSelected;
     private ActionListener modeChanged;
     
@@ -43,13 +48,6 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
     
     public void removeModeChangedListener() {
         this.modeChanged = null;
-    }
-    
-    public void clearSelection() {
-        buttonGroupTerrain.clearSelection();
-        if (buttonSelected != null) {
-            buttonSelected.actionPerformed(new ActionEvent(this, -1, "-1"));
-        }
     }
     
     private void updateDrawModePanels(TerrainDrawMode terrainDrawMode) {
@@ -138,7 +136,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         jLabel2.setText("Select a terrain type to paint onto the battle map");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Icons", "Colors", "Numbers" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(TerrainDrawMode.values()));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);

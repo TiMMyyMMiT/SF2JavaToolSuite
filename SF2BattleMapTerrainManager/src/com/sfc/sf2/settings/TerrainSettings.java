@@ -5,7 +5,7 @@
  */
 package com.sfc.sf2.settings;
 
-import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel.TerrainDrawMode;
+import com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel.TerrainDrawMode;
 import com.sfc.sf2.core.settings.AbstractSettings;
 import java.util.HashMap;
 
