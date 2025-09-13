@@ -12,7 +12,6 @@ import com.sfc.sf2.battle.Battle;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel;
 import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
-import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
@@ -23,13 +22,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
@@ -56,6 +52,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     private BattlePaintMode paintMode = BattlePaintMode.None;
     private SpritesetPaintMode spritesetMode = SpritesetPaintMode.Ally;
     private int selectedSpritesetEntity = -1;
+    private int closestRegionPoint;
     
     private boolean drawSprites = true;
     private boolean drawAiRegions = false;
@@ -185,39 +182,45 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
 
     private void drawAIRegions(Graphics2D g2, int battleX, int battleY) {
-        g2.setColor(Color.WHITE);
         g2.setStroke(new BasicStroke(3));
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
-            if (selectedSpritesetEntity == -1 || i == selectedSpritesetEntity) {
-                AIRegion region = regions[i];
-                int x1 = battleX+region.getX1();
-                int y1 = battleY+region.getY1();
-                int x2 = battleX+region.getX2();
-                int y2 = battleY+region.getY2();
-                int x3 = battleX+region.getX3();
-                int y3 = battleY+region.getY3();
-                int x4 = battleX+region.getX4();
-                int y4 = battleY+region.getY4();
-                g2.drawLine(x1*PIXEL_WIDTH+12, y1*PIXEL_HEIGHT+12, x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12);
-                g2.drawLine(x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12, x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12);
-                g2.drawLine(x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12, x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12);
-                g2.drawLine(x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12, x1*PIXEL_WIDTH+ 2, y1*PIXEL_HEIGHT+12);
-            }
+            if (i == selectedSpritesetEntity) continue;
+            g2.setColor(Color.WHITE);
+            AIRegion region = regions[i];
+            drawRegionBounds(g2, battleX, battleY, region);
         }
+        if (selectedSpritesetEntity >= 0) {
+            g2.setColor(Color.YELLOW);
+            AIRegion region = regions[selectedSpritesetEntity];
+            drawRegionBounds(g2, battleX, battleY, region);
+        }
+    }
+    
+    private void drawRegionBounds(Graphics2D g2, int battleX, int battleY, AIRegion region) {
+        int x1 = battleX+region.getX1();
+        int y1 = battleY+region.getY1();
+        int x2 = battleX+region.getX2();
+        int y2 = battleY+region.getY2();
+        int x3 = battleX+region.getX3();
+        int y3 = battleY+region.getY3();
+        int x4 = battleX+region.getX4();
+        int y4 = battleY+region.getY4();
+        g2.drawLine(x1*PIXEL_WIDTH+12, y1*PIXEL_HEIGHT+12, x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12);
+        g2.drawLine(x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12, x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12);
+        g2.drawLine(x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12, x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12);
+        g2.drawLine(x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12, x1*PIXEL_WIDTH+12, y1*PIXEL_HEIGHT+12);
     }
 
     private void drawAIPoints(Graphics2D g2, int battleX, int battleY) {
-        g2.setColor(Color.WHITE);
         g2.setStroke(new BasicStroke(3));
         AIPoint[] points = battle.getSpriteset().getAiPoints();
         for (int i = 0; i < points.length; i++) {
-            if (selectedSpritesetEntity == -1 || i == selectedSpritesetEntity) {
-                AIPoint p = points[i];
-                int px = battleX + p.getX();
-                int py = battleY + p.getY();
-                g2.drawRect(px*PIXEL_WIDTH, py*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
-            }
+            g2.setColor(i == selectedSpritesetEntity ? Color.YELLOW : Color.WHITE);
+            AIPoint p = points[i];
+            int px = battleX + p.getX();
+            int py = battleY + p.getY();
+            g2.drawRect(px*PIXEL_WIDTH, py*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
         }
     }
     
@@ -364,29 +367,62 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             }
             return;
         }
+        if (selectedSpritesetEntity == -1) return;
         
         //Edit spritesets
-        int x = evt.x();
-        int y = evt.y();
-        int startX = battle.getMapCoords().getX();
-        int startY = battle.getMapCoords().getY();
-        int width = battle.getMapCoords().getWidth();
-        int height = battle.getMapCoords().getHeight();  
+        int x = evt.x() - battle.getMapCoords().getX();
+        int y = evt.y() - battle.getMapCoords().getY();
         switch (evt.mouseButton()) {
             case MouseEvent.BUTTON1:
-                /*if (currentSpritesetMode==SPRITESETMODE_ALLY && selectedAlly >= 0) {
-                    alliesTable.setValueAt(x-startX, selectedAlly, 1);
-                    alliesTable.setValueAt(y-startY, selectedAlly, 2);
-                    redraw();
+                switch (spritesetMode) {
+                    case Ally:
+                        Ally ally = battle.getSpriteset().getAllies()[selectedSpritesetEntity];
+                        ally.setX(x);
+                        ally.setY(y);
+                        redraw();
+                        break;
+                    case Enemy:
+                        Enemy enemy = battle.getSpriteset().getEnemies()[selectedSpritesetEntity];
+                        enemy.setX(x);
+                        enemy.setY(y);
+                        redraw();
+                        break;
+                    case AiRegion:
+                        AIRegion region = battle.getSpriteset().getAiRegions()[selectedSpritesetEntity];
+                        if (evt.dragging()) {
+                            switch (closestRegionPoint) {
+                                case 0: region.setX1(x); region.setY1(y); break;
+                                case 1: region.setX2(x); region.setY2(y); break;
+                                case 2: region.setX3(x); region.setY3(y); break;
+                                case 3: region.setX4(x); region.setY4(y); break;
+                            }
+                            redraw();
+                        } else {
+                            findClosestPoint(region, x, y);
+                        }
+                        break;
+                    case AiPoint:
+                        AIPoint point = battle.getSpriteset().getAiPoints()[selectedSpritesetEntity];
+                        point.setX(x);
+                        point.setY(y);
+                        redraw();
+                        break;
                 }
-                if (currentSpritesetMode==SPRITESETMODE_ENEMY && selectedEnemy >= 0) {
-                    enemiesTable.setValueAt(x-startX, selectedEnemy, 1);
-                    enemiesTable.setValueAt(y-startY, selectedEnemy, 2);
-                    redraw();
-                }*/
-                break;
-            default:
-                break;
         }
+    }
+    
+    private void findClosestPoint(AIRegion region, int x, int y) {
+        int closest = -1;
+        double distance = Integer.MAX_VALUE;
+        Point mouse = new Point(x, y);
+        Point[] points = new Point[] { new Point(region.getX1(), region.getY1()), new Point(region.getX2(), region.getY2()), new Point(region.getX3(), region.getY3()), new Point(region.getX4(), region.getY4()) };
+        for (int i = 0; i < points.length; i++) {
+            double dist = mouse.distance(points[i]);
+            if (dist < distance) {
+                closest = i;
+                distance = dist;
+            }
+        }
+        closestRegionPoint = closest;
     }
 }
