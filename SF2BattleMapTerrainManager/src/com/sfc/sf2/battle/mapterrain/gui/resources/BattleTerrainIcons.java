@@ -5,7 +5,10 @@
  */
 package com.sfc.sf2.battle.mapterrain.gui.resources;
 
+import com.sfc.sf2.helpers.PathHelpers;
 import java.awt.Color;
+import java.io.File;
+import java.nio.file.Path;
 import javax.swing.ImageIcon;
 
 /**
@@ -13,6 +16,8 @@ import javax.swing.ImageIcon;
  * @author TiMMy
  */
 public class BattleTerrainIcons {
+    private static final ClassLoader loader = BattleTerrainIcons.class.getClassLoader();
+    
     public static final Color TERRAIN_DARKEN = new Color(0, 0, 0, 50);
     public static final Color TERRAIN_BG = Color.BLACK;
     public static final Color TERRAIN_BG_ADDITIONAL = Color.WHITE;
@@ -46,26 +51,25 @@ public class BattleTerrainIcons {
     
     public static ImageIcon getTerrainIcon(int terrainType) {
         if (terrainIcons[0] == null) {
-            ClassLoader loader = BattleTerrainIcons.class.getClassLoader();
             //Base
             terrainIcons[0] = new ImageIcon(loader.getResource("terrain/icons/XX_Obstructed.png"));
-            terrainIcons[1] = new ImageIcon(loader.getResource("terrain/icons/00_Wall.png"));
-            terrainIcons[2] = new ImageIcon(loader.getResource("terrain/icons/01_Plains.png"));
-            terrainIcons[3] = new ImageIcon(loader.getResource("terrain/icons/02_Path.png"));
-            terrainIcons[4] = new ImageIcon(loader.getResource("terrain/icons/03_Grass.png"));
-            terrainIcons[5] = new ImageIcon(loader.getResource("terrain/icons/04_Forest.png"));
-            terrainIcons[6] = new ImageIcon(loader.getResource("terrain/icons/05_Hills.png"));
-            terrainIcons[7] = new ImageIcon(loader.getResource("terrain/icons/06_Desert.png"));
-            terrainIcons[8] = new ImageIcon(loader.getResource("terrain/icons/07_Mountain.png"));
-            terrainIcons[9] = new ImageIcon(loader.getResource("terrain/icons/08_Water.png"));
+            terrainIcons[1] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/00.png"), "terrain/icons/00_Wall.png");
+            terrainIcons[2] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/01.png"), "terrain/icons/01_Plains.png");
+            terrainIcons[3] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/02.png"), "terrain/icons/02_Path.png");
+            terrainIcons[4] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/03.png"), "terrain/icons/03_Grass.png");
+            terrainIcons[5] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/04.png"), "terrain/icons/04_Forest.png");
+            terrainIcons[6] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/05.png"), "terrain/icons/05_Hills.png");
+            terrainIcons[7] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/06.png"), "terrain/icons/06_Desert.png");
+            terrainIcons[8] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/07.png"), "terrain/icons/07_Mountain.png");
+            terrainIcons[9] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/08.png"), "terrain/icons/08_Water.png");
             //Additional
-            terrainIcons[10] = new ImageIcon(loader.getResource("terrain/icons/09_Add_1.png"));
-            terrainIcons[11] = new ImageIcon(loader.getResource("terrain/icons/10_Add_2.png"));
-            terrainIcons[12] = new ImageIcon(loader.getResource("terrain/icons/11_Add_3.png"));
-            terrainIcons[13] = new ImageIcon(loader.getResource("terrain/icons/12_Add_4.png"));
-            terrainIcons[14] = new ImageIcon(loader.getResource("terrain/icons/13_Add_5.png"));
-            terrainIcons[15] = new ImageIcon(loader.getResource("terrain/icons/14_Add_6.png"));
-            terrainIcons[16] = new ImageIcon(loader.getResource("terrain/icons/15_Add_7.png"));
+            terrainIcons[10] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/09.png"), "terrain/icons/09_Add_1.png");
+            terrainIcons[11] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/10.png"), "terrain/icons/10_Add_2.png");
+            terrainIcons[12] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/11.png"), "terrain/icons/11_Add_3.png");
+            terrainIcons[13] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/12.png"), "terrain/icons/12_Add_4.png");
+            terrainIcons[14] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/13.png"), "terrain/icons/13_Add_5.png");
+            terrainIcons[15] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/14.png"), "terrain/icons/14_Add_6.png");
+            terrainIcons[16] = loadCustomOrInternal(PathHelpers.getBasePath().resolve("terrain_icons/15.png"), "terrain/icons/15_Add_7.png");
         }
         terrainType++;
         if (terrainType < 0 || terrainType >= terrainTextColors.length) {
@@ -73,6 +77,14 @@ public class BattleTerrainIcons {
         } else {
             return terrainIcons[terrainType];
         }
+    }
+    
+    private static ImageIcon loadCustomOrInternal(Path customPath, String resourcePath) {
+        File file = customPath.toFile();
+        if (file.exists()) {
+            return new ImageIcon(file.getAbsolutePath());
+        }
+        return new ImageIcon(loader.getResource(resourcePath));
     }
     
     public static Color getTerrainTextColor(int terrainType) {

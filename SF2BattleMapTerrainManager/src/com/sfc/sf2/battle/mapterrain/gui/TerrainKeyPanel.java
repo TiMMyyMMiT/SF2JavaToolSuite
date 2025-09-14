@@ -568,7 +568,7 @@ public class TerrainKeyPanel extends javax.swing.JPanel {
         infoButton12.setMessageText("<html>Select a terrain type then click and drag on the map to paint that terrain.<br><br>The base game only utilises 9 terrains (plus \"Obstructed\") but can support up to 15.<br>The icons and colors in this context are just generic placeholders.</html> ");
         infoButton12.setText("");
 
-        infoButton13.setMessageText("<html>Terrain can be visualised as a representative icon, a flat color, or their internal number value.<br><br>For the additional terrains (which are not defined by default), icons are misc. placeholders.</html>");
+        infoButton13.setMessageText("<html>Terrain can be visualised as a representative icon, a flat color, or their internal number value.<br><br>For the additional terrains (which are not defined by default), icons are misc. placeholders.<br><br>If you want to use custom icons, follow these steps:<br>1. Create the folder : /data/battles/terrain_icons/<br>2. Create a replacement icon that is 8x8 pixels. Icons should be named \"00.png\" to correspond to the terrain value (00-15).<br>3. Restart the Terrain Editor or Battle Editor. Your custom icons should be loaded in.</html>");
         infoButton13.setText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

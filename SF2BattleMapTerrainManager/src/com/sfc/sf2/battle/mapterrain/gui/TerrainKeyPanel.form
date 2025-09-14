@@ -740,7 +740,7 @@
     </Component>
     <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton13">
       <Properties>
-        <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Terrain can be visualised as a representative icon, a flat color, or their internal number value.&lt;br&gt;&lt;br&gt;For the additional terrains (which are not defined by default), icons are misc. placeholders.&lt;/html&gt;"/>
+        <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Terrain can be visualised as a representative icon, a flat color, or their internal number value.&lt;br&gt;&lt;br&gt;For the additional terrains (which are not defined by default), icons are misc. placeholders.&lt;br&gt;&lt;br&gt;If you want to use custom icons, follow these steps:&lt;br&gt;1. Create the folder : /data/battles/terrain_icons/&lt;br&gt;2. Create a replacement icon that is 8x8 pixels. Icons should be named &quot;00.png&quot; to correspond to the terrain value (00-15).&lt;br&gt;3. Restart the Terrain Editor or Battle Editor. Your custom icons should be loaded in.&lt;/html&gt;"/>
         <Property name="text" type="java.lang.String" value=""/>
       </Properties>
     </Component>
