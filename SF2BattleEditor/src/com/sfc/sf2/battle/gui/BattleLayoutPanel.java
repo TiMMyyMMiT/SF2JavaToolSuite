@@ -60,6 +60,17 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     private Image alertImage;
     
     private List<int[]> actions = new ArrayList<>();
+
+    public BattleLayoutPanel() {
+        super();
+        mouseInput.setMouseMotionListerned(this::onMouseMoved);
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        drawAIRegionNode(g);
+    }
             
     @Override
     public void drawImage(Graphics graphics) {
@@ -259,6 +270,27 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         }
         return alertImage;
     }
+    
+    private void drawAIRegionNode(Graphics graphics) {
+        //Draw a node to show closest node to mouse cursor (when in AI Region edit mode)
+        if (spritesetMode != SpritesetPaintMode.AiRegion || selectedSpritesetEntity == -1) return;
+        int battleX = battle.getMapCoords().getX();
+        int battleY = battle.getMapCoords().getY();
+        AIRegion region = battle.getSpriteset().getAiRegions()[selectedSpritesetEntity];
+        graphics.setColor(Color.BLUE);
+        int nodeX = -1;
+        int nodeY = -1;
+        switch (closestRegionPoint) {
+            case 0: nodeX = region.getX1(); nodeY = region.getY1(); break;
+            case 1: nodeX = region.getX2(); nodeY = region.getY2(); break;
+            case 2: nodeX = region.getX3(); nodeY = region.getY3(); break;
+            case 3: nodeX = region.getX4(); nodeY = region.getY4(); break;
+        }
+        int scale = getDisplayScale();
+        nodeX = (battleX+nodeX)*PIXEL_WIDTH+16;
+        nodeY = (battleY+nodeY)*PIXEL_HEIGHT+16;
+        graphics.fillArc(nodeX*scale, nodeY*scale, 8*scale, 8*scale, 0, 360);
+    }
 
     public Battle getBattle() {
         return battle;
@@ -358,6 +390,18 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         this.actions = actions;
     }
     
+    private void onMouseMoved(BaseMouseCoordsComponent.GridMouseMoveEvent evt) {
+        if (spritesetMode == SpritesetPaintMode.AiRegion && selectedSpritesetEntity >= 0) {
+            int x = evt.x() - battle.getMapCoords().getX();
+            int y = evt.y() - battle.getMapCoords().getY();
+            int region = findClosestRegionPoint(battle.getSpriteset().getAiRegions()[selectedSpritesetEntity], x, y);
+            if (closestRegionPoint != region) {
+                closestRegionPoint = region;
+                this.repaint();
+            }
+        } 
+    }
+    
     @Override
     protected void onMouseInteraction(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
         if (paintMode == BattlePaintMode.None) return;
@@ -398,7 +442,8 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                             }
                             redraw();
                         } else {
-                            findClosestPoint(region, x, y);
+                            closestRegionPoint = findClosestRegionPoint(region, x, y);
+                            this.repaint();
                         }
                         break;
                     case AiPoint:
@@ -411,7 +456,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         }
     }
     
-    private void findClosestPoint(AIRegion region, int x, int y) {
+    private int findClosestRegionPoint(AIRegion region, int x, int y) {
         int closest = -1;
         double distance = Integer.MAX_VALUE;
         Point mouse = new Point(x, y);
@@ -423,6 +468,6 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 distance = dist;
             }
         }
-        closestRegionPoint = closest;
+        return closest;
     }
 }
