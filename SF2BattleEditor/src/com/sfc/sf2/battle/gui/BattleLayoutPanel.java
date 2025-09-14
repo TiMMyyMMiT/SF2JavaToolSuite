@@ -16,6 +16,7 @@ import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.helpers.GraphicsHelpers;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -126,6 +127,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             int id = enemy.getEnemyData().getID();
             Tileset sprite = enemy.getEnemyData().getMapSprite();
             if (sprite == null) {
+                //Draw number to represent sprite
                 targetX += 8 + ((enemy.getEnemyData().getID() + 1 < 10) ? 0 : -4);
                 targetY += 3;
                 g2.setColor(Color.BLACK);
@@ -136,8 +138,10 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 g2.setColor(Color.RED);
                 g2.drawString(String.valueOf(id), targetX, targetY+16);
             } else if (enemy.getEnemyData().isIsSpecialSprite()) {
+                //Draw special sprite
                 g2.drawImage(sprite.getIndexedColorImage().getSubimage(0, 0, PIXEL_WIDTH*2, PIXEL_HEIGHT*2), targetX-PIXEL_WIDTH/2, targetY-PIXEL_HEIGHT, null);
             } else {
+                //Draw regular sprite
                 g2.drawImage(sprite.getIndexedColorImage(), targetX, targetY, null);
             }
             if (paintMode == BattlePaintMode.Spriteset && spritesetMode == SpritesetPaintMode.Enemy && i == selectedSpritesetEntity) {
@@ -146,6 +150,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 g2.drawRect((battleX+enemy.getX())*PIXEL_WIDTH, (battleY+enemy.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
+        g2.setColor(Color.YELLOW);
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
             drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder1());
@@ -186,9 +191,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 break;
         }
         if (targetX >= 0 && targetY >= 0) {
-            g2.setColor(Color.YELLOW);
-            g2.setStroke(new BasicStroke(1));
-            g2.drawLine((mapOffsetX+enemyX)*PIXEL_WIDTH+12, (mapOffsetY+enemyY)*PIXEL_HEIGHT+12, (mapOffsetX+targetX)*PIXEL_WIDTH+12, (mapOffsetY+targetY)*PIXEL_HEIGHT+12);
+            GraphicsHelpers.drawArrowLine(g2, (mapOffsetX+enemyX)*PIXEL_WIDTH+12, (mapOffsetY+enemyY)*PIXEL_HEIGHT+12, (mapOffsetX+targetX)*PIXEL_WIDTH+12, (mapOffsetY+targetY)*PIXEL_HEIGHT+12);
         }
     }
 
@@ -196,12 +199,12 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         g2.setStroke(new BasicStroke(3));
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
-            if (i == selectedSpritesetEntity) continue;
+            if (spritesetMode == SpritesetPaintMode.AiRegion && i == selectedSpritesetEntity) continue;
             g2.setColor(Color.WHITE);
             AIRegion region = regions[i];
             drawRegionBounds(g2, battleX, battleY, region);
         }
-        if (selectedSpritesetEntity >= 0) {
+        if (spritesetMode == SpritesetPaintMode.AiRegion && selectedSpritesetEntity >= 0) {
             g2.setColor(Color.YELLOW);
             AIRegion region = regions[selectedSpritesetEntity];
             drawRegionBounds(g2, battleX, battleY, region);
@@ -227,7 +230,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         g2.setStroke(new BasicStroke(3));
         AIPoint[] points = battle.getSpriteset().getAiPoints();
         for (int i = 0; i < points.length; i++) {
-            g2.setColor(i == selectedSpritesetEntity ? Color.YELLOW : Color.WHITE);
+            g2.setColor(spritesetMode == SpritesetPaintMode.AiPoint && i == selectedSpritesetEntity ? Color.YELLOW : Color.WHITE);
             AIPoint p = points[i];
             int px = battleX + p.getX();
             int py = battleY + p.getY();
@@ -299,7 +302,8 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
 
     public void setBattle(Battle battle) {
         this.battle = battle;
-            redraw();
+        selectedSpritesetEntity = -1;
+        redraw();
     }
 
     public boolean isDrawSprites() {
