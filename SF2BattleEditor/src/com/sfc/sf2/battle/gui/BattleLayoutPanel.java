@@ -236,6 +236,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
     
     private void drawAlerts(Graphics2D g2, int battleX, int battleY) {
+        //With the feature added to shift the map without shifting Spriteset items, it is possible for them to be out of bounds. This alerts the user if anything is out of bounds
         Ally[] allies = battle.getSpriteset().getAllies();
         for (int i=0; i < allies.length; i++) {
             drawAlertIfOutOfBounds(g2, battleX, battleY, allies[i].getX(), allies[i].getY());
@@ -258,7 +259,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
     
     private void drawAlertIfOutOfBounds(Graphics2D g2, int battleX, int battleY, int x, int y) {
-        if (x < 0 || x >= battleCoords.getWidth() || y < 0 || y >= battleCoords.getWidth()) {
+        if (x < 0 || x >= battleCoords.getWidth() || y < 0 || y >= battleCoords.getHeight()) {
             g2.drawImage(getAlertImage(), (battleX+x)*PIXEL_WIDTH, (battleY+y)*PIXEL_HEIGHT, null);
         }
     }
