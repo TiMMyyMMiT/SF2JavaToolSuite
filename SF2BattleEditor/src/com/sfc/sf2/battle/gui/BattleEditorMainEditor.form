@@ -107,9 +107,6 @@
                       <Properties>
                         <Property name="dividerLocation" type="int" value="400"/>
                         <Property name="resizeWeight" type="double" value="1.0"/>
-                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="null"/>
-                        </Property>
                         <Property name="oneTouchExpandable" type="boolean" value="true"/>
                       </Properties>
 
@@ -1027,24 +1024,14 @@
                                                 <DimensionLayout dim="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" attributes="0">
-                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Component id="jPanel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                              <Component id="jPanel14" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                               <Group type="102" attributes="0">
-                                                                  <EmptySpace max="-2" attributes="0"/>
                                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                                       <Group type="102" attributes="0">
                                                                           <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                                                                           <EmptySpace max="-2" attributes="0"/>
-                                                                          <Component id="jComboBox_Name" min="-2" max="-2" attributes="0"/>
-                                                                          <EmptySpace max="-2" attributes="0"/>
-                                                                          <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                                                          <EmptySpace max="-2" attributes="0"/>
-                                                                          <Component id="jSpinner_X" min="-2" pref="52" max="-2" attributes="0"/>
-                                                                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                                                          <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                                                                          <EmptySpace max="-2" attributes="0"/>
-                                                                          <Component id="jSpinner_Y" min="-2" pref="55" max="-2" attributes="0"/>
+                                                                          <Component id="jComboBox_Name" max="32767" attributes="0"/>
                                                                       </Group>
                                                                       <Group type="102" alignment="0" attributes="0">
                                                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1053,31 +1040,41 @@
                                                                           </Group>
                                                                           <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                                              <Component id="jComboBox_Items" max="32767" attributes="0"/>
+                                                                              <Component id="jComboBox_Items" pref="102" max="32767" attributes="0"/>
                                                                               <Component id="jComboBox_AI" max="32767" attributes="0"/>
                                                                           </Group>
-                                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                                              <Group type="102" alignment="0" attributes="0">
-                                                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                                                  <Component id="jLabel40" min="-2" pref="48" max="-2" attributes="0"/>
-                                                                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                                                                  <Component id="jComboBox_Spawn" min="-2" pref="99" max="-2" attributes="0"/>
-                                                                              </Group>
-                                                                              <Group type="102" alignment="1" attributes="0">
-                                                                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                                                                  <Component id="jTextField_ItemFlags" min="-2" pref="149" max="-2" attributes="0"/>
-                                                                              </Group>
-                                                                          </Group>
-                                                                      </Group>
-                                                                      <Group type="102" alignment="0" attributes="0">
-                                                                          <Component id="jLabel39" min="-2" pref="110" max="-2" attributes="0"/>
-                                                                          <EmptySpace max="-2" attributes="0"/>
-                                                                          <Component id="jSpinner_Trigger3" min="-2" pref="74" max="-2" attributes="0"/>
                                                                       </Group>
                                                                   </Group>
+                                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                                      <Group type="102" alignment="0" attributes="0">
+                                                                          <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
+                                                                          <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
+                                                                          <EmptySpace max="-2" attributes="0"/>
+                                                                          <Component id="jSpinner_X" min="-2" pref="52" max="-2" attributes="0"/>
+                                                                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                                                          <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                                                                          <EmptySpace max="-2" attributes="0"/>
+                                                                          <Component id="jSpinner_Y" pref="0" max="32767" attributes="0"/>
+                                                                      </Group>
+                                                                      <Group type="102" alignment="0" attributes="0">
+                                                                          <Component id="jLabel40" min="-2" pref="48" max="-2" attributes="0"/>
+                                                                          <EmptySpace max="-2" attributes="0"/>
+                                                                          <Component id="jComboBox_Spawn" max="32767" attributes="0"/>
+                                                                      </Group>
+                                                                      <Component id="multiComboBoxItemFlags" min="-2" pref="166" max="-2" attributes="0"/>
+                                                                  </Group>
                                                               </Group>
+                                                              <Group type="102" alignment="0" attributes="0">
+                                                                  <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                                                  <Component id="jLabel39" min="-2" max="-2" attributes="0"/>
+                                                                  <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                                                                  <Component id="jSpinner_Trigger3" min="-2" pref="85" max="-2" attributes="0"/>
+                                                              </Group>
+                                                              <Component id="jPanel6" alignment="0" max="32767" attributes="0"/>
+                                                              <Component id="jPanel14" alignment="0" max="32767" attributes="0"/>
                                                           </Group>
-                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <EmptySpace pref="55" max="32767" attributes="0"/>
                                                       </Group>
                                                   </Group>
                                                 </DimensionLayout>
@@ -1101,10 +1098,12 @@
                                                               <Component id="jComboBox_Spawn" alignment="3" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <EmptySpace max="-2" attributes="0"/>
-                                                          <Group type="103" groupAlignment="3" attributes="0">
-                                                              <Component id="jLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                              <Component id="jComboBox_Items" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                              <Component id="jTextField_ItemFlags" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="1" attributes="0">
+                                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                                  <Component id="jLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                                  <Component id="jComboBox_Items" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              </Group>
+                                                              <Component id="multiComboBoxItemFlags" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
@@ -1243,14 +1242,6 @@
                                                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                                                   </AuxValues>
                                                 </Component>
-                                                <Component class="javax.swing.JTextField" name="jTextField_ItemFlags">
-                                                  <Properties>
-                                                    <Property name="text" type="java.lang.String" value="flags"/>
-                                                  </Properties>
-                                                  <Events>
-                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField_ItemFlagsActionPerformed"/>
-                                                  </Events>
-                                                </Component>
                                                 <Container class="javax.swing.JPanel" name="jPanel6">
                                                   <Properties>
                                                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -1266,21 +1257,21 @@
                                                           <Group type="102" alignment="0" attributes="0">
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                                  <Group type="102" alignment="0" attributes="0">
-                                                                      <Component id="jLabel37" min="-2" pref="112" max="-2" attributes="0"/>
-                                                                      <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jSpinner_Trigger1" min="-2" max="-2" attributes="0"/>
+                                                                  <Group type="102" attributes="0">
+                                                                      <Component id="jLabel37" min="-2" max="-2" attributes="0"/>
+                                                                      <EmptySpace max="32767" attributes="0"/>
+                                                                      <Component id="jSpinner_Trigger1" min="-2" pref="84" max="-2" attributes="0"/>
                                                                   </Group>
-                                                                  <Group type="102" alignment="0" attributes="0">
+                                                                  <Group type="102" attributes="0">
                                                                       <Component id="jLabel36" min="-2" max="-2" attributes="0"/>
                                                                       <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jComboBox_Order1" min="-2" max="-2" attributes="0"/>
-                                                                      <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jLabel41" min="-2" pref="48" max="-2" attributes="0"/>
-                                                                      <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jSpinner_OrderTarget1" min="-2" pref="61" max="-2" attributes="0"/>
+                                                                      <Component id="jComboBox_Order1" max="32767" attributes="0"/>
                                                                   </Group>
                                                               </Group>
+                                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                              <Component id="jLabel41" min="-2" pref="48" max="-2" attributes="0"/>
+                                                              <EmptySpace max="-2" attributes="0"/>
+                                                              <Component id="jSpinner_OrderTarget1" min="-2" pref="61" max="-2" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                           </Group>
                                                       </Group>
@@ -1377,20 +1368,20 @@
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Group type="103" groupAlignment="0" attributes="0">
                                                                   <Group type="102" alignment="0" attributes="0">
-                                                                      <Component id="jLabel38" min="-2" pref="110" max="-2" attributes="0"/>
+                                                                      <Component id="jLabel38" min="-2" max="-2" attributes="0"/>
                                                                       <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jSpinner_Trigger2" min="-2" pref="74" max="-2" attributes="0"/>
+                                                                      <Component id="jSpinner_Trigger2" max="32767" attributes="0"/>
                                                                   </Group>
                                                                   <Group type="102" alignment="0" attributes="0">
                                                                       <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
                                                                       <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jComboBox_Order2" min="-2" max="-2" attributes="0"/>
-                                                                      <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jLabel42" min="-2" pref="48" max="-2" attributes="0"/>
-                                                                      <EmptySpace max="-2" attributes="0"/>
-                                                                      <Component id="jSpinner_OrderTarget2" min="-2" pref="61" max="-2" attributes="0"/>
+                                                                      <Component id="jComboBox_Order2" max="32767" attributes="0"/>
                                                                   </Group>
                                                               </Group>
+                                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                              <Component id="jLabel42" min="-2" pref="48" max="-2" attributes="0"/>
+                                                              <EmptySpace max="-2" attributes="0"/>
+                                                              <Component id="jSpinner_OrderTarget2" min="-2" pref="61" max="-2" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                           </Group>
                                                       </Group>
@@ -1484,6 +1475,11 @@
                                                   </Properties>
                                                   <Events>
                                                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinner_Trigger3StateChanged"/>
+                                                  </Events>
+                                                </Component>
+                                                <Component class="com.sfc.sf2.core.gui.MultiComboBox" name="multiComboBoxItemFlags">
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="multiComboBoxItemFlagsActionPerformed"/>
                                                   </Events>
                                                 </Component>
                                               </SubComponents>

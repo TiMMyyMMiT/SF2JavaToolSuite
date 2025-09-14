@@ -8,12 +8,10 @@ package com.sfc.sf2.core.gui;
 import com.sfc.sf2.core.gui.MultiComboBox.CheckItem;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.BeanProperty;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.accessibility.Accessible;
@@ -67,6 +65,37 @@ public class MultiComboBox extends JComboBox<CheckItem> {
         Object[] selected = new Object[model.getSize()];
         selected = list.toArray(selected);
         return selected;
+    }
+    
+    public String getObjectsString() {
+        CheckItemListCellRenderer renderer = (CheckItemListCellRenderer)getRenderer();
+        return renderer.getCheckItemString(getModel());
+    }
+    
+    public void clearSelection() {
+        ComboBoxModel<CheckItem> model = getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            model.getElementAt(i).setSelected(false);
+        }
+    }
+    
+    public void setSelected(int index, boolean selected) {
+        ComboBoxModel<CheckItem> model = getModel();
+        if (index < 0 || index >= model.getSize()) return;
+        CheckItem item = model.getElementAt(index);
+        item.setSelected(selected);
+        model.setSelectedItem(item);
+    }
+    
+    public void setSelected(Object item, boolean selected) {
+        ComboBoxModel<CheckItem> model = getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            if (model.getElementAt(i).item.equals(item)) {
+                model.getElementAt(i).setSelected(selected);
+                model.setSelectedItem(model.getElementAt(i));
+                return;
+            }
+        }
     }
 
     @Override

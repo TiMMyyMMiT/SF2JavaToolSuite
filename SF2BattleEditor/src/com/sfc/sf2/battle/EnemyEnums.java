@@ -15,20 +15,22 @@ import java.util.Map;
  */
 public class EnemyEnums extends AbstractEnums {
         
-    private LinkedHashMap<String, Integer> enemies;
-    private LinkedHashMap<String, Integer> mapSprites;
-    private LinkedHashMap<String, Integer> aiCommandSets;
-    private LinkedHashMap<String, Integer> aiOrders;
-    private LinkedHashMap<String, Integer> spawnParams;
-    private LinkedHashMap<String, Integer> items;
+    private final LinkedHashMap<String, Integer> enemies;
+    private final LinkedHashMap<String, Integer> mapSprites;
+    private final LinkedHashMap<String, Integer> aiCommandSets;
+    private final LinkedHashMap<String, Integer> aiOrders;
+    private final LinkedHashMap<String, Integer> spawnParams;
+    private final LinkedHashMap<String, Integer> items;
+    private final LinkedHashMap<String, Integer> itemFlags;
 
-    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> mapSprites, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders, LinkedHashMap<String, Integer> spawnParams, LinkedHashMap<String, Integer> items) {
+    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> mapSprites, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders, LinkedHashMap<String, Integer> spawnParams, LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> itemFlags) {
         this.enemies = enemies;
         this.mapSprites = mapSprites;
         this.aiCommandSets = aiCommandSets;
         this.aiOrders = aiOrders;
         this.spawnParams = spawnParams;
         this.items = items;
+        this.itemFlags = itemFlags;
     }
 
     public LinkedHashMap<String, Integer> getEnemies() {
@@ -53,6 +55,10 @@ public class EnemyEnums extends AbstractEnums {
 
     public LinkedHashMap<String, Integer> getItems() {
         return items;
+    }
+
+    public LinkedHashMap<String, Integer> getItemFlags() {
+        return itemFlags;
     }
     
     //Helper functions
