@@ -62,40 +62,36 @@ public class EnemyEnums extends AbstractEnums {
     }
     
     //Helper functions
-    public static String stringToItemString(String data, Map<String, Integer> items) {
-        try {
-            short number = Short.parseShort(data);
-            return itemNumToString(number, items);
-        } catch (NumberFormatException ex) {
-            //Not a number
-            return toEnumString(data, items);
-        }
-    }
-    
-    public static String itemNumToString(short data, Map<String, Integer> items) {
-        String s = "";
-        
-        if (data >= 0x1000) {  //If flags
-            for (Map.Entry<String, Integer> entry : items.entrySet()) {
-                if (entry.getValue() > 0x1000 && (data&entry.getValue()) != 0){
-                    s = appendItem(s, entry.getKey());
-                    data = (short)(data&(~entry.getValue()));
-                }
-            }
-        }
-
+    //Items
+    public static String itemNumToItemString(short data, Map<String, Integer> items) {
+        data = (short)(data&0xFFF);
         for (Map.Entry<String, Integer> entry : items.entrySet()) {
             if ((data == entry.getValue())){
-                s = prependItem(s, entry.getKey());
-                return s;
+                return entry.getKey();
             }
         }
         return Short.toString(data);    //Fallback
     }
     
-    public static short itemStringToNum(String data, Map<String, Integer> items) {
-        String[] split = data.split("\\|");
-                
+    public static String itemNumToItemFlagsString(short data, Map<String, Integer> items) {
+        if (data >= 0x1000) {  //If flags
+            String s = "";
+            for (Map.Entry<String, Integer> entry : items.entrySet()) {
+                if (entry.getValue() > 0x1000 && (data&entry.getValue()) != 0){
+                    if (s.length() > 0) s += "|";
+                    s += entry.getKey();
+                    data = (short)(data&(~entry.getValue()));
+                }
+            }
+            return s;
+        } else {
+            return null;
+        }
+    }
+    
+    public static short itemStringToNum(String item, Map<String, Integer> items) {
+        if (item == null || item.length() == 0) return 0;
+        String[] split = item.split("\\|");
         short value = 0;
         for (int i = 0; i < split.length; i++) {
             split[i] = split[i].trim();
@@ -107,6 +103,7 @@ public class EnemyEnums extends AbstractEnums {
         return value;
     }
     
+    //Orders
     public static String stringToAiOrderString(String data, Map<String, Integer> orders) {
         try {
             byte number = Byte.parseByte(data);
@@ -118,22 +115,15 @@ public class EnemyEnums extends AbstractEnums {
     }
     
     public static String aiOrderNumToString(byte data, Map<String, Integer> orders) {        
-        byte value1;
-        byte value2;
+        byte value = data;
         
-        if (data == 0xFF) {
-            value1 = data;
-            value2 = 0;
-        } else {
-            value1 = (byte)(data&0xF0);
-            value2 = (byte)(data&0x0F);
+        if (data != 0xFF) {
+            value = (byte)(data&0xF0);
         }
         
-        String s = Byte.toString(value2);
         for (Map.Entry<String, Integer> entry : orders.entrySet()) {
-            if ((value1 == entry.getValue())){
-                s = prependItem(s, entry.getKey());
-                return s;
+            if ((value == entry.getValue())) {
+                return entry.getKey();
             }
         }
         return Byte.toString(data); //Fallback
@@ -152,21 +142,5 @@ public class EnemyEnums extends AbstractEnums {
                 value += (byte)(orders.get(split[0])&0xF0);
         }
         return value;
-    }
-    
-    private static String appendItem(String current, String append)
-    {
-        if (current.length() == 0)
-            return append;
-        else
-            return current+"|"+append;
-    }
-    
-    private static String prependItem(String current, String prepend)
-    {
-        if (current.length() == 0)
-            return prepend;
-        else
-            return prepend+"|"+current;
     }
 }

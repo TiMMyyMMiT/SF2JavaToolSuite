@@ -53,15 +53,18 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
             int x = data[dataPointer+1];
             int y = data[dataPointer+2];
             String ai = EnemyEnums.toEnumString(data[dataPointer+3], pckg.enemyEnums().getCommandSets());
-            String item = EnemyEnums.itemNumToString(BinaryHelpers.getWord(data,dataPointer+4), pckg.enemyEnums().getItems());
+            String item = EnemyEnums.itemNumToItemString(BinaryHelpers.getWord(data,dataPointer+4), pckg.enemyEnums().getItems());
+            String itemFlags = EnemyEnums.itemNumToItemFlagsString(BinaryHelpers.getWord(data,dataPointer+4), pckg.enemyEnums().getItemFlags());
             String order1 = EnemyEnums.aiOrderNumToString(data[dataPointer+6], pckg.enemyEnums().getOrders());
+            int target1 = (byte)(data[dataPointer+6]&0x0F);
             int region1 = data[dataPointer+7];
             String order2 = EnemyEnums.aiOrderNumToString(data[dataPointer+8], pckg.enemyEnums().getOrders());
+            int target2 = (byte)(data[dataPointer+8]&0x0F);
             int region2 = data[dataPointer+9];
             int byte10 = data[dataPointer+10];
             String spawn = EnemyEnums.toEnumString(data[dataPointer+11], pckg.enemyEnums().getSpawnParams());
             while (enemyList.size() < index) { enemyList.add(null); }
-            enemyList.add(new Enemy(enemyData, x, y, ai, item, order1, region1, region2, order2, byte10, spawn));
+            enemyList.add(new Enemy(enemyData, x, y, ai, item, itemFlags, order1, target1, region1, region2, order2, target2, byte10, spawn));
         }
         Enemy[] enemies = new Enemy[enemyList.size()];
         enemies = enemyList.toArray(enemies);
@@ -128,15 +131,16 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
         for (int i=0; i < enemiesNumber; i++) {
             Enemy enemy = enemies[i];
             short itemData = EnemyEnums.itemStringToNum(enemy.getItem(), pckg.enemyEnums().getItems());
+            itemData += EnemyEnums.itemStringToNum(enemy.getItemFlags(), pckg.enemyEnums().getItemFlags());
             spritesetBytes[4+alliesNumber*12+i*12+0] = (byte)(enemy.getEnemyData().getID()&0xFF);
             spritesetBytes[4+alliesNumber*12+i*12+1] = (byte)enemy.getX();
             spritesetBytes[4+alliesNumber*12+i*12+2] = (byte)enemy.getY();
             spritesetBytes[4+alliesNumber*12+i*12+3] = EnemyEnums.toEnumByte(enemy.getAi(), pckg.enemyEnums().getCommandSets());
             spritesetBytes[4+alliesNumber*12+i*12+4] = (byte)(itemData>>8);
             spritesetBytes[4+alliesNumber*12+i*12+5] = (byte)(itemData&0xFF);
-            spritesetBytes[4+alliesNumber*12+i*12+6] = EnemyEnums.aiOrderStringToNum(enemy.getMoveOrder(), pckg.enemyEnums().getOrders());
+            spritesetBytes[4+alliesNumber*12+i*12+6] = (byte)(EnemyEnums.aiOrderStringToNum(enemy.getMoveOrder(), pckg.enemyEnums().getOrders()) + enemy.getMoveOrderTarget());
             spritesetBytes[4+alliesNumber*12+i*12+7] = (byte)enemy.getTriggerRegion1();
-            spritesetBytes[4+alliesNumber*12+i*12+8] = EnemyEnums.aiOrderStringToNum(enemy.getBackupMoveOrder(), pckg.enemyEnums().getOrders());
+            spritesetBytes[4+alliesNumber*12+i*12+8] = (byte)(EnemyEnums.aiOrderStringToNum(enemy.getBackupMoveOrder(), pckg.enemyEnums().getOrders()) + enemy.getBackupMoveOrderTarget());
             spritesetBytes[4+alliesNumber*12+i*12+9] = (byte)enemy.getTriggerRegion2();
             spritesetBytes[4+alliesNumber*12+i*12+10] = (byte)enemy.getUnknown();
             spritesetBytes[4+alliesNumber*12+i*12+11] = EnemyEnums.toEnumByte(enemy.getSpawnParams(), pckg.enemyEnums().getSpawnParams());

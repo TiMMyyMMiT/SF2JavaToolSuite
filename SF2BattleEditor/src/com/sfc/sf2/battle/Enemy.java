@@ -11,38 +11,44 @@ package com.sfc.sf2.battle;
  */
 public class Enemy {
         
-    private EnemyData data;
+    private EnemyData enemyData;
     private int x;
     private int y;
     private String ai;
     private String item;
+    private String itemFlags;
     private String moveOrder;
+    private int moveOrderTarget;
     private int triggerRegion1;
     private int triggerRegion2;
     private String backupMoveOrder;
+    private int backupMoveOrderTarget;
     private int unknown;
     private String spawnParams;
 
-    public Enemy(EnemyData data, int x, int y, String ai, String item, String moveOrder1, int triggerRegion1, int triggerRegion2, String backupMoveOrder, int unknown, String spawnParams) {
-        this.data = data;
+    public Enemy(EnemyData enemyData, int x, int y, String ai, String item, String itemFlags, String moveOrder, int moveOrderTarget, int triggerRegion1, int triggerRegion2, String backupMoveOrder, int backupMoveOrderTarget, int unknown, String spawnParams) {
+        this.enemyData = enemyData;
         this.x = x;
         this.y = y;
         this.ai = ai;
         this.item = item;
-        this.moveOrder = moveOrder1;
+        this.itemFlags = itemFlags;
+        this.moveOrder = moveOrder;
+        this.moveOrderTarget = moveOrderTarget;
         this.triggerRegion1 = triggerRegion1;
         this.triggerRegion2 = triggerRegion2;
         this.backupMoveOrder = backupMoveOrder;
+        this.backupMoveOrderTarget = backupMoveOrderTarget;
         this.unknown = unknown;
         this.spawnParams = spawnParams;
     }
 
     public EnemyData getEnemyData() {
-        return data;
+        return enemyData;
     }
 
     public void setEnemyData(EnemyData data) {
-        this.data = data;
+        this.enemyData = data;
     }
 
     public int getX() {
@@ -77,12 +83,28 @@ public class Enemy {
         this.item = item;
     }
 
+    public String getItemFlags() {
+        return itemFlags;
+    }
+
+    public void setItemFlags(String itemFlags) {
+        this.itemFlags = itemFlags;
+    }
+
     public String getMoveOrder() {
         return moveOrder;
     }
 
     public void setMoveOrder(String moveOrder) {
         this.moveOrder = moveOrder;
+    }
+
+    public int getMoveOrderTarget() {
+        return moveOrderTarget;
+    }
+
+    public void setMoveOrderTarget(int moveOrderTarget) {
+        this.moveOrderTarget = moveOrderTarget;
     }
 
     public int getTriggerRegion1() {
@@ -109,6 +131,14 @@ public class Enemy {
         this.backupMoveOrder = backupMoveOrder;
     }
 
+    public int getBackupMoveOrderTarget() {
+        return backupMoveOrderTarget;
+    }
+
+    public void setBackupMoveOrderTarget(int backupMoveOrderTarget) {
+        this.backupMoveOrderTarget = backupMoveOrderTarget;
+    }
+
     public int getUnknown() {
         return unknown;
     }
@@ -127,10 +157,10 @@ public class Enemy {
 
     @Override
     public Enemy clone() {
-        return new Enemy(data, x, y, ai, item, moveOrder, triggerRegion1, triggerRegion2, backupMoveOrder, unknown, spawnParams);
+        return new Enemy(enemyData, x, y, ai, item, itemFlags, moveOrder, moveOrderTarget, triggerRegion1, triggerRegion2, backupMoveOrder, backupMoveOrderTarget, unknown, spawnParams);
     }
     
     public static Enemy emptyEnemy() {
-        return new Enemy(null, 0, 0, null, null, null, -1, -1, null, 0, null);
+        return new Enemy(null, 0, 0, null, null, null, null, -1, 15, 15, null, -1, 0, null);
     }
 }

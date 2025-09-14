@@ -119,8 +119,8 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                 moveOrder1, region1, moveOrder2, region2, unknown, spawnParams
                  */
                 String[] params = line.trim().substring(MACRO_ENEMIES.length()).trim().split(",");
-                int x = 0, y = 0, region1 = 0, region2 = 0, unknownParam = 0;
-                String name, aiCommand = null, item = null, moveOrder1 = null, moveOrder2 = null, spawnParams = null;
+                int x = 0, y = 0, target1 = -1, target2 = -1, region1 = 15, region2 = 15, unknownParam = 0;
+                String name, aiCommand = null, item = null, itemFlags = null, moveOrder1 = null, moveOrder2 = null, spawnParams = null;
 
                 //Line 1
                 name = params[0].trim();
@@ -131,16 +131,40 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                 if ((line = reader.readLine()) != null) {
                     params = line.trim().substring(MACRO_ENEMY_LINE2.length()).trim().split(",");
                     aiCommand = params[0].trim();
-                    item = params[1].trim();
+                    params[1] = params[1].trim();
+                    int flagsIndex = params[1].indexOf('|');
+                    if (flagsIndex >= 0) {
+                        item = params[1].substring(0, flagsIndex);
+                        itemFlags = params[1].substring(flagsIndex+1);
+                    } else {
+                        item = params[1];
+                        itemFlags = null;
+                    }
                 }
 
                 //Line 3
                 if ((line = reader.readLine()) != null) {
                     params = line.trim().substring(MACRO_ENEMY_LINE3.length()).trim().split(",");
-                    moveOrder1 = params[0].trim();
+                    params[0] = params[0].trim();
+                    int orderIndex = params[0].indexOf('|');
+                    if (orderIndex >= 0) {
+                        moveOrder1 = params[0].substring(0, orderIndex);
+                        target1 = StringHelpers.getValueInt(params[0].substring(orderIndex+1));
+                    } else {
+                        moveOrder1 = params[0];
+                        target1 = 0;
+                    }
                     region1 = StringHelpers.getValueInt(params[1].trim());
-                    moveOrder2 = params[2].trim();
                     region2 = StringHelpers.getValueInt(params[3].trim());
+                    params[2] = params[2].trim();
+                    orderIndex = params[2].indexOf('|');
+                    if (orderIndex >= 0) {
+                        moveOrder2 = params[2].substring(0, orderIndex);
+                        target2 = StringHelpers.getValueInt(params[2].substring(orderIndex+1));
+                    } else {
+                        moveOrder2 = params[2];
+                        target2 = 0;
+                    }
                     unknownParam = StringHelpers.getValueInt(params[4].trim());
                     spawnParams = params[5].trim();
                 }
@@ -155,7 +179,7 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                     EnemyData placeholder = new EnemyData(-1, name, null, false);
                     enemyData = placeholder;
                 }
-                enemyList.add(new Enemy(enemyData, x, y, aiCommand, item, moveOrder1, region1, region2, moveOrder2, unknownParam, spawnParams));
+                enemyList.add(new Enemy(enemyData, x, y, aiCommand, item, itemFlags, moveOrder1, target1, region1, region2, moveOrder2, target2, unknownParam, spawnParams));
             } else if (inHeader) {
                 if (line.trim().startsWith(MACRO_LIST_START)) {
                     inHeader = false;
@@ -224,11 +248,14 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
             Enemy enemy = enemies[i];
 
             String name = enemy.getEnemyData().getName();
-            String command = EnemyEnums.toEnumString(enemy.getAi(), pckg.enemyEnums().getCommandSets());
-            String itemData = EnemyEnums.stringToItemString(enemy.getItem(), pckg.enemyEnums().getItems());
-            String moveOrder1 = EnemyEnums.stringToAiOrderString(enemy.getMoveOrder(), pckg.enemyEnums().getOrders());
-            String moveOrder2 = EnemyEnums.stringToAiOrderString(enemy.getBackupMoveOrder(), pckg.enemyEnums().getOrders());
-            String spawnParams = EnemyEnums.toEnumString(enemy.getSpawnParams(), pckg.enemyEnums().getSpawnParams());
+            String command = enemy.getAi();
+            String itemData = enemy.getItem();
+            if (!itemData.equals("NOTHING")) itemData = itemData+"|"+enemy.getItemFlags();
+            String moveOrder1 = enemy.getMoveOrder();
+            if (!moveOrder1.equals("NONE")) moveOrder1 = moveOrder1+"|"+enemy.getMoveOrderTarget();
+            String moveOrder2 = enemy.getBackupMoveOrder();
+            if (!moveOrder2.equals("NONE")) moveOrder2 = moveOrder1+"|"+enemy.getBackupMoveOrderTarget();
+            String spawnParams = enemy.getSpawnParams();
 
             writer.write(String.format("\t\t\t\t%s %s, %d, %d\n", MACRO_ENEMIES, name, enemy.getX(), enemy.getY()));
             writer.write(String.format("\t\t\t\t%s %s, %s\n", MACRO_ENEMY_LINE2, command, itemData));

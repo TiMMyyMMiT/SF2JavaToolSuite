@@ -12,7 +12,6 @@ import com.sfc.sf2.core.io.asm.SF2EnumsAsmProcessor;
 import com.sfc.sf2.helpers.StringHelpers;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**

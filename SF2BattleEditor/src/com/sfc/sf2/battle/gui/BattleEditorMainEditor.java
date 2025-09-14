@@ -243,7 +243,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jLabel42 = new javax.swing.JLabel();
         jSpinner_OrderTarget2 = new javax.swing.JSpinner();
         jLabel39 = new javax.swing.JLabel();
-        jSpinner_Trigger3 = new javax.swing.JSpinner();
+        jSpinner_Unknown = new javax.swing.JSpinner();
         multiComboBoxItemFlags = new com.sfc.sf2.core.gui.MultiComboBox();
         infoButton6 = new com.sfc.sf2.core.gui.controls.InfoButton();
         infoButton3 = new com.sfc.sf2.core.gui.controls.InfoButton();
@@ -973,10 +973,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jLabel39.setText("Unknown :");
 
-        jSpinner_Trigger3.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
-        jSpinner_Trigger3.addChangeListener(new javax.swing.event.ChangeListener() {
+        jSpinner_Unknown.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
+        jSpinner_Unknown.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinner_Trigger3StateChanged(evt);
+                jSpinner_UnknownStateChanged(evt);
             }
         });
 
@@ -987,7 +987,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: AI Spawn rules:<br>    <b>Starting</b>: The enemy is visible from the start of the battle.<br>    <b>Respawn</b>: Enemy will respawn after being kiled, based on triggers.<br>    <b>Hidden</b>: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.<br><b>Item</b>: The item the enemy holds and item flags. Item flags:<br>    <b>USABLE_BY_AI</b>: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.<br>    <b>UNUSED_ITEM_DROP</b>: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.<br>    <b>BROKEN</b>: Flags the item as broken (cracked) and needs to be repaired.<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
+        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: AI Spawn rules:<br>    <b>Starting</b>: The enemy is visible from the start of the battle.<br>    <b>Respawn</b>: Enemy will respawn after being kiled, based on triggers.<br>    <b>Hidden</b>: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.<br><b>Item</b>: The item the enemy holds and item flags. Item flags:<br>    <b>EQUIPPED</b>: Whether the enemy has this item equipped. May not do anything in the base game.<br>    <b>USABLE_BY_AI</b>: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.<br>    <b>UNUSED_ITEM_DROP</b>: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.<br>    <b>BROKEN</b>: Flags the item as broken (cracked) and needs to be repaired.<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
         infoButton6.setText("");
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
@@ -1002,7 +1002,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                         .addGap(6, 6, 6)
                         .addComponent(jLabel39)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner_Trigger3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSpinner_Unknown, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1070,7 +1070,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel39)
-                    .addComponent(jSpinner_Trigger3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinner_Unknown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1523,25 +1523,21 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 jSpinner_Trigger1.setValue(enemy.getTriggerRegion1());
                 jSpinner_Trigger2.setValue(enemy.getTriggerRegion2());
                 
-                String[] order = enemy.getMoveOrder().split("\\|");
-                jComboBox_Order1.setSelectedItem(order[0]);
-                jSpinner_OrderTarget1.setValue(order.length > 1 ? Integer.parseInt(order[1]) : 0);
-                order = enemy.getBackupMoveOrder().split("\\|");
-                jComboBox_Order2.setSelectedItem(order[0]);
-                jSpinner_OrderTarget2.setValue(order.length > 1 ? Integer.parseInt(order[1]) : 0);
+                jComboBox_Order1.setSelectedItem(enemy.getMoveOrder());
+                jSpinner_OrderTarget1.setValue(enemy.getMoveOrderTarget());
+                jComboBox_Order2.setSelectedItem(enemy.getBackupMoveOrder());
+                jSpinner_OrderTarget2.setValue(enemy.getBackupMoveOrderTarget());
                 
+                jComboBox_Items.setSelectedItem(enemy.getItem());
                 multiComboBoxItemFlags.clearSelection();
-                String item = enemy.getItem();
-                if (item.contains("|")) {
-                    String[] split = item.split("\\|");
-                    jComboBox_Items.setSelectedItem(split[0]);
-                    for (int i = 1; i < split.length; i++) {
+                String flags = enemy.getItemFlags();
+                if (flags != null && flags.length() > 0 && flags.contains("|")) {
+                    String[] split = flags.split("\\|");
+                    for (int i = 0; i < split.length; i++) {
                         multiComboBoxItemFlags.setSelected(split[i], true);
                     }
-                } else {
-                    jComboBox_Items.setSelectedItem(item);
                 }
-                multiComboBoxItemFlags.setEnabled(!jComboBox_Items.getSelectedItem().equals("NOTHING"));
+                multiComboBoxItemFlags.setEnabled(!enemy.getItem().equals("NOTHING"));
             }
         }
     }
@@ -1676,7 +1672,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jTabbedPane3StateChanged
 
     private void jSpinner_Trigger1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger1StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger1.getModel().getValue(), 7);
+        OnEnemyDataChanged((int)jSpinner_Trigger1.getModel().getValue(), 9);
     }//GEN-LAST:event_jSpinner_Trigger1StateChanged
 
     private void jSpinner_YStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_YStateChanged
@@ -1684,15 +1680,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jSpinner_YStateChanged
 
     private void jSpinner_Trigger2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger2StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger2.getModel().getValue(), 8);
+        OnEnemyDataChanged((int)jSpinner_Trigger2.getModel().getValue(), 10);
     }//GEN-LAST:event_jSpinner_Trigger2StateChanged
 
     private void jSpinner_OrderTarget1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_OrderTarget1StateChanged
-        OnEnemyOrderChanged((String)jComboBox_Order1.getSelectedItem(), (int)jSpinner_OrderTarget1.getModel().getValue(), true);
+        OnEnemyDataChanged((int)jSpinner_OrderTarget1.getModel().getValue(), 8);
     }//GEN-LAST:event_jSpinner_OrderTarget1StateChanged
 
     private void jSpinner_OrderTarget2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_OrderTarget2StateChanged
-        OnEnemyOrderChanged((String)jComboBox_Order2.getSelectedItem(), (int)jSpinner_OrderTarget2.getModel().getValue(), false);
+        OnEnemyDataChanged((int)jSpinner_OrderTarget2.getModel().getValue(), 12);
     }//GEN-LAST:event_jSpinner_OrderTarget2StateChanged
 
     private void jComboBox_NameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_NameItemStateChanged
@@ -1708,25 +1704,25 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox_AIItemStateChanged
 
     private void jComboBox_SpawnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_SpawnItemStateChanged
-        OnEnemyDataChanged((String)evt.getItem(), 11);
+        OnEnemyDataChanged((String)evt.getItem(), 14);
     }//GEN-LAST:event_jComboBox_SpawnItemStateChanged
 
     private void jComboBox_ItemsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_ItemsItemStateChanged
-        OnEnemyItemChanged((String)evt.getItem(), multiComboBoxItemFlags.getObjectsString());
+        OnEnemyDataChanged((String)evt.getItem(), 5);
         multiComboBoxItemFlags.setEnabled(!jComboBox_Items.getSelectedItem().equals("NOTHING"));
     }//GEN-LAST:event_jComboBox_ItemsItemStateChanged
 
     private void jComboBox_Order1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_Order1ItemStateChanged
-        OnEnemyOrderChanged((String)evt.getItem(), (int)jSpinner_OrderTarget1.getModel().getValue(), true);
+        OnEnemyDataChanged((String)evt.getItem(), 7);
     }//GEN-LAST:event_jComboBox_Order1ItemStateChanged
 
     private void jComboBox_Order2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_Order2ItemStateChanged
-        OnEnemyOrderChanged((String)evt.getItem(), (int)jSpinner_OrderTarget2.getModel().getValue(), false);
+        OnEnemyDataChanged((String)evt.getItem(), 11);
     }//GEN-LAST:event_jComboBox_Order2ItemStateChanged
 
-    private void jSpinner_Trigger3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger3StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger3.getModel().getValue(), 10);
-    }//GEN-LAST:event_jSpinner_Trigger3StateChanged
+    private void jSpinner_UnknownStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_UnknownStateChanged
+        OnEnemyDataChanged((int)jSpinner_Unknown.getModel().getValue(), 13);
+    }//GEN-LAST:event_jSpinner_UnknownStateChanged
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         drawAiRegions = jCheckBox6.isSelected();
@@ -1750,7 +1746,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void multiComboBoxItemFlagsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiComboBoxItemFlagsActionPerformed
-        OnEnemyItemChanged((String)jComboBox_Items.getSelectedItem(), multiComboBoxItemFlags.getObjectsString());
+        OnEnemyDataChanged(multiComboBoxItemFlags.getObjectsString(), 6);
     }//GEN-LAST:event_multiComboBoxItemFlagsActionPerformed
 
     private void changeDrawMode(boolean sprites, boolean aiRegions, boolean aiModes) {
@@ -1768,21 +1764,6 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             return;
         
         tableEnemies.jTable.setValueAt(data, selectRow, column);
-    }
-
-    private void OnEnemyItemChanged(String item, String flags) {
-        if (flags == null || flags.length() == 0)
-            OnEnemyDataChanged(item, 5);
-        else
-            OnEnemyDataChanged(item+"|"+flags, 5);
-    }
-
-    private void OnEnemyOrderChanged(String order, int target, boolean order1) {
-        if (order == "NONE") {
-            OnEnemyDataChanged(order, order1 ? 6 : 9);
-        } else {
-            OnEnemyDataChanged(order+"|"+target, order1 ? 6 : 9);
-        }
     }
     
     private void onTableAlliesDataChanged(TableModelEvent e) {
@@ -1987,7 +1968,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JSpinner jSpinner_OrderTarget2;
     private javax.swing.JSpinner jSpinner_Trigger1;
     private javax.swing.JSpinner jSpinner_Trigger2;
-    private javax.swing.JSpinner jSpinner_Trigger3;
+    private javax.swing.JSpinner jSpinner_Unknown;
     private javax.swing.JSpinner jSpinner_X;
     private javax.swing.JSpinner jSpinner_Y;
     private javax.swing.JSplitPane jSplitPane1;
