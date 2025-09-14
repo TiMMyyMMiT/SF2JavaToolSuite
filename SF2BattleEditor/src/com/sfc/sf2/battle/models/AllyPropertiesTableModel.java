@@ -41,7 +41,7 @@ public class AllyPropertiesTableModel extends AbstractTableModel<Ally> {
     @Override
     protected Object getValue(Ally item, int row, int col) {
         switch (col) {
-            case 0: return row;
+            case 0: return row+1;
             case 1: return item.getX();
             case 2: return item.getY();
             default: return 0;
