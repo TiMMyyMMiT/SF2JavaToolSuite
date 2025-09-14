@@ -153,8 +153,8 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         g2.setColor(Color.YELLOW);
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
-            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder1());
-            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder2());
+            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder());
+            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getBackupMoveOrder());
         }
     }
 

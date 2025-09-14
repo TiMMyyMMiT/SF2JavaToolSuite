@@ -155,7 +155,7 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
                     EnemyData placeholder = new EnemyData(-1, name, null, false);
                     enemyData = placeholder;
                 }
-                enemyList.add(new Enemy(enemyData, x, y, aiCommand, item, moveOrder1, region1, moveOrder2, region2, unknownParam, spawnParams));
+                enemyList.add(new Enemy(enemyData, x, y, aiCommand, item, moveOrder1, region1, region2, moveOrder2, unknownParam, spawnParams));
             } else if (inHeader) {
                 if (line.trim().startsWith(MACRO_LIST_START)) {
                     inHeader = false;
@@ -226,13 +226,13 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
             String name = enemy.getEnemyData().getName();
             String command = EnemyEnums.toEnumString(enemy.getAi(), pckg.enemyEnums().getCommandSets());
             String itemData = EnemyEnums.stringToItemString(enemy.getItem(), pckg.enemyEnums().getItems());
-            String moveOrder1 = EnemyEnums.stringToAiOrderString(enemy.getMoveOrder1(), pckg.enemyEnums().getOrders());
-            String moveOrder2 = EnemyEnums.stringToAiOrderString(enemy.getMoveOrder2(), pckg.enemyEnums().getOrders());
+            String moveOrder1 = EnemyEnums.stringToAiOrderString(enemy.getMoveOrder(), pckg.enemyEnums().getOrders());
+            String moveOrder2 = EnemyEnums.stringToAiOrderString(enemy.getBackupMoveOrder(), pckg.enemyEnums().getOrders());
             String spawnParams = EnemyEnums.toEnumString(enemy.getSpawnParams(), pckg.enemyEnums().getSpawnParams());
 
             writer.write(String.format("\t\t\t\t%s %s, %d, %d\n", MACRO_ENEMIES, name, enemy.getX(), enemy.getY()));
             writer.write(String.format("\t\t\t\t%s %s, %s\n", MACRO_ENEMY_LINE2, command, itemData));
-            writer.write(String.format("\t\t\t\t%s %s, %d, %s, %d, %d, %s\n\n", MACRO_ENEMY_LINE3, moveOrder1, enemy.getTriggerRegion1(), moveOrder2, enemy.getTriggerRegion2(), enemy.getByte10(), spawnParams));
+            writer.write(String.format("\t\t\t\t%s %s, %d, %s, %d, %d, %s\n\n", MACRO_ENEMY_LINE3, moveOrder1, enemy.getTriggerRegion1(), moveOrder2, enemy.getTriggerRegion2(), enemy.getUnknown(), spawnParams));
         }
         writer.write("\n");
 

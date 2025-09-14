@@ -61,7 +61,7 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
             int byte10 = data[dataPointer+10];
             String spawn = EnemyEnums.toEnumString(data[dataPointer+11], pckg.enemyEnums().getSpawnParams());
             while (enemyList.size() < index) { enemyList.add(null); }
-            enemyList.add(new Enemy(enemyData, x, y, ai, item, order1, region1, order2, region2, byte10, spawn));
+            enemyList.add(new Enemy(enemyData, x, y, ai, item, order1, region1, region2, order2, byte10, spawn));
         }
         Enemy[] enemies = new Enemy[enemyList.size()];
         enemies = enemyList.toArray(enemies);
@@ -134,11 +134,11 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
             spritesetBytes[4+alliesNumber*12+i*12+3] = EnemyEnums.toEnumByte(enemy.getAi(), pckg.enemyEnums().getCommandSets());
             spritesetBytes[4+alliesNumber*12+i*12+4] = (byte)(itemData>>8);
             spritesetBytes[4+alliesNumber*12+i*12+5] = (byte)(itemData&0xFF);
-            spritesetBytes[4+alliesNumber*12+i*12+6] = EnemyEnums.aiOrderStringToNum(enemy.getMoveOrder1(), pckg.enemyEnums().getOrders());
+            spritesetBytes[4+alliesNumber*12+i*12+6] = EnemyEnums.aiOrderStringToNum(enemy.getMoveOrder(), pckg.enemyEnums().getOrders());
             spritesetBytes[4+alliesNumber*12+i*12+7] = (byte)enemy.getTriggerRegion1();
-            spritesetBytes[4+alliesNumber*12+i*12+8] = EnemyEnums.aiOrderStringToNum(enemy.getMoveOrder2(), pckg.enemyEnums().getOrders());
+            spritesetBytes[4+alliesNumber*12+i*12+8] = EnemyEnums.aiOrderStringToNum(enemy.getBackupMoveOrder(), pckg.enemyEnums().getOrders());
             spritesetBytes[4+alliesNumber*12+i*12+9] = (byte)enemy.getTriggerRegion2();
-            spritesetBytes[4+alliesNumber*12+i*12+10] = (byte)enemy.getByte10();
+            spritesetBytes[4+alliesNumber*12+i*12+10] = (byte)enemy.getUnknown();
             spritesetBytes[4+alliesNumber*12+i*12+11] = EnemyEnums.toEnumByte(enemy.getSpawnParams(), pckg.enemyEnums().getSpawnParams());
         }
         

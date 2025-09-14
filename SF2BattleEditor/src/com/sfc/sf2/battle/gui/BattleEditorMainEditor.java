@@ -72,6 +72,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         columns.getColumn(0).setMaxWidth(30);
         columns = tableEnemies.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(30);
+        columns.getColumn(1).setMinWidth(70);
         columns = tableAIRegions.jTable.getColumnModel();
         columns.getColumn(0).setMaxWidth(30);
         columns = tableAIPoints.jTable.getColumnModel();
@@ -234,16 +235,17 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jSpinner_OrderTarget1 = new javax.swing.JSpinner();
         jLabel37 = new javax.swing.JLabel();
         jSpinner_Trigger1 = new javax.swing.JSpinner();
+        jSpinner_Trigger2 = new javax.swing.JSpinner();
+        jLabel38 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jComboBox_Order2 = new javax.swing.JComboBox<>();
         jLabel42 = new javax.swing.JLabel();
         jSpinner_OrderTarget2 = new javax.swing.JSpinner();
-        jSpinner_Trigger2 = new javax.swing.JSpinner();
-        jLabel38 = new javax.swing.JLabel();
         jLabel39 = new javax.swing.JLabel();
         jSpinner_Trigger3 = new javax.swing.JSpinner();
         multiComboBoxItemFlags = new com.sfc.sf2.core.gui.MultiComboBox();
+        infoButton6 = new com.sfc.sf2.core.gui.controls.InfoButton();
         infoButton3 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jLabel13 = new javax.swing.JLabel();
         jPanel26 = new javax.swing.JPanel();
@@ -556,11 +558,6 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 jTabbedPane2StateChanged(evt);
             }
         });
-        jTabbedPane2.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTabbedPane2FocusGained(evt);
-            }
-        });
 
         jPanel4.setMinimumSize(new java.awt.Dimension(400, 0));
         jPanel4.setPreferredSize(new java.awt.Dimension(400, 677));
@@ -791,7 +788,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Enemy :"));
 
-        jLabel16.setText("Name :");
+        jLabel16.setText("Enemy :");
 
         jLabel17.setText("X :");
 
@@ -847,7 +844,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel36.setText("Move Order 1 :");
+        jLabel36.setText("Move Order :");
 
         jComboBox_Order1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox_Order1.addItemListener(new java.awt.event.ItemListener() {
@@ -856,7 +853,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        jLabel41.setText("Target 1 :");
+        jLabel41.setText("Target :");
 
         jSpinner_OrderTarget1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
         jSpinner_OrderTarget1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -874,6 +871,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
+        jSpinner_Trigger2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
+        jSpinner_Trigger2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner_Trigger2StateChanged(evt);
+            }
+        });
+
+        jLabel38.setText("Trigger Region 2 :");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -883,16 +889,20 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner_Trigger1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jSpinner_Trigger1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel38))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel36)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_Order1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox_Order1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner_OrderTarget1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSpinner_OrderTarget1)
+                    .addComponent(jSpinner_Trigger2))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -907,13 +917,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel37)
-                    .addComponent(jSpinner_Trigger1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinner_Trigger1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel38)
+                    .addComponent(jSpinner_Trigger2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel35.setText("Move Order 2 :");
+        jLabel35.setText("Backup Move Order :");
 
         jComboBox_Order2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox_Order2.addItemListener(new java.awt.event.ItemListener() {
@@ -922,7 +934,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        jLabel42.setText("Target 2 :");
+        jLabel42.setText("Target :");
 
         jSpinner_OrderTarget2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
         jSpinner_OrderTarget2.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -931,34 +943,19 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        jSpinner_Trigger2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
-        jSpinner_Trigger2.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSpinner_Trigger2StateChanged(evt);
-            }
-        });
-
-        jLabel38.setText("Trigger Region 2 :");
-
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel14Layout.createSequentialGroup()
-                        .addComponent(jLabel38)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner_Trigger2))
-                    .addGroup(jPanel14Layout.createSequentialGroup()
-                        .addComponent(jLabel35)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_Order2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel35)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner_OrderTarget2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jComboBox_Order2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel42)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSpinner_OrderTarget2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel14Layout.setVerticalGroup(
@@ -966,18 +963,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel42)
-                    .addComponent(jSpinner_OrderTarget2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel35)
-                    .addComponent(jComboBox_Order2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel38)
-                    .addComponent(jSpinner_Trigger2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox_Order2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel42)
+                        .addComponent(jSpinner_OrderTarget2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
-        jLabel39.setText("Byte10 :");
+        jLabel39.setText("Unknown :");
 
         jSpinner_Trigger3.setModel(new javax.swing.SpinnerNumberModel(0, 0, 63, 1));
         jSpinner_Trigger3.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -986,11 +980,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
+        multiComboBoxItemFlags.setMinimumSize(new java.awt.Dimension(150, 26));
         multiComboBoxItemFlags.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 multiComboBoxItemFlagsActionPerformed(evt);
             }
         });
+
+        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: Whether the enemy is visible from the start, whether it respawns based on triggers, or whether it is hidden until a trigger is activated.<br><b>Item</b>: The item the enemy holds and item flags (NOTE: item flags are unused in base game).<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
+        infoButton6.setText("");
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -998,45 +996,49 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel17Layout.createSequentialGroup()
-                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel39)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner_Trigger3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel17Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox_Name, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jComboBox_Name, 0, 113, Short.MAX_VALUE))
                             .addGroup(jPanel17Layout.createSequentialGroup()
                                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel19)
                                     .addComponent(jLabel34))
                                 .addGap(12, 12, 12)
                                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox_Items, 0, 102, Short.MAX_VALUE)
+                                    .addComponent(jComboBox_Items, 0, 115, Short.MAX_VALUE)
                                     .addComponent(jComboBox_AI, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel17Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
+                                .addGap(19, 19, 19)
                                 .addComponent(jLabel17)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner_X, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jSpinner_X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel18)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner_Y, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                                .addComponent(jSpinner_Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel17Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
                                 .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox_Spawn, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(multiComboBoxItemFlags, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel17Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel39)
-                        .addGap(54, 54, 54)
-                        .addComponent(jSpinner_Trigger3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(55, Short.MAX_VALUE))
+                            .addComponent(multiComboBoxItemFlags, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1068,8 +1070,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel39)
-                    .addComponent(jSpinner_Trigger3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jSpinner_Trigger3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         infoButton3.setMessageText("<html>When you select an enemy in the table, its data can then be edited in the controls below.<br>Like allies, selecting an enemy and then clicking on the map will move the enemy to the new position.</html>");
@@ -1101,7 +1104,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(infoButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableEnemies, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addComponent(tableEnemies, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1520,10 +1523,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 jSpinner_Trigger1.setValue(enemy.getTriggerRegion1());
                 jSpinner_Trigger2.setValue(enemy.getTriggerRegion2());
                 
-                String[] order = enemy.getMoveOrder1().split("\\|");
+                String[] order = enemy.getMoveOrder().split("\\|");
                 jComboBox_Order1.setSelectedItem(order[0]);
                 jSpinner_OrderTarget1.setValue(order.length > 1 ? Integer.parseInt(order[1]) : 0);
-                order = enemy.getMoveOrder2().split("\\|");
+                order = enemy.getBackupMoveOrder().split("\\|");
                 jComboBox_Order2.setSelectedItem(order[0]);
                 jSpinner_OrderTarget2.setValue(order.length > 1 ? Integer.parseInt(order[1]) : 0);
                 
@@ -1621,10 +1624,6 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.redraw();
     }//GEN-LAST:event_jSpinner8StateChanged
 
-    private void jTabbedPane2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane2FocusGained
-        
-    }//GEN-LAST:event_jTabbedPane2FocusGained
-
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
         int index = jTabbedPane2.getSelectedIndex();
         switch (index) {
@@ -1685,7 +1684,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jSpinner_YStateChanged
 
     private void jSpinner_Trigger2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger2StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger2.getModel().getValue(), 9);
+        OnEnemyDataChanged((int)jSpinner_Trigger2.getModel().getValue(), 8);
     }//GEN-LAST:event_jSpinner_Trigger2StateChanged
 
     private void jSpinner_OrderTarget1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_OrderTarget1StateChanged
@@ -1780,9 +1779,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
     private void OnEnemyOrderChanged(String order, int target, boolean order1) {
         if (order == "NONE") {
-            OnEnemyDataChanged(order, order1 ? 6 : 8);
+            OnEnemyDataChanged(order, order1 ? 6 : 9);
         } else {
-            OnEnemyDataChanged(order+"|"+target, order1 ? 6 : 8);
+            OnEnemyDataChanged(order+"|"+target, order1 ? 6 : 9);
         }
     }
     
@@ -1907,6 +1906,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton3;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton4;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton5;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton6;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

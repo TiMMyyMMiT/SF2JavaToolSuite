@@ -20,7 +20,7 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
     private EnemyEnums enemyEnums;
     
     public EnemyPropertiesTableModel() {
-        super(new String[] {"Id", "Name", "X", "Y", "AI", "Item", "Order 1", "Region 1", "Order 2", "Region 2", "Byte10", "Spawn"}, 64);
+        super(new String[] { "Id", "Name", "X", "Y", "AI", "Item", "Move Order", "Region 1", "Region 2", "Bkup Order", "Byte10", "Spawn" }, 64);
     }
     
     public void setEnemyData(EnemyData[] enemyData, EnemyEnums enemyEnums) {
@@ -35,7 +35,7 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
             case 4:
             case 5:
             case 6:
-            case 8:
+            case 9:
             case 11:
                 return String.class;
             default: return Integer.class;
@@ -66,11 +66,11 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
             case 3: return item.getY();
             case 4: return item.getAi();
             case 5: return item.getItem();
-            case 6: return item.getMoveOrder1();
+            case 6: return item.getMoveOrder();
             case 7: return item.getTriggerRegion1();
-            case 8: return item.getMoveOrder2();
-            case 9: return item.getTriggerRegion2();
-            case 10: return item.getByte10();
+            case 8: return item.getTriggerRegion2();
+            case 9: return item.getBackupMoveOrder();
+            case 10: return item.getUnknown();
             case 11: return item.getSpawnParams();
             default: return null;
         }
@@ -90,11 +90,11 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
             case 3: item.setY((int)value); break;
             case 4: item.setAi((String)value); break;
             case 5: item.setItem((String)value); break;
-            case 6: item.setMoveOrder1((String)value); break;
+            case 6: item.setMoveOrder((String)value); break;
             case 7: item.setTriggerRegion1((int)value); break;
-            case 8: item.setMoveOrder2((String)value); break;
-            case 9: item.setTriggerRegion2((int)value); break;
-            case 10: item.setByte10((int)value); break;
+            case 8: item.setTriggerRegion2((int)value); break;
+            case 9: item.setBackupMoveOrder((String)value); break;
+            case 10: item.setUnknown((int)value); break;
             case 11: item.setSpawnParams((String)value); break;
         }
         return item;
@@ -111,7 +111,7 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
             case 2:
             case 3:
             case 7:
-            case 9:
+            case 8:
             case 10:
                 return 64;
             default: return Byte.MAX_VALUE;
