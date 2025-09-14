@@ -125,6 +125,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         } else {
             allyPropertiesTableModel.setTableData(spriteset.getAllies());
             enemyPropertiesTableModel.setTableData(spriteset.getEnemies());
+            enemyPropertiesTableModel.setEnemyData(battleManager.getEnemyData(), battleManager.getEnemyEnums());
             aIRegionPropertiesTableModel.setTableData(spriteset.getAiRegions());
             aIPointPropertiesTableModel.setTableData(spriteset.getAiPoints());
         }
@@ -181,6 +182,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         fileButton10 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton11 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton12 = new com.sfc.sf2.core.gui.controls.FileButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
@@ -270,7 +273,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2BattleEditor");
 
-        jSplitPane1.setDividerLocation(720);
+        jSplitPane1.setDividerLocation(750);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setOneTouchExpandable(true);
 
@@ -279,6 +282,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jSplitPane4.setDividerLocation(400);
         jSplitPane4.setResizeWeight(1.0);
+        jSplitPane4.setMinimumSize(null);
         jSplitPane4.setOneTouchExpandable(true);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Import from :"));
@@ -471,6 +475,16 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         fileButton12.setFilePath(".\\spritesets\\spriteset01.asm");
         fileButton12.setLabelText("Battle spriteset :");
 
+        jButton3.setText("Export");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setText("<html>Select new target files.</html>");
+        jLabel21.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -482,9 +496,13 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2))
-                    .addComponent(fileButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton10, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
                     .addComponent(fileButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fileButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -493,6 +511,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addContainerGap()
                 .addComponent(fileButton10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(fileButton11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileButton12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -500,7 +522,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton2)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -510,8 +532,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -519,9 +541,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jSplitPane4.setLeftComponent(jPanel9);
@@ -699,7 +721,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(terrainKeyPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 4, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -709,7 +731,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(terrainKeyPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addContainerGap(233, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Battle Map Edit", jPanel4);
@@ -738,7 +760,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tableAllies, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addComponent(tableAllies, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                     .addGroup(jPanel24Layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -754,7 +776,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(infoButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableAllies, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+                .addComponent(tableAllies, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -765,6 +787,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         tableEnemies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableEnemies.setSingleClickText(true);
         tableEnemies.setSpinnerNumberEditor(true);
+        tableEnemies.setMinimumSize(new java.awt.Dimension(260, 200));
 
         jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Enemy :"));
 
@@ -1078,8 +1101,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(infoButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableEnemies, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tableEnemies, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -1103,7 +1126,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tableAIRegions, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addComponent(tableAIRegions, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                     .addGroup(jPanel26Layout.createSequentialGroup()
                         .addComponent(jLabel20)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1119,7 +1142,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(infoButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel20))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableAIRegions, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+                .addComponent(tableAIRegions, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1143,7 +1166,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel31Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tableAIPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addComponent(tableAIPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                     .addGroup(jPanel31Layout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1159,7 +1182,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(infoButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableAIPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+                .addComponent(tableAIPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1183,7 +1206,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addComponent(jTabbedPane2)
+                .addContainerGap()
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 396, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
@@ -1201,11 +1225,11 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane4)
+            .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane4)
+            .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jSplitPane2.setLeftComponent(jPanel8);
@@ -1214,6 +1238,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        battleLayoutPanel.setPreferredSize(new java.awt.Dimension(1000, 1000));
 
         javax.swing.GroupLayout battleLayoutPanelLayout = new javax.swing.GroupLayout(battleLayoutPanel);
         battleLayoutPanel.setLayout(battleLayoutPanelLayout);
@@ -1310,7 +1336,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addComponent(jCheckBox6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel14)
@@ -1344,15 +1370,16 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE)
             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -1366,7 +1393,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jSplitPane2.setRightComponent(jPanel10);
@@ -1401,15 +1430,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Path coordsPath = PathHelpers.getBasePath().resolve(fileButton10.getFilePath());                           
         Path terrainPath = PathHelpers.getBasePath().resolve(fileButton11.getFilePath());                           
         Path spritesetPath = PathHelpers.getBasePath().resolve(fileButton12.getFilePath());
         if (!PathHelpers.createPathIfRequred(terrainPath)) return;
+        if (!PathHelpers.createPathIfRequred(spritesetPath)) return;
         try {
-            battleManager.exportDisassembly(coordsPath, terrainPath, spritesetPath, battleLayoutPanel.getBattle());
+            battleManager.exportDisassembly(terrainPath, spritesetPath, battleLayoutPanel.getBattle());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Battle disasm could not be exported to : " + terrainPath);
+            Console.logger().severe("ERROR Battle disasm could not be exported to : " + terrainPath + " and/or " + spritesetPath);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -1644,15 +1673,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jTabbedPane3StateChanged
 
     private void jSpinner_Trigger1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger1StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger1.getModel().getValue(), 6);
+        OnEnemyDataChanged((int)jSpinner_Trigger1.getModel().getValue(), 7);
     }//GEN-LAST:event_jSpinner_Trigger1StateChanged
 
     private void jSpinner_YStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_YStateChanged
-        OnEnemyDataChanged((int)jSpinner_Y.getModel().getValue(), 2);
+        OnEnemyDataChanged((int)jSpinner_Y.getModel().getValue(), 3);
     }//GEN-LAST:event_jSpinner_YStateChanged
 
     private void jSpinner_Trigger2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger2StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger2.getModel().getValue(), 8);
+        OnEnemyDataChanged((int)jSpinner_Trigger2.getModel().getValue(), 9);
     }//GEN-LAST:event_jSpinner_Trigger2StateChanged
 
     private void jSpinner_OrderTarget1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_OrderTarget1StateChanged
@@ -1668,19 +1697,19 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jTextField_ItemFlagsActionPerformed
 
     private void jComboBox_NameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_NameItemStateChanged
-        OnEnemyDataChanged((String)evt.getItem(), 0);
+        OnEnemyDataChanged((String)evt.getItem(), 1);
     }//GEN-LAST:event_jComboBox_NameItemStateChanged
 
     private void jSpinner_XStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_XStateChanged
-        OnEnemyDataChanged((int)jSpinner_X.getModel().getValue(), 1);
+        OnEnemyDataChanged((int)jSpinner_X.getModel().getValue(), 2);
     }//GEN-LAST:event_jSpinner_XStateChanged
 
     private void jComboBox_AIItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_AIItemStateChanged
-        OnEnemyDataChanged((String)evt.getItem(), 3);
+        OnEnemyDataChanged((String)evt.getItem(), 4);
     }//GEN-LAST:event_jComboBox_AIItemStateChanged
 
     private void jComboBox_SpawnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_SpawnItemStateChanged
-        OnEnemyDataChanged((String)evt.getItem(), 10);
+        OnEnemyDataChanged((String)evt.getItem(), 11);
     }//GEN-LAST:event_jComboBox_SpawnItemStateChanged
 
     private void jComboBox_ItemsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_ItemsItemStateChanged
@@ -1696,7 +1725,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox_Order2ItemStateChanged
 
     private void jSpinner_Trigger3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner_Trigger3StateChanged
-        OnEnemyDataChanged((int)jSpinner_Trigger3.getModel().getValue(), 9);
+        OnEnemyDataChanged((int)jSpinner_Trigger3.getModel().getValue(), 10);
     }//GEN-LAST:event_jSpinner_Trigger3StateChanged
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
@@ -1709,6 +1738,17 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Path coordsPath = PathHelpers.getBasePath().resolve(fileButton10.getFilePath());
+        if (!PathHelpers.createPathIfRequred(coordsPath)) return;
+        try {
+            battleManager.exportBattleCoords(coordsPath, battleLayoutPanel.getBattleCoords());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Battle coords disasm could not be exported to : " + coordsPath);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     private void changeDrawMode(boolean sprites, boolean aiRegions, boolean aiModes) {
         jCheckBox4.setSelected(sprites);
         jCheckBox6.setSelected(aiRegions);
@@ -1718,23 +1758,27 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.setDrawAiPoints(aiModes, -1);
     }
     
-    private void OnEnemyDataChanged(Object data, int column){
-        /*int selectRow = jTable3.getSelectedRow();
+    private void OnEnemyDataChanged(Object data, int column) {
+        int selectRow = tableEnemies.jTable.getSelectedRow();
         if (selectRow == -1)
             return;
         
-        jTable3.setValueAt(data, selectRow, column);*/
+        tableEnemies.jTable.setValueAt(data, selectRow, column);
     }
 
     private void OnEnemyItemChanged(String item, String flags){
         if (flags == null || flags.length() == 0)
-            OnEnemyDataChanged(item, 4);
+            OnEnemyDataChanged(item, 5);
         else
-            OnEnemyDataChanged(item+"|"+flags, 4);
+            OnEnemyDataChanged(item+"|"+flags, 5);
     }
 
-    private void OnEnemyOrderChanged(String order, int target, boolean order1){
-        OnEnemyDataChanged(order+"|"+target, order1 ? 5 : 7);
+    private void OnEnemyOrderChanged(String order, int target, boolean order1) {
+        if (order == "NONE") {
+            OnEnemyDataChanged(order, order1 ? 6 : 8);
+        } else {
+            OnEnemyDataChanged(order+"|"+target, order1 ? 6 : 8);
+        }
     }
     
     private void onTableAlliesDataChanged(TableModelEvent e) {
@@ -1860,6 +1904,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton5;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -1887,6 +1932,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;

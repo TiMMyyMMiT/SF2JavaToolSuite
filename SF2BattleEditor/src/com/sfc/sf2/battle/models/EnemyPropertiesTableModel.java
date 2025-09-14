@@ -6,6 +6,8 @@
 package com.sfc.sf2.battle.models;
 
 import com.sfc.sf2.battle.Enemy;
+import com.sfc.sf2.battle.EnemyData;
+import com.sfc.sf2.battle.EnemyEnums;
 import com.sfc.sf2.core.models.AbstractTableModel;
 
 /**
@@ -14,8 +16,16 @@ import com.sfc.sf2.core.models.AbstractTableModel;
  */
 public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
     
+    private EnemyData[] enemyData;
+    private EnemyEnums enemyEnums;
+    
     public EnemyPropertiesTableModel() {
         super(new String[] {"Id", "Name", "X", "Y", "AI", "Item", "Order 1", "Region 1", "Order 2", "Region 2", "Byte10", "Spawn"}, 64);
+    }
+    
+    public void setEnemyData(EnemyData[] enemyData, EnemyEnums enemyEnums) {
+        this.enemyData = enemyData;
+        this.enemyEnums = enemyEnums;
     }
     
     @Override
@@ -34,7 +44,7 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        return false;//column > 1;
+        return false;
     }
 
     @Override
@@ -69,17 +79,23 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
     @Override
     protected Enemy setValue(Enemy item, int row, int col, Object value) {
         switch (col) {
-            //case 1: item.getEnemyData().getName(); break;
-            case 2: item.setX((int)value);
-            case 3: item.setY((int)value);
-            case 4: item.setAi((String)value);
-            case 5: item.setItem((String)value);
-            case 6: item.setMoveOrder1((String)value);
-            case 7: item.setTriggerRegion1((int)value);
-            case 8: item.setMoveOrder2((String)value);
-            case 9: item.setTriggerRegion2((int)value);
-            case 10: item.setByte10((int)value);
-            case 11: item.setSpawnParams((String)value);
+            case 1:
+                if (enemyEnums.getEnemies().containsKey(value)) {
+                    int index = enemyEnums.getEnemies().get(value);
+                    if (index >= 0 && index < enemyData.length)
+                    item.setEnemyData(this.enemyData[index]);
+                }
+            break;
+            case 2: item.setX((int)value); break;
+            case 3: item.setY((int)value); break;
+            case 4: item.setAi((String)value); break;
+            case 5: item.setItem((String)value); break;
+            case 6: item.setMoveOrder1((String)value); break;
+            case 7: item.setTriggerRegion1((int)value); break;
+            case 8: item.setMoveOrder2((String)value); break;
+            case 9: item.setTriggerRegion2((int)value); break;
+            case 10: item.setByte10((int)value); break;
+            case 11: item.setSpawnParams((String)value); break;
         }
         return item;
     }

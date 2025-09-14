@@ -105,7 +105,7 @@ public class GraphicsHelpers {
         at.rotate(angle);
         
         Graphics2D g = (Graphics2D)g2.create();
-        g2.setStroke(new BasicStroke(1));
+        g.setStroke(new BasicStroke(1));
         g.drawLine(x1, y1, x2, y2);
         g.transform(at);
         g.fillPolygon(arrowHead);

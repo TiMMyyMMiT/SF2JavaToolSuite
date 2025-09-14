@@ -196,6 +196,7 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
         AIRegion[] aiRegions = item.getAiRegions();
         AIPoint[] aiPoints = item.getAiPoints();
 
+        writer.write(String.format("BattleSpriteset%02d:\n", pckg.index()));
         //Sizes
         writer.write("\t\t\t\t; # Allies\n");
         writer.write(String.format("\t\t\t\t%s %d\n", MACRO_DCB, allies.length));

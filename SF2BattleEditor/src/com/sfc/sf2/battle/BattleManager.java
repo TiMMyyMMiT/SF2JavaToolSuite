@@ -79,15 +79,23 @@ public class BattleManager extends AbstractManager {
         return battle;
     }
     
-    public void exportDisassembly(Path mapcoordsPath, Path terrainPath, Path spritesetPath, Battle battle) throws IOException, AsmException, DisassemblyException {
+    public void exportDisassembly(Path terrainPath, Path spritesetPath, Battle battle) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.battle = battle;
-        BattleMapCoords[] allCoords = mapTerrainManager.getAllCoords();
-        allCoords[battle.getIndex()] = battle.getMapCoords();
-        battleCoordsAsmProcessor.exportAsmData(mapcoordsPath, allCoords, null);
         mapTerrainManager.exportDisassembly(terrainPath, battle.getTerrain());
         BattleSpritesetPackage pckg = new BattleSpritesetPackage(battle.getIndex(), enemyData, enemyEnums);
         battleSpritesetAsmProcessor.exportAsmData(spritesetPath, battle.getSpriteset(), pckg);
+        Console.logger().info("Battle " + battle.getIndex() + " and spritesets exported to " + terrainPath + " and " + spritesetPath);
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public void exportBattleCoords(Path mapcoordsPath, BattleMapCoords coords) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.battle.setMapCoords(coords);
+        BattleMapCoords[] allCoords = mapTerrainManager.getAllCoords();
+        allCoords[battle.getIndex()] = battle.getMapCoords();
+        battleCoordsAsmProcessor.exportAsmData(mapcoordsPath, allCoords, null);
+        Console.logger().info("Battle coords exported to : " + mapcoordsPath);
         Console.logger().finest("EXITING exportDisassembly");
     }
     
