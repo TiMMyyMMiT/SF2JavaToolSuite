@@ -25,7 +25,7 @@ import java.awt.Graphics;
  */
 public class StaticMapLayoutPanel extends AbstractLayoutPanel {
     private static final int DEFAULT_BLOCKS_PER_ROW = MapLayout.BLOCK_WIDTH;
-    private static final Dimension mapDimensions = new Dimension(BLOCK_WIDTH*PIXEL_WIDTH, BLOCK_HEIGHT*PIXEL_HEIGHT);
+    private static final Dimension MAP_DIMENSIONS = new Dimension(BLOCK_WIDTH*PIXEL_WIDTH, BLOCK_HEIGHT*PIXEL_HEIGHT);
         
     protected MapLayout layout;
     
@@ -44,9 +44,21 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
         scroller = new LayoutScrollNormaliser(this);
         setItemsPerRow(DEFAULT_BLOCKS_PER_ROW);
         
-        setSize(mapDimensions);
-        setMinimumSize(mapDimensions);
-        setPreferredSize(mapDimensions);
+        setSize(MAP_DIMENSIONS);
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return MAP_DIMENSIONS;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension preferredSize = super.getPreferredSize();
+        if (preferredSize.width < MAP_DIMENSIONS.width || preferredSize.height < MAP_DIMENSIONS.height) {
+            setPreferredSize(MAP_DIMENSIONS);
+        }
+        return MAP_DIMENSIONS;
     }
 
     @Override
@@ -56,7 +68,7 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        return mapDimensions;
+        return MAP_DIMENSIONS;
     }
 
     @Override
