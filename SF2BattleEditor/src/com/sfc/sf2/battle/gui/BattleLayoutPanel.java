@@ -9,6 +9,7 @@ import com.sfc.sf2.battle.AIPoint;
 import com.sfc.sf2.battle.AIRegion;
 import com.sfc.sf2.battle.Ally;
 import com.sfc.sf2.battle.Battle;
+import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel;
 import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
@@ -84,6 +85,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         drawEnemies(g2, x, y);
         drawAIRegions(g2, x, y);
         drawAIPoints(g2, x, y);
+        drawSelected(g2, x, y);
         drawAlerts(g2, x, y);
     }
     
@@ -115,10 +117,6 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     
     private void drawEnemies(Graphics2D g2, int battleX, int battleY) {
         if (!drawSprites) return;
-        int selectedIndex = -1;
-        if (paintMode == BattlePaintMode.Spriteset && spritesetMode == SpritesetPaintMode.Enemy) {
-            selectedIndex = selectedSpritesetEntity;
-        }
         Enemy[] enemies = battle.getSpriteset().getEnemies();
         for (int i=0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
@@ -144,31 +142,17 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 //Draw regular sprite
                 g2.drawImage(sprite.getIndexedColorImage(), targetX, targetY, null);
             }
-            if (selectedIndex == i) {
-                g2.setColor(Color.YELLOW);
-                g2.setStroke(new BasicStroke(3));
-                g2.drawRect((battleX+enemy.getX())*PIXEL_WIDTH, (battleY+enemy.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
-            }
         }
         for (int i = 0; i < enemies.length; i++) {
             Enemy enemy = enemies[i];
-            if (selectedIndex == i) {
-                g2.setColor(Color.RED);
-                drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getBackupMoveOrder(), selectedIndex == i);
-            }
-            g2.setColor(selectedIndex == i ? Color.YELLOW : Color.WHITE);
-            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder(), selectedIndex == i);
+            g2.setColor(Color.WHITE);
+            drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder(), enemy.getMoveOrderTarget());
         }
     }
 
-    private void drawAiTarget(Graphics2D g2, int mapOffsetX, int mapOffsetY, int enemyX, int enemyY, String order, boolean isSelected) {
-        int target = 0;
+    private void drawAiTarget(Graphics2D g2, int mapOffsetX, int mapOffsetY, int enemyX, int enemyY, String order, int target) {
         int targetX = -1, targetY = -1;
-        String[] orderSplit = order.split("\\|");
-        if (orderSplit.length > 1) {
-            target = Integer.parseInt(orderSplit[1]);
-        }
-        switch (orderSplit[0]) {
+        switch (order) {
             case "FOLLOW_TARGET":     //Follow target (ally)
                 Ally[] allies = battle.getSpriteset().getAllies();
                 if (target >= 0 && target < allies.length) {
@@ -199,36 +183,12 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
 
     private void drawAIRegions(Graphics2D g2, int battleX, int battleY) {
+        if (!drawAiRegions) return;
         g2.setStroke(new BasicStroke(3));
-        int highlightRegion = -1;
-        int secondaryHighlight = -1;
-        if (spritesetMode == SpritesetPaintMode.AiRegion && selectedSpritesetEntity >= 0) {
-            highlightRegion = selectedSpritesetEntity;
-        } else if (spritesetMode == SpritesetPaintMode.Enemy && selectedSpritesetEntity >= 0) {
-            int trigger = battle.getSpriteset().getEnemies()[selectedSpritesetEntity].getTriggerRegion1();
-            if (trigger >= 0 && trigger < 15) {
-                highlightRegion = trigger;
-            }
-            trigger = battle.getSpriteset().getEnemies()[selectedSpritesetEntity].getTriggerRegion2();
-            if (trigger >= 0 && trigger < 15) {
-                secondaryHighlight = trigger;
-            }
-        }
-        if (drawAiRegions) {
-            AIRegion[] regions = battle.getSpriteset().getAiRegions();
-            for (int i=0; i < regions.length; i++) {
-                if (i == highlightRegion || i == secondaryHighlight) continue;
-                g2.setColor(Color.WHITE);
-                drawRegionBounds(g2, battleX, battleY, regions[i]);
-            }
-        }
-        if (secondaryHighlight >= 0) {
-            g2.setColor(Color.RED);
-            drawRegionBounds(g2, battleX, battleY, battle.getSpriteset().getAiRegions()[secondaryHighlight]);
-        }
-        if (highlightRegion >= 0) {
-            g2.setColor(Color.YELLOW);
-            drawRegionBounds(g2, battleX, battleY, battle.getSpriteset().getAiRegions()[highlightRegion]);
+        AIRegion[] regions = battle.getSpriteset().getAiRegions();
+        for (int i=0; i < regions.length; i++) {
+            g2.setColor(Color.WHITE);
+            drawRegionBounds(g2, battleX, battleY, regions[i]);
         }
     }
     
@@ -248,11 +208,11 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
 
     private void drawAIPoints(Graphics2D g2, int battleX, int battleY) {
-        if (drawAiPoints) return;
+        if (!drawAiPoints) return;
         g2.setStroke(new BasicStroke(3));
         AIPoint[] points = battle.getSpriteset().getAiPoints();
         for (int i = 0; i < points.length; i++) {
-            g2.setColor(spritesetMode == SpritesetPaintMode.AiPoint && i == selectedSpritesetEntity ? Color.YELLOW : Color.WHITE);
+            g2.setColor(Color.WHITE);
             drawAIPoint(g2, battleX, battleY, points[i]);
         }
     }
@@ -261,6 +221,53 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             int px = battleX + point.getX();
             int py = battleY + point.getY();
             g2.drawRect(px*PIXEL_WIDTH, py*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+    }
+    
+    private void drawSelected(Graphics2D g2, int battleX, int battleY) {
+        if (selectedSpritesetEntity == -1 || spritesetMode == SpritesetPaintMode.Ally) return;
+        BattleSpriteset spriteset = battle.getSpriteset();
+        switch (spritesetMode) {
+            case Enemy:
+                Enemy enemy = spriteset.getEnemies()[selectedSpritesetEntity];
+                g2.setColor(Color.YELLOW);
+                g2.setStroke(new BasicStroke(3));
+                g2.drawRect((battleX+enemy.getX())*PIXEL_WIDTH, (battleY+enemy.getY())*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+                g2.setColor(Color.RED);
+                drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getBackupMoveOrder(), enemy.getBackupMoveOrderTarget());
+                if (enemy.getBackupMoveOrder().equals("MOVE_TO")) {
+                    int target = enemy.getBackupMoveOrderTarget();
+                    if (target >= 0 && target < spriteset.getAiPoints().length) {
+                        drawAIPoint(g2, battleX, battleY, spriteset.getAiPoints()[target]);
+                    }
+                }
+                g2.setColor(Color.GREEN);
+                drawAiTarget(g2, battleX, battleY, enemy.getX(), enemy.getY(), enemy.getMoveOrder(), enemy.getMoveOrderTarget());
+                if (enemy.getMoveOrder().equals("MOVE_TO")) {
+                    int target = enemy.getMoveOrderTarget();
+                    if (target >= 0 && target < spriteset.getAiPoints().length) {
+                        drawAIPoint(g2, battleX, battleY, spriteset.getAiPoints()[target]);
+                    }
+                }
+                int triggerRegion = enemy.getTriggerRegion2();
+                if (triggerRegion >=0 && triggerRegion < spriteset.getAiRegions().length) {
+                    g2.setColor(Color.RED);
+                    drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion]);
+                }
+                triggerRegion = enemy.getTriggerRegion1();
+                if (triggerRegion >=0 && triggerRegion < spriteset.getAiRegions().length) {
+                    g2.setColor(Color.GREEN);
+                    drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion]);
+                }
+                break;
+            case AiRegion:
+                g2.setColor(Color.YELLOW);
+                drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[selectedSpritesetEntity]);
+                break;
+            case AiPoint:
+                g2.setColor(Color.YELLOW);
+                drawAIPoint(g2, battleX, battleY, spriteset.getAiPoints()[selectedSpritesetEntity]);
+                break;
+        }   
     }
     
     private void drawAlerts(Graphics2D g2, int battleX, int battleY) {
@@ -331,30 +338,23 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         redraw();
     }
 
-    public boolean isDrawSprites() {
-        return drawSprites;
-    }
-
-    public void setDrawSprites(boolean drawSprites, int selectedSprite) {
-        if (this.drawSprites != drawSprites || this.selectedSpritesetEntity != selectedSprite) {
+    public void setDrawSprites(boolean drawSprites) {
+        if (this.drawSprites != drawSprites) {
             this.drawSprites = drawSprites;
-            this.selectedSpritesetEntity = selectedSprite;
             redraw();
         }
     }
 
-    public void setDrawAiRegions(boolean drawAiRegions, int selectedAIRegion) {
-        if (this.drawAiRegions != drawAiRegions || this.selectedSpritesetEntity != selectedAIRegion) {
+    public void setDrawAiRegions(boolean drawAiRegions) {
+        if (this.drawAiRegions != drawAiRegions) {
             this.drawAiRegions = drawAiRegions;
-            this.selectedSpritesetEntity = selectedAIRegion;
             redraw();
         }
     }
 
-    public void setDrawAiPoints(boolean drawAiPoints, int selectedAIPoint) {
-        if (this.drawAiPoints != drawAiPoints || this.selectedSpritesetEntity != selectedAIPoint) {
+    public void setDrawAiPoints(boolean drawAiPoints) {
+        if (this.drawAiPoints != drawAiPoints) {
             this.drawAiPoints = drawAiPoints;
-            this.selectedSpritesetEntity = selectedAIPoint;
             redraw();
         }
     }
@@ -398,18 +398,23 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
 
     public void setSelectedEnemy(int selectedEnemy) {
-        if (this.selectedSpritesetEntity != selectedEnemy) {
-            this.selectedSpritesetEntity = selectedEnemy;
-            redraw();
-        }
+        setSelectedAlly(selectedEnemy);
     }
 
     public int getSelectedAIRegion() {
         return selectedSpritesetEntity;
     }
 
+    public void setSelectedAIRegion(int selectedRegion) {
+        setSelectedAlly(selectedRegion);
+    }
+
     public int getSelectedAIPoint() {
         return selectedSpritesetEntity;
+    }
+
+    public void setSelectedAIPoint(int selectedPoit) {
+        setSelectedAlly(selectedPoit);
     }
 
     public List<int[]> getActions() {

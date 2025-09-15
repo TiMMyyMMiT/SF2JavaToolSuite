@@ -91,9 +91,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         drawSprites = jCheckBox4.isSelected();
         drawAiRegions = jCheckBox6.isSelected();
         drawAiPoints = jCheckBox7.isSelected();
-        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected(), -1);
-        battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
-        battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
+        battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
+        battleLayoutPanel.setDrawAiRegions(drawAiRegions);
+        battleLayoutPanel.setDrawAiPoints(drawAiPoints);
         
         jTabbedPane2StateChanged(null);
         jTabbedPane3StateChanged(null);
@@ -962,12 +962,13 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel35)
-                    .addComponent(jComboBox_Order2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel42)
-                        .addComponent(jSpinner_OrderTarget2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jSpinner_OrderTarget2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel35)
+                        .addComponent(jComboBox_Order2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -1068,10 +1069,11 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel39)
-                    .addComponent(jSpinner_Unknown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(infoButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel39)
+                        .addComponent(jSpinner_Unknown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1544,7 +1546,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
         drawSprites = jCheckBox4.isSelected();
-        changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
+        battleLayoutPanel.setDrawSprites(drawSprites);
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
@@ -1726,12 +1728,12 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         drawAiRegions = jCheckBox6.isSelected();
-        changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
+        battleLayoutPanel.setDrawAiRegions(drawAiRegions);
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
         drawAiPoints = jCheckBox7.isSelected();
-        changeDrawMode(drawSprites, drawAiRegions, drawAiPoints);
+        battleLayoutPanel.setDrawAiPoints(drawAiPoints);
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1753,9 +1755,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jCheckBox4.setSelected(sprites);
         jCheckBox6.setSelected(aiRegions);
         jCheckBox7.setSelected(aiModes);
-        battleLayoutPanel.setDrawSprites(sprites, -1);
-        battleLayoutPanel.setDrawAiRegions(aiRegions, -1);
-        battleLayoutPanel.setDrawAiPoints(aiModes, -1);
+        battleLayoutPanel.setDrawSprites(sprites);
+        battleLayoutPanel.setDrawAiRegions(aiRegions);
+        battleLayoutPanel.setDrawAiPoints(aiModes);
     }
     
     private void OnEnemyDataChanged(Object data, int column) {
@@ -1794,7 +1796,6 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (row != battleLayoutPanel.getSelectedEnemy()) {
             battleLayoutPanel.setSelectedEnemy(row);
             UpdateEnemyControls(row);
-            battleLayoutPanel.redraw();
         }
     }
 
@@ -1809,9 +1810,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (e.getValueIsAdjusting()) return;
         int row = tableAIRegions.jTable.getSelectedRow();
         if (row != battleLayoutPanel.getSelectedAIRegion()) {
-            battleLayoutPanel.setDrawAiRegions(true, row);
-        } else if (row == -1) {
-            battleLayoutPanel.setDrawAiRegions(drawAiRegions, -1);
+            battleLayoutPanel.setDrawAiRegions(true);
+            battleLayoutPanel.setSelectedAIRegion(row);
         }
     }
 
@@ -1826,10 +1826,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (e.getValueIsAdjusting()) return;
         int row = tableAIPoints.jTable.getSelectedRow();
         if (row != battleLayoutPanel.getSelectedAIPoint()) {
-            battleLayoutPanel.setDrawAiPoints(true, row);
-            UpdateEnemyControls(row);
-        } else if (row == -1) {
-            battleLayoutPanel.setDrawAiPoints(drawAiPoints, -1);
+            battleLayoutPanel.setDrawAiPoints(true);
+            battleLayoutPanel.setSelectedAIPoint(row);
         }
     }
     
