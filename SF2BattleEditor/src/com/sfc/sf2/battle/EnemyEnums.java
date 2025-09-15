@@ -22,8 +22,12 @@ public class EnemyEnums extends AbstractEnums {
     private final LinkedHashMap<String, Integer> spawnParams;
     private final LinkedHashMap<String, Integer> items;
     private final LinkedHashMap<String, Integer> itemFlags;
+    
+    private final int specialSpritesStart;
+    private final int specialSpritesEnd;
 
-    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> mapSprites, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders, LinkedHashMap<String, Integer> spawnParams, LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> itemFlags) {
+    public EnemyEnums(LinkedHashMap<String, Integer> enemies, LinkedHashMap<String, Integer> mapSprites, LinkedHashMap<String, Integer> aiCommandSets, LinkedHashMap<String, Integer> aiOrders,
+                LinkedHashMap<String, Integer> spawnParams, LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> itemFlags, int specialSpritesStart, int specialSpritesEnd) {
         this.enemies = enemies;
         this.mapSprites = mapSprites;
         this.aiCommandSets = aiCommandSets;
@@ -31,6 +35,8 @@ public class EnemyEnums extends AbstractEnums {
         this.spawnParams = spawnParams;
         this.items = items;
         this.itemFlags = itemFlags;
+        this.specialSpritesStart = specialSpritesStart;
+        this.specialSpritesEnd = specialSpritesEnd;
     }
 
     public LinkedHashMap<String, Integer> getEnemies() {
@@ -59,6 +65,14 @@ public class EnemyEnums extends AbstractEnums {
 
     public LinkedHashMap<String, Integer> getItemFlags() {
         return itemFlags;
+    }
+
+    public int getSpecialSpritesStart() {
+        return specialSpritesStart;
+    }
+
+    public int getSpecialSpritesEnd() {
+        return specialSpritesEnd;
     }
     
     //Helper functions

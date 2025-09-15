@@ -23,11 +23,14 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
     private int itemEquippedValue = 0;
     private int itemNothingValue = 0;
     
+    private int specialSpritesStart = -1;
+    private int specialSpritesEnd = -1;
+    
     private boolean foundItemFlags;
     private LinkedHashMap<String, Integer> itemFlags;
 
     public EnemyEnumsAsmProcessor() {
-        super(new String[] { "Enemies", "Mapsprites", "AiCommandsets", "AiOrders", "SpawnSettings", "Items (bitfield)" });
+        super(new String[] { "Enemies", "Mapsprites", "AiCommandsets", "AiOrders", "SpawnSettings", "Items (bitfield)", "Mapsprites_Properties" });
     }
 
     @Override
@@ -42,7 +45,7 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
         switch (categoryIndex) {
             case 0:
                 if (line.startsWith("ENEMY_")) {
-                    line = line.substring(line.indexOf("_") + 1);
+                    line = line.substring(line.indexOf('_') + 1);
                     String name = line.substring(0, line.indexOf(":"));
                     int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                     asmData.put(name, value);
@@ -50,7 +53,7 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
                 break;
             case 1:
                 if (line.startsWith("MAPSPRITE_")) {
-                    line = line.substring(line.indexOf("_") + 1);
+                    line = line.substring(line.indexOf('_') + 1);
                     String name = line.substring(0, line.indexOf(":"));
                     int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                     asmData.put(name, value);
@@ -58,7 +61,7 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
                 break;
             case 2:
                 if (line.startsWith("AICOMMANDSET_")) {
-                    line = line.substring(line.indexOf("_") + 1);
+                    line = line.substring(line.indexOf('_') + 1);
                     String command = line.substring(0, line.indexOf(":"));
                     int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                     asmData.put(command, value);
@@ -66,7 +69,7 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
                 break;
             case 3:
                 if (line.startsWith("AIORDER_")) {
-                    line = line.substring(line.indexOf("_") + 1);
+                    line = line.substring(line.indexOf('_') + 1);
                     String order = line.substring(0, line.indexOf(":"));
                     int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                     asmData.put(order, value);
@@ -74,7 +77,7 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
                 break;
             case 4:
                 if (line.startsWith("SPAWN_")) {
-                    line = line.substring(line.indexOf("_") + 1);
+                    line = line.substring(line.indexOf('_') + 1);
                     String spawn = line.substring(0, line.indexOf(":"));
                     int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                     asmData.put(spawn, value);
@@ -114,11 +117,23 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
                     }
                 }
                 break;
+            case 6:
+                if (line.startsWith("MAPSPRITES_SPECIALS_")) {
+                    line = line.substring(line.lastIndexOf('_') + 1);
+                    String id = line.substring(0, line.indexOf(":"));
+                    int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
+                    if (id.equals("START")) {
+                        specialSpritesStart = value;
+                    } else if (id.equals("END")) {
+                        specialSpritesEnd = value;
+                    }
+                }
+                break;
         }
     }
 
     @Override
     protected EnemyEnums createEnumsData(LinkedHashMap<String, Integer>[] dataSets) {
-        return new EnemyEnums(dataSets[0], dataSets[1], dataSets[2], dataSets[3], dataSets[4], dataSets[5], itemFlags);
+        return new EnemyEnums(dataSets[0], dataSets[1], dataSets[2], dataSets[3], dataSets[4], dataSets[5], itemFlags, specialSpritesStart, specialSpritesEnd);
     }
 }

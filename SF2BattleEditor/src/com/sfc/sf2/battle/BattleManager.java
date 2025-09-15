@@ -99,14 +99,20 @@ public class BattleManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");
     }
     
-    public void importMapspriteData(Path basePalettePath, Path mapspriteEntriesPath, Path enemyMapspritesPath, Path mapspriteEnumsPath) throws IOException, AsmException, DisassemblyException {
+    public void importMapspriteData(Path basePalettePath, Path mapspriteEntriesPath, Path enemyMapspritesPath, Path specialSpritesEntriesPath, Path specialSpritesPointersPath, Path mapspriteEnumsPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importEnemyData");
         if (enemyEnums == null) {
             enemyEnums = enemyEnumsAsmProcessor.importAsmData(mapspriteEnumsPath, null);
             Palette palette = paletteManager.importDisassembly(basePalettePath, true);
             EntriesAsmData mapspriteEntries = entriesAsmProcessor.importAsmData(mapspriteEntriesPath, null);
             String[] enemyMapsprites = (String[])enemyMapspritesAsmProcessor.importAsmData(enemyMapspritesPath, null);
-            enemyData = processEnemyData(enemyEnums, mapspriteEntries, enemyMapsprites, enemyEnums.getMapSprites(), palette);
+            EntriesAsmData specialSpritesEntries = entriesAsmProcessor.importAsmData(specialSpritesPointersPath, null);
+            EntriesAsmData temp = entriesAsmProcessor.importAsmData(specialSpritesEntriesPath, null);
+            //Special sprites entries is split into 2 files (unlike all of the others), therefore we need to join them
+            for (int i = 0; i < temp.entriesCount(); i++) {
+                specialSpritesEntries.addPath(temp.getUniqueEntries(i), temp.getPathForUnique(i));
+            }
+            enemyData = processEnemyData(enemyEnums, mapspriteEntries, enemyMapsprites, enemyEnums.getMapSprites(), specialSpritesEntries, palette);
             Console.logger().info("Mapsprite data loaded from " + mapspriteEntriesPath + " and " + mapspriteEnumsPath);
         } else {
             Console.logger().warning("Mapsprite data already loaded.");
@@ -114,7 +120,7 @@ public class BattleManager extends AbstractManager {
         Console.logger().finest("EXITING importEnemyData");
     }
     
-    private EnemyData[] processEnemyData(EnemyEnums enemyEnums, EntriesAsmData mapspriteEntries, String[] enemyMapsprites, LinkedHashMap<String, Integer> mapspriteEnumsData, Palette palette) throws IOException, DisassemblyException {
+    private EnemyData[] processEnemyData(EnemyEnums enemyEnums, EntriesAsmData mapspriteEntries, String[] enemyMapsprites, LinkedHashMap<String, Integer> mapspriteEnumsData, EntriesAsmData specialSpritesEntries, Palette palette) throws IOException, DisassemblyException {
         ArrayList<EnemyData> enemyDataList = new ArrayList(enemyEnums.getEnemies().size());
         LinkedHashMap<String, Integer> enemies = enemyEnums.getEnemies();
         for (Map.Entry<String, Integer> entry : enemies.entrySet()) {
@@ -126,11 +132,9 @@ public class BattleManager extends AbstractManager {
                 Path mapspritePath = null;
                 try {
                     int mapSpriteIndex = mapspriteEnumsData.get(mapSprite);
-                    if (mapSpriteIndex > 1010) {    //Special sprite
-                        //TODO Handle correctly once: https://github.com/ShiningForceCentral/SF2DISASM/issues/57 is resolvedv
-                        String specialName = shortName.toLowerCase();
-                        if (specialName.indexOf('_') != -1) specialName = specialName.substring(0, specialName.indexOf('_'));
-                        mapspritePath = Path.of(String.format("data/graphics/specialsprites/%s.bin", specialName));
+                    if (mapSpriteIndex >= enemyEnums.getSpecialSpritesStart()) {    //Special sprite
+                        int specialIndex = enemyEnums.getSpecialSpritesEnd()-mapSpriteIndex;    //Special sprites are in reverse order for some reason
+                        mapspritePath = PathHelpers.getIncbinPath().resolve(specialSpritesEntries.getPathForEntry(specialIndex));
                         if (mapspritePath != null) {
                             mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
                             loadedSprite = specialSpriteManager.importDisassembly(mapspritePath, 2, 4, 3, null);

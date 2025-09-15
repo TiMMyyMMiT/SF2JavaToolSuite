@@ -290,6 +290,8 @@
                                                   <Component id="fileButton7" pref="344" max="32767" attributes="0"/>
                                                   <Component id="fileButton8" alignment="0" pref="0" max="32767" attributes="0"/>
                                                   <Component id="fileButton13" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="fileButton14" alignment="1" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="fileButton15" alignment="0" pref="0" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
@@ -305,8 +307,12 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="fileButton13" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton14" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton15" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                               <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
+                                              <EmptySpace pref="73" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -334,6 +340,18 @@
                                       <Properties>
                                         <Property name="filePath" type="java.lang.String" value="..\u005cstats\u005cenemies\u005cenemymapsprites.asm" containsInvalidXMLChars="true"/>
                                         <Property name="labelText" type="java.lang.String" value="Enemy mapsprites :"/>
+                                      </Properties>
+                                    </Component>
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton14">
+                                      <Properties>
+                                        <Property name="filePath" type="java.lang.String" value="..\u005cgraphics\u005cspecialsprites\u005centries.asm" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Special sprites entries :"/>
+                                      </Properties>
+                                    </Component>
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton15">
+                                      <Properties>
+                                        <Property name="filePath" type="java.lang.String" value="..\u005cgraphics\u005cspecialsprites\u005cpointers.asm" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Special sprites pointers :"/>
                                       </Properties>
                                     </Component>
                                   </SubComponents>

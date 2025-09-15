@@ -173,6 +173,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         fileButton7 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton8 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton13 = new com.sfc.sf2.core.gui.controls.FileButton();
+        fileButton14 = new com.sfc.sf2.core.gui.controls.FileButton();
+        fileButton15 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel16 = new javax.swing.JPanel();
         jSpinner4 = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
@@ -357,6 +359,12 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         fileButton13.setFilePath("..\\stats\\enemies\\enemymapsprites.asm");
         fileButton13.setLabelText("Enemy mapsprites :");
 
+        fileButton14.setFilePath("..\\graphics\\specialsprites\\entries.asm");
+        fileButton14.setLabelText("Special sprites entries :");
+
+        fileButton15.setFilePath("..\\graphics\\specialsprites\\pointers.asm");
+        fileButton15.setLabelText("Special sprites pointers :");
+
         javax.swing.GroupLayout accordionPanel2Layout = new javax.swing.GroupLayout(accordionPanel2);
         accordionPanel2.setLayout(accordionPanel2Layout);
         accordionPanel2Layout.setHorizontalGroup(
@@ -367,7 +375,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     .addComponent(fileButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                     .addComponent(fileButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                     .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fileButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         accordionPanel2Layout.setVerticalGroup(
@@ -380,8 +390,12 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileButton13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileButton14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileButton15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(fileButton8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Battle :"));
@@ -1477,10 +1491,12 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         Path basePalettePath = PathHelpers.getBasePath().resolve(fileButton6.getFilePath());
         Path mapspriteEntriesPath = PathHelpers.getBasePath().resolve(fileButton7.getFilePath());
         Path enemyMapspritesPath = PathHelpers.getBasePath().resolve(fileButton13.getFilePath());
+        Path specialSpritesEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
+        Path specialSpritesPointersPath = PathHelpers.getBasePath().resolve(fileButton15.getFilePath());
         Path mapspriteEnumsPath = PathHelpers.getBasePath().resolve(fileButton8.getFilePath());
         
         try {
-            battleManager.importMapspriteData(basePalettePath, mapspriteEntriesPath, enemyMapspritesPath, mapspriteEnumsPath);
+            battleManager.importMapspriteData(basePalettePath, mapspriteEntriesPath, enemyMapspritesPath, specialSpritesEntriesPath, specialSpritesPointersPath, mapspriteEnumsPath);
         } catch (Exception ex) {
             battleManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
@@ -1872,6 +1888,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton11;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton12;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton13;
+    private com.sfc.sf2.core.gui.controls.FileButton fileButton14;
+    private com.sfc.sf2.core.gui.controls.FileButton fileButton15;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton4;
