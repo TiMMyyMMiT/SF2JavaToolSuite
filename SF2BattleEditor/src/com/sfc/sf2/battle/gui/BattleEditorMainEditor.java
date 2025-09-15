@@ -1448,7 +1448,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if(jComboBox1.getSelectedIndex()>=0){
+        if (jComboBox1.getSelectedIndex() >= 0) {
             battleLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed

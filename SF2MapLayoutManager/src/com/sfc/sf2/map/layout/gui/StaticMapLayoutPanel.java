@@ -57,8 +57,9 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
         Dimension preferredSize = super.getPreferredSize();
         if (preferredSize.width < MAP_DIMENSIONS.width || preferredSize.height < MAP_DIMENSIONS.height) {
             setPreferredSize(MAP_DIMENSIONS);
+            return MAP_DIMENSIONS;
         }
-        return MAP_DIMENSIONS;
+        return preferredSize;
     }
 
     @Override
