@@ -29,7 +29,7 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
         int imageWidth = raster.getWidth();
         int imageHeight = raster.getHeight();
         if (imageWidth%PIXEL_WIDTH != 0 || imageHeight%PIXEL_HEIGHT != 0) {
-            throw new RawImageException("Warning : image dimensions are not a multiple of 8 (pixels per tile).");
+            throw new RawImageException("Warning : image dimensions are not a multiple of " + PIXEL_WIDTH + " (pixels per tile).");
         }
     }
     
@@ -89,17 +89,14 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
         int tileId = 0;
         //Console.logger().finest("Building tileset from coordinates "+tileX+":"+tileY+":"+(tileX+tilesPerRow)+":"+(tileY+tilesPerColumn));
         for (int t = 0; t < tiles.length; t++) {
-            int[] pixels = new int[PIXEL_WIDTH*PIXEL_WIDTH];
+            int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
             int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
             int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
             //Console.logger().finest("Building tile from coordinates "+x+":"+y);
-            Tile tile = new Tile();
-            tile.setId(tileId);
-            tile.setPalette(palette);
             raster.getPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
-            tile.setPixels(pixels);
+            Tile tile = new Tile(tileId, pixels, palette);
             //Console.logger().finest(tile.toString());
-            tiles[tileId] = tile;   
+            tiles[tileId] = tile;
             tileId++;
         }
         return new Tileset(null, tiles, tilesPerRow);

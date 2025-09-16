@@ -100,8 +100,6 @@ public class MapBlocksetDecoder {
     }   
     
     private void outputInitialBlocks() {
-        Tile emptyTile = new Tile();
-        emptyTile.setPalette(palette);
         outputData.add((short)0);
         outputData.add((short)0);
         outputData.add((short)0);
@@ -131,7 +129,6 @@ public class MapBlocksetDecoder {
         outputData.add((short)0x24E);
         outputData.add((short)0x24F);
         outputData.add((short)0xA4E);
-                
     }
     
     private int getCommandNumber() {
@@ -260,21 +257,14 @@ public class MapBlocksetDecoder {
             Tile tile;
             if (origTile == null) {
                 tile = Tile.EmptyTile(palette);
+                tile.setId(value&0x3FF);
             } else {
-                tile = new Tile();
-                tile.setPalette(palette);
-                tile.setPixels(origTile.getPixels());
-                if((value&0x8000)!=0){
-                    tile.setHighPriority(true);
-                }
-                if((value&0x1000)!=0){
-                    tile = Tile.vFlip(tile);
-                }
-                if((value&0x0800)!=0){
-                    tile = Tile.hFlip(tile);
-                }
+                boolean priority = (value&0x8000) != 0;
+                boolean hFlip = (value&0x0800) != 0;
+                boolean vFlip = (value&0x1000) != 0;
+                int[] pixels = Tile.flipPixels(origTile.getPixels(), hFlip != origTile.ishFlip(), vFlip != origTile.isvFlip());
+                tile = new Tile(value&0x3FF, pixels, palette, priority, hFlip, vFlip);
             }
-            tile.setId(value&0x3FF);
             outputTiles[i] = tile;
             //System.out.println(i+"="+tile.getId()+", "+tile.isHighPriority()+" "+tile.ishFlip()+" "+tile.isvFlip());
         }

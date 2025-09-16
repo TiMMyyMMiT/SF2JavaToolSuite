@@ -107,7 +107,7 @@ public class LayoutCoordsGridDisplay extends BaseLayoutComponent {
             float y = topCoords ? halfPadding+1 + displayScale*0.75f : i*coordsSize+offset;
             g2.drawString(item, x, y);
         }
-        g2.setColor(SettingsManager.getGlobalSettings().getIsDarkTheme() ? Color.BLACK : Color.WHITE);
+        g2.setColor(Color.BLACK);
         for (int i = 0; i <= count; i++) {
             if (topCoords) {
                 g2.drawLine(i*coordsSize, 0, i*coordsSize, padding);

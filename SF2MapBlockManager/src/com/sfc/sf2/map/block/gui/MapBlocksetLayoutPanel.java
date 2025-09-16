@@ -6,10 +6,12 @@
 package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.*;
 import com.sfc.sf2.graphics.Block;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import java.awt.BasicStroke;
@@ -18,33 +20,36 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 /**
  *
  * @author wiz
  */
-public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements MouseListener, MouseMotionListener {
+public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     
-    private static final int DEFAULT_BLOCKS_PER_ROW = 8;
+    private static final int DEFAULT_BLOCKS_PER_ROW = 10;
     
     public static int selectedBlockIndexLeft;
     public static int selectedBlockIndexRight;
     
     private BlockSlotPanel leftSlotBlockPanel;
     private BlockSlotPanel rightSlotBlockPanel;
+    private Color leftSlotColor = Color.YELLOW;
+    private Color rightSlotColor = Color.GREEN;
     
     private MapBlockset blockset;
     private boolean showPriority = false;
 
     public MapBlocksetLayoutPanel() {
         super();
-        tilesPerRow = DEFAULT_BLOCKS_PER_ROW;
-        setGridDimensions(MapBlock.PIXEL_WIDTH, MapBlock.PIXEL_HEIGHT);
-        
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/3);
+        scale = new LayoutScale(2);
+        grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
+        coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, true, 0, 10, 1);
+        coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, true);
+        mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
+        scroller = new LayoutScrollNormaliser(this);
+        setItemsPerRow(DEFAULT_BLOCKS_PER_ROW);
     }
 
     @Override
@@ -54,43 +59,34 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
 
     @Override
     protected Dimension getImageDimensions() {
-        return blockset.getDimensions(getBlocksPerRow());
+        return blockset.getDimensions(getItemsPerRow());
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
+        int blocksPerRow = getItemsPerRow();
         graphics.drawImage(blockset.getIndexedColorImage(), 0, 0, null);
         if (showPriority) {
-            MapBlock[] blocks = blockset.getBlocks();
-            for (int i=0; i < blocks.length; i++) {
-                int baseX = (i%tilesPerRow)*PIXEL_WIDTH;
-                int baseY = (i/tilesPerRow)*PIXEL_HEIGHT;
-                Tile[] tiles = blocks[i].getTiles();
-                for (int t = 0; t < tiles.length; t++) {
-                    if (tiles[t].isHighPriority()) {
-                        graphics.setColor(Color.BLACK);
-                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH+2, baseY+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT+2, 4, 4);
-                        graphics.setColor(Color.YELLOW);
-                        graphics.fillRect(baseX+(t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH+3, baseY+(t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT+3, 2, 2);
-                    }
-                }
-            }
+            MapBlockHelpers.drawTilePriorities(graphics, blockset.getBlocks(), blocksPerRow);
+        }
+        if (selectedBlockIndexLeft >= 0) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(leftSlotColor);
+            int baseX = (selectedBlockIndexLeft%blocksPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedBlockIndexLeft/blocksPerRow)*PIXEL_HEIGHT;
+            g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
+        }
+        if (selectedBlockIndexRight >= 0) {
+            Graphics2D g2 = (Graphics2D)graphics;
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(rightSlotColor);
+            int baseX = (selectedBlockIndexRight%blocksPerRow)*PIXEL_WIDTH;
+            int baseY = (selectedBlockIndexRight/blocksPerRow)*PIXEL_HEIGHT;
+            g2.drawRect(baseX-2, baseY-2, PIXEL_WIDTH+4, PIXEL_HEIGHT+4);
         }
     }
     
-    @Override
-    protected void paintOverGrid(Graphics graphics, int scale) {
-        super.paintOverGrid(graphics, scale);
-        if (selectedBlockIndexLeft >= 0) {
-            Graphics2D g2 = (Graphics2D)graphics;
-            g2.setStroke(new BasicStroke(2*scale));
-            g2.setColor(Color.YELLOW);
-            int baseX = (selectedBlockIndexLeft%tilesPerRow)*PIXEL_WIDTH*scale;
-            int baseY = (selectedBlockIndexLeft/tilesPerRow)*PIXEL_HEIGHT*scale;
-            g2.drawRect(baseX-2*scale, baseY-2*scale, PIXEL_WIDTH*scale+4*scale, PIXEL_HEIGHT*scale+4*scale);
-        }
-    }
-
     public MapBlockset getBlockset() {
         return blockset;
     }
@@ -99,14 +95,6 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
         this.blockset = blockset;
         selectedBlockIndexLeft = selectedBlockIndexRight = -1;
         this.redraw();
-    }
-    
-    public int getBlocksPerRow() {
-        return tilesPerRow;
-    }
-
-    public void setBlocksPerRow(int blocksPerRow) {
-        setItemsPerRow(blocksPerRow);
     }
     
     public boolean getShowPriority() {
@@ -168,19 +156,22 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
         this.rightSlotBlockPanel = rightSlotBlockPanel;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
+    public void setLeftSlotColor(Color leftSlotColor) {
+        this.leftSlotColor = leftSlotColor;
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        int x = e.getX() / (getDisplayScale()*PIXEL_WIDTH);
-        int y = e.getY() / (getDisplayScale()*PIXEL_HEIGHT);
-        int blockIndex = x+y*getBlocksPerRow();
+    public void setRightSlotColor(Color rightSlotColor) {
+        this.rightSlotColor = rightSlotColor;
+    }
+
+    private void onMousePressed(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
+        int x = evt.x();
+        int y = evt.y();
+        int blockIndex = x+y*getItemsPerRow();
         if (blockIndex < 0 || blockIndex >= blockset.getBlocks().length) {
             return;
         }
-        if (e.getButton() == MouseEvent.BUTTON1) {
+        if (evt.mouseButton() == MouseEvent.BUTTON1) {
             if (selectedBlockIndexLeft == blockIndex) {
                 setLeftSelectedIndex(-1);
             } else {
@@ -188,7 +179,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
             }
             this.revalidate();
             this.repaint();
-        }else if (e.getButton() == MouseEvent.BUTTON3) {
+        } else if (evt.mouseButton() == MouseEvent.BUTTON3) {
             if (selectedBlockIndexRight == blockIndex) {
                 setRightSelectedIndex(-1);
             } else {
@@ -197,17 +188,6 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel implements Mouse
             this.revalidate();
             this.repaint();
         }
-        //System.out.println("Blockset press "+e.getButton()+" "+x+" - "+y);
+        //System.out.println("Blockset press "+evt.mouseButton()+" "+x+" - "+y);
     }
-
-    @Override
-    public void mouseReleased(MouseEvent e) { }
-    @Override
-    public void mouseEntered(MouseEvent e) { }
-    @Override
-    public void mouseExited(MouseEvent e) { }
-    @Override
-    public void mouseDragged(MouseEvent e) { }
-    @Override
-    public void mouseMoved(MouseEvent e) { }
 }
