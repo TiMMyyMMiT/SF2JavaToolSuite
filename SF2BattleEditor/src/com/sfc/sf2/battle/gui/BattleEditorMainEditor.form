@@ -312,7 +312,7 @@
                                               <Component id="fileButton15" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                               <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="73" max="32767" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>

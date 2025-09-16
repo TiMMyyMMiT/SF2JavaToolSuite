@@ -116,6 +116,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jSpinner6.setValue(coords.getHeight());
         jSpinner7.setValue(coords.getTrigX());
         jSpinner8.setValue(coords.getTrigY());
+        UpdateEnemyControls(-1);
         
         BattleSpriteset spriteset = battleManager.getBattle().getSpriteset();
         if (spriteset == null) {
@@ -1529,6 +1530,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jSpinner_OrderTarget2.setEnabled(enabled);
         jComboBox_Items.setEnabled(enabled);
         multiComboBoxItemFlags.setEnabled(enabled);
+        jSpinner_Unknown.setEnabled(enabled);
               
         if (selectedRow != -1) {
             Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
@@ -1556,6 +1558,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                     }
                 }
                 multiComboBoxItemFlags.setEnabled(!enemy.getItem().equals("NOTHING"));
+                jSpinner_Unknown.setValue(enemy.getUnknown());
             }
         }
     }
