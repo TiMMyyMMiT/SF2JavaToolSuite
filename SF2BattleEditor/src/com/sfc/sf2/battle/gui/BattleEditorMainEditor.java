@@ -5,6 +5,9 @@
  */
 package com.sfc.sf2.battle.gui;
 
+import com.sfc.sf2.battle.AIPoint;
+import com.sfc.sf2.battle.AIRegion;
+import com.sfc.sf2.battle.Ally;
 import com.sfc.sf2.battle.BattleManager;
 import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
@@ -33,8 +36,8 @@ import javax.swing.table.TableColumnModel;
  */
 public class BattleEditorMainEditor extends AbstractMainEditor {
     
-    private TerrainSettings terrainSettings = new TerrainSettings();
-    private BattleManager battleManager = new BattleManager();
+    private final TerrainSettings terrainSettings = new TerrainSettings();
+    private final BattleManager battleManager = new BattleManager();
     
     private boolean drawSprites;
     private boolean drawAiRegions;
@@ -1643,6 +1646,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
         int index = jTabbedPane2.getSelectedIndex();
+        battleLayoutPanel.setSelectedAlly(-1);
         switch (index) {
             case 0:
                 battleLayoutPanel.setPaintMode(BattlePaintMode.Terrain);
@@ -1660,6 +1664,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
 
     private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
         int index = jTabbedPane3.getSelectedIndex();
+        battleLayoutPanel.setSelectedAlly(-1);
         switch (index) {
             case 0:
                 battleLayoutPanel.setSpritesetMode(SpritesetPaintMode.Ally);
@@ -1792,6 +1797,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (row == battleLayoutPanel.getSelectedAlly()) {
             battleLayoutPanel.redraw();
         }
+        if (e.getType() == TableModelEvent.DELETE || e.getType() == TableModelEvent.INSERT) {
+            battleLayoutPanel.getBattle().getSpriteset().setAllies(allyPropertiesTableModel.getTableData(Ally[].class));
+        }
     }
 
     private void onTableAlliesSelectionChanged(ListSelectionEvent e) {
@@ -1806,6 +1814,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         int row = e.getFirstRow();
         if (row == battleLayoutPanel.getSelectedEnemy()) {
             battleLayoutPanel.redraw();
+        }
+        if (e.getType() == TableModelEvent.DELETE || e.getType() == TableModelEvent.INSERT) {
+            battleLayoutPanel.getBattle().getSpriteset().setEnemies(enemyPropertiesTableModel.getTableData(Enemy[].class));
         }
     }
 
@@ -1823,6 +1834,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (row == battleLayoutPanel.getSelectedAIRegion()) {
             battleLayoutPanel.redraw();
         }
+        if (e.getType() == TableModelEvent.DELETE || e.getType() == TableModelEvent.INSERT) {
+            battleLayoutPanel.getBattle().getSpriteset().setAiRegions(aIRegionPropertiesTableModel.getTableData(AIRegion[].class));
+        }
     }
 
     private void onTableAIRegionsSelectionChanged(ListSelectionEvent e) {
@@ -1838,6 +1852,9 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         int row = e.getFirstRow();
         if (row == battleLayoutPanel.getSelectedAIPoint()) {
             battleLayoutPanel.redraw();
+        }
+        if (e.getType() == TableModelEvent.DELETE || e.getType() == TableModelEvent.INSERT) {
+            battleLayoutPanel.getBattle().getSpriteset().setAiPoints(aIPointPropertiesTableModel.getTableData(AIPoint[].class));
         }
     }
 
