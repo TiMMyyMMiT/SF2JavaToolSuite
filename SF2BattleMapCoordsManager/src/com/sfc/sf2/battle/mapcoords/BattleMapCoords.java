@@ -11,7 +11,6 @@ package com.sfc.sf2.battle.mapcoords;
  */
 public class BattleMapCoords {
     
-    private int index;
     private int map;
     private int x;
     private int y;
@@ -20,12 +19,14 @@ public class BattleMapCoords {
     private int trigX;
     private int trigY;
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
+    public BattleMapCoords(int map, int x, int y, int width, int height, int trigX, int trigY) {
+        this.map = map;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.trigX = trigX;
+        this.trigY = trigY;
     }
 
     public int getMap() {
@@ -83,6 +84,13 @@ public class BattleMapCoords {
     public void setTrigY(int trigY) {
         this.trigY = trigY;
     }
-
     
+    public static BattleMapCoords EmptyBattleMapCoords() {
+        return new BattleMapCoords(3, 10, 10, 10, 10, 255, 255);
+    }
+
+    @Override
+    public BattleMapCoords clone() {
+        return new BattleMapCoords(map, x, y, width, height, trigX, trigY);
+    }
 }

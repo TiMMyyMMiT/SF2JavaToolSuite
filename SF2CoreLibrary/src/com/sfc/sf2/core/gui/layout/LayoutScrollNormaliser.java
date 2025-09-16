@@ -10,7 +10,6 @@ import com.sfc.sf2.core.gui.controls.Console;
 import java.awt.Container;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
 /**
@@ -48,6 +47,11 @@ public class LayoutScrollNormaliser extends BaseLayoutComponent implements Compo
     public void componentResized(ComponentEvent e) {
         scrollPane.getHorizontalScrollBar().setUnitIncrement(e.getComponent().getSize().width/50);
         scrollPane.getVerticalScrollBar().setUnitIncrement(e.getComponent().getSize().height/50);
+    }
+    
+    public void scrollToPosition(int pixelX, int pixelY) {
+        scrollPane.getHorizontalScrollBar().setValue(pixelX);
+        scrollPane.getVerticalScrollBar().setValue(pixelY);
     }
     
     @Override

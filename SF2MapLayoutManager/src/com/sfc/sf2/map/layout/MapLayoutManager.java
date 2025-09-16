@@ -9,8 +9,10 @@ import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.block.MapBlockset;
+import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.map.layout.io.MapLayoutDisassemblyProcessor;
 import com.sfc.sf2.map.layout.io.MapLayoutPackage;
 import java.io.IOException;
@@ -50,24 +52,25 @@ public class MapLayoutManager extends AbstractManager {
         return layout;
     }
     
+    public MapLayout importDisassemblyFromMapEntry(Path paletteEntriesPath, Path tilesetEntriesPath, MapEntryData mapEntry) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassemblyFromMapEntry");
+        Path layoutPath = mapEntry.getLayoutPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getLayoutPath());
+        Path blocksetPath = mapEntry.getBlocksPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getBlocksPath());
+        Path tilesetsPath = mapEntry.getTilesetsPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getTilesetsPath());
+        importDisassemblyFromEntryFiles(paletteEntriesPath, tilesetEntriesPath, tilesetsPath, blocksetPath, layoutPath);
+        Console.logger().finest("EXITING importDisassemblyFromMapEntry");
+        return layout;
+    }
+    
     public MapLayout importDisassemblyFromEntryFiles(Path paletteEntriesPath, Path tilesetEntriesPath, Path tilesetsFilePath, Path blocksetPath, Path layoutPath) throws IOException, DisassemblyException, AsmException {
-        Console.logger().finest("ENTERING importDisassembly");
+        Console.logger().finest("ENTERING importDisassemblyFromEntryFiles");
         blockset = mapBlocksetManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, tilesetsFilePath, blocksetPath);
         MapLayoutPackage pckg = new MapLayoutPackage(blockset);
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
         Console.logger().info("Map layout successfully imported from entries paths. Layout data : " + layoutPath);
-        Console.logger().finest("EXITING importDisassembly");
+        Console.logger().finest("EXITING importDisassemblyFromEntryFiles");
         return layout;
     }
-    
-    /*public MapLayout importDisassemblyFromEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path tilesetsFilePath, Path blocksetPath, Path layoutPath,
-                int animTileset, int animLength, int animFrameStart, int animFrameLength, int animFrameDest) throws IOException, DisassemblyException, AsmException {
-    }
-    
-    public MapLayout importDisassemblyFromEntryFiles(Path paletteEntriesPath, Path tilesetEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath,
-                int animTileset, int animLength, int animFrameStart, int animFrameLength, int animFrameDest) throws IOException, DisassemblyException {
-
-    }*/
     
     public void exportDisassembly(Path tilesetsPath, Path blocksetPath, Path layoutPath, MapBlockset mapBlockset, MapLayout mapLayout) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING exportDisassembly");

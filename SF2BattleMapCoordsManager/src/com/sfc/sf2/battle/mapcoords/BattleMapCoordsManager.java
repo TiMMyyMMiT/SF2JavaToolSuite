@@ -5,47 +5,74 @@
  */
 package com.sfc.sf2.battle.mapcoords;
 
-import com.sfc.sf2.battle.mapcoords.io.DisassemblyManager;
-import com.sfc.sf2.map.layout.DisassemblyException;
+import com.sfc.sf2.battle.mapcoords.io.BattleMapCoordsAsmProcessor;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;
+import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
+import com.sfc.sf2.map.layout.io.MapEntryData;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
-public class BattleMapCoordsManager {
+public class BattleMapCoordsManager extends AbstractManager {
 
-    private final DisassemblyManager disassemblyManager = new DisassemblyManager();
     private final MapLayoutManager mapLayoutManager = new MapLayoutManager();
+    private final MapEntriesAsmProcessor mapEntriesAsmProcessor = new MapEntriesAsmProcessor();
+    private final BattleMapCoordsAsmProcessor coordsAsmProcessor = new BattleMapCoordsAsmProcessor();
+    
     private BattleMapCoords[] coords;
     private MapLayout battleMapLayout;
-    private String[][] mapEntries = null;
-    
-    public void importDisassembly(String basePath, String mapEntriesPath, String battleMapCoordsPath) {
-        System.out.println("com.sfc.sf2.battlemapcoords.BattleMapCoordsManager.importDisassembly() - Importing disassembly ...");
-        mapEntries = disassemblyManager.importMapEntryFile(basePath, mapEntriesPath);
-        coords = disassemblyManager.importDisassembly(battleMapCoordsPath);
-        System.out.println("com.sfc.sf2.battlemapcoords.BattleMapCoordsManager.importDisassembly() - Disassembly imported.");
-    }
-    
-    public void importLayoutDisassembly(BattleMapCoords coords, String palettesPath, String tilesetsPath) {
-        System.out.println("com.sfc.sf2.battlemapcoords.BattleMapCoordsManager.importDisassembly() - Importing disassembly ...");
-        int mapIndex = coords.getMap();
-        try {
-            mapLayoutManager.importDisassembly(palettesPath, tilesetsPath, mapEntries[mapIndex][0], mapEntries[mapIndex][1], mapEntries[mapIndex][2]);
-            battleMapLayout = mapLayoutManager.getLayout();
-        } catch (DisassemblyException ex) {
-            System.getLogger(BattleMapCoordsManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+    private MapEntryData[] mapEntries = null;
+
+    @Override
+    public void clearData() {
+        mapLayoutManager.clearData();
+        if (battleMapLayout != null) {
+            battleMapLayout.getBlockset().clearIndexedColorImage(true);
+            battleMapLayout = null;
         }
-        System.out.println("com.sfc.sf2.battlemapcoords.BattleMapCoordsManager.importDisassembly() - Disassembly imported.");
+        coords = null;
+        mapEntries = null;
     }
     
-    public void exportDisassembly(BattleMapCoords[] coords, String battleMapCoordsPath){
-        System.out.println("com.sfc.sf2.battlemapcoords.BattleMapCoordsManager.importDisassembly() - Exporting disassembly ...");
+    public BattleMapCoords[] importDisassembly(Path mapEntriesPath, Path battleMapCoordsPath) throws IOException, AsmException {
+        Console.logger().finest("ENTERING importDisassembly");
+        mapEntries = mapEntriesAsmProcessor.importAsmData(mapEntriesPath);
+        coords = coordsAsmProcessor.importAsmData(battleMapCoordsPath);
+        Console.logger().info("Battle map coords successfully imported from : " + battleMapCoordsPath);
+        Console.logger().finest("EXITING importDisassembly");
+        return coords;
+    }
+    
+    public MapLayout importMap(Path paletteEntriesPath, Path tilesetsEntriesPath, int mapId) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importMap");
+        if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
+            throw new DisassemblyException("Cannot import map " + mapId + ". Data was not found or is corrupt.");
+        }
+        MapEntryData mapEntry = mapEntries[mapId];
+        battleMapLayout = mapLayoutManager.importDisassemblyFromMapEntry(paletteEntriesPath, tilesetsEntriesPath, mapEntry);
+        Console.logger().info(String.format("Map data imported for for map%02d", mapId));
+        Console.logger().finest("EXITING importMap");
+        return battleMapLayout;
+    }
+    
+    public void exportDisassembly(Path battleMapCoordsPath, BattleMapCoords[] coords) throws IOException, AsmException {
+        Console.logger().finest("ENTERING exportDisassembly");
         this.coords = coords;
-        disassemblyManager.exportDisassembly(coords,battleMapCoordsPath);
-        System.out.println("com.sfc.sf2.battlemapcoords.BattleMapCoordsManager.importDisassembly() - Disassembly exported.");        
+        coordsAsmProcessor.exportAsmData(battleMapCoordsPath, coords);
+        Console.logger().info("Battle coords successfully exported to : " + battleMapCoordsPath);
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public boolean doesMapDataExist(int mapID) {
+        return mapEntries != null && mapID >= 0 && mapID < mapEntries.length && mapEntries[mapID] != null;
     }
 
     public BattleMapCoords[] getCoords() {
@@ -60,11 +87,7 @@ public class BattleMapCoordsManager {
         return battleMapLayout;
     }
 
-    public String[][] getMapEntries() {
-        return mapEntries;
-    }
-
-    public void setMapEntries(String[][] mapEntries) {
-        this.mapEntries = mapEntries;
+    public void setMapLayout(MapLayout battleMapLayout) {
+        this.battleMapLayout = battleMapLayout;
     }
 }

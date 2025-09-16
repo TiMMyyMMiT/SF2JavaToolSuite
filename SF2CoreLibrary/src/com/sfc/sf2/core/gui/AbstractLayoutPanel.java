@@ -96,8 +96,21 @@ public abstract class AbstractLayoutPanel extends JPanel {
         return currentImage;
     }
     
+    public void scrollToPosition(int pixelX, int pixelY) {
+        if (BaseLayoutComponent.IsEnabled(scroller)) {
+            scroller.scrollToPosition(pixelX, pixelY);
+        }
+    }
+    
+    public void scrollToPosition(float percentX, float percentY) {
+        if (BaseLayoutComponent.IsEnabled(scroller)) {
+            Dimension dims = getSize();
+            scroller.scrollToPosition((int)(dims.width*percentX), (int)(dims.height*percentY));
+        }
+    }
+    
     protected Dimension getImageOffset() {
-        if (coordsGrid != null && coordsGrid.isEnabled()) {
+        if (BaseLayoutComponent.IsEnabled(coordsGrid)) {
             return coordsGrid.getOffset(getDisplayScale());
         } else {
             return NO_OFFSET;

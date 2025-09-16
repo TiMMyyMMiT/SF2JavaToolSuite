@@ -8,67 +8,68 @@ package com.sfc.sf2.battle.mapterrain;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoordsManager;
-import com.sfc.sf2.battle.mapterrain.io.DisassemblyManager;
+import com.sfc.sf2.battle.mapterrain.io.BattleTerrainDisassemblyProcessor;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.core.io.asm.EntriesAsmData;
+import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
+import com.sfc.sf2.helpers.PathHelpers;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
-public class BattleMapTerrainManager {
+public class BattleMapTerrainManager extends AbstractManager {
 
-    private final DisassemblyManager disassemblyManager = new DisassemblyManager();
     private final BattleMapCoordsManager mapCoordsManager = new BattleMapCoordsManager();
-    private BattleMapCoords coords = null;
+    private final BattleTerrainDisassemblyProcessor terrainDisassemblyProcessor = new BattleTerrainDisassemblyProcessor();
+    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+
+    private BattleMapCoords coords;
     private BattleMapTerrain terrain;
-    private String[][] mapEntries = null;
-    
-    public void importDisassembly(String palettesPath, String tilesetsPath, String basePath, String mapEntriesPath, String terrainEntriesPath, String battleMapCoordsPath, int battleIndex){
-        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Importing disassembly ...");
-        mapEntries = disassemblyManager.importMapEntryFile(basePath, mapEntriesPath);
-        mapCoordsManager.importDisassembly(basePath, mapEntriesPath, battleMapCoordsPath);
-        coords = mapCoordsManager.getCoords()[battleIndex];
-        String[] terrainEntries = disassemblyManager.importTerrainEntriesFile(terrainEntriesPath);
+
+    @Override
+    public void clearData() {
+        mapCoordsManager.clearData();
+        coords = null;
         terrain = null;
-        if (battleIndex < terrainEntries.length) {
-            String path = basePath + terrainEntries[battleIndex];
-            terrain = disassemblyManager.importDisassembly(path);
-        }
-        int mapIndex = coords.getMap();
-        mapCoordsManager.importLayoutDisassembly(coords, palettesPath, tilesetsPath);
-        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Disassembly imported.");
     }
     
-    public void exportDisassembly(String battleMapTerrainPath){
-        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Exporting disassembly ...");
-        disassemblyManager.exportDisassembly(terrain,battleMapTerrainPath);
-        System.out.println("com.sfc.sf2.battlemapterrain.BattleMapTerrainManager.importDisassembly() - Disassembly exported.");        
+    public void importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
+        coords = mapCoordsManager.getCoords()[battleIndex];
+        EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath);
+        int mapId = coords.getMap();
+        mapCoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
+        if (battleIndex < terrainEntries.entriesCount()) {
+            Path path = PathHelpers.getIncbinPath().resolve(terrainEntries.getPathForEntry(battleIndex));
+            terrain = terrainDisassemblyProcessor.importDisassembly(path, null);
+        }
+        Console.logger().finest("EXITING importDisassembly");
+    }
+    
+    public void exportDisassembly(Path battleMapTerrainPath, BattleMapTerrain terrain) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.terrain = terrain;
+        terrainDisassemblyProcessor.exportDisassembly(battleMapTerrainPath, terrain, null);
+        Console.logger().info("Terrain data successfully exported to : " + battleMapTerrainPath);
+        Console.logger().finest("EXITING exportDisassembly");
     }   
 
     public BattleMapTerrain getTerrain() {
         return terrain;
     }
 
-    public void setTerrain(BattleMapTerrain terrain) {
-        this.terrain = terrain;
-    }
-
     public MapLayout getMapLayout() {
         return mapCoordsManager.getMapLayout();
     }
 
-    public String[][] getMapEntries() {
-        return mapEntries;
-    }
-
-    public void setMapEntries(String[][] mapEntries) {
-        this.mapEntries = mapEntries;
-    }
-
     public BattleMapCoords getCoords() {
         return coords;
-    }
-
-    public void setCoords(BattleMapCoords coords) {
-        this.coords = coords;
     }
 }

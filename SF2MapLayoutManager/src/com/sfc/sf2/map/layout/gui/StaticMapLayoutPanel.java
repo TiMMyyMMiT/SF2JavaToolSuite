@@ -7,10 +7,8 @@ package com.sfc.sf2.map.layout.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.*;
-import com.sfc.sf2.graphics.Block;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
-import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
@@ -30,7 +28,7 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
         
     protected MapLayout layout;
     
-    private boolean showExplorationFlags = true;
+    private boolean showExplorationFlags = false;
     private boolean showInteractionFlags = false;
     private boolean showPriority = false;
 
