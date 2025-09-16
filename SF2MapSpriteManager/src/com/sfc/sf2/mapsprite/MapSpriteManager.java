@@ -52,7 +52,9 @@ public class MapSpriteManager extends AbstractManager {
         paletteManager.clearData();
         if (mapSprites != null) {
             for (int i = 0; i < mapSprites.length; i++) {
-                mapSprites[i].clearIndexedColorImage(true);
+                if (mapSprites[i] != null) {
+                    mapSprites[i].clearIndexedColorImage(true);
+                }
             }
             mapSprites = null;
         }
@@ -62,6 +64,14 @@ public class MapSpriteManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassembly");
         mapSprites = new MapSprite[1];
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
+        mapSprites = importDisassembly(graphicsFilePath, palette);
+        Console.logger().finest("EXITING importDisassembly");
+        return mapSprites;
+    }
+
+    public MapSprite[] importDisassembly(Path graphicsFilePath, Palette palette) throws IOException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        mapSprites = new MapSprite[1];
         int[] indices = getIndicesFromFilename(graphicsFilePath.getFileName());
         MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), indices, palette, null);
         Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
@@ -78,7 +88,7 @@ public class MapSpriteManager extends AbstractManager {
     public MapSprite[] importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
-        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
         Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
         ArrayList<MapSprite> spritesList = new ArrayList<>();
         MapSprite lastMapSprite = null;

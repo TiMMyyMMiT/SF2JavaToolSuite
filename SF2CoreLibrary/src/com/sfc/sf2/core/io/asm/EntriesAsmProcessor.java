@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.core.io.asm;
 
+import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.helpers.StringHelpers;
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -33,14 +34,14 @@ import java.nio.file.Path;
  * 
  * @author TiMMy
  */
-public class EntriesAsmProcessor extends AbstractAsmProcessor<EntriesAsmData> {
+public class EntriesAsmProcessor extends AbstractAsmProcessor<EntriesAsmData, EmptyPackage> {
 
     protected String listPrefix = "pt_";
     protected String listItemPrefix = "dc.l";
     protected String listPathPrefix = "incbin";
     
     @Override
-    protected EntriesAsmData parseAsmData(BufferedReader reader) throws IOException, AsmException {
+    protected EntriesAsmData parseAsmData(BufferedReader reader, EmptyPackage pckg) throws IOException, AsmException {
         EntriesAsmData data = new EntriesAsmData();
         String line;
         boolean foundStart = false;
@@ -77,9 +78,14 @@ public class EntriesAsmProcessor extends AbstractAsmProcessor<EntriesAsmData> {
         data.setIsDoubleList(isDoubleList);
         return data;
     }
+    
+    @Override
+    protected String getHeaderName(EntriesAsmData item) {
+        return item.getHeaderName();
+    }
 
     @Override
-    protected void packageAsmData(FileWriter writer, EntriesAsmData item) throws IOException, AsmException {
+    protected void packageAsmData(FileWriter writer, EntriesAsmData item, EmptyPackage pckg) throws IOException, AsmException {
         writer.write(item.getPointerListName());
         writer.write(":\n");
         if (item.getIsDoubleList()) {
@@ -101,10 +107,5 @@ public class EntriesAsmProcessor extends AbstractAsmProcessor<EntriesAsmData> {
             writer.write(item.getPathForUnique(i).toString());
             writer.write("\"\n");
         }
-    }
-    
-    @Override
-    protected String getHeaderName(EntriesAsmData item) {
-        return item.getHeaderName();
     }
 }

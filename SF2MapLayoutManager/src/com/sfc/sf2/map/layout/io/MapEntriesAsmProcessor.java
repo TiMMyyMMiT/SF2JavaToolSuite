@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.layout.io;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.core.io.asm.AbstractAsmProcessor;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.StringHelpers;
@@ -18,10 +19,10 @@ import java.util.HashMap;
  *
  * @author TiMMy
  */
-public class MapEntriesAsmProcessor extends AbstractAsmProcessor<MapEntryData[]> {
+public class MapEntriesAsmProcessor extends AbstractAsmProcessor<MapEntryData[], EmptyPackage> {
 
     @Override
-    protected MapEntryData[] parseAsmData(BufferedReader reader) throws IOException, AsmException {
+    protected MapEntryData[] parseAsmData(BufferedReader reader, EmptyPackage pckg) throws IOException, AsmException {
         HashMap<Integer, String[]> mapComponents = new HashMap<>();
         HashMap<String, String> mapPaths = new HashMap<>();
         String line;
@@ -156,7 +157,7 @@ public class MapEntriesAsmProcessor extends AbstractAsmProcessor<MapEntryData[]>
     }
 
     @Override
-    protected void packageAsmData(FileWriter writer, MapEntryData[] item) throws IOException, AsmException {
+    protected void packageAsmData(FileWriter writer, MapEntryData[] item, EmptyPackage pckg) throws IOException, AsmException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

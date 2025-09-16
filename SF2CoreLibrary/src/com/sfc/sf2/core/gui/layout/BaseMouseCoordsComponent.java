@@ -56,6 +56,14 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         }
     }
     
+    public void setMouseButtonListener(GridMousePressedListener buttonListener) {
+        this.buttonListener = this.buttonListener;
+    }
+    
+    public void setMouseMotionListerned(GridMouseMoveListener motionListener) {
+        this.motionListener = motionListener;
+    }
+    
     public void updateDisplayParameters(int displayScale, Dimension bounds, Dimension coordsOffset) {
         this.bounds = bounds;
         this.displayScale = displayScale;

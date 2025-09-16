@@ -7,7 +7,10 @@ package com.sfc.sf2.helpers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -64,4 +67,48 @@ public class GraphicsHelpers {
         }
         graphics.dispose();
     }
+    
+    /**
+    * Draw an arrow line between two points
+    */
+    public static void drawArrowLine(Graphics2D g2, int x1, int y1, int x2, int y2) {
+        drawArrowLine(g2, x1, y1, x2, y2, 1, 20, 5);
+    }
+   
+    /**
+    * Draw an arrow line between two points
+    * @param stroke Thickness of the line
+    * @param arrowOffset Arrowhead distance back from end of line
+    * @param arrowSize The size of the arrowhead
+    */
+    public static void drawArrowLine(Graphics2D g2, int x1, int y1, int x2, int y2, int stroke, int arrowOffset, int arrowSize) {
+        Polygon arrowHead = new Polygon();
+        arrowHead.addPoint(arrowSize, 0);
+        arrowHead.addPoint(-arrowSize, arrowSize);
+        arrowHead.addPoint(-arrowSize/2, -0);
+        arrowHead.addPoint(-arrowSize, -arrowSize);
+
+        double l = Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2 - y1), 2));//  line length
+        double newX = ((x2+(((x1-x2) / l*arrowOffset)))); // new x of arrowhead position on the line with d distance from end of the line.
+        double newY = ((y2+(((y1-y2) / l*arrowOffset)))); // new y of arrowhead position on the line with d distance from end of the line.
+
+        double dx = x2-x1, dy = y2-y1;
+        double angle = (Math.atan2(dy, dx)); //get angle (Radians) between ours line and x vectors line. (counter clockwise)
+        angle = (-1)*Math.toDegrees(angle);// convert to degree and reverse it to round clock for better understand what we need to do.
+        if (angle < 0) {
+            angle = 360 + angle; // convert negative degrees to posative degree
+        }
+        angle = (-1)*angle; // convert to counter clockwise mode
+        angle = Math.toRadians(angle);//  convert Degree to Radians
+        AffineTransform at = new AffineTransform();
+        at.translate(newX, newY);// transport cursor to draw arrowhead position.
+        at.rotate(angle);
+        
+        Graphics2D g = (Graphics2D)g2.create();
+        g.setStroke(new BasicStroke(1));
+        g.drawLine(x1, y1, x2, y2);
+        g.transform(at);
+        g.fillPolygon(arrowHead);
+        g.dispose();
+   }
 }

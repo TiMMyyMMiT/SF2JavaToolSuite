@@ -20,6 +20,18 @@ public class AIRegion {
     private int x4;
     private int y4;
 
+    public AIRegion(int type, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+        this.type = type;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = y3;
+        this.x4 = x4;
+        this.y4 = y4;
+    }
+
     public int getType() {
         return type;
     }
@@ -92,5 +104,12 @@ public class AIRegion {
         this.y4 = y4;
     }
     
+    @Override
+    public AIRegion clone() {
+        return new AIRegion(type, x1, y1, x2, y2, x3, y3, x4, y4);
+    }
     
+    public static AIRegion emptyAIRegion() {
+        return new AIRegion(0, 0, 0, 1, 0, 1, 1, 0, 1);
+    }
 }

@@ -9,7 +9,6 @@ import com.sfc.sf2.graphics.Block;
 import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
-import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.palette.Palette;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -110,10 +109,14 @@ public class MapSprite {
     }
     
     public void clearIndexedColorImage(boolean alsoClearTiles) {
-        indexedColorImage.flush();
-        indexedColorImage = null;
-        for (int i = 0; i < frames.length; i++) {
-            frames[i].clearIndexedColorImage(alsoClearTiles);
+        if (indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+            if (frames != null) {
+                for (int i = 0; i < frames.length; i++) {
+                    frames[i].clearIndexedColorImage(alsoClearTiles);
+                }
+            }
         }
     }
 }

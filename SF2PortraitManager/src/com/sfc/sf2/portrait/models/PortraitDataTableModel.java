@@ -49,7 +49,7 @@ public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
     }
 
     @Override
-    protected int[] setValue(int[] item, int col, Object value) {
+    protected int[] setValue(int[] item, int row, int col, Object value) {
         if (col > 0) {
             item[col-1] = (int)value;
         }

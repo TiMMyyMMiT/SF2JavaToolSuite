@@ -5,10 +5,11 @@
  */
 package com.sfc.sf2.battle.mapterrain;
 
-import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
 import com.sfc.sf2.battle.mapcoords.BattleMapCoordsManager;
 import com.sfc.sf2.battle.mapterrain.io.BattleTerrainDisassemblyProcessor;
+import com.sfc.sf2.battle.mapterrain.io.LandEffectAsmProcessor;
+import com.sfc.sf2.battle.mapterrain.io.LandEffectEnumsAsmProcessor;
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
@@ -16,6 +17,7 @@ import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.map.layout.MapLayout;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -28,9 +30,14 @@ public class BattleMapTerrainManager extends AbstractManager {
     private final BattleMapCoordsManager mapCoordsManager = new BattleMapCoordsManager();
     private final BattleTerrainDisassemblyProcessor terrainDisassemblyProcessor = new BattleTerrainDisassemblyProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+    private final LandEffectEnumsAsmProcessor landEffectEnumsAsmProcessor = new LandEffectEnumsAsmProcessor();
+    private final LandEffectAsmProcessor landEffectAsmProcessor = new LandEffectAsmProcessor();
 
+    private BattleMapCoords[] allCoords;
     private BattleMapCoords coords;
     private BattleMapTerrain terrain;
+    private LandEffectEnums landEffectEnums;
+    private LandEffectMovementType[] landEffects;
 
     @Override
     public void clearData() {
@@ -39,18 +46,30 @@ public class BattleMapTerrainManager extends AbstractManager {
         terrain = null;
     }
     
-    public void importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
+    public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        mapCoordsManager.importDisassembly(mapEntriesPath, battleMapCoordsPath);
-        coords = mapCoordsManager.getCoords()[battleIndex];
-        EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath);
+        allCoords = mapCoordsManager.importDisassembly(battleMapCoordsPath);
+        this.coords = allCoords[battleIndex];
+        EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath, null);
         int mapId = coords.getMap();
+        mapCoordsManager.ImportMapEntries(mapEntriesPath);
         mapCoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
         if (battleIndex < terrainEntries.entriesCount()) {
             Path path = PathHelpers.getIncbinPath().resolve(terrainEntries.getPathForEntry(battleIndex));
             terrain = terrainDisassemblyProcessor.importDisassembly(path, null);
         }
+        Console.logger().info("Terrain data " + battleIndex + " successfully imported from : " + terrainEntriesPath);
         Console.logger().finest("EXITING importDisassembly");
+        return terrain;
+    }
+    
+    public BattleMapTerrain importLandEffects(Path enumsPath, Path landEffectPath) throws IOException, AsmException {
+        Console.logger().finest("ENTERING importLandEffects");
+        landEffectEnums = landEffectEnumsAsmProcessor.importAsmData(enumsPath, null);
+        landEffects = landEffectAsmProcessor.importAsmData(landEffectPath, landEffectEnums);
+        Console.logger().info("Land effects data successfully imported from : " + landEffectPath);
+        Console.logger().finest("EXITING importLandEffects");
+        return terrain;
     }
     
     public void exportDisassembly(Path battleMapTerrainPath, BattleMapTerrain terrain) throws IOException, DisassemblyException {
@@ -59,7 +78,19 @@ public class BattleMapTerrainManager extends AbstractManager {
         terrainDisassemblyProcessor.exportDisassembly(battleMapTerrainPath, terrain, null);
         Console.logger().info("Terrain data successfully exported to : " + battleMapTerrainPath);
         Console.logger().finest("EXITING exportDisassembly");
-    }   
+    }
+    
+    public void exportLandEffects(Path landEffectPath, LandEffectMovementType[] landEffects) throws IOException, AsmException {
+        Console.logger().finest("ENTERING exportLandEffects");
+        this.landEffects = landEffects;
+        landEffectAsmProcessor.exportAsmData(landEffectPath, landEffects, landEffectEnums);
+        Console.logger().info("Land effects successfully exported to : " + landEffectPath);
+        Console.logger().finest("EXITING exportLandEffects");
+    }
+    
+    public MapLayout importMap(Path paletteEntriesPath, Path tilesetsEntriesPath, int mapId) throws IOException, AsmException, DisassemblyException {
+        return mapCoordsManager.importMap(paletteEntriesPath, tilesetsEntriesPath, mapId);
+    }
 
     public BattleMapTerrain getTerrain() {
         return terrain;
@@ -71,5 +102,17 @@ public class BattleMapTerrainManager extends AbstractManager {
 
     public BattleMapCoords getCoords() {
         return coords;
+    }
+
+    public BattleMapCoords[] getAllCoords() {
+        return allCoords;
+    }
+
+    public LandEffectEnums getLandEffectEnums() {
+        return landEffectEnums;
+    }
+
+    public LandEffectMovementType[] getLandEffects() {
+        return landEffects;
     }
 }
