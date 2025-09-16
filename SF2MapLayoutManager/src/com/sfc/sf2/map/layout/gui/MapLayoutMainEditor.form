@@ -865,10 +865,8 @@
                                                       <Component id="jCheckBox3" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jComboBox7" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jLabel7" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                      <Group type="103" alignment="2" groupAlignment="2" attributes="0">
-                                                          <Component id="colorPicker1" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jLabel55" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
+                                                      <Component id="colorPicker1" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel55" alignment="2" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>

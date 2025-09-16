@@ -38,46 +38,31 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         jComboBox7.setSelectedIndex(mapLayoutSettings.getBlocksetScale()-1);
         jComboBox9.setSelectedIndex(mapLayoutSettings.getTilesetScale()-1);
         
+        mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
+        mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
+        mapLayoutPanel.setBGColor(colorPicker2.getColor());
+        mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        
+        mapBlocksetPanel.setShowGrid(jCheckBox3.isSelected());
+        mapBlocksetPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
+        mapBlocksetPanel.setBGColor(colorPicker1.getColor());
+        mapBlocksetPanel.setItemsPerRow(((int)jSpinner2.getModel().getValue()));
+        mapBlocksetPanel.setShowPriority(jCheckBox6.isSelected());
+        
         accordionPanel1.setExpanded(false);
     }
     
     @Override
-    protected void updateEditorData() {
+    protected void onDataLoaded() {
+        super.onDataLoaded();
         
         mapLayoutPanel.setMapLayout(maplayoutManager.getLayout());
-        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
-        mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
-        mapLayoutPanel.setBGColor(colorPicker2.getColor());
-        mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
-        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
-        
         mapBlocksetPanel.setBlockset(maplayoutManager.getBlockset());
-        mapBlocksetPanel.setItemsPerRow(((int)jSpinner2.getModel().getValue()));
-        mapBlocksetPanel.setShowGrid(jCheckBox3.isSelected());
-        mapBlocksetPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
-        mapBlocksetPanel.setBGColor(colorPicker1.getColor());
-        mapBlocksetPanel.setShowPriority(jCheckBox6.isSelected());
-        
-        super.updateEditorData();
-        repaintBlocksetLayout();
     }
     
-    @Override
-    protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
-        
-        mapLayoutPanel.revalidate();
-        mapLayoutPanel.repaint();
-    }
-    
-    private void repaintBlocksetLayout() {
-        super.repaintEditorLayout();
-        
-        mapBlocksetPanel.revalidate();
-        mapBlocksetPanel.repaint();
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -865,7 +850,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map layout disasm could not be imported from entries : " + mapDirectory);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton28ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -884,7 +869,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map layout disasm could not be imported from : " + blocksPath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -905,63 +890,52 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         mapBlocksetPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);
         mapLayoutSettings.setBlocksetScale(jComboBox7.getSelectedIndex()+1);
         SettingsManager.saveSettingsFile();
-        repaintBlocksetLayout();
     }//GEN-LAST:event_jComboBox7ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
         mapBlocksetPanel.setShowGrid(jCheckBox3.isSelected());
-        repaintBlocksetLayout();
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         mapBlocksetPanel.setItemsPerRow((int)jSpinner2.getValue());
-        repaintBlocksetLayout();
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
         mapBlocksetPanel.setBGColor(colorPicker1.getColor());
         mapLayoutSettings.setBlocksetBGColor(colorPicker1.getColor());
         SettingsManager.saveSettingsFile();
-        repaintBlocksetLayout();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
     private void jComboBox9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox9ActionPerformed
         mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
         mapLayoutSettings.setTilesetScale(jComboBox9.getSelectedIndex()+1);
         SettingsManager.saveSettingsFile();
-        repaintEditorLayout();
     }//GEN-LAST:event_jComboBox9ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
         mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
     private void colorPicker2ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker2ColorChanged
         mapLayoutPanel.setBGColor(colorPicker2.getColor());
         mapLayoutSettings.setTilesetBGColor(colorPicker2.getColor());
         SettingsManager.saveSettingsFile();
-        repaintEditorLayout();
     }//GEN-LAST:event_colorPicker2ColorChanged
 
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
         mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
-        repaintEditorLayout();
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
         mapBlocksetPanel.setShowPriority(jCheckBox6.isSelected());
-        repaintBlocksetLayout();
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     /**
