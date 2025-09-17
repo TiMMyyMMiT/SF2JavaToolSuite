@@ -6,23 +6,17 @@
 package com.sfc.sf2.battle.mapterrain.gui;
 
 import com.sfc.sf2.battle.mapterrain.BattleMapTerrainManager;
-import com.sfc.sf2.battle.mapterrain.LandEffect;
 import com.sfc.sf2.battle.mapterrain.LandEffectEnums;
 import com.sfc.sf2.battle.mapterrain.LandEffectMovementType;
 import com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel.TerrainDrawMode;
-import com.sfc.sf2.battle.mapterrain.models.LandEffectTableEditor;
-import com.sfc.sf2.battle.mapterrain.models.LandEffectTableRenderer;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.settings.TerrainSettings;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -30,12 +24,9 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class BattleMapTerrainMainEditor extends AbstractMainEditor {
 
-    private TerrainSettings terrainSettings = new TerrainSettings();
-    private BattleMapTerrainManager battlemapterrainManager = new BattleMapTerrainManager();
-    
-    private LandEffectTableEditor landEffectEditor;
-    private LandEffectTableRenderer landEffectRenderer;
-    
+    private final TerrainSettings terrainSettings = new TerrainSettings();
+    private final BattleMapTerrainManager battlemapterrainManager = new BattleMapTerrainManager();
+        
     public BattleMapTerrainMainEditor() {
         super();
         SettingsManager.registerSettingsStore("terrain", terrainSettings);
@@ -62,17 +53,6 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         battleMapTerrainLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
         battleMapTerrainLayoutPanel.setDrawTerrain(jCheckBox3.isSelected());
         battleMapTerrainLayoutPanel.setShowBattleCoords(true);
-        
-        tableLandEffect.setMinColumnWidth(-1, 60);
-        tableLandEffect.jTable.setMinimumSize(new Dimension(tableLandEffect.jTable.getColumnCount()*60, Integer.MAX_VALUE));
-        tableLandEffect.jTable.setRowHeight(70);
-        DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
-        cellRenderer.setHorizontalAlignment(JLabel.LEFT);
-        tableLandEffect.jTable.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
-        landEffectEditor = new LandEffectTableEditor();
-        tableLandEffect.jTable.setDefaultEditor(LandEffect.class, landEffectEditor);
-        landEffectRenderer = new LandEffectTableRenderer();
-        tableLandEffect.jTable.setDefaultRenderer(LandEffect.class, landEffectRenderer);
     }
     
     @Override
@@ -84,12 +64,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         battleMapTerrainLayoutPanel.setTerrain(battlemapterrainManager.getTerrain());
         
         LandEffectEnums landEffectEnums = battlemapterrainManager.getLandEffectEnums();
-        if (landEffectEnums != null) {
-            String[] defenses = new String[landEffectEnums.getDefenses().size()];
-            defenses = landEffectEnums.getDefenses().keySet().toArray(defenses);
-            landEffectEditor.setDefenses(defenses);
-            landEffectRenderer.setDefenses(defenses);
-        }
+        landEffectTable.setLandEffectData(landEffectEnums);
         landEffectTableModel.setTableData(battlemapterrainManager.getLandEffects());
     }
     
@@ -147,7 +122,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         jLabel8 = new javax.swing.JLabel();
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jPanel4 = new javax.swing.JPanel();
-        tableLandEffect = new com.sfc.sf2.core.gui.controls.Table();
+        landEffectTable = new com.sfc.sf2.battle.mapterrain.gui.LandEffectTable();
         infoButton11 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jLabel5 = new javax.swing.JLabel();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
@@ -546,12 +521,10 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
 
         jTabbedPane2.addTab("Map", jPanel10);
 
-        tableLandEffect.setBorder(javax.swing.BorderFactory.createTitledBorder("Land effect"));
-        tableLandEffect.setButtonsVisible(false);
-        tableLandEffect.setHorizontalScrolling(true);
-        tableLandEffect.setModel(landEffectTableModel);
-        tableLandEffect.setRowBorders(true);
-        tableLandEffect.setSingleClickText(false);
+        landEffectTable.setBorder(javax.swing.BorderFactory.createTitledBorder("Land Effect"));
+        landEffectTable.setHorizontalScrolling(true);
+        landEffectTable.setModel(landEffectTableModel);
+        landEffectTable.setRowBorders(true);
 
         infoButton11.setMessageText("<html>\"Land effect\" determines how each <i>movement type</i> is affected by each <i>terrain type</i>.<br>Each land effect entry determines defensive bonus and the movement cost that will affect the a unit with the specific movement type on the specific terrain.<br><br><b>Defenses:</b><br>Obstructed: Indicates that this <i>movement type</i> cannot move onto this tile.<br>LE0: By default, provides 0% defensive bonus (no bonus).<br>LE15: By default, provides 15% defensive bonus.<br>LE30: By default, provides 30% defensive bonus.<br><br><b>Movement costs:</b> Higher numbers = slower movement on that tile.</html>");
         infoButton11.setText("");
@@ -563,14 +536,13 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 733, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap(624, Short.MAX_VALUE)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(infoButton11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(infoButton11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(landEffectTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -581,7 +553,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                     .addComponent(infoButton11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableLandEffect, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+                .addComponent(landEffectTable, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -788,8 +760,8 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private com.sfc.sf2.battle.mapterrain.gui.LandEffectTable landEffectTable;
     private com.sfc.sf2.battle.mapterrain.models.LandEffectTableModel landEffectTableModel;
-    private com.sfc.sf2.core.gui.controls.Table tableLandEffect;
     private com.sfc.sf2.battle.mapterrain.gui.TerrainKeyPanel terrainKeyPanel1;
     // End of variables declaration//GEN-END:variables
 }

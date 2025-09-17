@@ -63,13 +63,13 @@ public class BattleMapTerrainManager extends AbstractManager {
         return terrain;
     }
     
-    public BattleMapTerrain importLandEffects(Path enumsPath, Path landEffectPath) throws IOException, AsmException {
+    public LandEffectMovementType[] importLandEffects(Path enumsPath, Path landEffectPath) throws IOException, AsmException {
         Console.logger().finest("ENTERING importLandEffects");
         landEffectEnums = landEffectEnumsAsmProcessor.importAsmData(enumsPath, null);
         landEffects = landEffectAsmProcessor.importAsmData(landEffectPath, landEffectEnums);
         Console.logger().info("Land effects data successfully imported from : " + landEffectPath);
         Console.logger().finest("EXITING importLandEffects");
-        return terrain;
+        return landEffects;
     }
     
     public void exportDisassembly(Path battleMapTerrainPath, BattleMapTerrain terrain) throws IOException, DisassemblyException {
