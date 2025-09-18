@@ -84,7 +84,7 @@ public abstract class AbstractEnums {
         int value = -1;
         for (int i = 0; i < split.length; i++) {
             if (enumData.containsKey(split[i]))
-                value = (enumData.get(split[i])&0xFFFF);
+                value = (enumData.get(split[i]));
         }
         
         return value;

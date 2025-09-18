@@ -9,6 +9,7 @@ import com.sfc.sf2.core.gui.controls.Console;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ComboBoxModel;
 
 /**
  *
@@ -73,6 +74,10 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
             return null;
         }
         return getMaxLimit(tableItems.get(row), col);
+    }
+    
+    public ComboBoxModel getComboBoxModel(int row, int col) {
+        return null;
     }
     
     public T getRow(int row) {

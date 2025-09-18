@@ -20,8 +20,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class LandEffectTable extends Table {
 
-    private LandEffectTableEditor landEffectEditor;
-    private LandEffectTableRenderer landEffectRenderer;
+    private final LandEffectTableEditor landEffectEditor;
+    private final LandEffectTableRenderer landEffectRenderer;
 
     public LandEffectTable() {
         super();
@@ -30,6 +30,7 @@ public class LandEffectTable extends Table {
         jTable.getColumnModel().getColumn(0).setMinWidth(70);
         jTable.setMinimumSize(new Dimension(jTable.getColumnCount()*60, Integer.MAX_VALUE));
         jTable.setRowHeight(70);
+        
         landEffectEditor = new LandEffectTableEditor();
         jTable.setDefaultEditor(LandEffect.class, landEffectEditor);
         landEffectRenderer = new LandEffectTableRenderer();

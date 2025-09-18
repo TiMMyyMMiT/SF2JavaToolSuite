@@ -5,106 +5,133 @@
  */
 package com.sfc.sf2.dialog.properties;
 
-import com.sfc.sf2.dialog.properties.io.DisassemblyManager;
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.dialog.properties.io.AllyDialogPropertiesAsmProcessor;
+import com.sfc.sf2.dialog.properties.io.DialogPropertiesAsmProcessor;
+import com.sfc.sf2.dialog.properties.io.DialogPropertiesDisassemblyProcessor;
+import com.sfc.sf2.dialog.properties.io.DialogPropertiesEnumsProcessor;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.MapSprite;
 import com.sfc.sf2.mapsprite.MapSpriteManager;
-import com.sfc.sf2.mapsprite.layout.MapSpriteLayout;
 import com.sfc.sf2.portrait.Portrait;
 import com.sfc.sf2.portrait.PortraitManager;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
-public class DialogPropertiesManager {
+public class DialogPropertiesManager extends AbstractManager {
        
-    private MapSpriteManager mapSpriteManager = new MapSpriteManager();
-    private PortraitManager portraitManager = new PortraitManager();
-    private DisassemblyManager disassemblyManager = new DisassemblyManager();
-    private DialogProperties dialogProperties = new DialogProperties();
-    private MapSprite[] mapsprites;
-    private BufferedImage[] mapspriteImages;
-    private Portrait[] portraits;
-       
-    public void importDisassembly(String palettePath, String mapspritesPath, String portraitsPath, String basePath, String filePath){
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.importDisassembly() - Importing disassembly ...");
-        importGraphics(palettePath, mapspritesPath, portraitsPath, basePath);
-        dialogProperties = DisassemblyManager.importDisassembly(basePath, filePath);
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.importDisassembly() - Disassembly imported.");
-    }
-       
-    public void importAlliesDisassembly(String palettePath, String mapspritesPath, String portraitsPath, String basePath, String filePath){
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.importAlliesDisassembly() - Importing disassembly ...");
-        importGraphics(palettePath, mapspritesPath, portraitsPath, basePath);
-        dialogProperties = DisassemblyManager.importAlliesDisassembly(basePath, filePath);
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.importAlliesDisassembly() - Disassembly imported.");
-    }
+    private final MapSpriteManager mapSpriteManager = new MapSpriteManager();
+    private final PortraitManager portraitManager = new PortraitManager();
+    private final AllyDialogPropertiesAsmProcessor allyDialogAsmProcessor = new AllyDialogPropertiesAsmProcessor();
+    private final DialogPropertiesAsmProcessor dialogAsmProcessor = new DialogPropertiesAsmProcessor();
+    private final DialogPropertiesDisassemblyProcessor dialogDisassemblyProcessor = new DialogPropertiesDisassemblyProcessor();
+    private final DialogPropertiesEnumsProcessor dialogEnumsProcessor = new DialogPropertiesEnumsProcessor();
     
-    private void importGraphics(String palettePath, String mapspritesPath, String portraitsPath, String basePath) {
-        mapsprites = mapSpriteManager.importDisassemblyFromEntryFile(palettePath, mapspritesPath, basePath);
-        mapspriteImages = new BufferedImage[mapsprites.length/3];
-        for(int i=0;i<mapspriteImages.length;i++){
-            MapSprite ms = mapsprites[i*3+2];
-            if(ms!=null){            
-                BufferedImage img = ms.getIndexedColorImage();
-                img = img.getSubimage(0, 0, 24, 24);
-                BufferedImage newImage = new BufferedImage(img.getWidth()*2, img.getHeight()*2, BufferedImage.TYPE_INT_ARGB);
-                Graphics g = newImage.getGraphics();
-                g.drawImage(img, 0, 0, img.getWidth()*2, img.getHeight()*2, null);
-                g.dispose();
-                mapspriteImages[i] = newImage;
-            }else{
-                mapspriteImages[i] = new BufferedImage(24,24,BufferedImage.TYPE_INT_RGB);    
+    private DialogPropertiesEnums dialogEnums;
+    private DialogProperty[] dialogProperties;
+    private MapSprite[] mapsprites;
+    private Portrait[] portraits;
+
+    @Override
+    public void clearData() {
+        mapSpriteManager.clearData();
+        portraitManager.clearData();
+        dialogEnums = null;
+        dialogProperties = null;
+        if (mapsprites != null) {
+            for (int i = 0; i < mapsprites.length; i++) {
+                if (mapsprites[i] != null) {
+                    mapsprites[i].clearIndexedColorImage(true);
+                }
             }
         }
-        portraits = portraitManager.importDisassemblyFromEntryFile(basePath, portraitsPath);
+        if (portraits != null) {
+            for (int i = 0; i < portraits.length; i++) {
+                if (portraits[i] != null) {
+                    portraits[i].clearIndexedColorImage();
+                }
+            }
+        }
     }
-    
-    public void exportDisassembly(String filepath){
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.exportDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportDisassembly(dialogProperties, filepath);
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.exportDisassembly() - Disassembly exported.");        
-    } 
-    
-    public void exportAlliesDisassembly(String filepath){
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.exportAlliesDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportAlliesDisassembly(dialogProperties, filepath);
-        System.out.println("com.sfc.sf2.dialog.properties.DialogPropertiesManager.exportAlliesDisassembly() - Disassembly exported.");        
-    } 
-
-    public DialogProperties getDialogProperties() {
+       
+    public DialogProperty[] importDisassembly(Path filePath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        if (PathHelpers.extensionFromPath(filePath).equals("bin")) {
+            dialogProperties = dialogDisassemblyProcessor.importDisassembly(filePath, dialogEnums);
+        } else {
+            dialogProperties = dialogAsmProcessor.importAsmData(filePath, dialogEnums);
+        }
+        Console.logger().info("Dialog properties successfully imported from : " + filePath);
+        Console.logger().finest("EXITING importDisassembly");
         return dialogProperties;
     }
-
-    public void setDialogProperties(DialogProperties dialogProperties) {
+       
+    public DialogProperty[] importAlliesDisassembly(Path filePath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importAlliesDisassembly");
+        dialogProperties = allyDialogAsmProcessor.importAsmData(filePath, dialogEnums);
+        Console.logger().info("Allies dialog properties successfully imported from : " + filePath);
+        Console.logger().finest("EXITING importAlliesDisassembly");
+        return dialogProperties;
+    }
+    
+    public void importImagesAndEnums(Path palettePath, Path mapspritesPath, Path portraitsPath, Path sf2EnumsPath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importImagesAndEnums");
+        if (dialogEnums == null) {
+            dialogEnums = dialogEnumsProcessor.importAsmData(sf2EnumsPath, null);
+            Console.logger().info("Dialog properties enums successfully imported from : " + sf2EnumsPath);
+        }
+        if (mapsprites == null) {
+            mapsprites = mapSpriteManager.importDisassemblyFromEntryFile(palettePath, mapspritesPath);
+            Console.logger().info("Mapsprites successfully imported from : " + mapspritesPath);
+        }
+        if (portraits == null) {
+            portraits = portraitManager.importDisassemblyFromEntryFile(portraitsPath);
+            Console.logger().info("Portraits successfully imported from : " + portraitsPath);
+        }
+        dialogEnums.setImages(mapsprites, portraits);
+        Console.logger().finest("EXITING importImagesAndEnums");
+    }
+    
+    public void exportDisassembly(Path filePath, DialogProperty[] dialogProperties) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassembly");
         this.dialogProperties = dialogProperties;
+        if (PathHelpers.extensionFromPath(filePath).equals("bin")) {
+            dialogDisassemblyProcessor.exportDisassembly(filePath, dialogProperties, dialogEnums);
+        } else {
+            dialogAsmProcessor.exportAsmData(filePath, dialogProperties, dialogEnums);
+        }
+        Console.logger().info("Dialog properties successfully exported to : " + filePath);
+        Console.logger().finest("EXITING exportDisassembly");
+    } 
+    
+    public void exportAlliesDisassembly(Path filePath, DialogProperty[] dialogProperties) throws IOException, AsmException {
+        Console.logger().finest("ENTERING exportAlliesDisassembly");
+        this.dialogProperties = dialogProperties;
+        allyDialogAsmProcessor.exportAsmData(filePath, dialogProperties, dialogEnums);
+        Console.logger().info("Allies dialog properties successfully exported to : " + filePath);
+        Console.logger().finest("EXITING exportAlliesDisassembly");
+    } 
+
+    public DialogProperty[] getDialogProperties() {
+        return dialogProperties;
     }
 
     public MapSprite[] getMapsprites() {
         return mapsprites;
     }
 
-    public void setMapsprites(MapSprite[] mapsprites) {
-        this.mapsprites = mapsprites;
-    }
-
     public Portrait[] getPortraits() {
         return portraits;
     }
 
-    public void setPortraits(Portrait[] portraits) {
-        this.portraits = portraits;
+    public DialogPropertiesEnums getDialogEnums() {
+        return dialogEnums;
     }
-
-    public BufferedImage[] getMapspriteImages() {
-        return mapspriteImages;
-    }
-
-    public void setMapspriteImages(BufferedImage[] mapspriteImages) {
-        this.mapspriteImages = mapspriteImages;
-    }
-
-    
 }

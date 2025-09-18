@@ -10,6 +10,9 @@ import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.MetadataException;
 import com.sfc.sf2.core.io.RawImageException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.core.io.asm.EntriesAsmData;
+import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.helpers.PathHelpers;
@@ -27,6 +30,7 @@ public class PortraitManager extends AbstractManager {
     private final TilesetManager tilesetManager = new TilesetManager();
     private final PortraitDisassemblyProcessor portraitDisassemblyProcessor = new PortraitDisassemblyProcessor();
     private final PortraitMetadataProcessor portraitMetadataProcessor = new PortraitMetadataProcessor();
+    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
     
     private Portrait portrait;
 
@@ -80,82 +84,30 @@ public class PortraitManager extends AbstractManager {
     }
        
     //TODO update to new format
-    /*public Portrait[] importAllDisassembly(String basePath){
-        Console.logger().finest("ENTERING importAllDisassembly");
-        Portrait[] portraits = PortraitDisassemblyProcessor.importAllDisassembly(basePath);
-        Console.logger().finest("ENTERING importAllDisassembly");
-        return portraits;
-    } 
-       
-    //TODO update to new format
-    public Portrait[] importDisassemblyFromEntryFile(String basePath, String entryPath){
+    public Portrait[] importDisassemblyFromEntryFile(Path entriesPath) throws IOException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
-        Portrait[] portraits = PortraitDisassemblyProcessor.importDisassemblyFromEntryFile(basePath, entryPath);
-        Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
-        return portraits;
-    }*/
-    
-    //TODO update to new format
-    /*public static Portrait[] importAllDisassembly(String filepath){
-        System.out.println("com.sfc.sf2.portrait.io.DisassemblyManager.importAllDisassembly() - Importing ALL disassembly files ...");
-        Portrait[] portraits = null;
-        List<Portrait> portraitList = new ArrayList();
-        
-        String dir = filepath.substring(0, filepath.lastIndexOf(System.getProperty("file.separator")));
-        File directory = new File(dir);
-        File[] files = directory.listFiles();
-        for(File f : files){        
-            if(f.getName().endsWith(".bin")){
-                System.out.println("Importing "+f.getAbsolutePath()+" ...");
-                Portrait portrait = importDisassembly(f.getAbsolutePath());
-                portraitList.add(portrait);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
+        Portrait[] portraits = new Portrait[entriesData.entriesCount()];
+        Path portraitPath = null;
+        int failedToLoad = 0;
+        for (int i = 0; i < portraits.length; i++) {
+            try {
+                portraitPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForUnique(i));
+                PortraitPackage pckg = new PortraitPackage(PathHelpers.filenameFromPath(portraitPath));
+                portraits[i] = portraitDisassemblyProcessor.importDisassembly(portraitPath, pckg);
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Portrait could not be imported : " + portraitPath + " : " + e);
             }
         }
-        portraits = new Portrait[portraitList.size()];
-        portraits = portraitList.toArray(portraits);
-        
-        System.out.println("com.sfc.sf2.portrait.io.DisassemblyManager.importAllDisassembly() - ALL Disassembly files imported.");
+        Console.logger().info(portraits.length + " portraits successfully imported from entries file : " + entriesPath);
+        Console.logger().info((entriesData.entriesCount() - entriesData.uniqueEntriesCount()) + " duplicate portrait entries found.");
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " portraits failed to import. See logs above");
+        }
+        Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
         return portraits;
     }
-    
-    //TODO update to new format
-    public static Portrait[] importDisassemblyFromEntryFile(String basepath, String entriesPath){
-        System.out.println("com.sfc.sf2.portrait.io.DisassemblyManager.importAllDisassembly() - Importing ALL disassembly files ...");
-        Portrait[] portraits = null;
-        List<Portrait> portraitList = new ArrayList();
-        try{
-            File entryFile = new File(entriesPath);
-            Scanner scan = new Scanner(entryFile);
-            List<String> filepaths = new ArrayList();
-            while(scan.hasNext()){
-                String line = scan.nextLine();
-                if(line.contains("dc.l")){
-                    String pointer = line.substring(line.indexOf("dc.l")+5).trim();
-                    String filepath = null;
-                    Scanner filescan = new Scanner(entryFile);
-                    while(filescan.hasNext()){
-                        String pathline = filescan.nextLine();
-                        if(pathline.startsWith(pointer)){
-                            filepath = pathline.substring(pathline.indexOf("\"")+1, pathline.lastIndexOf("\""));
-                        }
-                    }
-                    filepaths.add(filepath);
-                }
-            }            
-            for(int i=0;i<filepaths.size();i++){
-                String filePath = basepath + filepaths.get(i);
-                System.out.println("Importing "+filePath+" ...");
-                Portrait portrait = importDisassembly(filePath);
-                portraitList.add(portrait);
-            }
-        }catch(Exception e){
-             System.err.println("com.sfc.sf2.mapsprite.io.PngManager.importPng() - Error while parsing graphics data : "+e);
-        }      
-        portraits = new Portrait[portraitList.size()];
-        portraits = portraitList.toArray(portraits);   
-        System.out.println("com.sfc.sf2.portrait.io.DisassemblyManager.importAllDisassembly() - ALL Disassembly files imported.");
-        return portraits;
-    }*/
 
     public Portrait getPortrait() {
         return portrait;

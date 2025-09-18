@@ -88,6 +88,10 @@ public class Tileset {
     }
     
     public BufferedImage getIndexedColorImage() {
+        return getIndexedColorImage(1);
+    }
+    
+    public BufferedImage getIndexedColorImage(int scale) {
         if (tiles == null || tiles.length == 0) {
             return null;
         }
@@ -96,7 +100,7 @@ public class Tileset {
             int height = tiles.length/tilesPerRow;
             if (tiles.length%tilesPerRow != 0)
                 height++;
-            indexedColorImage = new BufferedImage(width*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            indexedColorImage = new BufferedImage(width*PIXEL_WIDTH*scale, height*PIXEL_HEIGHT*scale, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = indexedColorImage.getGraphics();
             for(int j=0;j<height;j++){
                 for(int i=0;i<width;i++){
@@ -104,7 +108,7 @@ public class Tileset {
                     if (tileID >= tiles.length) {
                         break;
                     } else {
-                        graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
+                        graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*PIXEL_WIDTH*scale, j*PIXEL_HEIGHT*scale, PIXEL_WIDTH*scale, PIXEL_HEIGHT*scale, null);
                     }
                 }
             }
