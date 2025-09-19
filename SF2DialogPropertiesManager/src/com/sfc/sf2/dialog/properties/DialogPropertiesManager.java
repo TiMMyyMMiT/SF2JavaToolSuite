@@ -20,6 +20,8 @@ import com.sfc.sf2.portrait.Portrait;
 import com.sfc.sf2.portrait.PortraitManager;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -36,8 +38,8 @@ public class DialogPropertiesManager extends AbstractManager {
     
     private DialogPropertiesEnums dialogEnums;
     private DialogProperty[] dialogProperties;
-    private MapSprite[] mapsprites;
-    private Portrait[] portraits;
+    private HashMap<Integer, MapSprite> mapsprites;
+    private HashMap<Integer, Portrait> portraits;
 
     @Override
     public void clearData() {
@@ -46,16 +48,18 @@ public class DialogPropertiesManager extends AbstractManager {
         dialogEnums = null;
         dialogProperties = null;
         if (mapsprites != null) {
-            for (int i = 0; i < mapsprites.length; i++) {
-                if (mapsprites[i] != null) {
-                    mapsprites[i].clearIndexedColorImage(true);
+            for (Map.Entry<Integer, MapSprite> entry : mapsprites.entrySet()) {
+                MapSprite sprite = entry.getValue();
+                if (sprite != null) {
+                    sprite.clearIndexedColorImage(true);
                 }
             }
         }
         if (portraits != null) {
-            for (int i = 0; i < portraits.length; i++) {
-                if (portraits[i] != null) {
-                    portraits[i].clearIndexedColorImage();
+            for (Map.Entry<Integer, Portrait> entry : portraits.entrySet()) {
+                Portrait portrait = entry.getValue();
+                if (portrait != null) {
+                    portrait.clearIndexedColorImage();
                 }
             }
         }
@@ -88,11 +92,23 @@ public class DialogPropertiesManager extends AbstractManager {
             Console.logger().info("Dialog properties enums successfully imported from : " + sf2EnumsPath);
         }
         if (mapsprites == null) {
-            mapsprites = mapSpriteManager.importDisassemblyFromEntryFile(palettePath, mapspritesPath);
+            MapSprite[] items = mapSpriteManager.importDisassemblyFromEntryFile(palettePath, mapspritesPath);
+            mapsprites = new HashMap<>(items.length);
+            for (int i = 0; i < items.length; i++) {
+                if (items[i] != null) {
+                    mapsprites.put(items[i].getIndex(), items[i]);
+                }
+            }
             Console.logger().info("Mapsprites successfully imported from : " + mapspritesPath);
         }
         if (portraits == null) {
-            portraits = portraitManager.importDisassemblyFromEntryFile(portraitsPath);
+            Portrait[] items = portraitManager.importDisassemblyFromEntryFile(portraitsPath);
+            portraits = new HashMap<>(items.length);
+            for (int i = 0; i < items.length; i++) {
+                if (items[i] != null) {
+                    portraits.put(items[i].getIndex(), items[i]);
+                }
+            }
             Console.logger().info("Portraits successfully imported from : " + portraitsPath);
         }
         dialogEnums.setImages(mapsprites, portraits);
@@ -121,14 +137,6 @@ public class DialogPropertiesManager extends AbstractManager {
 
     public DialogProperty[] getDialogProperties() {
         return dialogProperties;
-    }
-
-    public MapSprite[] getMapsprites() {
-        return mapsprites;
-    }
-
-    public Portrait[] getPortraits() {
-        return portraits;
     }
 
     public DialogPropertiesEnums getDialogEnums() {

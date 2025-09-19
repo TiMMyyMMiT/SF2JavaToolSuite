@@ -30,7 +30,7 @@ public class BufferedImageTableRenderer extends DefaultTableCellRenderer {
             setText(null);
         } else {
             setIcon(null);
-            setText("Bad image");
+            setText(null);
         }
         return this;
     }

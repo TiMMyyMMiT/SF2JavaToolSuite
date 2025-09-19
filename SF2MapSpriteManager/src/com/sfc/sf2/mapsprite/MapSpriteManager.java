@@ -94,10 +94,13 @@ public class MapSpriteManager extends AbstractManager {
         MapSprite lastMapSprite = null;
         int frameCount = 0;
         int failedToLoad = 0;
+        int[] indices = new int[3];
         for (int i = 0; i < entriesData.entriesCount(); i++) {
             Path tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
             try {
-                int[] indices = getIndicesFromFilename(tilesetPath.getFileName());
+                indices[0] = i/3;
+                indices[1] = i%3;
+                indices[2] = -1;
                 MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), indices, palette, null);
                 Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
                 frameCount+=2;

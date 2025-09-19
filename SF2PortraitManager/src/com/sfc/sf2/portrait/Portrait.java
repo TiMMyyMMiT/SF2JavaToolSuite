@@ -23,6 +23,7 @@ public class Portrait {
     public static final int PORTRAIT_TILES_WIDTH = 6;
     public static final int PORTRAIT_TILES_HEIGHT = 8;
     
+    private int index;
     private String name;
     private Tileset tileset;
     private BufferedImage indexedColorImage = null;
@@ -30,16 +31,24 @@ public class Portrait {
     private int[][] eyeTiles;    
     private int[][] mouthTiles;
     
-    public Portrait(String name, Tileset tileset) {
-        this.name = name;
-        this.tileset = tileset;
+    public Portrait(int index, String name, Tileset tileset) {
+        this(index, name, tileset, null, null);
     }
     
-    public Portrait(String name, Tileset tileset, int[][] eyeTiles, int[][] mouthTiles) {
+    public Portrait(int index, String name, Tileset tileset, int[][] eyeTiles, int[][] mouthTiles) {
+        this.index = index;
         this.name = name;
         this.tileset = tileset;
         this.eyeTiles = eyeTiles;
         this.mouthTiles = mouthTiles;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
     
     public String getName() {

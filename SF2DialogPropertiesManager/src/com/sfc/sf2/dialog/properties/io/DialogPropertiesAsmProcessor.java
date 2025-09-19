@@ -33,7 +33,7 @@ public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogPro
             if (line.length() == 0 || line.charAt(0) == ';') continue;
             line = StringHelpers.trimAndRemoveComments(line);
             if (line.startsWith("mapsprite")) {
-                String value = line.trim().substring(line.indexOf(' ')+1);
+                String value = line.substring(line.indexOf(' ')).trim();
                 if (value.contains("$") || value.matches("[0-9]+")) {
                     int val = StringHelpers.getValueInt(value);
                     mapSprite = DialogPropertiesEnums.toEnumString(val, pckg.getMapSprites());
@@ -45,7 +45,7 @@ public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogPro
                 if (!line.startsWith("portrait")) {
                     throw new AsmException("Dialog Properties asm file formatted incorrectly. Could not find \"portrait\" entry for : " + mapSprite);
                 }
-                value = line.trim().substring(line.indexOf(' ')+1);
+                value = line.substring(line.indexOf(' ')).trim();
                 if (value.contains("$") || value.matches("[0-9]+")) {
                     int val = StringHelpers.getValueInt(value);
                     portrait = DialogPropertiesEnums.toEnumString(val, pckg.getPortraits());
@@ -61,7 +61,7 @@ public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogPro
                 if (!line.startsWith("speechSfx")) {
                     throw new AsmException("Dialog Properties asm file formatted incorrectly. Could not find \"speechSfx\" entry for : " + mapSprite);
                 }
-                value = line.trim().substring(line.indexOf(' ')+1);
+                value = line.substring(line.indexOf(' ')).trim();
                 if (value.contains("$") || value.matches("[0-9]+")) {
                     int val = StringHelpers.getValueInt(value);
                     sfx = DialogPropertiesEnums.toEnumString(val, pckg.getSfx());
