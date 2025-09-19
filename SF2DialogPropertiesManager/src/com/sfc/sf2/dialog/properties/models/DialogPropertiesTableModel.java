@@ -42,7 +42,7 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
 
     @Override
     public Class getColumnType(int col) {
-        return (col == 2 || col == 4) ? BufferedImage.class : String.class;
+        return (col == 2 || col == 4) ? BufferedImage.class : col == 0 ? Integer.class : String.class;
     }
     
     @Override

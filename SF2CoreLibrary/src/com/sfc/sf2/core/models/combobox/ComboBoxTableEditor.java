@@ -28,7 +28,7 @@ public class ComboBoxTableEditor extends AbstractCellEditor implements TableCell
 
     public ComboBoxTableEditor(ComboBoxModel model) {
         this();
-        comboBox.setModel(model);
+        setData(model);
     }
     
     public ComboBoxTableEditor() {
