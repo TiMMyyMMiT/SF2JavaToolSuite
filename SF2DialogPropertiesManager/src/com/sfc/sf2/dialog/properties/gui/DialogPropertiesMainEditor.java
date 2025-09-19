@@ -12,7 +12,6 @@ import com.sfc.sf2.dialog.properties.DialogProperty;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -35,6 +34,8 @@ public class DialogPropertiesMainEditor extends AbstractMainEditor {
         accordionPanel1.setExpanded(false);
         
         dialogPropertiesTable.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
+        dialogPropertiesTable.jTable.getColumnModel().getColumn(2).setMaxWidth(60);
+        dialogPropertiesTable.jTable.getColumnModel().getColumn(4).setMaxWidth(60);
         dialogPropertiesTable.jTable.setRowHeight(70);
     }
     
@@ -501,6 +502,7 @@ public class DialogPropertiesMainEditor extends AbstractMainEditor {
         try {
             dialogpropertiesManager.importImagesAndEnums(palettePath, mapspriteEntriesPath, portraitEntriesPath, enumsPath);
             dialogpropertiesManager.importDisassembly(dialogPropertiesPath);
+            dialogPropertiesTableModel.setMapSpritesEditable(true);
         } catch (Exception ex) {
             dialogpropertiesManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
@@ -529,6 +531,7 @@ public class DialogPropertiesMainEditor extends AbstractMainEditor {
         try {
             dialogpropertiesManager.importImagesAndEnums(palettePath, mapspriteEntriesPath, portraitEntriesPath, enumsPath);
             dialogpropertiesManager.importAlliesDisassembly(dialogPropertiesPath);
+            dialogPropertiesTableModel.setMapSpritesEditable(false);
         } catch (Exception ex) {
             dialogpropertiesManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);

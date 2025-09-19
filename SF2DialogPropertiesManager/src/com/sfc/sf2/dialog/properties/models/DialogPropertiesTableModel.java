@@ -22,6 +22,8 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
     private DefaultComboBoxModel mapSpritesModel;
     private DefaultComboBoxModel portraitsModel;
     private DefaultComboBoxModel sfxModel;
+    
+    private boolean mapSpritesEditable;
 
     public DialogPropertiesTableModel() {
         super(new String[] { "Id", "Sprite", "Sprite", "Portrait", "Portrait", "SFX" }, 255);
@@ -34,6 +36,10 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
         sfxModel = new DefaultComboBoxModel(enums.getSfx().keySet().toArray());
     }
 
+    public void setMapSpritesEditable(boolean mapSpritesEditable) {
+        this.mapSpritesEditable = mapSpritesEditable;
+    }
+
     @Override
     public Class getColumnType(int col) {
         return (col == 2 || col == 4) ? BufferedImage.class : String.class;
@@ -41,7 +47,11 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
     
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return !(columnIndex == 0 || columnIndex == 2 || columnIndex == 4);
+        if (columnIndex == 1) {
+            return mapSpritesEditable;
+        } else {
+            return !(columnIndex == 0 || columnIndex == 2 || columnIndex == 4);
+        }
     }
 
     @Override
