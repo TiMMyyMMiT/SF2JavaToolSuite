@@ -12,13 +12,27 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 /**
  *
  * @author TiMMy
  */
-public class ComboBoxTableRenderer implements TableCellRenderer {
+public class ComboBoxTableRenderer extends DefaultTableCellRenderer {
+    public ComboBoxTableRenderer() {
+        super();
+    }
+    
+    public ComboBoxTableRenderer(ComboBoxModel model) {
+        super();
+    }
+    
+    public void setData(ComboBoxModel model) { }
+}
+
+//TODO How to make this work properly? (currently does not highlight selected when list appears)
+/*public class ComboBoxTableRenderer implements TableCellRenderer {
 
     private final JTextField text = new JTextField();
     private final JComboBox comboBox = new JComboBox();
@@ -51,7 +65,6 @@ public class ComboBoxTableRenderer implements TableCellRenderer {
                     comboBox.setModel(model);
                 }
             }
-            comboBox.setSelectedItem(null);
             comboBox.setSelectedItem(value);
             return comboBox;
         } else {
@@ -59,4 +72,4 @@ public class ComboBoxTableRenderer implements TableCellRenderer {
             return text;
         }
     }
-}
+}*/
