@@ -14,7 +14,6 @@ import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
 import com.sfc.sf2.graphics.Block;
-import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.FileHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.io.MapSpriteDisassemblyProcessor;
@@ -25,7 +24,6 @@ import com.sfc.sf2.palette.PaletteManager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import jdk.jshell.spi.ExecutionControl;
 
 /**
@@ -45,79 +43,88 @@ public class MapSpriteManager extends AbstractManager {
     private final MapSpriteRawImageProcessor mapSpriteRawImageProcessor = new MapSpriteRawImageProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
     
-    private MapSprite[] mapSprites;
+    private MapSpriteEntries mapSprites;
     
     @Override
     public void clearData() {
         paletteManager.clearData();
         if (mapSprites != null) {
-            for (int i = 0; i < mapSprites.length; i++) {
-                if (mapSprites[i] != null) {
-                    mapSprites[i].clearIndexedColorImage(true);
+            MapSprite[] sprites = mapSprites.getMapSprites();
+            for (int i = 0; i < sprites.length; i++) {
+                if (sprites[i] != null) {
+                    sprites[i].clearIndexedColorImage(true);
                 }
             }
             mapSprites = null;
         }
     }
 
-    public MapSprite[] importDisassembly(Path paletteFilePath, Path graphicsFilePath) throws IOException, DisassemblyException {
+    public MapSprite importDisassembly(Path paletteFilePath, Path graphicsFilePath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        mapSprites = new MapSprite[1];
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
-        mapSprites = importDisassembly(graphicsFilePath, palette);
+        MapSprite sprite = importDisassembly(graphicsFilePath, palette);
         Console.logger().finest("EXITING importDisassembly");
-        return mapSprites;
+        return sprite;
     }
 
-    public MapSprite[] importDisassembly(Path graphicsFilePath, Palette palette) throws IOException, DisassemblyException {
+    public MapSprite importDisassembly(Path graphicsFilePath, Palette palette) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        mapSprites = new MapSprite[1];
+        mapSprites = new MapSpriteEntries(1, 1);
         int[] indices = getIndicesFromFilename(graphicsFilePath.getFileName());
         MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), indices, palette, null);
         Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
         MapSprite newSprite = new MapSprite(indices[0]);
         newSprite.addFrame(frames[0], indices[1], 0);
         newSprite.addFrame(frames[1], indices[1], 1);
-        mapSprites[0] = newSprite;
+        mapSprites.addUniqueEntry(indices[0], newSprite);
         Console.logger().info("Mapsprite successfully imported from : " + graphicsFilePath);
         Console.logger().finest("EXITING importDisassembly");
-        return mapSprites;
+        return newSprite;
     }
         
     //TODO update to new format
-    public MapSprite[] importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
+    public MapSpriteEntries importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
         EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
         Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
-        ArrayList<MapSprite> spritesList = new ArrayList<>();
+        mapSprites = new MapSpriteEntries(entriesData);
         MapSprite lastMapSprite = null;
         int frameCount = 0;
         int failedToLoad = 0;
         int[] indices = new int[3];
         for (int i = 0; i < entriesData.entriesCount(); i++) {
-            Path tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
+            Path tilesetPath = null;
             try {
                 indices[0] = i/3;
                 indices[1] = i%3;
                 indices[2] = -1;
-                MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), indices, palette, null);
-                Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
-                frameCount+=2;
-                if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
-                    lastMapSprite = new MapSprite(indices[0]);
-                    spritesList.add(lastMapSprite);
+                int[] loadIndices = getIndicesFromFilename(entriesData.getEntry(i), "_");
+                if (indices[0] == loadIndices[0] && indices[1] == loadIndices[1] && indices[2] == loadIndices[2]) {
+                    //Is unique
+                    tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(i));
+                    MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), indices, palette, null);
+                    Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
+                    frameCount+=2;
+                    if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
+                        lastMapSprite = new MapSprite(indices[0]);
+                        mapSprites.addUniqueEntry(indices[0], lastMapSprite);
+                    }
+                    lastMapSprite.addFrame(frames[0], indices[1], 0);
+                    lastMapSprite.addFrame(frames[1], indices[1], 1);
+                } else {
+                    //Is duplicate
+                    if (indices[1] == 0) {
+                        mapSprites.addDuplicateEntry(indices[0], loadIndices[0]);
+                        i += 2; //Skip other duplicates
+                    }
                 }
-                lastMapSprite.addFrame(frames[0], indices[1], 0);
-                lastMapSprite.addFrame(frames[1], indices[1], 1);
             } catch (Exception e) {
                 failedToLoad++;
                 Console.logger().warning("Mapsprite could not be imported : " + tilesetPath + " : " + e);
             }
         }
-        mapSprites = new MapSprite[spritesList.size()];
-        mapSprites = spritesList.toArray(mapSprites);
-        Console.logger().info(mapSprites.length + " mapsprites with " + frameCount + " frames successfully imported from entries file : " + entriesPath);
+        Console.logger().info(mapSprites.getMapSprites().length + " mapsprites with " + frameCount + " frames successfully imported from images : " + entriesPath);
         Console.logger().info((entriesData.entriesCount() - entriesData.uniqueEntriesCount()) + " duplicate mapsprite entries found.");
         if (failedToLoad > 0) {
             Console.logger().severe(failedToLoad + " mapsprites failed to import. See logs above");
@@ -126,41 +133,14 @@ public class MapSpriteManager extends AbstractManager {
         return mapSprites;
     }
     
-    public void exportAllDisassemblies(Path basePath, MapSprite[] mapSprites) {
-        Console.logger().finest("ENTERING exportDisassembly");
-        this.mapSprites = mapSprites;
-        int failedToSave = 0;
-        Path filePath = null;
-        Block[] frames = new Block[2];
-        for (MapSprite mapSprite : mapSprites) {
-            try {
-                int index = mapSprite.getIndex();
-                for (int i = 0; i < 3; i++) {   //For each facing direction
-                    filePath = basePath.resolve(String.format("mapsprite%03d-%d.bin", index, i));
-                    frames[0] = mapSprite.getFrame(i, 0);
-                    frames[1] = mapSprite.getFrame(i, 1);
-                    if (frames[0] != null || frames[1] != null) {
-                        mapSpriteDisassemblyProcessor.exportDisassembly(filePath, frames, null);
-                    }
-                }
-            } catch (Exception e) {
-                failedToSave++;
-                Console.logger().warning("Mapsprite could not be exported : " + filePath + " : " + e);
-            }
-        }
-        Console.logger().info((mapSprites.length - failedToSave) + " mapsprites successfully exported.");
-        if (failedToSave > 0) {
-            Console.logger().severe(failedToSave + " mapsprites failed to export. See logs above");
-        }
-        Console.logger().finest("EXITING exportDisassembly");
-    }
-    
-    public MapSprite[] importAllImages(Path paletteFilePath, Path basePath, FileFormat format) throws IOException, DisassemblyException {
+    public MapSpriteEntries importAllImages(Path paletteFilePath, Path basePath, Path entriesPath, FileFormat format) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importImage");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
+        Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
+        mapSprites = new MapSpriteEntries(entriesData);
         File[] files = FileHelpers.findAllFilesInDirectory(basePath, "mapsprite", AbstractRawImageProcessor.GetFileExtensionString(format));
         Console.logger().info(files.length + " mapsprite images found.");
-        ArrayList<MapSprite> spritesList = new ArrayList<>();
         MapSprite lastMapSprite = null;
         int frameCount = 0;
         int failedToLoad = 0;
@@ -173,7 +153,7 @@ public class MapSpriteManager extends AbstractManager {
                 frameCount+=frames.length;
                 if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
                     lastMapSprite = new MapSprite(indices[0]);
-                    spritesList.add(lastMapSprite);
+                    mapSprites.addUniqueEntry(indices[0], lastMapSprite);
                 }
                 for (int i = 0; i < frames.length; i++) {
                     if (indices[1] == -1) {
@@ -189,23 +169,68 @@ public class MapSpriteManager extends AbstractManager {
                 Console.logger().warning("Mapsprite could not be imported : " + tilesetPath + " : " + e);
             }
         }
-        mapSprites = new MapSprite[spritesList.size()];
-        mapSprites = spritesList.toArray(mapSprites);
-        Console.logger().info(mapSprites.length + " mapsprites with " + frameCount + " frames successfully imported from images : " + basePath);
+        Console.logger().info(mapSprites.getMapSprites().length + " mapsprites with " + frameCount + " frames successfully imported from images : " + basePath);
         if (failedToLoad > 0) {
             Console.logger().severe(failedToLoad + " mapsprites failed to import. See logs above");
+        }
+        int[] indices = new int[3];
+        for (int i = 0; i < entriesData.entriesCount(); i++) {
+            indices[0] = i/3;
+            indices[1] = i%3;
+            indices[2] = -1;
+            int[] loadIndices = getIndicesFromFilename(entriesData.getEntry(i), "_");
+            if (indices[0] == loadIndices[0] && indices[1] == loadIndices[1] && indices[2] == loadIndices[2]) {
+                if (!mapSprites.hasData(indices[0])) {
+                    Console.logger().warning(String.format("WARNING No sprite data for entry : mapsprite%03d_d", indices[0], indices[1]));
+                }
+            } else {
+                if (indices[1] == 0) {
+                    mapSprites.addDuplicateEntry(indices[0], loadIndices[0]);
+                }
+            }
         }
         Console.logger().finest("EXITING importImage");
         return mapSprites;
     }
     
-    public void exportAllImages(Path basePath, MapSprite[] mapSprites, MapSpriteExportMode exportMode, FileFormat format) {
+    public void exportAllDisassemblies(Path basePath, MapSpriteEntries mapSprites) {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.mapSprites = mapSprites;
+        int failedToSave = 0;
+        Path filePath = null;
+        Block[] frames = new Block[2];
+        MapSprite[] uniques = mapSprites.getMapSprites();
+        for (MapSprite mapSprite : uniques) {
+            try {
+                int index = mapSprite.getIndex();
+                for (int i = 0; i < 3; i++) {   //For each facing direction
+                    filePath = basePath.resolve(String.format("mapsprite%03d-%d.bin", index, i));
+                    frames[0] = mapSprite.getFrame(i, 0);
+                    frames[1] = mapSprite.getFrame(i, 1);
+                    if (frames[0] != null || frames[1] != null) {
+                        mapSpriteDisassemblyProcessor.exportDisassembly(filePath, frames, null);
+                    }
+                }
+            } catch (Exception e) {
+                failedToSave++;
+                Console.logger().warning("Mapsprite could not be exported : " + filePath + " : " + e);
+            }
+        }
+        Console.logger().info((mapSprites.getMapSprites().length - failedToSave) + " mapsprites successfully exported.");
+        if (failedToSave > 0) {
+            Console.logger().severe(failedToSave + " mapsprites failed to export. See logs above");
+        }
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public void exportAllImages(Path basePath, MapSpriteEntries mapSprites, MapSpriteExportMode exportMode, FileFormat format) {
         Console.logger().finest("ENTERING exportImage");
         this.mapSprites = mapSprites;
         int failedToSave = 0;
         Path filePath = null;
         int files = 0;
-        for (MapSprite mapSprite : mapSprites) {
+        MapSprite[] uniques = mapSprites.getMapSprites();
+        for (MapSprite mapSprite : uniques) {
             try {
                 int index = mapSprite.getIndex();
                 MapSpritePackage pckg = new MapSpritePackage(null, new int[] { index }, mapSprite.getPalette(), exportMode);
@@ -253,17 +278,45 @@ public class MapSpriteManager extends AbstractManager {
         Console.logger().finest("EXITING exportImage");
     }
     
-    public MapSprite[] getMapSprites() {
+    public void exportEntries(Path entriesPath, MapSpriteEntries mapSprites) throws IOException, AsmException {
+        Console.logger().finest("ENTERING exportEntries");
+        this.mapSprites = mapSprites;
+        EntriesAsmData asmData = new EntriesAsmData();
+        asmData.setHeadername("Map sprites");
+        asmData.setPointerListName("pt_Mapsprites");
+        asmData.setIsDoubleList(true);
+        Path entryPath = PathHelpers.getIncbinPath().relativize(PathHelpers.getBasePath());
+        for (int i = 0; i < mapSprites.getEntries().length; i++) {
+            if (mapSprites.getEntries()[i] == i) {
+                String entry = String.format("Mapsprite%03d_", i);
+                asmData.addPath(entry+"0", entryPath.resolve(entry+"0.bin"));
+                asmData.addPath(entry+"1", entryPath.resolve(entry+"1.bin"));
+                asmData.addPath(entry+"2", entryPath.resolve(entry+"2.bin"));
+            } else {
+                String entry = String.format("Mapsprite%03d_", mapSprites.getEntries()[i]);
+                asmData.addEntry(entry+"0");
+                asmData.addEntry(entry+"1");
+                asmData.addEntry(entry+"2");
+            }
+        }
+        entriesAsmProcessor.exportAsmData(entriesPath, asmData, null);
+        Console.logger().finest("EXITING exportEntries");
+    }
+    
+    public MapSpriteEntries getMapSprites() {
         return mapSprites;
     }
     
     private int[] getIndicesFromFilename(Path filename) {
-        String name = filename.toString();
+        return getIndicesFromFilename(filename.toString(), "-");
+    }
+    
+    private int[] getIndicesFromFilename(String name, String splitter) {
         int dotIndex = name.lastIndexOf('.');
         if (dotIndex > 0) {
             name = name.substring(0, dotIndex);
         }
-        String[] split = name.substring(9).split("-");
+        String[] split = name.substring(9).split(splitter);
         int[] indices = new int[3];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i < split.length ? Integer.parseInt(split[i]) : -1;

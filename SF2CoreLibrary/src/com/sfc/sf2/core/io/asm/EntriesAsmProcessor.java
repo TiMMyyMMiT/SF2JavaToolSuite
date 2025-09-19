@@ -91,21 +91,13 @@ public class EntriesAsmProcessor extends AbstractAsmProcessor<EntriesAsmData, Em
         if (item.getIsDoubleList()) {
             //Write list of entries first
             for (int i = 0; i < item.entriesCount(); i++) {
-                writer.write("/t/t/t");
-                writer.write(listItemPrefix);
-                writer.write(" ");
-                writer.write(item.getEntry(i));
-                writer.write("\n");
+                writer.write(String.format("\t\t\t%s %s\n", listItemPrefix, item.getEntry(i)));
             }
         }
         //Write list of item:path pairs
         for (int i = 0; i < item.uniqueEntriesCount(); i++) {
-            writer.write(item.getUniqueEntries(i));
-                writer.write(" ");
-            writer.write(listPathPrefix);
-                writer.write(" \"");
-            writer.write(item.getPathForUnique(i).toString());
-            writer.write("\"\n");
+            String path = item.getPathForUnique(i).toString().replace('\\', '/');
+            writer.write(String.format("%s: %s \"%s\"\n", item.getUniqueEntries(i), listPathPrefix, path));
         }
     }
 }
