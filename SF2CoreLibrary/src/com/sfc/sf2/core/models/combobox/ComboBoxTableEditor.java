@@ -50,9 +50,7 @@ public class ComboBoxTableEditor extends AbstractCellEditor implements TableCell
                 comboBox.setModel(model);
             }
         }
-        comboBox.setSelectedItem(null);
         comboBox.setSelectedItem(value);
-        System.out.println(String.format("Item (%d, %d): %s (%s)", row, column, comboBox.getSelectedItem(), value));
         return comboBox;
     }
 
@@ -63,7 +61,6 @@ public class ComboBoxTableEditor extends AbstractCellEditor implements TableCell
 
     @Override
     public Object getCellEditorValue() {
-        System.out.println(String.format("Result : %s", comboBox.getSelectedItem()));
         return comboBox.getSelectedItem();
     }
     

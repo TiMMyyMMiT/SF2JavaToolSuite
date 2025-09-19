@@ -80,9 +80,9 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
     @Override
     protected DialogProperty setValue(DialogProperty item, int row, int col, Object value) {
         switch (col) {
-            case 1: item.setPortraitName((String)value);
-            case 3: item.setSpriteName((String)value);
-            case 5: item.setSfxName((String)value);
+            case 1: item.setSpriteName((String)value); break;
+            case 3: item.setPortraitName((String)value); break;
+            case 5: item.setSfxName((String)value); break;
         }
         return item;
     }
