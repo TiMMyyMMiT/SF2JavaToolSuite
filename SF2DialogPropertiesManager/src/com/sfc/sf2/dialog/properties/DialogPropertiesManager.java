@@ -15,6 +15,7 @@ import com.sfc.sf2.dialog.properties.io.DialogPropertiesDisassemblyProcessor;
 import com.sfc.sf2.dialog.properties.io.DialogPropertiesEnumsProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.mapsprite.MapSprite;
+import com.sfc.sf2.mapsprite.MapSpriteEntries;
 import com.sfc.sf2.mapsprite.MapSpriteManager;
 import com.sfc.sf2.portrait.Portrait;
 import com.sfc.sf2.portrait.PortraitManager;
@@ -92,12 +93,10 @@ public class DialogPropertiesManager extends AbstractManager {
             Console.logger().info("Dialog properties enums successfully imported from : " + sf2EnumsPath);
         }
         if (mapsprites == null) {
-            MapSprite[] items = mapSpriteManager.importDisassemblyFromEntryFile(palettePath, mapspritesPath);
-            mapsprites = new HashMap<>(items.length);
-            for (int i = 0; i < items.length; i++) {
-                if (items[i] != null) {
-                    mapsprites.put(items[i].getIndex(), items[i]);
-                }
+            MapSpriteEntries items = mapSpriteManager.importDisassemblyFromEntryFile(palettePath, mapspritesPath);
+            mapsprites = new HashMap<>(items.getEntries().length);
+            for (int i = 0; i < items.getEntries().length; i++) {
+                mapsprites.put(i, items.getMapSprite(i));
             }
             Console.logger().info("Mapsprites successfully imported from : " + mapspritesPath);
         }
