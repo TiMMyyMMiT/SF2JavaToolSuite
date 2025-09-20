@@ -5,32 +5,27 @@
  */
 package com.sfc.sf2.core.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
+import com.sfc.sf2.core.gui.layout.*;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener.FrameEvent;
 
 /**
  *
  * @author TiMMy
  */
-public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements ActionListener {
+public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements AnimationListener {
     
-    private Timer idleTimer = null;
-    private int currentAnimFrame = 0;
-    private int frameMax;
-    private boolean animPlaying = false;
-    private boolean variableAnimationSpeed;
-    private int speed;
-    private boolean loop;
+    protected LayoutAnimator animator;
     
-    ActionListener animationUpdated;
-
+    protected int currentAnimFrame;
+    
     public AnimatedLayoutPanel() {
         super();
+        animator = new LayoutAnimator(this);
     }
     
     public boolean isAnimating() {
-        return animPlaying;
+        return BaseLayoutComponent.IsEnabled(animator);
     }
     
     public int getCurrentAnimationFrame() {
@@ -38,19 +33,10 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
     }
 
     public void setCurrentAnimationFrame(int currentAnimationFrame) {
-        this.currentAnimFrame = currentAnimationFrame;
-    }
-    
-    protected int getFrameSpeed(int frame) {
-        return speed;
-    }
-    
-    public void setFrameUpdatedListener(ActionListener l) {
-        animationUpdated = l;
-    }
-    
-    public void removeFrameUpdatedListener() {
-        animationUpdated = null;
+        if (this.currentAnimFrame != currentAnimationFrame) {
+            this.currentAnimFrame = currentAnimationFrame;
+            redraw();
+        }
     }
     
     public void startAnimation(int speed) {
@@ -62,57 +48,15 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
     }
     
     public void startAnimation(int speed, int frameMax, boolean loop, boolean variableAnimationSpeed) {
-        if (!hasData()) return;
-        this.speed = speed;
-        this.loop = loop;
-        this.currentAnimFrame = 0;
-        this.frameMax = frameMax;
-        this.variableAnimationSpeed = variableAnimationSpeed;
-        if (!animPlaying) {
-            currentAnimFrame = 0;
-            idleTimer = new Timer(speed*1000/60, this);
-            if (!variableAnimationSpeed) idleTimer.setRepeats(loop);
-            idleTimer.start();
-        }
-        animPlaying = true;
-        animationFrameUpdated(0);
+        animator.startAnimation(speed, frameMax, loop, variableAnimationSpeed);
     }
     
     public void stopAnimation() {
-        if (!hasData()) return;
-        if (animPlaying) {
-            animPlaying = false;
-            idleTimer.stop();
-            idleTimer = null;
-        }
+        animator.stopAnimation();
     }
     
-    protected void animationFrameUpdated(int frame) {
-        redraw();
-        if (animationUpdated != null) {
-            animationUpdated.actionPerformed(new ActionEvent(this, frame, null));
-        }
-    }
-
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() != idleTimer) return;
-        
-        currentAnimFrame++;
-        if (currentAnimFrame > frameMax) {
-            if (loop) {
-                currentAnimFrame=0;
-            } else {
-                stopAnimation();
-                return;
-            }
-        }
-        animationFrameUpdated(currentAnimFrame);
-        if (variableAnimationSpeed) {
-            int delay = getFrameSpeed(currentAnimFrame)*1000/60;
-            idleTimer.setInitialDelay(delay);
-            idleTimer.setDelay(delay);
-            idleTimer.restart();
-        }
+    public void frameUpdated(FrameEvent e) {
+        setCurrentAnimationFrame(e.getCurrentFrame());
     }
 }

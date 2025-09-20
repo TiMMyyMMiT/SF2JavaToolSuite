@@ -5,15 +5,7 @@
  */
 package com.sfc.sf2.core.gui;
 
-import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.gui.layout.BaseLayoutComponent;
-import com.sfc.sf2.core.gui.layout.LayoutBackground;
-import com.sfc.sf2.core.gui.layout.LayoutGrid;
-import com.sfc.sf2.core.gui.layout.LayoutScale;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsHeader;
-import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
-import com.sfc.sf2.core.gui.layout.LayoutScrollNormaliser;
+import com.sfc.sf2.core.gui.layout.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

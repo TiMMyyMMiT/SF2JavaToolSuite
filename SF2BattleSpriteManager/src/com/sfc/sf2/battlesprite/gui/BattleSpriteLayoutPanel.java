@@ -98,6 +98,11 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
         graphics.drawLine(x-5, y+5, x+5, y-5);
         graphics.setColor(Color.WHITE);
     }
+
+    @Override
+    public int getFrameSpeed(int currentAnimFrame) {
+        return 0;
+    }
     
     public BattleSprite getBattleSprite() {
         return battleSprite;
