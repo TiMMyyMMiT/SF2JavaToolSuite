@@ -46,7 +46,7 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         jComboBox1.removeAllItems();
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         battleSpriteLayoutPanel.setBattleSprite(battleSprite);
-        battleSpriteLayoutPanel.stopAnimation();
+        battleSpriteLayoutPanel.getAnimator().stopAnimation();
         jCheckBox3.setSelected(false);
         if (battleSprite != null) {
             Palette[] palettes = battleSprite.getPalettes();
@@ -708,9 +708,9 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         BattleSprite battleSprite = battleSpriteLayoutPanel.getBattleSprite();
         if (battleSprite != null) {
             if (jCheckBox3.isSelected()) {
-                battleSpriteLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true);
+                battleSpriteLayoutPanel.getAnimator().startAnimation(battleSprite.getAnimSpeed(), 1, true);
             } else {
-                battleSpriteLayoutPanel.stopAnimation();
+                battleSpriteLayoutPanel.getAnimator().stopAnimation();
                 battleSpriteLayoutPanel.redraw();
             }
         }
@@ -728,9 +728,9 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         BattleSprite battleSprite = battleSpriteManager.getBattleSprite();
         if (battleSprite != null) {
             battleSprite.setAnimSpeed((int)jSpinner4.getValue());
-            if (battleSpriteLayoutPanel.isAnimating()) {
-                battleSpriteLayoutPanel.stopAnimation();
-                battleSpriteLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true);
+            if (battleSpriteLayoutPanel.getAnimator().isAnimating()) {
+                battleSpriteLayoutPanel.getAnimator().stopAnimation();
+                battleSpriteLayoutPanel.getAnimator().startAnimation(battleSprite.getAnimSpeed(), 1, true);
             }
         }
     }//GEN-LAST:event_jSpinner4StateChanged

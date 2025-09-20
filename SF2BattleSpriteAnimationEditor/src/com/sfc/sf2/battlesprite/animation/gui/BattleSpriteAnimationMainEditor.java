@@ -47,7 +47,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                                                 
         battleSpriteAnimationLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
         
-        battleSpriteAnimationLayoutPanel.addAnimationListener(this::onAnimationFrameUpdated);
+        battleSpriteAnimationLayoutPanel.getAnimator().addAnimationListener(this::onAnimationFrameUpdated);
         tableFrames.addTableModelListener(this::onTableFrameDataChanged);
         tableFrames.addListSelectionListener(this::onTableFrameSelectionChanged);
         TableColumnModel columns = tableFrames.jTable.getColumnModel();
@@ -800,10 +800,10 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        if (battleSpriteAnimationLayoutPanel.hasData() && !battleSpriteAnimationLayoutPanel.isAnimating()) {
+        if (battleSpriteAnimationLayoutPanel.hasData() && !battleSpriteAnimationLayoutPanel.getAnimator().isAnimating()) {
             int frame = (int)jSpinner1.getModel().getValue();
             if (frame >= 0) {
-                battleSpriteAnimationLayoutPanel.setCurrentAnimationFrame(frame);
+                battleSpriteAnimationLayoutPanel.getAnimator().setFrame(frame);
                 tableFrames.jTable.setRowSelectionInterval(frame, frame);
             }
         }
@@ -817,9 +817,9 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         BattleSprite battleSprite = battlespriteanimationManager.getBattleSprite();
         if (battleSprite != null && battleSpriteAnimationLayoutPanel.hasData()) {
             if (jCheckBox2.isSelected()) {
-                battleSpriteAnimationLayoutPanel.startAnimation(battleSprite.getAnimSpeed(), 1, true, false);
+                battleSpriteAnimationLayoutPanel.getAnimator().startAnimation(battleSprite.getAnimSpeed(), 1, true, false);
             } else {
-                battleSpriteAnimationLayoutPanel.stopAnimation();
+                battleSpriteAnimationLayoutPanel.getAnimator().stopAnimation();
             }
         }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
@@ -829,7 +829,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         if (battleSpriteAnimationLayoutPanel.hasData()) {
             int speed = battlespriteanimationManager.getBattleSpriteAnimation().getFrames()[0].getDuration();
             int frames = battlespriteanimationManager.getBattleSpriteAnimation().getFrameCount()-1;
-            battleSpriteAnimationLayoutPanel.startAnimation(speed, frames, false, true);
+            battleSpriteAnimationLayoutPanel.getAnimator().startAnimation(speed, frames, false, true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
