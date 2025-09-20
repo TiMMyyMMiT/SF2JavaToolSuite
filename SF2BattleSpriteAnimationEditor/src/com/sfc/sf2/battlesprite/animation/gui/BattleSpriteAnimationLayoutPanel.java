@@ -46,7 +46,6 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     private WeaponSprite weaponsprite;
     private BattleSpriteAnimation animation;
     
-    private int currentAnimationFrame = 0;
     private boolean hideWeapon = false;
     
     public BattleSpriteAnimationLayoutPanel() {
@@ -72,7 +71,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
 
     @Override
     protected void drawImage(Graphics graphics) {
-        BattleSpriteAnimationFrame animFrame = animation.getFrames()[currentAnimationFrame];
+        BattleSpriteAnimationFrame animFrame = animation.getFrames()[getCurrentAnimationFrame()];
         Tileset spriteFrame = null;
         spriteFrame = battlesprite.getFrames()[animFrame.getBattleSpriteIndex()];   
         graphics.drawImage(bg.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
@@ -110,18 +109,12 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
     
     private void drawBattleSpriteFrame(Graphics graphics, Tileset frame, int xOffset, int yOffset) {
         graphics.drawImage(frame.getIndexedColorImage(), xOffset, yOffset, null);
-    }
+    }    
 
     @Override
-    protected void animationFrameUpdated(int frame) {
-        super.animationFrameUpdated(frame);
-        setFrame(frame);
-    }
-    
-    @Override
-    protected int getFrameSpeed(int frame) {
+    public int getAnimationFrameSpeed(int currentAnimFrame) {
         if (hasData()) {
-            return animation.getFrames()[frame].getDuration();
+            return animation.getFrames()[currentAnimFrame].getDuration();
         } else {
             stopAnimation();
             return 0;
@@ -154,18 +147,6 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
 
     public void setAnimation(BattleSpriteAnimation animation) {
         this.animation = animation;
-    }
-    
-    public int getFrame() {
-        return currentAnimationFrame;
-    }
-
-    public void setFrame(int currentFrame) {
-        if (animation == null || currentFrame < 0) return;
-        if (this.currentAnimationFrame != currentFrame) {
-            currentAnimationFrame = currentFrame;
-            redraw();
-        }
     }
 
     public boolean isHideWeapon() {
