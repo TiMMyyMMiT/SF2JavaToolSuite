@@ -17,6 +17,7 @@ import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel;
 import com.sfc.sf2.map.animation.io.MapAnimationAsmProcessor;
+import com.sfc.sf2.map.animation.io.MapAnimationPackage;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;
 import com.sfc.sf2.palette.Palette;
@@ -39,19 +40,21 @@ public class MapAnimationManager extends AbstractManager {
     @Override
     public void clearData() {
         mapLayoutManager.clearData();
+        tilesetmanager.clearData();
         animation = null;
     }
     
     public MapAnimation importDisassembly(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
+        clearData();
         mapLayoutManager.importDisassemblyFromEntryFiles(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
         if (animationsPath.toFile().exists()) {
-            animation = mapAnimationAsmProcessor.importAsmData(animationsPath, null);
+            animation = mapAnimationAsmProcessor.importAsmData(animationsPath, new MapAnimationPackage(getMapLayout().getTilesets()));
             importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
             Console.logger().info("Map layout and animation succesfully imported for : " + animationsPath);
         } else {
-            animation = new MapAnimation(-1, 0, new MapAnimationFrame[0]);
-            animation.setTileset(null);
+            animation = new MapAnimation(-1, 0, new MapAnimationFrame[0], getMapLayout().getTilesets());
+            animation.setAnimationTileset(null);
             Console.logger().warning("WARNING Map has no animation.");
         }
         Console.logger().finest("EXITING importDisassembly");
@@ -62,28 +65,27 @@ public class MapAnimationManager extends AbstractManager {
         Console.logger().finest("ENTERING importTileset");
         EntriesAsmData tilesetData = entriesAsmProcessor.importAsmData(tilesetEntriesPath, null);
         if (tilesetId < 0 || tilesetId >= tilesetData.entriesCount()) {
-            animation.setTileset(null);
+            animation.setAnimationTileset(null);
             Console.logger().warning("WARNING Map index out of range : " + tilesetId);
             return null;
         }
         Path tilesetPath = PathHelpers.getIncbinPath().resolve(tilesetData.getPathForEntry(tilesetId));
         Tileset tileset = tilesetmanager.importDisassembly(tilesetPath, palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
-        animation.setTileset(tileset);
+        animation.setAnimationTileset(tileset);
+        getMapLayout().setTilesets(animation.getModifiedTilesets());
         Console.logger().info("Tileset succesfully imported for : " + tilesetPath);
         Console.logger().finest("EXITING importTileset");
         return tileset;
     }
     
-    public void exportDisassembly(Path animationsPath) {
-        /*System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Exporting disassembly ...");
-        DisassemblyManager.exportAnimation(map.getAnimation(), animationsPath);
-        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly exported.");   */     
-    }      
-    
-    public void exportPng(MapAnimationLayoutPanel mapPanel, Path filePath) {
-        /*System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - Exporting PNG ...");
-        PngManager.exportPng(mapPanel, filepath);
-        System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - PNG exported.");       */
+    public void exportDisassembly(Path animationsPath, MapAnimation animation) throws IOException, AsmException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        if (!this.animation.equals(animation)) {
+            this.animation.clearData();
+        }
+        this.animation = animation;
+        mapAnimationAsmProcessor.exportAsmData(animationsPath, animation, null);
+        Console.logger().finest("EXITING exportDisassembly");  
     }
 
     public MapAnimation getMapAnimation() {

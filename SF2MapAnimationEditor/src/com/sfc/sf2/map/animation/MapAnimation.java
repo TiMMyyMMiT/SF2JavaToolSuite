@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.animation;
 
 import com.sfc.sf2.graphics.Tileset;
+import static com.sfc.sf2.map.block.compression.MapBlocksetDecoder.TILESET_TILES;
 
 /**
  *
@@ -15,13 +16,19 @@ public class MapAnimation {
     
     private int tilesetId;
     private int length;
-    private Tileset tileset;
+    private Tileset animationTileset;
     private MapAnimationFrame[] frames;
+    private final Tileset[] originalTilesets;
+    private final Tileset[] modifiedTilesets;
+    private final boolean[] modified;
 
-    public MapAnimation(int tilesetId, int length, MapAnimationFrame[] frames) {
+    public MapAnimation(int tilesetId, int length, MapAnimationFrame[] frames, Tileset[] originalTilesets) {
         this.tilesetId = tilesetId;
         this.length = length;
         this.frames = frames;
+        this.originalTilesets = originalTilesets;
+        this.modifiedTilesets = new Tileset[originalTilesets.length];
+        this.modified = new boolean[originalTilesets.length];
     }
 
     public int getTilesetId() {
@@ -40,12 +47,17 @@ public class MapAnimation {
         this.length = length;
     }
 
-    public Tileset getTileset() {
-        return tileset;
+    public Tileset getAnimationTileset() {
+        return animationTileset;
     }
 
-    public void setTileset(Tileset tileset) {
-        this.tileset = tileset;
+    public void setAnimationTileset(Tileset animationTileset) {
+        this.animationTileset = animationTileset;
+        generateModifiedTilesets();
+    }
+
+    public Tileset[] getModifiedTilesets() {
+        return modifiedTilesets;
     }
 
     public MapAnimationFrame[] getFrames() {
@@ -54,5 +66,62 @@ public class MapAnimation {
 
     public void setFrames(MapAnimationFrame[] frames) {
         this.frames = frames;
+    }
+    
+    public Tileset[] generateModifiedTilesets() {
+        //Clear old
+        for (int i = 0; i < modifiedTilesets.length; i++) {
+            if (modified[i] && modifiedTilesets[i] != null) {
+                modifiedTilesets[i].clearIndexedColorImage(true);
+                modifiedTilesets[i] = null;
+            }
+            modified[i] = false;
+        }
+        //Fill with default
+        for (int i = 0; i < modifiedTilesets.length; i++) {
+            if (modifiedTilesets[i] == null) {
+                modifiedTilesets[i] = originalTilesets[i];
+            }
+        }
+        return modifiedTilesets;
+    }
+    
+    public void generateModifiedTileset(int frame) {
+        int tileset = frames[frame].getDestTileset();
+        if (modified[tileset] && modifiedTilesets[tileset] != null) {
+            modifiedTilesets[tileset].clearIndexedColorImage(true);
+            modifiedTilesets[tileset] = null;
+        }
+        if (modifiedTilesets[tileset] == null) {
+            modifiedTilesets[tileset] = originalTilesets[tileset].clone();
+        }
+    }
+    
+    public void updateTileset(int frame) {
+        int tileset = frames[frame].getDestTileset();
+        if (!modified[tileset]) {
+            modifiedTilesets[tileset] = originalTilesets[tileset].clone();
+        }
+        int dest = frames[frame].getDestTileIndex();
+        int start = frames[frame].getStart();
+        int length = frames[frame].getLength();
+        System.arraycopy(animationTileset.getTiles(), start, modifiedTilesets[tileset].getTiles(), dest, length);
+        modified[tileset] = true;
+    }
+    
+    public void clearData() {
+        for (int i = 0; i < modifiedTilesets.length; i++) {
+            if (modifiedTilesets[i] != null) {
+                modifiedTilesets[i].clearIndexedColorImage(true);
+                modifiedTilesets[i] = null;
+            }
+            modified[i] = false;
+        }
+        for (int i = 0; i < originalTilesets.length; i++) {
+            if (originalTilesets[i] != null) {
+                originalTilesets[i].clearIndexedColorImage(true);
+                originalTilesets[i] = null;
+            }
+        }
     }
 }

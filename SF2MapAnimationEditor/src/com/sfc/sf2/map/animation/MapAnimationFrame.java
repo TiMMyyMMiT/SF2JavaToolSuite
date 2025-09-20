@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.sfc.sf2.map.animation;
+import static com.sfc.sf2.map.block.compression.MapBlocksetDecoder.TILESET_TILES;
 
 /**
  *
@@ -13,14 +14,17 @@ public class MapAnimationFrame {
     
     private int start;
     private int length;
-    private int dest;
+    private int destTileset;
+    private int destTileIndex;
     private int delay;
 
     public MapAnimationFrame(int start, int length, int dest, int delay) {
         this.start = start;
         this.length = length;
-        this.dest = dest;
         this.delay = delay;
+        
+        this.destTileset = dest/TILESET_TILES-2;
+        destTileIndex = dest%TILESET_TILES;
     }
 
     public int getStart() {
@@ -39,12 +43,24 @@ public class MapAnimationFrame {
         this.length = length;
     }
 
-    public int getDest() {
-        return dest;
+    public int getDestTileset() {
+        return destTileset;
     }
 
-    public void setDest(int dest) {
-        this.dest = dest;
+    public void setDestTileset(int destTileset) {
+        this.destTileset = destTileset;
+    }
+
+    public int getDestTileIndex() {
+        return destTileIndex;
+    }
+
+    public void setDestTileIndex(int destTileIndex) {
+        this.destTileIndex = destTileIndex;
+    }
+    
+    public int getDestValue() {
+        return (destTileset+2)*TILESET_TILES+destTileIndex;
     }
 
     public int getDelay() {
@@ -57,7 +73,7 @@ public class MapAnimationFrame {
     
     @Override 
     public MapAnimationFrame clone() {
-        MapAnimationFrame clone = new MapAnimationFrame(start, length, dest, delay);
+        MapAnimationFrame clone = new MapAnimationFrame(start, length, getDestValue(), delay);
         return clone;
     }
     

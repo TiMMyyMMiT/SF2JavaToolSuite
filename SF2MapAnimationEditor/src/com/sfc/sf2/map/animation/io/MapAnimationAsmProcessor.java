@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.map.animation.io;
 
-import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.core.io.asm.AbstractAsmProcessor;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.StringHelpers;
@@ -20,10 +19,10 @@ import java.util.ArrayList;
  *
  * @author TiMMy
  */
-public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation, EmptyPackage> {
+public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation, MapAnimationPackage> {
 
     @Override
-    protected MapAnimation parseAsmData(BufferedReader reader, EmptyPackage pckg) throws IOException, AsmException {
+    protected MapAnimation parseAsmData(BufferedReader reader, MapAnimationPackage pckg) throws IOException, AsmException {
         ArrayList<MapAnimationFrame> framesList = new ArrayList<>();
         String line;
         int tileset = -1;
@@ -56,7 +55,7 @@ public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation,
         }
         MapAnimationFrame[] frames = new MapAnimationFrame[framesList.size()];
         frames = framesList.toArray(frames);
-        return new MapAnimation(tileset, length, frames);
+        return new MapAnimation(tileset, length, frames, pckg.tilesets());
     }
 
     @Override
@@ -65,11 +64,11 @@ public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation,
     }
 
     @Override
-    protected void packageAsmData(FileWriter writer, MapAnimation item, EmptyPackage pckg) throws IOException, AsmException {
-        writer.write(String.format("\t\t\tmapAnimation %d,%d\n", item.getTileset(), item.getLength()));
+    protected void packageAsmData(FileWriter writer, MapAnimation item, MapAnimationPackage pckg) throws IOException, AsmException {
+        writer.write(String.format("\t\t\tmapAnimation %d,%d\n", item.getAnimationTileset(), item.getLength()));
         MapAnimationFrame[] frames = item.getFrames();
         for (int i = 0; i < frames.length; i++) {
-            writer.write(String.format("\t\t\t\tmapAnimEntry %d, %d, $%X, %d\n", frames[i].getStart(), frames[i].getLength(), frames[i].getDest(), frames[i].getDelay()));
+            writer.write(String.format("\t\t\t\tmapAnimEntry %d, %d, $%X, %d\n", frames[i].getStart(), frames[i].getLength(), frames[i].getDestValue(), frames[i].getDelay()));
         }
         writer.write("\t\t\tendWord\n");
     }

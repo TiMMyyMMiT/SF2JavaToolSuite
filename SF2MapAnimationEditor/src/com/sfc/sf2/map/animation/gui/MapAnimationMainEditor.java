@@ -7,17 +7,18 @@ package com.sfc.sf2.map.animation.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.animation.MapAnimationFrame;
 import com.sfc.sf2.map.animation.MapAnimationManager;
-import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
+import com.sfc.sf2.map.settings.MapBlockSettings;
 
 /**
  *
@@ -52,11 +53,18 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         mapAnimationLayoutPanel.setShowExplorationFlags(jCheckBox3.isSelected());
         mapAnimationLayoutPanel.setShowInteractionFlags(jCheckBox4.isSelected());
         
-        tilesetLayoutPanel.setBGColor(colorPickerTileset.getColor());
-        tilesetLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        tilesetLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
-        tilesetLayoutPanel.setItemsPerRow((int)jSpinner6.getValue());
-        tilesetLayoutPanel.setShowAnimationFrames(jCheckBox7.isSelected());
+        tilesetLayoutPanelAnim.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanelAnim.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanelAnim.setDisplayScale(jComboBox4.getSelectedIndex()+1);
+        tilesetLayoutPanelAnim.setItemsPerRow((int)jSpinner6.getValue());
+        tilesetLayoutPanelAnim.setShowAnimationFrames(jCheckBox7.isSelected());
+        tilesetLayoutPanelModified.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanelModified.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanelModified.setDisplayScale(jComboBox4.getSelectedIndex()+1);
+        tilesetLayoutPanelModified.setItemsPerRow((int)jSpinner6.getValue());
+        tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
+        
+        tilesetLayoutPanelModified.getAnimator().addAnimationListener(this::onAnimationUpdated);
         
         table1.addListSelectionListener(this::onAnimationFramesSeletectionChanged);
         table1.addTableModelListener(this::onAnimationFramesDataChanged);
@@ -72,8 +80,9 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         
         MapAnimation animation = mapAnimationManager.getMapAnimation();
         if (animation != null) {
-            tilesetLayoutPanel.setTileset(animation.getTileset());
-            tilesetLayoutPanel.setMapAnimation(animation);
+            tilesetLayoutPanelAnim.setMapAnimation(animation);
+            tilesetLayoutPanelModified.setMapAnimation(animation);
+            tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[0].getDestTileset());
             
             jSpinner2.setValue(animation.getTilesetId());
             jSpinner3.setValue(animation.getLength());
@@ -112,16 +121,16 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         jButton28 = new javax.swing.JButton();
         directoryButton1 = new com.sfc.sf2.core.gui.controls.DirectoryButton();
         jPanel11 = new javax.swing.JPanel();
-        jPanel23 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jSpinner2 = new javax.swing.JSpinner();
         jLabel9 = new javax.swing.JLabel();
         jSpinner3 = new javax.swing.JSpinner();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        tilesetLayoutPanelAnim = new com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel();
         table1 = new com.sfc.sf2.core.gui.controls.Table();
-        jPanel19 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        tilesetLayoutPanel = new com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel();
+        tilesetLayoutPanelModified = new com.sfc.sf2.map.animation.gui.MapModifiedTilesetLayoutPanel();
         jPanel20 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
@@ -264,7 +273,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             jPanel32Layout.setHorizontalGroup(
                 jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel32Layout.createSequentialGroup()
-                    .addContainerGap()
+                    .addGap(0, 0, 0)
                     .addGroup(jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(accordionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -296,8 +305,6 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
 
             jSplitPane4.setLeftComponent(jPanel9);
 
-            jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder("Map Animation"));
-
             jLabel8.setText("Tileset :");
 
             jSpinner2.setModel(new javax.swing.SpinnerNumberModel(0, 0, 256, 1));
@@ -325,7 +332,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                     .addComponent(jLabel8)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel9)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -343,43 +350,39 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                     .addContainerGap())
             );
 
+            jScrollPane9.setViewportBorder(javax.swing.BorderFactory.createTitledBorder("Animation Tileset"));
+
+            javax.swing.GroupLayout tilesetLayoutPanelAnimLayout = new javax.swing.GroupLayout(tilesetLayoutPanelAnim);
+            tilesetLayoutPanelAnim.setLayout(tilesetLayoutPanelAnimLayout);
+            tilesetLayoutPanelAnimLayout.setHorizontalGroup(
+                tilesetLayoutPanelAnimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 319, Short.MAX_VALUE)
+            );
+            tilesetLayoutPanelAnimLayout.setVerticalGroup(
+                tilesetLayoutPanelAnimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 100, Short.MAX_VALUE)
+            );
+
+            jScrollPane9.setViewportView(tilesetLayoutPanelAnim);
+
             table1.setBorder(null);
             table1.setModel(mapAnimationFrameTableModel);
             table1.setSpinnerNumberEditor(true);
 
-            javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
-            jPanel23.setLayout(jPanel23Layout);
-            jPanel23Layout.setHorizontalGroup(
-                jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(table1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            );
-            jPanel23Layout.setVerticalGroup(
-                jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel23Layout.createSequentialGroup()
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(table1, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE))
-            );
+            jScrollPane8.setViewportBorder(javax.swing.BorderFactory.createTitledBorder("Modified Tileset"));
 
-            jPanel19.setMinimumSize(new java.awt.Dimension(340, 200));
-            jPanel19.setName(""); // NOI18N
-            jPanel19.setPreferredSize(new java.awt.Dimension(340, 300));
-
-            jScrollPane8.setViewportBorder(javax.swing.BorderFactory.createTitledBorder("Tileset"));
-
-            javax.swing.GroupLayout tilesetLayoutPanelLayout = new javax.swing.GroupLayout(tilesetLayoutPanel);
-            tilesetLayoutPanel.setLayout(tilesetLayoutPanelLayout);
-            tilesetLayoutPanelLayout.setHorizontalGroup(
-                tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 306, Short.MAX_VALUE)
+            javax.swing.GroupLayout tilesetLayoutPanelModifiedLayout = new javax.swing.GroupLayout(tilesetLayoutPanelModified);
+            tilesetLayoutPanelModified.setLayout(tilesetLayoutPanelModifiedLayout);
+            tilesetLayoutPanelModifiedLayout.setHorizontalGroup(
+                tilesetLayoutPanelModifiedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 314, Short.MAX_VALUE)
             );
-            tilesetLayoutPanelLayout.setVerticalGroup(
-                tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            tilesetLayoutPanelModifiedLayout.setVerticalGroup(
+                tilesetLayoutPanelModifiedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGap(0, 100, Short.MAX_VALUE)
             );
 
-            jScrollPane8.setViewportView(tilesetLayoutPanel);
+            jScrollPane8.setViewportView(tilesetLayoutPanelModified);
 
             jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("Tileset display"));
             jPanel20.setMinimumSize(new java.awt.Dimension(340, 100));
@@ -485,27 +488,9 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                         .addComponent(jCheckBox7)
                         .addComponent(jCheckBox8)
-                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(colorPickerTileset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12)))
+                        .addComponent(colorPickerTileset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel12))
                     .addContainerGap())
-            );
-
-            javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
-            jPanel19.setLayout(jPanel19Layout);
-            jPanel19Layout.setHorizontalGroup(
-                jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel19Layout.createSequentialGroup()
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addContainerGap())
-                .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            );
-            jPanel19Layout.setVerticalGroup(
-                jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel19Layout.createSequentialGroup()
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
 
             javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -515,17 +500,26 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel11Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, 333, Short.MAX_VALUE)
-                        .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel20, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane8)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(table1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addContainerGap())
             );
             jPanel11Layout.setVerticalGroup(
                 jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel11Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)
+                    .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                    .addGap(0, 0, 0)
+                    .addComponent(table1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
 
             jSplitPane4.setRightComponent(jPanel11);
@@ -534,7 +528,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             jPanel8.setLayout(jPanel8Layout);
             jPanel8Layout.setHorizontalGroup(
                 jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane4)
+                .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
             );
             jPanel8Layout.setVerticalGroup(
                 jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -751,7 +745,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                 anim.setTilesetId(value);
                 Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
                 Tileset tileset = mapAnimationManager.importTileset(mapAnimationLayoutPanel.getMapLayout().getPalette(), tilesetEntriesPath, value);
-                tilesetLayoutPanel.setTileset(tileset);
+                tilesetLayoutPanelAnim.setTileset(tileset);
             } catch (Exception ex) {
                 Console.logger().log(Level.SEVERE, null, ex);
                 Console.logger().severe("ERROR Tileset could not be imported for tileset : " + value);
@@ -788,10 +782,10 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
-        if (jComboBox4.getSelectedIndex() >= 0 && tilesetLayoutPanel != null) {
+        if (jComboBox4.getSelectedIndex() >= 0 && tilesetLayoutPanelModified != null) {
             int scale = (int)jComboBox4.getSelectedIndex()+1;
             if (scale != mapLayoutSettings.getTilesetScale()) {
-                tilesetLayoutPanel.setDisplayScale(scale);
+                tilesetLayoutPanelAnim.setDisplayScale(scale);
                 mapLayoutSettings.setTilesetScale(scale);
                 SettingsManager.saveSettingsFile();
             }
@@ -799,13 +793,13 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox4ItemStateChanged
 
     private void jCheckBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox2ItemStateChanged
-        if (tilesetLayoutPanel != null) {
-            tilesetLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        }
+        tilesetLayoutPanelAnim.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanelModified.setShowGrid(jCheckBox2.isSelected());
     }//GEN-LAST:event_jCheckBox2ItemStateChanged
 
     private void colorPickerTilesetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetColorChanged
-        tilesetLayoutPanel.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanelAnim.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanelModified.setBGColor(colorPickerTileset.getColor());
         mapLayoutSettings.setTilesetBGColor(colorPickerTileset.getColor());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_colorPickerTilesetColorChanged
@@ -829,32 +823,50 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton28ActionPerformed
 
     private void jSpinner6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner6StateChanged
-        if (tilesetLayoutPanel != null) {
-            int tilesPerRow = (int)jSpinner6.getValue();
-            tilesetLayoutPanel.setItemsPerRow(tilesPerRow);
-        }
+        int tilesPerRow = (int)jSpinner6.getValue();
+        tilesetLayoutPanelAnim.setItemsPerRow(tilesPerRow);
+        tilesetLayoutPanelModified.setItemsPerRow(tilesPerRow);
     }//GEN-LAST:event_jSpinner6StateChanged
 
     private void jCheckBox7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox7ItemStateChanged
-        tilesetLayoutPanel.setShowAnimationFrames(jCheckBox7.isSelected());
+        tilesetLayoutPanelAnim.setShowAnimationFrames(jCheckBox7.isSelected());
+        tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
     }//GEN-LAST:event_jCheckBox7ItemStateChanged
 
     private void jCheckBox8ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox8ItemStateChanged
-        // TODO add your handling code here:
+        tilesetLayoutPanelModified.setPreviewAnim(jCheckBox8.isSelected());
     }//GEN-LAST:event_jCheckBox8ItemStateChanged
     
     private void onAnimationFramesSeletectionChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) return;
         int selected = table1.jTable.getSelectedRow();
-        tilesetLayoutPanel.setSelectedFrame(selected);
+        tilesetLayoutPanelAnim.setSelectedFrame(selected);
+        tilesetLayoutPanelModified.setSelectedFrame(selected);
+        if (selected == -1) selected = 0;
+        tilesetLayoutPanelModified.setSelectedTileset(mapAnimationLayoutPanel.getAnimation().getFrames()[selected].getDestTileset());
     }
     
     private void onAnimationFramesDataChanged(TableModelEvent e) {
         if (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.DELETE) {
             MapAnimationFrame[] frames = mapAnimationFrameTableModel.getTableData(MapAnimationFrame[].class);
             mapAnimationLayoutPanel.getAnimation().setFrames(frames);
+        } else if (e.getColumn() == 3) {    //Editing destination tileset
+            MapAnimation animation = mapAnimationLayoutPanel.getAnimation();
+            animation.generateModifiedTilesets();
+            tilesetLayoutPanelModified.setMapAnimation(animation);
+            tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[e.getFirstRow()].getDestTileset());
+        } else if (e.getColumn() == 3) {    //Editing destination index
+            MapAnimation animation = mapAnimationLayoutPanel.getAnimation();
+            int frame = e.getFirstRow();
+            animation.generateModifiedTileset(frame);
+            tilesetLayoutPanelModified.setMapAnimation(animation);
+            tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[frame].getDestTileset());
         }
-        tilesetLayoutPanel.redraw();
+        tilesetLayoutPanelModified.redraw();
+    }
+    
+    private void onAnimationUpdated(LayoutAnimator.AnimationListener.AnimationFrameEvent e) {
+        mapAnimationLayoutPanel.redraw();
     }
     
     /**
@@ -908,21 +920,18 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel32;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
-    private javax.swing.JSpinner jSpinner5;
     private javax.swing.JSpinner jSpinner6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
@@ -930,6 +939,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel mapAnimationFrameTableModel;
     private com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel mapAnimationLayoutPanel;
     private com.sfc.sf2.core.gui.controls.Table table1;
-    private com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel tilesetLayoutPanel;
+    private com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel tilesetLayoutPanelAnim;
+    private com.sfc.sf2.map.animation.gui.MapModifiedTilesetLayoutPanel tilesetLayoutPanelModified;
     // End of variables declaration//GEN-END:variables
 }

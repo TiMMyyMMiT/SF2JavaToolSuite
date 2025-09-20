@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.map.animation.gui;
 
+import com.sfc.sf2.core.gui.layout.LayoutAnimator;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.gui.TilesetLayoutPanel;
@@ -17,13 +18,19 @@ import java.awt.Graphics;
  *
  * @author TiMMy
  */
-public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
+public class MapModifiedTilesetLayoutPanel extends TilesetLayoutPanel implements LayoutAnimator.AnimationController  {
     
     private MapAnimation mapAnimation;
+    private int selectedTileset = -1;
     private int selectedFrame = -1;
     
     private boolean showAnimationFrames;
 
+    public MapModifiedTilesetLayoutPanel() {
+        super();
+        animator = new LayoutAnimator(this);
+    }
+    
     @Override
     protected boolean hasData() {
         return mapAnimation != null && super.hasData();
@@ -32,7 +39,7 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
     @Override
     protected void drawImage(Graphics graphics) {
         super.drawImage(graphics);
-        if (!showAnimationFrames) return;
+        if (!showAnimationFrames || animator.isAnimating()) return;
         
         graphics.setColor(Color.WHITE);
         int tilesPerRow = getItemsPerRow();
@@ -51,7 +58,7 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
     }
     
     private void drawFrame(Graphics graphics, MapAnimationFrame frame, int tilesPerRow) {
-            int start = frame.getStart();
+            int start = frame.getDestTileIndex();
             int length = frame.getLength();
             int rows = length/tilesPerRow;
             if (frame.getLength()%tilesPerRow != 0) {
@@ -70,7 +77,17 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
 
     public void setMapAnimation(MapAnimation mapAnimation) {
         this.mapAnimation = mapAnimation;
-        setTileset(mapAnimation.getAnimationTileset());
+        redraw();
+        setSelectedTileset(selectedTileset);
+    }
+    
+    public void setSelectedTileset(int tileset) {
+        selectedTileset = tileset;
+        if (selectedTileset == -1) {
+            setTileset(mapAnimation.getAnimationTileset());
+        } else {
+            setTileset(mapAnimation.getModifiedTilesets()[selectedTileset]);
+        }
         redraw();
     }
 
@@ -84,5 +101,32 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
             this.selectedFrame = selectedFrame;
             redraw();
         }
+    }
+    
+    public void setPreviewAnim(boolean play) {
+        if (play && hasData()) {
+            selectedFrame = 0;
+            MapAnimationFrame[] frames = mapAnimation.getFrames();
+            animator.startAnimation(frames[selectedFrame].getDelay(), frames.length-1, true, true);
+        } else {
+            animator.stopAnimation();
+        }
+    }
+
+    @Override
+    public void animationFrameUpdated(AnimationFrameEvent e) {
+        if (mapAnimation == null) {
+            setPreviewAnim(false);
+            return;
+        }
+        selectedFrame = e.getCurrentFrame();
+        mapAnimation.updateTileset(selectedFrame);
+        setTileset(mapAnimation.getModifiedTilesets()[selectedTileset]);
+        redraw();
+    }
+
+    @Override
+    public int getAnimationFrameSpeed(int currentAnimFrame) {
+        return mapAnimation.getFrames()[currentAnimFrame].getDelay();
     }
 }
