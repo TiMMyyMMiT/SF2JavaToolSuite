@@ -5,9 +5,10 @@
  */
 package com.sfc.sf2.core.gui.layout;
 
-import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener.FrameEvent;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener.AnimationFrameEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.Timer;
 
 /**
@@ -16,19 +17,32 @@ import javax.swing.Timer;
  */
 public class LayoutAnimator extends BaseLayoutComponent implements ActionListener {
     
-    private final AnimationListener animationListener;
+    private final AnimationController animationController;
+    private final ArrayList<AnimationListener> animationListeners;
     
     private Timer idleTimer = null;
     private int currentAnimFrame = 0;
     private int frameMax;
     private boolean variableAnimationSpeed;
-    private int speed;
     private boolean loop;
     
-    public LayoutAnimator(AnimationListener listener) {
+    public LayoutAnimator(AnimationController controller) {
         super();
-        animationListener = listener;
+        this.animationController = controller;
+        animationListeners = new ArrayList<>();
+        animationListeners.add(controller);
         setEnabled(false);
+    }
+    
+    public void addAnimationListener(AnimationListener listener) {
+        animationListeners.add(listener);
+    }
+    
+    public void removeAnimationListener(AnimationListener listener) {
+        animationListeners.add(listener);
+        if (animationListeners.size() == 0) {
+            setEnabled(false);
+        }
     }
 
     @Override
@@ -44,7 +58,6 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
     }
     
     public void startAnimation(int speed, int frameMax, boolean loop, boolean variableAnimationSpeed) {
-        this.speed = speed;
         this.loop = loop;
         this.currentAnimFrame = 0;
         this.frameMax = frameMax;
@@ -56,8 +69,11 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
             idleTimer.start();
         }
         super.setEnabled(true);
-        if (animationListener != null) {
-            animationListener.frameUpdated(new FrameEvent(0));
+        if (animationListeners != null) {
+            AnimationFrameEvent evt = new AnimationFrameEvent(0);
+            for (int i = 0; i < animationListeners.size(); i++) {   
+                animationListeners.get(i).animationFrameUpdated(evt);
+            }
         }
     }
 
@@ -73,10 +89,12 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
                 return;
             }
         }
-        if (animationListener == null) return;
-        animationListener.frameUpdated(new FrameEvent(currentAnimFrame));
-        if (variableAnimationSpeed) {
-            int delay = animationListener.getFrameSpeed(currentAnimFrame)*1000/60;
+        AnimationFrameEvent evt = new AnimationFrameEvent(currentAnimFrame);
+        for (int i = 0; i < animationListeners.size(); i++) {
+            animationListeners.get(i).animationFrameUpdated(evt);
+        }
+        if (animationController != null && variableAnimationSpeed) {
+            int delay = animationController.getAnimationFrameSpeed(currentAnimFrame)*1000/60;
             idleTimer.setInitialDelay(delay);
             idleTimer.setDelay(delay);
             idleTimer.restart();
@@ -91,15 +109,24 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
         }
     }
     
-    public interface AnimationListener extends java.util.EventListener
-    {
-        public int getFrameSpeed(int currentAnimFrame);
-        public void frameUpdated(FrameEvent e);
+    public interface AnimationController extends AnimationListener {
+        
+        public void addAnimationListener(AnimationListener listener);
+        public void removeAnimationListener(AnimationListener listener);
+        
+        public void startAnimation(int speed, int frameMax, boolean loop, boolean variableAnimationSpeed);
+        public void stopAnimation();
+        public int getAnimationFrameSpeed(int currentAnimFrame);
+    }
     
-        public class FrameEvent {
+    public interface AnimationListener extends java.util.EventListener {
+        
+        public void animationFrameUpdated(AnimationFrameEvent e);
+    
+        public class AnimationFrameEvent {
             private int currentFrame;
 
-            public FrameEvent(int currentFrame) {
+            public AnimationFrameEvent(int currentFrame) {
                 this.currentFrame = currentFrame;
             }
 

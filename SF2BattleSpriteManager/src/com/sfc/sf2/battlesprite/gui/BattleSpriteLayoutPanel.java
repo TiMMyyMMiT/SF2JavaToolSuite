@@ -100,7 +100,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     }
 
     @Override
-    public int getFrameSpeed(int currentAnimFrame) {
+    public int getAnimationFrameSpeed(int currentAnimFrame) {
         return 0;
     }
     

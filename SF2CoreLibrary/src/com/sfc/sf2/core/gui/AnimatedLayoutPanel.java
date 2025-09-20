@@ -6,18 +6,18 @@
 package com.sfc.sf2.core.gui;
 
 import com.sfc.sf2.core.gui.layout.*;
-import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener;
-import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener.FrameEvent;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationController;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener.AnimationFrameEvent;
 
 /**
  *
  * @author TiMMy
  */
-public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements AnimationListener {
+public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements AnimationController {
     
     protected LayoutAnimator animator;
     
-    protected int currentAnimFrame;
+    private int currentAnimFrame;
     
     public AnimatedLayoutPanel() {
         super();
@@ -35,7 +35,9 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
     public void setCurrentAnimationFrame(int currentAnimationFrame) {
         if (this.currentAnimFrame != currentAnimationFrame) {
             this.currentAnimFrame = currentAnimationFrame;
-            redraw();
+            if (hasData()) {
+                redraw();
+            }
         }
     }
     
@@ -54,9 +56,18 @@ public abstract class AnimatedLayoutPanel extends AbstractLayoutPanel implements
     public void stopAnimation() {
         animator.stopAnimation();
     }
+    @Override
+    public void addAnimationListener(LayoutAnimator.AnimationListener listener) {
+        animator.addAnimationListener(listener);
+    }
     
     @Override
-    public void frameUpdated(FrameEvent e) {
+    public void removeAnimationListener(LayoutAnimator.AnimationListener listener) {
+        animator.removeAnimationListener(listener);
+    }
+    
+    @Override
+    public void animationFrameUpdated(AnimationFrameEvent e) {
         setCurrentAnimationFrame(e.getCurrentFrame());
     }
 }
