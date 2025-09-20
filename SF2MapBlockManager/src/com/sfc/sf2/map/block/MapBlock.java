@@ -8,7 +8,6 @@ package com.sfc.sf2.map.block;
 import com.sfc.sf2.graphics.Block;
 import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.palette.Palette;
-import java.awt.Color;
 
 /**
  *

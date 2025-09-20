@@ -168,7 +168,7 @@ public class MapLayoutFlagImages {
             Graphics2D g2 = (Graphics2D) warpImage.getGraphics();
             g2.setColor(Color.BLUE);
             g2.setStroke(new BasicStroke(3));
-            g2.drawRect(0, 0, 24, 24);
+            g2.drawRect(0, 0, 23, 23);
             g2.dispose();
         }
         return warpImage;
@@ -180,7 +180,7 @@ public class MapLayoutFlagImages {
             Graphics2D g2 = (Graphics2D) triggerImage.getGraphics();
             g2.setStroke(new BasicStroke(3));
             g2.setColor(Color.GREEN);
-            g2.drawRect(0,0, 24, 24);
+            g2.drawRect(0,0, 23, 23);
             g2.dispose();
         }
         return triggerImage;
