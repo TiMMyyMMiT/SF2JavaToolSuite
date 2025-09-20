@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.map.animation.gui;
 
+import com.sfc.sf2.core.gui.layout.LayoutAnimator;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.gui.TilesetLayoutPanel;
@@ -17,13 +18,17 @@ import java.awt.Graphics;
  *
  * @author TiMMy
  */
-public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel {
+public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel implements LayoutAnimator.AnimationController  {
     
     private MapAnimation mapAnimation;
     private int selectedFrame = -1;
     
     private boolean showAnimationFrames;
-    private boolean previewAnimation;
+
+    public MapAnimationTilesetLayoutPanel() {
+        super();
+        animator = new LayoutAnimator(this);
+    }
 
     @Override
     protected void drawImage(Graphics graphics) {
@@ -68,6 +73,10 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel {
         this.mapAnimation = mapAnimation;
     }
 
+    public void setShowAnimationFrames(boolean showAnimationFrames) {
+        this.showAnimationFrames = showAnimationFrames;
+    }
+
     public void setSelectedFrame(int selectedFrame) {
         if (this.selectedFrame != selectedFrame) {
             this.selectedFrame = selectedFrame;
@@ -75,12 +84,8 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel {
         }
     }
 
-    public void setShowAnimationFrames(boolean showAnimationFrames) {
-        this.showAnimationFrames = showAnimationFrames;
-        redraw();
-    }
-
-    public void setPreviewAnimation(boolean previewAnimation) {
-        this.previewAnimation = previewAnimation;
+    @Override
+    public int getAnimationFrameSpeed(int currentAnimFrame) {
+        return mapAnimation.getFrames()[currentAnimFrame].getDelay();
     }
 }

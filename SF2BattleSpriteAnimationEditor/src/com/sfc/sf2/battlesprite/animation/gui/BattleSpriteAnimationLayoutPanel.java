@@ -10,8 +10,9 @@ import com.sfc.sf2.battlesprite.BattleSprite;
 import com.sfc.sf2.battlesprite.BattleSprite.BattleSpriteType;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimation;
 import com.sfc.sf2.battlesprite.animation.BattleSpriteAnimationFrame;
-import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
+import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.*;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationController;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
@@ -25,7 +26,7 @@ import java.awt.Graphics;
  *
  * @author wiz
  */
-public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
+public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel implements AnimationController {
     
     private static final Dimension IMAGE_SIZE = new Dimension(256, 224);
     
@@ -57,6 +58,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
         coordsHeader = null;
         mouseInput = null;
         scroller = new LayoutScrollNormaliser(this);
+        animator = new LayoutAnimator(this);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
 
     @Override
     protected void drawImage(Graphics graphics) {
-        BattleSpriteAnimationFrame animFrame = animation.getFrames()[getCurrentAnimationFrame()];
+        BattleSpriteAnimationFrame animFrame = animation.getFrames()[animator.getFrame()];
         Tileset spriteFrame = null;
         spriteFrame = battlesprite.getFrames()[animFrame.getBattleSpriteIndex()];   
         graphics.drawImage(bg.getTileset().getIndexedColorImage(), BACKGROUND_BASE_X, BACKGROUND_BASE_Y, null);
@@ -116,7 +118,7 @@ public class BattleSpriteAnimationLayoutPanel extends AnimatedLayoutPanel {
         if (hasData()) {
             return animation.getFrames()[currentAnimFrame].getDuration();
         } else {
-            stopAnimation();
+            animator.stopAnimation();
             return 0;
         }
     }

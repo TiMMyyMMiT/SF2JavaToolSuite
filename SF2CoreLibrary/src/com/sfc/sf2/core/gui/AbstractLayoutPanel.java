@@ -6,6 +6,7 @@
 package com.sfc.sf2.core.gui;
 
 import com.sfc.sf2.core.gui.layout.*;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,7 +17,7 @@ import javax.swing.JPanel;
  *
  * @author TiMMy
  */
-public abstract class AbstractLayoutPanel extends JPanel {
+public abstract class AbstractLayoutPanel extends JPanel implements AnimationListener {
     
     private static final Dimension NO_OFFSET = new Dimension();
         
@@ -27,6 +28,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     protected LayoutCoordsHeader coordsHeader;
     protected LayoutMouseInput mouseInput;
     protected LayoutScrollNormaliser scroller;
+    protected LayoutAnimator animator;
     
     private int itemsPerRow = 8;
         
@@ -112,6 +114,15 @@ public abstract class AbstractLayoutPanel extends JPanel {
     private void updateMouseInputs(Dimension offset) {
         if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.updateDisplayParameters(getDisplayScale(), getPreferredSize(), offset); }
         if (BaseLayoutComponent.IsEnabled(mouseInput)) { mouseInput.updateDisplayParameters(getDisplayScale(), getPreferredSize(), offset); }
+    }
+
+    public LayoutAnimator getAnimator() {
+        return animator;
+    }
+
+    @Override
+    public void animationFrameUpdated(AnimationFrameEvent e) {
+        redraw();
     }
     
     public int getItemsPerRow() {

@@ -21,9 +21,9 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
     private final ArrayList<AnimationListener> animationListeners;
     
     private Timer idleTimer = null;
-    private int currentAnimFrame = 0;
+    private int currentFrame = 0;
     private int frameMax;
-    private boolean variableAnimationSpeed;
+    private boolean variableSpeed;
     private boolean loop;
     
     public LayoutAnimator(AnimationController controller) {
@@ -56,14 +56,38 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
     public boolean isAnimating() {
         return isEnabled();
     }
+
+    public int getFrame() {
+        return currentFrame;
+    }
+
+    public void setFrame(int frame) {
+        if (isAnimating()) {
+            updateFrame(frame);
+        } else {
+            this.currentFrame = frame;
+            AnimationFrameEvent evt = new AnimationFrameEvent(currentFrame);
+            for (int i = 0; i < animationListeners.size(); i++) {   
+                animationListeners.get(i).animationFrameUpdated(evt);
+            }
+        }
+    }
+    
+    public void startAnimation(int speed) {
+        startAnimation(speed, 100000, true, false);
+    }
+    
+    public void startAnimation(int speed, int frameMax, boolean loop) {
+        startAnimation(speed, frameMax, loop, false);
+    }
     
     public void startAnimation(int speed, int frameMax, boolean loop, boolean variableAnimationSpeed) {
         this.loop = loop;
-        this.currentAnimFrame = 0;
+        this.currentFrame = 0;
         this.frameMax = frameMax;
-        this.variableAnimationSpeed = variableAnimationSpeed;
+        this.variableSpeed = variableAnimationSpeed;
         if (!isEnabled()) {
-            currentAnimFrame = 0;
+            currentFrame = 0;
             idleTimer = new Timer(speed*1000/60, this);
             if (!variableAnimationSpeed) idleTimer.setRepeats(loop);
             idleTimer.start();
@@ -80,21 +104,25 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() != idleTimer) return;
-        currentAnimFrame++;
-        if (currentAnimFrame > frameMax) {
+        updateFrame(currentFrame+1);
+    }
+    
+    private void updateFrame(int frame) {
+        currentFrame = frame;
+        if (currentFrame > frameMax) {
             if (loop) {
-                currentAnimFrame=0;
+                currentFrame=0;
             } else {
                 stopAnimation();
                 return;
             }
         }
-        AnimationFrameEvent evt = new AnimationFrameEvent(currentAnimFrame);
+        AnimationFrameEvent evt = new AnimationFrameEvent(currentFrame);
         for (int i = 0; i < animationListeners.size(); i++) {
             animationListeners.get(i).animationFrameUpdated(evt);
         }
-        if (animationController != null && variableAnimationSpeed) {
-            int delay = animationController.getAnimationFrameSpeed(currentAnimFrame)*1000/60;
+        if (animationController != null && variableSpeed) {
+            int delay = animationController.getAnimationFrameSpeed(currentFrame)*1000/60;
             idleTimer.setInitialDelay(delay);
             idleTimer.setDelay(delay);
             idleTimer.restart();
@@ -110,12 +138,6 @@ public class LayoutAnimator extends BaseLayoutComponent implements ActionListene
     }
     
     public interface AnimationController extends AnimationListener {
-        
-        public void addAnimationListener(AnimationListener listener);
-        public void removeAnimationListener(AnimationListener listener);
-        
-        public void startAnimation(int speed, int frameMax, boolean loop, boolean variableAnimationSpeed);
-        public void stopAnimation();
         public int getAnimationFrameSpeed(int currentAnimFrame);
     }
     
