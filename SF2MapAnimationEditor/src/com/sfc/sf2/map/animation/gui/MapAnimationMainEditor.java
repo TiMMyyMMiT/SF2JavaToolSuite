@@ -6,23 +6,29 @@
 package com.sfc.sf2.map.animation.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.settings.SettingsManager;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.map.animation.MapAnimation;
+import com.sfc.sf2.map.animation.MapAnimationFrame;
 import com.sfc.sf2.map.animation.MapAnimationManager;
 import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
-public class MainEditor extends AbstractMainEditor {
+public class MapAnimationMainEditor extends AbstractMainEditor {
     
     private final MapBlockSettings mapLayoutSettings = new MapBlockSettings();
     MapAnimationManager mapAnimationManager = new MapAnimationManager();
     
-    public MainEditor() {
+    public MapAnimationMainEditor() {
         super();
         SettingsManager.registerSettingsStore("mapLayout", mapLayoutSettings);
         initComponents();
@@ -39,25 +45,41 @@ public class MainEditor extends AbstractMainEditor {
         colorPickerTileset.setColor(mapLayoutSettings.getTilesetBGColor());
         jComboBox4.setSelectedIndex(mapLayoutSettings.getTilesetScale()-1);
         
-        mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
-        mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
-        mapLayoutPanel.setBGColor(colorPicker1.getColor());
-        mapLayoutPanel.setShowPriority(jCheckBox6.isSelected());
-        mapLayoutPanel.setShowExplorationFlags(jCheckBox3.isSelected());
-        mapLayoutPanel.setShowInteractionFlags(jCheckBox4.isSelected());
+        mapAnimationLayoutPanel.setShowGrid(jCheckBox5.isSelected());
+        mapAnimationLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
+        mapAnimationLayoutPanel.setBGColor(colorPicker1.getColor());
+        mapAnimationLayoutPanel.setShowPriority(jCheckBox6.isSelected());
+        mapAnimationLayoutPanel.setShowExplorationFlags(jCheckBox3.isSelected());
+        mapAnimationLayoutPanel.setShowInteractionFlags(jCheckBox4.isSelected());
         
-        tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
-        tilesetsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
-        tilesetsLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
-        //tilesetsLayoutPanel.setItemsPerRow(((int)jSpinner2.getModel().getValue()));
+        tilesetLayoutPanel.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanel.setDisplayScale(jComboBox4.getSelectedIndex()+1);
+        tilesetLayoutPanel.setItemsPerRow((int)jSpinner6.getValue());
+        tilesetLayoutPanel.setShowAnimationFrames(jCheckBox7.isSelected());
+        
+        table1.addListSelectionListener(this::onAnimationFramesSeletectionChanged);
+        table1.addTableModelListener(this::onAnimationFramesDataChanged);
+        table1.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
     }
     
     @Override
     protected void onDataLoaded() {
         super.onDataLoaded();
         
-        //mapLayoutPanel.setMapLayout(maplayoutManager.getLayout());
-        //tilesetsLayoutPanel.setTilesets(maplayoutManager.getBlockset());
+        mapAnimationLayoutPanel.setMapLayout(mapAnimationManager.getMapLayout());
+        mapAnimationLayoutPanel.setAnimation(mapAnimationManager.getMapAnimation());
+        
+        MapAnimation animation = mapAnimationManager.getMapAnimation();
+        if (animation != null) {
+            tilesetLayoutPanel.setTileset(animation.getTileset());
+            tilesetLayoutPanel.setMapAnimation(animation);
+            
+            jSpinner2.setValue(animation.getTilesetId());
+            jSpinner3.setValue(animation.getLength());
+
+            mapAnimationFrameTableModel.setTableData(mapAnimationManager.getMapAnimation().getFrames());
+        }
     }
     
     /**
@@ -84,6 +106,7 @@ public class MainEditor extends AbstractMainEditor {
         fileButton3 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton4 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton16 = new com.sfc.sf2.core.gui.controls.FileButton();
+        fileButton17 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel22 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jButton28 = new javax.swing.JButton();
@@ -98,13 +121,17 @@ public class MainEditor extends AbstractMainEditor {
         table1 = new com.sfc.sf2.core.gui.controls.Table();
         jPanel19 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
-        tilesetsLayoutPanel = new com.sfc.sf2.map.block.gui.TilesetsLayoutPanel();
+        tilesetLayoutPanel = new com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel();
         jPanel20 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
         jCheckBox2 = new javax.swing.JCheckBox();
         colorPickerTileset = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jLabel12 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jSpinner6 = new javax.swing.JSpinner();
+        jCheckBox7 = new javax.swing.JCheckBox();
+        jCheckBox8 = new javax.swing.JCheckBox();
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -154,6 +181,10 @@ public class MainEditor extends AbstractMainEditor {
         fileButton16.setLabelText("Map layout :");
         fileButton16.setToolTipText("");
 
+        fileButton17.setFilePath("9-animations.asm");
+        fileButton17.setLabelText("Map anim :");
+        fileButton17.setToolTipText("");
+
         javax.swing.GroupLayout accordionPanel1Layout = new javax.swing.GroupLayout(accordionPanel1);
         accordionPanel1.setLayout(accordionPanel1Layout);
         accordionPanel1Layout.setHorizontalGroup(
@@ -161,11 +192,12 @@ public class MainEditor extends AbstractMainEditor {
             .addGroup(accordionPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(accordionPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fileButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         accordionPanel1Layout.setVerticalGroup(
@@ -181,6 +213,8 @@ public class MainEditor extends AbstractMainEditor {
                 .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileButton17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -233,8 +267,7 @@ public class MainEditor extends AbstractMainEditor {
                     .addContainerGap()
                     .addGroup(jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(accordionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap())
+                        .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             );
             jPanel32Layout.setVerticalGroup(
                 jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,15 +283,15 @@ public class MainEditor extends AbstractMainEditor {
                 jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel9Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jPanel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap())
+                    .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
             jPanel9Layout.setVerticalGroup(
                 jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel9Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(388, Short.MAX_VALUE))
+                    .addContainerGap(357, Short.MAX_VALUE))
             );
 
             jSplitPane4.setLeftComponent(jPanel9);
@@ -335,18 +368,18 @@ public class MainEditor extends AbstractMainEditor {
 
             jScrollPane8.setViewportBorder(javax.swing.BorderFactory.createTitledBorder("Tileset"));
 
-            javax.swing.GroupLayout tilesetsLayoutPanelLayout = new javax.swing.GroupLayout(tilesetsLayoutPanel);
-            tilesetsLayoutPanel.setLayout(tilesetsLayoutPanelLayout);
-            tilesetsLayoutPanelLayout.setHorizontalGroup(
-                tilesetsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 558, Short.MAX_VALUE)
+            javax.swing.GroupLayout tilesetLayoutPanelLayout = new javax.swing.GroupLayout(tilesetLayoutPanel);
+            tilesetLayoutPanel.setLayout(tilesetLayoutPanelLayout);
+            tilesetLayoutPanelLayout.setHorizontalGroup(
+                tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 306, Short.MAX_VALUE)
             );
-            tilesetsLayoutPanelLayout.setVerticalGroup(
-                tilesetsLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 373, Short.MAX_VALUE)
+            tilesetLayoutPanelLayout.setVerticalGroup(
+                tilesetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 100, Short.MAX_VALUE)
             );
 
-            jScrollPane8.setViewportView(tilesetsLayoutPanel);
+            jScrollPane8.setViewportView(tilesetLayoutPanel);
 
             jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("Tileset display"));
             jPanel20.setMinimumSize(new java.awt.Dimension(340, 100));
@@ -361,7 +394,6 @@ public class MainEditor extends AbstractMainEditor {
                 }
             });
 
-            jCheckBox2.setSelected(true);
             jCheckBox2.setText("Show grid");
             jCheckBox2.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -388,21 +420,55 @@ public class MainEditor extends AbstractMainEditor {
 
             jLabel12.setText("BG :");
 
+            jLabel21.setText("Tiles per row :");
+
+            jSpinner6.setModel(new javax.swing.SpinnerNumberModel(16, 4, 32, 4));
+            jSpinner6.addChangeListener(new javax.swing.event.ChangeListener() {
+                public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                    jSpinner6StateChanged(evt);
+                }
+            });
+
+            jCheckBox7.setSelected(true);
+            jCheckBox7.setText("Show anim frames");
+            jCheckBox7.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    jCheckBox7ItemStateChanged(evt);
+                }
+            });
+
+            jCheckBox8.setText("Preview anim");
+            jCheckBox8.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    jCheckBox8ItemStateChanged(evt);
+                }
+            });
+
             javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
             jPanel20.setLayout(jPanel20Layout);
             jPanel20Layout.setHorizontalGroup(
                 jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel20Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel12)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(colorPickerTileset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jCheckBox2)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel15)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel20Layout.createSequentialGroup()
+                            .addComponent(jCheckBox2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel21)
+                            .addGap(0, 0, 0)
+                            .addComponent(jSpinner6, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel15)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel20Layout.createSequentialGroup()
+                            .addComponent(jCheckBox7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jCheckBox8)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(colorPickerTileset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
             );
             jPanel20Layout.setVerticalGroup(
@@ -410,11 +476,18 @@ public class MainEditor extends AbstractMainEditor {
                 .addGroup(jPanel20Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jSpinner6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel21)
                         .addComponent(jCheckBox2)
-                        .addComponent(jLabel12)
-                        .addComponent(colorPickerTileset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel15)
                         .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jCheckBox7)
+                        .addComponent(jCheckBox8)
+                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(colorPickerTileset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)))
                     .addContainerGap())
             );
 
@@ -430,7 +503,7 @@ public class MainEditor extends AbstractMainEditor {
             jPanel19Layout.setVerticalGroup(
                 jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel19Layout.createSequentialGroup()
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
@@ -461,7 +534,7 @@ public class MainEditor extends AbstractMainEditor {
             jPanel8.setLayout(jPanel8Layout);
             jPanel8Layout.setHorizontalGroup(
                 jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 650, Short.MAX_VALUE)
+                .addComponent(jSplitPane4)
             );
             jPanel8Layout.setVerticalGroup(
                 jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -536,7 +609,6 @@ public class MainEditor extends AbstractMainEditor {
 
             jLabel59.setText("BG :");
 
-            jCheckBox3.setSelected(true);
             jCheckBox3.setText("Exploration flags");
             jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -664,50 +736,62 @@ public class MainEditor extends AbstractMainEditor {
         }// </editor-fold>//GEN-END:initComponents
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
-        /*if (map != null) {
-            map.getAnimation().setLength((int)jSpinner3.getModel().getValue());
-        }*/
+        int value = (int)jSpinner3.getValue();
+        MapAnimation anim = mapAnimationLayoutPanel.getAnimation();
+        if (anim != null && anim.getLength()!= value) {
+            anim.setLength(value);
+        }
     }//GEN-LAST:event_jSpinner3StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        /*if(map != null){
-            map.getAnimation().setTileset((int)jSpinner2.getModel().getValue());
-        }*/
+        int value = (int)jSpinner2.getValue();
+        MapAnimation anim = mapAnimationLayoutPanel.getAnimation();
+        if (anim != null && anim.getTilesetId()!= value) {
+            try {
+                anim.setTilesetId(value);
+                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+                Tileset tileset = mapAnimationManager.importTileset(mapAnimationLayoutPanel.getMapLayout().getPalette(), tilesetEntriesPath, value);
+                tilesetLayoutPanel.setTileset(tileset);
+            } catch (Exception ex) {
+                Console.logger().log(Level.SEVERE, null, ex);
+                Console.logger().severe("ERROR Tileset could not be imported for tileset : " + value);
+            }
+        }
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jComboBox9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox9ActionPerformed
-        mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
+        mapAnimationLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
         mapLayoutSettings.setTilesetScale(jComboBox9.getSelectedIndex()+1);
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_jComboBox9ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
-        mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
+        mapAnimationLayoutPanel.setShowGrid(jCheckBox5.isSelected());
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
     private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
-        mapLayoutPanel.setBGColor(colorPicker1.getColor());
+        mapAnimationLayoutPanel.setBGColor(colorPicker1.getColor());
         mapLayoutSettings.setTilesetBGColor(colorPicker1.getColor());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_colorPicker1ColorChanged
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        mapLayoutPanel.setShowExplorationFlags(jCheckBox3.isSelected());
+        mapAnimationLayoutPanel.setShowExplorationFlags(jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        mapLayoutPanel.setShowInteractionFlags(jCheckBox4.isSelected());
+        mapAnimationLayoutPanel.setShowInteractionFlags(jCheckBox4.isSelected());
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
-        mapLayoutPanel.setShowPriority(jCheckBox6.isSelected());
+        mapAnimationLayoutPanel.setShowPriority(jCheckBox6.isSelected());
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
-        if (jComboBox4.getSelectedIndex() >= 0 && tilesetsLayoutPanel != null) {
+        if (jComboBox4.getSelectedIndex() >= 0 && tilesetLayoutPanel != null) {
             int scale = (int)jComboBox4.getSelectedIndex()+1;
             if (scale != mapLayoutSettings.getTilesetScale()) {
-                tilesetsLayoutPanel.setDisplayScale(scale);
+                tilesetLayoutPanel.setDisplayScale(scale);
                 mapLayoutSettings.setTilesetScale(scale);
                 SettingsManager.saveSettingsFile();
             }
@@ -715,34 +799,64 @@ public class MainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox4ItemStateChanged
 
     private void jCheckBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox2ItemStateChanged
-        if (tilesetsLayoutPanel != null) {
-            tilesetsLayoutPanel.setShowGrid(jCheckBox2.isSelected());
+        if (tilesetLayoutPanel != null) {
+            tilesetLayoutPanel.setShowGrid(jCheckBox2.isSelected());
         }
     }//GEN-LAST:event_jCheckBox2ItemStateChanged
 
     private void colorPickerTilesetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetColorChanged
-        tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanel.setBGColor(colorPickerTileset.getColor());
         mapLayoutSettings.setTilesetBGColor(colorPickerTileset.getColor());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_colorPickerTilesetColorChanged
 
     private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
-        /*Path mapDirectory = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
+        Path mapDirectory = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
         Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         Path mapTilesetDataPath = mapDirectory.resolve(fileButton3.getFilePath());
         Path mapBlocksetDataPath = mapDirectory.resolve(fileButton4.getFilePath());
         Path mapLayoutDataPath = mapDirectory.resolve(fileButton16.getFilePath());
+        Path mapAnimDataPath = mapDirectory.resolve(fileButton17.getFilePath());
         try {
-            maplayoutManager.importDisassemblyFromEntryFiles(paletteEntriesPath, tilesetEntriesPath, mapTilesetDataPath, mapBlocksetDataPath, mapLayoutDataPath);
+            mapAnimationManager.importDisassembly(paletteEntriesPath, tilesetEntriesPath, mapTilesetDataPath, mapBlocksetDataPath, mapLayoutDataPath, mapAnimDataPath);
         } catch (Exception ex) {
-            maplayoutManager.clearData();
+            mapAnimationManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map layout disasm could not be imported from entries : " + mapDirectory);
         }
-        onDataLoaded();*/
+        onDataLoaded();
     }//GEN-LAST:event_jButton28ActionPerformed
 
+    private void jSpinner6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner6StateChanged
+        if (tilesetLayoutPanel != null) {
+            int tilesPerRow = (int)jSpinner6.getValue();
+            tilesetLayoutPanel.setItemsPerRow(tilesPerRow);
+        }
+    }//GEN-LAST:event_jSpinner6StateChanged
+
+    private void jCheckBox7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox7ItemStateChanged
+        tilesetLayoutPanel.setShowAnimationFrames(jCheckBox7.isSelected());
+    }//GEN-LAST:event_jCheckBox7ItemStateChanged
+
+    private void jCheckBox8ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox8ItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox8ItemStateChanged
+    
+    private void onAnimationFramesSeletectionChanged(ListSelectionEvent e) {
+        if (e.getValueIsAdjusting()) return;
+        int selected = table1.jTable.getSelectedRow();
+        tilesetLayoutPanel.setSelectedFrame(selected);
+    }
+    
+    private void onAnimationFramesDataChanged(TableModelEvent e) {
+        if (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.DELETE) {
+            MapAnimationFrame[] frames = mapAnimationFrameTableModel.getTableData(MapAnimationFrame[].class);
+            mapAnimationLayoutPanel.getAnimation().setFrames(frames);
+        }
+        tilesetLayoutPanel.redraw();
+    }
+    
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)
@@ -751,7 +865,7 @@ public class MainEditor extends AbstractMainEditor {
         AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
+                new MapAnimationMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
             }
         });
     }
@@ -767,6 +881,7 @@ public class MainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton16;
+    private com.sfc.sf2.core.gui.controls.FileButton fileButton17;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton4;
@@ -776,12 +891,15 @@ public class MainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox jCheckBox7;
+    private javax.swing.JCheckBox jCheckBox8;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox9;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -803,12 +921,15 @@ public class MainEditor extends AbstractMainEditor {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
+    private javax.swing.JSpinner jSpinner4;
+    private javax.swing.JSpinner jSpinner5;
+    private javax.swing.JSpinner jSpinner6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane4;
     private com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel mapAnimationFrameTableModel;
     private com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel mapAnimationLayoutPanel;
     private com.sfc.sf2.core.gui.controls.Table table1;
-    private com.sfc.sf2.map.block.gui.TilesetsLayoutPanel tilesetsLayoutPanel;
+    private com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel tilesetLayoutPanel;
     // End of variables declaration//GEN-END:variables
 }

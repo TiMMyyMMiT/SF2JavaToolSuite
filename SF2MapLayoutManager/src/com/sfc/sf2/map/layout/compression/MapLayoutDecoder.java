@@ -36,9 +36,8 @@ public class MapLayoutDecoder {
     
     //private StringBuilder debugSb = null;
 
-    public MapLayout decode(byte[] layoutData, MapBlock[] blockset) {
+    public MapBlockset decode(byte[] layoutData, MapBlock[] blockset) {
         inputData = layoutData;
-        MapLayout layout = new MapLayout();
         MapBlock[] blocks = new MapBlock[64 * 64];
         leftHistoryMap = new MapBlock[blockset.length][4];
         upperHistoryMap = new MapBlock[blockset.length][4];
@@ -238,9 +237,7 @@ public class MapLayoutDecoder {
                 blocks[i] = blockset[0];
             }
         }
-        MapBlockset layoutBlockset = new MapBlockset(blocks, MapLayout.BLOCK_WIDTH);
-        layout.setBlockset(layoutBlockset);
-        return layout;
+        return new MapBlockset(blocks, MapLayout.BLOCK_WIDTH);
     }
 
     private void applyFlags(MapBlock block) {

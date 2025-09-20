@@ -15,7 +15,7 @@ import com.sfc.sf2.map.animation.MapAnimationFrame;
 public class MapAnimationFrameTableModel extends AbstractTableModel<MapAnimationFrame> {
 
     public MapAnimationFrameTableModel() {
-        super(new String[] { "Index", "Start", "Length", "Dest", "Delay" }, 15);
+        super(new String[] { "Index", "Start", "Length", "Dest", "Delay" }, 100);
     }
 
     @Override

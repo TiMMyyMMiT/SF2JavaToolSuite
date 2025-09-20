@@ -102,7 +102,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSplitPane4" pref="650" max="32767" attributes="0"/>
+                              <Component id="jSplitPane4" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -130,10 +130,10 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jPanel32" max="32767" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jPanel32" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -142,7 +142,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jPanel32" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="388" max="32767" attributes="0"/>
+                                          <EmptySpace pref="357" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -166,7 +166,6 @@
                                                   <Component id="accordionPanel1" alignment="0" max="32767" attributes="0"/>
                                                   <Component id="jPanel22" alignment="0" max="32767" attributes="0"/>
                                               </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -193,14 +192,15 @@
                                       <Layout>
                                         <DimensionLayout dim="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="fileButton1" alignment="0" pref="250" max="32767" attributes="0"/>
+                                                      <Component id="fileButton1" alignment="0" pref="0" max="32767" attributes="0"/>
                                                       <Component id="fileButton2" alignment="0" pref="0" max="32767" attributes="0"/>
                                                       <Component id="fileButton3" alignment="0" pref="0" max="32767" attributes="0"/>
                                                       <Component id="fileButton4" alignment="0" pref="0" max="32767" attributes="0"/>
                                                       <Component id="fileButton16" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton17" alignment="0" pref="0" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
@@ -219,6 +219,8 @@
                                                   <Component id="fileButton4" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="fileButton16" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton17" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
@@ -254,6 +256,13 @@
                                           <Properties>
                                             <Property name="filePath" type="java.lang.String" value="1-layout.bin"/>
                                             <Property name="labelText" type="java.lang.String" value="Map layout :"/>
+                                            <Property name="toolTipText" type="java.lang.String" value=""/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton17">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="9-animations.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Map anim :"/>
                                             <Property name="toolTipText" type="java.lang.String" value=""/>
                                           </Properties>
                                         </Component>
@@ -489,7 +498,7 @@
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jScrollPane8" pref="133" max="32767" attributes="0"/>
+                                              <Component id="jScrollPane8" pref="103" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel20" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -508,17 +517,17 @@
 
                                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                                       <SubComponents>
-                                        <Container class="com.sfc.sf2.map.block.gui.TilesetsLayoutPanel" name="tilesetsLayoutPanel">
+                                        <Container class="com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel" name="tilesetLayoutPanel">
 
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="558" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="306" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="373" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                           </Layout>
@@ -540,17 +549,30 @@
                                       <Layout>
                                         <DimensionLayout dim="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="colorPickerTileset" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jComboBox4" min="-2" pref="55" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" attributes="0">
+                                                          <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                                          <Component id="jSpinner6" min="-2" pref="58" max="-2" attributes="0"/>
+                                                          <EmptySpace max="32767" attributes="0"/>
+                                                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jComboBox4" min="-2" pref="55" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" attributes="0">
+                                                          <Component id="jCheckBox7" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Component id="jCheckBox8" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="32767" attributes="0"/>
+                                                          <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="colorPickerTileset" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
@@ -560,11 +582,20 @@
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="2" attributes="0">
+                                                      <Component id="jSpinner6" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel21" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jCheckBox2" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabel12" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="colorPickerTileset" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jLabel15" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jComboBox4" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="2" attributes="0">
+                                                      <Component id="jCheckBox7" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jCheckBox8" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="103" alignment="2" groupAlignment="2" attributes="0">
+                                                          <Component id="colorPickerTileset" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jLabel12" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
@@ -598,7 +629,6 @@
                                         </Component>
                                         <Component class="javax.swing.JCheckBox" name="jCheckBox2">
                                           <Properties>
-                                            <Property name="selected" type="boolean" value="true"/>
                                             <Property name="text" type="java.lang.String" value="Show grid"/>
                                           </Properties>
                                           <Events>
@@ -627,6 +657,38 @@
                                           <Properties>
                                             <Property name="text" type="java.lang.String" value="BG :"/>
                                           </Properties>
+                                        </Component>
+                                        <Component class="javax.swing.JLabel" name="jLabel21">
+                                          <Properties>
+                                            <Property name="text" type="java.lang.String" value="Tiles per row :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="javax.swing.JSpinner" name="jSpinner6">
+                                          <Properties>
+                                            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                                              <SpinnerModel initial="16" maximum="32" minimum="4" numberType="java.lang.Integer" stepSize="4" type="number"/>
+                                            </Property>
+                                          </Properties>
+                                          <Events>
+                                            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinner6StateChanged"/>
+                                          </Events>
+                                        </Component>
+                                        <Component class="javax.swing.JCheckBox" name="jCheckBox7">
+                                          <Properties>
+                                            <Property name="selected" type="boolean" value="true"/>
+                                            <Property name="text" type="java.lang.String" value="Show anim frames"/>
+                                          </Properties>
+                                          <Events>
+                                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCheckBox7ItemStateChanged"/>
+                                          </Events>
+                                        </Component>
+                                        <Component class="javax.swing.JCheckBox" name="jCheckBox8">
+                                          <Properties>
+                                            <Property name="text" type="java.lang.String" value="Preview anim"/>
+                                          </Properties>
+                                          <Events>
+                                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCheckBox8ItemStateChanged"/>
+                                          </Events>
                                         </Component>
                                       </SubComponents>
                                     </Container>
@@ -836,7 +898,6 @@
                             </Component>
                             <Component class="javax.swing.JCheckBox" name="jCheckBox3">
                               <Properties>
-                                <Property name="selected" type="boolean" value="true"/>
                                 <Property name="text" type="java.lang.String" value="Exploration flags"/>
                               </Properties>
                               <Events>

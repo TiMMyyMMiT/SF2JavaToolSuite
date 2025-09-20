@@ -23,6 +23,12 @@ public class MapLayout {
      
     private Tileset[] tilesets;
     private MapBlockset blockset;
+
+    public MapLayout(int index, Tileset[] tilesets, MapBlockset blockset) {
+        this.index = index;
+        this.tilesets = tilesets;
+        this.blockset = blockset;
+    }
     
     public int getIndex() {
         return index;

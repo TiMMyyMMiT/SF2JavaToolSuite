@@ -5,28 +5,31 @@
  */
 package com.sfc.sf2.map.animation;
 
+import com.sfc.sf2.graphics.Tileset;
+
 /**
  *
  * @author wiz
  */
 public class MapAnimation {
     
-    private int tileset;
+    private int tilesetId;
     private int length;
+    private Tileset tileset;
     private MapAnimationFrame[] frames;
 
-    public MapAnimation(int tileset, int length, MapAnimationFrame[] frames) {
-        this.tileset = tileset;
+    public MapAnimation(int tilesetId, int length, MapAnimationFrame[] frames) {
+        this.tilesetId = tilesetId;
         this.length = length;
         this.frames = frames;
     }
 
-    public int getTileset() {
-        return tileset;
+    public int getTilesetId() {
+        return tilesetId;
     }
 
-    public void setTileset(int tileset) {
-        this.tileset = tileset;
+    public void setTilesetId(int tilesetId) {
+        this.tilesetId = tilesetId;
     }
 
     public int getLength() {
@@ -35,6 +38,14 @@ public class MapAnimation {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public Tileset getTileset() {
+        return tileset;
+    }
+
+    public void setTileset(Tileset tileset) {
+        this.tileset = tileset;
     }
 
     public MapAnimationFrame[] getFrames() {

@@ -55,6 +55,5 @@ public class TileSlotPanel extends AbstractLayoutPanel {
     public void setTile(Tile tile) {
         this.tile = tile;
         redraw();
-        this.repaint();
     }
 }

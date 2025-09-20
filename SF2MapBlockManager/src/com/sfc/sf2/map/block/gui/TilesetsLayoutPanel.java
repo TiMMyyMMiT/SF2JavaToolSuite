@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.*;
 import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
@@ -106,6 +107,18 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
         this.redraw();
     }
 
+    public void setSelectedTilesetById(int tilesetId) {
+        if (tilesets == null) return;
+        String stringId = Integer.toString(tilesetId);
+        for (int i = 0; i < tilesets.length; i++) {
+            if (tilesets[i].getName().equals(stringId)) {
+                setSelectedTileset(i);
+                return;
+            }
+        }
+        Console.logger().warning("Could not find tileset in map layout tilesets. ID : " + tilesetId);
+    }
+
     public EditableBlockSlotPanel getBlockSlotPanel() {
         return blockSlotPanel;
     }
@@ -131,24 +144,18 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
     }
     
     private void setSelectedLeftSlot(int index) {
+        if (leftSlotTilePanel == null) return;
         selectedTileIndexLeft = index;
         Tile tile = index == -1 ? null : tilesets[selectedTileset].getTiles()[index];
         leftSlotTilePanel.setTile(tile);
-        leftSlotTilePanel.revalidate();
-        leftSlotTilePanel.repaint();
-        this.revalidate();
-        this.repaint();
         this.redraw();
     }
     
     private void setSelectedRightSlot(int index) {
+        if (rightSlotTilePanel == null) return;
         selectedTileIndexRight = index;
         Tile tile = index == -1 ? null : tilesets[selectedTileset].getTiles()[index];
         rightSlotTilePanel.setTile(tile);
-        rightSlotTilePanel.revalidate();
-        rightSlotTilePanel.repaint();
-        this.revalidate();
-        this.repaint();
         this.redraw();
     }
 

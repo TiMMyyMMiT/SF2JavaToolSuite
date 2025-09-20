@@ -5,52 +5,100 @@
  */
 package com.sfc.sf2.map.animation;
 
+import com.sfc.sf2.core.AbstractManager;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.core.io.asm.EntriesAsmData;
+import com.sfc.sf2.core.io.asm.EntriesAsmProcessor;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.graphics.TilesetManager;
+import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel;
+import com.sfc.sf2.map.animation.io.MapAnimationAsmProcessor;
+import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;
+import com.sfc.sf2.palette.Palette;
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  *
  * @author wiz
  */
-public class MapAnimationManager {
+public class MapAnimationManager extends AbstractManager {
        
-    private MapLayoutManager mapLayoutManager = new MapLayoutManager();
+    private final MapLayoutManager mapLayoutManager = new MapLayoutManager();
+    private final TilesetManager tilesetmanager = new TilesetManager();
+    private final MapAnimationAsmProcessor mapAnimationAsmProcessor = new MapAnimationAsmProcessor();
+    private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+
+    private MapAnimation animation;
     
-    public void importDisassembly(String palettesPath, String tilesetsPath, String tilesetsFilePath, String blocksPath, String layoutPath, String animationsPath) {
-        /*System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Importing disassembly ...");
-        map = new Map();
-        mapLayoutManager.importDisassembly(palettesPath, tilesetsPath, tilesetsFilePath, blocksPath, layoutPath);
-        MapLayout layout = mapLayoutManager.getLayout();
-        MapBlock[] blockset = mapLayoutManager.getBlockset();
-        map.setLayout(layout);
-        map.setBlocks(blockset);        
-        MapAnimation animation = DisassemblyManager.importAnimation(animationsPath);
-        map.setAnimation(animation);        
-        MapAnimationFrame[] animFrames = animation.getFrames();
-        int animTileset = animation.getTileset();
-        int animLength = animation.getLength();
-        for(int i=0;i<animFrames.length;i++){
-            int animFrameStart = animFrames[i].getStart();
-            int animFrameLength = animFrames[i].getLength();
-            int animFrameDest = animFrames[i].getDest();
-            mapLayoutManager.importDisassembly(palettesPath, tilesetsPath, tilesetsFilePath, blocksPath, layoutPath, animTileset, animLength, animFrameStart, animFrameLength, animFrameDest);
-            //MapLayout layout = mapLayoutManager.getLayout();
-            MapBlock[] animFrameBlocks = mapLayoutManager.getLayout().getBlocks();  
-            animFrames[i].setBlocks(animFrameBlocks);
-        }
-        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly imported.");
-        */
+    @Override
+    public void clearData() {
+        mapLayoutManager.clearData();
+        animation = null;
     }
     
-    public void exportDisassembly(String animationsPath){
+    public MapAnimation importDisassembly(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassembly");
+        mapLayoutManager.importDisassemblyFromEntryFiles(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
+        if (animationsPath.toFile().exists()) {
+            animation = mapAnimationAsmProcessor.importAsmData(animationsPath, null);
+            importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
+            Console.logger().info("Map layout and animation succesfully imported for : " + animationsPath);
+        } else {
+            animation = new MapAnimation(-1, 0, new MapAnimationFrame[0]);
+            animation.setTileset(null);
+            Console.logger().warning("WARNING Map has no animation.");
+        }
+        Console.logger().finest("EXITING importDisassembly");
+        return animation;
+    }
+    
+    public Tileset importTileset(Palette palette, Path tilesetEntriesPath, int tilesetId) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importTileset");
+        EntriesAsmData tilesetData = entriesAsmProcessor.importAsmData(tilesetEntriesPath, null);
+        if (tilesetId < 0 || tilesetId >= tilesetData.entriesCount()) {
+            animation.setTileset(null);
+            Console.logger().warning("WARNING Map index out of range : " + tilesetId);
+            return null;
+        }
+        Path tilesetPath = PathHelpers.getIncbinPath().resolve(tilesetData.getPathForEntry(tilesetId));
+        Tileset tileset = tilesetmanager.importDisassembly(tilesetPath, palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
+        animation.setTileset(tileset);
+        Console.logger().info("Tileset succesfully imported for : " + tilesetPath);
+        Console.logger().finest("EXITING importTileset");
+        return tileset;
+    }
+    
+    public void exportDisassembly(Path animationsPath) {
         /*System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Exporting disassembly ...");
         DisassemblyManager.exportAnimation(map.getAnimation(), animationsPath);
         System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly exported.");   */     
     }      
     
-    public void exportPng(MapAnimationLayoutPanel mapPanel, String filepath){
+    public void exportPng(MapAnimationLayoutPanel mapPanel, Path filePath) {
         /*System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - Exporting PNG ...");
         PngManager.exportPng(mapPanel, filepath);
         System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - PNG exported.");       */
+    }
+
+    public MapAnimation getMapAnimation() {
+        return animation;
+    }
+
+    public MapLayout getMapLayout() {
+        return mapLayoutManager.getMapLayout();
+    }
+    
+    public Tileset[] getMapTilesets() {
+        if (getMapLayout() == null) {
+            return null;
+        } else {
+            return getMapLayout().getTilesets();
+        }
     }
 }

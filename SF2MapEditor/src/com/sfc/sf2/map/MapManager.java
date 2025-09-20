@@ -29,8 +29,8 @@ public class MapManager {
             throws DisassemblyException {
         System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Importing disassembly ...");
         mapLayoutManager.importDisassemblyFromEntryFiles(incbinPath, paletteEntriesPath, tilesetEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
-        MapLayout layout = mapLayoutManager.getLayout();
-        MapBlock[] blockset = mapLayoutManager.getBlockset();
+        MapLayout layout = mapLayoutManager.getMapLayout();
+        MapBlock[] blockset = mapLayoutManager.getMapBlockset();
         map = new Map();
         map.setLayout(layout);
         map.setBlocks(blockset);
