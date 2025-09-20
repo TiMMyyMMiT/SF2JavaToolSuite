@@ -19,6 +19,7 @@ import java.util.logging.Level;
  * @author wiz
  */
 public class MapLayoutMainEditor extends AbstractMainEditor {
+    
     private final MapBlockSettings mapLayoutSettings = new MapBlockSettings();
     private final MapLayoutManager maplayoutManager = new MapLayoutManager();
     
@@ -34,9 +35,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         super.initEditor();
         
         colorPicker1.setColor(mapLayoutSettings.getBlocksetBGColor());
-        colorPicker2.setColor(mapLayoutSettings.getTilesetBGColor());
+        colorPicker2.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
         jComboBox7.setSelectedIndex(mapLayoutSettings.getBlocksetScale()-1);
-        jComboBox9.setSelectedIndex(mapLayoutSettings.getTilesetScale()-1);
         
         mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
         mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
@@ -44,7 +44,6 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
         mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
         mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
-        mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
         
         mapBlocksetPanel.setShowGrid(jCheckBox3.isSelected());
         mapBlocksetPanel.setDisplayScale(jComboBox7.getSelectedIndex()+1);

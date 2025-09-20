@@ -5,13 +5,7 @@
  */
 package com.sfc.sf2.map.animation;
 
-import com.sfc.sf2.graphics.GraphicsManager;
-import com.sfc.sf2.map.block.MapBlock;
-import com.sfc.sf2.map.animation.gui.MapAnimationPanel;
-import com.sfc.sf2.map.animation.io.DisassemblyManager;
-import com.sfc.sf2.map.animation.io.PngManager;
-import com.sfc.sf2.map.layout.DisassemblyException;
-import com.sfc.sf2.map.layout.MapLayout;
+import com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel;
 import com.sfc.sf2.map.layout.MapLayoutManager;
 
 /**
@@ -21,11 +15,9 @@ import com.sfc.sf2.map.layout.MapLayoutManager;
 public class MapAnimationManager {
        
     private MapLayoutManager mapLayoutManager = new MapLayoutManager();
-    private Map map;
     
-    public void importDisassembly(String palettesPath, String tilesetsPath, String tilesetsFilePath, String blocksPath, String layoutPath, String animationsPath)
-            throws DisassemblyException {
-        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Importing disassembly ...");
+    public void importDisassembly(String palettesPath, String tilesetsPath, String tilesetsFilePath, String blocksPath, String layoutPath, String animationsPath) {
+        /*System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Importing disassembly ...");
         map = new Map();
         mapLayoutManager.importDisassembly(palettesPath, tilesetsPath, tilesetsFilePath, blocksPath, layoutPath);
         MapLayout layout = mapLayoutManager.getLayout();
@@ -47,28 +39,18 @@ public class MapAnimationManager {
             animFrames[i].setBlocks(animFrameBlocks);
         }
         System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly imported.");
+        */
     }
     
     public void exportDisassembly(String animationsPath){
-        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Exporting disassembly ...");
+        /*System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Exporting disassembly ...");
         DisassemblyManager.exportAnimation(map.getAnimation(), animationsPath);
-        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly exported.");        
+        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly exported.");   */     
     }      
     
-    public void exportPng(MapAnimationPanel mapPanel, String filepath){
-        System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - Exporting PNG ...");
+    public void exportPng(MapAnimationLayoutPanel mapPanel, String filepath){
+        /*System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - Exporting PNG ...");
         PngManager.exportPng(mapPanel, filepath);
-        System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - PNG exported.");       
+        System.out.println("com.sfc.sf2.maplayout.MapAnimationEditor.exportPng() - PNG exported.");       */
     }
-
-    public Map getMap() {
-        return map;
-    }
-
-    public void setMap(Map map) {
-        this.map = map;
-    }
-    
-    
-    
 }

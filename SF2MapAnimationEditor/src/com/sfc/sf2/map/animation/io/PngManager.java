@@ -5,21 +5,14 @@
  */
 package com.sfc.sf2.map.animation.io;
 
-import com.sfc.sf2.map.animation.gui.MapAnimationPanel;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-
 /**
  *
  * @author wiz
  */
 public class PngManager {
+    /*
     
-    
-    public static void exportPng(MapAnimationPanel mapPanel, String filepath){
+    public static void exportPng(MapAnimationLayoutPanel mapPanel, String filepath){
         try {
             System.out.println("com.sfc.sf2.map.io.PngManager.exportPng() - Exporting PNG files ...");
             writePngFile(mapPanel,filepath);    
@@ -31,7 +24,7 @@ public class PngManager {
                 
     }    
     
-    public static void writePngFile(MapAnimationPanel mapPanel, String filepath){
+    public static void writePngFile(MapAnimationLayoutPanel mapPanel, String filepath){
         try {
             BufferedImage image = mapPanel.buildImage();
             File outputfile = new File(filepath);
@@ -42,5 +35,5 @@ public class PngManager {
         }       
     }
        
-    
+    */
 }

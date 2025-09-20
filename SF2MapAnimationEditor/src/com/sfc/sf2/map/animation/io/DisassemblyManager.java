@@ -5,28 +5,13 @@
  */
 package com.sfc.sf2.map.animation.io;
 
-import com.sfc.sf2.map.animation.MapAnimation;
-import com.sfc.sf2.map.animation.MapAnimationFrame;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author wiz
  */
 public class DisassemblyManager {
  
-    private static String animationsHeader;
+    /*private static String animationsHeader;
 
     
     private static short getNextWord(byte[] data, int cursor){
@@ -125,7 +110,7 @@ public class DisassemblyManager {
                 System.out.println(animBytes.length + " bytes into " + animFilepath);
             }
         } catch (Exception ex) {
-            Logger.getLogger(com.sfc.sf2.map.layout.io.DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(com.sfc.sf2.map.layout.io.DisassemblyManager.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
             System.out.println(ex);
         }            
@@ -172,6 +157,5 @@ public class DisassemblyManager {
         }else{
             return Integer.valueOf(s);
         }
-    }
-    
+    }*/
 }

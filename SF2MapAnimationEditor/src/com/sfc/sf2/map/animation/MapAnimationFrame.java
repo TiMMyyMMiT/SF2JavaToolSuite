@@ -5,9 +5,6 @@
  */
 package com.sfc.sf2.map.animation;
 
-import com.sfc.sf2.map.block.MapBlock;
-import java.awt.image.BufferedImage;
-
 /**
  *
  * @author wiz
@@ -18,8 +15,13 @@ public class MapAnimationFrame {
     private int length;
     private int dest;
     private int delay;
-    private MapBlock[] blocks;
-    private BufferedImage image;
+
+    public MapAnimationFrame(int start, int length, int dest, int delay) {
+        this.start = start;
+        this.length = length;
+        this.dest = dest;
+        this.delay = delay;
+    }
 
     public int getStart() {
         return start;
@@ -52,23 +54,14 @@ public class MapAnimationFrame {
     public void setDelay(int delay) {
         this.delay = delay;
     }
-
-    public MapBlock[] getBlocks() {
-        return blocks;
-    }
-
-    public void setBlocks(MapBlock[] blocks) {
-        this.blocks = blocks;
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
-
     
+    @Override 
+    public MapAnimationFrame clone() {
+        MapAnimationFrame clone = new MapAnimationFrame(start, length, dest, delay);
+        return clone;
+    }
+    
+    public static MapAnimationFrame EmptyMapAnimationFrame() {
+        return new MapAnimationFrame(0, 32, 768, 20);
+    }
 }
