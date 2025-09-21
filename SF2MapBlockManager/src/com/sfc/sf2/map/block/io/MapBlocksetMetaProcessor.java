@@ -8,6 +8,7 @@ package com.sfc.sf2.map.block.io;
 import com.sfc.sf2.core.io.AbstractMetadataProcessor;
 import com.sfc.sf2.core.io.MetadataException;
 import com.sfc.sf2.graphics.Block;
+import com.sfc.sf2.graphics.TileFlags;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import java.io.BufferedReader;
@@ -33,7 +34,7 @@ public class MapBlocksetMetaProcessor extends AbstractMetadataProcessor<MapBlock
                 int blockIndex = (globalX/Block.TILE_WIDTH) + (globalY/Block.TILE_HEIGHT)*blocksPerRow;
                 int tileIndexInBlock = (globalX%Block.TILE_WIDTH) + (globalY%Block.TILE_HEIGHT)*Block.TILE_WIDTH;
                 if (line.charAt(cursor) != ' ') {
-                    item.getBlocks()[blockIndex].getTiles()[tileIndexInBlock].setHighPriority(line.charAt(cursor)=='H');
+                    item.getBlocks()[blockIndex].getMapTiles()[tileIndexInBlock].getTileFlags().setFlag(TileFlags.TILE_FLAG_PRIORITY, line.charAt(cursor)=='H');
                 }
                 cursor++;
             }
@@ -59,7 +60,7 @@ public class MapBlocksetMetaProcessor extends AbstractMetadataProcessor<MapBlock
             int blockIndex = (globalX/3) + (globalY/3)*blocksPerRow;
             int tileIndexInBlock = (globalX % 3) + (globalY % 3)*3;
             if (blockIndex < blocks.length) {
-                writer.write(blocks[blockIndex].getTiles()[tileIndexInBlock].isHighPriority()?"H":"L");
+                writer.write(blocks[blockIndex].getMapTiles()[tileIndexInBlock].getTileFlags().isPriority()?"H":"L");
             } else {
                 writer.write(' ');
             }

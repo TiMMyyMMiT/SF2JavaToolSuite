@@ -16,7 +16,6 @@ import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -79,6 +78,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         MapBlockset mapBlockset = mapblockManager.getMapBlockset();
         if (mapBlockset != null) {
             mapBlocksetLayoutPanel.setBlockset(mapBlockset);
+            mapBlocksetLayoutPanel.setTilesets(tilesets);
             mapBlocksetLayoutPanel.setLeftSelectedIndex(-1);
         }
         if (tilesets != null) {
@@ -96,7 +96,10 @@ public class MapBlockMainEditor extends AbstractMainEditor {
             
             tilesetsLayoutPanel.setItemsPerRow(((int)jSpinner4.getModel().getValue()));
             tileSlotPanelLeft.setTile(null);
+            tileSlotPanelLeft.setTilesets(tilesets);
             tileSlotPanelRight.setTile(null);
+            tileSlotPanelRight.setTilesets(tilesets);
+            editableBlockSlotPanel.setTilesets(tilesets);
         }
     }
     
@@ -1471,7 +1474,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         Path hpTilesPath = mapDirectory.resolve(fileButton14.getFilePath());
         if (!PathHelpers.createPathIfRequred(mapDirectory)) return;
         try {
-            mapblockManager.exportImage(blocksetImagePath, hpTilesPath, mapBlocksetLayoutPanel.getItemsPerRow(), mapBlocksetLayoutPanel.getBlockset());
+            mapblockManager.exportImage(blocksetImagePath, hpTilesPath, mapBlocksetLayoutPanel.getItemsPerRow(), mapBlocksetLayoutPanel.getBlockset(), mapBlocksetLayoutPanel.getTilesets());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map image & priority data could not be exported to : " + mapDirectory);

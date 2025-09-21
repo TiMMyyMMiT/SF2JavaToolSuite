@@ -11,6 +11,7 @@ import com.sfc.sf2.graphics.Block;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
@@ -38,6 +39,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     private Color rightSlotColor = Color.GREEN;
     
     private MapBlockset blockset;
+    private Tileset[] tilesets;
     private boolean showPriority = false;
 
     public MapBlocksetLayoutPanel() {
@@ -65,9 +67,9 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     @Override
     protected void drawImage(Graphics graphics) {
         int blocksPerRow = getItemsPerRow();
-        graphics.drawImage(blockset.getIndexedColorImage(), 0, 0, null);
+        graphics.drawImage(blockset.getIndexedColorImage(tilesets), 0, 0, null);
         if (showPriority) {
-            MapBlockHelpers.drawTilePriorities(graphics, blockset.getBlocks(), blocksPerRow);
+            MapBlockHelpers.drawTilePriorities(graphics, blockset.getBlocks(), tilesets, blocksPerRow);
         }
         if (selectedBlockIndexLeft >= 0) {
             Graphics2D g2 = (Graphics2D)graphics;
@@ -95,6 +97,14 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
         this.blockset = blockset;
         selectedBlockIndexLeft = selectedBlockIndexRight = -1;
         this.redraw();
+    }
+
+    public Tileset[] getTilesets() {
+        return tilesets;
+    }
+
+    public void setTilesets(Tileset[] tilesets) {
+        this.tilesets = tilesets;
     }
     
     public boolean getShowPriority() {

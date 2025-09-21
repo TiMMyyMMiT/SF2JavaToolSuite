@@ -18,9 +18,9 @@ import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.helpers.StringHelpers;
-import com.sfc.sf2.map.block.io.MapBlocksetMetaProcessor;
-import com.sfc.sf2.map.block.io.MapBlocksetDisassemblyProcessor;
 import com.sfc.sf2.map.block.io.MapBlockPackage;
+import com.sfc.sf2.map.block.io.MapBlocksetDisassemblyProcessor;
+import com.sfc.sf2.map.block.io.MapBlocksetMetaProcessor;
 import com.sfc.sf2.map.block.io.MapBlocksetRawImageProcessor;
 import com.sfc.sf2.map.block.io.MapTilesetData;
 import com.sfc.sf2.map.block.io.MapTilesetsAsmProcessor;
@@ -72,8 +72,7 @@ public class MapBlocksetManager extends AbstractManager {
                 tilesets[i] = tilesetManager.importDisassembly(tilesetPaths[i], palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
             }
         }
-        MapBlockPackage pckg = new MapBlockPackage(tilesets, palette);
-        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksetPath, pckg);
+        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksetPath, null);
         Console.logger().info("Map blocks successfully imported from palette and tilesets : " + blocksetPath);
         Console.logger().finest("EXITING importDisassembly");
         return mapBlockset;
@@ -102,8 +101,7 @@ public class MapBlocksetManager extends AbstractManager {
                 tilesets[i] = tilesetManager.importDisassembly(tilesetPath, palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
             }
         }
-        MapBlockPackage pckg = new MapBlockPackage(tilesets, palette);
-        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksetPath, pckg);
+        mapBlockset = blocksetDisassemblyProcessor.importDisassembly(blocksetPath, null);
         Console.logger().info("Map blocks successfully imported from entries paths. Map data : " + tilesetsFilePath);
         Console.logger().finest("EXITING importDisassembly");
         return mapBlockset;
@@ -112,9 +110,8 @@ public class MapBlocksetManager extends AbstractManager {
     public void exportDisassembly(Path tilesetsFilePath, Path blocksetPath, MapBlockset mapBlockset, Tileset[] mapTilesets) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.mapBlockset = mapBlockset;
-        MapBlockPackage pckg = new MapBlockPackage(mapTilesets, mapBlockset.getPalette());
-        blocksetDisassemblyProcessor.exportDisassembly(blocksetPath, mapBlockset, pckg);
-        int paletteIndex = StringHelpers.getNumberFromString(mapBlockset.getPalette().getName());
+        blocksetDisassemblyProcessor.exportDisassembly(blocksetPath, mapBlockset, null);
+        int paletteIndex = StringHelpers.getNumberFromString(mapTilesets[0].getPalette().getName());
         int[] tilesetIndices = new int[mapTilesets.length];
         for (int i = 0; i < tilesetIndices.length; i++) {
             tilesetIndices[i] = mapTilesets[i] == null ? -1 : StringHelpers.getNumberFromString(mapTilesets[i].getName());
@@ -132,11 +129,12 @@ public class MapBlocksetManager extends AbstractManager {
         Console.logger().finest("EXITING importImage");
     }
     
-    public void exportImage(Path filepath, Path hpFilePath, int blocksPerRow, MapBlockset mapBlockset) throws IOException, RawImageException, MetadataException {
+    public void exportImage(Path filepath, Path hpFilePath, int blocksPerRow, MapBlockset mapBlockset, Tileset[] tilesets) throws IOException, RawImageException, MetadataException {
         Console.logger().finest("ENTERING exportImage");
         mapBlockset.setBlocksPerRow(blocksPerRow);
         this.mapBlockset = mapBlockset;
-        blocksetRawImageProcessor.exportRawImage(filepath, mapBlockset, null);
+        MapBlockPackage pckg = new MapBlockPackage(tilesets, tilesets[0].getPalette());
+        blocksetRawImageProcessor.exportRawImage(filepath, mapBlockset, pckg);
         blocksetMetaProcessor.exportMetadata(hpFilePath, mapBlockset);
         Console.logger().info("Map blocks successfully exported to image : " + filepath + " and hpTiles : " + hpFilePath);
         Console.logger().finest("EXITING exportImage");

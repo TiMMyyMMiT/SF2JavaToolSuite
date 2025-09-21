@@ -22,12 +22,12 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
         Console.logger().finest("Data length = " + input.length + ", -> expecting " + input.length/32 + " tiles to parse.");
         Tile[] tiles = new Tile[input.length/32];
         for(int i=0;i<tiles.length;i++){
-            int[] pixels = new int[PIXEL_COUNT];
+            byte[] pixels = new byte[PIXEL_COUNT];
             for(int y=0;y<PIXEL_HEIGHT;y++){
                 for(int x=0;x<PIXEL_WIDTH;x+=2){
                     byte currentByte = input[i*32+(y*8+x)/2];
-                    int firstPixel = (currentByte & 0xF0)/16;
-                    int secondPixel = currentByte & 0x0F;
+                    byte firstPixel = (byte)((currentByte & 0xF0)/16);
+                    byte secondPixel = (byte)(currentByte & 0x0F);
                     pixels[x+y*PIXEL_WIDTH] = firstPixel;
                     pixels[x+1+y*PIXEL_WIDTH] = secondPixel;
                 }
@@ -46,11 +46,11 @@ public class UncompressedGraphicsDecoder extends AbstractGraphicsDecoder {
         Console.logger().finest("Tiles length = " + tiles.length + ", -> expecting " + tiles.length*32 + " byte output.");
         byte[] output = new byte[tiles.length*32];
         for(int i=0;i<tiles.length;i++){
-            int[] pixels = tiles[i].getPixels();
+            byte[] pixels = tiles[i].getPixels();
             for(int y=0;y<PIXEL_HEIGHT;y++){
                 for(int x=0;x<PIXEL_WIDTH;x+=2){
-                    byte first = (byte)pixels[x+y*PIXEL_WIDTH];
-                    byte second = (byte)pixels[x+1+y*PIXEL_WIDTH];
+                    byte first = pixels[x+y*PIXEL_WIDTH];
+                    byte second = pixels[x+1+y*PIXEL_WIDTH];
                     output[(i*64+y*8+x)/2] = (byte)(first*16 | second);
                 }
             }

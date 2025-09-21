@@ -11,6 +11,8 @@ import com.sfc.sf2.graphics.Tile;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.helpers.MapBlockHelpers;
+import com.sfc.sf2.map.block.MapTile;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -132,23 +134,18 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
     
     private void setSelectedLeftSlot(int index) {
         selectedTileIndexLeft = index;
-        Tile tile = index == -1 ? null : tilesets[selectedTileset].getTiles()[index];
+        MapTile tile = new MapTile(selectedTileset*MapBlockHelpers.TILESET_TILES + index);
         leftSlotTilePanel.setTile(tile);
-        leftSlotTilePanel.revalidate();
-        leftSlotTilePanel.repaint();
-        this.revalidate();
-        this.repaint();
+        leftSlotTilePanel.redraw();
         this.redraw();
     }
     
     private void setSelectedRightSlot(int index) {
         selectedTileIndexRight = index;
-        Tile tile = index == -1 ? null : tilesets[selectedTileset].getTiles()[index];
+        MapTile tile = new MapTile(selectedTileset*MapBlockHelpers.TILESET_TILES + index);
         rightSlotTilePanel.setTile(tile);
         rightSlotTilePanel.revalidate();
-        rightSlotTilePanel.repaint();
-        this.revalidate();
-        this.repaint();
+        rightSlotTilePanel.redraw();
         this.redraw();
     }
 

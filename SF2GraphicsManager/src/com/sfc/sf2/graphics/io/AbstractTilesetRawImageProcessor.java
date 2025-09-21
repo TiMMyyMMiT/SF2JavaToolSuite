@@ -8,6 +8,7 @@ package com.sfc.sf2.graphics.io;
 import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tile;
+import static com.sfc.sf2.graphics.Tile.PIXEL_COUNT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
@@ -89,11 +90,15 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
         int tileId = 0;
         //Console.logger().finest("Building tileset from coordinates "+tileX+":"+tileY+":"+(tileX+tilesPerRow)+":"+(tileY+tilesPerColumn));
         for (int t = 0; t < tiles.length; t++) {
-            int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
+            int[] rasterPixels = new int[PIXEL_COUNT];
             int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
             int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
             //Console.logger().finest("Building tile from coordinates "+x+":"+y);
-            raster.getPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
+            raster.getPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, rasterPixels);
+            byte[] pixels = new byte[PIXEL_COUNT];
+            for (int i = 0; i < PIXEL_COUNT; i++) {
+                pixels[i] = (byte)rasterPixels[i];
+            }
             Tile tile = new Tile(tileId, pixels, palette);
             //Console.logger().finest(tile.toString());
             tiles[tileId] = tile;
@@ -212,7 +217,8 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
             if (tiles[t] != null) {
                 int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
                 int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
-                raster.setPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, tiles[t].getPixels());
+                int[] pixels = tiles[t].getRenderPixels();
+                raster.setPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
             }
         }
     }

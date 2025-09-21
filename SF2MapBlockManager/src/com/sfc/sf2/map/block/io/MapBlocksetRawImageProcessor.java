@@ -14,6 +14,7 @@ import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
+import com.sfc.sf2.map.block.MapTile;
 import com.sfc.sf2.palette.Palette;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
@@ -53,21 +54,22 @@ public class MapBlocksetRawImageProcessor extends AbstractRawImageProcessor<MapB
     
     @Override
     protected MapBlockset parseImageData(WritableRaster raster, IndexColorModel icm, MapBlockPackage pckg) throws RawImageException {
-        checkImageDimensions(raster);
+        throw new RawImageException("Importing blockset image not implemented");
+        /*checkImageDimensions(raster);
         Palette palette = null;
         if (pckg != null && pckg.palette() != null) {
             palette = pckg.palette();
         } else {
             palette = new Palette(Palette.fromICM(icm), true);
         }
-        return parseBlockset(raster, palette);
+        return parseBlockset(raster, palette, pckg.tilesets());*/
     }
     
     /**
      * Parses the image (raster) and outputs a {@link Blockset} from all pixels.
      */
-    protected MapBlockset parseBlockset(WritableRaster raster, Palette palette) {
-        return parseBlockset(raster, 0, 0, raster.getWidth()/PIXEL_WIDTH, raster.getHeight()/PIXEL_HEIGHT, palette);
+    protected MapBlockset parseBlockset(WritableRaster raster, Palette palette, Tileset[] tilesets) {
+        return parseBlockset(raster, 0, 0, raster.getWidth()/PIXEL_WIDTH, raster.getHeight()/PIXEL_HEIGHT, palette, tilesets);
     }
     
     /**
@@ -77,44 +79,45 @@ public class MapBlocksetRawImageProcessor extends AbstractRawImageProcessor<MapB
      * @param blocksPerRow How many tiles in a row for the {@code Blockset} (not for the image)
      * @param blocksPerColumn How many tiles in a column for the {@code Blockset} (not for the image)
      */
-    protected MapBlockset parseBlockset(WritableRaster raster, int blockX, int blockY, int blocksPerRow, int blocksPerColumn, Palette palette) {
-        MapBlock[] blocks = new MapBlock[blocksPerRow*blocksPerColumn];
+    protected MapBlockset parseBlockset(WritableRaster raster, int blockX, int blockY, int blocksPerRow, int blocksPerColumn, Palette palette, Tileset[] tilesets) {
+        /*MapBlock[] blocks = new MapBlock[blocksPerRow*blocksPerColumn];
         int blockId = 0;
         int tileId = 0;
         //Console.logger().finest("Building blockset from coordinates "+blockX+":"+blockY+":"+(blockX+blocksPerRow)+":"+(blockY+blocksPerColumn));
         for (int b = 0; b < blocks.length; b++) {
             int bX = (blockX + b%blocksPerRow)*PIXEL_WIDTH;
             int bY = (blockY + b/blocksPerRow)*PIXEL_HEIGHT;
-            Tile[] tiles = new Tile[Block.TILES_COUNT];
+            MapTile[] tiles = new MapTile[Block.TILES_COUNT];
             for (int t = 0; t < tiles.length; t++) {
                 int[] pixels = new int[Tile.PIXEL_WIDTH*Tile.PIXEL_HEIGHT];
                 int tX = (t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH;
                 int tY = (t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT;
                 //Console.logger().finest("Building tile from coordinates "+tX+":"+tY);
                 raster.getPixels(bX+tX, bY+tY, Tile.PIXEL_WIDTH, Tile.PIXEL_HEIGHT, pixels);
-                Tile tile = new Tile(tileId, pixels, palette, false, false, false); //NOTE System cannot know if tile is flipped or now
-                //Console.logger().finest(tile.toString());
-                tiles[tileId] = tile;   
+                MapTile tile = new MapTile(tileId, pixels, palette, false, false, false); //NOTE System cannot know if tile is flipped or now
+                Console.logger().finest(tile.toString());
+                //tiles[tileId] = tile;   
                 tileId++;
             }
             blocks[blockId] = new MapBlock(blockId, 0, tiles);
             blockId++;
         }
-        return new MapBlockset(blocks, blocksPerRow);
+        return new MapBlockset(blocks, blocksPerRow);*/
+        return null;
     }
 
     @Override
     protected BufferedImage packageImageData(MapBlockset item, MapBlockPackage pckg) throws RawImageException {
-        BufferedImage image = setupImage(item, item.getBlocksPerRow());
+        BufferedImage image = setupImage(item, item.getBlocksPerRow(), pckg.palette());
         WritableRaster raster = image.getRaster();
-        writeTileset(raster, item);
+        writeTileset(raster, item, pckg.tilesets());
         return image;
     }
     
     /**
      * Creates a new {@code BufferedImage} based on a {@link Tileset} array and the number of {@code tilesPerRow} for the image
      */
-    protected BufferedImage setupImage(MapBlockset blockset, int blocksPerRow) {
+    protected BufferedImage setupImage(MapBlockset blockset, int blocksPerRow, Palette palette) {
         
         int width = blocksPerRow*PIXEL_WIDTH;
         int height = (blockset.getBlocks().length/blocksPerRow);
@@ -122,14 +125,14 @@ public class MapBlocksetRawImageProcessor extends AbstractRawImageProcessor<MapB
             height++;
         }
         height *= PIXEL_HEIGHT;
-        return new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY, blockset.getPalette().getIcm());
+        return new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY, palette.getIcm());
     }
     
     /**
      * Writes the {@link Blockset} to the image from the top-left corner
      */
-    protected void writeTileset(WritableRaster raster, MapBlockset blockset) {
-        writeTileset(raster, blockset, 0, blockset.getBlocks().length, 0, 0, blockset.getBlocksPerRow());
+    protected void writeTileset(WritableRaster raster, MapBlockset blockset, Tileset[] tilesets) {
+        writeTileset(raster, blockset, tilesets, 0, blockset.getBlocks().length, 0, 0, blockset.getBlocksPerRow());
     }
     
     /**
@@ -141,17 +144,18 @@ public class MapBlocksetRawImageProcessor extends AbstractRawImageProcessor<MapB
      * @param blockY How many {@code Tiles} from the top to start drawing the {@code Tileset}
      * @param blocksPerRow How many {@code Tiles} in a row in the image
      */
-    protected void writeTileset(WritableRaster raster, MapBlockset blockset, int blocksetIndexStart, int blocksetIndexEnd, int blockX, int blockY, int blocksPerRow) {
+    protected void writeTileset(WritableRaster raster, MapBlockset blockset, Tileset[] tilesets, int blocksetIndexStart, int blocksetIndexEnd, int blockX, int blockY, int blocksPerRow) {
         MapBlock[] blocks = blockset.getBlocks();
         for (int b = blocksetIndexStart; b < blocksetIndexEnd; b++) {
             if (blocks[b] != null) {
                 int bX = (blockX + b%blocksPerRow)*PIXEL_WIDTH;
                 int bY = (blockY + b/blocksPerRow)*PIXEL_HEIGHT;
-                Tile[] tiles = blocks[b].getTiles();
+                MapTile[] tiles = blocks[b].getMapTiles();
                 for (int t = 0; t < tiles.length; t++) {
                     int tX = (t%Block.TILE_WIDTH)*Tile.PIXEL_WIDTH;
                     int tY = (t/Block.TILE_WIDTH)*Tile.PIXEL_HEIGHT;
-                    raster.setPixels(bX+tX, bY+tY, Tile.PIXEL_WIDTH, Tile.PIXEL_HEIGHT, tiles[t].getPixels());
+                    int[] pixels = tiles[t].getTile(tilesets).getRenderPixels(tiles[t].getTileFlags());
+                    raster.setPixels(bX+tX, bY+tY, Tile.PIXEL_WIDTH, Tile.PIXEL_HEIGHT, pixels);
                 }
             }
         }
