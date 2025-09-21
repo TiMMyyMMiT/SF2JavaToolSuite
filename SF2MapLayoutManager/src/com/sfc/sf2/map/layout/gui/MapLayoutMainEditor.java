@@ -61,6 +61,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         
         mapLayoutPanel.setMapLayout(maplayoutManager.getLayout());
         mapBlocksetPanel.setBlockset(maplayoutManager.getBlockset());
+        mapBlocksetPanel.setTilesets(maplayoutManager.getLayout().getTilesets());
     }
     
     /**

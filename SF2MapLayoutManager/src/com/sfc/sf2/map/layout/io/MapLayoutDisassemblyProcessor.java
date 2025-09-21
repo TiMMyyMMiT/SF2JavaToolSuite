@@ -9,6 +9,7 @@ import com.sfc.sf2.core.io.AbstractDisassemblyProcessor;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.map.block.MapBlock;
+import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.layout.compression.MapLayoutDecoder;
 
 /**
@@ -19,13 +20,14 @@ public class MapLayoutDisassemblyProcessor extends AbstractDisassemblyProcessor<
 
     @Override
     protected MapLayout parseDisassemblyData(byte[] data, MapLayoutPackage pckg) throws DisassemblyException {
-        return new MapLayoutDecoder().decode(data, pckg.blockset().getBlocks());
+        MapBlockset layoutBlockset = new MapLayoutDecoder().decode(data, pckg.blockset().getBlocks());
+        return new MapLayout(pckg.index(), pckg.tilesets(), layoutBlockset);
     }
 
     @Override
     protected byte[] packageDisassemblyData(MapLayout item, MapLayoutPackage pckg) throws DisassemblyException {
         MapLayoutDecoder decoder = new MapLayoutDecoder();
-        MapBlock[] optimisedBlockset = decoder.encodeNewBlockset(pckg.blockset().getBlocks(), item);
+        MapBlock[] optimisedBlockset = decoder.encodeNewBlockset(pckg.blockset().getBlocks(), item.getBlockset());
         return decoder.encode(item, optimisedBlockset);
     }
 }

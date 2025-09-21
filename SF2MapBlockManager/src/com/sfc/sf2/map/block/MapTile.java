@@ -73,6 +73,7 @@ public class MapTile {
     }
     
     public Tile getTile(Tileset[] tilesets) {
+        if (tilesets == null || tilesets[tilesetIndex] == null) return null;
         return tilesets[tilesetIndex].getTiles()[tileIndex];
     }
     

@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.layout.compression;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.BinaryHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
@@ -36,9 +37,8 @@ public class MapLayoutDecoder {
     
     //private StringBuilder debugSb = null;
 
-    public MapLayout decode(byte[] layoutData, MapBlock[] blockset) {
+    public MapBlockset decode(byte[] layoutData, MapBlock[] blockset) {
         inputData = layoutData;
-        MapLayout layout = new MapLayout();
         MapBlock[] blocks = new MapBlock[64 * 64];
         leftHistoryMap = new MapBlock[blockset.length][4];
         upperHistoryMap = new MapBlock[blockset.length][4];
@@ -238,9 +238,7 @@ public class MapLayoutDecoder {
                 blocks[i] = blockset[0];
             }
         }
-        MapBlockset layoutBlockset = new MapBlockset(blocks, MapLayout.BLOCK_WIDTH);
-        layout.setBlockset(layoutBlockset);
-        return layout;
+        return new MapBlockset(blocks, MapLayout.BLOCK_WIDTH);
     }
 
     private void applyFlags(MapBlock block) {
@@ -337,10 +335,10 @@ public class MapLayoutDecoder {
         return bit;
     }
 
-    public MapBlock[] encodeNewBlockset(MapBlock[] blockSet, MapLayout layout) {
+    public MapBlock[] encodeNewBlockset(MapBlock[] blockSet, MapBlockset layoutBlockset) {
         List<Integer> newBlocksetValues = new ArrayList<>();
         MapBlock[] newBlockset;
-        MapBlock[] blocks = layout.getBlockset().getBlocks();
+        MapBlock[] blocks = layoutBlockset.getBlocks();
         /* Add base blocks : empty, closed chest and open chest */
         newBlocksetValues.add(blockSet[0].getIndex());
         newBlocksetValues.add(blockSet[1].getIndex());

@@ -23,6 +23,12 @@ public class MapLayout {
      
     private Tileset[] tilesets;
     private MapBlockset blockset;
+
+    public MapLayout(int index, Tileset[] tilesets, MapBlockset blockset) {
+        this.index = index;
+        this.tilesets = tilesets;
+        this.blockset = blockset;
+    }
     
     public int getIndex() {
         return index;
@@ -49,10 +55,12 @@ public class MapLayout {
     }
 
     public Palette getPalette() {
-        if (blockset == null) {
-            return null;
-        } else {
-            return blockset.getPalette();
+        if (tilesets == null) return null;
+        for (int i = 0; i < tilesets.length; i++) {
+            if (tilesets[i] != null) {
+                return tilesets[i].getPalette();
+            }
         }
+        return null;
     }
 }
