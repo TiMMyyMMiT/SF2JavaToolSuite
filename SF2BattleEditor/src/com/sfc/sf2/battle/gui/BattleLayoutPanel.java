@@ -25,6 +25,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,11 +63,12 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     private boolean drawAiPoints = false;
     private Image alertImage;
     
+    private ActionListener spritesetEditedListener;
     private List<int[]> actions = new ArrayList<>();
 
     public BattleLayoutPanel() {
         super();
-        mouseInput.setMouseMotionListerned(this::onMouseMoved);
+        mouseInput.setMouseMotionListener(this::onMouseMoved);
     }
     
     @Override
@@ -328,6 +331,10 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         graphics.fillArc(nodeX*scale, nodeY*scale, 8*scale, 8*scale, 0, 360);
     }
 
+    public void setSpritesetEditedListener(ActionListener spritesetEditedListener) {
+        this.spritesetEditedListener = spritesetEditedListener;
+    }
+
     public Battle getBattle() {
         return battle;
     }
@@ -459,12 +466,18 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                         ally.setX(x);
                         ally.setY(y);
                         redraw();
+                        if (spritesetEditedListener != null) {
+                            spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "Ally"));
+                        }
                         break;
                     case Enemy:
                         Enemy enemy = battle.getSpriteset().getEnemies()[selectedSpritesetEntity];
                         enemy.setX(x);
                         enemy.setY(y);
                         redraw();
+                        if (spritesetEditedListener != null) {
+                            spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "Enemy"));
+                        }
                         break;
                     case AiRegion:
                         AIRegion region = battle.getSpriteset().getAiRegions()[selectedSpritesetEntity];
@@ -476,6 +489,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                                 case 3: region.setX4(x); region.setY4(y); break;
                             }
                             redraw();
+                            if (spritesetEditedListener != null) {
+                                spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "AiRegion"));
+                            }
                         } else {
                             closestRegionPoint = findClosestRegionPoint(region, x, y);
                             this.repaint();
@@ -486,6 +502,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                         point.setX(x);
                         point.setY(y);
                         redraw();
+                        if (spritesetEditedListener != null) {
+                            spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "AiPoint"));
+                        }
                         break;
                 }
         }

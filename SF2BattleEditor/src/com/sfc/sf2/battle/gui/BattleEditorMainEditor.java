@@ -99,6 +99,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
         battleLayoutPanel.setDrawAiRegions(drawAiRegions);
         battleLayoutPanel.setDrawAiPoints(drawAiPoints);
+        battleLayoutPanel.setSpritesetEditedListener(this::onLayoutSpritesetChanged);
         
         jTabbedPane2StateChanged(null);
         jTabbedPane3StateChanged(null);
@@ -1686,36 +1687,43 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jComboBox_Items.setEnabled(enabled);
         multiComboBoxItemFlags.setEnabled(enabled);
         jSpinner_Unknown.setEnabled(enabled);
-              
-        if (selectedRow != -1) {
-            Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
-            if (enemy != null) {
-                jComboBox_Name.setSelectedItem(enemy.getEnemyData().getName());
-                jSpinner_X.setValue(enemy.getX());
-                jSpinner_Y.setValue(enemy.getY());
-                jComboBox_AI.setSelectedItem(enemy.getAi());
-                jComboBox_Spawn.setSelectedItem(enemy.getSpawnParams());
-                jSpinner_Trigger1.setValue(enemy.getTriggerRegion1());
-                jSpinner_Trigger2.setValue(enemy.getTriggerRegion2());
-                
-                jComboBox_Order1.setSelectedItem(enemy.getMoveOrder());
-                jSpinner_OrderTarget1.setValue(enemy.getMoveOrderTarget());
-                jComboBox_Order2.setSelectedItem(enemy.getBackupMoveOrder());
-                jSpinner_OrderTarget2.setValue(enemy.getBackupMoveOrderTarget());
-                
-                jComboBox_Items.setSelectedItem(enemy.getItem());
-                multiComboBoxItemFlags.clearSelection();
-                String flags = enemy.getItemFlags();
-                if (flags != null && flags.length() > 0 && flags.contains("|")) {
-                    String[] split = flags.split("\\|");
-                    for (int i = 0; i < split.length; i++) {
-                        multiComboBoxItemFlags.setSelected(split[i], true);
-                    }
-                }
-                multiComboBoxItemFlags.setEnabled(!enemy.getItem().equals("NOTHING"));
-                jSpinner_Unknown.setValue(enemy.getUnknown());
+
+        if (selectedRow == -1) return;
+        Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
+        if (enemy == null) return;
+        
+        jComboBox_Name.setSelectedItem(enemy.getEnemyData().getName());
+        jSpinner_X.setValue(enemy.getX());
+        jSpinner_Y.setValue(enemy.getY());
+        jComboBox_AI.setSelectedItem(enemy.getAi());
+        jComboBox_Spawn.setSelectedItem(enemy.getSpawnParams());
+        jSpinner_Trigger1.setValue(enemy.getTriggerRegion1());
+        jSpinner_Trigger2.setValue(enemy.getTriggerRegion2());
+
+        jComboBox_Order1.setSelectedItem(enemy.getMoveOrder());
+        jSpinner_OrderTarget1.setValue(enemy.getMoveOrderTarget());
+        jComboBox_Order2.setSelectedItem(enemy.getBackupMoveOrder());
+        jSpinner_OrderTarget2.setValue(enemy.getBackupMoveOrderTarget());
+
+        jComboBox_Items.setSelectedItem(enemy.getItem());
+        multiComboBoxItemFlags.clearSelection();
+        String flags = enemy.getItemFlags();
+        if (flags != null && flags.length() > 0 && flags.contains("|")) {
+            String[] split = flags.split("\\|");
+            for (int i = 0; i < split.length; i++) {
+                multiComboBoxItemFlags.setSelected(split[i], true);
             }
         }
+        multiComboBoxItemFlags.setEnabled(!enemy.getItem().equals("NOTHING"));
+        jSpinner_Unknown.setValue(enemy.getUnknown());
+    }
+    
+    private void updateEnemyPosition(int selectedRow) {
+        if (selectedRow == -1) return;
+        Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
+        if (enemy == null) return;
+        jSpinner_X.setValue(enemy.getX());
+        jSpinner_Y.setValue(enemy.getY());
     }
     
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
@@ -2027,6 +2035,27 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (row != battleLayoutPanel.getSelectedAIPoint()) {
             battleLayoutPanel.setDrawAiPoints(true);
             battleLayoutPanel.setSelectedAIPoint(row);
+        }
+    }
+    
+    private void onLayoutSpritesetChanged(ActionEvent e) {
+        int row = e.getID();
+        if (row != -1) {
+            switch (e.getActionCommand()) {
+                case "Ally":
+                    allyPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "Enemy":
+                    enemyPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    updateEnemyPosition(row);
+                    break;
+                case "AiRegion":
+                    aIRegionPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "AiPoint":
+                    aIPointPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    break;
+            }
         }
     }
     
