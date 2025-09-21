@@ -121,6 +121,17 @@ public class MapModifiedTilesetLayoutPanel extends TilesetLayoutPanel implements
         }
         selectedFrame = e.getCurrentFrame();
         mapAnimation.updateTileset(selectedFrame);
+        if (mapAnimation.getFrames()[selectedFrame].getDelay() <= 1) {
+            while (mapAnimation.getFrames()[selectedFrame].getDelay() <= 1) {
+                //To reduce load from very short frame updates
+                selectedFrame++;
+                if (selectedFrame >= mapAnimation.getFrames().length) {
+                    selectedFrame = 0;
+                }
+                mapAnimation.updateTileset(selectedFrame);
+            }
+            animator.setFrame(selectedFrame);
+        }
         setTileset(mapAnimation.getModifiedTilesets()[selectedTileset]);
         redraw();
     }
