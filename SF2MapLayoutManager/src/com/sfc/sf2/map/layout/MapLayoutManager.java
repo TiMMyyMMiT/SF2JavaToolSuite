@@ -51,7 +51,7 @@ public class MapLayoutManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassembly");
         blockset = mapBlocksetManager.importDisassembly(palettePath, tilesetsFilePath, blocksetPath);
         int mapIndex = FileHelpers.getNumberFromFileName(layoutPath.getParent().toFile());
-        MapLayoutPackage pckg = new MapLayoutPackage(mapIndex, mapBlocksetManager.getTilesets(), blockset);
+        MapLayoutPackage pckg = new MapLayoutPackage(mapIndex, blockset, mapBlocksetManager.getTilesets());
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
         Console.logger().info("Map layout successfully imported from palette and tilesets. Layout data : " + layoutPath);
         Console.logger().finest("EXITING importDisassembly");
@@ -72,7 +72,7 @@ public class MapLayoutManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassemblyFromEntryFiles");
         blockset = mapBlocksetManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, tilesetsFilePath, blocksetPath);
         int mapIndex = FileHelpers.getNumberFromFileName(layoutPath.getParent().toFile());
-        MapLayoutPackage pckg = new MapLayoutPackage(mapIndex, mapBlocksetManager.getTilesets(), blockset);
+        MapLayoutPackage pckg = new MapLayoutPackage(mapIndex, blockset, mapBlocksetManager.getTilesets());
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
         Console.logger().info("Map layout successfully imported from entries paths. Layout data : " + layoutPath);
         Console.logger().finest("EXITING importDisassemblyFromEntryFiles");
@@ -84,7 +84,7 @@ public class MapLayoutManager extends AbstractManager {
         blockset = mapBlockset;
         layout = mapLayout;
         mapBlocksetManager.exportDisassembly(tilesetsPath, blocksetPath, blockset, mapBlocksetManager.getTilesets());
-        MapLayoutPackage pckg = new MapLayoutPackage(0, null, blockset);
+        MapLayoutPackage pckg = new MapLayoutPackage(layout.getIndex(), blockset, mapLayout.getTilesets());
         layoutDisassemblyProcessor.exportDisassembly(layoutPath, layout, pckg);
         Console.logger().info("Map layout successfully exported to : " + layoutPath);
         Console.logger().finest("EXITING exportDisassembly");   

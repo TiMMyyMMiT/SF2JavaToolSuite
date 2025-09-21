@@ -12,4 +12,4 @@ import com.sfc.sf2.map.block.MapBlockset;
  *
  * @author TiMMy
  */
-public record MapLayoutPackage(int index, Tileset[] tilesets, MapBlockset blockset) { }
+public record MapLayoutPackage(int index, MapBlockset blockset, Tileset[] tilesets) { }

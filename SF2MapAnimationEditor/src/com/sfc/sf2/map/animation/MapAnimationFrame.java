@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package com.sfc.sf2.map.animation;
-import static com.sfc.sf2.map.block.compression.MapBlocksetDecoder.TILESET_TILES;
+
+import static com.sfc.sf2.helpers.MapBlockHelpers.TILESET_TILES;
 
 /**
  *

@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.layout.compression;
 
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.BinaryHelpers;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
@@ -334,10 +335,10 @@ public class MapLayoutDecoder {
         return bit;
     }
 
-    public MapBlock[] encodeNewBlockset(MapBlock[] blockSet, MapLayout layout) {
+    public MapBlock[] encodeNewBlockset(MapBlock[] blockSet, MapBlockset layoutBlockset) {
         List<Integer> newBlocksetValues = new ArrayList<>();
         MapBlock[] newBlockset;
-        MapBlock[] blocks = layout.getBlockset().getBlocks();
+        MapBlock[] blocks = layoutBlockset.getBlocks();
         /* Add base blocks : empty, closed chest and open chest */
         newBlocksetValues.add(blockSet[0].getIndex());
         newBlocksetValues.add(blockSet[1].getIndex());

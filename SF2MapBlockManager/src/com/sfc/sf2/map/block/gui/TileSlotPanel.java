@@ -9,7 +9,8 @@ import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.*;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
-import com.sfc.sf2.graphics.Tile;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.map.block.MapTile;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -20,7 +21,8 @@ import java.awt.Graphics;
  */
 public class TileSlotPanel extends AbstractLayoutPanel {
     
-    Tile tile;
+    MapTile tile;
+    Tileset[] tilesets;
     
     public TileSlotPanel() {
         super();
@@ -45,15 +47,19 @@ public class TileSlotPanel extends AbstractLayoutPanel {
 
     @Override
     protected void drawImage(Graphics graphics) {
-        graphics.drawImage(tile.getIndexedColorImage(), 0, 0, null);
+        graphics.drawImage(tile.getIndexedColorImage(tilesets), 0, 0, null);
     }
     
-    public Tile getTile() {
+    public MapTile getTile() {
         return tile;
     }
 
-    public void setTile(Tile tile) {
+    public void setTile(MapTile tile) {
         this.tile = tile;
         redraw();
+    }
+
+    public void setTilesets(Tileset[] tilesets) {
+        this.tilesets = tilesets;
     }
 }

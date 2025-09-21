@@ -6,7 +6,6 @@
 package com.sfc.sf2.map.animation;
 
 import com.sfc.sf2.graphics.Tileset;
-import static com.sfc.sf2.map.block.compression.MapBlocksetDecoder.TILESET_TILES;
 
 /**
  *
