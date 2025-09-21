@@ -917,7 +917,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton29ActionPerformed
     
     private void onAnimationFramesSeletectionChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting() || tilesetLayoutPanelAnim.getAnimator().isAnimating()) return;
+        if (e.getValueIsAdjusting() || tilesetLayoutPanelModified.getAnimator().isAnimating()) return;
         int selected = table1.jTable.getSelectedRow();
         tilesetLayoutPanelAnim.setSelectedFrame(selected);
         tilesetLayoutPanelModified.setSelectedFrame(selected);
