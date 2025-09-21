@@ -50,10 +50,12 @@ public class MapAnimationManager extends AbstractManager {
         if (animationsPath.toFile().exists()) {
             animation = mapAnimationAsmProcessor.importAsmData(animationsPath, new MapAnimationPackage(getMapLayout().getTilesets()));
             importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
+            getMapLayout().setTilesets(animation.getModifiedTilesets());
             Console.logger().info("Map layout and animation succesfully imported for : " + animationsPath);
         } else {
             animation = new MapAnimation(-1, 0, new MapAnimationFrame[0], getMapLayout().getTilesets());
             animation.setAnimationTileset(null);
+            getMapLayout().setTilesets(animation.getOriginalTilesets());
             Console.logger().warning("WARNING Map has no animation.");
         }
         Console.logger().finest("EXITING importDisassembly");
@@ -71,7 +73,6 @@ public class MapAnimationManager extends AbstractManager {
         Path tilesetPath = PathHelpers.getIncbinPath().resolve(tilesetData.getPathForEntry(tilesetId));
         Tileset tileset = tilesetmanager.importDisassembly(tilesetPath, palette, TilesetDisassemblyProcessor.TilesetCompression.STACK, 8);
         animation.setAnimationTileset(tileset);
-        getMapLayout().setTilesets(animation.getModifiedTilesets());
         Console.logger().info("Tileset succesfully imported for : " + tilesetPath);
         Console.logger().finest("EXITING importTileset");
         return tileset;

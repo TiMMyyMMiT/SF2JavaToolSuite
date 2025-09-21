@@ -55,6 +55,10 @@ public class MapAnimation {
         generateModifiedTilesets();
     }
 
+    public Tileset[] getOriginalTilesets() {
+        return originalTilesets;
+    }
+
     public Tileset[] getModifiedTilesets() {
         return modifiedTilesets;
     }

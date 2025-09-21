@@ -67,9 +67,9 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         
         tilesetLayoutPanelModified.getAnimator().addAnimationListener(this::onAnimationUpdated);
         
-        table1.addListSelectionListener(this::onAnimationFramesSeletectionChanged);
-        table1.addTableModelListener(this::onAnimationFramesDataChanged);
-        table1.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
+        tableAnimFrames.addListSelectionListener(this::onAnimationFramesSeletectionChanged);
+        tableAnimFrames.addTableModelListener(this::onAnimationFramesDataChanged);
+        tableAnimFrames.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
     }
     
     @Override
@@ -82,13 +82,18 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         if (animation != null) {
             tilesetLayoutPanelAnim.setMapAnimation(animation);
             tilesetLayoutPanelModified.setMapAnimation(animation);
-            tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[0].getDestTileset());
+            if (animation.getFrames().length == 0) {
+                tilesetLayoutPanelModified.setSelectedTileset(-1);
+            } else {
+                tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[0].getDestTileset());
+            }
             tilesetLayoutPanelModified.getAnimator().stopAnimation();
             jCheckBox8.setSelected(false);
             jCheckBox9.setSelected(false);
             jSpinner2.setValue(animation.getTilesetId());
             jSpinner3.setValue(animation.getLength());
 
+            tableAnimFrames.jTable.clearSelection();
             mapAnimationFrameTableModel.setTableData(mapAnimationManager.getMapAnimation().getFrames());
         }
     }
@@ -134,7 +139,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         jSpinner3 = new javax.swing.JSpinner();
         jScrollPane9 = new javax.swing.JScrollPane();
         tilesetLayoutPanelAnim = new com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel();
-        table1 = new com.sfc.sf2.core.gui.controls.Table();
+        tableAnimFrames = new com.sfc.sf2.core.gui.controls.Table();
         jScrollPane8 = new javax.swing.JScrollPane();
         tilesetLayoutPanelModified = new com.sfc.sf2.map.animation.gui.MapModifiedTilesetLayoutPanel();
         jPanel20 = new javax.swing.JPanel();
@@ -419,9 +424,9 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
 
                 jScrollPane9.setViewportView(tilesetLayoutPanelAnim);
 
-                table1.setBorder(null);
-                table1.setModel(mapAnimationFrameTableModel);
-                table1.setSpinnerNumberEditor(true);
+                tableAnimFrames.setBorder(null);
+                tableAnimFrames.setModel(mapAnimationFrameTableModel);
+                tableAnimFrames.setSpinnerNumberEditor(true);
 
                 jScrollPane8.setViewportBorder(javax.swing.BorderFactory.createTitledBorder("Modified Tileset"));
 
@@ -558,7 +563,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                             .addComponent(jScrollPane8)
                             .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(table1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(tableAnimFrames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
                 jPanel11Layout.setVerticalGroup(
@@ -569,7 +574,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                         .addGap(0, 0, 0)
                         .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(table1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tableAnimFrames, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -918,7 +923,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     
     private void onAnimationFramesSeletectionChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() || tilesetLayoutPanelModified.getAnimator().isAnimating()) return;
-        int selected = table1.jTable.getSelectedRow();
+        int selected = tableAnimFrames.jTable.getSelectedRow();
         tilesetLayoutPanelAnim.setSelectedFrame(selected);
         tilesetLayoutPanelModified.setSelectedFrame(selected);
         if (selected == -1) selected = 0;
@@ -947,6 +952,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private void onAnimationUpdated(LayoutAnimator.AnimationListener.AnimationFrameEvent e) {
         mapAnimationLayoutPanel.getMapLayout().getBlockset().clearIndexedColorImage(true);
         mapAnimationLayoutPanel.redraw();
+        tableAnimFrames.jTable.setRowSelectionInterval(e.getCurrentFrame(), e.getCurrentFrame());
     }
     
     /**
@@ -1023,7 +1029,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane4;
     private com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel mapAnimationFrameTableModel;
     private com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel mapAnimationLayoutPanel;
-    private com.sfc.sf2.core.gui.controls.Table table1;
+    private com.sfc.sf2.core.gui.controls.Table tableAnimFrames;
     private com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel tilesetLayoutPanelAnim;
     private com.sfc.sf2.map.animation.gui.MapModifiedTilesetLayoutPanel tilesetLayoutPanelModified;
     // End of variables declaration//GEN-END:variables

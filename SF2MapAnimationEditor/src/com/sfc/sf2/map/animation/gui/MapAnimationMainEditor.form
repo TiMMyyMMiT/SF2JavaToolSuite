@@ -425,7 +425,7 @@
                                               <Component id="jScrollPane8" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jScrollPane9" alignment="1" pref="0" max="32767" attributes="0"/>
                                               <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="table1" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="tableAnimFrames" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                       </Group>
@@ -439,7 +439,7 @@
                                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                           <Component id="jScrollPane9" pref="115" max="32767" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                          <Component id="table1" min="-2" pref="335" max="-2" attributes="0"/>
+                                          <Component id="tableAnimFrames" min="-2" pref="335" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                           <Component id="jScrollPane8" pref="115" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -543,7 +543,7 @@
                                     </Container>
                                   </SubComponents>
                                 </Container>
-                                <Component class="com.sfc.sf2.core.gui.controls.Table" name="table1">
+                                <Component class="com.sfc.sf2.core.gui.controls.Table" name="tableAnimFrames">
                                   <Properties>
                                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                       <Border info="null"/>
