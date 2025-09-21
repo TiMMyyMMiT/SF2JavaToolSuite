@@ -65,7 +65,7 @@ public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation,
 
     @Override
     protected void packageAsmData(FileWriter writer, MapAnimation item, MapAnimationPackage pckg) throws IOException, AsmException {
-        writer.write(String.format("\t\t\tmapAnimation %d,%d\n", item.getAnimationTileset(), item.getLength()));
+        writer.write(String.format("\t\t\tmapAnimation %d,%d\n", item.getTilesetId(), item.getLength()));
         MapAnimationFrame[] frames = item.getFrames();
         for (int i = 0; i < frames.length; i++) {
             writer.write(String.format("\t\t\t\tmapAnimEntry %d, %d, $%X, %d\n", frames[i].getStart(), frames[i].getLength(), frames[i].getDestValue(), frames[i].getDelay()));

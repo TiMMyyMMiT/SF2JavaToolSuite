@@ -84,6 +84,7 @@ public class MapAnimationManager extends AbstractManager {
         }
         this.animation = animation;
         mapAnimationAsmProcessor.exportAsmData(animationsPath, animation, null);
+        Console.logger().info("Map animation succesfully exported for : " + animationsPath);
         Console.logger().finest("EXITING exportDisassembly");  
     }
 
