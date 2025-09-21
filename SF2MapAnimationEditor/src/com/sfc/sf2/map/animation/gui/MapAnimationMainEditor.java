@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import com.sfc.sf2.map.settings.MapBlockSettings;
+import javax.swing.JCheckBox;
 
 /**
  *
@@ -76,14 +77,15 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         super.onDataLoaded();
         
         mapAnimationLayoutPanel.setMapLayout(mapAnimationManager.getMapLayout());
-        mapAnimationLayoutPanel.setAnimation(mapAnimationManager.getMapAnimation());
         
         MapAnimation animation = mapAnimationManager.getMapAnimation();
         if (animation != null) {
             tilesetLayoutPanelAnim.setMapAnimation(animation);
             tilesetLayoutPanelModified.setMapAnimation(animation);
             tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[0].getDestTileset());
-            
+            tilesetLayoutPanelModified.getAnimator().stopAnimation();
+            jCheckBox8.setSelected(false);
+            jCheckBox9.setSelected(false);
             jSpinner2.setValue(animation.getTilesetId());
             jSpinner3.setValue(animation.getLength());
 
@@ -144,7 +146,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        mapAnimationLayoutPanel = new com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel();
+        mapAnimationLayoutPanel = new com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel();
         jPanel25 = new javax.swing.JPanel();
         jComboBox9 = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
@@ -154,6 +156,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox9 = new javax.swing.JCheckBox();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -441,9 +444,9 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             });
 
             jCheckBox8.setText("Preview anim");
-            jCheckBox8.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    jCheckBox8ItemStateChanged(evt);
+            jCheckBox8.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    animationActionPerformed(evt);
                 }
             });
 
@@ -624,6 +627,13 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                 }
             });
 
+            jCheckBox9.setText("Preview anim");
+            jCheckBox9.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    animationActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
             jPanel25.setLayout(jPanel25Layout);
             jPanel25Layout.setHorizontalGroup(
@@ -647,6 +657,8 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                             .addComponent(jCheckBox4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jCheckBox6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jCheckBox9)
                             .addGap(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
             );
@@ -664,7 +676,8 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBox4)
-                        .addComponent(jCheckBox6))
+                        .addComponent(jCheckBox6)
+                        .addComponent(jCheckBox9))
                     .addContainerGap())
             );
 
@@ -731,7 +744,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
         int value = (int)jSpinner3.getValue();
-        MapAnimation anim = mapAnimationLayoutPanel.getAnimation();
+        MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
         if (anim != null && anim.getLength()!= value) {
             anim.setLength(value);
         }
@@ -739,7 +752,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         int value = (int)jSpinner2.getValue();
-        MapAnimation anim = mapAnimationLayoutPanel.getAnimation();
+        MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
         if (anim != null && anim.getTilesetId()!= value) {
             try {
                 anim.setTilesetId(value);
@@ -833,30 +846,33 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
     }//GEN-LAST:event_jCheckBox7ItemStateChanged
 
-    private void jCheckBox8ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox8ItemStateChanged
-        tilesetLayoutPanelModified.setPreviewAnim(jCheckBox8.isSelected());
-    }//GEN-LAST:event_jCheckBox8ItemStateChanged
+    private void animationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_animationActionPerformed
+        boolean isSelected = ((JCheckBox)evt.getSource()).isSelected();
+        jCheckBox8.setSelected(isSelected);
+        jCheckBox9.setSelected(isSelected);
+        tilesetLayoutPanelModified.setPreviewAnim(isSelected);
+    }//GEN-LAST:event_animationActionPerformed
     
     private void onAnimationFramesSeletectionChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting()) return;
+        if (e.getValueIsAdjusting() || tilesetLayoutPanelAnim.getAnimator().isAnimating()) return;
         int selected = table1.jTable.getSelectedRow();
         tilesetLayoutPanelAnim.setSelectedFrame(selected);
         tilesetLayoutPanelModified.setSelectedFrame(selected);
         if (selected == -1) selected = 0;
-        tilesetLayoutPanelModified.setSelectedTileset(mapAnimationLayoutPanel.getAnimation().getFrames()[selected].getDestTileset());
+        tilesetLayoutPanelModified.setSelectedTileset(tilesetLayoutPanelModified.getMapAnimation().getFrames()[selected].getDestTileset());
     }
     
     private void onAnimationFramesDataChanged(TableModelEvent e) {
         if (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.DELETE) {
             MapAnimationFrame[] frames = mapAnimationFrameTableModel.getTableData(MapAnimationFrame[].class);
-            mapAnimationLayoutPanel.getAnimation().setFrames(frames);
+            tilesetLayoutPanelModified.getMapAnimation().setFrames(frames);
         } else if (e.getColumn() == 3) {    //Editing destination tileset
-            MapAnimation animation = mapAnimationLayoutPanel.getAnimation();
+            MapAnimation animation = tilesetLayoutPanelModified.getMapAnimation();
             animation.generateModifiedTilesets();
             tilesetLayoutPanelModified.setMapAnimation(animation);
             tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[e.getFirstRow()].getDestTileset());
         } else if (e.getColumn() == 3) {    //Editing destination index
-            MapAnimation animation = mapAnimationLayoutPanel.getAnimation();
+            MapAnimation animation = tilesetLayoutPanelModified.getMapAnimation();
             int frame = e.getFirstRow();
             animation.generateModifiedTileset(frame);
             tilesetLayoutPanelModified.setMapAnimation(animation);
@@ -906,6 +922,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JCheckBox jCheckBox8;
+    private javax.swing.JCheckBox jCheckBox9;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox9;
     private javax.swing.JLabel jLabel11;
@@ -938,7 +955,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane4;
     private com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel mapAnimationFrameTableModel;
-    private com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel mapAnimationLayoutPanel;
+    private com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel mapAnimationLayoutPanel;
     private com.sfc.sf2.core.gui.controls.Table table1;
     private com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel tilesetLayoutPanelAnim;
     private com.sfc.sf2.map.animation.gui.MapModifiedTilesetLayoutPanel tilesetLayoutPanelModified;
