@@ -30,7 +30,7 @@ public class Tile {
         this.id = id;
         this.pixels = pixels;
         this.palette = palette;
-    }    
+    }
         
     public byte[] getPixels() {
         return pixels;
@@ -62,48 +62,56 @@ public class Tile {
     }
     
     public BufferedImage getIndexedColorImage() {
-        return getIndexedColorImage(TileFlags.None);
+        return getIndexedColorImage(0);
     }
 
     public BufferedImage getIndexedColorImage(TileFlags tileFlags) {
-        BufferedImage image = indexedColorImages[tileFlags.value()];
+        return getIndexedColorImage(tileFlags.value()&0x3);
+    }
+
+    private BufferedImage getIndexedColorImage(int flagValue) {
+        BufferedImage image = indexedColorImages[flagValue];
         if (image == null) {
             IndexColorModel icm = palette.getIcm();
             image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, icm);
-            indexedColorImages[tileFlags.value()] = image;
+            indexedColorImages[flagValue] = image;
             byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
-            
-            if (tileFlags.value() == 0) {
-                for (int j=0; j < PIXEL_HEIGHT; j++) {
-                    for (int i=0; i < PIXEL_WIDTH; i++) {
-                        int index = i + j*PIXEL_WIDTH;
-                        data[i+j*PIXEL_WIDTH] = pixels[index];
+            switch ((byte)flagValue) {
+                case TileFlags.TILE_FLAG_NONE:
+                    for (int j=0; j < PIXEL_HEIGHT; j++) {
+                        for (int i=0; i < PIXEL_WIDTH; i++) {
+                            int index = i + j*PIXEL_WIDTH;
+                            data[i+j*PIXEL_WIDTH] = pixels[index];
+                        }
                     }
-                }
-            } else if (tileFlags.isHFlip()) {
-                for (int j=0; j < PIXEL_HEIGHT; j++) {
-                    for (int i=0; i < PIXEL_WIDTH; i++) {
-                        int index = i + (PIXEL_HEIGHT-1-j)*PIXEL_WIDTH;
-                        data[i+j*PIXEL_WIDTH] = pixels[index];
+                    break;
+                case TileFlags.TILE_FLAG_BOTHFLIP:
+                    for (int j=0; j < PIXEL_HEIGHT; j++) {
+                        for (int i=0; i < PIXEL_WIDTH; i++) {
+                            int index = (PIXEL_WIDTH-1-i) + (PIXEL_HEIGHT-1-j)*PIXEL_WIDTH;
+                            data[i+j*PIXEL_WIDTH] = pixels[index];
+                        }
                     }
-                }
-            } else if (tileFlags.isVFlip()) {
-                for (int j=0; j < PIXEL_HEIGHT; j++) {
-                    for (int i=0; i < PIXEL_WIDTH; i++) {
-                        int index = (PIXEL_WIDTH-1-i) + (PIXEL_HEIGHT-1-j)*PIXEL_WIDTH;
-                        data[i+j*PIXEL_WIDTH] = pixels[index];
+                    break;
+                case TileFlags.TILE_FLAG_HFLIP:
+                    for (int j=0; j < PIXEL_HEIGHT; j++) {
+                        for (int i=0; i < PIXEL_WIDTH; i++) {
+                            int index = (PIXEL_WIDTH-1-i) + j*PIXEL_WIDTH;
+                            data[i+j*PIXEL_WIDTH] = pixels[index];
+                        }
                     }
-                }
-            } else if (tileFlags.isBothFlip()) {
-                for (int j=0; j < PIXEL_HEIGHT; j++) {
-                    for (int i=0; i < PIXEL_WIDTH; i++) {
-                        int index = (PIXEL_WIDTH-1-i) + j*PIXEL_WIDTH;
-                        data[i+j*PIXEL_WIDTH] = pixels[index];
+                    break;
+                case TileFlags.TILE_FLAG_VFLIP:
+                    for (int j=0; j < PIXEL_HEIGHT; j++) {
+                        for (int i=0; i < PIXEL_WIDTH; i++) {
+                            int index = i + (PIXEL_HEIGHT-1-j)*PIXEL_WIDTH;
+                            data[i+j*PIXEL_WIDTH] = pixels[index];
+                        }
                     }
-                }
+                    break;
             }
         }
-        return image;        
+        return image;
     }
     
     public void clearIndexedColorImage() {
@@ -113,6 +121,53 @@ public class Tile {
                 indexedColorImages[i] = null;
             }
         }
+    }
+    
+    public int[] getRenderPixels() {
+        return getRenderPixels(0);
+    }
+
+    public int[] getRenderPixels(TileFlags tileFlags) {
+        return getRenderPixels(tileFlags.value()&0x3);
+    }
+    
+    private int[] getRenderPixels(int flagValue) {
+        int[] renderPixels = new int[PIXEL_COUNT];
+        switch ((byte)flagValue) {
+            case TileFlags.TILE_FLAG_NONE:
+                for (int j=0; j < PIXEL_HEIGHT; j++) {
+                    for (int i=0; i < PIXEL_WIDTH; i++) {
+                        int index = i + j*PIXEL_WIDTH;
+                        renderPixels[i+j*PIXEL_WIDTH] = pixels[index];
+                    }
+                }
+                break;
+            case TileFlags.TILE_FLAG_BOTHFLIP:
+                for (int j=0; j < PIXEL_HEIGHT; j++) {
+                    for (int i=0; i < PIXEL_WIDTH; i++) {
+                        int index = (PIXEL_WIDTH-1-i) + (PIXEL_HEIGHT-1-j)*PIXEL_WIDTH;
+                        renderPixels[i+j*PIXEL_WIDTH] = pixels[index];
+                    }
+                }
+                break;
+            case TileFlags.TILE_FLAG_HFLIP:
+                for (int j=0; j < PIXEL_HEIGHT; j++) {
+                    for (int i=0; i < PIXEL_WIDTH; i++) {
+                        int index = (PIXEL_WIDTH-1-i) + j*PIXEL_WIDTH;
+                        renderPixels[i+j*PIXEL_WIDTH] = pixels[index];
+                    }
+                }
+                break;
+            case TileFlags.TILE_FLAG_VFLIP:
+                for (int j=0; j < PIXEL_HEIGHT; j++) {
+                    for (int i=0; i < PIXEL_WIDTH; i++) {
+                        int index = i + (PIXEL_HEIGHT-1-j)*PIXEL_WIDTH;
+                        renderPixels[i+j*PIXEL_WIDTH] = pixels[index];
+                    }
+                }
+                break;
+        }
+        return renderPixels;
     }
     
     @Override

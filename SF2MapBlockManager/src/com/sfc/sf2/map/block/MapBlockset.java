@@ -7,7 +7,7 @@ package com.sfc.sf2.map.block;
 
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
-import com.sfc.sf2.palette.Palette;
+import com.sfc.sf2.graphics.Tileset;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -60,25 +60,8 @@ public class MapBlockset {
         }
         return new Dimension(w*PIXEL_WIDTH, h*PIXEL_HEIGHT);
     }
-
-    public Palette getPalette() {
-        if (blocks == null || blocks.length == 0) {
-            return null;
-        }
-        return blocks[0].getPalette();
-    }
-
-    public void setPalette(Palette palette) {
-        if (blocks == null || blocks.length == 0) {
-            return;
-        }
-        for (int i = 0; i < blocks.length; i++) {
-            blocks[i].setPalette(palette);
-        }
-        clearIndexedColorImage(false);
-    }
     
-    public BufferedImage getIndexedColorImage() {
+    public BufferedImage getIndexedColorImage(Tileset[] tilesets) {
         if (blocks == null || blocks.length == 0) {
             return null;
         }
@@ -95,7 +78,7 @@ public class MapBlockset {
                     if (tileID >= blocks.length) {
                         break;
                     } else if (blocks[tileID] != null) {
-                        graphics.drawImage(blocks[tileID].getIndexedColorImage(), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
+                        graphics.drawImage(blocks[tileID].getIndexedColorImage(tilesets), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
                     }
                 }
             }
@@ -104,15 +87,15 @@ public class MapBlockset {
         return indexedColorImage;
     }
     
-    public void clearIndexedColorImage(boolean alsoClearTiles) {
+    public void clearIndexedColorImage(boolean alsoClearBlocks) {
         if (this.indexedColorImage != null) {
             indexedColorImage.flush();
             indexedColorImage = null;
         }
         
-        if (alsoClearTiles) {
+        if (alsoClearBlocks) {
             for (int i = 0; i < blocks.length; i++) {
-                blocks[i].clearIndexedColorImage(alsoClearTiles);
+                blocks[i].clearIndexedColorImage();
             }
         }
     }
@@ -148,7 +131,7 @@ public class MapBlockset {
         if (!(obj instanceof MapBlockset)) return false;
         MapBlockset blockset = (MapBlockset)obj;
         for (int i=0; i < this.blocks.length; i++) {
-            if (!this.blocks[i].equalsWithPriority(blockset.getBlocks()[i])) {
+            if (!this.blocks[i].equals(blockset.getBlocks()[i])) {
                 return false;
             }
         }
@@ -164,15 +147,15 @@ public class MapBlockset {
             return true;
         }
         for (int i = 0; i < blocks.length; i++) {
-            if (!blocks[i].isTilesetEmpty()) {
+            if (!blocks[i].isEmpty()) {
                 return false;
             }
         }
         return true;
     }
     
-    public static MapBlockset EmptyMapBlockset(Palette palette, int blocksPerRow) {
-        MapBlock emptyBlock = MapBlock.EmptyMapBlock(-1, 0, palette);
+    public static MapBlockset EmptyMapBlockset(int blocksPerRow) {
+        MapBlock emptyBlock = MapBlock.EmptyMapBlock(-1, 0);
         MapBlock[] blocks = new MapBlock[128];
         for(int i=0; i < blocks.length; i++) {
             blocks[i] = emptyBlock;

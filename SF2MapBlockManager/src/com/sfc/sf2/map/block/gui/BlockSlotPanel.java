@@ -9,6 +9,7 @@ import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.*;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,6 +23,7 @@ import java.awt.image.BufferedImage;
 public class BlockSlotPanel extends AbstractLayoutPanel {
     
     protected MapBlock block;
+    protected Tileset[] tilesets;
     private BufferedImage overrideImage;    //Required to render a non-block
     
     public BlockSlotPanel() {
@@ -50,7 +52,7 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         if (overrideImage != null) {
             graphics.drawImage(overrideImage, 0, 0, null);
         } else if (block != null) {
-            graphics.drawImage(block.getIndexedColorImage(), 0, 0, null);
+            graphics.drawImage(block.getIndexedColorImage(tilesets), 0, 0, null);
         }
     }
     
@@ -66,7 +68,10 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         this.block = block;
         overrideImage = null;
         redraw();
-        repaint();
+    }
+
+    public void setTilesets(Tileset[] tilesets) {
+        this.tilesets = tilesets;
     }
     
     public BufferedImage getOverrideImage() {
@@ -77,6 +82,5 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         this.overrideImage = overrideImage;
         block = null;
         redraw();
-        repaint();
     }
 }

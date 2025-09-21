@@ -217,12 +217,8 @@ public abstract class AbstractTilesetRawImageProcessor<TType extends Object, TPa
             if (tiles[t] != null) {
                 int x = (tileX + t%tilesPerRow)*PIXEL_WIDTH;
                 int y = (tileY + t/tilesPerRow)*PIXEL_HEIGHT;
-                byte[] pixels = tiles[t].getPixels();
-                int[] rasterPixels = new int[PIXEL_COUNT];
-                for (int i = 0; i < PIXEL_COUNT; i++) {
-                    rasterPixels[i] = pixels[i];
-                }
-                raster.setPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, rasterPixels);
+                int[] pixels = tiles[t].getRenderPixels();
+                raster.setPixels(x, y, PIXEL_WIDTH, PIXEL_HEIGHT, pixels);
             }
         }
     }
