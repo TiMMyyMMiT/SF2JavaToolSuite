@@ -15,7 +15,6 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
-import com.sfc.sf2.map.animation.gui.MapAnimationLayoutPanel;
 import com.sfc.sf2.map.animation.io.MapAnimationAsmProcessor;
 import com.sfc.sf2.map.animation.io.MapAnimationPackage;
 import com.sfc.sf2.map.layout.MapLayout;

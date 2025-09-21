@@ -8,6 +8,7 @@ package com.sfc.sf2.map.animation.gui;
 import com.sfc.sf2.core.gui.layout.LayoutAnimator;
 import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationController;
 import com.sfc.sf2.map.animation.MapAnimation;
+import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel;
 import java.awt.Graphics;
 
@@ -36,7 +37,7 @@ public class MapAnimationLayoutPanel extends StaticMapLayoutPanel implements Ani
             }
         }*/
     }
-    
+
     public MapAnimation getAnimation() {
         return animation;
     }
