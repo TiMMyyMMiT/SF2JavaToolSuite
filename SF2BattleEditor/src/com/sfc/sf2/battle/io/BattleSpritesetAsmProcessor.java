@@ -11,10 +11,10 @@ import com.sfc.sf2.battle.Ally;
 import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.EnemyData;
-import com.sfc.sf2.battle.EnemyEnums;
 import com.sfc.sf2.core.io.asm.AbstractAsmProcessor;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.StringHelpers;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,40 +49,26 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
             if (parsedSizes && line.trim().startsWith(MACRO_DCB)) {
                 if (parsingRegions) {
                     String[] params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
-                    int type = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0, x4 = 0, y4 = 0;
+                    int type = 0;
+                    Point[] points = new Point[4];
                     //Line 1
                     type = StringHelpers.getValueInt(params[0].trim());
                     //Line 2 (Ignore)
                     reader.readLine();
-                    //Line 3
-                    if ((line = reader.readLine()) != null) {
-                        params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
-                        x1 = StringHelpers.getValueInt(params[0].trim());
-                        y1 = StringHelpers.getValueInt(params[1].trim());
-                    }
-                    //Line 4
-                    if ((line = reader.readLine()) != null) {
-                        params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
-                        x2 = StringHelpers.getValueInt(params[0].trim());
-                        y2 = StringHelpers.getValueInt(params[1].trim());
-                    }
-                    //Line 5
-                    if ((line = reader.readLine()) != null) {
-                        params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
-                        x3 = StringHelpers.getValueInt(params[0].trim());
-                        y3 = StringHelpers.getValueInt(params[1].trim());
-                    }
-                    //Line 6
-                    if ((line = reader.readLine()) != null) {
-                        params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
-                        x4 = StringHelpers.getValueInt(params[0].trim());
-                        y4 = StringHelpers.getValueInt(params[1].trim());
+                    for (int i = 0; i < points.length; i++) {
+                    //Lines 3,4,5,6
+                        if ((line = reader.readLine()) != null) {
+                            params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
+                            points[i] = new Point();
+                            points[i].x = StringHelpers.getValueInt(params[0].trim());
+                            points[i].y = StringHelpers.getValueInt(params[1].trim());
+                        }
                     }
                     //Line 7 & 8 (Ignore)
                     reader.readLine();
                     reader.readLine();
 
-                    aiRegionList.add(new AIRegion(type, x1, y1, x2, y2, x3, y3, x4, y4));
+                    aiRegionList.add(new AIRegion(type, points));
                 } else {
                     String[] params = line.trim().substring(MACRO_DCB.length()).trim().split(",");
                     int x = 0, y = 0;
@@ -267,12 +253,13 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
         writer.write("\t\t\t\t; AI Regions\n");
         for (int i=0; i < aiRegions.length; i++) {
             AIRegion region = aiRegions[i];
+            region.validateRegionPoints();
             writer.write(String.format("\t\t\t\t%s %d\n", MACRO_DCB, region.getType()));
             writer.write(String.format("\t\t\t\t%s 0\n", MACRO_DCB));
-            writer.write(String.format("\t\t\t\t%s %d, %d\n", MACRO_DCB, region.getX1(), region.getY1()));
-            writer.write(String.format("\t\t\t\t%s %d, %d\n", MACRO_DCB, region.getX2(), region.getY2()));
-            writer.write(String.format("\t\t\t\t%s %d, %d\n", MACRO_DCB, region.getX3(), region.getY3()));
-            writer.write(String.format("\t\t\t\t%s %d, %d\n", MACRO_DCB, region.getX4(), region.getY4()));
+            Point[] points = region.getPoints();
+            for (int p = 0; p < points.length; p++) {
+                writer.write(String.format("\t\t\t\t%s %d, %d\n", MACRO_DCB, points[p].x, points[p].y));
+            }
             writer.write(String.format("\t\t\t\t%s 0\n", MACRO_DCB));
             writer.write(String.format("\t\t\t\t%s 0\n", MACRO_DCB));
         }

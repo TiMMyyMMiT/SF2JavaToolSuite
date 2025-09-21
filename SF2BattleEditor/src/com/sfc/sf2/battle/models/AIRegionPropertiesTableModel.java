@@ -43,14 +43,14 @@ public class AIRegionPropertiesTableModel extends AbstractTableModel<AIRegion> {
         switch (col) {
             case 0: return row;
             case 1: return item.getType();
-            case 2: return item.getX1();
-            case 3: return item.getY1();
-            case 4: return item.getX2();
-            case 5: return item.getY2();
-            case 6: return item.getX3();
-            case 7: return item.getY3();
-            case 8: return item.getX4();
-            case 9: return item.getY4();
+            case 2: return item.getPoint(0).x;
+            case 3: return item.getPoint(0).y;
+            case 4: return item.getPoint(1).x;
+            case 5: return item.getPoint(1).y;
+            case 6: return item.getPoint(2).x;
+            case 7: return item.getPoint(2).y;
+            case 8: return item.getPoint(3).x;
+            case 9: return item.getPoint(3).y;
             default: return 0;
         }
     }
@@ -59,14 +59,14 @@ public class AIRegionPropertiesTableModel extends AbstractTableModel<AIRegion> {
     protected AIRegion setValue(AIRegion item, int row, int col, Object value) {
         switch (col) {
             case 1: item.setType((int)value);
-            case 2: item.setX1((int)value);
-            case 3: item.setY1((int)value);
-            case 4: item.setX2((int)value);
-            case 5: item.setY2((int)value);
-            case 6: item.setX3((int)value);
-            case 7: item.setY3((int)value);
-            case 8: item.setX4((int)value);
-            case 9: item.setY4((int)value);
+            case 2: item.getPoint(0).x = (int)value;
+            case 3: item.getPoint(0).y = (int)value;
+            case 4: item.getPoint(1).x = (int)value;
+            case 5: item.getPoint(1).y = (int)value;
+            case 6: item.getPoint(2).x = (int)value;
+            case 7: item.getPoint(2).y = (int)value;
+            case 8: item.getPoint(3).x = (int)value;
+            case 9: item.getPoint(3).y = (int)value;
         }
         return item;
     }
