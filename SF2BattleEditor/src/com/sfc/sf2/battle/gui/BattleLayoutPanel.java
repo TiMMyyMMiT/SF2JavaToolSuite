@@ -214,7 +214,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
             }
         }
         g2.setColor(borderColor);
-        drawRegionBounds(g2, battleX, battleY, points);
+        drawRegionBounds(g2, battleX, battleY, region);
     }
     
     private void drawRegionArea(Graphics2D g2, int battleX, int battleY, Point p1, Point p2, Point p3) {
@@ -225,10 +225,12 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         g2.fillPolygon(p);
     }
     
-    private void drawRegionBounds(Graphics2D g2, int battleX, int battleY, Point[] points) {
-        for (int i = 0; i < 4; i++) {
+    private void drawRegionBounds(Graphics2D g2, int battleX, int battleY, AIRegion region) {
+        Point[] points = region.getPoints();
+        int pointsCount = region.getType();
+        for (int i = 0; i < pointsCount; i++) {
             Point s = points[i];
-            Point e = points[(i+1)%4];
+            Point e = points[(i+1)%pointsCount];
             g2.drawLine((s.x+battleX)*PIXEL_WIDTH+12, (s.y+battleY)*PIXEL_HEIGHT+12, (e.x+battleX)*PIXEL_WIDTH+12, (e.y+battleY)*PIXEL_HEIGHT+12);
         }
     }
@@ -525,7 +527,8 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         double distance = Integer.MAX_VALUE;
         Point mouse = new Point(x, y);
         Point[] points = region.getPoints();
-        for (int i = 0; i < points.length; i++) {
+        int pointCount = region.getType();
+        for (int i = 0; i < pointCount; i++) {
             double dist = mouse.distance(points[i]);
             if (dist < distance) {
                 closest = i;
