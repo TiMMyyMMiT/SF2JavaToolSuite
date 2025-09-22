@@ -76,7 +76,7 @@ public class MapSpriteManager extends AbstractManager {
         MapSprite newSprite = new MapSprite(indices[0]);
         newSprite.addFrame(frames[0], indices[1], 0);
         newSprite.addFrame(frames[1], indices[1], 1);
-        mapSprites.addUniqueEntry(indices[0], newSprite);
+        mapSprites.addUniqueEntry(0, newSprite);
         Console.logger().info("Mapsprite successfully imported from : " + graphicsFilePath);
         Console.logger().finest("EXITING importDisassembly");
         return newSprite;

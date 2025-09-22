@@ -15,6 +15,7 @@ import com.sfc.sf2.battle.EnemyEnums;
 import com.sfc.sf2.core.io.AbstractDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.helpers.BinaryHelpers;
+import java.awt.Point;
 import java.util.ArrayList;
 
 /**
@@ -74,15 +75,12 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
         for (int i=0; i < aiRegionsNumber; i++) {
             int dataPointer = 4+alliesNumber*12+enemiesNumber*12+i*12*12;
             int type = data[dataPointer+0];
-            int x1 = data[dataPointer+2];
-            int y1 = data[dataPointer+3];
-            int x2 = data[dataPointer+4];
-            int y2 = data[dataPointer+5];
-            int x3 = data[dataPointer+6];
-            int y3 = data[dataPointer+7];
-            int x4 = data[dataPointer+8];
-            int y4 = data[dataPointer+9];
-            aiRegionList.add(new AIRegion(type, x1, y1, x2, y2, x3, y3, x4, y4));
+            Point[] points = new Point[4];
+            for (int p = 0; p < points.length; p++) {
+                points[p].x = data[dataPointer+2+p*2];
+                points[p].y = data[dataPointer+3+p*2];
+            }
+            aiRegionList.add(new AIRegion(type, points));
         }
         AIRegion[] aiRegions = new AIRegion[aiRegionList.size()];
         aiRegions = aiRegionList.toArray(aiRegions);
@@ -149,14 +147,11 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
         for (int i=0; i < aiRegionsNumber; i++) {
             AIRegion aiRegion = aiRegions[i];
             spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+0] = (byte)aiRegion.getType();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+2] = (byte)aiRegion.getX1();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+3] = (byte)aiRegion.getY1();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+4] = (byte)aiRegion.getX2();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+5] = (byte)aiRegion.getY2();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+6] = (byte)aiRegion.getX3();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+7] = (byte)aiRegion.getY3();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+8] = (byte)aiRegion.getX4();
-            spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+9] = (byte)aiRegion.getY4();
+            Point[] points = aiRegion.getPoints();
+            for (int p = 0; p < points.length; p++) {
+                spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+2+p*2] = (byte)points[p].x;
+                spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+3+p*2] = (byte)points[p].y;
+            }
         }
         
         for (int i=0; i < aiPointsNumber; i++) {
