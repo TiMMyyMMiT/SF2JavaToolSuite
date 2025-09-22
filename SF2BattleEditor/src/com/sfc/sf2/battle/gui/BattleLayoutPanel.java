@@ -298,8 +298,8 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     
     private Image getAlertImage() {
         if (alertImage == null) {
-            ClassLoader loader = BattleTerrainIcons.class.getClassLoader();
-            alertImage = new ImageIcon(loader.getResource("battle/icons/alert.png")).getImage();
+            ClassLoader loader = BattleLayoutPanel.class.getClassLoader();
+            alertImage = new ImageIcon(loader.getResource("battle/icons/Alert.png")).getImage();
         }
         return alertImage;
     }
