@@ -201,6 +201,7 @@ public class MapSpriteManager extends AbstractManager {
         Block[] frames = new Block[2];
         MapSprite[] uniques = mapSprites.getMapSprites();
         for (MapSprite mapSprite : uniques) {
+            if (mapSprite == null) continue;
             try {
                 int index = mapSprite.getIndex();
                 for (int i = 0; i < 3; i++) {   //For each facing direction
@@ -231,6 +232,7 @@ public class MapSpriteManager extends AbstractManager {
         int files = 0;
         MapSprite[] uniques = mapSprites.getMapSprites();
         for (MapSprite mapSprite : uniques) {
+            if (mapSprite == null) continue;
             try {
                 int index = mapSprite.getIndex();
                 MapSpritePackage pckg = new MapSpritePackage(null, new int[] { index }, mapSprite.getPalette(), exportMode);
@@ -288,18 +290,19 @@ public class MapSpriteManager extends AbstractManager {
         Path entryPath = PathHelpers.getIncbinPath().relativize(PathHelpers.getBasePath());
         for (int i = 0; i < mapSprites.getEntries().length; i++) {
             if (mapSprites.getEntries()[i] == i) {
-                String entry = String.format("Mapsprite%03d_", i);
-                asmData.addPath(entry+"0", entryPath.resolve(entry+"0.bin"));
-                asmData.addPath(entry+"1", entryPath.resolve(entry+"1.bin"));
-                asmData.addPath(entry+"2", entryPath.resolve(entry+"2.bin"));
+                String entry = String.format("Mapsprite%03d", i);
+                asmData.addPath(entry+"_0", entryPath.resolve(entry+"-0.bin"));
+                asmData.addPath(entry+"_1", entryPath.resolve(entry+"-1.bin"));
+                asmData.addPath(entry+"_2", entryPath.resolve(entry+"-2.bin"));
             } else {
-                String entry = String.format("Mapsprite%03d_", mapSprites.getEntries()[i]);
-                asmData.addEntry(entry+"0");
-                asmData.addEntry(entry+"1");
-                asmData.addEntry(entry+"2");
+                String entry = String.format("Mapsprite%03d", mapSprites.getEntries()[i]);
+                asmData.addEntry(entry+"_0");
+                asmData.addEntry(entry+"_1");
+                asmData.addEntry(entry+"_2");
             }
         }
         entriesAsmProcessor.exportAsmData(entriesPath, asmData, null);
+        Console.logger().info("Mapsprites entires successfully exported to : " + entryPath);
         Console.logger().finest("EXITING exportEntries");
     }
     
