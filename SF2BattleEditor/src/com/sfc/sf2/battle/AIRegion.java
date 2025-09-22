@@ -43,26 +43,6 @@ public class AIRegion {
         return points[index];
     }
     
-    public void validateRegionPoints() {
-        int index = -1;
-        int dist = Integer.MAX_VALUE;
-        for (int i = 0; i < points.length; i++) {
-            int calcDist = Math.abs((points[i].x*points[i].x)-(points[i].y*points[i].y));
-            if (calcDist < dist) {
-                index = i;
-                dist = calcDist;
-            }
-        }
-        if (index > 0) {
-            //The first point is not top-left
-            Point[] newPoints = new Point[4];
-            for (int i = 0; i < newPoints.length; i++) {
-                newPoints[i] = points[(index+i)%4];
-            }
-            points = newPoints;
-        }
-    }
-    
     @Override
     public AIRegion clone() {
         return new AIRegion(type, points[0], points[1], points[2], points[3]);

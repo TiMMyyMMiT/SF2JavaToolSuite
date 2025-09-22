@@ -253,7 +253,6 @@ public class BattleSpritesetAsmProcessor extends AbstractAsmProcessor<BattleSpri
         writer.write("\t\t\t\t; AI Regions\n");
         for (int i=0; i < aiRegions.length; i++) {
             AIRegion region = aiRegions[i];
-            region.validateRegionPoints();
             writer.write(String.format("\t\t\t\t%s %d\n", MACRO_DCB, region.getType()));
             writer.write(String.format("\t\t\t\t%s 0\n", MACRO_DCB));
             Point[] points = region.getPoints();

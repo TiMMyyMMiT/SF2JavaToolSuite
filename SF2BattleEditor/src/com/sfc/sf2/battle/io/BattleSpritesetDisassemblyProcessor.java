@@ -146,7 +146,6 @@ public class BattleSpritesetDisassemblyProcessor extends AbstractDisassemblyProc
         
         for (int i=0; i < aiRegionsNumber; i++) {
             AIRegion aiRegion = aiRegions[i];
-            aiRegion.validateRegionPoints();
             spritesetBytes[4+alliesNumber*12+enemiesNumber*12+i*12+0] = (byte)aiRegion.getType();
             Point[] points = aiRegion.getPoints();
             for (int p = 0; p < points.length; p++) {
