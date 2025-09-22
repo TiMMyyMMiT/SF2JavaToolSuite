@@ -25,7 +25,13 @@ public class AIRegionPropertiesTableModel extends AbstractTableModel<AIRegion> {
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        return column > 0;
+        if (column >= 8) {
+            //X4 & Y4 disabled for type 3 region (triangle)
+            int type = getRow(row).getType();
+            return type != 3;
+        } else {
+            return column > 0;
+        }
     }
 
     @Override

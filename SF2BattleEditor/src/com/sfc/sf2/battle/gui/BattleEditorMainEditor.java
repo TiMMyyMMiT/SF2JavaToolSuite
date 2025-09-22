@@ -650,8 +650,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -1124,7 +1124,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: AI Spawn rules:<br>    <b>Starting</b>: The enemy is visible from the start of the battle.<br>    <b>Respawn</b>: Enemy will respawn after being kiled, based on triggers.<br>    <b>Hidden</b>: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.<br><b>Item</b>: The item the enemy holds and item flags. Item flags:<br>    <b>EQUIPPED</b>: Whether the enemy has this item equipped. May not do anything in the base game.<br>    <b>USABLE_BY_AI</b>: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.<br>    <b>UNUSED_ITEM_DROP</b>: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.<br>    <b>BROKEN</b>: Flags the item as broken (cracked) and needs to be repaired.<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
+        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: AI Spawn rules:<br>    <b>Starting</b>: The enemy is visible from the start of the battle.<br>    <b>Respawn</b>: Enemy will respawn after being kiled, based on triggers.<br>    <b>Hidden</b>: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.<br><b>Item</b>: The item the enemy holds and item flags. Item flags:<br>-    <b>EQUIPPED</b>: Whether the enemy has this item equipped. May not do anything in the base game.<br>-    <b>USABLE_BY_AI</b>: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.<br>-    <b>UNUSED_ITEM_DROP</b>: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.<br>-    <b>BROKEN</b>: Flags the item as broken (cracked) and needs to be repaired.<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
         infoButton6.setText("");
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
@@ -1256,7 +1256,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         tableAIRegions.setSingleClickText(true);
         tableAIRegions.setSpinnerNumberEditor(true);
 
-        infoButton5.setMessageText("<html>AI Regions indicate a 4-point area that can influce specific enemy AI.<br>Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.</html>");
+        infoButton5.setMessageText("<html>AI Regions indicate a an area that can influce specific enemy AI.<br>Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.<br><br><b>Points:</b>Regions are made up of a number of points: P1, P2, P3, P4. Or, as you will see in the data [x1,y1], [x2,y2], etc.<br><br><b>Type 3:</b> Type 3 = a 3-point region (a triangle) made up of points [P1, P2, P3].<br><b>Type 4:</b> Type 4 = a 4-point region; or more accurately, 2 triangles made up of points [P1, P2, P4] & [P2, P3, P4].</html>");
         infoButton5.setText("");
 
         jLabel20.setText("Editing AI Regions :");
@@ -1591,7 +1591,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1516, 908));

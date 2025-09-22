@@ -45,10 +45,10 @@ public class AIRegion {
     
     @Override
     public AIRegion clone() {
-        return new AIRegion(type, points[0], points[1], points[2], points[3]);
+        return new AIRegion(type, new Point(points[0]), new Point(points[1]), new Point(points[2]), new Point(points[3]));
     }
     
     public static AIRegion emptyAIRegion() {
-        return new AIRegion(0, new Point(), new Point(), new Point(), new Point());
+        return new AIRegion(4, new Point(0, 0), new Point(0, 4), new Point(4, 4), new Point(4, 0));
     }
 }
