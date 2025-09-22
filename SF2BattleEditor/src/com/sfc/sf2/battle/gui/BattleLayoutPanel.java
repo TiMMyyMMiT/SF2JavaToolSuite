@@ -12,7 +12,6 @@ import com.sfc.sf2.battle.Battle;
 import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel;
-import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
@@ -25,6 +24,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -50,6 +50,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         AiRegion,
         AiPoint,
     }
+    
+    public static Color REGION_TRAINGLE_1 = new Color(100, 100, 255, 75);
+    public static Color REGION_TRAINGLE_2 = new Color(255, 100, 255, 75);
     
     private Battle battle;
     
@@ -190,13 +193,39 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         g2.setStroke(new BasicStroke(3));
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
-            g2.setColor(Color.WHITE);
-            drawRegionBounds(g2, battleX, battleY, regions[i]);
+            drawAIRegion(g2, battleX, battleY, regions[i], false, Color.WHITE);
         }
     }
     
-    private void drawRegionBounds(Graphics2D g2, int battleX, int battleY, AIRegion region) {
+    private void drawAIRegion(Graphics2D g2, int battleX, int battleY, AIRegion region, boolean fillArea, Color borderColor) {
         Point[] points = region.getPoints();
+        if (fillArea) {
+            switch (region.getType()) {
+                case 3: //3-points
+                    g2.setColor(REGION_TRAINGLE_1);
+                    drawRegionArea(g2, battleX, battleY, points[0], points[1], points[2]);
+                break;
+                case 4: //4-points
+                    g2.setColor(REGION_TRAINGLE_1);
+                    drawRegionArea(g2, battleX, battleY, points[0], points[1], points[3]);
+                    g2.setColor(REGION_TRAINGLE_2);
+                    drawRegionArea(g2, battleX, battleY, points[1], points[2], points[3]);
+                break;
+            }
+        }
+        g2.setColor(borderColor);
+        drawRegionBounds(g2, battleX, battleY, points);
+    }
+    
+    private void drawRegionArea(Graphics2D g2, int battleX, int battleY, Point p1, Point p2, Point p3) {
+        Polygon p = new Polygon();
+        p.addPoint((battleX+p1.x)*PIXEL_WIDTH+12, (battleY+p1.y)*PIXEL_HEIGHT+12);
+        p.addPoint((battleX+p2.x)*PIXEL_WIDTH+12, (battleY+p2.y)*PIXEL_HEIGHT+12);
+        p.addPoint((battleX+p3.x)*PIXEL_WIDTH+12, (battleY+p3.y)*PIXEL_HEIGHT+12);
+        g2.fillPolygon(p);
+    }
+    
+    private void drawRegionBounds(Graphics2D g2, int battleX, int battleY, Point[] points) {
         for (int i = 0; i < 4; i++) {
             Point s = points[i];
             Point e = points[(i+1)%4];
@@ -247,18 +276,15 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 }
                 int triggerRegion = enemy.getTriggerRegion2();
                 if (triggerRegion >=0 && triggerRegion < spriteset.getAiRegions().length) {
-                    g2.setColor(Color.RED);
-                    drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion]);
+                    drawAIRegion(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion], false, Color.RED);
                 }
                 triggerRegion = enemy.getTriggerRegion1();
                 if (triggerRegion >=0 && triggerRegion < spriteset.getAiRegions().length) {
-                    g2.setColor(Color.GREEN);
-                    drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion]);
+                    drawAIRegion(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion], false, Color.GREEN);
                 }
                 break;
             case AiRegion:
-                g2.setColor(Color.YELLOW);
-                drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[selectedSpritesetEntity]);
+                drawAIRegion(g2, battleX, battleY, spriteset.getAiRegions()[selectedSpritesetEntity], true, Color.YELLOW);
                 break;
             case AiPoint:
                 g2.setColor(Color.YELLOW);

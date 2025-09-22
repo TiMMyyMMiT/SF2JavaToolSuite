@@ -125,8 +125,8 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jPanel3" pref="294" max="32767" attributes="0"/>
-                                      <Component id="jPanel5" alignment="0" pref="294" max="32767" attributes="0"/>
+                                      <Component id="jPanel3" pref="332" max="32767" attributes="0"/>
+                                      <Component id="jPanel5" alignment="0" pref="332" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
@@ -1770,7 +1770,7 @@
                                                 </Component>
                                                 <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton5">
                                                   <Properties>
-                                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;AI Regions indicate a 4-point area that can influce specific enemy AI.&lt;br&gt;Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.&lt;/html&gt;"/>
+                                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;AI Regions indicate a an area that can influce specific enemy AI.&lt;br&gt;Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.&lt;br&gt;&lt;br&gt;&lt;b&gt;Points:&lt;/b&gt;Regions are made up of a number of points: P1, P2, P3, P4. Or, as you will see in the data [x1,y1], [x2,y2], etc.&lt;br&gt;&lt;br&gt;&lt;b&gt;Type 3:&lt;/b&gt; Type 3 = a 3-point region (a triangle) made up of points [P1, P2, P3].&lt;br&gt;&lt;b&gt;Type 4:&lt;/b&gt; Type 4 = a 4-point region; or more accurately, 2 triangles made up of points [P1, P2, P4] &amp; [P2, P3, P4].&lt;/html&gt;"/>
                                                     <Property name="text" type="java.lang.String" value=""/>
                                                   </Properties>
                                                 </Component>

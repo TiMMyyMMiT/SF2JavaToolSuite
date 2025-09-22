@@ -49,6 +49,6 @@ public class AIRegion {
     }
     
     public static AIRegion emptyAIRegion() {
-        return new AIRegion(0, new Point(0, 0), new Point(0, 4), new Point(4, 4), new Point(4, 0));
+        return new AIRegion(4, new Point(0, 0), new Point(0, 4), new Point(4, 4), new Point(4, 0));
     }
 }
