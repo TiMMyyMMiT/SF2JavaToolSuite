@@ -89,7 +89,7 @@ public class EnemyPropertiesTableModel extends AbstractTableModel<Enemy> {
                     if (index >= 0 && index < enemyData.length)
                     item.setEnemyData(this.enemyData[index]);
                 }
-            break;
+                break;
             case 2: item.setX((int)value); break;
             case 3: item.setY((int)value); break;
             case 4: item.setAi((String)value); break;

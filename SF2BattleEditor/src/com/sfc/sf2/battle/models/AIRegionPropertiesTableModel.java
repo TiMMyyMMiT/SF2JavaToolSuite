@@ -64,15 +64,15 @@ public class AIRegionPropertiesTableModel extends AbstractTableModel<AIRegion> {
     @Override
     protected AIRegion setValue(AIRegion item, int row, int col, Object value) {
         switch (col) {
-            case 1: item.setType((int)value);
-            case 2: item.getPoint(0).x = (int)value;
-            case 3: item.getPoint(0).y = (int)value;
-            case 4: item.getPoint(1).x = (int)value;
-            case 5: item.getPoint(1).y = (int)value;
-            case 6: item.getPoint(2).x = (int)value;
-            case 7: item.getPoint(2).y = (int)value;
-            case 8: item.getPoint(3).x = (int)value;
-            case 9: item.getPoint(3).y = (int)value;
+            case 1: item.setType((int)value); break;
+            case 2: item.getPoint(0).x = (int)value; break;
+            case 3: item.getPoint(0).y = (int)value; break;
+            case 4: item.getPoint(1).x = (int)value; break;
+            case 5: item.getPoint(1).y = (int)value; break;
+            case 6: item.getPoint(2).x = (int)value; break;
+            case 7: item.getPoint(2).y = (int)value; break;
+            case 8: item.getPoint(3).x = (int)value; break;
+            case 9: item.getPoint(3).y = (int)value; break;
         }
         return item;
     }
