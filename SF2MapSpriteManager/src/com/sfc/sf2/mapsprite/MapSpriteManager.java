@@ -69,7 +69,7 @@ public class MapSpriteManager extends AbstractManager {
 
     public MapSprite importDisassembly(Path graphicsFilePath, Palette palette) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        mapSprites = new MapSpriteEntries(1, 1);
+        mapSprites = new MapSpriteEntries(1);
         int[] indices = getIndicesFromFilename(graphicsFilePath.getFileName());
         MapSpritePackage pckg = new MapSpritePackage(graphicsFilePath.getFileName().toString(), indices, palette, null);
         Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(graphicsFilePath, pckg);
@@ -181,7 +181,7 @@ public class MapSpriteManager extends AbstractManager {
             int[] loadIndices = getIndicesFromFilename(entriesData.getEntry(i), "_");
             if (indices[0] == loadIndices[0] && indices[1] == loadIndices[1] && indices[2] == loadIndices[2]) {
                 if (!mapSprites.hasData(indices[0])) {
-                    Console.logger().warning(String.format("WARNING No sprite data for entry : mapsprite%03d_d", indices[0], indices[1]));
+                    Console.logger().warning(String.format("WARNING No sprite data for entry : mapsprite%03d_%d", indices[0], indices[1]));
                 }
             } else {
                 if (indices[1] == 0) {
@@ -199,18 +199,21 @@ public class MapSpriteManager extends AbstractManager {
         int failedToSave = 0;
         Path filePath = null;
         Block[] frames = new Block[2];
-        MapSprite[] uniques = mapSprites.getMapSprites();
-        for (MapSprite mapSprite : uniques) {
-            if (mapSprite == null) continue;
+        int totalEntries = mapSprites.getEntries().length;
+        for (int i=0; i < totalEntries; i++) {
+            if (mapSprites.isDuplicateEntry(i)) continue;
             try {
-                int index = mapSprite.getIndex();
-                for (int i = 0; i < 3; i++) {   //For each facing direction
-                    filePath = basePath.resolve(String.format("mapsprite%03d-%d.bin", index, i));
-                    frames[0] = mapSprite.getFrame(i, 0);
-                    frames[1] = mapSprite.getFrame(i, 1);
-                    if (frames[0] != null || frames[1] != null) {
-                        mapSpriteDisassemblyProcessor.exportDisassembly(filePath, frames, null);
+                for (int s = 0; s < 3; s++) {   //For each facing direction
+                    filePath = basePath.resolve(String.format("mapsprite%03d-%d.bin", i, s));
+                    MapSprite mapSprite = mapSprites.getMapSprite(i);
+                    if (mapSprite == null) {
+                        frames[0] = null;
+                        frames[1] = null;
+                    } else {
+                        frames[0] = mapSprite.getFrame(s, 0);
+                        frames[1] = mapSprite.getFrame(s, 1);
                     }
+                    mapSpriteDisassemblyProcessor.exportDisassembly(filePath, frames, null);
                 }
             } catch (Exception e) {
                 failedToSave++;

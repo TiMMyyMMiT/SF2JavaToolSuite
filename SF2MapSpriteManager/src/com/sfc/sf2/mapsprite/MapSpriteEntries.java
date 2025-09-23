@@ -19,14 +19,11 @@ public class MapSpriteEntries {
     private final int[] entries;
     
     public MapSpriteEntries(EntriesAsmData mapspriteEntries) {
-        String id = mapspriteEntries.getUniqueEntries(mapspriteEntries.uniqueEntriesCount()-1);
-        int count = Integer.parseInt(id.substring(9, id.indexOf('_')))+1;
-        mapSprites = new MapSprite[count];
-        entries = new int[count];
+        this(mapspriteEntries.entriesCount()/3);
     }
 
-    public MapSpriteEntries(int totalEntries, int uniqueEntries) {
-        this.mapSprites = new MapSprite[uniqueEntries];
+    public MapSpriteEntries(int totalEntries) {
+        this.mapSprites = new MapSprite[totalEntries];
         this.entries = new int[totalEntries];
         for (int i = 0; i < entries.length; i++) {
             entries[i] = -1;
