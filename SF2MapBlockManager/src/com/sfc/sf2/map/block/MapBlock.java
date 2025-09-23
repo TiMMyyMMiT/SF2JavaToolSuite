@@ -34,7 +34,7 @@ public class MapBlock extends Block {
     }
     
     public boolean equalsIgnoreTiles(Object obj) {
-        if (obj == null) return false;
+        if (obj == null) return this == null;
         if (obj == this) return true;
         if (!(obj instanceof MapBlock)) return false;
         MapBlock block = (MapBlock)obj;
@@ -46,7 +46,7 @@ public class MapBlock extends Block {
     }
     
     public boolean equalsWithPriority(Object obj) {
-        if (obj == null) return false;
+        if (obj == null) return this == null;
         if (obj == this) return true;
         if (!(obj instanceof MapBlock)) return false;
         MapBlock block = (MapBlock)obj;
