@@ -293,15 +293,16 @@ public class MapSpriteManager extends AbstractManager {
         Path entryPath = PathHelpers.getIncbinPath().relativize(PathHelpers.getBasePath());
         for (int i = 0; i < mapSprites.getEntries().length; i++) {
             if (mapSprites.getEntries()[i] == i) {
-                String entry = String.format("Mapsprite%03d", i);
-                asmData.addPath(entry+"_0", entryPath.resolve(entry+"-0.bin"));
-                asmData.addPath(entry+"_1", entryPath.resolve(entry+"-1.bin"));
-                asmData.addPath(entry+"_2", entryPath.resolve(entry+"-2.bin"));
+                String entry = String.format("Mapsprite%03d_", i);
+                String path = String.format("mapsprite%03d-", i);
+                asmData.addPath(entry+"0", entryPath.resolve(path+"0.bin"));
+                asmData.addPath(entry+"1", entryPath.resolve(path+"1.bin"));
+                asmData.addPath(entry+"2", entryPath.resolve(path+"2.bin"));
             } else {
-                String entry = String.format("Mapsprite%03d", mapSprites.getEntries()[i]);
-                asmData.addEntry(entry+"_0");
-                asmData.addEntry(entry+"_1");
-                asmData.addEntry(entry+"_2");
+                String entry = String.format("Mapsprite%03d_", mapSprites.getEntries()[i]);
+                asmData.addEntry(entry+"0");
+                asmData.addEntry(entry+"1");
+                asmData.addEntry(entry+"2");
             }
         }
         entriesAsmProcessor.exportAsmData(entriesPath, asmData, null);
