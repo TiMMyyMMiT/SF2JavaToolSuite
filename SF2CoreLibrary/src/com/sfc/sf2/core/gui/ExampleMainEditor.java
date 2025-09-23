@@ -36,9 +36,9 @@ public final class ExampleMainEditor extends AbstractMainEditor {
         
         DefaultComboBoxModel model = new DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" });
         jTable2.setDefaultEditor(String.class, new ComboBoxTableEditor(model));
-        jTable2.setDefaultRenderer(String.class, new ComboBoxTableRenderer(model));
+        jTable2.setDefaultRenderer(String.class, new ComboBoxTableRenderer());
         table2.jTable.setDefaultEditor(String.class, new ComboBoxTableEditor(model));
-        table2.jTable.setDefaultRenderer(String.class, new ComboBoxTableRenderer(model));
+        table2.jTable.setDefaultRenderer(String.class, new ComboBoxTableRenderer());
     }
     
     @Override

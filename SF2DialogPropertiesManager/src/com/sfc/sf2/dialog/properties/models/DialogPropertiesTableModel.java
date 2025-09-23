@@ -22,6 +22,8 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
     private DefaultComboBoxModel mapSpritesModel;
     private DefaultComboBoxModel portraitsModel;
     private DefaultComboBoxModel sfxModel;
+    
+    private boolean mapSpritesEditable;
 
     public DialogPropertiesTableModel() {
         super(new String[] { "Id", "Sprite", "Sprite", "Portrait", "Portrait", "SFX" }, 255);
@@ -34,14 +36,22 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
         sfxModel = new DefaultComboBoxModel(enums.getSfx().keySet().toArray());
     }
 
+    public void setMapSpritesEditable(boolean mapSpritesEditable) {
+        this.mapSpritesEditable = mapSpritesEditable;
+    }
+
     @Override
     public Class getColumnType(int col) {
-        return (col == 2 || col == 4) ? BufferedImage.class : String.class;
+        return (col == 2 || col == 4) ? BufferedImage.class : col == 0 ? Integer.class : String.class;
     }
     
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return !(columnIndex == 0 || columnIndex == 2 || columnIndex == 4);
+        if (columnIndex == 1) {
+            return mapSpritesEditable;
+        } else {
+            return !(columnIndex == 0 || columnIndex == 2 || columnIndex == 4);
+        }
     }
 
     @Override
@@ -70,9 +80,9 @@ public class DialogPropertiesTableModel extends AbstractTableModel<DialogPropert
     @Override
     protected DialogProperty setValue(DialogProperty item, int row, int col, Object value) {
         switch (col) {
-            case 1: item.setPortraitName((String)value);
-            case 3: item.setSpriteName((String)value);
-            case 5: item.setSfxName((String)value);
+            case 1: item.setSpriteName((String)value); break;
+            case 3: item.setPortraitName((String)value); break;
+            case 5: item.setSfxName((String)value); break;
         }
         return item;
     }
