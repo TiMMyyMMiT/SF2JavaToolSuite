@@ -100,7 +100,9 @@ public class EntriesAsmData {
         int hash = entry.hashCode();
         if (hashMap.containsKey(hash)) {
             int index = hashMap.get(hash);
+            entries.add(entry);
             entryIndices.add(index);
+            paths.add(null);
         } else {
             int index = entries.size();
             entries.add(entry);

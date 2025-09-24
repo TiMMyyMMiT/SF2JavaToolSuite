@@ -21,7 +21,9 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
     @Override
     protected Block[] parseDisassemblyData(byte[] data, MapSpritePackage pckg) throws DisassemblyException {
         if (data.length <= 2) {
-            throw new DisassemblyException("File ignored because of too small length (must be a dummy file) " + data.length);
+            //Must be a dummy sprite so return an empty sprite (otherwise many other errors occur)
+            int index = pckg.indices()[0]*6+pckg.indices()[1]*2;
+            return new Block[] { Block.EmptyBlock(index, pckg.palette()), Block.EmptyBlock(index+1, pckg.palette()) };
         }
         Tile[] tiles = new BasicGraphicsDecoder().decode(data, pckg.palette());
         if (tiles == null || tiles.length == 0) {
@@ -47,7 +49,7 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
         Tile[] tiles = new Tile[Block.TILES_COUNT*item.length];
         boolean spriteDataFound = false;
         for (int i = 0; i < item.length; i++) {
-            if (tiles != null) {
+            if (item[i] != null && !item[i].isEmpty()) {
                 Tile[] frame = item[i].getTiles();
                 frame = TileHelpers.reorderTilesForDisasssembly(frame, 1, 1, Block.TILE_WIDTH);
                 System.arraycopy(frame, 0, tiles, i*Block.TILES_COUNT, Block.TILES_COUNT);

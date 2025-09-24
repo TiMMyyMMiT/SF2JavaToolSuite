@@ -119,6 +119,14 @@ public class MapSprite {
             }
         }
     }
+    
+    public boolean isEmpty() {
+        if (frames == null) return true;
+        for (int i = 0; i < frames.length; i++) {
+            if (frames[i] != null && !frames[i].isEmpty()) return false;
+        }
+        return true;
+    }
 
     @Override
     public boolean equals(Object obj) {
