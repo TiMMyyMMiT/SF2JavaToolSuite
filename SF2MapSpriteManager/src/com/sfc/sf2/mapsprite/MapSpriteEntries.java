@@ -62,12 +62,18 @@ public class MapSpriteEntries {
     public void optimise() {
         ArrayList<Integer> optimised = new ArrayList<>();
         for (int i = 0; i < entries.length; i++) {
-            if (entries[i] == i) {  //Not a reference
+            if (entries[i] == i) {  //Not a reference (therefore may duplicate sprites)
                 for (int j = i+1; j < entries.length; j++) {
-                    if (entries[j] == j && mapSprites[entries[i]].equals(mapSprites[entries[j]])) {
+                    if (entries[j] == j && mapSprites[entries[i]].equals(mapSprites[entries[j]])) { //Is a duplicate
                         entries[j] = entries[i];
                         mapSprites[j] = null;
                         optimised.add(j);
+                        //Also check if anything references this sprite and make it point to the new reference point
+                        for (int k = j+1; k < entries.length; k++) {
+                            if (entries[k] == j) {
+                                entries[k] = entries[i];
+                            }
+                        }
                     }
                 }
             }
