@@ -35,7 +35,7 @@ public class MapSpriteManager extends AbstractManager {
     public enum MapSpriteExportMode {
         INDIVIDUAL_FILES,
         FILE_PER_DIRECTION,
-        FILE_PER_SET,
+        FILE_PER_CHARACTER,
     }
     
     private final PaletteManager paletteManager = new PaletteManager();
@@ -264,22 +264,24 @@ public class MapSpriteManager extends AbstractManager {
         int failedToSave = 0;
         Path filePath = null;
         int files = 0;
-        int step = exportMode == exportMode.FILE_PER_SET ? 3 : 1;
-        MapSprite mapSprite;
+        int step = exportMode == exportMode.FILE_PER_CHARACTER ? 3 : 1;
+        MapSprite mapSprite = null;
+        Palette palette = null;
         for (int m = 0; m < mapSprites.getEntries().length; m += step) {
             try {
                 switch (exportMode) {
                     case INDIVIDUAL_FILES:
                         if (mapSprites.isDuplicateEntry(m)) continue;
                         mapSprite = mapSprites.getMapSprite(m);
+                        palette = mapSprite == null ? null : mapSprite.getPalette();
                         for (int i = 0; i < 2; i++) {
                             Block[] frames = new Block[1];
-                            frames[0] = mapSprite.getFrame(i == 0);
+                            frames[0] = mapSprite == null ? null : mapSprite.getFrame(i == 0);
                             if (frames[0] != null) {
                                 files++;
-                                int[] indices = new int[] { mapSprite.getIndex()/3, mapSprite.getIndex()%3, i%2 };
+                                int[] indices = new int[] { mapSprite.getIndex(), mapSprite.getFacingIndex(), i%2 };
                                 filePath = basePath.resolve(String.format("mapsprite%03d-%d-%d%s", indices[0], indices[1], indices[2], AbstractRawImageProcessor.GetFileExtensionString(format)));
-                                MapSpritePackage pckg = new MapSpritePackage(null, indices, mapSprite.getPalette(), exportMode);
+                                MapSpritePackage pckg = new MapSpritePackage(null, indices, palette, exportMode);
                                 mapSpriteRawImageProcessor.exportRawImage(filePath, frames, pckg);
                             }
                         }
@@ -287,20 +289,22 @@ public class MapSpriteManager extends AbstractManager {
                     case FILE_PER_DIRECTION:
                         if (mapSprites.isDuplicateEntry(m)) continue;
                         mapSprite = mapSprites.getMapSprite(m);
+                        palette = mapSprite == null ? null : mapSprite.getPalette();
                         Block[] frames = new Block[2];
-                        frames[0] = mapSprite.getFrame(true);
-                        frames[1] = mapSprite.getFrame(false);
+                        frames[0] = mapSprite == null ? null : mapSprite.getFrame(true);
+                        frames[1] = mapSprite == null ? null : mapSprite.getFrame(false);
                         if (frames[0] != null && frames[1] != null) {
                             files++;
-                            int[] indices = new int[] { mapSprite.getIndex()/3, mapSprite.getIndex()%3, -1 };
+                            int[] indices = new int[] { mapSprite.getIndex(), mapSprite.getFacingIndex(), -1 };
                             filePath = basePath.resolve(String.format("mapsprite%03d-%d%s", indices[0], indices[1], AbstractRawImageProcessor.GetFileExtensionString(format)));
-                            MapSpritePackage pckg = new MapSpritePackage(null, indices, mapSprite.getPalette(), exportMode);
+                            MapSpritePackage pckg = new MapSpritePackage(null, indices, palette, exportMode);
                             mapSpriteRawImageProcessor.exportRawImage(filePath, frames, pckg);
                         }
                         break;
-                    case FILE_PER_SET:
+                    case FILE_PER_CHARACTER:
                         files++;
                         frames = new Block[6];
+                        palette = null;
                         boolean allEmpty = true;
                         int index = -1;
                         for (int i = 0; i < 3; i++) {
@@ -309,18 +313,26 @@ public class MapSpriteManager extends AbstractManager {
                                 frames[i*2+1] = null;
                             } else {
                                 mapSprite = mapSprites.getMapSprite(m+i);
-                                frames[i*2+0] = mapSprite.getFrame(true);
-                                frames[i*2+1] = mapSprite.getFrame(false);
-                                allEmpty = false;
-                                if (index == -1) {
-                                    index = mapSprite.getIndex()/3;
+                                if (mapSprite == null) {
+                                    frames[i*2+0] = null;
+                                    frames[i*2+1] = null;
+                                } else {
+                                    frames[i*2+0] = mapSprite.getFrame(true);
+                                    frames[i*2+1] = mapSprite.getFrame(false);
+                                    allEmpty = false;
+                                    if (index == -1) {
+                                        index = mapSprite.getIndex();
+                                    }
+                                    if (palette == null) {
+                                        palette = mapSprite.getPalette();
+                                    }
                                 }
                             }
                         }
                         if (allEmpty) continue;
                         int[] indices = new int[] { index, -1, -1 };
                         filePath = basePath.resolve(String.format("mapsprite%03d%s", indices[0], AbstractRawImageProcessor.GetFileExtensionString(format)));
-                        MapSpritePackage pckg = new MapSpritePackage(null, indices, null, exportMode);
+                        MapSpritePackage pckg = new MapSpritePackage(null, indices, palette, exportMode);
                         mapSpriteRawImageProcessor.exportRawImage(filePath, frames, pckg);
                         break;
                     default:
@@ -347,32 +359,17 @@ public class MapSpriteManager extends AbstractManager {
         asmData.setIsDoubleList(true);
         Path entryPath = PathHelpers.getIncbinPath().relativize(PathHelpers.getBasePath());
         for (int i = 0; i < mapSprites.getEntries().length; i++) {
+            int index = mapSprites.getEntries()[i];
+            int facingIndex = index%3;
+            index /= 3;
             boolean isEmpty = mapSprites.getMapSprite(i) == null || mapSprites.getMapSprite(i).isEmpty();
-            if (mapSprites.getEntries()[i] == i) {
-                String entry = String.format("Mapsprite%03d_", i);
-                String path = String.format("mapsprite%03d-", i);
-                if (isEmpty) {
-                    //e.g. like Mapsprite237_0
-                    asmData.addPath(entry+"0", entryPath.resolve(path+"0.bin"));
-                    asmData.addEntry(entry+"0");
-                    asmData.addEntry(entry+"0");
-                } else {
-                    asmData.addPath(entry+"0", entryPath.resolve(path+"0.bin"));
-                    asmData.addPath(entry+"1", entryPath.resolve(path+"1.bin"));
-                    asmData.addPath(entry+"2", entryPath.resolve(path+"2.bin"));
-                }
+            if (mapSprites.isDuplicateEntry(i)) {
+                String entry = String.format("Mapsprite%03d_%d", index, facingIndex);
+                asmData.addEntry(entry);
             } else {
-                String entry = String.format("Mapsprite%03d_", mapSprites.getEntries()[i]);
-                if (isEmpty) {
-                    //e.g. like Mapsprite237_0
-                    asmData.addEntry(entry+"0");
-                    asmData.addEntry(entry+"0");
-                    asmData.addEntry(entry+"0");
-                } else {
-                    asmData.addEntry(entry+"0");
-                    asmData.addEntry(entry+"1");
-                    asmData.addEntry(entry+"2");
-                }
+                String entry = String.format("Mapsprite%03d_%d", index, facingIndex);
+                String path = String.format("mapsprite%03d-%d.bin", index, facingIndex);
+                asmData.addPath(entry, entryPath.resolve(path));
             }
         }
         entriesAsmProcessor.exportAsmData(entriesPath, asmData, null);
