@@ -25,6 +25,12 @@ public class DirectoryButton extends javax.swing.JPanel {
     public DirectoryButton() {
         initComponents();
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        jTextFieldFile.setEnabled(enabled);
+        jButtonFile.setEnabled(enabled);
+    }
     
     public String getLabelText() {
         return jLabelFile.getText();
