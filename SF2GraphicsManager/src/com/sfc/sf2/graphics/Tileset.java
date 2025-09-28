@@ -160,9 +160,9 @@ public class Tileset {
         return true;
     }
     
-    public static Tileset EmptyTilset(Palette palette, int tilesPerRow) {
+    public static Tileset EmptyTilset(Palette palette, int numberOfTiles, int tilesPerRow) {
         Tile emptyTile = Tile.EmptyTile(palette);
-        Tile[] tiles = new Tile[128];
+        Tile[] tiles = new Tile[numberOfTiles];
         for(int i=0; i < tiles.length; i++) {
             tiles[i] = emptyTile;
         }

@@ -22,8 +22,7 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
     protected Block[] parseDisassemblyData(byte[] data, MapSpritePackage pckg) throws DisassemblyException {
         if (data.length <= 2) {
             //Must be a dummy sprite so return an empty sprite (otherwise many other errors occur)
-            int index = pckg.indices()[0]*6+pckg.indices()[1]*2;
-            return new Block[] { Block.EmptyBlock(index, pckg.palette()), Block.EmptyBlock(index+1, pckg.palette()) };
+            return null;
         }
         Tile[] tiles = new BasicGraphicsDecoder().decode(data, pckg.palette());
         if (tiles == null || tiles.length == 0) {
@@ -46,19 +45,19 @@ public class MapSpriteDisassemblyProcessor extends AbstractDisassemblyProcessor<
 
     @Override
     protected byte[] packageDisassemblyData(Block[] item, MapSpritePackage pckg) throws DisassemblyException {
+        if (item == null) {
+            //If no sprite data is found then this is an "empty" entry. Preserve this, since the core game has an empty entry at (mapsprite237-0.bin)
+            return new byte[] { (byte)0xFF, (byte)0xFF };
+        }
         Tile[] tiles = new Tile[Block.TILES_COUNT*item.length];
         boolean spriteDataFound = false;
         for (int i = 0; i < item.length; i++) {
-            if (item[i] != null && !item[i].isEmpty()) {
+            if (item[i] != null) {
                 Tile[] frame = item[i].getTiles();
                 frame = TileHelpers.reorderTilesForDisasssembly(frame, 1, 1, Block.TILE_WIDTH);
                 System.arraycopy(frame, 0, tiles, i*Block.TILES_COUNT, Block.TILES_COUNT);
                 spriteDataFound = true;
             }
-        }
-        if (!spriteDataFound) {
-            //If no sprite data is found then this is an "empty" entry. Preserve this, since the core game has an empty entry at (mapsprite237-0.bin)
-            return new byte[] { (byte)0xFF, (byte)0xFF };
         }
         
         byte[] bytes = new BasicGraphicsDecoder().encode(tiles);

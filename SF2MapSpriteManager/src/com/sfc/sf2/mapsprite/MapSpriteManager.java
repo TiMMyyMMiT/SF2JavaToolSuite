@@ -106,12 +106,18 @@ public class MapSpriteManager extends AbstractManager {
                     MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), indices, palette, null);
                     Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
                     frameCount+=2;
-                    if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
-                        lastMapSprite = new MapSprite(indices[0]);
+                    if (frames == null) {
+                        Console.logger().warning("WARNING Mapsprite entry is empty, must be a placeholder. Mapsprite " + tilesetPath);
+                        lastMapSprite = null;
                         mapSprites.addUniqueEntry(indices[0], lastMapSprite);
+                    } else {
+                        if (lastMapSprite == null || lastMapSprite.getIndex() != indices[0]) {
+                            lastMapSprite = new MapSprite(indices[0]);
+                            mapSprites.addUniqueEntry(indices[0], lastMapSprite);
+                        }
+                        lastMapSprite.addFrame(frames[0], indices[1], 0);
+                        lastMapSprite.addFrame(frames[1], indices[1], 1);
                     }
-                    lastMapSprite.addFrame(frames[0], indices[1], 0);
-                    lastMapSprite.addFrame(frames[1], indices[1], 1);
                 } else {
                     //Is duplicate
                     if (indices[1] == 0) {
@@ -207,13 +213,16 @@ public class MapSpriteManager extends AbstractManager {
                     filePath = basePath.resolve(String.format("mapsprite%03d-%d.bin", i, s));
                     MapSprite mapSprite = mapSprites.getMapSprite(i);
                     if (mapSprite == null) {
-                        frames[0] = null;
-                        frames[1] = null;
+                        //Data was a 2 byte placeholder (e.g. like Mapsprite237_0)
+                        mapSpriteDisassemblyProcessor.exportDisassembly(filePath, null, null);
+                        break;
                     } else {
                         frames[0] = mapSprite.getFrame(s, 0);
                         frames[1] = mapSprite.getFrame(s, 1);
+                        if (frames[0] == null) frames[0] = Block.EmptyBlock(i, null);
+                        if (frames[1] == null) frames[1] = Block.EmptyBlock(i, null);
+                        mapSpriteDisassemblyProcessor.exportDisassembly(filePath, frames, null);
                     }
-                    mapSpriteDisassemblyProcessor.exportDisassembly(filePath, frames, null);
                 }
             } catch (Exception e) {
                 failedToSave++;
@@ -292,7 +301,7 @@ public class MapSpriteManager extends AbstractManager {
         asmData.setIsDoubleList(true);
         Path entryPath = PathHelpers.getIncbinPath().relativize(PathHelpers.getBasePath());
         for (int i = 0; i < mapSprites.getEntries().length; i++) {
-            boolean isEmpty = mapSprites.getMapSprite(i).isEmpty();
+            boolean isEmpty = mapSprites.getMapSprite(i) == null || mapSprites.getMapSprite(i).isEmpty();
             if (mapSprites.getEntries()[i] == i) {
                 String entry = String.format("Mapsprite%03d_", i);
                 String path = String.format("mapsprite%03d-", i);
@@ -321,7 +330,7 @@ public class MapSpriteManager extends AbstractManager {
             }
         }
         entriesAsmProcessor.exportAsmData(entriesPath, asmData, null);
-        Console.logger().info("Mapsprites entires successfully exported to : " + entryPath);
+        Console.logger().info("Mapsprites entries successfully exported to : " + entriesPath + ". Entries : " + asmData.entriesCount());
         Console.logger().finest("EXITING exportEntries");
     }
     
