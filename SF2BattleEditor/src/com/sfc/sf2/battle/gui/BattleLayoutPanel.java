@@ -12,7 +12,6 @@ import com.sfc.sf2.battle.Battle;
 import com.sfc.sf2.battle.BattleSpriteset;
 import com.sfc.sf2.battle.Enemy;
 import com.sfc.sf2.battle.mapterrain.gui.BattleMapTerrainLayoutPanel;
-import com.sfc.sf2.battle.mapterrain.gui.resources.BattleTerrainIcons;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
@@ -25,6 +24,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         AiPoint,
     }
     
+    public static Color REGION_TRAINGLE_1 = new Color(100, 100, 255, 75);
+    public static Color REGION_TRAINGLE_2 = new Color(255, 100, 255, 75);
+    
     private Battle battle;
     
     private BattlePaintMode paintMode = BattlePaintMode.None;
@@ -61,11 +66,12 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     private boolean drawAiPoints = false;
     private Image alertImage;
     
+    private ActionListener spritesetEditedListener;
     private List<int[]> actions = new ArrayList<>();
 
     public BattleLayoutPanel() {
         super();
-        mouseInput.setMouseMotionListerned(this::onMouseMoved);
+        mouseInput.setMouseMotionListener(this::onMouseMoved);
     }
     
     @Override
@@ -187,24 +193,46 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         g2.setStroke(new BasicStroke(3));
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
-            g2.setColor(Color.WHITE);
-            drawRegionBounds(g2, battleX, battleY, regions[i]);
+            drawAIRegion(g2, battleX, battleY, regions[i], false, Color.WHITE);
         }
     }
     
+    private void drawAIRegion(Graphics2D g2, int battleX, int battleY, AIRegion region, boolean fillArea, Color borderColor) {
+        Point[] points = region.getPoints();
+        if (fillArea) {
+            switch (region.getType()) {
+                case 3: //3-points
+                    g2.setColor(REGION_TRAINGLE_1);
+                    drawRegionArea(g2, battleX, battleY, points[0], points[1], points[2]);
+                break;
+                case 4: //4-points
+                    g2.setColor(REGION_TRAINGLE_1);
+                    drawRegionArea(g2, battleX, battleY, points[0], points[1], points[3]);
+                    g2.setColor(REGION_TRAINGLE_2);
+                    drawRegionArea(g2, battleX, battleY, points[1], points[2], points[3]);
+                break;
+            }
+        }
+        g2.setColor(borderColor);
+        drawRegionBounds(g2, battleX, battleY, region);
+    }
+    
+    private void drawRegionArea(Graphics2D g2, int battleX, int battleY, Point p1, Point p2, Point p3) {
+        Polygon p = new Polygon();
+        p.addPoint((battleX+p1.x)*PIXEL_WIDTH+12, (battleY+p1.y)*PIXEL_HEIGHT+12);
+        p.addPoint((battleX+p2.x)*PIXEL_WIDTH+12, (battleY+p2.y)*PIXEL_HEIGHT+12);
+        p.addPoint((battleX+p3.x)*PIXEL_WIDTH+12, (battleY+p3.y)*PIXEL_HEIGHT+12);
+        g2.fillPolygon(p);
+    }
+    
     private void drawRegionBounds(Graphics2D g2, int battleX, int battleY, AIRegion region) {
-        int x1 = battleX+region.getX1();
-        int y1 = battleY+region.getY1();
-        int x2 = battleX+region.getX2();
-        int y2 = battleY+region.getY2();
-        int x3 = battleX+region.getX3();
-        int y3 = battleY+region.getY3();
-        int x4 = battleX+region.getX4();
-        int y4 = battleY+region.getY4();
-        g2.drawLine(x1*PIXEL_WIDTH+12, y1*PIXEL_HEIGHT+12, x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12);
-        g2.drawLine(x2*PIXEL_WIDTH+12, y2*PIXEL_HEIGHT+12, x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12);
-        g2.drawLine(x3*PIXEL_WIDTH+12, y3*PIXEL_HEIGHT+12, x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12);
-        g2.drawLine(x4*PIXEL_WIDTH+12, y4*PIXEL_HEIGHT+12, x1*PIXEL_WIDTH+12, y1*PIXEL_HEIGHT+12);
+        Point[] points = region.getPoints();
+        int pointsCount = region.getType();
+        for (int i = 0; i < pointsCount; i++) {
+            Point s = points[i];
+            Point e = points[(i+1)%pointsCount];
+            g2.drawLine((s.x+battleX)*PIXEL_WIDTH+12, (s.y+battleY)*PIXEL_HEIGHT+12, (e.x+battleX)*PIXEL_WIDTH+12, (e.y+battleY)*PIXEL_HEIGHT+12);
+        }
     }
 
     private void drawAIPoints(Graphics2D g2, int battleX, int battleY) {
@@ -250,18 +278,15 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                 }
                 int triggerRegion = enemy.getTriggerRegion2();
                 if (triggerRegion >=0 && triggerRegion < spriteset.getAiRegions().length) {
-                    g2.setColor(Color.RED);
-                    drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion]);
+                    drawAIRegion(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion], false, Color.RED);
                 }
                 triggerRegion = enemy.getTriggerRegion1();
                 if (triggerRegion >=0 && triggerRegion < spriteset.getAiRegions().length) {
-                    g2.setColor(Color.GREEN);
-                    drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion]);
+                    drawAIRegion(g2, battleX, battleY, spriteset.getAiRegions()[triggerRegion], false, Color.GREEN);
                 }
                 break;
             case AiRegion:
-                g2.setColor(Color.YELLOW);
-                drawRegionBounds(g2, battleX, battleY, spriteset.getAiRegions()[selectedSpritesetEntity]);
+                drawAIRegion(g2, battleX, battleY, spriteset.getAiRegions()[selectedSpritesetEntity], true, Color.YELLOW);
                 break;
             case AiPoint:
                 g2.setColor(Color.YELLOW);
@@ -282,10 +307,10 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         }
         AIRegion[] regions = battle.getSpriteset().getAiRegions();
         for (int i=0; i < regions.length; i++) {
-            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX1(), regions[i].getY1());
-            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX2(), regions[i].getY2());
-            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX3(), regions[i].getY3());
-            drawAlertIfOutOfBounds(g2, battleX, battleY, regions[i].getX4(), regions[i].getY4());
+            Point[] points = regions[i].getPoints();
+            for (int p = 0; p < points.length; p++) {
+                drawAlertIfOutOfBounds(g2, battleX, battleY, points[p].x, points[p].y);   
+            }
         }
         AIPoint[] points = battle.getSpriteset().getAiPoints();
         for (int i = 0; i < points.length; i++) {
@@ -301,8 +326,8 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     
     private Image getAlertImage() {
         if (alertImage == null) {
-            ClassLoader loader = BattleTerrainIcons.class.getClassLoader();
-            alertImage = new ImageIcon(loader.getResource("battle/icons/alert.png")).getImage();
+            ClassLoader loader = BattleLayoutPanel.class.getClassLoader();
+            alertImage = new ImageIcon(loader.getResource("battle/icons/Alert.png")).getImage();
         }
         return alertImage;
     }
@@ -314,18 +339,15 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         int battleY = battle.getMapCoords().getY();
         AIRegion region = battle.getSpriteset().getAiRegions()[selectedSpritesetEntity];
         graphics.setColor(Color.BLUE);
-        int nodeX = -1;
-        int nodeY = -1;
-        switch (closestRegionPoint) {
-            case 0: nodeX = region.getX1(); nodeY = region.getY1(); break;
-            case 1: nodeX = region.getX2(); nodeY = region.getY2(); break;
-            case 2: nodeX = region.getX3(); nodeY = region.getY3(); break;
-            case 3: nodeX = region.getX4(); nodeY = region.getY4(); break;
-        }
+        Point point = region.getPoint(closestRegionPoint);
         int scale = getDisplayScale();
-        nodeX = (battleX+nodeX)*PIXEL_WIDTH+16;
-        nodeY = (battleY+nodeY)*PIXEL_HEIGHT+16;
+        int nodeX = (battleX+point.x)*PIXEL_WIDTH+16;
+        int nodeY = (battleY+point.y)*PIXEL_HEIGHT+16;
         graphics.fillArc(nodeX*scale, nodeY*scale, 8*scale, 8*scale, 0, 360);
+    }
+
+    public void setSpritesetEditedListener(ActionListener spritesetEditedListener) {
+        this.spritesetEditedListener = spritesetEditedListener;
     }
 
     public Battle getBattle() {
@@ -459,23 +481,29 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                         ally.setX(x);
                         ally.setY(y);
                         redraw();
+                        if (spritesetEditedListener != null) {
+                            spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "Ally"));
+                        }
                         break;
                     case Enemy:
                         Enemy enemy = battle.getSpriteset().getEnemies()[selectedSpritesetEntity];
                         enemy.setX(x);
                         enemy.setY(y);
                         redraw();
+                        if (spritesetEditedListener != null) {
+                            spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "Enemy"));
+                        }
                         break;
                     case AiRegion:
                         AIRegion region = battle.getSpriteset().getAiRegions()[selectedSpritesetEntity];
                         if (evt.dragging()) {
-                            switch (closestRegionPoint) {
-                                case 0: region.setX1(x); region.setY1(y); break;
-                                case 1: region.setX2(x); region.setY2(y); break;
-                                case 2: region.setX3(x); region.setY3(y); break;
-                                case 3: region.setX4(x); region.setY4(y); break;
-                            }
+                            Point point = region.getPoint(closestRegionPoint);
+                            point.x = x;
+                            point.y = y;
                             redraw();
+                            if (spritesetEditedListener != null) {
+                                spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "AiRegion"));
+                            }
                         } else {
                             closestRegionPoint = findClosestRegionPoint(region, x, y);
                             this.repaint();
@@ -486,6 +514,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
                         point.setX(x);
                         point.setY(y);
                         redraw();
+                        if (spritesetEditedListener != null) {
+                            spritesetEditedListener.actionPerformed(new ActionEvent(this, selectedSpritesetEntity, "AiPoint"));
+                        }
                         break;
                 }
         }
@@ -495,8 +526,9 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         int closest = -1;
         double distance = Integer.MAX_VALUE;
         Point mouse = new Point(x, y);
-        Point[] points = new Point[] { new Point(region.getX1(), region.getY1()), new Point(region.getX2(), region.getY2()), new Point(region.getX3(), region.getY3()), new Point(region.getX4(), region.getY4()) };
-        for (int i = 0; i < points.length; i++) {
+        Point[] points = region.getPoints();
+        int pointCount = region.getType();
+        for (int i = 0; i < pointCount; i++) {
             double dist = mouse.distance(points[i]);
             if (dist < distance) {
                 closest = i;

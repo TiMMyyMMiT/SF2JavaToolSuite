@@ -124,6 +124,6 @@ public class AllyDialogPropertiesAsmProcessor extends AbstractAsmProcessor<Dialo
             }
         }
         //Close the special check for expanded force
-        writer.write("\n\t\t\tendif\n");
+        writer.write("\t\t\tendif\n");
     }
 }

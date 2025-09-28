@@ -97,20 +97,18 @@ public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogPro
         writer.write(";\t\t\t\tportrait  [PORTRAIT_]enum (or index)\n");
         writer.write(";\t\t\t\tspeechSfx [SFX_]enum (or index)\n\n");
         
-        boolean elisFix = false;
         for (int i=0; i < item.length; i++) {
             writer.append(String.format("\t\t\t\tmapSprite %s\n", item[i].getSpriteName()));
             writer.append(String.format("\t\t\t\tportrait %s\n", item[i].getPortraitName()));
             if (item[i].getSpriteName().equals("POSE6") && item[i].getPortraitName().equals("ELIS")) {
-                elisFix = true;
+                //Elis fix
                 writer.append("\t\t\tif (FIX_ELIS_SPEECH_SFX=1)\n");
-            }
-            writer.append(String.format("\t\t\t\tspeechSfx %s\n\n", item[i].getSfxName()));
-            if (elisFix) {
+                writer.append(String.format("\t\t\t\tspeechSfx %s\n", item[i].getSfxName()));
                 writer.append("\t\t\telse\n");
                 writer.append("\t\t\t\tspeechSfx DIALOG_BLEEP_6\n");
                 writer.append("\t\t\tendif\n");
-                elisFix = false;
+            } else {
+                writer.append(String.format("\t\t\t\tspeechSfx %s\n\n", item[i].getSfxName()));
             }
         }
         writer.append("\t\t\t\ttableEnd\n");

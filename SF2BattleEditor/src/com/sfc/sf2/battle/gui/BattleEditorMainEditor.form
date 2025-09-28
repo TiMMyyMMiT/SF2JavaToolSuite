@@ -126,7 +126,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jPanel3" pref="332" max="32767" attributes="0"/>
-                                      <Component id="jPanel5" alignment="1" pref="332" max="32767" attributes="0"/>
+                                      <Component id="jPanel5" alignment="0" pref="332" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
@@ -136,9 +136,9 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jPanel3" min="-2" pref="499" max="-2" attributes="0"/>
-                                  <EmptySpace pref="33" max="32767" attributes="0"/>
-                                  <Component id="jPanel5" min="-2" pref="194" max="-2" attributes="0"/>
+                                  <Component id="jPanel3" pref="605" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="jPanel5" min="-2" pref="165" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -201,8 +201,8 @@
                                       <Group type="102" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="fileButton1" pref="0" max="32767" attributes="0"/>
-                                              <Component id="fileButton2" pref="0" max="32767" attributes="0"/>
+                                              <Component id="fileButton1" pref="250" max="32767" attributes="0"/>
+                                              <Component id="fileButton2" pref="250" max="32767" attributes="0"/>
                                               <Component id="fileButton3" alignment="0" pref="0" max="32767" attributes="0"/>
                                               <Component id="fileButton4" alignment="0" pref="0" max="32767" attributes="0"/>
                                               <Component id="fileButton5" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -458,14 +458,14 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTabbedPane4" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane4" alignment="1" pref="284" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTabbedPane4" pref="165" max="32767" attributes="0"/>
+                                      <Component id="jTabbedPane4" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -475,84 +475,11 @@
 
                               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                               <SubComponents>
-                                <Container class="javax.swing.JPanel" name="jPanel13">
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="Battle">
-                                        <Property name="tabTitle" type="java.lang.String" value="Battle"/>
-                                      </JTabbedPaneConstraints>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel1" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="fileButton11" alignment="0" pref="0" max="32767" attributes="0"/>
-                                                  <Component id="fileButton12" alignment="0" pref="0" max="32767" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="fileButton11" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="fileButton12" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jButton2" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel1">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Select new target files.&lt;/html&gt;"/>
-                                        <Property name="verticalAlignment" type="int" value="1"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton2">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Export"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton11">
-                                      <Properties>
-                                        <Property name="filePath" type="java.lang.String" value=".\u005centries\u005cbattle01\u005cterrain.bin" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Battle terrain :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton12">
-                                      <Properties>
-                                        <Property name="filePath" type="java.lang.String" value=".\u005cspritesets\u005cspriteset01.asm" containsInvalidXMLChars="true"/>
-                                        <Property name="labelText" type="java.lang.String" value="Battle spriteset :"/>
-                                      </Properties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
                                 <Container class="javax.swing.JPanel" name="jPanel18">
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="Terrain">
-                                        <Property name="tabTitle" type="java.lang.String" value="Terrain"/>
+                                      <JTabbedPaneConstraints tabName="Map Coords">
+                                        <Property name="tabTitle" type="java.lang.String" value="Map Coords"/>
                                       </JTabbedPaneConstraints>
                                     </Constraint>
                                   </Constraints>
@@ -563,7 +490,7 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="fileButton10" alignment="0" pref="310" max="32767" attributes="0"/>
+                                                  <Component id="fileButton10" alignment="0" pref="272" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="jLabel21" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
@@ -612,6 +539,79 @@
                                     </Component>
                                   </SubComponents>
                                 </Container>
+                                <Container class="javax.swing.JPanel" name="jPanel13">
+                                  <Constraints>
+                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                      <JTabbedPaneConstraints tabName="Battle &amp; Terrain">
+                                        <Property name="tabTitle" type="java.lang.String" value="Battle &amp; Terrain"/>
+                                      </JTabbedPaneConstraints>
+                                    </Constraint>
+                                  </Constraints>
+
+                                  <Layout>
+                                    <DimensionLayout dim="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="jLabel1" max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <Component id="fileButton11" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  <Component id="fileButton12" alignment="0" pref="0" max="32767" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                    </DimensionLayout>
+                                    <DimensionLayout dim="1">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton11" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="fileButton12" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="2" attributes="0">
+                                                  <Component id="jButton2" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                    </DimensionLayout>
+                                  </Layout>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JLabel" name="jLabel1">
+                                      <Properties>
+                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Select new target files.&lt;/html&gt;"/>
+                                        <Property name="verticalAlignment" type="int" value="1"/>
+                                      </Properties>
+                                    </Component>
+                                    <Component class="javax.swing.JButton" name="jButton2">
+                                      <Properties>
+                                        <Property name="text" type="java.lang.String" value="Export"/>
+                                      </Properties>
+                                      <Events>
+                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                                      </Events>
+                                    </Component>
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton11">
+                                      <Properties>
+                                        <Property name="filePath" type="java.lang.String" value=".\u005centries\u005cbattle01\u005cterrain.bin" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Battle terrain :"/>
+                                      </Properties>
+                                    </Component>
+                                    <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton12">
+                                      <Properties>
+                                        <Property name="filePath" type="java.lang.String" value=".\u005cspritesets\u005cspriteset01.asm" containsInvalidXMLChars="true"/>
+                                        <Property name="labelText" type="java.lang.String" value="Battle spriteset :"/>
+                                      </Properties>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
                                 <Container class="javax.swing.JPanel" name="jPanel19">
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
@@ -627,7 +627,7 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="fileButton17" alignment="0" pref="310" max="32767" attributes="0"/>
+                                                  <Component id="fileButton17" alignment="0" pref="272" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="jLabel23" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
@@ -1692,7 +1692,7 @@
                                                     </Component>
                                                     <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton6">
                                                       <Properties>
-                                                        <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Enemy info:&lt;br&gt;&lt;b&gt;Enemy&lt;/b&gt;: The Id of the enemy. Determines which enemy.&lt;br&gt;&lt;b&gt;X/Y&lt;/b&gt;: The position of the enemy, relative to the top-left corner of the battle area.&lt;br&gt;&lt;b&gt;AI&lt;/b&gt;: Which AI logic the enemy will use.&lt;br&gt;&lt;b&gt;Spawn&lt;/b&gt;: AI Spawn rules:&lt;br&gt;    &lt;b&gt;Starting&lt;/b&gt;: The enemy is visible from the start of the battle.&lt;br&gt;    &lt;b&gt;Respawn&lt;/b&gt;: Enemy will respawn after being kiled, based on triggers.&lt;br&gt;    &lt;b&gt;Hidden&lt;/b&gt;: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.&lt;br&gt;&lt;b&gt;Item&lt;/b&gt;: The item the enemy holds and item flags. Item flags:&lt;br&gt;    &lt;b&gt;EQUIPPED&lt;/b&gt;: Whether the enemy has this item equipped. May not do anything in the base game.&lt;br&gt;    &lt;b&gt;USABLE_BY_AI&lt;/b&gt;: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.&lt;br&gt;    &lt;b&gt;UNUSED_ITEM_DROP&lt;/b&gt;: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.&lt;br&gt;    &lt;b&gt;BROKEN&lt;/b&gt;: Flags the item as broken (cracked) and needs to be repaired.&lt;br&gt;&lt;b&gt;Move Order&lt;/b&gt;: Directs target to stay in place or move towards specific targets.&lt;br&gt;&lt;b&gt;Target (Move order)&lt;/b&gt;: The target of the move order. &lt;br&gt;&lt;b&gt;Trigger region 1/2&lt;/b&gt;: Move orders are activated when region triggers.&lt;br&gt;&lt;b&gt;Backup Move Order&lt;/b&gt;: Backup move order (TODO What does this do specifically).&lt;br&gt;&lt;b&gt;Target (backup)&lt;/b&gt;: Target for the backup move order.&lt;br&gt;&lt;b&gt;Unknown&lt;/b&gt;: It is unknown what this does. Valid values seem to be 0 or 6.&lt;/html&gt;"/>
+                                                        <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Enemy info:&lt;br&gt;&lt;b&gt;Enemy&lt;/b&gt;: The Id of the enemy. Determines which enemy.&lt;br&gt;&lt;b&gt;X/Y&lt;/b&gt;: The position of the enemy, relative to the top-left corner of the battle area.&lt;br&gt;&lt;b&gt;AI&lt;/b&gt;: Which AI logic the enemy will use.&lt;br&gt;&lt;b&gt;Spawn&lt;/b&gt;: AI Spawn rules:&lt;br&gt;    &lt;b&gt;Starting&lt;/b&gt;: The enemy is visible from the start of the battle.&lt;br&gt;    &lt;b&gt;Respawn&lt;/b&gt;: Enemy will respawn after being kiled, based on triggers.&lt;br&gt;    &lt;b&gt;Hidden&lt;/b&gt;: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.&lt;br&gt;&lt;b&gt;Item&lt;/b&gt;: The item the enemy holds and item flags. Item flags:&lt;br&gt;-    &lt;b&gt;EQUIPPED&lt;/b&gt;: Whether the enemy has this item equipped. May not do anything in the base game.&lt;br&gt;-    &lt;b&gt;USABLE_BY_AI&lt;/b&gt;: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.&lt;br&gt;-    &lt;b&gt;UNUSED_ITEM_DROP&lt;/b&gt;: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.&lt;br&gt;-    &lt;b&gt;BROKEN&lt;/b&gt;: Flags the item as broken (cracked) and needs to be repaired.&lt;br&gt;&lt;b&gt;Move Order&lt;/b&gt;: Directs target to stay in place or move towards specific targets.&lt;br&gt;&lt;b&gt;Target (Move order)&lt;/b&gt;: The target of the move order. &lt;br&gt;&lt;b&gt;Trigger region 1/2&lt;/b&gt;: Move orders are activated when region triggers.&lt;br&gt;&lt;b&gt;Backup Move Order&lt;/b&gt;: Backup move order (TODO What does this do specifically).&lt;br&gt;&lt;b&gt;Target (backup)&lt;/b&gt;: Target for the backup move order.&lt;br&gt;&lt;b&gt;Unknown&lt;/b&gt;: It is unknown what this does. Valid values seem to be 0 or 6.&lt;/html&gt;"/>
                                                         <Property name="text" type="java.lang.String" value=""/>
                                                       </Properties>
                                                     </Component>
@@ -1770,7 +1770,7 @@
                                                 </Component>
                                                 <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton5">
                                                   <Properties>
-                                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;AI Regions indicate a 4-point area that can influce specific enemy AI.&lt;br&gt;Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.&lt;/html&gt;"/>
+                                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;AI Regions indicate a an area that can influce specific enemy AI.&lt;br&gt;Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.&lt;br&gt;&lt;br&gt;&lt;b&gt;Points:&lt;/b&gt;Regions are made up of a number of points: P1, P2, P3, P4. Or, as you will see in the data [x1,y1], [x2,y2], etc.&lt;br&gt;&lt;br&gt;&lt;b&gt;Type 3:&lt;/b&gt; Type 3 = a 3-point region (a triangle) made up of points [P1, P2, P3].&lt;br&gt;&lt;b&gt;Type 4:&lt;/b&gt; Type 4 = a 4-point region; or more accurately, 2 triangles made up of points [P1, P2, P4] &amp; [P2, P3, P4].&lt;/html&gt;"/>
                                                     <Property name="text" type="java.lang.String" value=""/>
                                                   </Properties>
                                                 </Component>

@@ -99,6 +99,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         battleLayoutPanel.setDrawSprites(jCheckBox4.isSelected());
         battleLayoutPanel.setDrawAiRegions(drawAiRegions);
         battleLayoutPanel.setDrawAiPoints(drawAiPoints);
+        battleLayoutPanel.setSpritesetEditedListener(this::onLayoutSpritesetChanged);
         
         jTabbedPane2StateChanged(null);
         jTabbedPane3StateChanged(null);
@@ -193,15 +194,15 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jLabel2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jTabbedPane4 = new javax.swing.JTabbedPane();
+        jPanel18 = new javax.swing.JPanel();
+        fileButton10 = new com.sfc.sf2.core.gui.controls.FileButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         fileButton11 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton12 = new com.sfc.sf2.core.gui.controls.FileButton();
-        jPanel18 = new javax.swing.JPanel();
-        fileButton10 = new com.sfc.sf2.core.gui.controls.FileButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         fileButton17 = new com.sfc.sf2.core.gui.controls.FileButton();
@@ -344,8 +345,8 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(accordionPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(accordionPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(fileButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                     .addComponent(fileButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -500,6 +501,47 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
         jPanel5.setPreferredSize(new java.awt.Dimension(32, 135));
 
+        fileButton10.setFilePath(".\\global\\battlemapcoords.asm");
+        fileButton10.setLabelText("Battle map coords :");
+
+        jButton3.setText("Export");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setText("<html>Select new target files.</html>");
+        jLabel21.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(fileButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
+                .addContainerGap())
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(fileButton10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jTabbedPane4.addTab("Map Coords", jPanel18);
+
         jLabel1.setText("<html>Select new target files.</html>");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
@@ -542,51 +584,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jButton2)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane4.addTab("Battle", jPanel13);
-
-        fileButton10.setFilePath(".\\global\\battlemapcoords.asm");
-        fileButton10.setLabelText("Battle map coords :");
-
-        jButton3.setText("Export");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jLabel21.setText("<html>Select new target files.</html>");
-        jLabel21.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
-        jPanel18.setLayout(jPanel18Layout);
-        jPanel18Layout.setHorizontalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel18Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(fileButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
-                .addContainerGap())
-        );
-        jPanel18Layout.setVerticalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel18Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(fileButton10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jButton3)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        jTabbedPane4.addTab("Terrain", jPanel18);
+        jTabbedPane4.addTab("Battle & Terrain", jPanel13);
 
         jLabel23.setText("<html>Select new target files.</html>");
         jLabel23.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -608,7 +609,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(fileButton17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                    .addComponent(fileButton17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                     .addGroup(jPanel19Layout.createSequentialGroup()
                         .addComponent(jLabel23)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -633,13 +634,13 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTabbedPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -650,16 +651,16 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -675,7 +676,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 738, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1123,7 +1124,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: AI Spawn rules:<br>    <b>Starting</b>: The enemy is visible from the start of the battle.<br>    <b>Respawn</b>: Enemy will respawn after being kiled, based on triggers.<br>    <b>Hidden</b>: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.<br><b>Item</b>: The item the enemy holds and item flags. Item flags:<br>    <b>EQUIPPED</b>: Whether the enemy has this item equipped. May not do anything in the base game.<br>    <b>USABLE_BY_AI</b>: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.<br>    <b>UNUSED_ITEM_DROP</b>: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.<br>    <b>BROKEN</b>: Flags the item as broken (cracked) and needs to be repaired.<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
+        infoButton6.setMessageText("<html>Enemy info:<br><b>Enemy</b>: The Id of the enemy. Determines which enemy.<br><b>X/Y</b>: The position of the enemy, relative to the top-left corner of the battle area.<br><b>AI</b>: Which AI logic the enemy will use.<br><b>Spawn</b>: AI Spawn rules:<br>    <b>Starting</b>: The enemy is visible from the start of the battle.<br>    <b>Respawn</b>: Enemy will respawn after being kiled, based on triggers.<br>    <b>Hidden</b>: Enemy does not spawn into the battle until a trigger is activated. If no trigger is activated then enemy will never spawn.<br><b>Item</b>: The item the enemy holds and item flags. Item flags:<br>-    <b>EQUIPPED</b>: Whether the enemy has this item equipped. May not do anything in the base game.<br>-    <b>USABLE_BY_AI</b>: Flags that the item can be used by the AI. The base game is hard-coded so that this only works with Healing Water.<br>-    <b>UNUSED_ITEM_DROP</b>: Flags the item to be dropped when enemy dies if it was not consumed (used) by the enemy.<br>-    <b>BROKEN</b>: Flags the item as broken (cracked) and needs to be repaired.<br><b>Move Order</b>: Directs target to stay in place or move towards specific targets.<br><b>Target (Move order)</b>: The target of the move order. <br><b>Trigger region 1/2</b>: Move orders are activated when region triggers.<br><b>Backup Move Order</b>: Backup move order (TODO What does this do specifically).<br><b>Target (backup)</b>: Target for the backup move order.<br><b>Unknown</b>: It is unknown what this does. Valid values seem to be 0 or 6.</html>");
         infoButton6.setText("");
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
@@ -1255,7 +1256,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         tableAIRegions.setSingleClickText(true);
         tableAIRegions.setSpinnerNumberEditor(true);
 
-        infoButton5.setMessageText("<html>AI Regions indicate a 4-point area that can influce specific enemy AI.<br>Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.</html>");
+        infoButton5.setMessageText("<html>AI Regions indicate a an area that can influce specific enemy AI.<br>Edit the positions in the table directly - or select a row then click on the map to move the area around: Click near a point (corner) of the region to drag that point to the desired position.<br><br><b>Points:</b>Regions are made up of a number of points: P1, P2, P3, P4. Or, as you will see in the data [x1,y1], [x2,y2], etc.<br><br><b>Type 3:</b> Type 3 = a 3-point region (a triangle) made up of points [P1, P2, P3].<br><b>Type 4:</b> Type 4 = a 4-point region; or more accurately, 2 triangles made up of points [P1, P2, P4] & [P2, P3, P4].</html>");
         infoButton5.setText("");
 
         jLabel20.setText("Editing AI Regions :");
@@ -1590,7 +1591,7 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1516, 908));
@@ -1686,36 +1687,43 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jComboBox_Items.setEnabled(enabled);
         multiComboBoxItemFlags.setEnabled(enabled);
         jSpinner_Unknown.setEnabled(enabled);
-              
-        if (selectedRow != -1) {
-            Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
-            if (enemy != null) {
-                jComboBox_Name.setSelectedItem(enemy.getEnemyData().getName());
-                jSpinner_X.setValue(enemy.getX());
-                jSpinner_Y.setValue(enemy.getY());
-                jComboBox_AI.setSelectedItem(enemy.getAi());
-                jComboBox_Spawn.setSelectedItem(enemy.getSpawnParams());
-                jSpinner_Trigger1.setValue(enemy.getTriggerRegion1());
-                jSpinner_Trigger2.setValue(enemy.getTriggerRegion2());
-                
-                jComboBox_Order1.setSelectedItem(enemy.getMoveOrder());
-                jSpinner_OrderTarget1.setValue(enemy.getMoveOrderTarget());
-                jComboBox_Order2.setSelectedItem(enemy.getBackupMoveOrder());
-                jSpinner_OrderTarget2.setValue(enemy.getBackupMoveOrderTarget());
-                
-                jComboBox_Items.setSelectedItem(enemy.getItem());
-                multiComboBoxItemFlags.clearSelection();
-                String flags = enemy.getItemFlags();
-                if (flags != null && flags.length() > 0 && flags.contains("|")) {
-                    String[] split = flags.split("\\|");
-                    for (int i = 0; i < split.length; i++) {
-                        multiComboBoxItemFlags.setSelected(split[i], true);
-                    }
-                }
-                multiComboBoxItemFlags.setEnabled(!enemy.getItem().equals("NOTHING"));
-                jSpinner_Unknown.setValue(enemy.getUnknown());
+
+        if (selectedRow == -1) return;
+        Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
+        if (enemy == null) return;
+        
+        jComboBox_Name.setSelectedItem(enemy.getEnemyData().getName());
+        jSpinner_X.setValue(enemy.getX());
+        jSpinner_Y.setValue(enemy.getY());
+        jComboBox_AI.setSelectedItem(enemy.getAi());
+        jComboBox_Spawn.setSelectedItem(enemy.getSpawnParams());
+        jSpinner_Trigger1.setValue(enemy.getTriggerRegion1());
+        jSpinner_Trigger2.setValue(enemy.getTriggerRegion2());
+
+        jComboBox_Order1.setSelectedItem(enemy.getMoveOrder());
+        jSpinner_OrderTarget1.setValue(enemy.getMoveOrderTarget());
+        jComboBox_Order2.setSelectedItem(enemy.getBackupMoveOrder());
+        jSpinner_OrderTarget2.setValue(enemy.getBackupMoveOrderTarget());
+
+        jComboBox_Items.setSelectedItem(enemy.getItem());
+        multiComboBoxItemFlags.clearSelection();
+        String flags = enemy.getItemFlags();
+        if (flags != null && flags.length() > 0 && flags.contains("|")) {
+            String[] split = flags.split("\\|");
+            for (int i = 0; i < split.length; i++) {
+                multiComboBoxItemFlags.setSelected(split[i], true);
             }
         }
+        multiComboBoxItemFlags.setEnabled(!enemy.getItem().equals("NOTHING"));
+        jSpinner_Unknown.setValue(enemy.getUnknown());
+    }
+    
+    private void updateEnemyPosition(int selectedRow) {
+        if (selectedRow == -1) return;
+        Enemy enemy = (selectedRow == -1) ? null : battleManager.getBattle().getSpriteset().getEnemies()[selectedRow];
+        if (enemy == null) return;
+        jSpinner_X.setValue(enemy.getX());
+        jSpinner_Y.setValue(enemy.getY());
     }
     
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
@@ -2027,6 +2035,27 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         if (row != battleLayoutPanel.getSelectedAIPoint()) {
             battleLayoutPanel.setDrawAiPoints(true);
             battleLayoutPanel.setSelectedAIPoint(row);
+        }
+    }
+    
+    private void onLayoutSpritesetChanged(ActionEvent e) {
+        int row = e.getID();
+        if (row != -1) {
+            switch (e.getActionCommand()) {
+                case "Ally":
+                    allyPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "Enemy":
+                    enemyPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    updateEnemyPosition(row);
+                    break;
+                case "AiRegion":
+                    aIRegionPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "AiPoint":
+                    aIPointPropertiesTableModel.fireTableRowsUpdated(row, row);
+                    break;
+            }
         }
     }
     
