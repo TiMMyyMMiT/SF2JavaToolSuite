@@ -298,12 +298,16 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPanel5" pref="600" max="32767" attributes="0"/>
-                              <Component id="jPanel3" alignment="1" pref="600" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jPanel6" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jPanel6" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Component id="jPanel3" alignment="0" pref="600" max="32767" attributes="0"/>
+                                      <Component id="jPanel5" alignment="0" pref="600" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -340,7 +344,7 @@
                                   <Group type="102" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jTabbedPane1" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="jTabbedPane1" alignment="1" pref="578" max="32767" attributes="0"/>
                                           <Component id="fileButton2" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -657,14 +661,14 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTabbedPane2" pref="0" max="32767" attributes="0"/>
+                                      <Component id="jTabbedPane2" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTabbedPane2" alignment="0" pref="163" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane2" alignment="0" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                           </Layout>
@@ -917,7 +921,7 @@
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
                                           <Properties>
-                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;The number of sprites-per-image:&lt;br&gt;&lt;b&gt;INDIVIDUAL_FILES:&lt;/b&gt; i.e. all 6 frames (2x up, 2x left, 2x, right) of mapspriteXXX will be exported as individual files. This results in 6x images for each row, with the filename &quot;mapspriteXXX-Y-Z&quot;.&lt;br&gt;&lt;b&gt;FILE_PER_DIRECTION:&lt;/b&gt; i.e. the 3 facing directions (up, left, right) of mapspriteXXX will be exported as separate images. This results in 3 images for each row, with the filename &quot;mapsprite-XXX-Y&quot;.&lt;br&gt;&lt;b&gt;FILE_PER_SET:&lt;/b&gt; All 6 frames of mapspriteXXX will be exported as a single file. This results in1x image per row with the filename &quot;mapsprite-XXX&quot;.&lt;/html&gt;"/>
+                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;The number of sprites-per-image:&lt;br&gt;&lt;b&gt;INDIVIDUAL_FILES:&lt;/b&gt; i.e. all 6 frames (2x up, 2x left, 2x, right) of mapspriteXXX will be exported as individual files. This results in 6x images for each row, with the filename &quot;mapspriteXXX-Y-Z&quot;.&lt;br&gt;&lt;b&gt;FILE_PER_DIRECTION:&lt;/b&gt; i.e. the 3 facing directions (up, left, right) of mapspriteXXX will be exported as separate images. This results in 3 images for each row, with the filename &quot;mapsprite-XXX-Y&quot;.&lt;br&gt;&lt;b&gt;FILE_PER_CHARACTER:&lt;/b&gt; All 6 frames of mapspriteXXX will be exported as a single file. This results in1x image per row with the filename &quot;mapsprite-XXX&quot;.&lt;/html&gt;"/>
                                             <Property name="text" type="java.lang.String" value=""/>
                                           </Properties>
                                         </Component>

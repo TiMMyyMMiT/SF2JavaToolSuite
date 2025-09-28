@@ -71,9 +71,9 @@ public class MapSpriteLayoutPanel extends AbstractLayoutPanel {
                     if (drawReferenceLabels && mapsprites.isDuplicateEntry(i)) {
                         graphics.setColor(LABEL_BG);
                         graphics.drawRect(((i%3)*2)*PIXEL_WIDTH, (i/3)*PIXEL_HEIGHT, 2*PIXEL_WIDTH-1, PIXEL_HEIGHT-1);
-                        graphics.fillRect(((i%3)*2+1)*PIXEL_WIDTH, (i/3)*PIXEL_HEIGHT, PIXEL_WIDTH, 9);
+                        graphics.fillRect(((i%3)*2+1)*PIXEL_WIDTH, (i/3)*PIXEL_HEIGHT+14, PIXEL_WIDTH, 9);
                         graphics.setColor(Color.BLACK);
-                        graphics.drawString(sprites[index].toString(), ((i%3)*2+1)*PIXEL_WIDTH+1, (i/3)*PIXEL_HEIGHT+8);
+                        graphics.drawString(sprites[index].toString(), ((i%3)*2+1)*PIXEL_WIDTH+1, (i/3)*PIXEL_HEIGHT+22);
                     }
                 }
             }
