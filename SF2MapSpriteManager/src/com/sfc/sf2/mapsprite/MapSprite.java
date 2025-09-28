@@ -20,45 +20,45 @@ import java.awt.image.BufferedImage;
 public class MapSprite {
     
     private int index;
-    private Block[] frames = new Block[6];    //2x up, left, down frames
+    private int facingIndex;
+    private Block[] frames = new Block[2];
     
     private BufferedImage indexedColorImage = null;
     
-    public MapSprite(int index) {
+    public MapSprite(int index, int facingIndex) {
         this.index = index;
+        this.facingIndex = facingIndex;
     }
     
-    public MapSprite(int index, Block[] frames) {
+    public MapSprite(int index, int facingIndex, Block firstFrame, Block secondFrame) {
         this.index = index;
-        this.frames = frames;
+        this.facingIndex = facingIndex;
+        this.frames[0] = firstFrame;
+        this.frames[1] = secondFrame;
     }
     
     public int getIndex() {
         return index;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public int getFacingIndex() {
+        return facingIndex;
     }
     
     public Block[] getFrames() {
         return frames;
     }
     
-    public Block getFrame(int[] indices) {
-        return getFrame(indices[1], indices[2]);
+    public Block getFrame(boolean first) {
+        return first ? frames[0] : frames[1];
     }
     
-    public Block getFrame(int facingIndex, int frameIndex) {
-        return frames[facingIndex*2 + frameIndex];
-    }
-    
-    public void addFrame(Block tileset, int[] indices) {
-        addFrame(tileset, indices[1], indices[2]);
-    }
-    
-    public void addFrame(Block tileset, int facingIndex, int frameIndex) {
-        frames[facingIndex*2 + frameIndex] = tileset;
+    public void setFrame(Block tileset, boolean first) {
+        if (first) {
+            frames[0] = tileset;
+        } else {
+            frames[1] = tileset;
+        }
     }
     
     public Palette getPalette() {
@@ -72,7 +72,7 @@ public class MapSprite {
     }
     
     public int getSpritesWidth() {
-        return 6;
+        return 2;
     }
     
     public int getSpritesHeight() {
@@ -118,6 +118,11 @@ public class MapSprite {
                 }
             }
         }
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%03d-%d", index, facingIndex);
     }
     
     public boolean isEmpty() {

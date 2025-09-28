@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.mapsprite;
 
-import com.sfc.sf2.core.io.asm.EntriesAsmData;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -18,10 +17,6 @@ public class MapSpriteEntries {
     private final MapSprite mapSprites[];
     private final int[] entries;
     
-    public MapSpriteEntries(EntriesAsmData mapspriteEntries) {
-        this(mapspriteEntries.entriesCount()/3);
-    }
-
     public MapSpriteEntries(int totalEntries) {
         this.mapSprites = new MapSprite[totalEntries];
         this.entries = new int[totalEntries];
@@ -64,7 +59,7 @@ public class MapSpriteEntries {
         for (int i = 0; i < entries.length; i++) {
             if (entries[i] == i) {  //Not a reference (therefore may duplicate sprites)
                 for (int j = i+1; j < entries.length; j++) {
-                    if (entries[j] == j && mapSprites[entries[i]].equals(mapSprites[entries[j]])) { //Is a duplicate
+                    if (entries[j] == j && (mapSprites[entries[i]] != null && mapSprites[entries[i]].equals(mapSprites[entries[j]]))) { //Is a duplicate
                         entries[j] = entries[i];
                         mapSprites[j] = null;
                         optimised.add(j);
