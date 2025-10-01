@@ -80,24 +80,28 @@ public class MapSprite {
     }
     
     public BufferedImage getIndexedColorImage() {
+        return getIndexedColorImage(1);
+    }
+    
+    public BufferedImage getIndexedColorImage(int scale) {
         if (frames == null || frames.length == 0) {
             return null;
         }
         if (indexedColorImage == null) {
             int width = getSpritesWidth();
             int height = getSpritesHeight();
-            indexedColorImage = new BufferedImage(width*3*PIXEL_WIDTH, height*3*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            indexedColorImage = new BufferedImage(width*3*PIXEL_WIDTH*scale, height*3*PIXEL_HEIGHT*scale, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = indexedColorImage.getGraphics();
             for (int f = 0; f < width; f++) {
-                int fx = (f%width)*3*PIXEL_WIDTH;
-                int fy = (f/width)*3*PIXEL_HEIGHT;
+                int fx = (f%width)*3*PIXEL_WIDTH * scale;
+                int fy = (f/width)*3*PIXEL_HEIGHT * scale;
                 Tile[] tiles = frames[f] == null ? null : frames[f].getTiles();
                 if (tiles != null) {
                     for(int j=0; j < 3; j++) {
                         for(int i=0; i < 3; i++) {
                             int spriteID = i+j*3;
                             if (tiles[spriteID] != null) {
-                                graphics.drawImage(tiles[spriteID].getIndexedColorImage(), fx + i*PIXEL_WIDTH, fy + j*PIXEL_HEIGHT, null);
+                                graphics.drawImage(tiles[spriteID].getIndexedColorImage(), fx + i*PIXEL_WIDTH*scale, fy + j*PIXEL_HEIGHT*scale, PIXEL_WIDTH*scale, PIXEL_HEIGHT*scale, null);
                             }
                         }
                     }

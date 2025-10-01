@@ -6,6 +6,7 @@
 package com.sfc.sf2.mapsprite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /**
@@ -54,14 +55,18 @@ public class MapSpriteEntries {
         return mapSprites[entries[index]];
     }
     
-    public void optimise() {
+    public MapSprite[] optimise(MapSprite[] unreferencedSprites) {
         ArrayList<Integer> optimised = new ArrayList<>();
+        ArrayList<MapSprite> unreferenced = new ArrayList<>(Arrays.asList(unreferencedSprites));
         for (int i = 0; i < entries.length; i++) {
             if (entries[i] == i) {  //Not a reference (therefore may duplicate sprites)
                 for (int j = i+1; j < entries.length; j++) {
                     if (entries[j] == j && (mapSprites[entries[i]] != null && mapSprites[entries[i]].equals(mapSprites[entries[j]]))) { //Is a duplicate
                         entries[j] = entries[i];
-                        mapSprites[j] = null;
+                        if (mapSprites[j] != null) {
+                            unreferenced.add(mapSprites[j]);
+                            mapSprites[j] = null;
+                        }
                         optimised.add(j);
                         //Also check if anything references this sprite and make it point to the new reference point
                         for (int k = j+1; k < entries.length; k++) {
@@ -85,5 +90,10 @@ public class MapSpriteEntries {
             }
             JOptionPane.showMessageDialog(null, sb.toString());
         }
+        
+        unreferenced.sort((o1, o2) -> { return (o1.getIndex()*3+o1.getFacingIndex()) - (o2.getIndex()*3+o2.getFacingIndex()); });
+        unreferencedSprites = new MapSprite[unreferenced.size()];
+        unreferencedSprites = unreferenced.toArray(unreferencedSprites);
+        return unreferencedSprites;
     }
 }
