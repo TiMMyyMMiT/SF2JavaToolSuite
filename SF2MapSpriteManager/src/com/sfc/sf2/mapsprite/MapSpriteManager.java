@@ -153,8 +153,8 @@ public class MapSpriteManager extends AbstractManager {
         EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
         Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
         File[] files = FileHelpers.findAllFilesInDirectory(itemsPath, "mapsprite", binFiles ? ".bin" : AbstractRawImageProcessor.GetFileExtensionString(format));
-        Console.logger().info(files.length + " mapsprite images found.");
-        int entriesMax = getIndicesFromFilename(files[files.length-1].toPath().getFileName())[0];
+        Console.logger().info(files.length + " mapsprite files found.");
+        int entriesMax = 1 + getIndicesFromFilename(files[files.length-1].toPath().getFileName())[0];
         mapSprites = new MapSpriteEntries(entriesMax*3);
         int frameCount = 0;
         int failedToLoad = 0;
@@ -169,7 +169,9 @@ public class MapSpriteManager extends AbstractManager {
                 } else {
                     frames = mapSpriteRawImageProcessor.importRawImage(tilesetPath, pckg);
                 }
-                frameCount+=frames.length;
+                if (frames != null) {
+                    frameCount+=frames.length;
+                }
                 int index;
                 MapSprite sprite;
                 if (indices[1] == -1) {
@@ -182,8 +184,10 @@ public class MapSpriteManager extends AbstractManager {
                             sprite = new MapSprite(indices[0], i);
                             mapSprites.addUniqueEntry(index, sprite);
                         }
-                        sprite.setFrame(frames[i*2+0], true);
-                        sprite.setFrame(frames[i*2+1], false);
+                        if (frames != null) {
+                            sprite.setFrame(frames[i*2+0], true);
+                            sprite.setFrame(frames[i*2+1], false);
+                        }
                     }
                 } else if (indices[2] == -1) {
                     //2 sprites
@@ -194,8 +198,10 @@ public class MapSpriteManager extends AbstractManager {
                         sprite = new MapSprite(indices[0], indices[1]);
                         mapSprites.addUniqueEntry(index, sprite);
                     }
-                    sprite.setFrame(frames[0], true);
-                    sprite.setFrame(frames[1], false);
+                    if (frames != null) {
+                        sprite.setFrame(frames[0], true);
+                        sprite.setFrame(frames[1], false);
+                    }
                 } else {
                     //1 sprite
                     index = indices[0]*3+indices[1];
@@ -205,14 +211,16 @@ public class MapSpriteManager extends AbstractManager {
                         sprite = new MapSprite(indices[0], indices[1]);
                         mapSprites.addUniqueEntry(index, sprite);
                     }
-                    sprite.setFrame(frames[0], indices[2] == 0);
+                    if (frames != null) {
+                        sprite.setFrame(frames[0], indices[2] == 0);
+                    }
                 }
             } catch (Exception e) {
                 failedToLoad++;
                 Console.logger().warning("Mapsprite could not be imported : " + tilesetPath + " : " + e);
             }
         }
-        Console.logger().info(mapSprites.getMapSprites().length + " mapsprites with " + frameCount + " frames successfully imported from images : " + itemsPath);
+        Console.logger().info(mapSprites.getMapSprites().length + " mapsprites with " + frameCount + " frames successfully imported from : " + itemsPath);
         if (failedToLoad > 0) {
             Console.logger().severe(failedToLoad + " mapsprites failed to import. See logs above");
         }
