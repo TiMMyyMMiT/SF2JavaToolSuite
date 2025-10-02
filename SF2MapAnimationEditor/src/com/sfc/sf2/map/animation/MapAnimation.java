@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.animation;
 
 import com.sfc.sf2.graphics.Tileset;
+import static com.sfc.sf2.helpers.MapBlockHelpers.TILESET_TILES;
 
 /**
  *
@@ -108,6 +109,12 @@ public class MapAnimation {
         int dest = frames[frame].getDestTileIndex();
         int start = frames[frame].getStart();
         int length = frames[frame].getLength();
+        if (start+length > TILESET_TILES) {
+            length -= start+length-TILESET_TILES;
+        }
+        if (dest+length > TILESET_TILES) {
+            length -= dest+length-TILESET_TILES;
+        }
         System.arraycopy(animationTileset.getTiles(), start, modifiedTilesets[tileset].getTiles(), dest, length);
         modified[tileset] = true;
     }
