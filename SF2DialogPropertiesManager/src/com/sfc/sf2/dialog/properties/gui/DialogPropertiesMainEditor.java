@@ -375,7 +375,7 @@ public class DialogPropertiesMainEditor extends AbstractMainEditor {
         fileButton3.setFilePath(".\\graphics\\portraits\\entries.asm");
         fileButton3.setLabelText("Portrait entries :");
 
-        fileButton8.setFilePath("..\\SF2Enums.asm");
+        fileButton8.setFilePath("..\\sf2enums.asm");
         fileButton8.setLabelText("SF2Enums :");
 
         fileButton9.setFilePath(".\\graphics\\portraits\\entries.asm");
