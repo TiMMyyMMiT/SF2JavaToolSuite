@@ -8,6 +8,7 @@ package com.sfc.sf2.map.animation.gui;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.gui.TilesetLayoutPanel;
+import static com.sfc.sf2.helpers.MapBlockHelpers.TILESET_TILES;
 import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.animation.MapAnimationFrame;
 import java.awt.Color;
@@ -19,10 +20,16 @@ import java.awt.Graphics;
  */
 public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
     
-    private MapAnimation mapAnimation;
-    private int selectedFrame = -1;
+    protected MapAnimation mapAnimation;
+    protected int selectedFrame = -1;
     
-    private boolean showAnimationFrames;
+    protected boolean useFrameDestinationStart;
+    protected boolean showAnimationFrames;
+
+    public MapAnimationTilesetLayoutPanel() {
+        super();
+        useFrameDestinationStart = false;
+    }
 
     @Override
     protected boolean hasData() {
@@ -51,21 +58,24 @@ public class MapAnimationTilesetLayoutPanel extends TilesetLayoutPanel  {
     }
     
     private void drawFrame(Graphics graphics, MapAnimationFrame frame, int tilesPerRow) {
-            int start = frame.getStart();
-            int length = frame.getLength();
-            int rows = length/tilesPerRow;
-            if (frame.getLength()%tilesPerRow != 0) {
-                rows++;
-            }
-            length -= 1;
-            graphics.fillArc((start%tilesPerRow)*PIXEL_WIDTH+3, (start/tilesPerRow)*PIXEL_HEIGHT-1, PIXEL_WIDTH+1, PIXEL_HEIGHT+2, 135, 90);
-            for (int r = 0; r < rows; r++) {
-                int x1 = r == 0 ? ((start+1)%tilesPerRow)*PIXEL_WIDTH-2 : -10;
-                int x2 = r == rows-1 ? ((start+length)%tilesPerRow)*PIXEL_WIDTH+2 : tilesPerRow*PIXEL_WIDTH+10;
-                int y = (start/tilesPerRow+r)*PIXEL_HEIGHT+4;
-                graphics.drawLine(x1, y, x2, y);
-            }
-            graphics.fillArc(((start+length)%tilesPerRow)*PIXEL_WIDTH-4, ((start+length)/tilesPerRow)*PIXEL_HEIGHT-1, PIXEL_WIDTH+1, PIXEL_HEIGHT+2, 315, 90);
+        int start = useFrameDestinationStart ? frame.getDestTileIndex() : frame.getStart();
+        int length = frame.getLength();
+        if (start+length > TILESET_TILES) {
+            graphics.setColor(Color.RED);
+        }
+        int rows = ((start%tilesPerRow)+length)/tilesPerRow;
+        if (((start%tilesPerRow)+length)%tilesPerRow != 0) {
+            rows++;
+        }
+        length -= 1;
+        graphics.fillArc((start%tilesPerRow)*PIXEL_WIDTH+3, (start/tilesPerRow)*PIXEL_HEIGHT-1, PIXEL_WIDTH+1, PIXEL_HEIGHT+2, 135, 90);
+        for (int r = 0; r < rows; r++) {
+            int x1 = r == 0 ? ((start%tilesPerRow)+1)*PIXEL_WIDTH-2 : -10;
+            int x2 = r == rows-1 ? ((start+length)%tilesPerRow)*PIXEL_WIDTH+2 : tilesPerRow*PIXEL_WIDTH+10;
+            int y = (start/tilesPerRow+r)*PIXEL_HEIGHT+4;
+            graphics.drawLine(x1, y, x2, y);
+        }
+        graphics.fillArc(((start+length)%tilesPerRow)*PIXEL_WIDTH-4, ((start+length)/tilesPerRow)*PIXEL_HEIGHT-1, PIXEL_WIDTH+1, PIXEL_HEIGHT+2, 315, 90);
     }
 
     public void setMapAnimation(MapAnimation mapAnimation) {
