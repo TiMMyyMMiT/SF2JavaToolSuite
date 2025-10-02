@@ -84,10 +84,67 @@ public class MapSpriteManager extends AbstractManager {
         return newSprite;
     }
 
+    public MapSpriteEntries importDisassemblyFromEntryFile(Path paletteFilePath, Path entriesPath) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassemblyFromEntryFile");
+        Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
+        Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
+        int entriesMax = getIndicesFromFilename(entriesData.getUniqueEntries(entriesData.uniqueEntriesCount()-1), "_")[0];
+        if (entriesMax < entriesData.entriesCount()/3) {
+            entriesMax = entriesData.entriesCount()/3;
+        }
+        mapSprites = new MapSpriteEntries(entriesMax*3);
+        int frameCount = 0;
+        int failedToLoad = 0;
+        int[] indices = new int[3];
+        indices[2] = -1;
+        for (int i = 0; i < entriesData.entriesCount(); i++) {
+            Path tilesetPath = null;
+            try {
+                indices[0] = i/3;
+                indices[1] = i%3;
+                int[] loadIndices = getIndicesFromFilename(entriesData.getEntry(i), "_");
+                int index = indices[0]*3 + indices[1];
+                int loadedIndex = loadIndices[0]*3 + loadIndices[1];
+                if (index == loadedIndex) {
+                    //Is unique
+                    tilesetPath = PathHelpers.getIncbinPath().resolve(entriesData.getPathForEntry(index));
+                    MapSpritePackage pckg = new MapSpritePackage(tilesetPath.getFileName().toString(), indices, palette, null);
+                    Block[] frames = mapSpriteDisassemblyProcessor.importDisassembly(tilesetPath, pckg);
+                    frameCount+=2;
+                    MapSprite sprite;
+                    if (mapSprites.hasData(index)) {
+                        sprite = mapSprites.getMapSprite(i);
+                    } else if (frames == null) {
+                        Console.logger().warning("WARNING Mapsprite entry is empty, must be a placeholder. Mapsprite " + tilesetPath);
+                        sprite = null;
+                        mapSprites.addUniqueEntry(index, sprite);
+                    } else {
+                        sprite = new MapSprite(indices[0], indices[1], frames[0], frames[1]);
+                        mapSprites.addUniqueEntry(index, sprite);
+                    }
+                } else {
+                    //Is duplicate
+                    mapSprites.addDuplicateEntry(index, loadedIndex);
+                }
+            } catch (Exception e) {
+                failedToLoad++;
+                Console.logger().warning("Mapsprite could not be imported : " + tilesetPath + " : " + e);
+            }
+        }
+        Console.logger().info(mapSprites.getMapSprites().length + " mapsprites with " + frameCount + " frames successfully imported from images : " + entriesPath);
+        Console.logger().info((entriesData.entriesCount() - entriesData.uniqueEntriesCount()) + " duplicate mapsprite entries found.");
+        if (failedToLoad > 0) {
+            Console.logger().severe(failedToLoad + " mapsprites failed to import. See logs above");
+        }
+        Console.logger().finest("EXITING importDisassemblyFromEntryFile");
+        return mapSprites;
+    }
+
     public MapSpriteEntries importAllDisassemblies(Path mapspritesPath, Path entriesPath, Path paletteFilePath) throws IOException, AsmException, DisassemblyException {
         HashMap<Integer, MapSprite> loadedSprites = importSprites(mapspritesPath, paletteFilePath, true, FileFormat.UNKNOWN);
         parseEntries(entriesPath, loadedSprites);
-        return mapSprites;
+        return mapSprites; 
     }
     
     public MapSpriteEntries importAllImages(Path paletteFilePath, Path imagesPath, Path entriesPath, FileFormat format) throws IOException, AsmException, DisassemblyException {

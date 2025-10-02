@@ -158,6 +158,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2MapSpriteManager");
+        setFocusable(false);
 
         jSplitPane1.setDividerLocation(700);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);

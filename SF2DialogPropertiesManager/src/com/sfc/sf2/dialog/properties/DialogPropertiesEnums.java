@@ -51,16 +51,26 @@ public class DialogPropertiesEnums extends AbstractEnums {
     
     public BufferedImage getMapSpriteFor(String name) {
         int index = -1;
-        if (mapSprites.containsKey(name)) index = mapSprites.get(name);
+        if (mapSprites.containsKey(name)) { 
+            index = mapSprites.get(name);
+            index = index*3+2;  //Get the "down" facing mapsprite
+        }
         if (mapSpriteImages.containsKey(index)) {
             MapSprite mapSprite = mapSpriteImages.get(index);
-            if (mapSprite != null) {
-                Tileset frame = mapSprite.getFrame(2, 0);
-                if (frame == null) frame = mapSprite.getFrame(0, 0);
-                if (frame != null) {
-                    return frame.getIndexedColorImage(2);
+            Tileset frame = null;
+            if (mapSprite == null) {
+                index -= 2;
+                if (mapSpriteImages.containsKey(index)) {
+                    mapSprite = mapSpriteImages.get(index);
                 }
             }
+            if (mapSprite != null) {
+                frame = mapSprite.getFrame(true);
+                if (frame == null) {
+                    frame = mapSprite.getFrame(false);
+                }
+            }
+            if (frame != null) return frame.getIndexedColorImage(2);
         }
         return null;
     }
