@@ -65,6 +65,7 @@ public class MapSpriteEntries {
                         entries[j] = entries[i];
                         if (mapSprites[j] != null) {
                             unreferenced.add(mapSprites[j]);
+                            mapSprites[j].clearIndexedColorImage(false);
                             mapSprites[j] = null;
                         }
                         optimised.add(j);

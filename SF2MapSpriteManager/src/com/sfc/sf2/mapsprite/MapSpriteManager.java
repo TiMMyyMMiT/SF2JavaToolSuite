@@ -100,7 +100,7 @@ public class MapSpriteManager extends AbstractManager {
         Console.logger().finest("ENTERING importSprites");
         Palette palette = paletteManager.importDisassembly(paletteFilePath, true);
         File[] files = FileHelpers.findAllFilesInDirectory(itemsPath, "mapsprite", binFiles ? ".bin" : AbstractRawImageProcessor.GetFileExtensionString(format));
-        Console.logger().info(files.length + " files found.");
+        Console.logger().finest(files.length + " files found.");
         HashMap<Integer, MapSprite> mapSprites = new HashMap<>();
         int frameCount = 0;
         int failedToLoad = 0;
@@ -177,7 +177,7 @@ public class MapSpriteManager extends AbstractManager {
     public void parseEntries(Path entriesPath, HashMap<Integer, MapSprite> loadedMapSprites) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING parseEntries");
         EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
-        Console.logger().info("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
+        Console.logger().finest("Mapsprites entries successfully imported. Entries found : " + entriesData.entriesCount());
         int entriesMax = getIndicesFromFilename(entriesData.getUniqueEntries(entriesData.uniqueEntriesCount()-1), "_")[0];
         if (entriesMax < entriesData.entriesCount()/3) {
             entriesMax = entriesData.entriesCount()/3;
@@ -205,8 +205,8 @@ public class MapSpriteManager extends AbstractManager {
         
         unreferencedMapsprites = new MapSprite[loadedMapSprites.size()];
         unreferencedMapsprites = loadedMapSprites.values().toArray(unreferencedMapsprites);
-        int loadedCount = loadedMapSprites.size()-unfoundEntries-unreferencedMapsprites.length;
-        Console.logger().info(String.format("Mapsprite entries parsed. %d mapSprites matched. %d mapSprites without match. %d mapSprites unreferenced by entries.", loadedCount, unfoundEntries, unreferencedMapsprites.length));
+        int loadedCount = entriesData.uniqueEntriesCount()-unfoundEntries-unreferencedMapsprites.length;
+        Console.logger().info(String.format("Mapsprite entries parsed. %d mapSprites matched to entries. %d entries without matching sprites. %d mapSprites unreferenced by entries.", loadedCount, unfoundEntries, unreferencedMapsprites.length));
         Console.logger().finest("EXITING parseEntries");
     }
     
