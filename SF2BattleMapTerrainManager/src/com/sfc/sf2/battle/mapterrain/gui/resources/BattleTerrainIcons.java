@@ -5,6 +5,8 @@
  */
 package com.sfc.sf2.battle.mapterrain.gui.resources;
 
+import com.sfc.sf2.core.settings.CoreSettings;
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.awt.Color;
 import java.io.File;
@@ -50,6 +52,7 @@ public class BattleTerrainIcons {
     }
     
     public static ImageIcon getTerrainIcon(int terrainType) {
+        if (!((CoreSettings)SettingsManager.getSettingsStore("core")).arePathsValid()) return null;
         if (terrainIcons[0] == null) {
             //Base
             terrainIcons[0] = new ImageIcon(loader.getResource("terrain/icons/XX_Obstructed.png"));
