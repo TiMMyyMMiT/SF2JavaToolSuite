@@ -27,11 +27,11 @@ public class PathHelpers {
     }
     
     public static Path getBasePath() {
-        return Path.of(coreSettings.getBasePath());
+        return Path.of(coreSettings.getActiveBasePath());
     }
     
     public static Path getIncbinPath() {
-        return Path.of(coreSettings.getIncbinPath());
+        return Path.of(coreSettings.getActiveIncbinPath());
     }
     
     public static String filenameFromPath(Path path) {

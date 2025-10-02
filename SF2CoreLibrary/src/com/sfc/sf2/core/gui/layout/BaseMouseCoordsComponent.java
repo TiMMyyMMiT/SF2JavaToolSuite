@@ -60,7 +60,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         this.buttonListener = this.buttonListener;
     }
     
-    public void setMouseMotionListerned(GridMouseMoveListener motionListener) {
+    public void setMouseMotionListener(GridMouseMoveListener motionListener) {
         this.motionListener = motionListener;
     }
     

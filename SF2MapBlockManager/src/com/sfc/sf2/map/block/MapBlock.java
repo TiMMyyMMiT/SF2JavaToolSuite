@@ -107,11 +107,15 @@ public class MapBlock {
     }
     
     public boolean equalsIgnoreTiles(Object obj) {
-        if (obj == null) return false;
+        if (obj == null) return this == null;
         if (obj == this) return true;
         if (!(obj instanceof MapBlock)) return false;
         MapBlock block = (MapBlock)obj;
-        return this.index == block.getIndex() && this.flags == block.getFlags();
+        if (this.index == block.getIndex() && this.flags == block.getFlags()) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     @Override 

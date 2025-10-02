@@ -62,6 +62,15 @@ public abstract class SF2EnumsAsmProcessor<TData extends AbstractEnums> extends 
     protected abstract void parseLine(int categoryIndex, String line, LinkedHashMap<String, Integer> asmData);
     protected abstract TData createEnumsData(LinkedHashMap<String, Integer>[] dataSets);
 
+    protected void defaultParseLine(int categoryIndex, String line, LinkedHashMap<String, Integer> asmData) {
+        int colonIndex = line.indexOf(':');
+        String id = line.substring(line.indexOf("_")+1, colonIndex);
+        int value = StringHelpers.getValueInt(line.substring(colonIndex+1).replace("equ", ""));
+        if (!asmData.containsKey(id)) {
+            asmData.put(id, value);
+        }
+    }
+    
     @Override
     protected String getHeaderName(TData item) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

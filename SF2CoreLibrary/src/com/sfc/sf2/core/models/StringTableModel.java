@@ -43,7 +43,7 @@ public class StringTableModel extends AbstractTableModel<String> {
         switch (col) {
             case 0: return row;
             case 1: return item;
-            case 2: return item.length();
+            case 2: return item == null ? 0 : item.length();
         }
         return null;
     }
