@@ -6,6 +6,8 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="buttonGroupExport">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupOptimise">
+    </Component>
     <Component class="com.sfc.sf2.mapsprite.gui.MapSpriteTableModel" name="mapSpriteTableModel">
     </Component>
   </NonVisualComponents>
@@ -54,7 +56,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jSplitPane1" alignment="0" pref="850" max="32767" attributes="0"/>
+              <Component id="jSplitPane1" alignment="0" pref="855" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -83,7 +85,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSplitPane2" alignment="0" pref="700" max="32767" attributes="0"/>
+                      <Component id="jSplitPane2" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -126,7 +128,7 @@
                                   <Component id="jPanel3" min="-2" pref="235" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="100" max="32767" attributes="0"/>
+                                  <EmptySpace pref="48" max="32767" attributes="0"/>
                                   <Component id="jPanel5" min="-2" pref="186" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
@@ -695,23 +697,22 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="fileButton4" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jButton1" min="-2" pref="116" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="infoButton4" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                          </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel8" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jButton19" min="-2" max="-2" attributes="0"/>
                                           </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="infoButton4" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="jPanel18" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
@@ -724,32 +725,25 @@
                                       <Group type="103" groupAlignment="2" attributes="0">
                                           <Component id="infoButton4" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel7" alignment="2" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton1" alignment="2" min="-2" pref="50" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jPanel18" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                       <Component id="fileButton4" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel8" alignment="3" max="-2" attributes="0"/>
                                           <Component id="jButton19" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace pref="16" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
                           </Layout>
                           <SubComponents>
-                            <Component class="javax.swing.JButton" name="jButton1">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="Optimise"/>
-                              </Properties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-                              </Events>
-                            </Component>
                             <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton4">
                               <Properties>
-                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Will search the mapsprites and replace any pixel-perfect duplicates with a reference.&lt;/html&gt;"/>
+                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Will search the mapsprites and replace any pixel-perfect duplicates with a reference.&lt;br&gt;&lt;br&gt;&lt;i&gt;Images with all pixels set to color will be treated as &quot;empty&quot;.&lt;/i&gt;&lt;/html&gt;"/>
                                 <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>
@@ -778,6 +772,102 @@
                                 <Property name="verticalAlignment" type="int" value="1"/>
                               </Properties>
                             </Component>
+                            <Container class="javax.swing.JPanel" name="jPanel18">
+                              <Properties>
+                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                    <TitledBorder/>
+                                  </Border>
+                                </Property>
+                              </Properties>
+
+                              <Layout>
+                                <DimensionLayout dim="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButton1" min="-2" pref="116" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jRadioButton5" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="infoButton6" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jRadioButton6" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="infoButton7" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                </DimensionLayout>
+                                <DimensionLayout dim="1">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="2" attributes="0">
+                                                      <Component id="jRadioButton5" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="infoButton6" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="2" attributes="0">
+                                                      <Component id="infoButton7" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jRadioButton6" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                              <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                </DimensionLayout>
+                              </Layout>
+                              <SubComponents>
+                                <Component class="javax.swing.JButton" name="jButton1">
+                                  <Properties>
+                                    <Property name="text" type="java.lang.String" value="Optimise"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JRadioButton" name="jRadioButton6">
+                                  <Properties>
+                                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                      <ComponentRef name="buttonGroupOptimise"/>
+                                    </Property>
+                                    <Property name="selected" type="boolean" value="true"/>
+                                    <Property name="text" type="java.lang.String" value="Optmise per-character"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JRadioButton" name="jRadioButton5">
+                                  <Properties>
+                                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                      <ComponentRef name="buttonGroupOptimise"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Optimise pairs"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton6">
+                                  <Properties>
+                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Optimises if a mapSprite pair is pixel-perfect identical to another pair.&lt;br&gt;&lt;i&gt;e.g. if mapSprite001-0 matches mapSprite001-1.&lt;/i&gt;&lt;/html&gt;"/>
+                                    <Property name="text" type="java.lang.String" value=""/>
+                                  </Properties>
+                                </Component>
+                                <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton7">
+                                  <Properties>
+                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;Optimises only if an entire row pixel-perfect matches another row.&lt;br&gt;&lt;i&gt;e.g. if mapSprite001 matches mapSprite002.&lt;/i&gt;&lt;/html&gt;"/>
+                                    <Property name="text" type="java.lang.String" value=""/>
+                                  </Properties>
+                                </Component>
+                              </SubComponents>
+                            </Container>
                           </SubComponents>
                         </Container>
                       </SubComponents>
@@ -802,7 +892,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jTabbedPane3" pref="688" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane3" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -1055,7 +1145,7 @@
                                               <Component id="jLabel2" alignment="2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="tableUnreferenced" min="-2" pref="559" max="-2" attributes="0"/>
+                                          <Component id="tableUnreferenced" min="-2" pref="615" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>

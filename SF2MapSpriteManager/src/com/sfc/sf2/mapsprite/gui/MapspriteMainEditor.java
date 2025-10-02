@@ -83,6 +83,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
 
         buttonGroupImport = new javax.swing.ButtonGroup();
         buttonGroupExport = new javax.swing.ButtonGroup();
+        buttonGroupOptimise = new javax.swing.ButtonGroup();
         mapSpriteTableModel = new com.sfc.sf2.mapsprite.gui.MapSpriteTableModel();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -124,12 +125,17 @@ public class MapspriteMainEditor extends AbstractMainEditor {
         infoButton1 = new com.sfc.sf2.core.gui.controls.InfoButton();
         infoButton2 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanel6 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         infoButton4 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jLabel7 = new javax.swing.JLabel();
         fileButton4 = new com.sfc.sf2.core.gui.controls.FileButton();
         jButton19 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        jPanel18 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        infoButton6 = new com.sfc.sf2.core.gui.controls.InfoButton();
+        infoButton7 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanel10 = new javax.swing.JPanel();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
@@ -505,14 +511,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
 
                         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Optimise Mapsprites"));
 
-                        jButton1.setText("Optimise");
-                        jButton1.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton1ActionPerformed(evt);
-                            }
-                        });
-
-                        infoButton4.setMessageText("<html>Will search the mapsprites and replace any pixel-perfect duplicates with a reference.</html>");
+                        infoButton4.setMessageText("<html>Will search the mapsprites and replace any pixel-perfect duplicates with a reference.<br><br><i>Images with all pixels set to color will be treated as \"empty\".</i></html>");
                         infoButton4.setText("");
 
                         jLabel7.setText("Remove duplicate mapsprites");
@@ -530,6 +529,65 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                         jLabel8.setText("<html>If mapsprites have been optimised then the entries file will need to be updated.</html>");
                         jLabel8.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
+                        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+                        jButton1.setText("Optimise");
+                        jButton1.addActionListener(new java.awt.event.ActionListener() {
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton1ActionPerformed(evt);
+                            }
+                        });
+
+                        buttonGroupOptimise.add(jRadioButton6);
+                        jRadioButton6.setSelected(true);
+                        jRadioButton6.setText("Optmise per-character");
+
+                        buttonGroupOptimise.add(jRadioButton5);
+                        jRadioButton5.setText("Optimise pairs");
+
+                        infoButton6.setMessageText("<html>Optimises if a mapSprite pair is pixel-perfect identical to another pair.<br><i>e.g. if mapSprite001-0 matches mapSprite001-1.</i></html>");
+                        infoButton6.setText("");
+
+                        infoButton7.setMessageText("<html>Optimises only if an entire row pixel-perfect matches another row.<br><i>e.g. if mapSprite001 matches mapSprite002.</i></html>");
+                        infoButton7.setText("");
+
+                        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+                        jPanel18.setLayout(jPanel18Layout);
+                        jPanel18Layout.setHorizontalGroup(
+                            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel18Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel18Layout.createSequentialGroup()
+                                        .addComponent(jRadioButton5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel18Layout.createSequentialGroup()
+                                        .addComponent(jRadioButton6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(infoButton7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        );
+                        jPanel18Layout.setVerticalGroup(
+                            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel18Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel18Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                            .addComponent(jRadioButton5)
+                                            .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                            .addComponent(infoButton7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jRadioButton6)))
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
+                        );
+
                         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
                         jPanel6.setLayout(jPanel6Layout);
                         jPanel6Layout.setHorizontalGroup(
@@ -539,16 +597,15 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(fileButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton19))
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(infoButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton19)))
+                                    .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addContainerGap())
                         );
                         jPanel6Layout.setVerticalGroup(
@@ -557,15 +614,16 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                                 .addContainerGap()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                     .addComponent(infoButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(fileButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton19))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(16, Short.MAX_VALUE))
                         );
 
                         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -588,7 +646,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
                         );
@@ -764,7 +822,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                                     .addComponent(infoButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tableUnreferenced, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tableUnreferenced, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE))
                         );
 
                         jTabbedPane3.addTab("Unreferenced", jPanel17);
@@ -781,7 +839,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel10Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
+                                .addComponent(jTabbedPane3)
                                 .addContainerGap())
                         );
 
@@ -795,7 +853,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                         );
                         jPanel15Layout.setVerticalGroup(
                             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                            .addComponent(jSplitPane2)
                         );
 
                         jSplitPane1.setTopComponent(jPanel15);
@@ -809,7 +867,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
                         );
                         jPanel13Layout.setVerticalGroup(
                             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
+                            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE)
                         );
 
                         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -924,7 +982,12 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        MapSprite[] unreferenced = mapSpriteLayoutPanel.getMapSprites().optimise(mapSpriteTableModel.getTableData(MapSprite[].class));
+        MapSprite[] unreferenced;
+        if (jRadioButton5.isSelected()) {
+            unreferenced = mapSpriteLayoutPanel.getMapSprites().optimisePerPair(mapSpriteTableModel.getTableData(MapSprite[].class));
+        } else {
+            unreferenced = mapSpriteLayoutPanel.getMapSprites().optimisePerRow(mapSpriteTableModel.getTableData(MapSprite[].class));
+        }
         mapSpriteTableModel.setTableData(unreferenced);
         mapSpriteLayoutPanel.redraw();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -973,6 +1036,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupExport;
     private javax.swing.ButtonGroup buttonGroupImport;
+    private javax.swing.ButtonGroup buttonGroupOptimise;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.DirectoryButton directoryButton1;
@@ -988,6 +1052,8 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton3;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton4;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton5;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton6;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton7;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
@@ -1018,6 +1084,7 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1030,6 +1097,8 @@ public class MapspriteMainEditor extends AbstractMainEditor {
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
