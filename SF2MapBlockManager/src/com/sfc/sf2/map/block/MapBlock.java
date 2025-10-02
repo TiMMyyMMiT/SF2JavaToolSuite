@@ -64,6 +64,6 @@ public class MapBlock extends Block {
     }
     
     public static MapBlock EmptyMapBlock(int index, int flags, Palette palette) {
-        return new MapBlock(index, 0, EmptyTilset(palette, TILE_WIDTH).getTiles());
+        return new MapBlock(index, 0, EmptyTilset(palette, TILES_COUNT, TILE_WIDTH).getTiles());
     }
 }

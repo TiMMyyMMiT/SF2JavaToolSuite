@@ -164,7 +164,7 @@ public class BattleManager extends AbstractManager {
                         if (mapspritePath != null) {
                             mapspritePath = PathHelpers.getIncbinPath().resolve(mapspritePath);
                             MapSprite sprite = mapspriteManager.importDisassembly(mapspritePath, palette);
-                            loadedSprite = sprite.getFrame(2, 0);
+                            loadedSprite = sprite.getFrame(true);
                         }
                     }
                 } catch (Exception e) {

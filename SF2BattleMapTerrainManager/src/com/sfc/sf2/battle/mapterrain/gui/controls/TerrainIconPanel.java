@@ -11,6 +11,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.beans.BeanProperty;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -46,9 +47,12 @@ public class TerrainIconPanel extends Component {
         Dimension dims = getSize();
         switch (terrainDrawMode) {
             case Icons:
-                g.setColor(BattleTerrainIcons.getBGColor(terrainValue));
-                g.fillRect(0, 0, dims.width, dims.height);
-                g.drawImage(BattleTerrainIcons.getTerrainIcon(terrainValue).getImage(), 4, 4, dims.width-8, dims.height-8, null);
+                ImageIcon icon = BattleTerrainIcons.getTerrainIcon(terrainValue);
+                if (icon != null) {
+                    g.setColor(BattleTerrainIcons.getBGColor(terrainValue));
+                    g.fillRect(0, 0, dims.width, dims.height);
+                    g.drawImage(icon.getImage(), 4, 4, dims.width-8, dims.height-8, null);
+                }
                 break;
             case Colors:
                 g.setColor(BattleTerrainIcons.getBGColor(terrainValue));
