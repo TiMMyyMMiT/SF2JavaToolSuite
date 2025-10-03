@@ -5,11 +5,18 @@
  */
 package com.sfc.sf2.map.gui;
 
+import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.map.models.MapLayer2CopyTableModel;
+import com.sfc.sf2.map.models.MapStepCopyTableModel;
+import com.sfc.sf2.map.models.MapAreaTableModel;
+import com.sfc.sf2.map.models.MapFlagCopyTableModel;
+import com.sfc.sf2.map.models.MapWarpTableModel;
+import com.sfc.sf2.map.models.MapItemTableModel;
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
-import com.sfc.sf2.map.block.layout.MapBlockLayout;
 import com.sfc.sf2.map.MapManager;
-import com.sfc.sf2.map.layout.DisassemblyException;
+import com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel;
+import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.PrintStream;
@@ -34,14 +41,14 @@ public class MainEditor extends javax.swing.JFrame {
     MapManager mapManager = new MapManager();
     Map map = null;
     MapPanel mapPanel = null;
-    MapBlockLayout mapblockLayout = null;
-    MapFlagCopyPropertiesTableModel flagCopyTableModel;
-    MapStepCopyPropertiesTableModel stepCopyTableModel;
-    MapLayer2CopyPropertiesTableModel layer2CopyTableModel;
-    MapWarpPropertiesTableModel warpTableModel;
-    MapChestItemPropertiesTableModel chestItemTableModel;
-    MapOtherItemPropertiesTableModel otherItemTableModel;
-    MapAnimationFramePropertiesTableModel animFrameTableModel;
+    MapBlocksetLayoutPanel mapblockLayout = null;
+    MapFlagCopyTableModel flagCopyTableModel;
+    MapStepCopyTableModel stepCopyTableModel;
+    MapLayer2CopyTableModel layer2CopyTableModel;
+    MapWarpTableModel warpTableModel;
+    MapItemTableModel chestItemTableModel;
+    MapItemTableModel otherItemTableModel;
+    MapAnimationFrameTableModel animFrameTableModel;
     
     JCheckBox tabRelativeCheckbox;
     boolean tabRelativeCheckboxState;
@@ -2434,9 +2441,9 @@ public class MainEditor extends javax.swing.JFrame {
             animPath = aPath;
         }        
         System.out.println(animPath.toString());
-        flagCopyTableModel.updateProperties();
-        stepCopyTableModel.updateProperties();
-        layer2CopyTableModel.updateProperties();
+        //flagCopyTableModel.updateProperties();
+        //stepCopyTableModel.updateProperties();
+        //layer2CopyTableModel.updateProperties();
         //warpTableModel.updateProperties();
         mapManager.exportDisassembly(blocksetPath.toString(),layoutPath.toString(),areasPath.toString(),flagCopiesPath.toString(),
                 stepCopiesPath.toString(),layer2CopiesPath.toString(),warpsPath.toString(), chestItemsPath.toString(), otherItemsPath.toString(), animPath.toString());
@@ -2592,10 +2599,9 @@ public class MainEditor extends javax.swing.JFrame {
         
         jPanel6.removeAll();       
         jPanel6.setLayout(new GridLayout(1,1));
-        mapblockLayout = new MapBlockLayout();
-        mapblockLayout.setBlocksPerRow(((int)jSpinner1.getModel().getValue()));
-        mapblockLayout.setCurrentDisplaySize(jComboBox2.getSelectedIndex()+1);
-        mapblockLayout.setBlocks(map.getBlocks());
+        mapblockLayout = new MapBlocksetLayoutPanel();
+        mapblockLayout.setItemsPerRow(((int)jSpinner1.getModel().getValue()));
+        mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
         jPanel6.add(mapblockLayout);
         jPanel6.setSize(mapblockLayout.getWidth(), mapblockLayout.getHeight());
         jPanel6.revalidate();
@@ -2605,7 +2611,6 @@ public class MainEditor extends javax.swing.JFrame {
         mapPanel = new MapPanel();
         mapPanel.setMap(map);
         mapPanel.setMapLayout(map.getLayout());
-        mapPanel.setBlockset(map.getBlocks());
         mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_EXPLORATION_FLAGS, jCheckBox1.isSelected());
         mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_GRID, jCheckBox2.isSelected());
         mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_AREAS, jCheckBox3.isSelected());
@@ -2615,8 +2620,7 @@ public class MainEditor extends javax.swing.JFrame {
         mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_WARPS, jCheckBox7.isSelected());
         mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_ITEMS, jCheckBox8.isSelected());
         mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_TRIGGERS, jCheckBox9.isSelected());
-        mapPanel.setCurrentDisplaySize(jComboBox1.getSelectedIndex()+1);
-        mapPanel.setTitledPanel(jPanel1);
+        mapPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         jPanel2.add(mapPanel);
         jPanel2.setSize(mapPanel.getWidth(), mapPanel.getHeight());
         jPanel2.revalidate();
@@ -2632,22 +2636,22 @@ public class MainEditor extends javax.swing.JFrame {
         mapPanel.setLeftSlot(leftSlotBlockPanel);
         mapblockLayout.setLeftSlotBlockPanel(leftSlotBlockPanel);
         mapblockLayout.setRightSlotBlockPanel(rightSlotBlockPanel);
-        jTable1.setModel(new MapAreaPropertiesTableModel(map, mapPanel));
+        /*jTable1.setModel(new MapAreaTableModel(map, mapPanel));
         jPanel21.validate();
         jPanel21.repaint();
-        flagCopyTableModel = new MapFlagCopyPropertiesTableModel(map, mapPanel);
+        flagCopyTableModel = new MapFlagCopyTableModel(map, mapPanel);
         jTable2.setModel(flagCopyTableModel);
         jPanel24.validate();
         jPanel24.repaint();
-        stepCopyTableModel = new MapStepCopyPropertiesTableModel(map, mapPanel);
+        stepCopyTableModel = new MapStepCopyTableModel(map, mapPanel);
         jTable3.setModel(stepCopyTableModel);
         jPanel25.validate();
         jPanel25.repaint();
-        layer2CopyTableModel = new MapLayer2CopyPropertiesTableModel(map, mapPanel);
+        layer2CopyTableModel = new MapLayer2CopyTableModel(map, mapPanel);
         jTable4.setModel(layer2CopyTableModel);
         jPanel26.validate();
         jPanel26.repaint();
-        warpTableModel = new MapWarpPropertiesTableModel(map, mapPanel);
+        warpTableModel = new MapWarpTableModel(map, mapPanel);
         jTable5.setModel(warpTableModel);
         jPanel27.validate();
         jPanel27.repaint();
@@ -2655,7 +2659,7 @@ public class MainEditor extends javax.swing.JFrame {
         jTable6.setModel(chestItemTableModel);
         jPanel29.validate();
         jPanel29.repaint();
-        otherItemTableModel = new MapOtherItemPropertiesTableModel(map, mapPanel);
+        otherItemTableModel = new MapItemTableModel(map, mapPanel);
         jTable7.setModel(otherItemTableModel);
         jPanel30.validate();
         jPanel30.repaint();
@@ -2664,7 +2668,7 @@ public class MainEditor extends javax.swing.JFrame {
         jPanel23.validate();
         jPanel23.repaint();
         jSpinner2.getModel().setValue(map.getAnimation().getTileset());
-        jSpinner3.getModel().setValue(map.getAnimation().getLength());
+        jSpinner3.getModel().setValue(map.getAnimation().getLength());*/
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
@@ -2677,7 +2681,7 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if(jComboBox1.getSelectedIndex()>=0 && mapPanel!=null){
-            mapPanel.setCurrentDisplaySize(jComboBox1.getSelectedIndex()+1);
+            mapPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
             jPanel2.revalidate();
             jPanel2.repaint();  
         }
@@ -2717,9 +2721,7 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         if(jComboBox2.getSelectedIndex()>=0 && mapblockLayout!=null){
-            mapblockLayout.setCurrentDisplaySize(jComboBox2.getSelectedIndex()+1);
-            jPanel6.revalidate();
-            jPanel6.repaint();  
+            mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
         }
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
@@ -2728,10 +2730,8 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        if(mapPanel!=null){
+        if (mapPanel != null) {
             mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_EXPLORATION_FLAGS, jCheckBox1.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
@@ -2745,9 +2745,7 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         if(mapblockLayout != null){
-            mapblockLayout.setBlocksPerRow((int)jSpinner1.getModel().getValue());
-            jPanel6.revalidate();
-            jPanel6.repaint();
+            mapblockLayout.setItemsPerRow((int)jSpinner1.getModel().getValue());
         }
     }//GEN-LAST:event_jSpinner1StateChanged
 
@@ -2782,8 +2780,6 @@ public class MainEditor extends javax.swing.JFrame {
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         if(mapPanel!=null){
             mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_GRID, jCheckBox2.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
         }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
@@ -2897,51 +2893,27 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton47ActionPerformed
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
-        if(mapPanel!=null){
-            mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_AREAS, jCheckBox3.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
-        }
+        mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_AREAS, jCheckBox3.isSelected());
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        if(mapPanel!=null){
-            mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_FLAG_COPIES, jCheckBox4.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
-        }
+        mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_FLAG_COPIES, jCheckBox4.isSelected());
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
     private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
-        if(mapPanel!=null){
-            mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_STEP_COPIES, jCheckBox5.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
-        }
+        mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_STEP_COPIES, jCheckBox5.isSelected());
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
-        if(mapPanel!=null){
-            mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox6.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
-        }
+        mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox6.isSelected());
     }//GEN-LAST:event_jCheckBox6ActionPerformed
 
     private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox7ActionPerformed
-         if(mapPanel!=null){
-            mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_WARPS, jCheckBox7.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
-        }
+        mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_WARPS, jCheckBox7.isSelected());
     }//GEN-LAST:event_jCheckBox7ActionPerformed
 
     private void jCheckBox8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox8ActionPerformed
-         if(mapPanel!=null){
-            mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_ITEMS, jCheckBox8.isSelected());
-            jPanel2.revalidate();
-            jPanel2.repaint();
-        }
+        mapPanel.setDrawMode_Toggles(MapPanel.DRAW_MODE_ITEMS, jCheckBox8.isSelected());
     }//GEN-LAST:event_jCheckBox8ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
@@ -2962,7 +2934,7 @@ public class MainEditor extends javax.swing.JFrame {
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         if(map != null){
-            map.getAnimation().setTileset((int)jSpinner2.getModel().getValue());
+            map.getAnimation().setTilesetId((int)jSpinner2.getModel().getValue());
         }
     }//GEN-LAST:event_jSpinner2StateChanged
 
@@ -3021,7 +2993,7 @@ public class MainEditor extends javax.swing.JFrame {
         }
         System.out.println(hpFilepath.toString());
         
-        mapManager.exportPngBlockset(mapblockLayout, pngPath.toString(), hpFilepath.toString(), (int)jSpinner1.getValue());
+        //mapManager.exportBlocksetImage(mapblockLayout, pngPath.toString(), hpFilepath.toString(), (int)jSpinner1.getValue());
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -3069,7 +3041,7 @@ public class MainEditor extends javax.swing.JFrame {
         }
         System.out.println(phtilesPath.toString());
         
-        mapManager.exportPngMapLayout(mapPanel, pngPath.toString(), flagsPath.toString(), phtilesPath.toString());
+        mapManager.exportMapLayoutImage(mapPanel, pngPath.toString(), flagsPath.toString(), phtilesPath.toString());
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton51ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton51ActionPerformed
@@ -3089,42 +3061,7 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton52ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-                                       
-        String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
-        
-        String mapPath = jTextField24.getText();
-        if(!mapPath.endsWith(File.separator)){
-            mapPath = mapPath+""+File.separator;
-        }
-        //Path basePath = Paths.get(mapPath).toAbsolutePath();
-        System.out.println(toolPath.toString());
-        Path basePath = toolPath.resolve(Paths.get(mapPath)).normalize();
-        System.out.println(basePath.toString());
-        Path pPath = Paths.get(jTextField45.getText());
-        Path pngPath;
-        if(!pPath.isAbsolute()){
-           pngPath = basePath.resolve(pPath).normalize();
-        }else{
-            pngPath = pPath;
-        }
-        Path fPath = Paths.get(jTextField48.getText());
-        Path flagsPath;
-        if(!fPath.isAbsolute()){
-           flagsPath = basePath.resolve(fPath).normalize();
-        }else{
-            flagsPath = fPath;
-        }
-        Path tPath = Paths.get(jTextField46.getText());
-        Path phtilesPath;
-        if(!tPath.isAbsolute()){
-           phtilesPath = basePath.resolve(tPath).normalize();
-        }else{
-            phtilesPath = tPath;
-        }
-        System.out.println(phtilesPath.toString());
-        
-        mapManager.exportGifMapLayout(mapPanel, pngPath.toString(), flagsPath.toString(), phtilesPath.toString());
+            
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton53ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton53ActionPerformed
@@ -3233,35 +3170,7 @@ public class MainEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton58ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
         
-        String mapPath = jTextField24.getText();
-        if(!mapPath.endsWith(File.separator)){
-            mapPath = mapPath+""+File.separator;
-        }
-        //Path basePath = Paths.get(mapPath).toAbsolutePath();
-        System.out.println(toolPath.toString());
-        Path basePath = toolPath.resolve(Paths.get(mapPath)).normalize();
-        System.out.println(basePath.toString());
-        Path pPath = Paths.get(jTextField51.getText());
-        Path pngPath;
-        if(!pPath.isAbsolute()){
-           pngPath = basePath.resolve(pPath).normalize();
-        }else{
-            pngPath = pPath;
-        }
-        System.out.println(pngPath.toString());
-        Path hpPath = Paths.get(jTextField52.getText());
-        Path hpFilepath;
-        if(!hpPath.isAbsolute()){
-           hpFilepath = basePath.resolve(hpPath).normalize();
-        }else{
-            hpFilepath = hpPath;
-        }
-        System.out.println(hpFilepath.toString());
-        
-        mapManager.exportGifBlockset(mapblockLayout, pngPath.toString(), hpFilepath.toString(), (int)jSpinner1.getValue());
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton59ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton59ActionPerformed

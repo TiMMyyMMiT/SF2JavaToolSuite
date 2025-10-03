@@ -6,7 +6,6 @@
 package com.sfc.sf2.map.io;
 
 import com.sfc.sf2.map.Map;
-import com.sfc.sf2.map.block.io.MetaManager;
 import com.sfc.sf2.map.gui.MapPanel;
 import com.sfc.sf2.map.layout.MapLayout;
 import java.io.BufferedWriter;
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
  * @author TiMMy
  */
 public class RawImageManager {
-    
+    /*
     public static void exportMapAsRawImage(MapLayout mapLayout, String filepath, int fileFormat){
         try {
             System.out.println("com.sfc.sf2.map.io.ImageManager.exportImage() - Exporting Image files ...");
@@ -67,5 +66,5 @@ public class RawImageManager {
         } catch (Exception ex) {
             Logger.getLogger(RawImageManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 }

@@ -59,15 +59,19 @@ public class MapLayoutFlagImages {
                 return getTableImage();
             case 0x3000:
                 return getBarrelImage();
+            case 0x2C00:
+                return getVaseImage();
+            case 0x1C00:
+                return getSearchImage();
             default:
                 return null;
         }
     }
     
     public static BufferedImage getObstructedImage() {
-        if (obstructedImage==null) {
+        if (obstructedImage == null) {
             obstructedImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) obstructedImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)obstructedImage.getGraphics();  
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(3));
             Line2D line1 = new Line2D.Double(6, 6, 18, 18);
@@ -86,9 +90,9 @@ public class MapLayoutFlagImages {
     }
     
     public static BufferedImage getLeftUpstairsImage() {
-        if (leftUpstairsImage==null) {
+        if (leftUpstairsImage == null) {
             leftUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) leftUpstairsImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)leftUpstairsImage.getGraphics();  
             g2.setColor(Color.CYAN);
             g2.setStroke(new BasicStroke(3));
             Line2D line1 = new Line2D.Double(3, 3, 21, 21);
@@ -99,9 +103,9 @@ public class MapLayoutFlagImages {
     }
     
     public static BufferedImage getRightUpstairsImage() {
-        if (rightUpstairsImage==null) {
+        if (rightUpstairsImage == null) {
             rightUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) rightUpstairsImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)rightUpstairsImage.getGraphics();  
             g2.setColor(Color.CYAN);
             g2.setStroke(new BasicStroke(3));
             Line2D line1 = new Line2D.Double(3, 21, 21, 3);
@@ -112,9 +116,9 @@ public class MapLayoutFlagImages {
     }     
     
     public static BufferedImage getChestImage() {
-        if (chestImage==null) {
+        if (chestImage == null) {
             chestImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) chestImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)chestImage.getGraphics();  
             g2.setColor(Color.ORANGE);
             g2.setStroke(new BasicStroke(3));
             g2.drawRect(1, 1, 21, 21);
@@ -124,9 +128,9 @@ public class MapLayoutFlagImages {
     } 
     
     public static BufferedImage getTableImage() {
-        if(tableImage==null){
+        if(tableImage == null){
             tableImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) tableImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)tableImage.getGraphics();  
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(3));
             g2.drawLine(8, 8, 16, 8);
@@ -137,9 +141,9 @@ public class MapLayoutFlagImages {
     } 
     
     public static BufferedImage getBarrelImage() {
-        if (barrelImage==null) {
+        if (barrelImage == null) {
             barrelImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) barrelImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)barrelImage.getGraphics();  
             g2.setColor(Color.ORANGE);
             g2.setStroke(new BasicStroke(3));
             //g2.drawRoundRect(6, 4, 12, 16, 8, 8);
@@ -150,9 +154,9 @@ public class MapLayoutFlagImages {
     } 
     
     public static BufferedImage getVaseImage() {
-        if (vaseImage==null) {
+        if (vaseImage == null) {
             vaseImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) vaseImage.getGraphics(); 
+            Graphics2D g2 = (Graphics2D)vaseImage.getGraphics(); 
             g2.setColor(Color.WHITE);
             g2.setStroke(new BasicStroke(3));
             //g2.drawRoundRect(6, 4, 12, 16, 8, 8);
@@ -163,9 +167,9 @@ public class MapLayoutFlagImages {
     }
     
     public static BufferedImage getWarpImage() {
-        if (warpImage==null) {
+        if (warpImage == null) {
             warpImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) warpImage.getGraphics();
+            Graphics2D g2 = (Graphics2D)warpImage.getGraphics();
             g2.setColor(Color.BLUE);
             g2.setStroke(new BasicStroke(3));
             g2.drawRect(0, 0, 23, 23);
@@ -175,9 +179,9 @@ public class MapLayoutFlagImages {
     }
         
     public static BufferedImage getTriggerImage() {
-        if (triggerImage==null) {
+        if (triggerImage == null) {
             triggerImage = new BufferedImage(3*8*64, 3*8*64, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) triggerImage.getGraphics();
+            Graphics2D g2 = (Graphics2D)triggerImage.getGraphics();
             g2.setStroke(new BasicStroke(3));
             g2.setColor(Color.GREEN);
             g2.drawRect(0,0, 23, 23);
@@ -187,9 +191,9 @@ public class MapLayoutFlagImages {
     }
     
     public static BufferedImage getEventImage() {
-        if (eventImage==null) {
+        if (eventImage == null) {
             eventImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) eventImage.getGraphics();  
+            Graphics2D g2 = (Graphics2D)eventImage.getGraphics();  
             g2.setColor(Color.YELLOW);
             g2.setStroke(new BasicStroke(3));
             g2.drawRect(1, 1, 21, 21);
@@ -198,9 +202,9 @@ public class MapLayoutFlagImages {
     }
     
     public static BufferedImage getSearchImage() {
-        if (rightUpstairsImage==null) {
-            rightUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) rightUpstairsImage.getGraphics();  
+        if (searchImage == null) {
+            searchImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = (Graphics2D)searchImage.getGraphics();  
             g2.setColor(Color.BLUE);
             Line2D line0 = new Line2D.Double(3-1, 21, 21-1, 3);
             Line2D line1 = new Line2D.Double(3, 21, 21, 3);
@@ -209,13 +213,13 @@ public class MapLayoutFlagImages {
             g2.draw(line1);
             g2.draw(line2);
         }
-        return rightUpstairsImage;
+        return searchImage;
     } 
     
     public static BufferedImage getCopyImage() {
-        if (rightUpstairsImage==null) {
-            rightUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) rightUpstairsImage.getGraphics();  
+        if (copyImage == null) {
+            copyImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = (Graphics2D)copyImage.getGraphics();  
             g2.setColor(Color.BLUE);
             Line2D line0 = new Line2D.Double(3-1, 21, 21-1, 3);
             Line2D line1 = new Line2D.Double(3, 21, 21, 3);
@@ -224,13 +228,13 @@ public class MapLayoutFlagImages {
             g2.draw(line1);
             g2.draw(line2);
         }
-        return rightUpstairsImage;
+        return copyImage;
     } 
     
     public static BufferedImage getShowImage() {
-        if (rightUpstairsImage==null) {
-            rightUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) rightUpstairsImage.getGraphics();  
+        if (showImage == null) {
+            showImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = (Graphics2D)showImage.getGraphics();  
             g2.setColor(Color.BLUE);
             Line2D line0 = new Line2D.Double(3-1, 21, 21-1, 3);
             Line2D line1 = new Line2D.Double(3, 21, 21, 3);
@@ -239,13 +243,13 @@ public class MapLayoutFlagImages {
             g2.draw(line1);
             g2.draw(line2);
         }
-        return rightUpstairsImage;
+        return showImage;
     } 
     
     public static BufferedImage getHideImage() {
-        if (rightUpstairsImage==null) {
-            rightUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) rightUpstairsImage.getGraphics();  
+        if (hideImage == null) {
+            hideImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = (Graphics2D)hideImage.getGraphics();  
             g2.setColor(Color.BLUE);
             Line2D line0 = new Line2D.Double(3-1, 21, 21-1, 3);
             Line2D line1 = new Line2D.Double(3, 21, 21, 3);
@@ -254,6 +258,6 @@ public class MapLayoutFlagImages {
             g2.draw(line1);
             g2.draw(line2);
         }
-        return rightUpstairsImage;
+        return hideImage;
     }
 }
