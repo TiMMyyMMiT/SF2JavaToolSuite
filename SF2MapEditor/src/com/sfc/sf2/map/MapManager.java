@@ -9,7 +9,7 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.block.MapBlocksetManager;
-import com.sfc.sf2.map.gui.MapPanel;
+import com.sfc.sf2.map.gui.MapLayoutPanel;
 import com.sfc.sf2.map.io.DisassemblyManager;
 import com.sfc.sf2.map.io.RawImageManager;
 import com.sfc.sf2.map.layout.MapLayout;
@@ -80,7 +80,7 @@ public class MapManager {
         System.out.println("com.sfc.sf2.maplayout.MapEditor.exportPng() - PNG exported.");*/
     }
     
-    public void exportMapLayoutImage(MapPanel mapPanel, String filepath, String flagsPath, String hpTilesPath) {
+    public void exportMapLayoutImage(MapLayoutPanel mapPanel, String filepath, String flagsPath, String hpTilesPath) {
         /*System.out.println("com.sfc.sf2.maplayout.MapEditor.exportPng() - Exporting PNG ...");
         RawImageManager.exportImageMapLayout(mapPanel, filepath, flagsPath, hpTilesPath, com.sfc.sf2.graphics.io.RawImageManager.FILE_FORMAT_PNG);
         System.out.println("com.sfc.sf2.maplayout.MapEditor.exportPng() - PNG exported.");*/

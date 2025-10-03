@@ -164,7 +164,7 @@
 
                               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                               <SubComponents>
-                                <Container class="com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel" name="mapLayoutPanel">
+                                <Container class="com.sfc.sf2.map.layout.gui.MapLayoutPanel" name="mapLayoutPanel">
 
                                   <Layout>
                                     <DimensionLayout dim="0">

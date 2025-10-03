@@ -12,14 +12,14 @@ import com.sfc.sf2.map.layout.MapLayout;
  *
  * @author TiMMy
  */
-public abstract class MapWarpTableModel extends AbstractTableModel<MapWarp> {
+public class MapWarpTableModel extends AbstractTableModel<MapWarp> {
     
     public MapWarpTableModel() {
         super(new String[] { "Index", "Trigger X", "Trigger Y", "Dest Map", "Dest X", "Dest Y", "Facing" }, 64);
     }
 
     @Override
-    public Class getColumnType(int col) {
+    public Class<?> getColumnType(int col) {
         switch (col) {
             case 3:
             case 4:

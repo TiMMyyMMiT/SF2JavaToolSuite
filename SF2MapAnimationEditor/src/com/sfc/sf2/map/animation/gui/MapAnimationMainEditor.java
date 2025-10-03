@@ -155,7 +155,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        mapAnimationLayoutPanel = new com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel();
+        mapAnimationLayoutPanel = new com.sfc.sf2.map.layout.gui.MapLayoutPanel();
         jPanel25 = new javax.swing.JPanel();
         jComboBox9 = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
@@ -1044,7 +1044,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane4;
     private com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel mapAnimationFrameTableModel;
-    private com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel mapAnimationLayoutPanel;
+    private com.sfc.sf2.map.layout.gui.MapLayoutPanel mapAnimationLayoutPanel;
     private com.sfc.sf2.core.gui.controls.Table tableAnimFrames;
     private com.sfc.sf2.map.animation.gui.MapAnimationTilesetLayoutPanel tilesetLayoutPanelAnim;
     private com.sfc.sf2.map.animation.gui.MapModifiedTilesetLayoutPanel tilesetLayoutPanelModified;

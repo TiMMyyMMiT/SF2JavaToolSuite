@@ -86,7 +86,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        mapLayoutPanel = new com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel();
+        mapLayoutPanel = new com.sfc.sf2.map.layout.gui.MapLayoutPanel();
         jPanel25 = new javax.swing.JPanel();
         jComboBox9 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
@@ -1031,6 +1031,6 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     private javax.swing.JSplitPane jSplitPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel mapBlocksetPanel;
-    private com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel mapLayoutPanel;
+    private com.sfc.sf2.map.layout.gui.MapLayoutPanel mapLayoutPanel;
     // End of variables declaration//GEN-END:variables
 }

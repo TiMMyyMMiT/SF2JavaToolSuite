@@ -23,7 +23,7 @@ import java.awt.Graphics;
  *
  * @author TiMMy
  */
-public class StaticMapLayoutPanel extends AbstractLayoutPanel {
+public class MapLayoutPanel extends AbstractLayoutPanel {
     private static final int DEFAULT_BLOCKS_PER_ROW = MapLayout.BLOCK_WIDTH;
     private static final Dimension MAP_DIMENSIONS = new Dimension(BLOCK_WIDTH*PIXEL_WIDTH, BLOCK_HEIGHT*PIXEL_HEIGHT);
         
@@ -33,7 +33,7 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
     private boolean showInteractionFlags = false;
     private boolean showPriority = false;
 
-    public StaticMapLayoutPanel() {
+    public MapLayoutPanel() {
         super();
         background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/3);
         scale = new LayoutScale(1);

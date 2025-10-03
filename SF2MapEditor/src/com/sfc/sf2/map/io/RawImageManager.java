@@ -6,7 +6,7 @@
 package com.sfc.sf2.map.io;
 
 import com.sfc.sf2.map.Map;
-import com.sfc.sf2.map.gui.MapPanel;
+import com.sfc.sf2.map.gui.MapLayoutPanel;
 import com.sfc.sf2.map.layout.MapLayout;
 import java.io.BufferedWriter;
 import java.io.File;

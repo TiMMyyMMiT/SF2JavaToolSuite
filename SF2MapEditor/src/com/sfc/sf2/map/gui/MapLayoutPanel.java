@@ -5,8 +5,6 @@
  */
 package com.sfc.sf2.map.gui;
 
-import static com.sfc.sf2.graphics.Block.TILE_HEIGHT;
-import static com.sfc.sf2.graphics.Block.TILE_WIDTH;
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapFlagCopy;
@@ -16,14 +14,11 @@ import com.sfc.sf2.map.MapWarp;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
-import com.sfc.sf2.map.layout.MapLayout;
-import com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel;
 import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagImages;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +26,7 @@ import java.util.List;
  *
  * @author wiz
  */
-public class MapPanel extends StaticMapLayoutPanel {
+public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         
     private static final int ACTION_CHANGE_BLOCK_VALUE = 0;
     private static final int ACTION_CHANGE_BLOCK_FLAGS = 1;
@@ -79,9 +74,10 @@ public class MapPanel extends StaticMapLayoutPanel {
     
     private Map map;
 
-    public MapPanel() {
-        MapBlockLayoutPanel.setLeftSelectedIndex(-1);
-        MapBlockLayoutPanel.setRightSelectedIndex(-1);
+    public MapLayoutPanel() {
+        super();
+        //MapBlockLayoutPanel.setLeftSelectedIndex(-1);
+        //MapBlockLayoutPanel.setRightSelectedIndex(-1);
     }
 
     @Override
