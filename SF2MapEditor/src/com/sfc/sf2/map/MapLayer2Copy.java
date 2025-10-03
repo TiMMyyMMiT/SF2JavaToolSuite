@@ -20,6 +20,17 @@ public class MapLayer2Copy {
     private int destX;
     private int destY;
 
+    public MapLayer2Copy(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY) {
+        this.triggerX = triggerX;
+        this.triggerY = triggerY;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
+        this.width = width;
+        this.height = height;
+        this.destX = destX;
+        this.destY = destY;
+    }
+
     public int getTriggerX() {
         return triggerX;
     }
@@ -83,8 +94,13 @@ public class MapLayer2Copy {
     public void setDestY(int destY) {
         this.destY = destY;
     }
-
-  
- 
     
+    public static MapLayer2Copy createEmpty() {
+        return new MapLayer2Copy(0, 0, 0, 32, 10, 10, 32, 0);
+    }
+
+    @Override
+    public MapLayer2Copy clone() {
+        return new MapLayer2Copy(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY);
+    }
 }

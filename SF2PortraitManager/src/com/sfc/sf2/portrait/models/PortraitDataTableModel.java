@@ -21,11 +21,6 @@ public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
     public Class<?> getColumnType(int col) {
         return Integer.class;
     }
- 
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return column > 0;
-    }
 
     @Override
     protected int[] createBlankItem(int row) {

@@ -19,6 +19,16 @@ public class MapWarp {
     private int destY;
     private String facing;
 
+    public MapWarp(int triggerX, int triggerY, String scrollDirection, String destMap, int destX, int destY, String facing) {
+        this.triggerX = triggerX;
+        this.triggerY = triggerY;
+        this.scrollDirection = scrollDirection;
+        this.destMap = destMap;
+        this.destX = destX;
+        this.destY = destY;
+        this.facing = facing;
+    }
+
     public int getTriggerX() {
         return triggerX;
     }
@@ -74,7 +84,13 @@ public class MapWarp {
     public void setScrollDirection(String scrollDirection) {
         this.scrollDirection = scrollDirection;
     }
-
- 
     
+    public static MapWarp createEmpty() {
+        return new MapWarp(0, 0, "None", "None", 0, 0, "None");
+    }
+
+    @Override
+    public MapWarp clone() {
+        return new MapWarp(triggerX, triggerY, scrollDirection, destMap, destX, destY, facing);
+    }
 }

@@ -20,6 +20,17 @@ public class MapFlagCopy {
     private int destY;
     private String comment;
 
+    public MapFlagCopy(int flag, int sourceX, int sourceY, int width, int height, int destX, int destY, String comment) {
+        this.flag = flag;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
+        this.width = width;
+        this.height = height;
+        this.destX = destX;
+        this.destY = destY;
+        this.comment = comment;
+    }
+
     public int getFlag() {
         return flag;
     }
@@ -83,8 +94,13 @@ public class MapFlagCopy {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-  
- 
     
+    public static MapFlagCopy createEmpty() {
+        return new MapFlagCopy(0, 0, 0, 1, 1, 1, 0, "WHAT?");
+    }
+
+    @Override
+    public MapFlagCopy clone() {
+        return new MapFlagCopy(flag, sourceX, sourceY, width, height, destX, destY, comment);
+    }
 }

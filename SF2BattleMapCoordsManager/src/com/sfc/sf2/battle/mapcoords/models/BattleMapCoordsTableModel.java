@@ -69,11 +69,6 @@ public class BattleMapCoordsTableModel extends AbstractTableModel<BattleMapCoord
         }
         return item;
     }
- 
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return column > 0;
-    }
 
     @Override
     protected Comparable<?> getMinLimit(BattleMapCoords item, int col) {

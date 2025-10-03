@@ -7,6 +7,7 @@ package com.sfc.sf2.map;
 
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
+import com.sfc.sf2.map.animation.MapAnimation;
 
 /**
  *
@@ -64,14 +65,14 @@ public class Map {
         this.stepCopies = stepCopies;
     }
 
-    public void setActionFlag(int x, int y, int value){
-        MapBlock block = this.layout.getBlocks()[y*64+x];
+    public void setActionFlag(int x, int y, int value) {
+        MapBlock block = this.layout.getBlockset().getBlocks()[y*64+x];
         int origFlags = block.getFlags();
         int newValue = value;
-        if((origFlags&0x0400)!=0 && newValue==0x0800){
+        if ((origFlags&0x0400) != 0 && newValue == 0x0800) {
             newValue = 0x0400;
         }
-        int newFlags = (origFlags & 0xC000) + (newValue & 0x3FFF);
+        int newFlags = (origFlags&0xC000)+(newValue&0x3FFF);
         block.setFlags(newFlags);
     }
 
@@ -114,7 +115,4 @@ public class Map {
     public void setAnimation(MapAnimation animation) {
         this.animation = animation;
     }
-    
-    
-    
 }

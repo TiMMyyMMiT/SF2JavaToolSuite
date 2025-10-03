@@ -30,6 +30,27 @@ public class MapArea {
     private int layerType;
     private String defaultMusic;
 
+    public MapArea(int layer1StartX, int layer1StartY, int layer1EndX, int layer1EndY, int foregroundLayer2StartX, int foregroundLayer2StartY, int backgroundLayer2StartX, int backgroundLayer2StartY, int layer1ParallaxX, int layer1ParallaxY, int layer2ParallaxX, int layer2ParallaxY, int layer1AutoscrollX, int layer1AutoscrollY, int layer2AutoscrollX, int layer2AutoscrollY, int layerType, String defaultMusic) {
+        this.layer1StartX = layer1StartX;
+        this.layer1StartY = layer1StartY;
+        this.layer1EndX = layer1EndX;
+        this.layer1EndY = layer1EndY;
+        this.foregroundLayer2StartX = foregroundLayer2StartX;
+        this.foregroundLayer2StartY = foregroundLayer2StartY;
+        this.backgroundLayer2StartX = backgroundLayer2StartX;
+        this.backgroundLayer2StartY = backgroundLayer2StartY;
+        this.layer1ParallaxX = layer1ParallaxX;
+        this.layer1ParallaxY = layer1ParallaxY;
+        this.layer2ParallaxX = layer2ParallaxX;
+        this.layer2ParallaxY = layer2ParallaxY;
+        this.layer1AutoscrollX = layer1AutoscrollX;
+        this.layer1AutoscrollY = layer1AutoscrollY;
+        this.layer2AutoscrollX = layer2AutoscrollX;
+        this.layer2AutoscrollY = layer2AutoscrollY;
+        this.layerType = layerType;
+        this.defaultMusic = defaultMusic;
+    }
+
     public int getLayer1StartX() {
         return layer1StartX;
     }
@@ -173,6 +194,13 @@ public class MapArea {
     public void setDefaultMusic(String defaultMusic) {
         this.defaultMusic = defaultMusic;
     }
- 
     
+    public static MapArea createEmpty() {
+        return new MapArea(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "NONE");
+    }
+
+    @Override
+    public MapArea clone() {
+        return new MapArea(layer1StartX, layer1StartY, layer1EndX, layer1EndY, foregroundLayer2StartX, foregroundLayer2StartY, backgroundLayer2StartX, backgroundLayer2StartY, layer1ParallaxX, layer1ParallaxY, layer2ParallaxX, layer2ParallaxY, layer1AutoscrollX, layer1AutoscrollY, layer2AutoscrollX, layer2AutoscrollY, layerType, defaultMusic);
+    }
 }

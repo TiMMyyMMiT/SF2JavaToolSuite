@@ -20,6 +20,17 @@ public class MapStepCopy {
     private int destX;
     private int destY;
 
+    public MapStepCopy(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY) {
+        this.triggerX = triggerX;
+        this.triggerY = triggerY;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
+        this.width = width;
+        this.height = height;
+        this.destX = destX;
+        this.destY = destY;
+    }
+
     public int getTriggerX() {
         return triggerX;
     }
@@ -83,8 +94,13 @@ public class MapStepCopy {
     public void setDestY(int destY) {
         this.destY = destY;
     }
-
-  
- 
     
+    public static MapStepCopy createEmpty() {
+        return new MapStepCopy(0, 0, 0, 0, 1, 1, 1, 1);
+    }
+
+    @Override
+    public MapStepCopy clone() {
+        return new MapStepCopy(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY);
+    }
 }

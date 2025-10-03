@@ -22,11 +22,6 @@ public class AIPointPropertiesTableModel extends AbstractTableModel<AIPoint> {
     public Class<?> getColumnType(int col) {
         return Integer.class;
     }
- 
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return column > 0;
-    }
 
     @Override
     protected AIPoint createBlankItem(int row) {

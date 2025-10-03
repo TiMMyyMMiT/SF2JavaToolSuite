@@ -34,11 +34,6 @@ public class LandEffectTableModel extends AbstractTableModel<LandEffectMovementT
     public Class<?> getColumnType(int col) {
         return col == 0 ? Integer.class : LandEffect.class;
     }
- 
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        return column > 0;
-    }
 
     @Override
     protected LandEffectMovementType createBlankItem(int row) {

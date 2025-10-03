@@ -16,6 +16,13 @@ public class MapItem {
     private int flag;
     private String item;
 
+    public MapItem(int x, int y, int flag, String item) {
+        this.x = x;
+        this.y = y;
+        this.flag = flag;
+        this.item = item;
+    }
+
     public int getX() {
         return x;
     }
@@ -47,7 +54,13 @@ public class MapItem {
     public void setItem(String item) {
         this.item = item;
     }
-
- 
     
+    public static MapItem createEmpty() {
+        return new MapItem(0, 0, 0, "MEDICAL_HERB");
+    }
+
+    @Override
+    public MapItem clone() {
+        return new MapItem(x, y, flag, item);
+    }
 }

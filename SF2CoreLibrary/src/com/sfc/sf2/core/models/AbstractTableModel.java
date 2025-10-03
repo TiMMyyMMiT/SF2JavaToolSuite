@@ -233,7 +233,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        return true;
+        return column > 0;
     }
  
     public boolean isRowLocked(int row) {

@@ -24,11 +24,6 @@ public class MapAnimationFrameTableModel extends AbstractTableModel<MapAnimation
     }
 
     @Override
-    public boolean isCellEditable(int row, int column) {
-        return column > 0;
-    }
-
-    @Override
     protected MapAnimationFrame createBlankItem(int row) {
         return MapAnimationFrame.EmptyMapAnimationFrame();
     }
