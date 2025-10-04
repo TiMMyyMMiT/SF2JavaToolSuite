@@ -31,6 +31,7 @@ public class DialogPropertiesMainEditor extends AbstractMainEditor {
         File file = PathHelpers.getBasePath().resolve(fileButton6.getFilePath()).toFile();
         if (!file.exists()) {
             fileButton6.setFilePath(".\\spritedialogproperties.asm");
+            fileButton7.setFilePath(".\\spritedialogproperties.asm");
         }
     }
     
