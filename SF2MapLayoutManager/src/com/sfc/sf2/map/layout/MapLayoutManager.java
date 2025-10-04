@@ -112,6 +112,10 @@ public class MapLayoutManager extends AbstractManager {
     public boolean doesMapDataExist(int mapID) {
         return mapEntries != null && mapID >= 0 && mapID < mapEntries.length && mapEntries[mapID] != null;
     }
+    
+    public MapEntryData[] getMapEntries() {
+        return mapEntries;
+    }
 
     public MapLayout getMapLayout() {
         return layout;
