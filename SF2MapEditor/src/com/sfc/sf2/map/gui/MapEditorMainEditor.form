@@ -2,16 +2,7 @@
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="jFileChooser1">
-    </Component>
-    <Component class="javax.swing.JFileChooser" name="jFileChooser2">
-      <Properties>
-        <Property name="fileSelectionMode" type="int" value="1"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
-    </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup2">
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupMapActions">
     </Component>
     <Component class="com.sfc.sf2.map.models.MapAreaTableModel" name="mapAreaTableModel">
     </Component>
@@ -143,28 +134,12 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jTextField24" pref="0" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButton31" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jTabbedPane1" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane1" alignment="0" pref="293" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jTextField24" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel26" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton31" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
                                       <Component id="jTabbedPane1" max="32767" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
@@ -172,25 +147,6 @@
                             </DimensionLayout>
                           </Layout>
                           <SubComponents>
-                            <Component class="javax.swing.JLabel" name="jLabel26">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="Base dir :"/>
-                              </Properties>
-                            </Component>
-                            <Component class="javax.swing.JTextField" name="jTextField24">
-                              <Properties>
-                                <Property name="horizontalAlignment" type="int" value="11"/>
-                                <Property name="text" type="java.lang.String" value=".\u005centries\u005cmap03\u005c" containsInvalidXMLChars="true"/>
-                              </Properties>
-                            </Component>
-                            <Component class="javax.swing.JButton" name="jButton31">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="File..."/>
-                              </Properties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton31ActionPerformed"/>
-                              </Events>
-                            </Component>
                             <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
                               <Properties>
                                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -204,19 +160,14 @@
                               <SubComponents>
                                 <Container class="javax.swing.JPanel" name="jPanel3">
                                   <Properties>
-                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                        <TitledBorder title="Import from :"/>
-                                      </Border>
-                                    </Property>
                                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                       <Dimension value="[590, 135]"/>
                                     </Property>
                                   </Properties>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="Import">
-                                        <Property name="tabTitle" type="java.lang.String" value="Import"/>
+                                      <JTabbedPaneConstraints tabName="Import/Export">
+                                        <Property name="tabTitle" type="java.lang.String" value="Import/Export"/>
                                       </JTabbedPaneConstraints>
                                     </Constraint>
                                   </Constraints>
@@ -224,912 +175,40 @@
                                   <Layout>
                                     <DimensionLayout dim="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField19" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton25" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField20" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton26" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField23" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton30" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField21" pref="0" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton28" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel24" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField22" pref="0" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton29" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField26" pref="0" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton32" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel27" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField25" pref="0" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton33" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField27" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton34" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel32" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField29" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton35" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel30" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField28" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton36" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel31" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField30" pref="0" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton37" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel34" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField32" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton38" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField31" pref="0" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton39" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                              <Component id="jButton18" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel51" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField49" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton56" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField49" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel51" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton56" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField21" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel23" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField22" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel24" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton29" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField23" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton30" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField19" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton25" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField20" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton26" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField27" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton34" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField26" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton32" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField25" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel27" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton33" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField30" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel31" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton37" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField29" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel32" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton35" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton36" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField32" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton38" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField31" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel33" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton39" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton18" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="169" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel2">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Select disassembly files."/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton18">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Import"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton18ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel20">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Blockset :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField19">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="0-blocks.bin"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton25">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton25ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel21">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Layout :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField20">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="1-layout.bin"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton26">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton26ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel23">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Palette entries :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField21">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="..\u005c..\u005c..\u005cgraphics\u005cmaps\u005cmappalettes\u005centries.asm" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton28">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton28ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel24">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Tileset entries :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField22">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="..\u005c..\u005c..\u005cgraphics\u005cmaps\u005cmaptilesets\u005centries.asm" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton29">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton29ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel25">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Tilesets :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField23">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="00-tilesets.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton30">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton30ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField25">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="4-step-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel27">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Step events :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton32">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton32ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField26">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="3-flag-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton33">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton33ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel28">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Areas :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton34">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton34ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField27">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="2-areas.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel29">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Flag events :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField28">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="7-chest-items.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel30">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Chests :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton35">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton35ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField29">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="6-warp-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton36">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton36ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel31">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Roof events :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton37">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton37ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField30">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="5-roof-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel32">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Warps :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField31">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="9-animations.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel33">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Animations :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton38">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton38ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField32">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="8-other-items.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton39">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton39ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel34">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Items :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel51">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Incbin Base Path :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField49">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="..\u005c..\u005c..\u005c..\u005c" containsInvalidXMLChars="true"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton56">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton56ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                                <Container class="javax.swing.JPanel" name="jPanel5">
-                                  <Properties>
-                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                        <TitledBorder title="Export to :"/>
-                                      </Border>
-                                    </Property>
-                                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                      <Dimension value="[32, 135]"/>
-                                    </Property>
-                                  </Properties>
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="Export">
-                                        <Property name="tabTitle" type="java.lang.String" value="Export"/>
-                                      </JTabbedPaneConstraints>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField15" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton27" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField14" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton21" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField38" pref="165" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton44" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel40" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField39" pref="133" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton47" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel36" min="-2" pref="45" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField34" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton40" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel38" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField36" pref="134" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton42" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel39" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField40" pref="132" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton45" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jLabel35" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel42" alignment="0" min="-2" pref="42" max="-2" attributes="0"/>
-                                              </Group>
+                                          <Group type="102" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jTextField37" pref="158" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton43" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jTextField33" pref="158" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton46" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="jPanel6" alignment="1" max="32767" attributes="0"/>
+                                                  <Component id="accordionPanel2" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="accordionPanel1" alignment="1" max="32767" attributes="0"/>
+                                                  <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
                                               </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel37" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextField35" pref="135" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton41" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                    <DimensionLayout dim="1">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jLabel16" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField14" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton21" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jLabel22" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField15" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton27" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jLabel36" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField34" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton40" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jButton41" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField35" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel37" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField36" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel38" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton42" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField40" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel39" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton45" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jLabel42" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField37" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton43" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="jLabel35" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jTextField33" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton46" alignment="2" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField38" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton44" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="3" attributes="0">
-                                                  <Component id="jTextField39" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel40" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jButton47" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="jLabel1" min="-2" pref="23" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="291" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                    </DimensionLayout>
-                                  </Layout>
-                                  <SubComponents>
-                                    <Component class="javax.swing.JLabel" name="jLabel16">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Blocks :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField14">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="0-blocks.bin"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton21">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton21ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel1">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="&lt;html&gt;Select new target files.&lt;/html&gt;"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton2">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Export"/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel22">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Layout :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField15">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="1-layout.bin"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton27">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton27ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField33">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="7-chest-items.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel35">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Chests :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel36">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Areas :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton40">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton40ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField34">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="2-areas.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel37">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Flag events :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel38">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Step events :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton41">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton41ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField35">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="3-flag-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton42">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton42ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton43">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton43ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton44">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton44ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField36">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="4-step-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel39">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Roof events :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton45">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton45ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField37">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="6-warp-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton46">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton46ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField38">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="8-other-items.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField39">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="9-animations.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel40">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Animations :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel41">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Items :"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JTextField" name="jTextField40">
-                                      <Properties>
-                                        <Property name="horizontalAlignment" type="int" value="11"/>
-                                        <Property name="text" type="java.lang.String" value="5-roof-events.asm"/>
-                                      </Properties>
-                                    </Component>
-                                    <Component class="javax.swing.JButton" name="jButton47">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="File..."/>
-                                      </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton47ActionPerformed"/>
-                                      </Events>
-                                    </Component>
-                                    <Component class="javax.swing.JLabel" name="jLabel42">
-                                      <Properties>
-                                        <Property name="text" type="java.lang.String" value="Warps :"/>
-                                      </Properties>
-                                    </Component>
-                                  </SubComponents>
-                                </Container>
-                                <Container class="javax.swing.JPanel" name="jPanel32">
-                                  <Constraints>
-                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                      <JTabbedPaneConstraints tabName="Misc.">
-                                        <Property name="tabTitle" type="java.lang.String" value="Misc."/>
-                                      </JTabbedPaneConstraints>
-                                    </Constraint>
-                                  </Constraints>
-
-                                  <Layout>
-                                    <DimensionLayout dim="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jPanel34" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jPanel37" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jPanel35" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jPanel36" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                     </DimensionLayout>
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jPanel34" min="-2" max="-2" attributes="0"/>
+                                              <Component id="accordionPanel1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jPanel37" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="jPanel35" min="-2" max="-2" attributes="0"/>
+                                              <Component id="accordionPanel2" min="-2" pref="212" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jPanel36" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace pref="84" max="32767" attributes="0"/>
+                                              <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
                                   </Layout>
                                   <SubComponents>
-                                    <Container class="javax.swing.JPanel" name="jPanel34">
+                                    <Container class="com.sfc.sf2.core.gui.controls.AccordionPanel" name="accordionPanel1">
                                       <Properties>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                            <TitledBorder title="PNG Blockset Export"/>
+                                            <TitledBorder title="Paths"/>
                                           </Border>
                                         </Property>
                                       </Properties>
@@ -1140,113 +219,54 @@
                                               <Group type="102" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jTextField42" max="32767" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jButton49" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="32767" attributes="0"/>
-                                                          <Component id="jButton4" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="1" attributes="0">
-                                                          <Component id="jLabel52" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jTextField50" pref="0" max="32767" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jButton57" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
+                                                      <Component id="fileButton1" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton2" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton14" alignment="0" pref="0" max="32767" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                         </DimensionLayout>
                                         <DimensionLayout dim="1">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel44" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField42" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton49" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel52" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField50" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton57" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel11" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                      <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="fileButton1" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton2" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton14" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                         </DimensionLayout>
                                       </Layout>
                                       <SubComponents>
-                                        <Component class="javax.swing.JLabel" name="jLabel44">
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton1">
                                           <Properties>
-                                            <Property name="text" type="java.lang.String" value="PNG :"/>
+                                            <Property name="filePath" type="java.lang.String" value="..\u005c..\u005c..\u005cgraphics\u005cmaps\u005cmappalettes\u005centries.asm" containsInvalidXMLChars="true"/>
+                                            <Property name="labelText" type="java.lang.String" value="Palette entries :"/>
                                           </Properties>
                                         </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField42">
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton2">
                                           <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="blockset.png"/>
+                                            <Property name="filePath" type="java.lang.String" value="..\u005c..\u005c..\u005cgraphics\u005cmaps\u005cmaptilesets\u005centries.asm" containsInvalidXMLChars="true"/>
+                                            <Property name="labelText" type="java.lang.String" value="Tileset entries :"/>
                                           </Properties>
                                         </Component>
-                                        <Component class="javax.swing.JButton" name="jButton49">
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton14">
                                           <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
+                                            <Property name="filePath" type="java.lang.String" value=".\u005centries.asm" containsInvalidXMLChars="true"/>
+                                            <Property name="labelText" type="java.lang.String" value="Map entries :"/>
                                           </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton49ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel11">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="&lt;html&gt;Color mode : indexed 16&lt;/html&gt;"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton4">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="Export"/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel52">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="HP tiles : "/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField50">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="blocksethptiles.txt"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton57">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton57ActionPerformed"/>
-                                          </Events>
                                         </Component>
                                       </SubComponents>
                                     </Container>
-                                    <Container class="javax.swing.JPanel" name="jPanel35">
+                                    <Container class="com.sfc.sf2.core.gui.controls.AccordionPanel" name="accordionPanel2">
                                       <Properties>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                            <TitledBorder title="PNG Map Layout Export"/>
+                                            <TitledBorder title="Map files"/>
                                           </Border>
                                         </Property>
                                       </Properties>
@@ -1255,416 +275,491 @@
                                         <DimensionLayout dim="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="fileButton3" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton4" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton5" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton6" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton7" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton8" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton9" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton10" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton11" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton12" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton13" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                        </DimensionLayout>
+                                        <DimensionLayout dim="1">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton3" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton4" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton5" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton6" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton7" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton8" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton9" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton10" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton11" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton12" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton13" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                        </DimensionLayout>
+                                      </Layout>
+                                      <SubComponents>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton3">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="00-tilesets.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Tilesets :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton4">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="0-blocks.bin"/>
+                                            <Property name="labelText" type="java.lang.String" value="Blocks :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton5">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="1-layout.bin"/>
+                                            <Property name="labelText" type="java.lang.String" value="Layout :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton6">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="2-areas.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Areas :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton7">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="3-flag-events.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Flag events :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton8">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="4-step-events.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Step events :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton9">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="5-roof-events.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Roof events :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton10">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="6-warp-events.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Warps :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton11">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="7-chest-items.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Chest items :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton12">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="8-other-items.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Other items :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton13">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="9-animations.asm"/>
+                                            <Property name="labelText" type="java.lang.String" value="Animations :"/>
+                                          </Properties>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel6">
+                                      <Properties>
+                                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                            <TitledBorder title="Import"/>
+                                          </Border>
+                                        </Property>
+                                      </Properties>
+
+                                      <Layout>
+                                        <DimensionLayout dim="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="1" attributes="0">
+                                                          <EmptySpace min="0" pref="56" max="32767" attributes="0"/>
+                                                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jSpinner4" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                          <Component id="jButton18" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Component id="jLabel18" alignment="0" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                        </DimensionLayout>
+                                        <DimensionLayout dim="1">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="jSpinner4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jButton18" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                        </DimensionLayout>
+                                      </Layout>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JButton" name="jButton18">
+                                          <Properties>
+                                            <Property name="text" type="java.lang.String" value="Import"/>
+                                          </Properties>
+                                          <Events>
+                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton18ActionPerformed"/>
+                                          </Events>
+                                        </Component>
+                                        <Component class="javax.swing.JSpinner" name="jSpinner4">
+                                          <Properties>
+                                            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                                              <SpinnerModel initial="0" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                                            </Property>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="javax.swing.JLabel" name="jLabel4">
+                                          <Properties>
+                                            <Property name="text" type="java.lang.String" value="Map :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="javax.swing.JLabel" name="jLabel18">
+                                          <Properties>
+                                            <Property name="text" type="java.lang.String" value="Import map disassembly files"/>
+                                          </Properties>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel7">
+                                      <Properties>
+                                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                            <TitledBorder title="Export"/>
+                                          </Border>
+                                        </Property>
+                                      </Properties>
+
+                                      <Layout>
+                                        <DimensionLayout dim="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jTabbedPane5" pref="0" max="32767" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                        </DimensionLayout>
+                                        <DimensionLayout dim="1">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jTabbedPane5" max="32767" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                        </DimensionLayout>
+                                      </Layout>
+                                      <SubComponents>
+                                        <Container class="javax.swing.JTabbedPane" name="jTabbedPane5">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="jPanel5">
+                                              <Constraints>
+                                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                                  <JTabbedPaneConstraints tabName="Map">
+                                                    <Property name="tabTitle" type="java.lang.String" value="Map"/>
+                                                  </JTabbedPaneConstraints>
+                                                </Constraint>
+                                              </Constraints>
+
+                                              <Layout>
+                                                <DimensionLayout dim="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" alignment="0" attributes="0">
                                                           <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="32767" attributes="0"/>
-                                                          <Component id="jButton5" min="-2" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="1" attributes="0">
+                                                              <Group type="102" alignment="0" attributes="0">
+                                                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                                                  <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+                                                                  <EmptySpace max="-2" attributes="0"/>
+                                                                  <Component id="jSpinner5" min="-2" max="-2" attributes="0"/>
+                                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                                  <Component id="jButton19" min="-2" max="-2" attributes="0"/>
+                                                              </Group>
+                                                              <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace max="-2" attributes="0"/>
                                                       </Group>
+                                                  </Group>
+                                                </DimensionLayout>
+                                                <DimensionLayout dim="1">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" alignment="0" attributes="0">
-                                                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="jSpinner5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jButton19" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                </DimensionLayout>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel2">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Export map disassembly files"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JButton" name="jButton19">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Export"/>
+                                                  </Properties>
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton19ActionPerformed"/>
+                                                  </Events>
+                                                </Component>
+                                                <Component class="javax.swing.JSpinner" name="jSpinner5">
+                                                  <Properties>
+                                                    <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+                                                      <SpinnerModel initial="0" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                                                    </Property>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="jLabel16">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Map :"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="jPanel34">
+                                              <Properties>
+                                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                                    <TitledBorder title="Blockset image export"/>
+                                                  </Border>
+                                                </Property>
+                                              </Properties>
+                                              <Constraints>
+                                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                                  <JTabbedPaneConstraints tabName="Blockset Image">
+                                                    <Property name="tabTitle" type="java.lang.String" value="Blockset Image"/>
+                                                  </JTabbedPaneConstraints>
+                                                </Constraint>
+                                              </Constraints>
+
+                                              <Layout>
+                                                <DimensionLayout dim="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" attributes="0">
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="0" attributes="0">
+                                                              <Group type="102" alignment="0" attributes="0">
+                                                                  <Component id="jLabel11" max="-2" attributes="0"/>
+                                                                  <EmptySpace max="-2" attributes="0"/>
+                                                                  <Component id="infoButton1" min="-2" max="-2" attributes="0"/>
+                                                                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                                                                  <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                                                              </Group>
+                                                              <Component id="fileButton16" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton15" alignment="1" pref="0" max="32767" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                </DimensionLayout>
+                                                <DimensionLayout dim="1">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="fileButton15" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="fileButton16" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="infoButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                </DimensionLayout>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton15">
+                                                  <Properties>
+                                                    <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005cblockset.png" containsInvalidXMLChars="true"/>
+                                                    <Property name="labelText" type="java.lang.String" value="Blockset image :"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton16">
+                                                  <Properties>
+                                                    <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005cblockset_hptiles.txt" containsInvalidXMLChars="true"/>
+                                                    <Property name="labelText" type="java.lang.String" value="Blockset priority tiles :"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="jLabel11">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Export blockset data"/>
+                                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JButton" name="jButton4">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Export"/>
+                                                  </Properties>
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+                                                  </Events>
+                                                </Component>
+                                                <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
+                                                  <Properties>
+                                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Image Format:&lt;/b&gt; Select an image File (e.g. PNG or GIF).&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16). &lt;br&gt;&lt;br&gt;&lt;b&gt;Priority tiles:&lt;/b&gt; Outputs a a representation of the map&apos;s blockset with &apos;H&apos; = a high-priority tile, and &apos;L&apos; = a regular tile (low priority).&lt;br&gt;High priority tells the engine to draw tiles over the sprites (i.e. player character).&lt;/html&gt;"/>
+                                                    <Property name="text" type="java.lang.String" value=""/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="jPanel35">
+                                              <Properties>
+                                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                                    <TitledBorder title="Map layout image export"/>
+                                                  </Border>
+                                                </Property>
+                                              </Properties>
+                                              <Constraints>
+                                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                                                  <JTabbedPaneConstraints tabName="Layout Image">
+                                                    <Property name="tabTitle" type="java.lang.String" value="Layout Image"/>
+                                                  </JTabbedPaneConstraints>
+                                                </Constraint>
+                                              </Constraints>
+
+                                              <Layout>
+                                                <DimensionLayout dim="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <EmptySpace max="-2" attributes="0"/>
                                                           <Group type="103" groupAlignment="0" attributes="0">
                                                               <Group type="102" attributes="0">
-                                                                  <Component id="jLabel49" min="-2" max="-2" attributes="0"/>
+                                                                  <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                                                   <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jTextField47" pref="0" max="32767" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jButton54" min="-2" max="-2" attributes="0"/>
+                                                                  <Component id="infoButton2" min="-2" max="-2" attributes="0"/>
+                                                                  <EmptySpace max="32767" attributes="0"/>
+                                                                  <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                                                               </Group>
-                                                              <Group type="102" attributes="0">
-                                                                  <Component id="jLabel46" min="-2" max="-2" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jTextField44" pref="0" max="32767" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jButton51" min="-2" max="-2" attributes="0"/>
-                                                              </Group>
-                                                              <Group type="102" attributes="0">
-                                                                  <Component id="jLabel45" min="-2" max="-2" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jTextField43" pref="0" max="32767" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jButton50" min="-2" max="-2" attributes="0"/>
-                                                              </Group>
+                                                              <Component id="fileButton19" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton18" alignment="1" pref="0" max="32767" attributes="0"/>
+                                                              <Component id="fileButton17" alignment="1" pref="0" max="32767" attributes="0"/>
                                                           </Group>
+                                                          <EmptySpace max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
-                                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                        </DimensionLayout>
-                                        <DimensionLayout dim="1">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel45" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField43" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton50" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel49" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField47" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton54" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel46" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField44" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton51" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel12" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                      <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                        </DimensionLayout>
-                                      </Layout>
-                                      <SubComponents>
-                                        <Component class="javax.swing.JLabel" name="jLabel45">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="PNG :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField43">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="maplayout.png"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton50">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton50ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel12">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="&lt;html&gt;Color mode : indexed 16&lt;/html&gt;"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton5">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="Export"/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel46">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="HP Tiles :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField44">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="maphptiles.txt"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton51">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton51ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel49">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="Flags :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField47">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="maplayoutflags.txt"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton54">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton54ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                      </SubComponents>
-                                    </Container>
-                                    <Container class="javax.swing.JPanel" name="jPanel36">
-                                      <Properties>
-                                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                            <TitledBorder title="GIF Map Layout Export"/>
-                                          </Border>
-                                        </Property>
-                                      </Properties>
-
-                                      <Layout>
-                                        <DimensionLayout dim="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" attributes="0">
+                                                </DimensionLayout>
+                                                <DimensionLayout dim="1">
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" alignment="0" attributes="0">
                                                           <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="32767" attributes="0"/>
-                                                          <Component id="jButton6" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                                          <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Group type="102" attributes="0">
-                                                                  <Component id="jLabel50" min="-2" max="-2" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jTextField48" pref="0" max="32767" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jButton55" min="-2" max="-2" attributes="0"/>
-                                                              </Group>
-                                                              <Group type="102" alignment="0" attributes="0">
-                                                                  <Component id="jLabel48" min="-2" max="-2" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jTextField46" pref="0" max="32767" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jButton53" min="-2" max="-2" attributes="0"/>
-                                                              </Group>
-                                                              <Group type="102" alignment="0" attributes="0">
-                                                                  <Component id="jLabel47" min="-2" max="-2" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jTextField45" max="32767" attributes="0"/>
-                                                                  <EmptySpace max="-2" attributes="0"/>
-                                                                  <Component id="jButton52" min="-2" max="-2" attributes="0"/>
-                                                              </Group>
+                                                          <Component id="fileButton17" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="fileButton18" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="fileButton19" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="3" attributes="0">
+                                                              <Component id="jLabel12" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                                              <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="infoButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                                                           </Group>
+                                                          <EmptySpace max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
-                                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                        </DimensionLayout>
-                                        <DimensionLayout dim="1">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel47" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField45" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton52" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel50" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField48" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton55" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel48" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField46" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton53" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel13" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                      <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                        </DimensionLayout>
-                                      </Layout>
-                                      <SubComponents>
-                                        <Component class="javax.swing.JLabel" name="jLabel47">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="PNG :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField45">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="maplayout.gif"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton52">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton52ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel13">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="&lt;html&gt;Color mode : indexed 16&lt;/html&gt;"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton6">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="Export"/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel48">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="HP Tiles :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField46">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="maphptiles.txt"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton53">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton53ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel50">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="Flags :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField48">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="maplayoutflags.txt"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton55">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton55ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                      </SubComponents>
-                                    </Container>
-                                    <Container class="javax.swing.JPanel" name="jPanel37">
-                                      <Properties>
-                                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                                            <TitledBorder title="GIF Blockset Export"/>
-                                          </Border>
-                                        </Property>
-                                      </Properties>
-
-                                      <Layout>
-                                        <DimensionLayout dim="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="jLabel53" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jTextField51" max="32767" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jButton58" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="32767" attributes="0"/>
-                                                          <Component id="jButton7" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <Group type="102" alignment="1" attributes="0">
-                                                          <Component id="jLabel54" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jTextField52" pref="0" max="32767" attributes="0"/>
-                                                          <EmptySpace max="-2" attributes="0"/>
-                                                          <Component id="jButton59" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                  </Group>
-                                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                        </DimensionLayout>
-                                        <DimensionLayout dim="1">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel53" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField51" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton58" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel54" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jTextField52" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButton59" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel14" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                                                      <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                        </DimensionLayout>
-                                      </Layout>
-                                      <SubComponents>
-                                        <Component class="javax.swing.JLabel" name="jLabel53">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="GIF :"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField51">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="blockset.gif"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton58">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton58ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel14">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="&lt;html&gt;Color mode : indexed 16&lt;/html&gt;"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton7">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="Export"/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
-                                          </Events>
-                                        </Component>
-                                        <Component class="javax.swing.JLabel" name="jLabel54">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="HP tiles : "/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JTextField" name="jTextField52">
-                                          <Properties>
-                                            <Property name="horizontalAlignment" type="int" value="11"/>
-                                            <Property name="text" type="java.lang.String" value="blocksethptiles.txt"/>
-                                          </Properties>
-                                        </Component>
-                                        <Component class="javax.swing.JButton" name="jButton59">
-                                          <Properties>
-                                            <Property name="text" type="java.lang.String" value="File..."/>
-                                          </Properties>
-                                          <Events>
-                                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton59ActionPerformed"/>
-                                          </Events>
-                                        </Component>
+                                                </DimensionLayout>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton17">
+                                                  <Properties>
+                                                    <Property name="filePath" type="java.lang.String" value="\u005c.export\u005cmaplayout.png" containsInvalidXMLChars="true"/>
+                                                    <Property name="labelText" type="java.lang.String" value="Layout image :"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton18">
+                                                  <Properties>
+                                                    <Property name="filePath" type="java.lang.String" value="\u005c.export\u005cmaplayout_flags.txt" containsInvalidXMLChars="true"/>
+                                                    <Property name="labelText" type="java.lang.String" value="Layout flags :"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton19">
+                                                  <Properties>
+                                                    <Property name="filePath" type="java.lang.String" value="\u005c.export\u005clayout_hptiles.txt" containsInvalidXMLChars="true"/>
+                                                    <Property name="labelText" type="java.lang.String" value="Layout priority tiles :"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="jLabel12">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Export map layout data"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JButton" name="jButton5">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Export"/>
+                                                  </Properties>
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+                                                  </Events>
+                                                </Component>
+                                                <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton2">
+                                                  <Properties>
+                                                    <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Image Format:&lt;/b&gt; Select an image File (e.g. PNG or GIF).&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16).&lt;br&gt;&lt;br&gt;&lt;b&gt;Flags:&lt;/b&gt; Outputs a representation of the map containing flag values (i.e. if the tile has an item, warp, etc flag on it).&lt;br&gt;&lt;br&gt;&lt;b&gt;Priority tiles:&lt;/b&gt; Outputs a a representation of the map with &apos;H&apos; = a high-priority tile, and &apos;L&apos; = a regular tile (low priority).&lt;br&gt;High priority tells the engine to draw tiles over the sprites (i.e. player character).&lt;/html&gt;"/>
+                                                    <Property name="text" type="java.lang.String" value=""/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                          </SubComponents>
+                                        </Container>
                                       </SubComponents>
                                     </Container>
                                   </SubComponents>
@@ -1732,7 +827,7 @@
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jScrollPane3" max="32767" attributes="0"/>
+                                              <Component id="jScrollPane3" pref="430" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel14" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -1758,7 +853,7 @@
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="412" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="859" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                           </Layout>
@@ -1888,7 +983,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton1">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Obstructed"/>
                                               </Properties>
@@ -1899,7 +994,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton3">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Stairs"/>
                                               </Properties>
@@ -1975,7 +1070,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton2">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="selected" type="boolean" value="true"/>
                                                 <Property name="text" type="java.lang.String" value="Apply Blocks"/>
@@ -2119,7 +1214,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton4">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Warp"/>
                                               </Properties>
@@ -2130,7 +1225,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton5">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Barrel"/>
                                               </Properties>
@@ -2141,7 +1236,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton6">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Vase"/>
                                               </Properties>
@@ -2152,7 +1247,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton7">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Table"/>
                                               </Properties>
@@ -2163,7 +1258,7 @@
                                             <Component class="javax.swing.JRadioButton" name="jRadioButton8">
                                               <Properties>
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                                                  <ComponentRef name="buttonGroup1"/>
+                                                  <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
                                                 <Property name="text" type="java.lang.String" value="Trigger"/>
                                               </Properties>
@@ -3030,7 +2125,7 @@
                                           <Component id="jCheckBox17" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jCheckBox18" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="46" max="32767" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                           <Component id="jCheckBox19" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jCheckBox20" min="-2" max="-2" attributes="0"/>
