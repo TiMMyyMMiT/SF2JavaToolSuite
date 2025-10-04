@@ -10,6 +10,7 @@ import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.dialog.properties.DialogPropertiesManager;
 import com.sfc.sf2.dialog.properties.DialogProperty;
 import com.sfc.sf2.helpers.PathHelpers;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.logging.Level;
 
@@ -25,6 +26,12 @@ public class DialogPropertiesMainEditor extends AbstractMainEditor {
         super();
         initComponents();
         initCore(console1);
+        
+        //Handle if standard dialog properties exists or not
+        File file = PathHelpers.getBasePath().resolve(fileButton6.getFilePath()).toFile();
+        if (!file.exists()) {
+            fileButton6.setFilePath(".\\spritedialogproperties.asm");
+        }
     }
     
     @Override
