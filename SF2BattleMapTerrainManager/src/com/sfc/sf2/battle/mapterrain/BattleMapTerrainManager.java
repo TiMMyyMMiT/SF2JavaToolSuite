@@ -36,6 +36,7 @@ public class BattleMapTerrainManager extends AbstractManager {
     private BattleMapCoords[] allCoords;
     private BattleMapCoords coords;
     private BattleMapTerrain terrain;
+    private String sharedTerrainInfo;
     private LandEffectEnums landEffectEnums;
     private LandEffectMovementType[] landEffects;
 
@@ -48,6 +49,7 @@ public class BattleMapTerrainManager extends AbstractManager {
     
     public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
+        sharedTerrainInfo = null;
         allCoords = mapCoordsManager.importDisassembly(battleMapCoordsPath);
         this.coords = allCoords[battleIndex];
         EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath, null);
@@ -57,6 +59,18 @@ public class BattleMapTerrainManager extends AbstractManager {
         if (battleIndex < terrainEntries.entriesCount()) {
             Path path = PathHelpers.getIncbinPath().resolve(terrainEntries.getPathForEntry(battleIndex));
             terrain = terrainDisassemblyProcessor.importDisassembly(path, null);
+            if (terrainEntries.isEntryShared(terrainEntries.getEntryValue(battleIndex))) {
+                int[] sharedEntries = terrainEntries.getSharedEntries(terrainEntries.getEntryValue(battleIndex));
+                if (sharedEntries != null && sharedEntries.length > 0) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < sharedEntries.length; i++) {
+                        sb.append("- Battle ");
+                        sb.append(sharedEntries[i]);
+                        sb.append("\n");
+                    }
+                    sharedTerrainInfo = sb.toString();
+                }
+            }
         }
         Console.logger().info("Terrain data " + battleIndex + " successfully imported from : " + terrainEntriesPath);
         Console.logger().finest("EXITING importDisassembly");
@@ -106,6 +120,10 @@ public class BattleMapTerrainManager extends AbstractManager {
 
     public BattleMapCoords[] getAllCoords() {
         return allCoords;
+    }
+
+    public String getSharedTerrainInfo() {
+        return sharedTerrainInfo;
     }
 
     public LandEffectEnums getLandEffectEnums() {
