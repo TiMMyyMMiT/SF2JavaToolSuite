@@ -66,6 +66,9 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         LandEffectEnums landEffectEnums = battlemapterrainManager.getLandEffectEnums();
         landEffectTable.setLandEffectData(landEffectEnums);
         landEffectTableModel.setTableData(battlemapterrainManager.getLandEffects());
+        
+        String sharedTerrainInfo = battlemapterrainManager.getSharedTerrainInfo();
+        terrainKeyPanel1.setSharedTerrainInfo(sharedTerrainInfo);
     }
     
     /**

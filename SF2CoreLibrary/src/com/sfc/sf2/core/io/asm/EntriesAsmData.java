@@ -63,6 +63,14 @@ public class EntriesAsmData {
         }
     }
     
+    public int getEntryValue(int index) {
+        if (index >= 0 && index < entryIndices.size()) {
+            return entryIndices.get(index);
+        } else {
+            return -1;
+        }
+    }
+    
     public String getUniqueEntries(int index) {
         if (index >= 0 && index < uniqueEntryIndices.size()) {
             return entries.get(uniqueEntryIndices.get(index));
@@ -121,5 +129,33 @@ public class EntriesAsmData {
         if (existing == null) {
             paths.set(index, path);
         }
+    }
+    
+    public boolean isEntryShared(int index) {
+        if (index >= uniqueEntryIndices.size() || entryIndices.get(index) != uniqueEntryIndices.get(index)) return true;
+        int count = 0;
+        for (int i = 0; i < entryIndices.size(); i++) {
+            if (entryIndices.get(i) == index) {
+                count++;
+                if (count >= 2) {
+                    return true;    //Multiple matches found
+                }
+            }
+        }
+        return false;
+    }
+    
+    public int[] getSharedEntries(int index) {
+        ArrayList<Integer> sharedList = new ArrayList<>();
+        for (int i = 0; i < entryIndices.size(); i++) {
+            if (entryIndices.get(i) == index) {
+                sharedList.add(i);
+            }
+        }
+        int[] shared = new int[sharedList.size()];
+        for (int i = 0; i < shared.length; i++) {
+            shared[i] = sharedList.get(i).intValue();
+        }
+        return shared;
     }
 }
