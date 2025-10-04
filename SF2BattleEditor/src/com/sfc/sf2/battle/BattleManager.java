@@ -196,6 +196,10 @@ public class BattleManager extends AbstractManager {
     public LandEffectEnums getLandEffectEnums() {
         return mapTerrainManager.getLandEffectEnums();
     }
+    
+    public String getSharedTerrainInfo() {
+        return mapTerrainManager.getSharedTerrainInfo();
+    }
 
     public BattleMapCoords getBattleCoords() {
         return this.battle.getMapCoords();
