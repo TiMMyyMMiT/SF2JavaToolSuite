@@ -36,6 +36,7 @@ public class BattleMapTerrainManager extends AbstractManager {
     private BattleMapCoords[] allCoords;
     private BattleMapCoords coords;
     private BattleMapTerrain terrain;
+    private String sharedTerrainInfo;
     private LandEffectEnums landEffectEnums;
     private LandEffectMovementType[] landEffects;
 
@@ -44,10 +45,12 @@ public class BattleMapTerrainManager extends AbstractManager {
         mapCoordsManager.clearData();
         coords = null;
         terrain = null;
+        sharedTerrainInfo = null;
     }
     
     public BattleMapTerrain importDisassembly(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path terrainEntriesPath, Path battleMapCoordsPath, int battleIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
+        sharedTerrainInfo = null;
         allCoords = mapCoordsManager.importDisassembly(battleMapCoordsPath);
         this.coords = allCoords[battleIndex];
         EntriesAsmData terrainEntries = entriesAsmProcessor.importAsmData(terrainEntriesPath, null);
@@ -57,6 +60,7 @@ public class BattleMapTerrainManager extends AbstractManager {
         if (battleIndex < terrainEntries.entriesCount()) {
             Path path = PathHelpers.getIncbinPath().resolve(terrainEntries.getPathForEntry(battleIndex));
             terrain = terrainDisassemblyProcessor.importDisassembly(path, null);
+            checkForSharedTerrain(terrainEntries, battleIndex);
         }
         Console.logger().info("Terrain data " + battleIndex + " successfully imported from : " + terrainEntriesPath);
         Console.logger().finest("EXITING importDisassembly");
@@ -91,6 +95,21 @@ public class BattleMapTerrainManager extends AbstractManager {
     public MapLayout importMap(Path paletteEntriesPath, Path tilesetsEntriesPath, int mapId) throws IOException, AsmException, DisassemblyException {
         return mapCoordsManager.importMap(paletteEntriesPath, tilesetsEntriesPath, mapId);
     }
+    
+    private void checkForSharedTerrain(EntriesAsmData terrainEntries, int index) {
+        if (terrainEntries.isEntryShared(terrainEntries.getEntryValue(index))) {
+            int[] sharedEntries = terrainEntries.getSharedEntries(terrainEntries.getEntryValue(index));
+            if (sharedEntries != null && sharedEntries.length > 0) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < sharedEntries.length; i++) {
+                    sb.append("- Battle ");
+                    sb.append(sharedEntries[i]);
+                    sb.append("\n");
+                }
+                sharedTerrainInfo = sb.toString();
+            }
+        }
+    }
 
     public BattleMapTerrain getTerrain() {
         return terrain;
@@ -106,6 +125,10 @@ public class BattleMapTerrainManager extends AbstractManager {
 
     public BattleMapCoords[] getAllCoords() {
         return allCoords;
+    }
+
+    public String getSharedTerrainInfo() {
+        return sharedTerrainInfo;
     }
 
     public LandEffectEnums getLandEffectEnums() {

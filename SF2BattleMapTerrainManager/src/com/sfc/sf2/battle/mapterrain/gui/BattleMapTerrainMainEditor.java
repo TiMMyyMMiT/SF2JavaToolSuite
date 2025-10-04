@@ -66,6 +66,9 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
         LandEffectEnums landEffectEnums = battlemapterrainManager.getLandEffectEnums();
         landEffectTable.setLandEffectData(landEffectEnums);
         landEffectTableModel.setTableData(battlemapterrainManager.getLandEffects());
+        
+        String sharedTerrainInfo = battlemapterrainManager.getSharedTerrainInfo();
+        terrainKeyPanel1.setSharedTerrainInfo(sharedTerrainInfo);
     }
     
     /**
@@ -212,7 +215,7 @@ public class BattleMapTerrainMainEditor extends AbstractMainEditor {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton18)
                 .addGap(6, 6, 6))

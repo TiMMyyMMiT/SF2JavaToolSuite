@@ -15,13 +15,17 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.helpers.StringHelpers;
 import com.sfc.sf2.map.animation.io.MapAnimationAsmProcessor;
 import com.sfc.sf2.map.animation.io.MapAnimationPackage;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;
+import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
+import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.palette.Palette;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,16 +35,19 @@ public class MapAnimationManager extends AbstractManager {
        
     private final MapLayoutManager mapLayoutManager = new MapLayoutManager();
     private final TilesetManager tilesetmanager = new TilesetManager();
-    private final MapAnimationAsmProcessor mapAnimationAsmProcessor = new MapAnimationAsmProcessor();
     private final EntriesAsmProcessor entriesAsmProcessor = new EntriesAsmProcessor();
+    private final MapEntriesAsmProcessor mapEntriesAsmProcessor = new MapEntriesAsmProcessor();
+    private final MapAnimationAsmProcessor mapAnimationAsmProcessor = new MapAnimationAsmProcessor();
 
     private MapAnimation animation;
+    private String sharedAnimationInfo;
     
     @Override
     public void clearData() {
         mapLayoutManager.clearData();
         tilesetmanager.clearData();
         animation = null;
+        sharedAnimationInfo = null;
     }
     
     public MapAnimation importDisassembly(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
@@ -58,7 +65,32 @@ public class MapAnimationManager extends AbstractManager {
             getMapLayout().setTilesets(animation.getOriginalTilesets());
             Console.logger().warning("WARNING Map has no animation.");
         }
+        //checkForSharedAnimations(terrainEntries, 0);
         Console.logger().finest("EXITING importDisassembly");
+        return animation;
+    }
+    
+    public MapAnimation importDisassemblyFromEntries(Path palettesEntriesPath, Path tilesetsEntriesPath, Path mapEntriesPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassemblyFromEntries");
+        clearData();
+        mapLayoutManager.ImportMapEntries(mapEntriesPath);
+        mapLayoutManager.importMap(palettesEntriesPath, tilesetsEntriesPath, mapIndex);
+        MapEntryData[] mapEntries = mapLayoutManager.getMapEntries();
+        MapEntryData mapEntry = (mapIndex >= 0 && mapIndex < mapEntries.length) ? mapEntries[mapIndex] : null;
+        if (mapEntry.getAnimationsPath() == null) {
+            animation = new MapAnimation(-1, 0, new MapAnimationFrame[0], getMapLayout().getTilesets());
+            animation.setAnimationTileset(null);
+            getMapLayout().setTilesets(animation.getOriginalTilesets());
+            Console.logger().warning("WARNING Map has no animation.");
+        } else {
+            Path path = PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath());
+            animation = mapAnimationAsmProcessor.importAsmData(path, new MapAnimationPackage(getMapLayout().getTilesets()));
+            importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
+            getMapLayout().setTilesets(animation.getModifiedTilesets());
+            Console.logger().info("Map layout and animation succesfully imported for : " + mapEntry.getAnimationsPath());
+            checkForSharedAnimations(mapEntries, mapEntry.getAnimationsPath());
+        }
+        Console.logger().finest("EXITING importDisassemblyFromEntries");
         return animation;
     }
     
@@ -88,6 +120,22 @@ public class MapAnimationManager extends AbstractManager {
         Console.logger().info("Map animation succesfully exported for : " + animationsPath);
         Console.logger().finest("EXITING exportDisassembly");  
     }
+    
+    private void checkForSharedAnimations(MapEntryData[] mapEntries, String path) {
+        ArrayList<Integer> sharedEntries = new ArrayList<>();
+        for (int i = 0; i < mapEntries.length; i++) {
+            if (path.equals(mapEntries[i].getAnimationsPath())) {
+                sharedEntries.add(i);
+            }
+        }
+        if (sharedEntries.size() > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < sharedEntries.size(); i++) {
+                sb.append(String.format("- Map%02d\n", sharedEntries.get(i)));
+            }
+            sharedAnimationInfo = sb.toString();
+        }
+    }
 
     public MapAnimation getMapAnimation() {
         return animation;
@@ -103,5 +151,9 @@ public class MapAnimationManager extends AbstractManager {
         } else {
             return getMapLayout().getTilesets();
         }
+    }
+
+    public String getSharedAnimationInfo() {
+        return sharedAnimationInfo;
     }
 }
