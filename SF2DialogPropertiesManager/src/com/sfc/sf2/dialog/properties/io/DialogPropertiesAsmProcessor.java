@@ -22,6 +22,7 @@ import java.util.ArrayList;
  */
 public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogProperty[], DialogPropertiesEnums> {
 
+    private boolean importedFileIsStandard = false;
     private int importedFileElisFixIndex = -1;
     
     @Override
@@ -78,6 +79,8 @@ public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogPro
 
                 entriesList.add(new DialogProperty(mapSprite, portrait, sfx));
                 mapSprite = portrait = sfx = null;
+            } else if (line.startsWith("tableEnd")) {
+                importedFileIsStandard = !line.endsWith(".w");
             }
         }
         DialogProperty[] entries = new DialogProperty[entriesList.size()];
@@ -113,7 +116,10 @@ public class DialogPropertiesAsmProcessor extends AbstractAsmProcessor<DialogPro
                 writer.append(String.format("\t\t\t\tspeechSfx %s\n\n", item[i].getSfxName()));
             }
         }
-        writer.append("\t\t\t\ttableEnd\n");
-        
+        if (importedFileIsStandard) {
+            writer.append("\t\t\t\ttableEnd\n");
+        } else {
+            writer.append("\t\t\t\ttableEnd.w\n");
+        }
     }
 }
