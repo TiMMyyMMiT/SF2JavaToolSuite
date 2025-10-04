@@ -150,6 +150,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
         jComboBox_Order2.setModel(new DefaultComboBoxModel<>(enemyEnums.getOrders().keySet().toArray(new String[enemyEnums.getOrders().size()])));
         jComboBox_Items.setModel(new DefaultComboBoxModel<>(enemyEnums.getItems().keySet().toArray(new String[enemyEnums.getItems().size()])));
         multiComboBoxItemFlags.setModel(new DefaultComboBoxModel<>(enemyEnums.getItemFlags().keySet().toArray(new String[enemyEnums.getItemFlags().size()])));
+        
+        
+        String sharedTerrainInfo = battleManager.getSharedTerrainInfo();
+        terrainKeyPanel1.setSharedTerrainInfo(sharedTerrainInfo);
     }
     
     /**

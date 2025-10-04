@@ -134,7 +134,6 @@ public class EntriesAsmData {
     }
     
     public boolean isEntryShared(int index) {
-        if (index >= uniqueEntryIndices.size() || entryIndices.get(index) != uniqueEntryIndices.get(index)) return true;
         int count = 0;
         for (int i = 0; i < entryIndices.size(); i++) {
             if (entryIndices.get(i) == index) {
