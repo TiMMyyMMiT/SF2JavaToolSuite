@@ -44,8 +44,8 @@ public class MapManager extends AbstractManager {
         map.setFlagCopies(flagCopies);
         MapStepCopy[] stepCopies = DisassemblyManager.importStepCopies(stepCopiesPath);
         map.setStepCopies(stepCopies);
-        MapLayer2Copy[] layer2Copies = DisassemblyManager.importLayer2Copies(layer2CopiesPath);
-        map.setLayer2Copies(layer2Copies);
+        MapRoofCopy[] roofCopies = DisassemblyManager.importRoofCopies(layer2CopiesPath);
+        map.setRoofCopies(roofCopies);
         MapWarp[] warps = DisassemblyManager.importWarps(warpsPath);
         map.setWarps(warps);
         MapItem[] chestItems = DisassemblyManager.importChestItems(chestItemsPath);
@@ -53,7 +53,7 @@ public class MapManager extends AbstractManager {
         MapItem[] otherItems = DisassemblyManager.importOtherItems(otherItemsPath);
         map.setOtherItems(otherItems);
         */
-        map = new Map(layout.getBlockset(), layout, new MapArea[0], new MapFlagCopy[0], new MapStepCopy[0], new MapLayer2Copy[0], new MapWarp[0], new MapItem[0], new MapItem[0], animation);
+        map = new Map(layout.getBlockset(), layout, new MapArea[0], new MapFlagCopy[0], new MapStepCopy[0], new MapRoofCopy[0], new MapWarp[0], new MapItem[0], new MapItem[0], animation);
         Console.logger().finest("EXITING importDisassemblyFromEntries");
         return map;
     }

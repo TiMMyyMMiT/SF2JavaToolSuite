@@ -8,7 +8,7 @@ package com.sfc.sf2.map.gui;
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapFlagCopy;
-import com.sfc.sf2.map.MapLayer2Copy;
+import com.sfc.sf2.map.MapRoofCopy;
 import com.sfc.sf2.map.MapStepCopy;
 import com.sfc.sf2.map.MapWarp;
 import com.sfc.sf2.map.block.MapBlock;
@@ -48,7 +48,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     public static final int DRAW_MODE_AREAS = 1<<3;
     public static final int DRAW_MODE_FLAG_COPIES = 1<<4;
     public static final int DRAW_MODE_STEP_COPIES = 1<<5;
-    public static final int DRAW_MODE_LAYER2_COPIES = 1<<6;
+    public static final int DRAW_MODE_ROOF_COPIES = 1<<6;
     public static final int DRAW_MODE_WARPS = 1<<7;
     public static final int DRAW_MODE_ITEMS = 1<<8;
     public static final int DRAW_MODE_TRIGGERS = 1<<9;
@@ -93,8 +93,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         if (shouldDraw(DRAW_MODE_STEP_COPIES)) {
             drawMapStepCopiesImage(graphics);
         }
-        if (shouldDraw(DRAW_MODE_LAYER2_COPIES)) {
-            drawMapLayer2CopiesImage(graphics);
+        if (shouldDraw(DRAW_MODE_ROOF_COPIES)) {
+            drawMapRoofCopiesImage(graphics);
         }
         if (shouldDraw(DRAW_MODE_WARPS)) {
             drawMapWarpsImage(graphics);
@@ -244,22 +244,22 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         }
     }
     
-    private void drawMapLayer2CopiesImage(Graphics graphics) {   
+    private void drawMapRoofCopiesImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
-        for (MapLayer2Copy layer2Copy : map.getLayer2Copies()) {
+        for (MapRoofCopy roofCopy : map.getRoofCopies()) {
             g2.setColor(Color.WHITE);
-            g2.drawRect(layer2Copy.getTriggerX()*24,layer2Copy.getTriggerY()*24, 24, 24);
+            g2.drawRect(roofCopy.getTriggerX()*24,roofCopy.getTriggerY()*24, 24, 24);
             g2.setColor(Color.LIGHT_GRAY);
-            g2.drawRect(layer2Copy.getTriggerX()*24,(layer2Copy.getTriggerY()+1)*24, 24, 24);
+            g2.drawRect(roofCopy.getTriggerX()*24,(roofCopy.getTriggerY()+1)*24, 24, 24);
             g2.setColor(Color.CYAN);
-            int width = layer2Copy.getWidth();
-            int heigth = layer2Copy.getHeight();
-            if(layer2Copy.getSourceX()>=0 && layer2Copy.getSourceX()<64 && layer2Copy.getSourceY()>=0 && layer2Copy.getSourceY()<64){
-                g2.drawRect(layer2Copy.getSourceX()*24 + 3,layer2Copy.getSourceY()*24+3, width*24-6, heigth*24-6);
+            int width = roofCopy.getWidth();
+            int heigth = roofCopy.getHeight();
+            if(roofCopy.getSourceX()>=0 && roofCopy.getSourceX()<64 && roofCopy.getSourceY()>=0 && roofCopy.getSourceY()<64){
+                g2.drawRect(roofCopy.getSourceX()*24 + 3,roofCopy.getSourceY()*24+3, width*24-6, heigth*24-6);
             }
             g2.setColor(Color.LIGHT_GRAY);
-            g2.drawRect(layer2Copy.getDestX()*24 + 3, layer2Copy.getDestY()*24+3, width*24-6, heigth*24-6);
+            g2.drawRect(roofCopy.getDestX()*24 + 3, roofCopy.getDestY()*24+3, width*24-6, heigth*24-6);
         }
     }
     

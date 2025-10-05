@@ -6,14 +6,14 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
-import com.sfc.sf2.map.MapLayer2Copy;
+import com.sfc.sf2.map.MapRoofCopy;
 import com.sfc.sf2.map.layout.MapLayout;
 
 /**
  *
  * @author TiMMy
  */
-public class MapLayer2CopyTableModel extends AbstractTableModel<MapLayer2Copy> {
+public class MapLayer2CopyTableModel extends AbstractTableModel<MapRoofCopy> {
     
     public MapLayer2CopyTableModel() {
         super(new String[] {"Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
@@ -25,17 +25,17 @@ public class MapLayer2CopyTableModel extends AbstractTableModel<MapLayer2Copy> {
     }
 
     @Override
-    protected MapLayer2Copy createBlankItem(int row) {
-        return MapLayer2Copy.createEmpty();
+    protected MapRoofCopy createBlankItem(int row) {
+        return MapRoofCopy.createEmpty();
     }
 
     @Override
-    protected MapLayer2Copy cloneItem(MapLayer2Copy item) {
+    protected MapRoofCopy cloneItem(MapRoofCopy item) {
         return item.clone();
     }
 
     @Override
-    protected Object getValue(MapLayer2Copy item, int row, int col) {
+    protected Object getValue(MapRoofCopy item, int row, int col) {
         switch (col) {
             case 0: return row;
             case 1: return item.getTriggerX();
@@ -51,7 +51,7 @@ public class MapLayer2CopyTableModel extends AbstractTableModel<MapLayer2Copy> {
     }
 
     @Override
-    protected MapLayer2Copy setValue(MapLayer2Copy item, int row, int col, Object value) {
+    protected MapRoofCopy setValue(MapRoofCopy item, int row, int col, Object value) {
         switch (col) {
             case 1: item.setTriggerX((int)value); break;
             case 2: item.setTriggerY((int)value); break;
@@ -66,12 +66,12 @@ public class MapLayer2CopyTableModel extends AbstractTableModel<MapLayer2Copy> {
     }
 
     @Override
-    protected Comparable<?> getMinLimit(MapLayer2Copy item, int col) {
+    protected Comparable<?> getMinLimit(MapRoofCopy item, int col) {
         return 0;
     }
 
     @Override
-    protected Comparable<?> getMaxLimit(MapLayer2Copy item, int col) {
+    protected Comparable<?> getMaxLimit(MapRoofCopy item, int col) {
         return MapLayout.BLOCK_WIDTH-1;
     }
 }

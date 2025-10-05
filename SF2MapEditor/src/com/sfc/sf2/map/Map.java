@@ -20,19 +20,19 @@ public class Map {
     private MapArea[] areas;
     private MapFlagCopy[] flagCopies;
     private MapStepCopy[] stepCopies;
-    private MapLayer2Copy[] layer2Copies;
+    private MapRoofCopy[] roofCopies;
     private MapWarp[] warps;
     private MapItem[] chestItems;
     private MapItem[] otherItems;
     private MapAnimation animation;
 
-    public Map(MapBlockset blockset, MapLayout layout, MapArea[] areas, MapFlagCopy[] flagCopies, MapStepCopy[] stepCopies, MapLayer2Copy[] layer2Copies, MapWarp[] warps, MapItem[] chestItems, MapItem[] otherItems, MapAnimation animation) {
+    public Map(MapBlockset blockset, MapLayout layout, MapArea[] areas, MapFlagCopy[] flagCopies, MapStepCopy[] stepCopies, MapRoofCopy[] roofCopies, MapWarp[] warps, MapItem[] chestItems, MapItem[] otherItems, MapAnimation animation) {
         this.blockset = blockset;
         this.layout = layout;
         this.areas = areas;
         this.flagCopies = flagCopies;
         this.stepCopies = stepCopies;
-        this.layer2Copies = layer2Copies;
+        this.roofCopies = roofCopies;
         this.warps = warps;
         this.chestItems = chestItems;
         this.otherItems = otherItems;
@@ -79,23 +79,12 @@ public class Map {
         this.stepCopies = stepCopies;
     }
 
-    public void setActionFlag(int x, int y, int value) {
-        MapBlock block = this.layout.getBlockset().getBlocks()[y*64+x];
-        int origFlags = block.getFlags();
-        int newValue = value;
-        if ((origFlags&0x0400) != 0 && newValue == 0x0800) {
-            newValue = 0x0400;
-        }
-        int newFlags = (origFlags&0xC000)+(newValue&0x3FFF);
-        block.setFlags(newFlags);
+    public MapRoofCopy[] getRoofCopies() {
+        return roofCopies;
     }
 
-    public MapLayer2Copy[] getLayer2Copies() {
-        return layer2Copies;
-    }
-
-    public void setLayer2Copies(MapLayer2Copy[] layer2Copies) {
-        this.layer2Copies = layer2Copies;
+    public void setRoofCopies(MapRoofCopy[] roofCopies) {
+        this.roofCopies = roofCopies;
     }
 
     public MapWarp[] getWarps() {
@@ -128,5 +117,16 @@ public class Map {
 
     public void setAnimation(MapAnimation animation) {
         this.animation = animation;
+    }
+
+    public void setActionFlag(int x, int y, int value) {
+        MapBlock block = this.layout.getBlockset().getBlocks()[y*64+x];
+        int origFlags = block.getFlags();
+        int newValue = value;
+        if ((origFlags&0x0400) != 0 && newValue == 0x0800) {
+            newValue = 0x0400;
+        }
+        int newFlags = (origFlags&0xC000)+(newValue&0x3FFF);
+        block.setFlags(newFlags);
     }
 }

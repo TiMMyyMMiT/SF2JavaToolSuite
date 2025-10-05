@@ -9,7 +9,7 @@ package com.sfc.sf2.map;
  *
  * @author wiz
  */
-public class MapLayer2Copy {
+public class MapRoofCopy {
     
     private int triggerX;
     private int triggerY;
@@ -20,7 +20,7 @@ public class MapLayer2Copy {
     private int destX;
     private int destY;
 
-    public MapLayer2Copy(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY) {
+    public MapRoofCopy(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY) {
         this.triggerX = triggerX;
         this.triggerY = triggerY;
         this.sourceX = sourceX;
@@ -95,12 +95,12 @@ public class MapLayer2Copy {
         this.destY = destY;
     }
     
-    public static MapLayer2Copy createEmpty() {
-        return new MapLayer2Copy(0, 0, 0, 32, 10, 10, 32, 0);
+    public static MapRoofCopy createEmpty() {
+        return new MapRoofCopy(0, 0, 0, 32, 10, 10, 32, 0);
     }
 
     @Override
-    public MapLayer2Copy clone() {
-        return new MapLayer2Copy(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY);
+    public MapRoofCopy clone() {
+        return new MapRoofCopy(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY);
     }
 }

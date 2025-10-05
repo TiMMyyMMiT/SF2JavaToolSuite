@@ -97,7 +97,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_AREAS, jCheckBox15.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_FLAG_COPIES, jCheckBox16.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_STEP_COPIES, jCheckBox17.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox18.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ROOF_COPIES, jCheckBox18.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_WARPS, jCheckBox19.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox20.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox21.isSelected());
@@ -106,7 +106,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             mapAreaTableModel.setTableData(map.getAreas());
             mapFlagCopyTableModel.setTableData(map.getFlagCopies());
             mapStepCopyTableModel.setTableData(map.getStepCopies());
-            mapLayer2CopyTableModel.setTableData(map.getLayer2Copies());
+            mapLayer2CopyTableModel.setTableData(map.getRoofCopies());
             mapWarpTableModel.setTableData(map.getWarps());
             mapChestItemTableModel.setTableData(map.getChestItems());
             mapOtherItemTableModel.setTableData(map.getOtherItems());
@@ -1944,7 +1944,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 SetTabRelativeCheckbox(jCheckBox17, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
                 break;
             case 2:     //Roof copies
-                SetTabRelativeCheckbox(jCheckBox18, MapLayoutPanel.DRAW_MODE_LAYER2_COPIES);
+                SetTabRelativeCheckbox(jCheckBox18, MapLayoutPanel.DRAW_MODE_ROOF_COPIES);
                 break;
         }
         mapLayoutPanel.redraw();
@@ -1987,7 +1987,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox17ActionPerformed
 
     private void jCheckBox18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox18ActionPerformed
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox18.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ROOF_COPIES, jCheckBox18.isSelected());
     }//GEN-LAST:event_jCheckBox18ActionPerformed
 
     private void jCheckBox19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox19ActionPerformed

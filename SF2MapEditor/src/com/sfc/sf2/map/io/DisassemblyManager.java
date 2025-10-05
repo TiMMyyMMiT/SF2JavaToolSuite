@@ -8,7 +8,7 @@ package com.sfc.sf2.map.io;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapFlagCopy;
 import com.sfc.sf2.map.MapItem;
-import com.sfc.sf2.map.MapLayer2Copy;
+import com.sfc.sf2.map.MapRoofCopy;
 import com.sfc.sf2.map.MapStepCopy;
 import com.sfc.sf2.map.MapWarp;
 import java.io.File;
