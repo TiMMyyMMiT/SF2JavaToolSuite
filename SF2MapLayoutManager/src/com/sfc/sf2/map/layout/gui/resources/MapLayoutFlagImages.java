@@ -49,20 +49,27 @@ public class MapLayoutFlagImages {
     
     public static BufferedImage getBlockInteractionFlagImage(int interactionFlags) {
         switch (interactionFlags) {
-            case 0x1800:
-                return getChestImage();
             case 0x1000:
                 return getWarpImage();
             case 0x1400:
                 return getEventImage();
+            case 0x1C00:
+                return getSearchImage();
+            default:
+                return getBlockItemFlagImage(interactionFlags);
+        }
+    }
+    
+    public static BufferedImage getBlockItemFlagImage(int interactionFlags) {
+        switch (interactionFlags) {
+            case 0x1800:
+                return getChestImage();
             case 0x2800:
                 return getTableImage();
             case 0x3000:
                 return getBarrelImage();
             case 0x2C00:
                 return getVaseImage();
-            case 0x1C00:
-                return getSearchImage();
             default:
                 return null;
         }

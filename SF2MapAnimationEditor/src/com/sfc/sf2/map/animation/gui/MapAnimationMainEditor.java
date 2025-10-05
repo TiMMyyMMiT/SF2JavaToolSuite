@@ -96,7 +96,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             jSpinner3.setValue(animation.getLength());
 
             tableAnimFrames.jTable.clearSelection();
-            mapAnimationFrameTableModel.setTableData(mapAnimationManager.getMapAnimation().getFrames());
+            mapAnimationFrameTableModel.setTableData(animation.getFrames());
         }
         
         String sharedAnimationInfo = mapAnimationManager.getSharedAnimationInfo();
@@ -253,7 +253,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -417,7 +417,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             tilesetLayoutPanelAnim.setLayout(tilesetLayoutPanelAnimLayout);
             tilesetLayoutPanelAnimLayout.setHorizontalGroup(
                 tilesetLayoutPanelAnimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 327, Short.MAX_VALUE)
+                .addGap(0, 367, Short.MAX_VALUE)
             );
             tilesetLayoutPanelAnimLayout.setVerticalGroup(
                 tilesetLayoutPanelAnimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,7 +437,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             tilesetLayoutPanelModified.setLayout(tilesetLayoutPanelModifiedLayout);
             tilesetLayoutPanelModifiedLayout.setHorizontalGroup(
                 tilesetLayoutPanelModifiedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 327, Short.MAX_VALUE)
+                .addGap(0, 367, Short.MAX_VALUE)
             );
             tilesetLayoutPanelModifiedLayout.setVerticalGroup(
                 tilesetLayoutPanelModifiedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -765,7 +765,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             jPanel15.setLayout(jPanel15Layout);
             jPanel15Layout.setHorizontalGroup(
                 jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1200, Short.MAX_VALUE)
             );
             jPanel15Layout.setVerticalGroup(
                 jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -783,7 +783,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             );
             jPanel13Layout.setVerticalGroup(
                 jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 858, Short.MAX_VALUE)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
             );
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -797,7 +797,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
                 .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             );
 
-            setSize(new java.awt.Dimension(1086, 866));
+            setSize(new java.awt.Dimension(1216, 908));
             setLocationRelativeTo(null);
         }// </editor-fold>//GEN-END:initComponents
 

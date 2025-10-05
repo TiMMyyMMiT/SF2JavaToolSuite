@@ -6,16 +6,23 @@
 package com.sfc.sf2.map.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
-import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator;
 import com.sfc.sf2.core.settings.SettingsManager;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapManager;
+import com.sfc.sf2.map.animation.MapAnimation;
+import com.sfc.sf2.map.animation.MapAnimationFrame;
 import com.sfc.sf2.map.settings.MapBlockSettings;
-import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JCheckBox;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
 
 /**
  *
@@ -25,6 +32,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     
     private final MapBlockSettings mapLayoutSettings = new MapBlockSettings();
     MapManager mapManager = new MapManager();
+    
+    JCheckBox tabRelativeCheckbox;
+    boolean tabRelativeCheckboxState;
+    JCheckBox actionRelativeCheckbox;
+    boolean actionRelativeCheckboxState;
     
     public MapEditorMainEditor() {
         super();
@@ -37,14 +49,93 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     protected void initEditor() {
         super.initEditor();
         
-        //Init
+        accordionPanel1.setExpanded(false);
+        accordionPanel2.setExpanded(false);
+        
+        colorPicker1.setColor(SettingsManager.getGlobalSettings().getTransparentBGColor());
+        colorPickerTileset.setColor(mapLayoutSettings.getTilesetBGColor());
+        jComboBox4.setSelectedIndex(mapLayoutSettings.getTilesetScale()-1);
+        
+        mapLayoutPanel.setShowGrid(jCheckBox10.isSelected());
+        mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
+        mapLayoutPanel.setBGColor(colorPicker1.getColor());
+        mapLayoutPanel.setShowPriority(jCheckBox13.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox11.isSelected());
+        
+        //mapLayoutPanel.setLeftSlot(leftSlotBlockPanel);
+        //mapblockLayout.setLeftSlotBlockPanel(leftSlotBlockPanel);
+        //mapblockLayout.setRightSlotBlockPanel(rightSlotBlockPanel);
+        
+        tilesetLayoutPanelAnim.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanelAnim.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanelAnim.setDisplayScale(jComboBox4.getSelectedIndex()+1);
+        tilesetLayoutPanelAnim.setItemsPerRow((int)jSpinner6.getValue());
+        tilesetLayoutPanelAnim.setShowAnimationFrames(jCheckBox7.isSelected());
+        tilesetLayoutPanelModified.setBGColor(colorPickerTileset.getColor());
+        tilesetLayoutPanelModified.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanelModified.setDisplayScale(jComboBox4.getSelectedIndex()+1);
+        tilesetLayoutPanelModified.setItemsPerRow((int)jSpinner6.getValue());
+        tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
+        
+        tilesetLayoutPanelModified.getAnimator().addAnimationListener(this::onAnimationUpdated);
+        
+        tableAnimFrames.addListSelectionListener(this::onAnimationFramesSelectionChanged);
+        tableAnimFrames.addTableModelListener(this::onAnimationFramesDataChanged);
+        tableAnimFrames.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
+        
+        infoButtonSharedAnimation.setVisible(false);
     }
     
     @Override
     protected void onDataLoaded() {
         super.onDataLoaded();
         
-        //Set data
+        Map map = mapManager.getMap();        
+        mapLayoutPanel.setMap(map);
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_EXPLORATION_FLAGS, jCheckBox11.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_GRID, jCheckBox10.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_AREAS, jCheckBox15.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_FLAG_COPIES, jCheckBox16.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_STEP_COPIES, jCheckBox17.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox18.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_WARPS, jCheckBox19.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox20.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox21.isSelected());
+                
+        if (map != null) {
+            mapAreaTableModel.setTableData(map.getAreas());
+            mapFlagCopyTableModel.setTableData(map.getFlagCopies());
+            mapStepCopyTableModel.setTableData(map.getStepCopies());
+            mapLayer2CopyTableModel.setTableData(map.getLayer2Copies());
+            mapWarpTableModel.setTableData(map.getWarps());
+            mapChestItemTableModel.setTableData(map.getChestItems());
+            mapOtherItemTableModel.setTableData(map.getOtherItems());
+            
+            MapAnimation animation = map.getAnimation();
+            if (animation != null) {
+                tilesetLayoutPanelAnim.setMapAnimation(animation);
+                tilesetLayoutPanelModified.setMapAnimation(animation);
+                if (animation.getFrames().length == 0) {
+                    tilesetLayoutPanelModified.setSelectedTileset(-1);
+                } else {
+                    tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[0].getDestTileset());
+                }
+                tilesetLayoutPanelModified.getAnimator().stopAnimation();
+                jCheckBox8.setSelected(false);
+                jCheckBox9.setSelected(false);
+                jSpinner2.setValue(animation.getTilesetId());
+                jSpinner3.setValue(animation.getLength());
+
+                tableAnimFrames.jTable.clearSelection();
+                mapAnimationFrameTableModel.setTableData(animation.getFrames());
+            }
+
+            String sharedAnimationInfo = mapManager.getSharedAnimationInfo();
+            infoButtonSharedAnimation.setVisible(sharedAnimationInfo != null);
+            if (sharedAnimationInfo != null) {
+                infoButtonSharedAnimation.setMessageText("This animation data is used by the following maps:\n" + sharedAnimationInfo + "\nAny changes will affect all of these maps.\n\nTo unlink the maps, you can export this animation for a specific map and then update \\maps\\entries.asm");
+            }
+        }
     }
     
     /**
@@ -65,6 +156,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapStepCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyTableModel();
         mapAnimationFrameTableModel = new com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel();
         mapWarpTableModel = new com.sfc.sf2.map.models.MapWarpTableModel();
+        flatOptionPaneWarningIcon1 = new com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
@@ -179,6 +271,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jSpinner2 = new javax.swing.JSpinner();
         jLabel9 = new javax.swing.JLabel();
         jSpinner3 = new javax.swing.JSpinner();
+        infoButtonSharedAnimation = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -187,10 +280,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jComboBox9 = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jCheckBox10 = new javax.swing.JCheckBox();
-        colorPicker2 = new com.sfc.sf2.core.gui.controls.ColorPicker();
+        colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jLabel59 = new javax.swing.JLabel();
         jCheckBox11 = new javax.swing.JCheckBox();
-        jCheckBox12 = new javax.swing.JCheckBox();
         jCheckBox13 = new javax.swing.JCheckBox();
         jCheckBox15 = new javax.swing.JCheckBox();
         jCheckBox16 = new javax.swing.JCheckBox();
@@ -199,6 +291,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jCheckBox21 = new javax.swing.JCheckBox();
         jCheckBox20 = new javax.swing.JCheckBox();
         jCheckBox19 = new javax.swing.JCheckBox();
+        jCheckBox9 = new javax.swing.JCheckBox();
         jSplitPane3 = new javax.swing.JSplitPane();
         jPanel20 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -208,11 +301,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2MapEditor");
 
-        jSplitPane1.setDividerLocation(800);
+        jSplitPane1.setDividerLocation(900);
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setOneTouchExpandable(true);
 
-        jSplitPane2.setDividerLocation(650);
+        jSplitPane2.setDividerLocation(700);
         jSplitPane2.setOneTouchExpandable(true);
 
         jSplitPane4.setDividerLocation(300);
@@ -224,10 +317,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
         accordionPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Paths"));
 
-        fileButton1.setFilePath("..\\..\\..\\graphics\\maps\\mappalettes\\entries.asm");
+        fileButton1.setFilePath("..\\graphics\\maps\\mappalettes\\entries.asm");
         fileButton1.setLabelText("Palette entries :");
 
-        fileButton2.setFilePath("..\\..\\..\\graphics\\maps\\maptilesets\\entries.asm");
+        fileButton2.setFilePath("..\\graphics\\maps\\maptilesets\\entries.asm");
         fileButton2.setLabelText("Tileset entries :");
 
         fileButton14.setFilePath(".\\entries.asm");
@@ -349,7 +442,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(3, 0, 100, 1));
 
         jLabel4.setText("Map :");
 
@@ -363,7 +456,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addGap(0, 56, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -464,7 +557,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(infoButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addComponent(jButton4))
                     .addComponent(fileButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(fileButton15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
@@ -583,10 +676,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 .addContainerGap()
                 .addComponent(accordionPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(accordionPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(accordionPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -597,7 +690,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -608,6 +701,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
         jSplitPane4.setLeftComponent(jPanel9);
 
+        jTabbedPane2.setMinimumSize(new java.awt.Dimension(390, 185));
         jTabbedPane2.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTabbedPane2StateChanged(evt);
@@ -623,7 +717,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapBlocksetLayoutPanel.setLayout(mapBlocksetLayoutPanelLayout);
         mapBlocksetLayoutPanelLayout.setHorizontalGroup(
             mapBlocksetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 318, Short.MAX_VALUE)
+            .addGap(0, 361, Short.MAX_VALUE)
         );
         mapBlocksetLayoutPanelLayout.setVerticalGroup(
             mapBlocksetLayoutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -911,7 +1005,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -930,14 +1024,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -961,14 +1055,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableFlagCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(tableFlagCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableFlagCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(tableFlagCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -986,14 +1080,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableStepCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(tableStepCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel25Layout.setVerticalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel25Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableStepCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(tableStepCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1011,14 +1105,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1049,14 +1143,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel27Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableWarps, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(tableWarps, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel27Layout.setVerticalGroup(
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel27Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableWarps, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+                .addComponent(tableWarps, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1074,14 +1168,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel29Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableChestItems, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                .addComponent(tableChestItems, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel29Layout.setVerticalGroup(
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel29Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableChestItems, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(tableChestItems, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1099,14 +1193,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel30Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableOtherItems, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                .addComponent(tableOtherItems, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel30Layout.setVerticalGroup(
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel30Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableOtherItems, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(tableOtherItems, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1134,7 +1228,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tilesetLayoutPanelAnim.setLayout(tilesetLayoutPanelAnimLayout);
         tilesetLayoutPanelAnimLayout.setHorizontalGroup(
             tilesetLayoutPanelAnimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 324, Short.MAX_VALUE)
+            .addGap(0, 367, Short.MAX_VALUE)
         );
         tilesetLayoutPanelAnimLayout.setVerticalGroup(
             tilesetLayoutPanelAnimLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1154,7 +1248,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tilesetLayoutPanelModified.setLayout(tilesetLayoutPanelModifiedLayout);
         tilesetLayoutPanelModifiedLayout.setHorizontalGroup(
             tilesetLayoutPanelModifiedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 324, Short.MAX_VALUE)
+            .addGap(0, 367, Short.MAX_VALUE)
         );
         tilesetLayoutPanelModifiedLayout.setVerticalGroup(
             tilesetLayoutPanelModifiedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1290,6 +1384,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             }
         });
 
+        infoButtonSharedAnimation.setIcon(flatOptionPaneWarningIcon1);
+        infoButtonSharedAnimation.setText("");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1300,6 +1397,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(infoButtonSharedAnimation, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1309,11 +1408,13 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(infoButtonSharedAnimation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9)
+                        .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -1352,12 +1453,12 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addComponent(jTabbedPane2)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1402,7 +1503,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 752, Short.MAX_VALUE)
         );
 
         jPanel33.setBorder(javax.swing.BorderFactory.createTitledBorder("Map view"));
@@ -1423,20 +1524,20 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             }
         });
 
-        colorPicker2.addColorChangedListener(new com.sfc.sf2.core.gui.controls.ColorPicker.ColorChangedListener() {
+        colorPicker1.addColorChangedListener(new com.sfc.sf2.core.gui.controls.ColorPicker.ColorChangedListener() {
             public void colorChanged(java.awt.event.ActionEvent evt) {
-                colorPicker2ColorChanged(evt);
+                colorPicker1ColorChanged(evt);
             }
         });
 
-        javax.swing.GroupLayout colorPicker2Layout = new javax.swing.GroupLayout(colorPicker2);
-        colorPicker2.setLayout(colorPicker2Layout);
-        colorPicker2Layout.setHorizontalGroup(
-            colorPicker2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout colorPicker1Layout = new javax.swing.GroupLayout(colorPicker1);
+        colorPicker1.setLayout(colorPicker1Layout);
+        colorPicker1Layout.setHorizontalGroup(
+            colorPicker1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 22, Short.MAX_VALUE)
         );
-        colorPicker2Layout.setVerticalGroup(
-            colorPicker2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        colorPicker1Layout.setVerticalGroup(
+            colorPicker1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 22, Short.MAX_VALUE)
         );
 
@@ -1447,13 +1548,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jCheckBox11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBox11ActionPerformed(evt);
-            }
-        });
-
-        jCheckBox12.setText("Interaction flags");
-        jCheckBox12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox12ActionPerformed(evt);
             }
         });
 
@@ -1513,6 +1607,13 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             }
         });
 
+        jCheckBox9.setText("Preview anim");
+        jCheckBox9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox9animationActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
@@ -1523,11 +1624,13 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel33Layout.createSequentialGroup()
                         .addComponent(jCheckBox11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCheckBox13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBox9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                         .addComponent(jLabel59)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(colorPicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCheckBox10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1535,22 +1638,22 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel33Layout.createSequentialGroup()
-                        .addComponent(jCheckBox12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox13)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel33Layout.createSequentialGroup()
-                        .addComponent(jCheckBox16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBox19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox21)))
+                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel33Layout.createSequentialGroup()
+                                .addComponent(jCheckBox16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCheckBox17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCheckBox18))
+                            .addGroup(jPanel33Layout.createSequentialGroup()
+                                .addComponent(jCheckBox15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCheckBox19)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCheckBox20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jCheckBox21)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel33Layout.setVerticalGroup(
@@ -1558,25 +1661,26 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             .addGroup(jPanel33Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(colorPicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel59)
                     .addComponent(jCheckBox11)
                     .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox15)
                     .addComponent(jLabel10)
-                    .addComponent(jCheckBox10))
+                    .addComponent(jCheckBox10)
+                    .addComponent(jCheckBox13)
+                    .addComponent(jCheckBox9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jCheckBox12)
-                    .addComponent(jCheckBox13))
+                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jCheckBox15)
+                    .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jCheckBox19)
+                        .addComponent(jCheckBox20)
+                        .addComponent(jCheckBox21)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jCheckBox16)
                     .addComponent(jCheckBox17)
-                    .addComponent(jCheckBox18)
-                    .addComponent(jCheckBox19)
-                    .addComponent(jCheckBox20)
-                    .addComponent(jCheckBox21))
+                    .addComponent(jCheckBox18))
                 .addContainerGap())
         );
 
@@ -1611,9 +1715,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
-                .addComponent(jSplitPane2)
-                .addContainerGap())
+            .addComponent(jSplitPane2)
         );
 
         jSplitPane1.setTopComponent(jPanel15);
@@ -1658,356 +1760,72 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1216, 908));
+        setSize(new java.awt.Dimension(1416, 1008));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        /*
-        String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
-        
-        String mapPath = jTextField24.getText();
-        if(!mapPath.endsWith(File.separator)){
-            mapPath = mapPath+""+File.separator;
-        }
-        System.out.println(toolPath.toString());
-        Path mapBasePath = toolPath.resolve(Paths.get(mapPath)).normalize();
-        System.out.println(mapBasePath.toString());        
-        Path iPath = Paths.get(jTextField49.getText());
-        Path incbinPath;
-        if(!iPath.isAbsolute()){
-           incbinPath = mapBasePath.resolve(iPath).normalize();
-        }else{
-            incbinPath = iPath;
-        }
-        System.out.println(incbinPath.toString());
-        //Palettes path
-        Path pePath = Paths.get(jTextField21.getText());
-        Path paletteEntriesPath;
-        if(!pePath.isAbsolute()){
-           paletteEntriesPath = mapBasePath.resolve(pePath).normalize();
-        }else{
-            paletteEntriesPath = pePath;
-        }
-        System.out.println(paletteEntriesPath.toString());
-        //Tilesets path
-        Path tePath = Paths.get(jTextField22.getText());
-        Path tilesetEntriesPath;
-        if(!tePath.isAbsolute()){
-           tilesetEntriesPath = mapBasePath.resolve(tePath).normalize();
-        }else{
-            tilesetEntriesPath = tePath;
-        }
-        System.out.println(tilesetEntriesPath.toString());
-        //Map tilesets path
-        Path tPath = Paths.get(jTextField23.getText());
-        Path tilesetsPath;
-        if(!tPath.isAbsolute()){
-           tilesetsPath = mapBasePath.resolve(tPath).normalize();
-        }else{
-            tilesetsPath = tPath;
-        }
-        System.out.println(tilesetsPath.toString());
-        //Map blocks path
-        Path bPath = Paths.get(jTextField19.getText());
-        Path blocksetPath;
-        if(!bPath.isAbsolute()){
-           blocksetPath = mapBasePath.resolve(bPath).normalize();
-        }else{
-            blocksetPath = bPath;
-        }
-        System.out.println(blocksetPath.toString());
-        //Map layout path
-        Path lPath = Paths.get(jTextField20.getText());
-        Path layoutPath;
-        if(!lPath.isAbsolute()){
-           layoutPath = mapBasePath.resolve(lPath).normalize();
-        }else{
-            layoutPath = lPath;
-        }        
-        System.out.println(layoutPath.toString());
-        //Map areas path
-        Path arPath = Paths.get(jTextField27.getText());
-        Path areasPath;
-        if(!arPath.isAbsolute()){
-           areasPath = mapBasePath.resolve(arPath).normalize();
-        }else{
-            areasPath = arPath;
-        }        
-        System.out.println(areasPath.toString());
-        //Map flag copies path
-        Path fcPath = Paths.get(jTextField26.getText());
-        Path flagCopiesPath;
-        if(!fcPath.isAbsolute()){
-           flagCopiesPath = mapBasePath.resolve(fcPath).normalize();
-        }else{
-            flagCopiesPath = fcPath;
-        }        
-        System.out.println(flagCopiesPath.toString());
-        //Map step copies path
-        Path scPath = Paths.get(jTextField25.getText());
-        Path stepCopiesPath;
-        if(!scPath.isAbsolute()){
-           stepCopiesPath = mapBasePath.resolve(scPath).normalize();
-        }else{
-            stepCopiesPath = scPath;
-        }        
-        System.out.println(stepCopiesPath.toString());
-        //Map roof copies path
-        Path rcPath = Paths.get(jTextField30.getText());
-        Path layer2CopiesPath;
-        if(!rcPath.isAbsolute()){
-           layer2CopiesPath = mapBasePath.resolve(rcPath).normalize();
-        }else{
-            layer2CopiesPath = rcPath;
-        }        
-        System.out.println(layer2CopiesPath.toString());
-        //Map warps path
-        Path wPath = Paths.get(jTextField29.getText());
-        Path warpsPath;
-        if(!wPath.isAbsolute()){
-           warpsPath = mapBasePath.resolve(wPath).normalize();
-        }else{
-            warpsPath = wPath;
-        }        
-        System.out.println(warpsPath.toString());
-        //Map chest items path
-        Path ciPath = Paths.get(jTextField28.getText());
-        Path chestItemsPath;
-        if(!ciPath.isAbsolute()){
-           chestItemsPath = mapBasePath.resolve(ciPath).normalize();
-        }else{
-            chestItemsPath = ciPath;
-        }        
-        System.out.println(chestItemsPath.toString());
-        //Map other items path
-        Path oiPath = Paths.get(jTextField32.getText());
-        Path otherItemsPath;
-        if(!oiPath.isAbsolute()){
-           otherItemsPath = mapBasePath.resolve(oiPath).normalize();
-        }else{
-            otherItemsPath = oiPath;
-        }        
-        System.out.println(otherItemsPath.toString());
-        //Map anims path
-        Path aPath = Paths.get(jTextField31.getText());
-        Path animPath;
-        if(!aPath.isAbsolute()){
-           animPath = mapBasePath.resolve(aPath).normalize();
-        }else{
-            animPath = aPath;
-        }        
-        System.out.println(animPath.toString());
-        
+        Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
+        Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
+        int mapId = (int)jSpinner4.getValue();
         try {
-            mapManager.importDisassembly(incbinPath.toString(), paletteEntriesPath.toString(),tilesetEntriesPath.toString(),tilesetsPath.toString(),blocksetPath.toString(),layoutPath.toString(),
-                    areasPath.toString(), flagCopiesPath.toString(), stepCopiesPath.toString(), layer2CopiesPath.toString(), warpsPath.toString(),
-                    chestItemsPath.toString(),otherItemsPath.toString(), animPath.toString());
-        } catch (DisassemblyException ex) {
-            Logger.getLogger(MapEditorMainEditor.class.getName()).log(Level.SEVERE, null, ex);
+            mapManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapId);
+        } catch (Exception ex) {
+            mapManager.clearData();
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map animation be imported for map : " + mapId);
         }
-        
-        map = mapManager.getMap();
-        
-        jPanel6.removeAll();       
-        jPanel6.setLayout(new GridLayout(1,1));
-        mapblockLayout = new MapBlocksetLayoutPanel();
-        mapblockLayout.setItemsPerRow(((int)jSpinner1.getModel().getValue()));
-        mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
-        jPanel6.add(mapblockLayout);
-        jPanel6.setSize(mapblockLayout.getWidth(), mapblockLayout.getHeight());
-        jPanel6.revalidate();
-        jPanel6.repaint();         
-        jPanel2.removeAll();       
-        jPanel2.setLayout(new GridLayout(1,1));
-        mapLayoutPanel = new MapLayoutPanel();
-        mapLayoutPanel.setMap(map);
-        mapLayoutPanel.setMapLayout(map.getLayout());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_EXPLORATION_FLAGS, jCheckBox1.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_GRID, jCheckBox2.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_AREAS, jCheckBox3.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_FLAG_COPIES, jCheckBox4.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_STEP_COPIES, jCheckBox5.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox6.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_WARPS, jCheckBox7.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox8.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox9.isSelected());
-        mapLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        jPanel2.add(////mapLayoutPanel);
-        jPanel2.setSize(////mapLayoutPanel.getWidth(), ////mapLayoutPanel.getHeight());
-        jPanel2.revalidate();
-        jPanel2.repaint();  
-        jPanel18.removeAll();
-        jPanel19.removeAll();
-        jPanel18.setLayout(new GridLayout(1,1));
-        jPanel19.setLayout(new GridLayout(1,1));
-        BlockSlotPanel leftSlotBlockPanel = new BlockSlotPanel();
-        BlockSlotPanel rightSlotBlockPanel = new BlockSlotPanel();
-        jPanel18.add(leftSlotBlockPanel);
-        jPanel19.add(rightSlotBlockPanel);
-        ////mapLayoutPanel.setLeftSlot(leftSlotBlockPanel);
-        mapblockLayout.setLeftSlotBlockPanel(leftSlotBlockPanel);
-        mapblockLayout.setRightSlotBlockPanel(rightSlotBlockPanel);
-        /*jTable1.setModel(new MapAreaTableModel(map, ////mapLayoutPanel));
-        jPanel21.validate();
-        jPanel21.repaint();
-        flagCopyTableModel = new MapFlagCopyTableModel(map, ////mapLayoutPanel);
-        jTable2.setModel(flagCopyTableModel);
-        jPanel24.validate();
-        jPanel24.repaint();
-        stepCopyTableModel = new MapStepCopyTableModel(map, ////mapLayoutPanel);
-        jTable3.setModel(stepCopyTableModel);
-        jPanel25.validate();
-        jPanel25.repaint();
-        layer2CopyTableModel = new MapLayer2CopyTableModel(map, ////mapLayoutPanel);
-        jTable4.setModel(layer2CopyTableModel);
-        jPanel26.validate();
-        jPanel26.repaint();
-        warpTableModel = new MapWarpTableModel(map, ////mapLayoutPanel);
-        jTable5.setModel(warpTableModel);
-        jPanel27.validate();
-        jPanel27.repaint();
-        chestItemTableModel = new MapChestItemPropertiesTableModel(map, ////mapLayoutPanel);
-        jTable6.setModel(chestItemTableModel);
-        jPanel29.validate();
-        jPanel29.repaint();
-        otherItemTableModel = new MapItemTableModel(map, ////mapLayoutPanel);
-        jTable7.setModel(otherItemTableModel);
-        jPanel30.validate();
-        jPanel30.repaint();
-        animFrameTableModel = new MapAnimationFramePropertiesTableModel(map, ////mapLayoutPanel);
-        jTable8.setModel(animFrameTableModel);
-        jPanel23.validate();
-        jPanel23.repaint();
-        jSpinner2.getModel().setValue(map.getAnimation().getTileset());
-        
-        /*map = mapManager.getMap();
-        
-        jPanel6.removeAll();       
-        jPanel6.setLayout(new GridLayout(1,1));
-        mapblockLayout = new MapBlocksetLayoutPanel();
-        mapblockLayout.setItemsPerRow(((int)jSpinner1.getModel().getValue()));
-        mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
-        jPanel6.add(mapblockLayout);
-        jPanel6.setSize(mapblockLayout.getWidth(), mapblockLayout.getHeight());
-        jPanel6.revalidate();
-        jPanel6.repaint();         
-        jPanel2.removeAll();       
-        jPanel2.setLayout(new GridLayout(1,1));
-        ////mapLayoutPanel = new MapLayoutPanel();
-        ////mapLayoutPanel.setMap(map);
-        ////mapLayoutPanel.setMapLayout(map.getLayout());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_EXPLORATION_FLAGS, jCheckBox1.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_GRID, jCheckBox2.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_AREAS, jCheckBox3.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_FLAG_COPIES, jCheckBox4.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_STEP_COPIES, jCheckBox5.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox6.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_WARPS, jCheckBox7.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox8.isSelected());
-        ////mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox9.isSelected());
-        ////mapLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
-        jPanel2.add(////mapLayoutPanel);
-        jPanel2.setSize(////mapLayoutPanel.getWidth(), ////mapLayoutPanel.getHeight());
-        jPanel2.revalidate();
-        jPanel2.repaint();  
-        jPanel18.removeAll();
-        jPanel19.removeAll();
-        jPanel18.setLayout(new GridLayout(1,1));
-        jPanel19.setLayout(new GridLayout(1,1));
-        BlockSlotPanel leftSlotBlockPanel = new BlockSlotPanel();
-        BlockSlotPanel rightSlotBlockPanel = new BlockSlotPanel();
-        jPanel18.add(leftSlotBlockPanel);
-        jPanel19.add(rightSlotBlockPanel);
-        ////mapLayoutPanel.setLeftSlot(leftSlotBlockPanel);
-        mapblockLayout.setLeftSlotBlockPanel(leftSlotBlockPanel);
-        mapblockLayout.setRightSlotBlockPanel(rightSlotBlockPanel);
-        /*jTable1.setModel(new MapAreaTableModel(map, ////mapLayoutPanel));
-        jPanel21.validate();
-        jPanel21.repaint();
-        flagCopyTableModel = new MapFlagCopyTableModel(map, ////mapLayoutPanel);
-        jTable2.setModel(flagCopyTableModel);
-        jPanel24.validate();
-        jPanel24.repaint();
-        stepCopyTableModel = new MapStepCopyTableModel(map, ////mapLayoutPanel);
-        jTable3.setModel(stepCopyTableModel);
-        jPanel25.validate();
-        jPanel25.repaint();
-        layer2CopyTableModel = new MapLayer2CopyTableModel(map, ////mapLayoutPanel);
-        jTable4.setModel(layer2CopyTableModel);
-        jPanel26.validate();
-        jPanel26.repaint();
-        warpTableModel = new MapWarpTableModel(map, ////mapLayoutPanel);
-        jTable5.setModel(warpTableModel);
-        jPanel27.validate();
-        jPanel27.repaint();
-        chestItemTableModel = new MapChestItemPropertiesTableModel(map, ////mapLayoutPanel);
-        jTable6.setModel(chestItemTableModel);
-        jPanel29.validate();
-        jPanel29.repaint();
-        otherItemTableModel = new MapItemTableModel(map, ////mapLayoutPanel);
-        jTable7.setModel(otherItemTableModel);
-        jPanel30.validate();
-        jPanel30.repaint();
-        animFrameTableModel = new MapAnimationFramePropertiesTableModel(map, ////mapLayoutPanel);
-        jTable8.setModel(animFrameTableModel);
-        jPanel23.validate();
-        jPanel23.repaint();
-        jSpinner2.getModel().setValue(map.getAnimation().getTileset());
-        jSpinner3.getModel().setValue(map.getAnimation().getLength());*/
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        /*if(jComboBox2.getSelectedIndex()>=0 && mapblockLayout!=null){
-            mapblockLayout.setDisplayScale(jComboBox2.getSelectedIndex()+1);
-        }*/
+        if (jComboBox2.getSelectedIndex() >= 0) {
+            mapBlocksetLayoutPanel.setDisplayScale(jComboBox2.getSelectedIndex()+1);
+        }
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //////mapLayoutPanel.revertLastAction();
+        mapLayoutPanel.revertLastAction();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        /*if(mapblockLayout != null){
-            mapblockLayout.setItemsPerRow((int)jSpinner1.getModel().getValue());
-        }*/
+        mapBlocksetLayoutPanel.setItemsPerRow((int)jSpinner1.getModel().getValue());
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        /* Block graphics radio button */
-        SetActionRelativeCheckbox(null, MapLayoutPanel.MODE_BLOCK);
+        onMapActionCheckboxSet(null, MapLayoutPanel.MODE_BLOCK);
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox1, MapLayoutPanel.MODE_OBSTRUCTED);
+        onMapActionCheckboxSet(jCheckBox11, MapLayoutPanel.MODE_OBSTRUCTED);
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox1, MapLayoutPanel.MODE_STAIRS);
+        onMapActionCheckboxSet(jCheckBox11, MapLayoutPanel.MODE_STAIRS);
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox7, MapLayoutPanel.MODE_WARP);
+        onMapActionCheckboxSet(jCheckBox19, MapLayoutPanel.MODE_WARP);
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox8, MapLayoutPanel.MODE_BARREL);
+        onMapActionCheckboxSet(jCheckBox20, MapLayoutPanel.MODE_BARREL);
     }//GEN-LAST:event_jRadioButton5ActionPerformed
 
     private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox8, MapLayoutPanel.MODE_VASE);
+        onMapActionCheckboxSet(jCheckBox20, MapLayoutPanel.MODE_VASE);
     }//GEN-LAST:event_jRadioButton6ActionPerformed
 
     private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox8, MapLayoutPanel.MODE_TABLE);
+        onMapActionCheckboxSet(jCheckBox20, MapLayoutPanel.MODE_TABLE);
     }//GEN-LAST:event_jRadioButton7ActionPerformed
 
     private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
-        //SetActionRelativeCheckbox(jCheckBox9, MapLayoutPanel.MODE_TRIGGER);
+        onMapActionCheckboxSet(jCheckBox21, MapLayoutPanel.MODE_TRIGGER);
     }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -2083,42 +1901,36 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
-        /*if (////mapLayoutPanel == null) return;
         SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
         JTabbedPane sourceTabbedPane = (JTabbedPane)evt.getSource();
         int index = sourceTabbedPane.getSelectedIndex();
-        ////mapLayoutPanel.setIsOnActionsTab(index == 0);
+        mapLayoutPanel.setIsOnActionsTab(index == 0);
         switch (index) {
             case 0:     //Actions & Anims
-                SetTabRelativeCheckbox(null, 0);
-                
                 if (index == 0) {
                     JCheckBox actionCheckbox = actionRelativeCheckbox;
-                    int mode = ////mapLayoutPanel.getCurrentMode();
-                    SetActionRelativeCheckbox(null, -1);
-                    SetActionRelativeCheckbox(actionCheckbox, mode);
+                    int mode = mapLayoutPanel.getCurrentMode();
+                    onMapActionCheckboxSet(null, -1);
+                    onMapActionCheckboxSet(actionCheckbox, mode);
                 }
                 break;
             case 1:     //Areas panel
-                SetTabRelativeCheckbox(jCheckBox3, MapLayoutPanel.DRAW_MODE_AREAS);
+                SetTabRelativeCheckbox(jCheckBox15, MapLayoutPanel.DRAW_MODE_AREAS);
                 break;
             case 2:     //Block Copies panels
                 jTabbedPane3StateChanged(new ChangeEvent(jTabbedPane3));
                 break;
             case 3:     //Warps panel
-                SetTabRelativeCheckbox(jCheckBox7, MapLayoutPanel.DRAW_MODE_WARPS);
+                SetTabRelativeCheckbox(jCheckBox19, MapLayoutPanel.DRAW_MODE_WARPS);
                 break;
             case 4:     //Items panel
-                SetTabRelativeCheckbox(jCheckBox8, MapLayoutPanel.DRAW_MODE_ITEMS);
+                SetTabRelativeCheckbox(jCheckBox20, MapLayoutPanel.DRAW_MODE_ITEMS);
                 break;
         }
-        
-        jPanel2.revalidate();
-        jPanel2.repaint();*/
+        mapLayoutPanel.redraw();
     }//GEN-LAST:event_jTabbedPane2StateChanged
 
     private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
-        /*if (////mapLayoutPanel == null) return;
         SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
         JTabbedPane sourceTabbedPane = (JTabbedPane)evt.getSource();
         int index = sourceTabbedPane.getSelectedIndex();
@@ -2126,17 +1938,16 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             default:     //Layout and Anims & Block Copies panels
                 return;
             case 0:     //Flag copies
-                SetTabRelativeCheckbox(jCheckBox4, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
+                SetTabRelativeCheckbox(jCheckBox16, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
                 break;
             case 1:     //Step copies
-                SetTabRelativeCheckbox(jCheckBox5, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
+                SetTabRelativeCheckbox(jCheckBox17, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
                 break;
             case 2:     //Roof copies
-                SetTabRelativeCheckbox(jCheckBox6, MapLayoutPanel.DRAW_MODE_LAYER2_COPIES);
+                SetTabRelativeCheckbox(jCheckBox18, MapLayoutPanel.DRAW_MODE_LAYER2_COPIES);
                 break;
         }
-        jPanel2.revalidate();
-        jPanel2.repaint();*/
+        mapLayoutPanel.redraw();
     }//GEN-LAST:event_jTabbedPane3StateChanged
 
     private void jComboBox9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox9ActionPerformed
@@ -2146,53 +1957,49 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jComboBox9ActionPerformed
 
     private void jCheckBox10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox10ActionPerformed
-        //mapLayoutPanel.setShowGrid(jCheckBox5.isSelected());
+        mapLayoutPanel.setShowGrid(jCheckBox10.isSelected());
     }//GEN-LAST:event_jCheckBox10ActionPerformed
 
-    private void colorPicker2ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker2ColorChanged
-        mapLayoutPanel.setBGColor(colorPicker2.getColor());
-        mapLayoutSettings.setTilesetBGColor(colorPicker2.getColor());
+    private void colorPicker1ColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPicker1ColorChanged
+        mapLayoutPanel.setBGColor(colorPicker1.getColor());
+        mapLayoutSettings.setTilesetBGColor(colorPicker1.getColor());
         SettingsManager.saveSettingsFile();
-    }//GEN-LAST:event_colorPicker2ColorChanged
+    }//GEN-LAST:event_colorPicker1ColorChanged
 
     private void jCheckBox11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox11ActionPerformed
-        //mapLayoutPanel.setShowExplorationFlags(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowExplorationFlags(jCheckBox11.isSelected());
     }//GEN-LAST:event_jCheckBox11ActionPerformed
 
-    private void jCheckBox12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox12ActionPerformed
-        //mapLayoutPanel.setShowInteractionFlags(jCheckBox2.isSelected());
-    }//GEN-LAST:event_jCheckBox12ActionPerformed
-
     private void jCheckBox13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox13ActionPerformed
-        //mapLayoutPanel.setShowPriority(jCheckBox4.isSelected());
+        mapLayoutPanel.setShowPriority(jCheckBox13.isSelected());
     }//GEN-LAST:event_jCheckBox13ActionPerformed
 
     private void jCheckBox15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox15ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_AREAS, jCheckBox15.isSelected());
     }//GEN-LAST:event_jCheckBox15ActionPerformed
 
     private void jCheckBox16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox16ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_FLAG_COPIES, jCheckBox16.isSelected());
     }//GEN-LAST:event_jCheckBox16ActionPerformed
 
     private void jCheckBox17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox17ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_STEP_COPIES, jCheckBox17.isSelected());
     }//GEN-LAST:event_jCheckBox17ActionPerformed
 
     private void jCheckBox18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox18ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_LAYER2_COPIES, jCheckBox18.isSelected());
     }//GEN-LAST:event_jCheckBox18ActionPerformed
 
     private void jCheckBox19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox19ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_WARPS, jCheckBox19.isSelected());
     }//GEN-LAST:event_jCheckBox19ActionPerformed
 
     private void jCheckBox20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox20ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox20.isSelected());
     }//GEN-LAST:event_jCheckBox20ActionPerformed
 
     private void jCheckBox21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox21ActionPerformed
-        // TODO add your handling code here:
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox21.isSelected());
     }//GEN-LAST:event_jCheckBox21ActionPerformed
 
     private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
@@ -2231,42 +2038,49 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox7ItemStateChanged
 
     private void jCheckBox8animationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox8animationActionPerformed
-        /*boolean isSelected = ((JCheckBox)evt.getSource()).isSelected();
+        boolean isSelected = ((JCheckBox)evt.getSource()).isSelected();
         jCheckBox8.setSelected(isSelected);
         jCheckBox9.setSelected(isSelected);
-        tilesetLayoutPanelModified.setPreviewAnim(isSelected);*/
+        tilesetLayoutPanelModified.setPreviewAnim(isSelected);
     }//GEN-LAST:event_jCheckBox8animationActionPerformed
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        /*int value = (int)jSpinner2.getValue();
+        int value = (int)jSpinner2.getValue();
         MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
         if (anim != null && anim.getTilesetId()!= value) {
             try {
                 anim.setTilesetId(value);
-                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
-                Tileset tileset = mapAnimationManager.importTileset(mapAnimationLayoutPanel.getMapLayout().getPalette(), tilesetEntriesPath, value);
+                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
+                Tileset tileset = mapManager.getMapAnimationManager().importTileset(mapLayoutPanel.getMap().getLayout().getPalette(), tilesetEntriesPath, value);
                 tilesetLayoutPanelAnim.setTileset(tileset);
             } catch (Exception ex) {
                 Console.logger().log(Level.SEVERE, null, ex);
                 Console.logger().severe("ERROR Tileset could not be imported for tileset : " + value);
             }
-        }*/
+        }
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
-        /*int value = (int)jSpinner3.getValue();
+        int value = (int)jSpinner3.getValue();
         MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
         if (anim != null && anim.getLength()!= value) {
             anim.setLength(value);
-        }*/
+        }
     }//GEN-LAST:event_jSpinner3StateChanged
 
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        // TODO add your handling code here:
+        //TODO Export mapdata
     }//GEN-LAST:event_jButton19ActionPerformed
 
+    private void jCheckBox9animationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox9animationActionPerformed
+        boolean isSelected = ((JCheckBox)evt.getSource()).isSelected();
+        jCheckBox8.setSelected(isSelected);
+        jCheckBox9.setSelected(isSelected);
+        tilesetLayoutPanelModified.setPreviewAnim(isSelected);
+    }//GEN-LAST:event_jCheckBox9animationActionPerformed
+
     private void SetTabRelativeCheckbox(JCheckBox checkbox, int mode) {
-        /*if (checkbox == null) {
+        if (checkbox == null) {
             // Restore checkboxes
             if (tabRelativeCheckbox != null) {
                 tabRelativeCheckbox.setSelected(tabRelativeCheckboxState);
@@ -2275,30 +2089,29 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             tabRelativeCheckbox = null;
         }
         else {
-            if (tabRelativeCheckbox != null)
+            if (tabRelativeCheckbox != null) {
                 SetTabRelativeCheckbox(null, 0);
-        
-            //If tabs change then disable the action tab affecting the checkboxes
-            if (!////mapLayoutPanel.isDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_ACTION_FLAGS)){
-                JCheckBox actionCheckbox = actionRelativeCheckbox;
-                int actionMode = ////mapLayoutPanel.getCurrentMode();
-                SetActionRelativeCheckbox(null, -1);
-                actionRelativeCheckbox = actionCheckbox;
-                ////mapLayoutPanel.setCurrentMode(actionMode);
             }
-            
+            //If tabs change then disable the action tab affecting the checkboxes
+            if (!mapLayoutPanel.isDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_ACTION_FLAGS)) {
+                JCheckBox actionCheckbox = actionRelativeCheckbox;
+                int actionMode = mapLayoutPanel.getCurrentMode();
+                onMapActionCheckboxSet(null, -1);
+                actionRelativeCheckbox = actionCheckbox;
+                mapLayoutPanel.setCurrentMode(actionMode);
+            }
             // Lock active checkbox
-            ////mapLayoutPanel.setDrawMode_Tabs(mode);
+            mapLayoutPanel.setDrawMode_Tabs(mode);
             tabRelativeCheckbox = checkbox;
             tabRelativeCheckboxState = checkbox.isSelected();
             tabRelativeCheckbox.setSelected(true);
             tabRelativeCheckbox.setEnabled(false);
-        }*/
+        }
     }
     
-    private void SetActionRelativeCheckbox(JCheckBox checkbox, int mode) {
-        /*if (////mapLayoutPanel.getCurrentMode() == mode) return;
-        ////mapLayoutPanel.setCurrentMode(mode);
+    private void onMapActionCheckboxSet(JCheckBox checkbox, int mode) {
+        if (mapLayoutPanel.getCurrentMode() == mode) return;
+        mapLayoutPanel.setCurrentMode(mode);
         if (actionRelativeCheckbox != null) {
             // Restore checkboxes
             if (actionRelativeCheckbox != null) {
@@ -2314,8 +2127,52 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             actionRelativeCheckbox.setSelected(true);
             actionRelativeCheckbox.setEnabled(false);
         }
-        jPanel2.revalidate();
-        jPanel2.repaint();*/
+        mapLayoutPanel.redraw();
+    }
+    
+    private void onAnimationFramesSelectionChanged(ListSelectionEvent e) {
+        if (e.getValueIsAdjusting() || tilesetLayoutPanelModified.getAnimator().isAnimating()) return;
+        int selected = tableAnimFrames.jTable.getSelectedRow();
+        tilesetLayoutPanelAnim.setSelectedFrame(selected);
+        tilesetLayoutPanelModified.setSelectedFrame(selected);
+        if (selected == -1) selected = 0;
+        MapAnimation animation = tilesetLayoutPanelModified.getMapAnimation();
+        int tileset = -1;
+        if (animation != null && animation.getFrames() != null && selected < animation.getFrames().length) {
+            tileset = animation.getFrames()[selected].getDestTileset();
+        }
+        tilesetLayoutPanelModified.setSelectedTileset(tileset);
+    }
+    
+    private void onAnimationFramesDataChanged(TableModelEvent e) {
+        if (e.getType() == TableModelEvent.INSERT || e.getType() == TableModelEvent.DELETE) {
+            //Number of animation frames changed
+            MapAnimationFrame[] frames = mapAnimationFrameTableModel.getTableData(MapAnimationFrame[].class);
+            tilesetLayoutPanelModified.getMapAnimation().setFrames(frames);
+        } else if (e.getColumn() == 3) {
+            //Editing destination tileset
+            MapAnimation animation = tilesetLayoutPanelModified.getMapAnimation();
+            animation.generateModifiedTilesets();
+            tilesetLayoutPanelModified.setMapAnimation(animation);
+            tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[e.getFirstRow()].getDestTileset());
+        } else if (e.getColumn() == 4) {
+            //Editing destination index
+            MapAnimation animation = tilesetLayoutPanelModified.getMapAnimation();
+            int frame = e.getFirstRow();
+            animation.generateModifiedTileset(frame);
+            tilesetLayoutPanelModified.setMapAnimation(animation);
+            tilesetLayoutPanelModified.setSelectedTileset(animation.getFrames()[frame].getDestTileset());
+        } else if (e.getColumn() < 3) {
+            //Editing the start or length of the frame (affects both panels)
+            tilesetLayoutPanelAnim.redraw();
+        }
+        tilesetLayoutPanelModified.redraw();
+    }
+    
+    private void onAnimationUpdated(LayoutAnimator.AnimationListener.AnimationFrameEvent e) {
+        mapLayoutPanel.getMapLayout().getBlockset().clearIndexedColorImage(true);
+        mapLayoutPanel.redraw();
+        tableAnimFrames.jTable.setRowSelectionInterval(e.getCurrentFrame(), e.getCurrentFrame());
     }
     
     /**
@@ -2338,7 +2195,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel2;
     private javax.swing.ButtonGroup buttonGroupMapActions;
-    private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker2;
+    private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPickerTileset;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
@@ -2360,8 +2217,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton7;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton8;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton9;
+    private com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon flatOptionPaneWarningIcon1;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton1;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton2;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButtonSharedAnimation;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
@@ -2369,7 +2228,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox10;
     private javax.swing.JCheckBox jCheckBox11;
-    private javax.swing.JCheckBox jCheckBox12;
     private javax.swing.JCheckBox jCheckBox13;
     private javax.swing.JCheckBox jCheckBox15;
     private javax.swing.JCheckBox jCheckBox16;
@@ -2381,6 +2239,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox21;
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JCheckBox jCheckBox8;
+    private javax.swing.JCheckBox jCheckBox9;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox9;

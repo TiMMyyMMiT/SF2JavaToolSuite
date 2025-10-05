@@ -20,13 +20,15 @@
     </Component>
     <Component class="com.sfc.sf2.map.models.MapWarpTableModel" name="mapWarpTableModel">
     </Component>
+    <Component class="com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon" name="flatOptionPaneWarningIcon1">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="SF2MapEditor"/>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,-116,0,0,4,-64"/>
+    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,-16,0,0,5,-120"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="0"/>
     <SyntheticProperty name="generateSize" type="boolean" value="true"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
@@ -51,14 +53,14 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jSplitPane1" alignment="0" pref="900" max="32767" attributes="0"/>
+          <Component id="jSplitPane1" alignment="0" pref="1000" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JSplitPane" name="jSplitPane1">
       <Properties>
-        <Property name="dividerLocation" type="int" value="800"/>
+        <Property name="dividerLocation" type="int" value="900"/>
         <Property name="orientation" type="int" value="0"/>
         <Property name="oneTouchExpandable" type="boolean" value="true"/>
       </Properties>
@@ -80,17 +82,14 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jSplitPane2" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jSplitPane2" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
             <Container class="javax.swing.JSplitPane" name="jSplitPane2">
               <Properties>
-                <Property name="dividerLocation" type="int" value="650"/>
+                <Property name="dividerLocation" type="int" value="700"/>
                 <Property name="oneTouchExpandable" type="boolean" value="true"/>
               </Properties>
 
@@ -134,7 +133,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTabbedPane1" alignment="0" pref="293" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane1" alignment="0" pref="300" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -193,10 +192,10 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="accordionPanel1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="accordionPanel2" min="-2" pref="212" max="-2" attributes="0"/>
+                                              <Component id="accordionPanel2" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="84" max="32767" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                               <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
@@ -244,13 +243,13 @@
                                       <SubComponents>
                                         <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton1">
                                           <Properties>
-                                            <Property name="filePath" type="java.lang.String" value="..\u005c..\u005c..\u005cgraphics\u005cmaps\u005cmappalettes\u005centries.asm" containsInvalidXMLChars="true"/>
+                                            <Property name="filePath" type="java.lang.String" value="..\u005cgraphics\u005cmaps\u005cmappalettes\u005centries.asm" containsInvalidXMLChars="true"/>
                                             <Property name="labelText" type="java.lang.String" value="Palette entries :"/>
                                           </Properties>
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton2">
                                           <Properties>
-                                            <Property name="filePath" type="java.lang.String" value="..\u005c..\u005c..\u005cgraphics\u005cmaps\u005cmaptilesets\u005centries.asm" containsInvalidXMLChars="true"/>
+                                            <Property name="filePath" type="java.lang.String" value="..\u005cgraphics\u005cmaps\u005cmaptilesets\u005centries.asm" containsInvalidXMLChars="true"/>
                                             <Property name="labelText" type="java.lang.String" value="Tileset entries :"/>
                                           </Properties>
                                         </Component>
@@ -408,7 +407,7 @@
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" alignment="1" attributes="0">
-                                                          <EmptySpace min="0" pref="56" max="32767" attributes="0"/>
+                                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="jSpinner4" min="-2" max="-2" attributes="0"/>
@@ -449,7 +448,7 @@
                                         <Component class="javax.swing.JSpinner" name="jSpinner4">
                                           <Properties>
                                             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                                              <SpinnerModel initial="0" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                                              <SpinnerModel initial="3" maximum="100" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
                                             </Property>
                                           </Properties>
                                         </Component>
@@ -598,7 +597,7 @@
                                                                   <Component id="jLabel11" max="-2" attributes="0"/>
                                                                   <EmptySpace max="-2" attributes="0"/>
                                                                   <Component id="infoButton1" min="-2" max="-2" attributes="0"/>
-                                                                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                                                                  <EmptySpace pref="27" max="32767" attributes="0"/>
                                                                   <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                                                               </Group>
                                                               <Component id="fileButton16" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -778,7 +777,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTabbedPane2" pref="352" max="32767" attributes="0"/>
+                                  <Component id="jTabbedPane2" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -792,6 +791,11 @@
                           </Layout>
                           <SubComponents>
                             <Container class="javax.swing.JTabbedPane" name="jTabbedPane2">
+                              <Properties>
+                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[390, 185]"/>
+                                </Property>
+                              </Properties>
                               <Events>
                                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jTabbedPane2StateChanged"/>
                               </Events>
@@ -827,7 +831,7 @@
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jScrollPane3" pref="430" max="32767" attributes="0"/>
+                                              <Component id="jScrollPane3" pref="566" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel14" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -848,7 +852,7 @@
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="318" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="361" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
@@ -1286,7 +1290,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="tableAreas" pref="340" max="32767" attributes="0"/>
+                                              <Component id="tableAreas" pref="383" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1295,7 +1299,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="tableAreas" pref="711" max="32767" attributes="0"/>
+                                              <Component id="tableAreas" pref="847" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1360,7 +1364,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableFlagCopies" pref="340" max="32767" attributes="0"/>
+                                                      <Component id="tableFlagCopies" pref="383" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1369,7 +1373,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableFlagCopies" pref="676" max="32767" attributes="0"/>
+                                                      <Component id="tableFlagCopies" pref="812" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1405,7 +1409,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableStepCopies" pref="340" max="32767" attributes="0"/>
+                                                      <Component id="tableStepCopies" pref="383" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1414,7 +1418,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableStepCopies" pref="676" max="32767" attributes="0"/>
+                                                      <Component id="tableStepCopies" pref="812" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1450,7 +1454,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableRoofCopies" pref="340" max="32767" attributes="0"/>
+                                                      <Component id="tableRoofCopies" pref="383" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1459,7 +1463,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableRoofCopies" pref="676" max="32767" attributes="0"/>
+                                                      <Component id="tableRoofCopies" pref="812" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1499,7 +1503,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="tableWarps" pref="340" max="32767" attributes="0"/>
+                                              <Component id="tableWarps" pref="383" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1508,7 +1512,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="tableWarps" pref="711" max="32767" attributes="0"/>
+                                              <Component id="tableWarps" pref="847" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1573,7 +1577,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableChestItems" pref="334" max="32767" attributes="0"/>
+                                                      <Component id="tableChestItems" pref="377" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1582,7 +1586,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableChestItems" pref="676" max="32767" attributes="0"/>
+                                                      <Component id="tableChestItems" pref="812" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1618,7 +1622,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableOtherItems" pref="334" max="32767" attributes="0"/>
+                                                      <Component id="tableOtherItems" pref="377" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1627,7 +1631,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableOtherItems" pref="676" max="32767" attributes="0"/>
+                                                      <Component id="tableOtherItems" pref="812" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1715,7 +1719,7 @@
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="324" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="367" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
@@ -1757,7 +1761,7 @@
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <EmptySpace min="0" pref="324" max="32767" attributes="0"/>
+                                                  <EmptySpace min="0" pref="367" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
@@ -1936,6 +1940,8 @@
                                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                   <Component id="jSpinner2" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="32767" attributes="0"/>
+                                                  <Component id="infoButtonSharedAnimation" min="-2" pref="38" max="-2" attributes="0"/>
+                                                  <EmptySpace max="32767" attributes="0"/>
                                                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                   <Component id="jSpinner3" min="-2" max="-2" attributes="0"/>
@@ -1947,11 +1953,14 @@
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="3" attributes="0">
-                                                      <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jSpinner2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jSpinner3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="infoButtonSharedAnimation" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="3" attributes="0">
+                                                          <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jSpinner2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jSpinner3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
@@ -1988,6 +1997,14 @@
                                           <Events>
                                             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinner3StateChanged"/>
                                           </Events>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButtonSharedAnimation">
+                                          <Properties>
+                                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                              <Connection component="flatOptionPaneWarningIcon1" type="bean"/>
+                                            </Property>
+                                            <Property name="text" type="java.lang.String" value=""/>
+                                          </Properties>
                                         </Component>
                                       </SubComponents>
                                     </Container>
@@ -2051,7 +2068,7 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane2" alignment="0" pref="646" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" alignment="0" pref="752" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -2101,11 +2118,13 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jCheckBox11" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jCheckBox15" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="jCheckBox13" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="jCheckBox9" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace pref="97" max="32767" attributes="0"/>
                                           <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="colorPicker2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="colorPicker1" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="jCheckBox10" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -2114,23 +2133,25 @@
                                           <Component id="jComboBox9" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
-                                          <Component id="jCheckBox12" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jCheckBox13" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Component id="jCheckBox16" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jCheckBox17" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jCheckBox18" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jCheckBox15" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jCheckBox19" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jCheckBox20" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jCheckBox21" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jCheckBox16" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jCheckBox17" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jCheckBox18" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="jCheckBox19" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jCheckBox20" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jCheckBox21" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -2142,27 +2163,29 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="2" attributes="0">
-                                      <Component id="colorPicker2" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="colorPicker1" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel59" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jCheckBox11" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jComboBox9" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox15" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel10" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jCheckBox10" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jCheckBox13" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jCheckBox9" alignment="2" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="2" attributes="0">
-                                      <Component id="jCheckBox12" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox13" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jCheckBox15" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="2" attributes="0">
+                                          <Component id="jCheckBox19" alignment="2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jCheckBox20" alignment="2" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jCheckBox21" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="2" attributes="0">
                                       <Component id="jCheckBox16" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jCheckBox17" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="jCheckBox18" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox19" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox20" alignment="2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jCheckBox21" alignment="2" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
@@ -2201,9 +2224,9 @@
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox10ActionPerformed"/>
                           </Events>
                         </Component>
-                        <Container class="com.sfc.sf2.core.gui.controls.ColorPicker" name="colorPicker2">
+                        <Container class="com.sfc.sf2.core.gui.controls.ColorPicker" name="colorPicker1">
                           <Events>
-                            <EventHandler event="colorChanged" listener="com.sfc.sf2.core.gui.controls.ColorPicker$ColorChangedListener" parameters="java.awt.event.ActionEvent" handler="colorPicker2ColorChanged"/>
+                            <EventHandler event="colorChanged" listener="com.sfc.sf2.core.gui.controls.ColorPicker$ColorChangedListener" parameters="java.awt.event.ActionEvent" handler="colorPicker1ColorChanged"/>
                           </Events>
 
                           <Layout>
@@ -2231,14 +2254,6 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox11ActionPerformed"/>
-                          </Events>
-                        </Component>
-                        <Component class="javax.swing.JCheckBox" name="jCheckBox12">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Interaction flags"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox12ActionPerformed"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JCheckBox" name="jCheckBox13">
@@ -2303,6 +2318,14 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox19ActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JCheckBox" name="jCheckBox9">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="Preview anim"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox9animationActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>

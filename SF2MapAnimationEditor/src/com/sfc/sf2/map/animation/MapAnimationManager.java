@@ -15,7 +15,6 @@ import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
-import com.sfc.sf2.helpers.StringHelpers;
 import com.sfc.sf2.map.animation.io.MapAnimationAsmProcessor;
 import com.sfc.sf2.map.animation.io.MapAnimationPackage;
 import com.sfc.sf2.map.layout.MapLayout;
@@ -50,11 +49,9 @@ public class MapAnimationManager extends AbstractManager {
         sharedAnimationInfo = null;
     }
     
-    public MapAnimation importDisassembly(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
+    public MapAnimation importDisassembly(Path animationsPath, Path tilesetsEntriesPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
-        clearData();
-        mapLayoutManager.importDisassemblyFromEntryFiles(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
-        if (animationsPath.toFile().exists()) {
+        if (animationsPath != null && animationsPath.toFile().exists()) {
             animation = mapAnimationAsmProcessor.importAsmData(animationsPath, new MapAnimationPackage(getMapLayout().getTilesets()));
             importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
             getMapLayout().setTilesets(animation.getModifiedTilesets());
@@ -70,6 +67,15 @@ public class MapAnimationManager extends AbstractManager {
         return animation;
     }
     
+    public MapAnimation importDisassemblyFromMapData(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassemblyFromMapData");
+        clearData();
+        mapLayoutManager.importDisassemblyFromEntryFiles(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
+        animation = importDisassembly(animationsPath, tilesetsEntriesPath);
+        Console.logger().finest("EXITING importDisassemblyFromMapData");
+        return animation;
+    }
+    
     public MapAnimation importDisassemblyFromEntries(Path palettesEntriesPath, Path tilesetsEntriesPath, Path mapEntriesPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassemblyFromEntries");
         clearData();
@@ -78,16 +84,9 @@ public class MapAnimationManager extends AbstractManager {
         MapEntryData[] mapEntries = mapLayoutManager.getMapEntries();
         MapEntryData mapEntry = (mapIndex >= 0 && mapIndex < mapEntries.length) ? mapEntries[mapIndex] : null;
         if (mapEntry.getAnimationsPath() == null) {
-            animation = new MapAnimation(-1, 0, new MapAnimationFrame[0], getMapLayout().getTilesets());
-            animation.setAnimationTileset(null);
-            getMapLayout().setTilesets(animation.getOriginalTilesets());
-            Console.logger().warning("WARNING Map has no animation.");
+            importDisassembly(null, tilesetsEntriesPath);
         } else {
-            Path path = PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath());
-            animation = mapAnimationAsmProcessor.importAsmData(path, new MapAnimationPackage(getMapLayout().getTilesets()));
-            importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
-            getMapLayout().setTilesets(animation.getModifiedTilesets());
-            Console.logger().info("Map layout and animation succesfully imported for : " + mapEntry.getAnimationsPath());
+            importDisassembly(PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath()), tilesetsEntriesPath);
             checkForSharedAnimations(mapEntries, mapEntry.getAnimationsPath());
         }
         Console.logger().finest("EXITING importDisassemblyFromEntries");

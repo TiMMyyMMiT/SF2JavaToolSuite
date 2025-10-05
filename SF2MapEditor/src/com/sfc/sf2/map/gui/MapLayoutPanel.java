@@ -265,6 +265,16 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private void drawMapWarpsImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
+        MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
+        g2.setColor(Color.BLUE);
+        g2.setStroke(new BasicStroke(1));
+        for (int y=0; y < 64; y++) {
+            for (int x=0; x < 64; x++) {
+                int itemFlag = blocks[y*64+x].getFlags()&0x3C00;
+                if (itemFlag == 0x1000)
+                    g2.drawImage(MapLayoutFlagImages.getWarpImage(),x*24,y*24, null);
+            }
+        }
         g2.setStroke(new BasicStroke(3));
         for (MapWarp warp : map.getWarps()) {
             g2.setColor(Color.CYAN);
@@ -301,11 +311,11 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapItemsImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
-        for (int y=0;y<64;y++) {
-            for (int x=0;x<64;x++) {
-                MapBlock block = map.getLayout().getBlockset().getBlocks()[y*64+x];
-                int itemFlag = block.getFlags()&0x3C00;
-                g2.drawImage(MapLayoutFlagImages.getBlockInteractionFlagImage(itemFlag),x*24,y*24, null);
+        MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
+        for (int y=0;y< 64; y++) {
+            for (int x=0; x < 64; x++) {
+                int itemFlag = blocks[y*64+x].getFlags()&0x3C00;
+                g2.drawImage(MapLayoutFlagImages.getBlockItemFlagImage(itemFlag),x*24,y*24, null);
             }
         }
     }
@@ -313,10 +323,10 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapTriggersImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
-        for(int y=0;y<64;y++){
-            for(int x=0;x<64;x++){
+        for(int y=0;y< 64; y++) {
+            for(int x=0;x < 64; x++) {
                 int itemFlag = blocks[y*64+x].getFlags()&0x3C00;
-                if(itemFlag==0x1400)
+                if (itemFlag==0x1400)
                     g2.drawImage(MapLayoutFlagImages.getTriggerImage(),x*24,y*24, null);
             }
         }
@@ -325,16 +335,16 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapAreasImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
-        for(MapArea area : map.getAreas()){ 
+        for (MapArea area : map.getAreas()) { 
             g2.setColor(Color.WHITE);
             int width = area.getLayer1EndX() - area.getLayer1StartX() + 1;
             int heigth = area.getLayer1EndY() - area.getLayer1StartY() + 1;
             g2.drawRect(area.getLayer1StartX()*24 + 3, area.getLayer1StartY()*24+3, width*24-6, heigth*24-6);
             g2.setColor(Color.LIGHT_GRAY);
-            if(area.getForegroundLayer2StartX()!=0 || area.getForegroundLayer2StartY() != 0){
+            if (area.getForegroundLayer2StartX()!=0 || area.getForegroundLayer2StartY() != 0) {
                 g2.drawRect((area.getLayer1StartX() + area.getForegroundLayer2StartX())*24 + 3, (area.getLayer1StartY() + area.getForegroundLayer2StartY())*24+3, width*24-6, heigth*24-6);
             }
-            if(area.getBackgroundLayer2StartX()!=0 || area.getBackgroundLayer2StartY() != 0){
+            if (area.getBackgroundLayer2StartX()!=0 || area.getBackgroundLayer2StartY() != 0) {
                 g2.drawRect(area.getBackgroundLayer2StartX()*24 + 3, area.getBackgroundLayer2StartY()*24+3, width*24-6, heigth*24-6);
             }
         }
@@ -770,6 +780,10 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
 
     public void setMap(Map map) {
         this.map = map;
+        if (map != null) {
+            setMapLayout(map.getLayout());
+        }
+        redraw();
     }
     
     private boolean shouldDraw(int drawFlag) {

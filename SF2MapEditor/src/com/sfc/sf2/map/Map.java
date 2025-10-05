@@ -8,13 +8,14 @@ package com.sfc.sf2.map;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.animation.MapAnimation;
+import com.sfc.sf2.map.block.MapBlockset;
 
 /**
  *
  * @author wiz
  */
 public class Map {
-    private MapBlock[] blocks;
+    private MapBlockset blockset;
     private MapLayout layout;
     private MapArea[] areas;
     private MapFlagCopy[] flagCopies;
@@ -24,13 +25,26 @@ public class Map {
     private MapItem[] chestItems;
     private MapItem[] otherItems;
     private MapAnimation animation;
-    
-    public MapBlock[] getBlocks() {
-        return blocks;
+
+    public Map(MapBlockset blockset, MapLayout layout, MapArea[] areas, MapFlagCopy[] flagCopies, MapStepCopy[] stepCopies, MapLayer2Copy[] layer2Copies, MapWarp[] warps, MapItem[] chestItems, MapItem[] otherItems, MapAnimation animation) {
+        this.blockset = blockset;
+        this.layout = layout;
+        this.areas = areas;
+        this.flagCopies = flagCopies;
+        this.stepCopies = stepCopies;
+        this.layer2Copies = layer2Copies;
+        this.warps = warps;
+        this.chestItems = chestItems;
+        this.otherItems = otherItems;
+        this.animation = animation;
     }
 
-    public void setBlocks(MapBlock[] blocks) {
-        this.blocks = blocks;
+    public MapBlockset getBlockset() {
+        return blockset;
+    }
+
+    public void setBlockset(MapBlockset blockset) {
+        this.blockset = blockset;
     }
 
     public MapLayout getLayout() {
