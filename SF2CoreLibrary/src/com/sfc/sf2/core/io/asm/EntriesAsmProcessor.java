@@ -80,7 +80,7 @@ public class EntriesAsmProcessor extends AbstractAsmProcessor<EntriesAsmData, Em
     }
     
     @Override
-    protected String getHeaderName(EntriesAsmData item) {
+    protected String getHeaderName(EntriesAsmData item, EmptyPackage pckg) {
         return item.getHeaderName();
     }
 

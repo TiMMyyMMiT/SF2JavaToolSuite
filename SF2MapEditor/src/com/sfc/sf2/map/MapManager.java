@@ -9,11 +9,14 @@ import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
+import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.animation.MapAnimationManager;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.gui.MapLayoutPanel;
+import com.sfc.sf2.map.io.*;
 import com.sfc.sf2.map.layout.MapLayout;
+import com.sfc.sf2.map.layout.io.MapEntryData;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -24,38 +27,77 @@ import java.nio.file.Path;
 public class MapManager extends AbstractManager {
     
     private MapAnimationManager mapAnimationManager = new MapAnimationManager();
-    
+    private MapEnumsAsmProcessor mapEnumsAsmProcessor = new MapEnumsAsmProcessor();
+    private MapAreaAsmProcessor mapAreasAsmProcessor = new MapAreaAsmProcessor();
+    private MapFlagEventsAsmProcessor mapFlagsAsmProcessor = new MapFlagEventsAsmProcessor();
+    private MapStepEventsAsmProcessor mapStepsAsmProcessor = new MapStepEventsAsmProcessor();
+    private MapRoofEventsAsmProcessor mapRoofsAsmProcessor = new MapRoofEventsAsmProcessor();
+    private MapWarpEventsAsmProcessor mapWarpsAsmProcessor = new MapWarpEventsAsmProcessor();
+    private MapItemAsmProcessor mapItemAsmProcessor = new MapItemAsmProcessor();
+            
     private Map map;
+    private MapEnums mapEnums;
 
     @Override
     public void clearData() {
         mapAnimationManager.clearData();
         map = null;
+        mapEnums = null;
     }
     
-    public Map importDisassemblyFromEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
+    public Map importDisassemblyFromEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path sf2enumsPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassemblyFromEntries");
+        ImportMapEnums(sf2enumsPath);
         MapAnimation animation = mapAnimationManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapIndex);
         MapLayout layout = mapAnimationManager.getMapLayout();
-        /*
-        MapArea[] areas = DisassemblyManager.importAreas(areasPath);
-        map.setAreas(areas);
-        MapFlagCopy[] flagCopies = DisassemblyManager.importFlagCopies(flagCopiesPath);
-        map.setFlagCopies(flagCopies);
-        MapStepCopy[] stepCopies = DisassemblyManager.importStepCopies(stepCopiesPath);
-        map.setStepCopies(stepCopies);
-        MapRoofCopy[] roofCopies = DisassemblyManager.importRoofCopies(layer2CopiesPath);
-        map.setRoofCopies(roofCopies);
-        MapWarp[] warps = DisassemblyManager.importWarps(warpsPath);
-        map.setWarps(warps);
-        MapItem[] chestItems = DisassemblyManager.importChestItems(chestItemsPath);
-        map.setChestItems(chestItems);
-        MapItem[] otherItems = DisassemblyManager.importOtherItems(otherItemsPath);
-        map.setOtherItems(otherItems);
-        */
-        map = new Map(layout.getBlockset(), layout, new MapArea[0], new MapFlagCopy[0], new MapStepCopy[0], new MapRoofCopy[0], new MapWarp[0], new MapItem[0], new MapItem[0], animation);
+        MapBlockset blockset = mapAnimationManager.getMapBlockset();
+        
+        MapEntryData mapEntry = mapAnimationManager.getMapEntries()[mapIndex];
+        MapArea[] areas = null;
+        MapFlagCopyEvent[] flagCopies = null;
+        MapCopyEvent[] stepCopies = null;
+        MapCopyEvent[] roofCopies = null;
+        MapWarpEvent[] warps = null;
+        MapItem[] chestItems = null;
+        MapItem[] otherItems = null;
+        if (mapEntry.getAreasPath() != null) {
+            Path areasPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAreasPath());
+            areas = mapAreasAsmProcessor.importAsmData(areasPath, mapEnums);
+        }
+        if (mapEntry.getFlagEventsPath() != null) {
+            Path flagsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getFlagEventsPath());
+            flagCopies = mapFlagsAsmProcessor.importAsmData(flagsPath, null);
+        }
+        if (mapEntry.getStepEventsPath() != null) {
+            Path stepsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getStepEventsPath());
+            stepCopies = mapStepsAsmProcessor.importAsmData(stepsPath, null);
+        }
+        if (mapEntry.getRoofEventsPath() != null) {
+            Path roofsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getRoofEventsPath());
+            roofCopies = mapRoofsAsmProcessor.importAsmData(roofsPath, null);
+        }
+        if (mapEntry.getWarpEventsPath() != null) {
+            Path warpsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getWarpEventsPath());
+            warps = mapWarpsAsmProcessor.importAsmData(warpsPath, null);
+        }
+        if (mapEntry.getChestItemsPath()!= null) {
+            Path chestItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getChestItemsPath());
+            chestItems = mapItemAsmProcessor.importAsmData(chestItemsPath, null);
+        }
+        if (mapEntry.getOtherItemsPath()!= null) {
+            Path otherItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getOtherItemsPath());
+            otherItems = mapItemAsmProcessor.importAsmData(otherItemsPath, null);
+        }
+        map = new Map(blockset, layout, areas, flagCopies, stepCopies, roofCopies, warps, chestItems, otherItems, animation);
         Console.logger().finest("EXITING importDisassemblyFromEntries");
         return map;
+    }
+    
+    private void ImportMapEnums(Path sf2enumsPath) throws IOException, AsmException {
+        if (mapEnums == null) {
+            mapEnums = mapEnumsAsmProcessor.importAsmData(sf2enumsPath, null);
+            Console.logger().info("Map enums successfully loaded from : " + sf2enumsPath);
+        }
     }
     
     public void exportDisassembly(Path blocksPath, Path layoutPath, Path areasPath, Path flagCopiesPath, Path stepCopiesPath, Path layer2CopiesPath, Path warpsPath, Path chestItemsPath, Path otherItemsPath, Path animationsPath) {

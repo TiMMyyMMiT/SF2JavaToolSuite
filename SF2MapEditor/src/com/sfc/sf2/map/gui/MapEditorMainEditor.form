@@ -6,15 +6,15 @@
     </Component>
     <Component class="com.sfc.sf2.map.models.MapAreaTableModel" name="mapAreaTableModel">
     </Component>
-    <Component class="com.sfc.sf2.map.models.MapFlagCopyTableModel" name="mapFlagCopyTableModel">
+    <Component class="com.sfc.sf2.map.models.MapFlagCopyEventTableModel" name="mapFlagCopyTableModel">
     </Component>
     <Component class="com.sfc.sf2.map.models.MapItemTableModel" name="mapChestItemTableModel">
     </Component>
     <Component class="com.sfc.sf2.map.models.MapItemTableModel" name="mapOtherItemTableModel">
     </Component>
-    <Component class="com.sfc.sf2.map.models.MapLayer2CopyTableModel" name="mapLayer2CopyTableModel">
+    <Component class="com.sfc.sf2.map.models.MapCopyEventTableModel" name="MapCopyEventTableModel">
     </Component>
-    <Component class="com.sfc.sf2.map.models.MapStepCopyTableModel" name="mapStepCopyTableModel">
+    <Component class="com.sfc.sf2.map.models.MapCopyEventTableModel" name="mapStepCopyTableModel">
     </Component>
     <Component class="com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel" name="mapAnimationFrameTableModel">
     </Component>
@@ -221,6 +221,7 @@
                                                       <Component id="fileButton1" pref="0" max="32767" attributes="0"/>
                                                       <Component id="fileButton2" pref="0" max="32767" attributes="0"/>
                                                       <Component id="fileButton14" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="fileButton20" alignment="0" pref="0" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
@@ -235,6 +236,8 @@
                                                   <Component id="fileButton2" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="fileButton14" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="fileButton20" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
@@ -257,6 +260,12 @@
                                           <Properties>
                                             <Property name="filePath" type="java.lang.String" value=".\u005centries.asm" containsInvalidXMLChars="true"/>
                                             <Property name="labelText" type="java.lang.String" value="Map entries :"/>
+                                          </Properties>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton20">
+                                          <Properties>
+                                            <Property name="filePath" type="java.lang.String" value="..\u005c..\u005csf2enums.asm" containsInvalidXMLChars="true"/>
+                                            <Property name="labelText" type="java.lang.String" value="Sf2enums :"/>
                                           </Properties>
                                         </Component>
                                       </SubComponents>
@@ -831,7 +840,7 @@
                                     <DimensionLayout dim="1">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jScrollPane3" pref="566" max="32767" attributes="0"/>
+                                              <Component id="jScrollPane3" pref="571" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel14" min="-2" max="-2" attributes="0"/>
                                           </Group>
@@ -1299,7 +1308,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="tableAreas" pref="847" max="32767" attributes="0"/>
+                                              <Component id="tableAreas" pref="852" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1373,7 +1382,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableFlagCopies" pref="812" max="32767" attributes="0"/>
+                                                      <Component id="tableFlagCopies" pref="817" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1418,7 +1427,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableStepCopies" pref="812" max="32767" attributes="0"/>
+                                                      <Component id="tableStepCopies" pref="817" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1463,7 +1472,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableRoofCopies" pref="812" max="32767" attributes="0"/>
+                                                      <Component id="tableRoofCopies" pref="817" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1476,7 +1485,7 @@
                                                   <Border info="null"/>
                                                 </Property>
                                                 <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                                                  <ComponentRef name="mapLayer2CopyTableModel"/>
+                                                  <ComponentRef name="MapCopyEventTableModel"/>
                                                 </Property>
                                                 <Property name="selectionMode" type="int" value="0"/>
                                                 <Property name="singleClickText" type="boolean" value="true"/>
@@ -1512,7 +1521,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="tableWarps" pref="847" max="32767" attributes="0"/>
+                                              <Component id="tableWarps" pref="852" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1586,7 +1595,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableChestItems" pref="812" max="32767" attributes="0"/>
+                                                      <Component id="tableChestItems" pref="817" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1631,7 +1640,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableOtherItems" pref="812" max="32767" attributes="0"/>
+                                                      <Component id="tableOtherItems" pref="817" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -2068,7 +2077,7 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane2" alignment="0" pref="752" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" alignment="0" pref="757" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>

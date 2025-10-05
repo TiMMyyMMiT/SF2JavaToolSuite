@@ -46,7 +46,7 @@ public abstract class AbstractAsmProcessor<TType extends Object, TPackage extend
         writer.write(PathHelpers.getIncbinPath().relativize(filePath).toString());
         writer.write(" :\n");
         writer.write("; --- : ");
-        writer.write(getHeaderName(item));
+        writer.write(getHeaderName(item, pckg));
         writer.write("\n");
         //Data
         packageAsmData(writer, item, pckg);
@@ -54,6 +54,6 @@ public abstract class AbstractAsmProcessor<TType extends Object, TPackage extend
         Console.logger().finest("EXITING exportAsmData");
     }
     
-    protected abstract String getHeaderName(TType item);
+    protected abstract String getHeaderName(TType item, TPackage pckg);
     protected abstract void packageAsmData(FileWriter writer, TType item, TPackage pckg) throws IOException, AsmException;
 }

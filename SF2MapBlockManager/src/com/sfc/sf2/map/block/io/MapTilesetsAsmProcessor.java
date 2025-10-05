@@ -64,7 +64,7 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
     }
 
     @Override
-    protected String getHeaderName(MapTilesetData item) {
+    protected String getHeaderName(MapTilesetData item, EmptyPackage pckg) {
         return "Map Tileset Data";
     }
 

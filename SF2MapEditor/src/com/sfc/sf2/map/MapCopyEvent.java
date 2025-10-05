@@ -9,36 +9,44 @@ package com.sfc.sf2.map;
  *
  * @author wiz
  */
-public class MapFlagCopy {
+public class MapCopyEvent {
     
-    private int flag;
+    private int triggerX;
+    private int triggerY;
     private int sourceX;
     private int sourceY;
     private int width;
     private int height;
     private int destX;
     private int destY;
-    private String comment;
 
-    public MapFlagCopy(int flag, int sourceX, int sourceY, int width, int height, int destX, int destY, String comment) {
-        this.flag = flag;
+    public MapCopyEvent(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY) {
+        this.triggerX = triggerX;
+        this.triggerY = triggerY;
         this.sourceX = sourceX;
         this.sourceY = sourceY;
         this.width = width;
         this.height = height;
         this.destX = destX;
         this.destY = destY;
-        this.comment = comment;
     }
 
-    public int getFlag() {
-        return flag;
+    public int getTriggerX() {
+        return triggerX;
     }
 
-    public void setFlag(int flag) {
-        this.flag = flag;
+    public void setTriggerX(int triggerX) {
+        this.triggerX = triggerX;
     }
 
+    public int getTriggerY() {
+        return triggerY;
+    }
+
+    public void setTriggerY(int triggerY) {
+        this.triggerY = triggerY;
+    }
+    
     public int getSourceX() {
         return sourceX;
     }
@@ -86,21 +94,13 @@ public class MapFlagCopy {
     public void setDestY(int destY) {
         this.destY = destY;
     }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
     
-    public static MapFlagCopy createEmpty() {
-        return new MapFlagCopy(0, 0, 0, 1, 1, 1, 0, "WHAT?");
+    public static MapCopyEvent createEmpty() {
+        return new MapCopyEvent(0, 0, 0, 0, 1, 1, 1, 1);
     }
 
     @Override
-    public MapFlagCopy clone() {
-        return new MapFlagCopy(flag, sourceX, sourceY, width, height, destX, destY, comment);
+    public MapCopyEvent clone() {
+        return new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY);
     }
 }

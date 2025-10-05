@@ -152,7 +152,7 @@ public class MapEntriesAsmProcessor extends AbstractAsmProcessor<MapEntryData[],
     }
 
     @Override
-    protected String getHeaderName(MapEntryData[] item) {
+    protected String getHeaderName(MapEntryData[] item, EmptyPackage pckg) {
         return "Map entries";
     }
 

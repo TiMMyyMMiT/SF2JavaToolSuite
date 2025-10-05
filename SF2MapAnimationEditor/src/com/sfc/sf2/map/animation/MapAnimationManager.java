@@ -17,6 +17,7 @@ import com.sfc.sf2.graphics.io.TilesetDisassemblyProcessor;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.animation.io.MapAnimationAsmProcessor;
 import com.sfc.sf2.map.animation.io.MapAnimationPackage;
+import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;
 import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
@@ -142,6 +143,14 @@ public class MapAnimationManager extends AbstractManager {
 
     public MapLayout getMapLayout() {
         return mapLayoutManager.getMapLayout();
+    }
+    
+    public MapBlockset getMapBlockset() {
+        return mapLayoutManager.getMapBlockset();
+    }
+    
+    public MapEntryData[] getMapEntries() {
+        return mapLayoutManager.getMapEntries();
     }
     
     public Tileset[] getMapTilesets() {

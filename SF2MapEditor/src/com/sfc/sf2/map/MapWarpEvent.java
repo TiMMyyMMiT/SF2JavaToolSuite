@@ -5,23 +5,27 @@
  */
 package com.sfc.sf2.map;
 
+import com.sfc.sf2.helpers.Direction;
+
 /**
  *
  * @author wiz
  */
-public class MapWarp {
-    
+public class MapWarpEvent {
+        
     private int triggerX;
     private int triggerY;
-    private String scrollDirection;
+    private String warpType;
+    private Direction scrollDirection;
     private String destMap;
     private int destX;
     private int destY;
-    private String facing;
+    private Direction facing;
 
-    public MapWarp(int triggerX, int triggerY, String scrollDirection, String destMap, int destX, int destY, String facing) {
+    public MapWarpEvent(int triggerX, int triggerY, String warpType, Direction scrollDirection, String destMap, int destX, int destY, Direction facing) {
         this.triggerX = triggerX;
         this.triggerY = triggerY;
+        this.warpType = warpType;
         this.scrollDirection = scrollDirection;
         this.destMap = destMap;
         this.destX = destX;
@@ -43,6 +47,22 @@ public class MapWarp {
 
     public void setTriggerY(int triggerY) {
         this.triggerY = triggerY;
+    }
+
+    public String getWarpType() {
+        return warpType;
+    }
+
+    public void setWarpType(String warpType) {
+        this.warpType = warpType;
+    }
+
+    public Direction getScrollDirection() {
+        return scrollDirection;
+    }
+
+    public void setScrollDirection(Direction scrollDirection) {
+        this.scrollDirection = scrollDirection;
     }
 
     public String getDestMap() {
@@ -69,28 +89,20 @@ public class MapWarp {
         this.destY = destY;
     }
 
-    public String getFacing() {
+    public Direction getFacing() {
         return facing;
     }
 
-    public void setFacing(String facing) {
+    public void setFacing(Direction facing) {
         this.facing = facing;
     }
-
-    public String getScrollDirection() {
-        return scrollDirection;
-    }
-
-    public void setScrollDirection(String scrollDirection) {
-        this.scrollDirection = scrollDirection;
-    }
     
-    public static MapWarp createEmpty() {
-        return new MapWarp(0, 0, "None", "None", 0, 0, "None");
+    public static MapWarpEvent createEmpty() {
+        return new MapWarpEvent(0, 0, "warpNoScroll", Direction.RIGHT, "NONE", 0, 0, Direction.DOWN);
     }
 
     @Override
-    public MapWarp clone() {
-        return new MapWarp(triggerX, triggerY, scrollDirection, destMap, destX, destY, facing);
+    public MapWarpEvent clone() {
+        return new MapWarpEvent(triggerX, triggerY, warpType, scrollDirection, destMap, destX, destY, facing);
     }
 }

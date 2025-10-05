@@ -61,6 +61,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setBGColor(colorPicker1.getColor());
         mapLayoutPanel.setShowPriority(jCheckBox13.isSelected());
         mapLayoutPanel.setShowExplorationFlags(jCheckBox11.isSelected());
+        mapLayoutPanel.setShowInteractionFlags(false);
         
         //mapLayoutPanel.setLeftSlot(leftSlotBlockPanel);
         //mapblockLayout.setLeftSlotBlockPanel(leftSlotBlockPanel);
@@ -106,7 +107,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             mapAreaTableModel.setTableData(map.getAreas());
             mapFlagCopyTableModel.setTableData(map.getFlagCopies());
             mapStepCopyTableModel.setTableData(map.getStepCopies());
-            mapLayer2CopyTableModel.setTableData(map.getRoofCopies());
+            MapCopyEventTableModel.setTableData(map.getRoofCopies());
             mapWarpTableModel.setTableData(map.getWarps());
             mapChestItemTableModel.setTableData(map.getChestItems());
             mapOtherItemTableModel.setTableData(map.getOtherItems());
@@ -135,6 +136,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             if (sharedAnimationInfo != null) {
                 infoButtonSharedAnimation.setMessageText("This animation data is used by the following maps:\n" + sharedAnimationInfo + "\nAny changes will affect all of these maps.\n\nTo unlink the maps, you can export this animation for a specific map and then update \\maps\\entries.asm");
             }
+        } else {
+            mapAreaTableModel.setTableData(null);
+            mapFlagCopyTableModel.setTableData(null);
+            mapStepCopyTableModel.setTableData(null);
+            MapCopyEventTableModel.setTableData(null);
+            mapWarpTableModel.setTableData(null);
+            mapChestItemTableModel.setTableData(null);
+            mapOtherItemTableModel.setTableData(null);
         }
     }
     
@@ -149,11 +158,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
         buttonGroupMapActions = new javax.swing.ButtonGroup();
         mapAreaTableModel = new com.sfc.sf2.map.models.MapAreaTableModel();
-        mapFlagCopyTableModel = new com.sfc.sf2.map.models.MapFlagCopyTableModel();
+        mapFlagCopyTableModel = new com.sfc.sf2.map.models.MapFlagCopyEventTableModel();
         mapChestItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
         mapOtherItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
-        mapLayer2CopyTableModel = new com.sfc.sf2.map.models.MapLayer2CopyTableModel();
-        mapStepCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyTableModel();
+        MapCopyEventTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
+        mapStepCopyTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
         mapAnimationFrameTableModel = new com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel();
         mapWarpTableModel = new com.sfc.sf2.map.models.MapWarpTableModel();
         flatOptionPaneWarningIcon1 = new com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon();
@@ -169,6 +178,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         fileButton1 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton2 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton14 = new com.sfc.sf2.core.gui.controls.FileButton();
+        fileButton20 = new com.sfc.sf2.core.gui.controls.FileButton();
         accordionPanel2 = new com.sfc.sf2.core.gui.controls.AccordionPanel();
         fileButton3 = new com.sfc.sf2.core.gui.controls.FileButton();
         fileButton4 = new com.sfc.sf2.core.gui.controls.FileButton();
@@ -326,6 +336,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         fileButton14.setFilePath(".\\entries.asm");
         fileButton14.setLabelText("Map entries :");
 
+        fileButton20.setFilePath("..\\..\\sf2enums.asm");
+        fileButton20.setLabelText("Sf2enums :");
+
         javax.swing.GroupLayout accordionPanel1Layout = new javax.swing.GroupLayout(accordionPanel1);
         accordionPanel1.setLayout(accordionPanel1Layout);
         accordionPanel1Layout.setHorizontalGroup(
@@ -333,9 +346,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             .addGroup(accordionPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(accordionPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                     .addComponent(fileButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(fileButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(fileButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(fileButton20, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         accordionPanel1Layout.setVerticalGroup(
@@ -347,6 +361,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 .addComponent(fileButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileButton14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileButton20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1094,7 +1110,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jTabbedPane3.addTab("Step Copies", jPanel25);
 
         tableRoofCopies.setBorder(null);
-        tableRoofCopies.setModel(mapLayer2CopyTableModel);
+        tableRoofCopies.setModel(MapCopyEventTableModel);
         tableRoofCopies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableRoofCopies.setSingleClickText(true);
         tableRoofCopies.setSpinnerNumberEditor(true);
@@ -1760,7 +1776,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1416, 1008));
@@ -1771,9 +1787,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
+        Path sf2enumsPath = PathHelpers.getBasePath().resolve(fileButton20.getFilePath());
         int mapId = (int)jSpinner4.getValue();
         try {
-            mapManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapId);
+            mapManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, sf2enumsPath, mapId);
         } catch (Exception ex) {
             mapManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
@@ -2192,6 +2209,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.sfc.sf2.map.models.MapCopyEventTableModel MapCopyEventTableModel;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel2;
     private javax.swing.ButtonGroup buttonGroupMapActions;
@@ -2210,6 +2228,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton18;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton19;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;
+    private com.sfc.sf2.core.gui.controls.FileButton fileButton20;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton3;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton4;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton5;
@@ -2326,11 +2345,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.map.models.MapAreaTableModel mapAreaTableModel;
     private com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel mapBlocksetLayoutPanel;
     private com.sfc.sf2.map.models.MapItemTableModel mapChestItemTableModel;
-    private com.sfc.sf2.map.models.MapFlagCopyTableModel mapFlagCopyTableModel;
-    private com.sfc.sf2.map.models.MapLayer2CopyTableModel mapLayer2CopyTableModel;
+    private com.sfc.sf2.map.models.MapFlagCopyEventTableModel mapFlagCopyTableModel;
     private com.sfc.sf2.map.gui.MapLayoutPanel mapLayoutPanel;
     private com.sfc.sf2.map.models.MapItemTableModel mapOtherItemTableModel;
-    private com.sfc.sf2.map.models.MapStepCopyTableModel mapStepCopyTableModel;
+    private com.sfc.sf2.map.models.MapCopyEventTableModel mapStepCopyTableModel;
     private com.sfc.sf2.map.models.MapWarpTableModel mapWarpTableModel;
     private com.sfc.sf2.core.gui.controls.Table tableAnimFrames;
     private com.sfc.sf2.core.gui.controls.Table tableAreas;

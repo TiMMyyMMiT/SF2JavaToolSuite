@@ -6,40 +6,45 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
-import com.sfc.sf2.map.MapStepCopy;
+import com.sfc.sf2.map.MapFlagCopyEvent;
 import com.sfc.sf2.map.layout.MapLayout;
 
 /**
  *
- * @author TiMMy
+ * @author wiz
  */
-public class MapStepCopyTableModel extends AbstractTableModel<MapStepCopy> {
+public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEvent> {
     
-    public MapStepCopyTableModel() {
-        super(new String[] { "Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
+    public MapFlagCopyEventTableModel() {
+        super(new String[] { "Index", "Flag", "Comment", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
     }
 
     @Override
     public Class<?> getColumnType(int col) {
-        return Integer.class;
+        return col == 8 ? String.class : Integer.class;
     }
 
     @Override
-    protected MapStepCopy createBlankItem(int row) {
-        return MapStepCopy.createEmpty();
+    public boolean isCellEditable(int row, int column) {
+        return column == 2 ? false : super.isCellEditable(row, column);
     }
 
     @Override
-    protected MapStepCopy cloneItem(MapStepCopy item) {
+    protected MapFlagCopyEvent createBlankItem(int row) {
+        return MapFlagCopyEvent.createEmpty();
+    }
+
+    @Override
+    protected MapFlagCopyEvent cloneItem(MapFlagCopyEvent item) {
         return item.clone();
     }
 
     @Override
-    protected Object getValue(MapStepCopy item, int row, int col) {
+    protected Object getValue(MapFlagCopyEvent item, int row, int col) {
         switch (col) {
             case 0: return row;
-            case 1: return item.getTriggerX();
-            case 2: return item.getTriggerY();
+            case 1: return item.getFlag();
+            case 2: return "TODO"; //TODO get string to desribe flag
             case 3: return item.getSourceX();
             case 4: return item.getSourceY();
             case 5: return item.getWidth();
@@ -51,10 +56,9 @@ public class MapStepCopyTableModel extends AbstractTableModel<MapStepCopy> {
     }
 
     @Override
-    protected MapStepCopy setValue(MapStepCopy item, int row, int col, Object value) {
+    protected MapFlagCopyEvent setValue(MapFlagCopyEvent item, int row, int col, Object value) {
         switch (col) {
-            case 1: item.setTriggerX((int)value); break;
-            case 2: item.setTriggerY((int)value); break;
+            case 1: item.setFlag((int)value); break;
             case 3: item.setSourceX((int)value); break;
             case 4: item.setSourceY((int)value); break;
             case 5: item.setWidth((int)value); break;
@@ -66,12 +70,12 @@ public class MapStepCopyTableModel extends AbstractTableModel<MapStepCopy> {
     }
 
     @Override
-    protected Comparable<?> getMinLimit(MapStepCopy item, int col) {
+    protected Comparable<?> getMinLimit(MapFlagCopyEvent item, int col) {
         return 0;
     }
 
     @Override
-    protected Comparable<?> getMaxLimit(MapStepCopy item, int col) {
+    protected Comparable<?> getMaxLimit(MapFlagCopyEvent item, int col) {
         return MapLayout.BLOCK_WIDTH-1;
     }
 }

@@ -6,13 +6,13 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
-import com.sfc.sf2.map.MapWarp;
+import com.sfc.sf2.map.MapWarpEvent;
 import com.sfc.sf2.map.layout.MapLayout;
 /**
  *
  * @author TiMMy
  */
-public class MapWarpTableModel extends AbstractTableModel<MapWarp> {
+public class MapWarpTableModel extends AbstractTableModel<MapWarpEvent> {
     
     public MapWarpTableModel() {
         super(new String[] { "Index", "Trigger X", "Trigger Y", "Dest Map", "Dest X", "Dest Y", "Facing" }, 64);
@@ -31,17 +31,17 @@ public class MapWarpTableModel extends AbstractTableModel<MapWarp> {
     }
 
     @Override
-    protected MapWarp createBlankItem(int row) {
-        return MapWarp.createEmpty();
+    protected MapWarpEvent createBlankItem(int row) {
+        return MapWarpEvent.createEmpty();
     }
 
     @Override
-    protected MapWarp cloneItem(MapWarp item) {
+    protected MapWarpEvent cloneItem(MapWarpEvent item) {
         return item.clone();
     }
 
     @Override
-    protected Object getValue(MapWarp item, int row, int col) {
+    protected Object getValue(MapWarpEvent item, int row, int col) {
         switch (col) {
             case 0: return row;
             case 1: return item.getTriggerX();
@@ -56,26 +56,26 @@ public class MapWarpTableModel extends AbstractTableModel<MapWarp> {
     }
 
     @Override
-    protected MapWarp setValue(MapWarp item, int row, int col, Object value) {
+    protected MapWarpEvent setValue(MapWarpEvent item, int row, int col, Object value) {
         switch (col) {
             case 1: item.setTriggerX((int)value); break;
             case 2: item.setTriggerY((int)value); break;
-            case 3: item.setScrollDirection((String)value); break;
+            //case 3: item.setScrollDirection((String)value); break;
             case 4: item.setDestMap((String)value); break;
             case 5: item.setDestX((int)value); break;
             case 6: item.setDestY((int)value); break;
-            case 7: item.setFacing((String)value); break;
+            //case 7: item.setFacing((String)value); break;
         }
         return item;
     }
 
     @Override
-    protected Comparable<?> getMinLimit(MapWarp item, int col) {
+    protected Comparable<?> getMinLimit(MapWarpEvent item, int col) {
         return 0;
     }
 
     @Override
-    protected Comparable<?> getMaxLimit(MapWarp item, int col) {
+    protected Comparable<?> getMaxLimit(MapWarpEvent item, int col) {
         return MapLayout.BLOCK_WIDTH-1;
     }
 }

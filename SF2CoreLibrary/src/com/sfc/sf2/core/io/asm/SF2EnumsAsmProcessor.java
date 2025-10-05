@@ -72,7 +72,7 @@ public abstract class SF2EnumsAsmProcessor<TData extends AbstractEnums> extends 
     }
     
     @Override
-    protected String getHeaderName(TData item) {
+    protected String getHeaderName(TData item, EmptyPackage pckg) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

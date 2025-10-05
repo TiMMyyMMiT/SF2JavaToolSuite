@@ -7,10 +7,9 @@ package com.sfc.sf2.map.gui;
 
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
-import com.sfc.sf2.map.MapFlagCopy;
-import com.sfc.sf2.map.MapRoofCopy;
-import com.sfc.sf2.map.MapStepCopy;
-import com.sfc.sf2.map.MapWarp;
+import com.sfc.sf2.map.MapFlagCopyEvent;
+import com.sfc.sf2.map.MapCopyEvent;
+import com.sfc.sf2.map.MapWarpEvent;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
@@ -219,7 +218,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapFlagCopies(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
-        for (MapFlagCopy flagCopy : map.getFlagCopies()) {
+        for (MapFlagCopyEvent flagCopy : map.getFlagCopies()) {
             g2.setColor(Color.CYAN);
             int width = flagCopy.getWidth();
             int heigth = flagCopy.getHeight();
@@ -232,7 +231,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapStepCopiesImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
-        for (MapStepCopy stepCopy : map.getStepCopies()) {
+        for (MapCopyEvent stepCopy : map.getStepCopies()) {
             g2.setColor(Color.WHITE);
             g2.drawRect(stepCopy.getTriggerX()*24,stepCopy.getTriggerY()*24, 24, 24);
             g2.setColor(Color.CYAN);
@@ -247,7 +246,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapRoofCopiesImage(Graphics graphics) {   
         Graphics2D g2 = (Graphics2D)graphics;
         g2.setStroke(new BasicStroke(3));
-        for (MapRoofCopy roofCopy : map.getRoofCopies()) {
+        for (MapCopyEvent roofCopy : map.getRoofCopies()) {
             g2.setColor(Color.WHITE);
             g2.drawRect(roofCopy.getTriggerX()*24,roofCopy.getTriggerY()*24, 24, 24);
             g2.setColor(Color.LIGHT_GRAY);
@@ -276,7 +275,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             }
         }
         g2.setStroke(new BasicStroke(3));
-        for (MapWarp warp : map.getWarps()) {
+        for (MapWarpEvent warp : map.getWarps()) {
             g2.setColor(Color.CYAN);
             if (warp.getTriggerX() == 0xFF || warp.getTriggerY() == 0xFF) {
                 MapArea mainArea = map.getAreas()[0];

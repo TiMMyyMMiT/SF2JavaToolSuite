@@ -59,7 +59,7 @@ public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation,
     }
 
     @Override
-    protected String getHeaderName(MapAnimation item) {
+    protected String getHeaderName(MapAnimation item, MapAnimationPackage pckg) {
         return "";
     }
 

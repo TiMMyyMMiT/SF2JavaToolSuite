@@ -18,15 +18,15 @@ public class Map {
     private MapBlockset blockset;
     private MapLayout layout;
     private MapArea[] areas;
-    private MapFlagCopy[] flagCopies;
-    private MapStepCopy[] stepCopies;
-    private MapRoofCopy[] roofCopies;
-    private MapWarp[] warps;
+    private MapFlagCopyEvent[] flagCopies;
+    private MapCopyEvent[] stepCopies;
+    private MapCopyEvent[] roofCopies;
+    private MapWarpEvent[] warps;
     private MapItem[] chestItems;
     private MapItem[] otherItems;
     private MapAnimation animation;
 
-    public Map(MapBlockset blockset, MapLayout layout, MapArea[] areas, MapFlagCopy[] flagCopies, MapStepCopy[] stepCopies, MapRoofCopy[] roofCopies, MapWarp[] warps, MapItem[] chestItems, MapItem[] otherItems, MapAnimation animation) {
+    public Map(MapBlockset blockset, MapLayout layout, MapArea[] areas, MapFlagCopyEvent[] flagCopies, MapCopyEvent[] stepCopies, MapCopyEvent[] roofCopies, MapWarpEvent[] warps, MapItem[] chestItems, MapItem[] otherItems, MapAnimation animation) {
         this.blockset = blockset;
         this.layout = layout;
         this.areas = areas;
@@ -63,35 +63,35 @@ public class Map {
         this.areas = areas;
     }
 
-    public MapFlagCopy[] getFlagCopies() {
+    public MapFlagCopyEvent[] getFlagCopies() {
         return flagCopies;
     }
 
-    public void setFlagCopies(MapFlagCopy[] flagCopies) {
+    public void setFlagCopies(MapFlagCopyEvent[] flagCopies) {
         this.flagCopies = flagCopies;
     }
 
-    public MapStepCopy[] getStepCopies() {
+    public MapCopyEvent[] getStepCopies() {
         return stepCopies;
     }
 
-    public void setStepCopies(MapStepCopy[] stepCopies) {
+    public void setStepCopies(MapCopyEvent[] stepCopies) {
         this.stepCopies = stepCopies;
     }
 
-    public MapRoofCopy[] getRoofCopies() {
+    public MapCopyEvent[] getRoofCopies() {
         return roofCopies;
     }
 
-    public void setRoofCopies(MapRoofCopy[] roofCopies) {
+    public void setRoofCopies(MapCopyEvent[] roofCopies) {
         this.roofCopies = roofCopies;
     }
 
-    public MapWarp[] getWarps() {
+    public MapWarpEvent[] getWarps() {
         return warps;
     }
 
-    public void setWarps(MapWarp[] warps) {
+    public void setWarps(MapWarpEvent[] warps) {
         this.warps = warps;
     }
 

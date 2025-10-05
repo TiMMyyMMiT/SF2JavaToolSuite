@@ -6,36 +6,36 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
-import com.sfc.sf2.map.MapRoofCopy;
+import com.sfc.sf2.map.MapCopyEvent;
 import com.sfc.sf2.map.layout.MapLayout;
 
 /**
  *
  * @author TiMMy
  */
-public class MapLayer2CopyTableModel extends AbstractTableModel<MapRoofCopy> {
+public class MapCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
     
-    public MapLayer2CopyTableModel() {
-        super(new String[] {"Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
+    public MapCopyEventTableModel() {
+        super(new String[] { "Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
     }
 
     @Override
     public Class<?> getColumnType(int col) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Integer.class;
     }
 
     @Override
-    protected MapRoofCopy createBlankItem(int row) {
-        return MapRoofCopy.createEmpty();
+    protected MapCopyEvent createBlankItem(int row) {
+        return MapCopyEvent.createEmpty();
     }
 
     @Override
-    protected MapRoofCopy cloneItem(MapRoofCopy item) {
+    protected MapCopyEvent cloneItem(MapCopyEvent item) {
         return item.clone();
     }
 
     @Override
-    protected Object getValue(MapRoofCopy item, int row, int col) {
+    protected Object getValue(MapCopyEvent item, int row, int col) {
         switch (col) {
             case 0: return row;
             case 1: return item.getTriggerX();
@@ -51,7 +51,7 @@ public class MapLayer2CopyTableModel extends AbstractTableModel<MapRoofCopy> {
     }
 
     @Override
-    protected MapRoofCopy setValue(MapRoofCopy item, int row, int col, Object value) {
+    protected MapCopyEvent setValue(MapCopyEvent item, int row, int col, Object value) {
         switch (col) {
             case 1: item.setTriggerX((int)value); break;
             case 2: item.setTriggerY((int)value); break;
@@ -66,12 +66,12 @@ public class MapLayer2CopyTableModel extends AbstractTableModel<MapRoofCopy> {
     }
 
     @Override
-    protected Comparable<?> getMinLimit(MapRoofCopy item, int col) {
+    protected Comparable<?> getMinLimit(MapCopyEvent item, int col) {
         return 0;
     }
 
     @Override
-    protected Comparable<?> getMaxLimit(MapRoofCopy item, int col) {
+    protected Comparable<?> getMaxLimit(MapCopyEvent item, int col) {
         return MapLayout.BLOCK_WIDTH-1;
     }
 }
