@@ -115,7 +115,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         lastX = x;
         lastY = y;
         buttonHeld = e.getButton();
-        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false));
+        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false, false));
     }
     
     @Override
@@ -127,18 +127,18 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (x == lastX && y == lastY) return;
         lastX = x;
         lastY = y;
-        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, true));
+        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, true, false));
     }
     
     @Override
     public void mouseReleased(MouseEvent e) {
         if (buttonHeld != -1) {
-            buttonListener.mousePressed(new GridMousePressedEvent(0, 0, MouseEvent.NOBUTTON, false));
+            buttonListener.mousePressed(new GridMousePressedEvent(0, 0, buttonHeld, false, true));
             buttonHeld = -1;
         }
     }
     
-    public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging) { }
+    public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging, boolean lifted) { }
     public interface GridMousePressedListener extends EventListener {
         public void mousePressed(GridMousePressedEvent evt);
     }
