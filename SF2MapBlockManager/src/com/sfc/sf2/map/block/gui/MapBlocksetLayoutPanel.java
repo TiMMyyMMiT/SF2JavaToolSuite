@@ -7,13 +7,10 @@ package com.sfc.sf2.map.block.gui;
 
 import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.*;
-import com.sfc.sf2.graphics.Block;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
-import com.sfc.sf2.graphics.Tile;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.MapBlockHelpers;
-import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import java.awt.BasicStroke;
 import java.awt.Color;

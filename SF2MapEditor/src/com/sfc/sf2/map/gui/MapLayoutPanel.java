@@ -5,6 +5,9 @@
  */
 package com.sfc.sf2.map.gui;
 
+import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
+import com.sfc.sf2.helpers.GraphicsHelpers;
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapFlagCopyEvent;
@@ -13,11 +16,14 @@ import com.sfc.sf2.map.MapWarpEvent;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
+import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
+import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagImages;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,13 +67,18 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private int currentMode = 0;
     private int togglesDrawMode = 0;
     private int selectedTabsDrawMode = 0;
+    private int selectedItemIndex;
     
-    private MapBlock selectedBlock0;
+    private MapBlock selectedBlock;
     MapBlock[][] copiedBlocks;
     private int copiedBlocksStartX = -1;
     private int copiedBlocksStartY = -1;
     private int copiedBlocksDrawX = -1;
     private int copiedBlocksDrawY = -1;
+    private BufferedImage previewImage;
+    private int lastMapX;
+    private int lastMapY;
+    private int previewIndex = -1;
     
     private List<int[]> actions = new ArrayList<int[]>();
     
@@ -80,33 +91,53 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     }
 
     @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(previewImage, copiedBlocksDrawX, copiedBlocksDrawY, null);
+    }
+
+    @Override
     protected void drawImage(Graphics graphics) {
         super.drawImage(graphics);
         
+        Graphics2D g2 = (Graphics2D)graphics;
         if (shouldDraw(DRAW_MODE_AREAS)) {
-            drawMapAreasImage(graphics);
+            for (int i = 0; i < map.getAreas().length; i++) {
+                drawMapArea(g2, map.getAreas()[i], false);
+            }
         }
         if (shouldDraw(DRAW_MODE_FLAG_COPIES)) {
-            drawMapFlagCopies(graphics);
+            for (int i = 0; i < map.getFlagCopies().length; i++) {
+                drawMapFlagCopy(g2, map.getFlagCopies()[i], false);
+            }
         }
         if (shouldDraw(DRAW_MODE_STEP_COPIES)) {
-            drawMapStepCopiesImage(graphics);
+            for (int i = 0; i < map.getStepCopies().length; i++) {
+                drawMapStepCopy(g2, map.getStepCopies()[i], false);
+            }
         }
         if (shouldDraw(DRAW_MODE_ROOF_COPIES)) {
-            drawMapRoofCopiesImage(graphics);
+            for (int i = 0; i < map.getRoofCopies().length; i++) {
+                drawMapRoofCopy(g2, map.getRoofCopies()[i], false);
+            }
         }
         if (shouldDraw(DRAW_MODE_WARPS)) {
-            drawMapWarpsImage(graphics);
+            drawMapWarps(g2);
+            for (int i = 0; i < map.getWarps().length; i++) {
+                drawMapWarp(g2, map.getWarps()[i], false);
+            }
         }
         if (shouldDraw(DRAW_MODE_ITEMS)) {
-            drawMapItemsImage(graphics);
+            drawMapItems(g2);
         }
         if (shouldDraw(DRAW_MODE_TRIGGERS)) {
-            drawMapTriggersImage(graphics);
+            drawMapTriggers(g2);
         }
+        drawSelected(g2);
+        buildPreviewImage();
     }
     
-    /*private BufferedImage buildPreviewImage() {
+    private BufferedImage buildPreviewImage() {
         BufferedImage preview = null;
         boolean overlayRect = false;
         
@@ -131,61 +162,61 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                         height = lastMapY - copiedBlocksStartY + 1;
                         copiedBlocksDrawY = copiedBlocksStartY;
                     }
-                    preview = new BufferedImage(width*24, height*24, BufferedImage.TYPE_INT_ARGB);
+                    preview = new BufferedImage(width*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D graphics = (Graphics2D)preview.getGraphics();
                     graphics.setColor(Color.YELLOW);
                     graphics.setStroke(new BasicStroke(2));
-                    graphics.drawRect(0, 0, width*24, height*24);
+                    graphics.drawRect(0, 0, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
                     overlayRect = false;
                 } else if (copiedBlocks != null) {
                     overlayRect = true;
-                    preview = new BufferedImage(copiedBlocks[0].length*24, copiedBlocks.length*24, BufferedImage.TYPE_INT_ARGB);
+                    preview = new BufferedImage(copiedBlocks[0].length*PIXEL_WIDTH, copiedBlocks.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D graphics = (Graphics2D)preview.getGraphics();
                     graphics.setColor(Color.WHITE);
-                    for (int i = 0; i < copiedBlocks.length; i++) {
-                        for (int j = 0; j < copiedBlocks[i].length; j++) {
-                            graphics.drawImage(copiedBlocks[i][j].getIndexedColorImage(), j*24, i*24, null);
+                    for (int j=0; j < copiedBlocks.length; j++) {
+                        for (int i=0; i < copiedBlocks[j].length; i++) {
+                            graphics.drawImage(copiedBlocks[j][i].getIndexedColorImage(map.getLayout().getTilesets()), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
                         }
                     }
-                } else if (MapBlockLayoutPanel.selectedBlockIndex0 == -1) {
+                } else if (MapBlockLayoutPanel.selectedBlockIndexLeft == -1) {
                     //No block
-                    previewImage = null;
+                    preview = null;
                     previewIndex = -1;
                 } else {
                     //Block selected
-                    previewIndex = MapBlockLayoutPanel.selectedBlockIndex0;
-                    selectedBlock0 = blockset[previewIndex];
+                    previewIndex = MapBlockLayoutPanel.selectedBlockIndexLeft;
+                    selectedBlock = map.getBlockset().getBlocks()[previewIndex];
                     //"layout" is not MapBlockLayout. How to get that?
-                    if (selectedBlock0 != null) {
-                        preview = selectedBlock0.getIndexedColorImage();
+                    if (selectedBlock != null) {
+                        preview = selectedBlock.getIndexedColorImage(map.getLayout().getTilesets());
                     }
                 }
                 break;
-            case MODE_OBSTRUCTED :
+            case MODE_OBSTRUCTED:
                 overlayRect = true;
-                preview = getObstructedImage();
+                preview = MapLayoutFlagImages.getObstructedImage();
                 break;
-            case MODE_STAIRS :
+            case MODE_STAIRS:
                 overlayRect = true;
-                preview = getLeftUpstairsImage();
+                preview = MapLayoutFlagImages.getLeftUpstairsImage();
                 break;
-            case MODE_WARP :
-                preview = getWarpImage();
+            case MODE_WARP:
+                preview = MapLayoutFlagImages.getWarpImage();
                 break;
-            case MODE_BARREL :
+            case MODE_BARREL:
                 overlayRect = true;
-                preview = getBarrelImage();
+                preview = MapLayoutFlagImages.getBarrelImage();
                 break;
-            case MODE_VASE :
+            case MODE_VASE:
                 overlayRect = true;
-                preview = getVaseImage();
+                preview = MapLayoutFlagImages.getVaseImage();
                 break;
-            case MODE_TABLE :
+            case MODE_TABLE:
                 overlayRect = true;
-                preview = getTableImage();
+                preview = MapLayoutFlagImages.getTableImage();
                 break;
-            case MODE_TRIGGER :
-                preview = getTriggerImage();
+            case MODE_TRIGGER:
+                preview = MapLayoutFlagImages.getTriggerImage();
                 break;
             default:
                 preview = null;
@@ -194,7 +225,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         
         if (preview != null || overlayRect) {
             if (preview == null) {
-                previewImage = new BufferedImage(24, 24, BufferedImage.TYPE_INT_ARGB);
+                previewImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
             } else {
                 previewImage = new BufferedImage(preview.getWidth(), preview.getHeight(), BufferedImage.TYPE_INT_ARGB);
             }
@@ -209,144 +240,133 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 graphics.drawRect(0,0, previewImage.getWidth(), previewImage.getHeight());
             }
             graphics.dispose();
-            previewImage = resize(previewImage);
+            previewImage = scale.resizeImage(previewImage);
         }
         
         return previewImage;
-    }*/
+    }
     
-    private void drawMapFlagCopies(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
+    private void drawMapArea(Graphics2D g2, MapArea area, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        for (MapFlagCopyEvent flagCopy : map.getFlagCopies()) {
-            g2.setColor(Color.CYAN);
-            int width = flagCopy.getWidth();
-            int heigth = flagCopy.getHeight();
-            g2.drawRect(flagCopy.getSourceX()*24 + 3,flagCopy.getSourceY()*24+3, width*24-6, heigth*24-6);
-            g2.setColor(Color.LIGHT_GRAY);
-            g2.drawRect(flagCopy.getDestX()*24 + 3, flagCopy.getDestY()*24+3, width*24-6, heigth*24-6);
+        g2.setColor(selected ? Color.YELLOW : Color.WHITE);
+        int width = area.getLayer1EndX()-area.getLayer1StartX()+1;
+        int heigth = area.getLayer1EndY()-area.getLayer1StartY()+1;
+        g2.drawRect(area.getLayer1StartX()*PIXEL_WIDTH+3, area.getLayer1StartY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        if (area.getForegroundLayer2StartX()!=0 || area.getForegroundLayer2StartY() != 0) {
+            g2.drawRect((area.getLayer1StartX()+area.getForegroundLayer2StartX())*PIXEL_WIDTH+3, (area.getLayer1StartY()+area.getForegroundLayer2StartY())*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        }
+        if (area.getBackgroundLayer2StartX()!=0 || area.getBackgroundLayer2StartY() != 0) {
+            g2.drawRect(area.getBackgroundLayer2StartX()*PIXEL_WIDTH+3, area.getBackgroundLayer2StartY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
         }
     }
     
-    private void drawMapStepCopiesImage(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
+    private void drawMapFlagCopy(Graphics2D g2, MapFlagCopyEvent flagCopy, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        for (MapCopyEvent stepCopy : map.getStepCopies()) {
-            g2.setColor(Color.WHITE);
-            g2.drawRect(stepCopy.getTriggerX()*24,stepCopy.getTriggerY()*24, 24, 24);
-            g2.setColor(Color.CYAN);
-            int width = stepCopy.getWidth();
-            int heigth = stepCopy.getHeight();
-            g2.drawRect(stepCopy.getSourceX()*24 + 3,stepCopy.getSourceY()*24+3, width*24-6, heigth*24-6);
-            g2.setColor(Color.LIGHT_GRAY);
-            g2.drawRect(stepCopy.getDestX()*24 + 3, stepCopy.getDestY()*24+3, width*24-6, heigth*24-6);
-        }
+        g2.setColor(selected ? Color.YELLOW : Color.CYAN);
+        int width = flagCopy.getWidth();
+        int heigth = flagCopy.getHeight();
+        g2.drawRect(flagCopy.getSourceX()*PIXEL_WIDTH+3,flagCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        g2.drawRect(flagCopy.getDestX()*PIXEL_WIDTH+3, flagCopy.getDestY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
     }
     
-    private void drawMapRoofCopiesImage(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
+    private void drawMapStepCopy(Graphics2D g2, MapCopyEvent stepCopy, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        for (MapCopyEvent roofCopy : map.getRoofCopies()) {
-            g2.setColor(Color.WHITE);
-            g2.drawRect(roofCopy.getTriggerX()*24,roofCopy.getTriggerY()*24, 24, 24);
-            g2.setColor(Color.LIGHT_GRAY);
-            g2.drawRect(roofCopy.getTriggerX()*24,(roofCopy.getTriggerY()+1)*24, 24, 24);
-            g2.setColor(Color.CYAN);
-            int width = roofCopy.getWidth();
-            int heigth = roofCopy.getHeight();
-            if(roofCopy.getSourceX()>=0 && roofCopy.getSourceX()<64 && roofCopy.getSourceY()>=0 && roofCopy.getSourceY()<64){
-                g2.drawRect(roofCopy.getSourceX()*24 + 3,roofCopy.getSourceY()*24+3, width*24-6, heigth*24-6);
-            }
-            g2.setColor(Color.LIGHT_GRAY);
-            g2.drawRect(roofCopy.getDestX()*24 + 3, roofCopy.getDestY()*24+3, width*24-6, heigth*24-6);
-        }
+        g2.setColor(selected ? Color.YELLOW : Color.WHITE);
+        g2.drawRect(stepCopy.getTriggerX()*PIXEL_WIDTH, stepCopy.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+        g2.setColor(Color.CYAN);
+        int width = stepCopy.getWidth();
+        int heigth = stepCopy.getHeight();
+        g2.drawRect(stepCopy.getSourceX()*PIXEL_WIDTH+3,stepCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        g2.drawRect(stepCopy.getDestX()*PIXEL_WIDTH+3, stepCopy.getDestY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
     }
     
-    private void drawMapWarpsImage(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
+    private void drawMapRoofCopy(Graphics2D g2, MapCopyEvent roofCopy, boolean selected) {
+        g2.setStroke(new BasicStroke(3));
+        g2.setColor(selected ? Color.YELLOW : Color.WHITE);
+        g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, roofCopy.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, (roofCopy.getTriggerY()+1)*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+        g2.setColor(Color.CYAN);
+        int width = roofCopy.getWidth();
+        int heigth = roofCopy.getHeight();
+        if(roofCopy.getSourceX() >=0 && roofCopy.getSourceX() < BLOCK_WIDTH && roofCopy.getSourceY() >= 0 && roofCopy.getSourceY() < BLOCK_HEIGHT) {
+            g2.drawRect(roofCopy.getSourceX()*PIXEL_WIDTH+3,roofCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        }
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.drawRect(roofCopy.getDestX()*PIXEL_WIDTH + 3, roofCopy.getDestY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+    }
+    
+    private void drawMapWarps(Graphics2D g2) {
         MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
         g2.setColor(Color.BLUE);
         g2.setStroke(new BasicStroke(1));
-        for (int y=0; y < 64; y++) {
-            for (int x=0; x < 64; x++) {
-                int itemFlag = blocks[y*64+x].getFlags()&0x3C00;
+        for (int y=0; y < BLOCK_HEIGHT; y++) {
+            for (int x=0; x < BLOCK_WIDTH; x++) {
+                int itemFlag = blocks[x+y*BLOCK_WIDTH].getFlags()&0x3C00;
                 if (itemFlag == 0x1000)
-                    g2.drawImage(MapLayoutFlagImages.getWarpImage(),x*24,y*24, null);
+                    g2.drawImage(MapLayoutFlagImages.getWarpImage(), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);
             }
         }
+    }
+    
+    private void drawMapWarp(Graphics2D g2, MapWarpEvent warp, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        for (MapWarpEvent warp : map.getWarps()) {
-            g2.setColor(Color.CYAN);
-            if (warp.getTriggerX() == 0xFF || warp.getTriggerY() == 0xFF) {
-                MapArea mainArea = map.getAreas()[0];
-                int x, w, y, h;
-                if (warp.getTriggerX()==0xFF) {
-                    x = mainArea.getLayer1StartX();
-                    w = mainArea.getLayer1EndX()-x+1;
-                } else {
-                    x = warp.getTriggerX();
-                    w = 1;
-                }
-                if (warp.getTriggerY()==0xFF) {
-                    y = mainArea.getLayer1StartY();
-                    h = mainArea.getLayer1EndY()-y+1;
-                } else {
-                    y = warp.getTriggerY();
-                    h = 1;
-                }
-                g2.drawRect(x*24,y*24, w*24, h*24);
-            }else {
-                g2.drawImage(MapLayoutFlagImages.getWarpImage(), warp.getTriggerX()*24, warp.getTriggerY()*24, null);
+        g2.setColor(Color.CYAN);
+        if (warp.getTriggerX() == 0xFF || warp.getTriggerY() == 0xFF) {
+            MapArea mainArea = map.getAreas()[0];
+            int x, w, y, h;
+            if (warp.getTriggerX()==0xFF) {
+                x = mainArea.getLayer1StartX();
+                w = mainArea.getLayer1EndX()-x+1;
+            } else {
+                x = warp.getTriggerX();
+                w = 1;
             }
-
-            if (warp.getDestMap().equals("MAP_CURRENT")) {
-                g2.setStroke(new BasicStroke(1));
-                g2.setColor(Color.BLUE);
-                g2.drawLine(warp.getTriggerX()*24+12, warp.getTriggerY()*24+12, warp.getDestX()*24+12, warp.getDestY()*24+12);
+            if (warp.getTriggerY()==0xFF) {
+                y = mainArea.getLayer1StartY();
+                h = mainArea.getLayer1EndY()-y+1;
+            } else {
+                y = warp.getTriggerY();
+                h = 1;
             }
+            g2.drawRect(x*PIXEL_WIDTH, y*PIXEL_HEIGHT, w*PIXEL_WIDTH, h*PIXEL_HEIGHT);
+        } else {
+            g2.drawImage(MapLayoutFlagImages.getWarpImage(), warp.getTriggerX()*PIXEL_WIDTH, warp.getTriggerY()*PIXEL_HEIGHT, null);
+        }
+        if (warp.getDestMap().equals("MAP_CURRENT")) {
+            g2.setStroke(new BasicStroke(1));
+            g2.setColor(Color.BLUE);
+            GraphicsHelpers.drawArrowLine(g2, warp.getTriggerX()*PIXEL_WIDTH+12, warp.getTriggerY()*PIXEL_HEIGHT+12, warp.getDestX()*PIXEL_WIDTH+12, warp.getDestY()*PIXEL_HEIGHT+12);
         }
     }    
 
-    private void drawMapItemsImage(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
+    private void drawMapItems(Graphics2D g2) {
         g2.setStroke(new BasicStroke(3));
         MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
-        for (int y=0;y< 64; y++) {
-            for (int x=0; x < 64; x++) {
-                int itemFlag = blocks[y*64+x].getFlags()&0x3C00;
-                g2.drawImage(MapLayoutFlagImages.getBlockItemFlagImage(itemFlag),x*24,y*24, null);
+        for (int y=0;y< BLOCK_HEIGHT; y++) {
+            for (int x=0; x < BLOCK_WIDTH; x++) {
+                int itemFlag = blocks[x+y*BLOCK_WIDTH].getFlags()&0x3C00;
+                g2.drawImage(MapLayoutFlagImages.getBlockItemFlagImage(itemFlag), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);
             }
         }
     }
         
-    private void drawMapTriggersImage(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
+    private void drawMapTriggers(Graphics2D g2) {
         MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
-        for(int y=0;y< 64; y++) {
-            for(int x=0;x < 64; x++) {
-                int itemFlag = blocks[y*64+x].getFlags()&0x3C00;
-                if (itemFlag==0x1400)
-                    g2.drawImage(MapLayoutFlagImages.getTriggerImage(),x*24,y*24, null);
+        for (int y=0;y< BLOCK_HEIGHT; y++) {
+            for (int x=0;x < BLOCK_WIDTH; x++) {
+                int itemFlag = blocks[x+y*BLOCK_WIDTH].getFlags()&0x3C00;
+                if (itemFlag == 0x1400)
+                    g2.drawImage(MapLayoutFlagImages.getTriggerImage(), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);
             }
         }
     }
     
-    private void drawMapAreasImage(Graphics graphics) {   
-        Graphics2D g2 = (Graphics2D)graphics;
-        g2.setStroke(new BasicStroke(3));
-        for (MapArea area : map.getAreas()) { 
-            g2.setColor(Color.WHITE);
-            int width = area.getLayer1EndX() - area.getLayer1StartX() + 1;
-            int heigth = area.getLayer1EndY() - area.getLayer1StartY() + 1;
-            g2.drawRect(area.getLayer1StartX()*24 + 3, area.getLayer1StartY()*24+3, width*24-6, heigth*24-6);
-            g2.setColor(Color.LIGHT_GRAY);
-            if (area.getForegroundLayer2StartX()!=0 || area.getForegroundLayer2StartY() != 0) {
-                g2.drawRect((area.getLayer1StartX() + area.getForegroundLayer2StartX())*24 + 3, (area.getLayer1StartY() + area.getForegroundLayer2StartY())*24+3, width*24-6, heigth*24-6);
-            }
-            if (area.getBackgroundLayer2StartX()!=0 || area.getBackgroundLayer2StartY() != 0) {
-                g2.drawRect(area.getBackgroundLayer2StartX()*24 + 3, area.getBackgroundLayer2StartY()*24+3, width*24-6, heigth*24-6);
-            }
-        }
+    private void drawSelected(Graphics2D g2) {
+        if (selectedItemIndex == -1) return;
     }
     
     /*public void mousePressed(MouseEvent e) {
@@ -649,14 +669,14 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         leftSlot.setBlock(block);
     }
     
-    public void setBlockValue(int x, int y, int value){
+    public void setBlockValue(int x, int y, int value) {
         if (value == -1) return;
         MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
-        MapBlock block = blocks[y*64+x];
+        MapBlock block = blocks[x+y*BLOCK_WIDTH];
         if (block.getIndex() != value) {
             int[] action = new int[3];
             action[0] = ACTION_CHANGE_BLOCK_VALUE;
-            action[1] = y*64+x;
+            action[1] = x+y*BLOCK_WIDTH;
             action[2] = block.getIndex();
             block.setIndex(value);
             block.clearIndexedColorImage();
@@ -666,13 +686,13 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         }
     }
     
-    public void setFlagValue(int x, int y, int value){
+    public void setFlagValue(int x, int y, int value) {
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        MapBlock block = blocks[y*64+x];
+        MapBlock block = blocks[x+y*BLOCK_WIDTH];
         if(block.getFlags()!=value){
             int[] action = new int[3];
             action[0] = ACTION_CHANGE_BLOCK_FLAGS;
-            action[1] = y*64+x;
+            action[1] = x+y*BLOCK_WIDTH;
             int origFlags = block.getFlags();
             action[2] = origFlags;
             int newFlags = (0xC000 & value) + (0x3C00 & origFlags);
@@ -684,11 +704,11 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     public void clearFlagValue(int x, int y){
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        MapBlock block = blocks[y*64+x];
+        MapBlock block = blocks[x+y*BLOCK_WIDTH];
         if(block.getFlags()!=0){
             int[] action = new int[3];
             action[0] = ACTION_CHANGE_BLOCK_FLAGS;
-            action[1] = y*64+x;
+            action[1] = x+y*BLOCK_WIDTH;
             int origFlags = block.getFlags();
             action[2] = origFlags;
             int newFlags = 0;
@@ -729,7 +749,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                         int flags = action[4+2*(j*width+i)+1];
                         if (value != -1 && flags != -1) {
                             MapBlock block = new MapBlock(value, flags, map.getLayout().getBlockset().getBlocks()[value].getMapTiles());
-                            layout.getBlockset().getBlocks()[blockIndex+j*64+i] = block;
+                            layout.getBlockset().getBlocks()[i+blockIndex+j*BLOCK_WIDTH] = block;
                         }
                     }
                 }   actions.remove(actions.size()-1);
@@ -741,11 +761,11 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     }
 
     public MapBlock getSelectedBlock0() {
-        return selectedBlock0;
+        return selectedBlock;
     }
 
     public void setSelectedBlock0(MapBlock selectedBlock0) {
-        this.selectedBlock0 = selectedBlock0;
+        this.selectedBlock = selectedBlock0;
     }
 
     public List<int[]> getActions() {
@@ -832,6 +852,15 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             default:
                 return false;
         }
+    }
+
+    public int getSelectedItemIndex() {
+        return selectedItemIndex;
+    }
+
+    public void setSelectedItemIndex(int selectedItemIndex) {
+        this.selectedItemIndex = selectedItemIndex;
+        redraw();
     }
     
     public boolean getIsOnActionsTab() {        
