@@ -62,6 +62,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setShowPriority(jCheckBox13.isSelected());
         mapLayoutPanel.setShowExplorationFlags(jCheckBox11.isSelected());
         mapLayoutPanel.setShowInteractionFlags(false);
+        mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ALL, false);
         
         //mapLayoutPanel.setLeftSlot(leftSlotBlockPanel);
         //mapblockLayout.setLeftSlotBlockPanel(leftSlotBlockPanel);
@@ -1919,8 +1921,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
         SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
-        JTabbedPane sourceTabbedPane = (JTabbedPane)evt.getSource();
-        int index = sourceTabbedPane.getSelectedIndex();
+        int index = jTabbedPane2.getSelectedIndex();
         mapLayoutPanel.setIsOnActionsTab(index == 0);
         switch (index) {
             case 0:     //Actions & Anims
@@ -1948,9 +1949,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jTabbedPane2StateChanged
 
     private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
+        int index = jTabbedPane2.getSelectedIndex();
+        if (index != 2) return; //Is not on Block copies panel
         SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
-        JTabbedPane sourceTabbedPane = (JTabbedPane)evt.getSource();
-        int index = sourceTabbedPane.getSelectedIndex();
+        index = jTabbedPane3.getSelectedIndex();
         switch (index) {
             default:     //Layout and Anims & Block Copies panels
                 return;
