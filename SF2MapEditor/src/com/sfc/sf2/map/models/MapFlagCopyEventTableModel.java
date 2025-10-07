@@ -16,7 +16,7 @@ import com.sfc.sf2.map.layout.MapLayout;
 public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEvent> {
     
     public MapFlagCopyEventTableModel() {
-        super(new String[] { "Index", "Flag", "Comment", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
+        super(new String[] { "Index", "Flag", "Flag Info", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEv
         switch (col) {
             case 0: return row;
             case 1: return item.getFlag();
-            case 2: return "TODO"; //TODO get string to desribe flag
+            case 2: return MapFlagCopyEvent.getFlagInfo(item.getFlag());
             case 3: return item.getSourceX();
             case 4: return item.getSourceY();
             case 5: return item.getWidth();

@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
+import com.sfc.sf2.map.MapFlagCopyEvent;
 import com.sfc.sf2.map.MapItem;
 import com.sfc.sf2.map.layout.MapLayout;
 
@@ -16,12 +17,17 @@ import com.sfc.sf2.map.layout.MapLayout;
 public class MapItemTableModel extends AbstractTableModel<MapItem> {
     
     public MapItemTableModel() {
-        super(new String[] { "Index", "X", "Y", "Flag", "Item" }, 64);
+        super(new String[] { "Index", "X", "Y", "Flag", "Flag Info", "Item" }, 64);
     }
 
     @Override
     public Class<?> getColumnType(int col) {
-        return col == 4 ? String.class : Integer.class;
+        return col >= 4 ? String.class : Integer.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return column == 4 ? false : super.isCellEditable(row, column);
     }
 
     @Override
@@ -41,7 +47,8 @@ public class MapItemTableModel extends AbstractTableModel<MapItem> {
             case 1: return item.getX();
             case 2: return item.getY();
             case 3: return item.getFlag();
-            case 4: return item.getItem();
+            case 4: return MapFlagCopyEvent.getFlagInfo(item.getFlag());
+            case 5: return item.getItem();
         }
         return -1;
     }
@@ -52,7 +59,7 @@ public class MapItemTableModel extends AbstractTableModel<MapItem> {
             case 1: item.setX((int)value); break;
             case 2: item.setY((int)value); break;
             case 3: item.setFlag((int)value); break;
-            case 4: item.setItem((String)value); break;
+            case 5: item.setItem((String)value); break;
         }
         return item;
     }
