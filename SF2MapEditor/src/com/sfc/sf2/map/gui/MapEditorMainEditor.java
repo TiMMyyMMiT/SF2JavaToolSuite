@@ -1642,7 +1642,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
         jLabel59.setText("BG :");
 
-        jCheckBox11.setSelected(true);
         jCheckBox11.setText("Exploration flags");
         jCheckBox11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -88,11 +88,11 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
     protected void drawBlock(MapBlock block, Graphics graphics, int x, int y) {
         graphics.drawImage(block.getIndexedColorImage(layout.getTilesets()), x, y, null);
         
-        if (showExplorationFlags) {
+        if (getShowExplorationFlags()) {
             int explorationFlags = block.getNavFlags();
             graphics.drawImage(MapLayoutFlagImages.getBlockExplorationFlagImage(explorationFlags), x, y, null); 
         }
-        if (showInteractionFlags) {
+        if (getShowInteractionFlags()) {
             int interactionFlags = block.getEventFlags();
             graphics.drawImage(MapLayoutFlagImages.getBlockInteractionFlagImage(interactionFlags), x, y, null); 
         }
@@ -115,6 +115,7 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
         this.showExplorationFlags = showExplorationFlags;
         redraw();
     }
+    
     public boolean getShowInteractionFlags() {
         return showInteractionFlags;
     }

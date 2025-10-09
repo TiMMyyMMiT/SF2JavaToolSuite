@@ -96,7 +96,7 @@ public class MapLayoutFlagImages {
         return obstructedImage;
     }
     
-    public static BufferedImage getLeftUpstairsImage() {
+    public static BufferedImage getRightUpstairsImage() {
         if (leftUpstairsImage == null) {
             leftUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = (Graphics2D)leftUpstairsImage.getGraphics();  
@@ -107,9 +107,9 @@ public class MapLayoutFlagImages {
             g2.dispose();
         }
         return leftUpstairsImage;
-    }
+    } 
     
-    public static BufferedImage getRightUpstairsImage() {
+    public static BufferedImage getLeftUpstairsImage() {
         if (rightUpstairsImage == null) {
             rightUpstairsImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = (Graphics2D)rightUpstairsImage.getGraphics();  
@@ -120,7 +120,7 @@ public class MapLayoutFlagImages {
             g2.dispose();
         }
         return rightUpstairsImage;
-    }     
+    }    
     
     public static BufferedImage getChestImage() {
         if (chestImage == null) {

@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.map.gui;
 
-import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
@@ -23,6 +22,7 @@ import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagImages;
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,19 +38,30 @@ import java.util.List;
  * @author wiz
  */
 public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
-        
+    private static final AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+    
     private static final int ACTION_CHANGE_BLOCK_VALUE = 0;
     private static final int ACTION_CHANGE_BLOCK_FLAGS = 1;
     private static final int ACTION_MASS_COPY = 2;
     
     public static final int MODE_BLOCK = 0;
-    public static final int MODE_OBSTRUCTED = 1;
-    public static final int MODE_STAIRS = 2;
-    public static final int MODE_WARP = 3;
-    public static final int MODE_BARREL = 4;
-    public static final int MODE_VASE = 5;
-    public static final int MODE_TABLE = 6;
-    public static final int MODE_TRIGGER = 7;
+    public static final int MODE_STEP = 1;
+    public static final int MODE_SHOW = 2;
+    public static final int MODE_HIDE = 3;
+    public static final int MODE_WARP = 4;
+    public static final int MODE_TRIGGER = 5;
+    public static final int MODE_CHEST = 6;
+    public static final int MODE_SEARCH = 7;
+    public static final int MODE_LAYER_UP = 8;
+    public static final int MODE_LAYER_DOWN = 9;
+    public static final int MODE_TABLE = 10;
+    public static final int MODE_VASE = 11;
+    public static final int MODE_BARREL = 12;
+    public static final int MODE_SHELF = 13;
+    public static final int MODE_CARAVAN = 14;
+    public static final int MODE_RAFT = 15;
+    public static final int MODE_STAIRS = 16;
+    public static final int MODE_OBSTRUCTED = 17;
         
     public static final int DRAW_MODE_NONE = 0;
     public static final int DRAW_MODE_EXPLORATION_FLAGS = 1;
@@ -103,7 +114,9 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         super.paintComponent(g);
         
         Dimension offset = getImageOffset();
-        g.drawImage(previewImage, offset.width+copiedBlocksDrawX*PIXEL_WIDTH, offset.height+copiedBlocksDrawY*PIXEL_HEIGHT, null);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setComposite(composite);
+        g2.drawImage(previewImage, offset.width+copiedBlocksDrawX*PIXEL_WIDTH, offset.height+copiedBlocksDrawY*PIXEL_HEIGHT, null);
     }
 
     @Override
@@ -208,7 +221,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 break;
             case MODE_STAIRS:
                 overlayRect = true;
-                preview = MapLayoutFlagImages.getLeftUpstairsImage();
+                preview = MapLayoutFlagImages.getRightUpstairsImage();
                 break;
             case MODE_WARP:
                 preview = MapLayoutFlagImages.getWarpImage();
@@ -552,7 +565,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             action[1] = x+y*BLOCK_WIDTH;
             int origFlags = block.getFlags();
             action[2] = origFlags;
-            int newFlags = (MapBlock.MAP_FLAG_MASK_NAV & value) + (MapBlock.MAP_FLAG_MASK_EVENTS & origFlags);
+            int newFlags = (MapBlock.MAP_FLAG_MASK_NAV & value) + (MapBlock.MAP_FLAG_MASK_EVENTS & value);
             block.setFlags(newFlags);
             actions.add(action);
             redraw();
@@ -660,6 +673,11 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             setMapLayout(map.getLayout());
         }
         redraw();
+    }
+
+    @Override
+    public boolean getShowExplorationFlags() {
+        return super.getShowExplorationFlags() || shouldDraw(DRAW_MODE_EXPLORATION_FLAGS);
     }
     
     private boolean shouldDraw(int drawFlag) {
