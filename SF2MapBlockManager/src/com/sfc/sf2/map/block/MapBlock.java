@@ -20,6 +20,25 @@ public class MapBlock {
     public static final int TILES_COUNT = Block.TILES_COUNT;
     public static final int MAP_FLAG_MASK_EVENTS = 0x3C00;
     public static final int MAP_FLAG_MASK_NAV = 0xC000;
+    
+    public static final int MAP_FLAG_STEP = 0x0400;
+    public static final int MAP_FLAG_SHOW = 0x0800;
+    public static final int MAP_FLAG_HIDE = 0x0C00;
+    public static final int MAP_FLAG_WARP = 0x1000;    
+    public static final int MAP_FLAG_TRIGGER = 0x1400;
+    public static final int MAP_FLAG_CHEST = 0x1800;
+    public static final int MAP_FLAG_SEARCH = 0x1C00;
+    public static final int MAP_FLAG_LAYER_UP = 0x2000;
+    public static final int MAP_FLAG_LAYER_DOWN = 0x2400;
+    public static final int MAP_FLAG_TABLE = 0x2800;
+    public static final int MAP_FLAG_VASE = 0x2C00;
+    public static final int MAP_FLAG_BARREL = 0x3000;
+    public static final int MAP_FLAG_SHELF = 0x3400;
+    public static final int MAP_FLAG_CARAVAN = 0x3800;
+    public static final int MAP_FLAG_RAFT = 0x3C00;
+    public static final int MAP_FLAG_STAIRS_RIGHT = 0x4000;
+    public static final int MAP_FLAG_STAIRS_LEFT = 0x8000;
+    public static final int MAP_FLAG_OBSTRUCTED = 0xC000;
        
     private int index;
     private int flags;
@@ -54,6 +73,14 @@ public class MapBlock {
 
     public int getFlags() {
         return flags;
+    }
+
+    public int getNavFlags() {
+        return flags & MAP_FLAG_MASK_NAV;
+    }
+
+    public int getEventFlags() {
+        return flags & MAP_FLAG_MASK_EVENTS;
     }
 
     public void setFlags(int flags) {

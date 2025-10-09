@@ -7,6 +7,7 @@ package com.sfc.sf2.map.layout.gui.resources;
 
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
+import com.sfc.sf2.map.block.MapBlock;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -24,7 +25,6 @@ public class MapLayoutFlagImages {
     private static BufferedImage rightUpstairsImage;
     private static BufferedImage warpImage;
     private static BufferedImage triggerImage;
-    private static BufferedImage eventImage;
     private static BufferedImage tableImage;
     private static BufferedImage chestImage;
     private static BufferedImage barrelImage;
@@ -36,11 +36,11 @@ public class MapLayoutFlagImages {
     
     public static BufferedImage getBlockExplorationFlagImage(int explorationFlags) {
         switch (explorationFlags) {
-            case 0xC000:
+            case MapBlock.MAP_FLAG_OBSTRUCTED:
                 return getObstructedImage();
-            case 0x8000:
+            case MapBlock.MAP_FLAG_STAIRS_RIGHT:
                 return getRightUpstairsImage();
-            case 0x4000:
+            case MapBlock.MAP_FLAG_STAIRS_LEFT:
                 return getLeftUpstairsImage();
             default:
                 return null;
@@ -49,11 +49,11 @@ public class MapLayoutFlagImages {
     
     public static BufferedImage getBlockInteractionFlagImage(int interactionFlags) {
         switch (interactionFlags) {
-            case 0x1000:
+            case MapBlock.MAP_FLAG_WARP:
                 return getWarpImage();
-            case 0x1400:
-                return getEventImage();
-            case 0x1C00:
+            case MapBlock.MAP_FLAG_TRIGGER:
+                return getTriggerImage();
+            case MapBlock.MAP_FLAG_SEARCH:
                 return getSearchImage();
             default:
                 return getBlockItemFlagImage(interactionFlags);
@@ -62,13 +62,13 @@ public class MapLayoutFlagImages {
     
     public static BufferedImage getBlockItemFlagImage(int interactionFlags) {
         switch (interactionFlags) {
-            case 0x1800:
+            case MapBlock.MAP_FLAG_CHEST:
                 return getChestImage();
-            case 0x2800:
+            case MapBlock.MAP_FLAG_TABLE:
                 return getTableImage();
-            case 0x3000:
+            case MapBlock.MAP_FLAG_BARREL:
                 return getBarrelImage();
-            case 0x2C00:
+            case MapBlock.MAP_FLAG_VASE:
                 return getVaseImage();
             default:
                 return null;
@@ -195,17 +195,6 @@ public class MapLayoutFlagImages {
             g2.dispose();
         }
         return triggerImage;
-    }
-    
-    public static BufferedImage getEventImage() {
-        if (eventImage == null) {
-            eventImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D)eventImage.getGraphics();  
-            g2.setColor(Color.YELLOW);
-            g2.setStroke(new BasicStroke(3));
-            g2.drawRect(1, 1, 21, 21);
-        }
-        return eventImage;
     }
     
     public static BufferedImage getSearchImage() {

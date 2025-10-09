@@ -123,10 +123,10 @@ public class Map {
         MapBlock block = this.layout.getBlockset().getBlocks()[y*64+x];
         int origFlags = block.getFlags();
         int newValue = value;
-        if ((origFlags&0x0400) != 0 && newValue == 0x0800) {
-            newValue = 0x0400;
+        if ((origFlags & MapBlock.MAP_FLAG_STEP) != 0 && newValue == MapBlock.MAP_FLAG_SHOW) {
+            newValue = MapBlock.MAP_FLAG_STEP;
         }
-        int newFlags = (origFlags&0xC000)+(newValue&0x3FFF);
+        int newFlags = (origFlags & MapBlock.MAP_FLAG_HIDE)+(newValue & 0x3FFF);
         block.setFlags(newFlags);
     }
 }

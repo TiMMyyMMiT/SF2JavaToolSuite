@@ -248,16 +248,16 @@ public class MapLayoutDecoder {
                 /* 00 : no flag set */
             } else {
                 /* 01 : $C000*/
-                flags = (short)0xC000;
+                flags = (short)MapBlock.MAP_FLAG_OBSTRUCTED;
             }
         } else {
             if (getNextBit() == 0) {
                 if (getNextBit() == 0) {
                     /* 100 : $4000 */
-                    flags = (short)0x4000;
+                    flags = (short)MapBlock.MAP_FLAG_STAIRS_RIGHT;
                 } else {
                     /* 101 : $8000 */
-                    flags = (short)0x8000;
+                    flags = (short)MapBlock.MAP_FLAG_STAIRS_LEFT;
                 }
             } else {
                 /* 11 : next 6 bits = flag mask XXXX XX00 0000 0000 */
