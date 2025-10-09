@@ -103,6 +103,8 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
         if (x == lastX && y == lastY) return;
+        lastX = x;
+        lastY = y;
         motionListener.mouseMoved(new GridMouseMoveEvent(x, y));
     }
     
@@ -128,6 +130,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         lastX = x;
         lastY = y;
         buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, true, false));
+        motionListener.mouseMoved(new GridMouseMoveEvent(x, y));
     }
     
     @Override
