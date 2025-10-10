@@ -145,6 +145,10 @@ public class MapManager extends AbstractManager {
         this.map = map;
     }
     
+    public String getSharedBlockInfo() {
+        return mapAnimationManager.getSharedBlockInfo();
+    }
+    
     public String getSharedAnimationInfo() {
         return mapAnimationManager.getSharedAnimationInfo();
     }

@@ -25,7 +25,6 @@ import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.palette.Palette;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 /**
  *
@@ -88,7 +87,7 @@ public class MapAnimationManager extends AbstractManager {
             importDisassembly(null, tilesetsEntriesPath);
         } else {
             importDisassembly(PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath()), tilesetsEntriesPath);
-            checkForSharedAnimations(mapEntries, mapEntry.getAnimationsPath());
+            checkForSharedAnimations(mapEntries, mapIndex, mapEntry.getAnimationsPath());
         }
         Console.logger().finest("EXITING importDisassemblyFromEntries");
         return animation;
@@ -121,20 +120,14 @@ public class MapAnimationManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");  
     }
     
-    private void checkForSharedAnimations(MapEntryData[] mapEntries, String path) {
-        ArrayList<Integer> sharedEntries = new ArrayList<>();
+    private void checkForSharedAnimations(MapEntryData[] mapEntries, int mapIndex, String path) {
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mapEntries.length; i++) {
-            if (path.equals(mapEntries[i].getAnimationsPath())) {
-                sharedEntries.add(i);
+            if (i != mapIndex && path.equals(mapEntries[i].getAnimationsPath())) {
+                sb.append(String.format("- Map%02d\n", i));
             }
         }
-        if (sharedEntries.size() > 1) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < sharedEntries.size(); i++) {
-                sb.append(String.format("- Map%02d\n", sharedEntries.get(i)));
-            }
-            sharedAnimationInfo = sb.toString();
-        }
+        sharedAnimationInfo = sb.length() == 0 ? null : sb.toString();
     }
 
     public MapAnimation getMapAnimation() {
@@ -159,6 +152,10 @@ public class MapAnimationManager extends AbstractManager {
         } else {
             return getMapLayout().getTilesets();
         }
+    }
+
+    public String getSharedBlockInfo() {
+        return mapLayoutManager.getSharedBlockInfo();
     }
 
     public String getSharedAnimationInfo() {

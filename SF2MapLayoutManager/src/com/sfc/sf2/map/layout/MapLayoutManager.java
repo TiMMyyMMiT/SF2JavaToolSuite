@@ -11,8 +11,8 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.FileHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
-import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.block.MapBlockset;
+import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
 import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.map.layout.io.MapLayoutDisassemblyProcessor;
@@ -32,6 +32,7 @@ public class MapLayoutManager extends AbstractManager {
     private MapBlockset blockset;
     private MapLayout layout;
     private MapEntryData[] mapEntries = null;
+    private String sharedBlockInfo;
 
     @Override
     public void clearData() {
@@ -45,6 +46,7 @@ public class MapLayoutManager extends AbstractManager {
             layout = null;
         }
         mapEntries = null;
+        sharedBlockInfo = null;
     }
        
     public MapLayout importDisassembly(Path palettePath, Path[] tilesetsFilePath, Path blocksetPath, Path layoutPath) throws IOException, DisassemblyException {
@@ -64,6 +66,7 @@ public class MapLayoutManager extends AbstractManager {
         Path blocksetPath = mapEntry.getBlocksPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getBlocksPath());
         Path tilesetsPath = mapEntry.getTilesetsPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getTilesetsPath());
         layout = importDisassemblyFromEntryFiles(paletteEntriesPath, tilesetEntriesPath, tilesetsPath, blocksetPath, layoutPath);
+        checkForSharedBlocks(mapEntries, mapEntry.getMapId(), mapEntry.getBlocksPath(), mapEntry.getLayoutPath());
         Console.logger().finest("EXITING importDisassemblyFromMapEntry");
         return layout;
     }
@@ -113,6 +116,20 @@ public class MapLayoutManager extends AbstractManager {
         return mapEntries != null && mapID >= 0 && mapID < mapEntries.length && mapEntries[mapID] != null;
     }
     
+    private void checkForSharedBlocks(MapEntryData[] mapEntries, int mapIndex, String blocksPath, String layoutPath) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mapEntries.length; i++) {
+            if (i == mapIndex) continue;
+            if (blocksPath.equals(mapEntries[i].getBlocksPath())) {
+                sb.append(String.format("- Map%02d - Blocks\n", i));
+            }
+            if (layoutPath.equals(mapEntries[i].getLayoutPath())) {
+                sb.append(String.format("- Map%02d - Layout\n", i));
+            }
+        }
+        sharedBlockInfo = sb.length() == 0 ? null : sb.toString();
+    }
+    
     public MapEntryData[] getMapEntries() {
         return mapEntries;
     }
@@ -123,5 +140,9 @@ public class MapLayoutManager extends AbstractManager {
 
     public MapBlockset getMapBlockset() {
         return blockset;
+    }
+
+    public String getSharedBlockInfo() {
+        return sharedBlockInfo;
     }
 }

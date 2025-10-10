@@ -104,6 +104,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tableAnimFrames.addTableModelListener(this::onAnimationFramesDataChanged);
         tableAnimFrames.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
         
+        infoButtonSharedBlocks.setVisible(false);
         infoButtonSharedAnimation.setVisible(false);
     }
     
@@ -154,10 +155,15 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 mapAnimationFrameTableModel.setTableData(animation.getFrames());
             }
 
+            String sharedBlockInfo = mapManager.getSharedBlockInfo();
+            infoButtonSharedBlocks.setVisible(sharedBlockInfo != null);
+            if (sharedBlockInfo != null) {
+                infoButtonSharedBlocks.setMessageText("This block and layout data are also used by the following maps:\n" + sharedBlockInfo + "\nAny changes will affect these other maps.\n\nTo unlink the maps, you can export this layout for a specific map and then update \\maps\\entries.asm");
+            }
             String sharedAnimationInfo = mapManager.getSharedAnimationInfo();
             infoButtonSharedAnimation.setVisible(sharedAnimationInfo != null);
             if (sharedAnimationInfo != null) {
-                infoButtonSharedAnimation.setMessageText("This animation data is used by the following maps:\n" + sharedAnimationInfo + "\nAny changes will affect all of these maps.\n\nTo unlink the maps, you can export this animation for a specific map and then update \\maps\\entries.asm");
+                infoButtonSharedAnimation.setMessageText("This animation data is also used by the following maps:\n" + sharedAnimationInfo + "\nAny changes will affect these other maps.\n\nTo unlink the maps, you can export this animation for a specific map and then update \\maps\\entries.asm");
             }
         } else {
             mapBlocksetLayoutPanel.setBlockset(null);
@@ -296,6 +302,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jCheckBox5 = new javax.swing.JCheckBox();
         jLabel21 = new javax.swing.JLabel();
         colorPickerBlockset = new com.sfc.sf2.core.gui.controls.ColorPicker();
+        infoButtonSharedBlocks = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanel21 = new javax.swing.JPanel();
         tableAreas = new com.sfc.sf2.core.gui.controls.Table();
         jPanel12 = new javax.swing.JPanel();
@@ -1274,6 +1281,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             .addGap(0, 22, Short.MAX_VALUE)
         );
 
+        infoButtonSharedBlocks.setIcon(flatOptionPaneWarningIcon1);
+        infoButtonSharedBlocks.setText("");
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
@@ -1285,6 +1295,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addComponent(jLabel20)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53)
+                        .addComponent(infoButtonSharedBlocks, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jCheckBox3))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
@@ -1306,7 +1318,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel20)
                     .addComponent(jSpinner7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox3))
+                    .addComponent(jCheckBox3)
+                    .addComponent(infoButtonSharedBlocks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel19)
@@ -2657,6 +2670,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton8;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton9;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButtonSharedAnimation;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButtonSharedBlocks;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;

@@ -51,6 +51,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         mapBlocksetPanel.setItemsPerRow(((int)jSpinner2.getModel().getValue()));
         mapBlocksetPanel.setShowPriority(jCheckBox6.isSelected());
         
+        infoButtonSharedBlocks.setVisible(false);
+        
         accordionPanel1.setExpanded(false);
     }
     
@@ -63,6 +65,12 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setMapLayout(maplayoutManager.getMapLayout());
         mapBlocksetPanel.setBlockset(maplayoutManager.getMapBlockset());
         mapBlocksetPanel.setTilesets(maplayoutManager.getMapLayout().getTilesets());
+
+        String sharedBlockInfo = maplayoutManager.getSharedBlockInfo();
+        infoButtonSharedBlocks.setVisible(sharedBlockInfo != null);
+        if (sharedBlockInfo != null) {
+            infoButtonSharedBlocks.setMessageText("This block and layout data are also used by the following maps:\n" + sharedBlockInfo + "\nAny changes will affect these other maps.\n\nTo unlink the maps, you can export this layout for a specific map and then update \\maps\\entries.asm");
+        }
     }
     
     /**
@@ -79,6 +87,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jColorChooser1 = new javax.swing.JColorChooser();
+        flatOptionPaneWarningIcon1 = new com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -145,6 +154,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
         colorPicker1 = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jLabel55 = new javax.swing.JLabel();
         jCheckBox6 = new javax.swing.JCheckBox();
+        infoButtonSharedBlocks = new com.sfc.sf2.core.gui.controls.InfoButton();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
 
         jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
@@ -281,10 +291,9 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                     .addComponent(jLabel8)
                     .addComponent(jComboBox9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox5)
-                    .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(jLabel59)
-                        .addComponent(colorPicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCheckBox1)))
+                    .addComponent(jLabel59)
+                    .addComponent(colorPicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox2)
@@ -611,7 +620,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                 jPanel9.setLayout(jPanel9Layout);
                 jPanel9Layout.setHorizontalGroup(
                     jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                    .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                     .addComponent(jPanel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
                 jPanel9Layout.setVerticalGroup(
@@ -708,6 +717,9 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                     }
                 });
 
+                infoButtonSharedBlocks.setIcon(flatOptionPaneWarningIcon1);
+                infoButtonSharedBlocks.setText("");
+
                 javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
                 jPanel23.setLayout(jPanel23Layout);
                 jPanel23Layout.setHorizontalGroup(
@@ -720,6 +732,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(infoButtonSharedBlocks, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBox6))
                             .addGroup(jPanel23Layout.createSequentialGroup()
                                 .addComponent(jCheckBox3)
@@ -740,7 +754,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jCheckBox6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel54))
+                            .addComponent(jLabel54)
+                            .addComponent(infoButtonSharedBlocks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jCheckBox3)
@@ -792,7 +807,7 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
                 jPanel8.setLayout(jPanel8Layout);
                 jPanel8Layout.setHorizontalGroup(
                     jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                    .addComponent(jSplitPane4)
                 );
                 jPanel8Layout.setVerticalGroup(
                     jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -984,6 +999,8 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.FileButton fileButton7;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton8;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton9;
+    private com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon flatOptionPaneWarningIcon1;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButtonSharedBlocks;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton4;

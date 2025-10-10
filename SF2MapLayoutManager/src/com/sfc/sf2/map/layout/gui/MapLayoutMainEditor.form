@@ -15,6 +15,8 @@
     </Component>
     <Component class="javax.swing.JColorChooser" name="jColorChooser1">
     </Component>
+    <Component class="com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon" name="flatOptionPaneWarningIcon1">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -979,6 +981,8 @@
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="jSpinner2" min="-2" pref="61" max="-2" attributes="0"/>
                                                           <EmptySpace max="32767" attributes="0"/>
+                                                          <Component id="infoButtonSharedBlocks" min="-2" pref="38" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                           <Component id="jCheckBox6" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <Group type="102" alignment="0" attributes="0">
@@ -1005,6 +1009,7 @@
                                                       <Component id="jCheckBox6" alignment="2" max="32767" attributes="0"/>
                                                       <Component id="jSpinner2" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jLabel54" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="infoButtonSharedBlocks" alignment="2" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="2" attributes="0">
@@ -1096,6 +1101,14 @@
                                           <Events>
                                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox6ActionPerformed"/>
                                           </Events>
+                                        </Component>
+                                        <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButtonSharedBlocks">
+                                          <Properties>
+                                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                              <Connection component="flatOptionPaneWarningIcon1" type="bean"/>
+                                            </Property>
+                                            <Property name="text" type="java.lang.String" value=""/>
+                                          </Properties>
                                         </Component>
                                       </SubComponents>
                                     </Container>
