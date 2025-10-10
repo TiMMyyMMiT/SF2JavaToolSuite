@@ -41,6 +41,8 @@ import javax.swing.ImageIcon;
  * @author wiz
  */
 public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
+    private static final Color COLOR_SELECTED = Color.YELLOW;
+    private static final Color COLOR_SELECTED_SECONDARY = new Color(0xFFFFFF88);
     
     private static final int ACTION_CHANGE_BLOCK_VALUE = 0;
     private static final int ACTION_CHANGE_BLOCK_FLAGS = 1;
@@ -74,6 +76,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private boolean showAreasOverlay;
     private boolean showAreasUnderlay;
+    private boolean showFlagCopyResult;
+    private boolean showStepCopyResult;
     
     private MapBlock selectedBlock;
     MapBlock[][] copiedBlocks;
@@ -130,20 +134,24 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         if (shouldDraw(DRAW_MODE_AREAS)) {
             for (int i = 0; i < map.getAreas().length; i++) {
                 drawMapArea(g2, map.getAreas()[i], false);
-            }
-            if (showAreasOverlay) {
-                for (int i = 0; i < map.getAreas().length; i++) {
+                if (showAreasOverlay) {
                     overlayMapUpperLayer(g2, map.getAreas()[i]);
                 }
             }
         }
         if (shouldDraw(DRAW_MODE_FLAG_COPIES)) {
             for (int i = 0; i < map.getFlagCopies().length; i++) {
+                if (showFlagCopyResult) {
+                    drawFlagCopyResult(g2, map.getFlagCopies()[i]);
+                }
                 drawMapFlagCopy(g2, map.getFlagCopies()[i], false);
             }
         }
         if (shouldDraw(DRAW_MODE_STEP_COPIES)) {
             for (int i = 0; i < map.getStepCopies().length; i++) {
+                if (showStepCopyResult) {
+                    drawStepCopyResult(g2, map.getStepCopies()[i]);
+                }
                 drawMapStepCopy(g2, map.getStepCopies()[i], false);
             }
         }
@@ -261,11 +269,11 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private void drawMapArea(Graphics2D g2, MapArea area, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(selected ? Color.YELLOW : Color.WHITE);
+        g2.setColor(selected ? COLOR_SELECTED : Color.WHITE);
         int width = area.getLayer1EndX()-area.getLayer1StartX()+1;
         int heigth = area.getLayer1EndY()-area.getLayer1StartY()+1;
         g2.drawRect(area.getLayer1StartX()*PIXEL_WIDTH+3, area.getLayer1StartY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
-        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.LIGHT_GRAY);
         if (area.getForegroundLayer2StartX() != 0 || area.getForegroundLayer2StartY() != 0) {
             g2.drawRect((area.getLayer1StartX()+area.getForegroundLayer2StartX())*PIXEL_WIDTH+3, (area.getLayer1StartY()+area.getForegroundLayer2StartY())*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
         }
@@ -325,40 +333,69 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private void drawMapFlagCopy(Graphics2D g2, MapFlagCopyEvent flagCopy, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(selected ? Color.YELLOW : Color.CYAN);
         int width = flagCopy.getWidth();
         int heigth = flagCopy.getHeight();
-        g2.drawRect(flagCopy.getSourceX()*PIXEL_WIDTH+3,flagCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
-        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.LIGHT_GRAY);
         g2.drawRect(flagCopy.getDestX()*PIXEL_WIDTH+3, flagCopy.getDestY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? COLOR_SELECTED : Color.CYAN);
+        g2.drawRect(flagCopy.getSourceX()*PIXEL_WIDTH+3,flagCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        if (selected) {
+            GraphicsHelpers.drawArrowLine(g2, flagCopy.getSourceX()*PIXEL_WIDTH+12, flagCopy.getSourceY()*PIXEL_HEIGHT+12, flagCopy.getDestX()*PIXEL_WIDTH+12, flagCopy.getDestY()*PIXEL_HEIGHT+12);
+        }
+    }
+    
+    private void drawFlagCopyResult(Graphics2D g2, MapFlagCopyEvent flagCopy) {
+        int dx = (flagCopy.getDestX()-flagCopy.getSourceX())*PIXEL_WIDTH;
+        int dy = (flagCopy.getDestY()-flagCopy.getSourceY())*PIXEL_HEIGHT;
+        g2.copyArea(flagCopy.getSourceX()*PIXEL_WIDTH, flagCopy.getSourceY()*PIXEL_HEIGHT, flagCopy.getWidth()*PIXEL_WIDTH, flagCopy.getHeight()*PIXEL_HEIGHT, dx, dy);
     }
     
     private void drawMapStepCopy(Graphics2D g2, MapCopyEvent stepCopy, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(selected ? Color.YELLOW : Color.WHITE);
-        g2.drawRect(stepCopy.getTriggerX()*PIXEL_WIDTH, stepCopy.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
-        g2.setColor(Color.CYAN);
         int width = stepCopy.getWidth();
         int heigth = stepCopy.getHeight();
-        g2.drawRect(stepCopy.getSourceX()*PIXEL_WIDTH+3,stepCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
-        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+        g2.setColor(Color.LIGHT_GRAY);
         g2.drawRect(stepCopy.getDestX()*PIXEL_WIDTH+3, stepCopy.getDestY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.CYAN);
+        g2.drawRect(stepCopy.getSourceX()*PIXEL_WIDTH+3,stepCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? COLOR_SELECTED : Color.WHITE);
+        g2.drawRect(stepCopy.getTriggerX()*PIXEL_WIDTH, stepCopy.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+        if (selected) {
+            GraphicsHelpers.drawArrowLine(g2, stepCopy.getSourceX()*PIXEL_WIDTH+12, stepCopy.getSourceY()*PIXEL_HEIGHT+12, stepCopy.getDestX()*PIXEL_WIDTH+12, stepCopy.getDestY()*PIXEL_HEIGHT+12);
+        }
+    }
+    
+    private void drawStepCopyResult(Graphics2D g2, MapCopyEvent stepCopy) {
+        int dx = (stepCopy.getDestX()-stepCopy.getSourceX())*PIXEL_WIDTH;
+        int dy = (stepCopy.getDestY()-stepCopy.getSourceY())*PIXEL_HEIGHT;
+        g2.copyArea(stepCopy.getSourceX()*PIXEL_WIDTH, stepCopy.getSourceY()*PIXEL_HEIGHT, stepCopy.getWidth()*PIXEL_WIDTH, stepCopy.getHeight()*PIXEL_HEIGHT, dx, dy);
     }
     
     private void drawMapRoofCopy(Graphics2D g2, MapCopyEvent roofCopy, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(selected ? Color.YELLOW : Color.WHITE);
-        g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, roofCopy.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
-        g2.setColor(selected ? Color.DARK_GRAY : Color.LIGHT_GRAY);
-        g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, (roofCopy.getTriggerY()+1)*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
-        g2.setColor(Color.CYAN);
         int width = roofCopy.getWidth();
         int heigth = roofCopy.getHeight();
-        if(roofCopy.getSourceX() >=0 && roofCopy.getSourceX() < BLOCK_WIDTH && roofCopy.getSourceY() >= 0 && roofCopy.getSourceY() < BLOCK_HEIGHT) {
-            g2.drawRect(roofCopy.getSourceX()*PIXEL_WIDTH+3,roofCopy.getSourceY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
-        }
         g2.setColor(Color.LIGHT_GRAY);
+        g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, (roofCopy.getTriggerY()+1)*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+        int sourceX = roofCopy.getSourceX();
+        int sourceY = roofCopy.getSourceY();
+        if (sourceX == 255 && sourceY == 255) {
+            MapArea area = map.getAreas()[0];
+            sourceX = roofCopy.getDestX() - (area.getForegroundLayer2StartX()-area.getLayer1StartX());
+            sourceY = roofCopy.getDestY() - (area.getForegroundLayer2StartY()-area.getLayer1StartY());
+        }
+        g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.CYAN);
+        g2.drawRect(sourceX*PIXEL_WIDTH+3, sourceY*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        g2.setColor(selected ? COLOR_SELECTED : Color.WHITE);
+        g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, roofCopy.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+        g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.LIGHT_GRAY);
         g2.drawRect(roofCopy.getDestX()*PIXEL_WIDTH + 3, roofCopy.getDestY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
+        if (selected) {
+            g2.setColor(Color.WHITE);
+            GraphicsHelpers.drawArrowLine(g2, roofCopy.getTriggerX()*PIXEL_WIDTH+12, roofCopy.getTriggerY()*PIXEL_HEIGHT+12, roofCopy.getDestX()*PIXEL_WIDTH+12, roofCopy.getDestY()*PIXEL_HEIGHT+12);
+            g2.setColor(COLOR_SELECTED);
+            GraphicsHelpers.drawArrowLine(g2, roofCopy.getDestX()*PIXEL_WIDTH+12, roofCopy.getDestY()*PIXEL_HEIGHT+12, sourceX*PIXEL_WIDTH+12, sourceY*PIXEL_HEIGHT+12, true, true);
+        }
     }
     
     private void drawMapWarps(Graphics2D g2) {
@@ -449,6 +486,15 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         switch (selectedTabsDrawMode) {
             case DRAW_MODE_AREAS:
                 drawMapArea(g2, map.getAreas()[selectedItemIndex], true);
+                break;
+            case DRAW_MODE_FLAG_COPIES:
+                drawMapFlagCopy(g2, map.getFlagCopies()[selectedItemIndex], true);
+                break;
+            case DRAW_MODE_STEP_COPIES:
+                drawMapStepCopy(g2, map.getStepCopies()[selectedItemIndex], true);
+                break;
+            case DRAW_MODE_ROOF_COPIES:
+                drawMapRoofCopy(g2, map.getRoofCopies()[selectedItemIndex], true);
                 break;
         }
     }
@@ -831,6 +877,16 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
 
     public void setShowAreasUnderlay(boolean showAreasUnderlay) {
         this.showAreasUnderlay = showAreasUnderlay;
+        redraw();
+    }
+
+    public void setShowFlagCopyResult(boolean showFlagCopyResult) {
+        this.showFlagCopyResult = showFlagCopyResult;
+        redraw();
+    }
+
+    public void setShowStepCopyResult(boolean showStepCopyResult) {
+        this.showStepCopyResult = showStepCopyResult;
         redraw();
     }
 }
