@@ -14,10 +14,11 @@ import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
-import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagImages;
+import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagIcons;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -75,26 +76,41 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
     @Override
     protected void drawImage(Graphics graphics) {
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        for (int y=0; y < BLOCK_HEIGHT; y++) {
-            for (int x=0; x < BLOCK_WIDTH; x++) {
-                drawBlock(blocks[y * BLOCK_WIDTH + x], graphics, x*PIXEL_WIDTH, y*PIXEL_HEIGHT);
-            }
+        drawBlocks(blocks, graphics);
+        if (getShowExplorationFlags() || getShowInteractionFlags()) {
+            drawFlags(blocks, graphics);
         }
         if (showPriority) {
             MapBlockHelpers.drawTilePriorities(graphics, blocks, layout.getTilesets(), BLOCK_WIDTH);
         }
     }
     
-    protected void drawBlock(MapBlock block, Graphics graphics, int x, int y) {
-        graphics.drawImage(block.getIndexedColorImage(layout.getTilesets()), x, y, null);
-        
-        if (getShowExplorationFlags()) {
-            int explorationFlags = block.getNavFlags();
-            graphics.drawImage(MapLayoutFlagImages.getBlockExplorationFlagImage(explorationFlags), x, y, null); 
+    protected void drawBlocks(MapBlock[] blocks, Graphics graphics) {
+        for (int y=0; y < BLOCK_HEIGHT; y++) {
+            for (int x=0; x < BLOCK_WIDTH; x++) {
+                graphics.drawImage(blocks[x+y*BLOCK_WIDTH].getIndexedColorImage(layout.getTilesets()), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);
+            }
         }
-        if (getShowInteractionFlags()) {
-            int interactionFlags = block.getEventFlags();
-            graphics.drawImage(MapLayoutFlagImages.getBlockInteractionFlagImage(interactionFlags), x, y, null); 
+    }
+    
+    protected void drawFlags(MapBlock[] blocks, Graphics graphics) {
+        boolean showExplorationFlags = getShowExplorationFlags();
+        boolean showInteractionFlags = getShowInteractionFlags();
+        for (int y=0; y < BLOCK_HEIGHT; y++) {
+            for (int x=0; x < BLOCK_WIDTH; x++) {
+                if (showExplorationFlags) {
+                    ImageIcon icon = MapLayoutFlagIcons.getBlockExplorationFlagIcon(blocks[x+y*BLOCK_WIDTH].getExplorationFlags());
+                    if (icon != null) {
+                        graphics.drawImage(icon.getImage(), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null); 
+                    }
+                }
+                if (showInteractionFlags) {
+                    ImageIcon icon = MapLayoutFlagIcons.getBlockInteractionFlagIcon(blocks[x+y*BLOCK_WIDTH].getEventFlags());
+                    if (icon != null) {
+                        graphics.drawImage(icon.getImage(), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null); 
+                    }
+                }
+            }
         }
     }
 

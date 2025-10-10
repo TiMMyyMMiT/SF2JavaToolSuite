@@ -19,11 +19,11 @@ import java.awt.image.BufferedImage;
 public class MapBlock {
     public static final int TILES_COUNT = Block.TILES_COUNT;
     public static final int MAP_FLAG_MASK_EVENTS = 0x3C00;
-    public static final int MAP_FLAG_MASK_NAV = 0xC000;
+    public static final int MAP_FLAG_MASK_EXPLORE = 0xC000;
     
     public static final int MAP_FLAG_STEP = 0x0400;
-    public static final int MAP_FLAG_SHOW = 0x0800;
-    public static final int MAP_FLAG_HIDE = 0x0C00;
+    public static final int MAP_FLAG_HIDE = 0x0800;
+    public static final int MAP_FLAG_SHOW = 0x0C00;
     public static final int MAP_FLAG_WARP = 0x1000;    
     public static final int MAP_FLAG_TRIGGER = 0x1400;
     public static final int MAP_FLAG_CHEST = 0x1800;
@@ -75,8 +75,8 @@ public class MapBlock {
         return flags;
     }
 
-    public int getNavFlags() {
-        return flags & MAP_FLAG_MASK_NAV;
+    public int getExplorationFlags() {
+        return flags & MAP_FLAG_MASK_EXPLORE;
     }
 
     public int getEventFlags() {

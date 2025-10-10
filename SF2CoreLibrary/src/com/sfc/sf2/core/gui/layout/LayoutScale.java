@@ -6,6 +6,7 @@
 package com.sfc.sf2.core.gui.layout;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
@@ -30,9 +31,9 @@ public class LayoutScale extends BaseLayoutComponent {
     
     public BufferedImage resizeImage(BufferedImage image) {
         if (displayScale <= 1) return image;
-        BufferedImage newImage = new BufferedImage(image.getWidth()*displayScale, image.getHeight()*displayScale, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage newImage = new BufferedImage(image.getWidth(null)*displayScale, image.getHeight(null)*displayScale, BufferedImage.TYPE_INT_ARGB);
         Graphics g = newImage.getGraphics();
-        g.drawImage(image, 0, 0, image.getWidth()*displayScale, image.getHeight()*displayScale, null);
+        g.drawImage(image, 0, 0, image.getWidth(null)*displayScale, image.getHeight(null)*displayScale, null);
         g.dispose();
         image.flush();
         return newImage;
