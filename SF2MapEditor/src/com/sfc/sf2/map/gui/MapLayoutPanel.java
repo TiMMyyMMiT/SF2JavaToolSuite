@@ -10,6 +10,7 @@ import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.helpers.GraphicsHelpers;
+import com.sfc.sf2.helpers.MapBlockHelpers;
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapFlagCopyEvent;
@@ -40,7 +41,6 @@ import javax.swing.ImageIcon;
  * @author wiz
  */
 public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
-    private static final AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
     
     private static final int ACTION_CHANGE_BLOCK_VALUE = 0;
     private static final int ACTION_CHANGE_BLOCK_FLAGS = 1;
@@ -70,7 +70,10 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private int currentMode = 0;
     private int togglesDrawMode = 0;
     private int selectedTabsDrawMode = 0;
-    private int selectedItemIndex;
+    private int selectedItemIndex = -1;
+    
+    private boolean showAreasOverlay;
+    private boolean showAreasUnderlay;
     
     private MapBlock selectedBlock;
     MapBlock[][] copiedBlocks;
@@ -101,18 +104,37 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         
         Dimension offset = getImageOffset();
         Graphics2D g2 = (Graphics2D)g;
-        g2.setComposite(composite);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         g2.drawImage(previewImage, offset.width+copiedBlocksDrawX*PIXEL_WIDTH, offset.height+copiedBlocksDrawY*PIXEL_HEIGHT, null);
     }
 
     @Override
     protected void drawImage(Graphics graphics) {
-        super.drawImage(graphics);
-        
         Graphics2D g2 = (Graphics2D)graphics;
+        
+        if (shouldDraw(DRAW_MODE_AREAS)) {
+            if (showAreasUnderlay) {
+                for (int i = 0; i < map.getAreas().length; i++) {
+                    underlayMapBackground(g2, map.getAreas()[i]);
+                }
+            }
+            if (showAreasOverlay) {
+                for (int i = 0; i < map.getAreas().length; i++) {
+                    underlayMapUpperLayer(g2, map.getAreas()[i]);
+                }
+            }
+        }
+        
+        super.drawImage(graphics);  //Draw map blocks
+                
         if (shouldDraw(DRAW_MODE_AREAS)) {
             for (int i = 0; i < map.getAreas().length; i++) {
                 drawMapArea(g2, map.getAreas()[i], false);
+            }
+            if (showAreasOverlay) {
+                for (int i = 0; i < map.getAreas().length; i++) {
+                    overlayMapUpperLayer(g2, map.getAreas()[i]);
+                }
             }
         }
         if (shouldDraw(DRAW_MODE_FLAG_COPIES)) {
@@ -252,6 +274,55 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         }
     }
     
+    private void overlayMapUpperLayer(Graphics2D g2, MapArea area) {
+        if (!area.hasForegroundLayer2()) return;
+        int width = area.getLayer1EndX()-area.getLayer1StartX();
+        int height = area.getLayer1EndY()-area.getLayer1StartY();
+        //g2.setColor(MapBlockHelpers.PRIORITY_DARKEN_COLOR);
+        //g2.fillRect(area.getLayer1StartX()*PIXEL_WIDTH, area.getLayer1StartY()*PIXEL_HEIGHT, (width+1)*PIXEL_WIDTH, (height+1)*PIXEL_HEIGHT);
+        MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
+                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH;
+                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT;
+                int index = area.getLayer1StartX()+area.getForegroundLayer2StartX()+x + (area.getLayer1StartY()+area.getForegroundLayer2StartY()+y)*BLOCK_WIDTH;
+                g2.drawImage(blocks[index].getIndexedColorImage(map.getLayout().getTilesets()), destX, destY, null);
+            }
+        }
+    }
+    
+    private void underlayMapUpperLayer(Graphics2D g2, MapArea area) {
+        if (!area.hasForegroundLayer2()) return;
+        int width = area.getLayer1EndX()-area.getLayer1StartX();
+        int height = area.getLayer1EndY()-area.getLayer1StartY();
+        MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
+                int destX = (area.getForegroundLayer2StartX()+x)*PIXEL_WIDTH;
+                int destY = (area.getForegroundLayer2StartY()+y)*PIXEL_HEIGHT;
+                int index = area.getLayer1StartX()+x + (area.getLayer1StartY()+y)*BLOCK_WIDTH;
+                g2.drawImage(blocks[index].getIndexedColorImage(map.getLayout().getTilesets()), destX, destY, null);
+            }
+        }
+        g2.setColor(MapBlockHelpers.PRIORITY_DARKEN_COLOR);
+        g2.fillRect(area.getForegroundLayer2StartX()*PIXEL_WIDTH, area.getForegroundLayer2StartY()*PIXEL_HEIGHT, (width+1)*PIXEL_WIDTH, (height+1)*PIXEL_HEIGHT);
+    }
+    
+    private void underlayMapBackground(Graphics2D g2, MapArea area) {
+        if (!area.hasBackgroundLayer2()) return;
+        int width = area.getLayer1EndX()-area.getLayer1StartX();
+        int height = area.getLayer1EndY()-area.getLayer1StartY();
+        MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
+                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH;
+                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT;
+                int index = area.getBackgroundLayer2StartX()+x + (area.getBackgroundLayer2StartY()+y)*BLOCK_WIDTH;
+                g2.drawImage(blocks[index].getIndexedColorImage(map.getLayout().getTilesets()), destX, destY, null);
+            }
+        }
+    }
+    
     private void drawMapFlagCopy(Graphics2D g2, MapFlagCopyEvent flagCopy, boolean selected) {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(selected ? Color.YELLOW : Color.CYAN);
@@ -374,9 +445,15 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     }
     
     private void drawSelected(Graphics2D g2) {
-        if (selectedItemIndex == -1) return;
+        if (selectedItemIndex == -1 || isOnActionsTab) return;
+        switch (selectedTabsDrawMode) {
+            case DRAW_MODE_AREAS:
+                drawMapArea(g2, map.getAreas()[selectedItemIndex], true);
+                break;
+        }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Input">      
     private void onMouseButtonInput(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
         if (!isOnActionsTab)
             return;
@@ -620,7 +697,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             default:
                 break;
         }
-    }
+    }// </editor-fold>
 
     public MapBlock getSelectedBlock0() {
         return selectedBlock;
@@ -745,5 +822,15 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     public void setIsOnActionsTab(boolean isOnActionsTab) {
         this.isOnActionsTab = isOnActionsTab;
+    }
+
+    public void setShowAreasOverlay(boolean showAreasOverlay) {
+        this.showAreasOverlay = showAreasOverlay;
+        redraw();
+    }
+
+    public void setShowAreasUnderlay(boolean showAreasUnderlay) {
+        this.showAreasUnderlay = showAreasUnderlay;
+        redraw();
     }
 }

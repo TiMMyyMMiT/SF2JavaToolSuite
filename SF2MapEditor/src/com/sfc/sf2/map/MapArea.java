@@ -82,6 +82,10 @@ public class MapArea {
     public void setLayer1EndY(int layer1EndY) {
         this.layer1EndY = layer1EndY;
     }
+    
+    public boolean hasForegroundLayer2() {
+        return foregroundLayer2StartX != 0 || foregroundLayer2StartY != 0;
+    }
 
     public int getForegroundLayer2StartX() {
         return foregroundLayer2StartX;
@@ -97,6 +101,10 @@ public class MapArea {
 
     public void setForegroundLayer2StartY(int foregroundLayer2StartY) {
         this.foregroundLayer2StartY = foregroundLayer2StartY;
+    }
+    
+    public boolean hasBackgroundLayer2() {
+        return backgroundLayer2StartX != 0 || backgroundLayer2StartY != 0;
     }
 
     public int getBackgroundLayer2StartX() {
@@ -114,6 +122,10 @@ public class MapArea {
     public void setBackgroundLayer2StartY(int backgroundLayer2StartY) {
         this.backgroundLayer2StartY = backgroundLayer2StartY;
     }
+    
+    public boolean doesLayer1Paralax() {
+        return layer1ParallaxX != 0 || layer1ParallaxY != 0;
+    }
 
     public int getLayer1ParallaxX() {
         return layer1ParallaxX;
@@ -129,6 +141,10 @@ public class MapArea {
 
     public void setLayer1ParallaxY(int layer1ParallaxY) {
         this.layer1ParallaxY = layer1ParallaxY;
+    }
+    
+    public boolean doesLayer2Paralax() {
+        return layer2ParallaxX != 0 || layer2ParallaxY != 0;
     }
 
     public int getLayer2ParallaxX() {
@@ -146,6 +162,10 @@ public class MapArea {
     public void setLayer2ParallaxY(int layer2ParallaxY) {
         this.layer2ParallaxY = layer2ParallaxY;
     }
+    
+    public boolean doesLayer1AutoScroll() {
+        return layer1AutoscrollX != 0 || layer1AutoscrollY != 0;
+    }
 
     public int getLayer1AutoscrollX() {
         return layer1AutoscrollX;
@@ -161,6 +181,10 @@ public class MapArea {
 
     public void setLayer1AutoscrollY(int layer1AutoscrollY) {
         this.layer1AutoscrollY = layer1AutoscrollY;
+    }
+    
+    public boolean doesLayer2AutoScroll() {
+        return layer2AutoscrollX != 0 || layer2AutoscrollY != 0;
     }
 
     public int getLayer2AutoscrollX() {

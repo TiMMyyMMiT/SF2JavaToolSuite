@@ -20,6 +20,7 @@ import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.JCheckBox;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableModelEvent;
@@ -65,6 +66,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ALL, false);
         
+        mapLayoutPanel.setShowAreasOverlay(jCheckBox1.isSelected());
+        mapLayoutPanel.setShowAreasUnderlay(jCheckBox4.isSelected());
+        
         mapBlocksetLayoutPanel.setShowGrid(jCheckBox3.isSelected());
         mapBlocksetLayoutPanel.setDisplayScale(jComboBox3.getSelectedIndex()+1);
         mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
@@ -85,6 +89,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tilesetLayoutPanelModified.setDisplayScale(jComboBox4.getSelectedIndex()+1);
         tilesetLayoutPanelModified.setItemsPerRow((int)jSpinner6.getValue());
         tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
+        
+        tableAreas.addListSelectionListener(this::OnTableSelectionChanged);
+        tableFlagCopies.addListSelectionListener(this::OnTableSelectionChanged);
+        tableStepCopies.addListSelectionListener(this::OnTableSelectionChanged);
+        tableRoofCopies.addListSelectionListener(this::OnTableSelectionChanged);
+        tableWarps.addListSelectionListener(this::OnTableSelectionChanged);
+        tableChestItems.addListSelectionListener(this::OnTableSelectionChanged);
+        tableOtherItems.addListSelectionListener(this::OnTableSelectionChanged);
         
         tilesetLayoutPanelModified.getAnimator().addAnimationListener(this::onAnimationUpdated);
         
@@ -286,6 +298,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         colorPickerBlockset = new com.sfc.sf2.core.gui.controls.ColorPicker();
         jPanel21 = new javax.swing.JPanel();
         tableAreas = new com.sfc.sf2.core.gui.controls.Table();
+        jPanel12 = new javax.swing.JPanel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
         jPanel22 = new javax.swing.JPanel();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel24 = new javax.swing.JPanel();
@@ -1332,20 +1347,61 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tableAreas.setSingleClickText(true);
         tableAreas.setSpinnerNumberEditor(true);
 
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Areas display"));
+
+        jCheckBox1.setText("Show upper layer overlay");
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox4.setText("Show BG underlay");
+        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBox4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox1)
+                    .addComponent(jCheckBox4))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel21Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 852, Short.MAX_VALUE)
+                .addComponent(tableAreas, javax.swing.GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -2186,12 +2242,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setIsOnActionsTab(index == 0);
         switch (index) {
             case 0:     //Actions & Anims
-                if (index == 0) {
-                    JCheckBox actionCheckbox = actionRelativeCheckbox;
-                    int mode = mapLayoutPanel.getCurrentMode();
-                    onMapActionCheckboxSet(null, -1);
-                    onMapActionCheckboxSet(actionCheckbox, mode);
-                }
+                JCheckBox actionCheckbox = actionRelativeCheckbox;
+                int mode = mapLayoutPanel.getCurrentMode();
+                onMapActionCheckboxSet(null, -1);
+                onMapActionCheckboxSet(actionCheckbox, mode);
+                mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
                 break;
             case 1:     //Areas panel
                 SetTabRelativeCheckbox(jCheckBox15, MapLayoutPanel.DRAW_MODE_AREAS);
@@ -2429,6 +2484,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_LAYER_DOWN);
     }//GEN-LAST:event_jRadioButton15ActionPerformed
 
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        mapLayoutPanel.setShowAreasOverlay(jCheckBox1.isSelected());
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        mapLayoutPanel.setShowAreasUnderlay(jCheckBox4.isSelected());
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
     private void SetTabRelativeCheckbox(JCheckBox checkbox, int mode) {
         if (checkbox == null) {
             // Restore checkboxes
@@ -2525,6 +2588,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tableAnimFrames.jTable.setRowSelectionInterval(e.getCurrentFrame(), e.getCurrentFrame());
     }
     
+    private void OnTableSelectionChanged(ListSelectionEvent e) {
+        if (e.getValueIsAdjusting()) return;
+        mapLayoutPanel.setSelectedItemIndex(((ListSelectionModel)e.getSource()).getLeadSelectionIndex());
+    }
+    
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)
@@ -2594,6 +2662,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox10;
     private javax.swing.JCheckBox jCheckBox11;
     private javax.swing.JCheckBox jCheckBox13;
@@ -2607,6 +2676,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox21;
     private javax.swing.JCheckBox jCheckBox22;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JCheckBox jCheckBox8;
@@ -2635,6 +2705,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
