@@ -21,7 +21,7 @@ public class MapStringHelpers {
         if (!line.startsWith(identifier)) {
             throw new AsmException("ERROR Map area cannot be parsed. Cannot find '" + identifier + "' in area " + count);
         }
-        return line.substring(line.indexOf(" ")+1);
+        return line.substring(line.indexOf(" ")+1).trim();
     }
     
     public static String[] getNextLineMulti(BufferedReader reader, String identifier, int count) throws IOException, AsmException {

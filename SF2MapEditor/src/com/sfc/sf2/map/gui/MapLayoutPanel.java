@@ -379,7 +379,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         g2.drawRect(roofCopy.getTriggerX()*PIXEL_WIDTH, (roofCopy.getTriggerY()+1)*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
         int sourceX = roofCopy.getSourceX();
         int sourceY = roofCopy.getSourceY();
-        if (sourceX == 255 && sourceY == 255) {
+        if (sourceX == 0xFF && sourceY == 0xFF) {
             MapArea area = map.getAreas()[0];
             sourceX = roofCopy.getDestX() - (area.getForegroundLayer2StartX()-area.getLayer1StartX());
             sourceY = roofCopy.getDestY() - (area.getForegroundLayer2StartY()-area.getLayer1StartY());
@@ -414,7 +414,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private void drawMapWarp(Graphics2D g2, MapWarpEvent warp, boolean selected) {
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(Color.CYAN);
+        g2.setColor(selected ? COLOR_SELECTED : Color.CYAN);
         if (warp.getTriggerX() == 0xFF || warp.getTriggerY() == 0xFF) {
             MapArea mainArea = map.getAreas()[0];
             int x, w, y, h;
@@ -435,10 +435,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             g2.drawRect(x*PIXEL_WIDTH, y*PIXEL_HEIGHT, w*PIXEL_WIDTH, h*PIXEL_HEIGHT);
         } else {
             g2.drawImage(MapLayoutFlagIcons.getWarpIcon().getImage(), warp.getTriggerX()*PIXEL_WIDTH, warp.getTriggerY()*PIXEL_HEIGHT, null);
+            if (selected) {
+                g2.drawRect(warp.getTriggerX()*PIXEL_WIDTH, warp.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+            }
         }
         if (warp.getDestMap().equals("MAP_CURRENT")) {
-            g2.setStroke(new BasicStroke(1));
-            g2.setColor(Color.BLUE);
+            g2.setColor(selected ? COLOR_SELECTED : Color.BLUE);
             GraphicsHelpers.drawArrowLine(g2, warp.getTriggerX()*PIXEL_WIDTH+12, warp.getTriggerY()*PIXEL_HEIGHT+12, warp.getDestX()*PIXEL_WIDTH+12, warp.getDestY()*PIXEL_HEIGHT+12);
         }
     }    
@@ -495,6 +497,9 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 break;
             case DRAW_MODE_ROOF_COPIES:
                 drawMapRoofCopy(g2, map.getRoofCopies()[selectedItemIndex], true);
+                break;
+            case DRAW_MODE_WARPS:
+                drawMapWarp(g2, map.getWarps()[selectedItemIndex], true);
                 break;
         }
     }
