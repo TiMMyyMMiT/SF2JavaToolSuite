@@ -102,10 +102,10 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        Dimension offset = getImageOffset();
         Graphics2D g2 = (Graphics2D)g;
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-        g2.drawImage(previewImage, offset.width+copiedBlocksDrawX*PIXEL_WIDTH, offset.height+copiedBlocksDrawY*PIXEL_HEIGHT, null);
+        Dimension offset = getImageOffset();
+        g2.drawImage(previewImage, offset.width+(copiedBlocksDrawX*PIXEL_WIDTH)*getDisplayScale(), offset.height+(copiedBlocksDrawY*PIXEL_HEIGHT)*getDisplayScale(), null);
     }
 
     @Override
