@@ -80,6 +80,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private boolean showAreasUnderlay;
     private boolean showFlagCopyResult;
     private boolean showStepCopyResult;
+    private boolean showRoofCopyResult;
     
     private MapBlock selectedBlock;
     MapBlock[][] copiedBlocks;
@@ -159,6 +160,9 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         }
         if (shouldDraw(DRAW_MODE_ROOF_COPIES)) {
             for (int i = 0; i < map.getRoofCopies().length; i++) {
+                if (showRoofCopyResult) {
+                    drawRoofCopyResult(g2, map.getRoofCopies()[i]);
+                }
                 drawMapRoofCopy(g2, map.getRoofCopies()[i], false);
             }
         }
@@ -397,6 +401,41 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             GraphicsHelpers.drawArrowLine(g2, roofCopy.getTriggerX()*PIXEL_WIDTH+12, roofCopy.getTriggerY()*PIXEL_HEIGHT+12, roofCopy.getDestX()*PIXEL_WIDTH+12, roofCopy.getDestY()*PIXEL_HEIGHT+12);
             g2.setColor(COLOR_SELECTED);
             GraphicsHelpers.drawArrowLine(g2, roofCopy.getDestX()*PIXEL_WIDTH+12, roofCopy.getDestY()*PIXEL_HEIGHT+12, sourceX*PIXEL_WIDTH+12, sourceY*PIXEL_HEIGHT+12, true, true);
+        }
+    }
+    
+    private void drawRoofCopyResult(Graphics2D g2, MapCopyEvent roofCopy) {
+        int sourceX = roofCopy.getSourceX();
+        int sourceY = roofCopy.getSourceY();
+        int destX = roofCopy.getDestX();
+        int destY = roofCopy.getDestY();
+        if (sourceX == 0xFF && sourceY == 0xFF) {
+            MapArea area = map.getAreas()[0];
+            sourceX = destX;
+            sourceY = destY;
+            destX = roofCopy.getDestX() - (area.getForegroundLayer2StartX()-area.getLayer1StartX());
+            destY = roofCopy.getDestY() - (area.getForegroundLayer2StartY()-area.getLayer1StartY());
+        } else {
+            MapArea mainArea = map.getAreas()[0];
+            int areaL2StartX = mainArea.getLayer1StartX()+mainArea.getForegroundLayer2StartX();
+            int areaL2StartY = mainArea.getLayer1StartY()+mainArea.getForegroundLayer2StartY();
+            int areaL2EndX = areaL2StartX+(mainArea.getLayer1EndX()-mainArea.getLayer1StartX());
+            int areaL2EndY = areaL2StartY+(mainArea.getLayer1EndY()-mainArea.getLayer1StartY());
+            if (destX >= areaL2StartX && destX <= areaL2EndX && destY >= areaL2StartY && destY <= areaL2EndY) {
+                destX -= areaL2StartX;
+                destY -= areaL2StartY;
+            }
+        }
+        int width = roofCopy.getWidth();
+        int height = roofCopy.getHeight();
+        MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int blockPosX = (destX+x)*PIXEL_WIDTH;
+                int blockPosY = (destY+y)*PIXEL_HEIGHT;
+                int index = sourceX+x + (sourceY+y)*BLOCK_WIDTH;
+                g2.drawImage(blocks[index].getIndexedColorImage(map.getLayout().getTilesets()), blockPosX, blockPosY, null);
+            }
         }
     }
     
@@ -962,6 +1001,11 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
 
     public void setShowStepCopyResult(boolean showStepCopyResult) {
         this.showStepCopyResult = showStepCopyResult;
+        redraw();
+    }
+
+    public void setShowRoofCopyResult(boolean showRoofCopyResult) {
+        this.showRoofCopyResult = showRoofCopyResult;
         redraw();
     }
 }
