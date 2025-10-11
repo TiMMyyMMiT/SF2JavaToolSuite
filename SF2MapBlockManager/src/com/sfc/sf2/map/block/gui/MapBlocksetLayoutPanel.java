@@ -27,8 +27,9 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     
     private static final int DEFAULT_BLOCKS_PER_ROW = 10;
     
-    public static int selectedBlockIndexLeft;
-    public static int selectedBlockIndexRight;
+    public static int selectedBlockIndexLeft = -1;
+    public static int selectedBlockIndexRight = -1;
+    private boolean canSelectInitialBlocks = false;
     
     private BlockSlotPanel leftSlotBlockPanel;
     private BlockSlotPanel rightSlotBlockPanel;
@@ -122,8 +123,8 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     }
     
     public void setLeftSelectedIndex(int index) {
-        if (leftSlotBlockPanel!=null) {
-            if (index < 3 || index >= blockset.getBlocks().length) {
+        if (leftSlotBlockPanel != null) {
+            if (index < (canSelectInitialBlocks ? 0 : 3) || index >= blockset.getBlocks().length) {
                 selectedBlockIndexLeft = -1;
                 leftSlotBlockPanel.setBlock(null);
             } else {
@@ -140,7 +141,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     
     public void setRightSelectedIndex(int index) {
         if (rightSlotBlockPanel!=null) {
-            if (index < 3 || index >= blockset.getBlocks().length) {
+            if (index < (canSelectInitialBlocks ? 0 : 3) || index >= blockset.getBlocks().length) {
                 selectedBlockIndexRight = -1;
                 rightSlotBlockPanel.setBlock(null);
             } else {
@@ -169,6 +170,10 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
 
     public void setRightSlotColor(Color rightSlotColor) {
         this.rightSlotColor = rightSlotColor;
+    }
+
+    public void setCanSelectInitialBlocks(boolean canSelectInitialBlocks) {
+        this.canSelectInitialBlocks = canSelectInitialBlocks;
     }
 
     private void onMousePressed(BaseMouseCoordsComponent.GridMousePressedEvent evt) {

@@ -14,6 +14,8 @@ import com.sfc.sf2.map.block.MapBlock;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -26,11 +28,13 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
     protected Tileset[] tilesets;
     private BufferedImage overrideImage;    //Required to render a non-block
     
+    private ActionListener blockChangedListener;
+    
     public BlockSlotPanel() {
         super();
         background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
         scale = new LayoutScale(2);
-        grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
+        grid = null;
         coordsGrid = null;
         coordsHeader = null;
         mouseInput = null;
@@ -55,6 +59,10 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
             graphics.drawImage(block.getIndexedColorImage(tilesets), 0, 0, null);
         }
     }
+
+    public void setTilesets(Tileset[] tilesets) {
+        this.tilesets = tilesets;
+    }
     
     public MapBlock getBlock() {
         return block;
@@ -68,10 +76,9 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         this.block = block;
         overrideImage = null;
         redraw();
-    }
-
-    public void setTilesets(Tileset[] tilesets) {
-        this.tilesets = tilesets;
+        if (blockChangedListener != null) {
+            blockChangedListener.actionPerformed(new ActionEvent(block, block == null ? -1 : block.getIndex(), null));
+        }
     }
     
     public BufferedImage getOverrideImage() {
@@ -82,5 +89,12 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         this.overrideImage = overrideImage;
         block = null;
         redraw();
+        if (blockChangedListener != null) {
+            blockChangedListener.actionPerformed(new ActionEvent(null, -1, null));
+        }
+    }
+
+    public void setBlockChangedListener(ActionListener blockChangedListener) {
+        this.blockChangedListener = blockChangedListener;
     }
 }

@@ -14,6 +14,7 @@ import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.settings.MapBlockSettings;
+import java.awt.event.ActionEvent;
 import java.nio.file.Path;
 import java.util.logging.Level;
 
@@ -61,7 +62,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
         editableBlockSlotPanel.setShowPriority(jCheckBox3.isSelected());
         
-        editableBlockSlotPanel.setMapBlocksetLayout(mapBlocksetLayoutPanel);
+        editableBlockSlotPanel.setBlockEditedListener(this::onBlockEdited);
         editableBlockSlotPanel.setLeftTileSlotPanel(tileSlotPanelLeft);
         editableBlockSlotPanel.setRightTileSlotPanel(tileSlotPanelRight);
         mapBlocksetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
@@ -1513,6 +1514,11 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         mapBlocksetLayoutPanel.setLeftSelectedIndex(index+1);
     }//GEN-LAST:event_jButton37ActionPerformed
 
+    private void onBlockEdited(ActionEvent e) {
+        mapBlocksetLayoutPanel.getBlockset().clearIndexedColorImage(false);
+        mapBlocksetLayoutPanel.redraw();
+    }
+    
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)
@@ -1629,5 +1635,4 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.map.block.gui.TileSlotPanel tileSlotPanelRight;
     private com.sfc.sf2.map.block.gui.TilesetsLayoutPanel tilesetsLayoutPanel;
     // End of variables declaration//GEN-END:variables
-
 }
