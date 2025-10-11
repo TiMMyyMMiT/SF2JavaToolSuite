@@ -61,7 +61,7 @@ public class LandEffectAsmProcessor extends AbstractAsmProcessor<LandEffectMovem
     }
 
     @Override
-    protected String getHeaderName(LandEffectMovementType[] item) {
+    protected String getHeaderName(LandEffectMovementType[] item, LandEffectEnums pckg) {
         return "Land effect settings and move costs table";
     }
 

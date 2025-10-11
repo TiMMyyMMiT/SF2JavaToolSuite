@@ -44,7 +44,7 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, true, selectedTileIndexLeft, 4, 0);
         coordsHeader = new LayoutCoordsHeader(this, PIXEL_WIDTH, PIXEL_HEIGHT, true);
-        mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
+        mouseInput = new LayoutMouseInput(this, this::onMouseButtonInput, PIXEL_WIDTH, PIXEL_HEIGHT);
         scroller = null;
         setItemsPerRow(DEFAULT_TILES_PER_ROW);
     }
@@ -162,7 +162,8 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
         this.redraw();
     }
 
-    private void onMousePressed(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
+    private void onMouseButtonInput(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
+        if (evt.released()) return;
         int x = evt.x();
         int y = evt.y();
         int tileIndex = x+y*getItemsPerRow();

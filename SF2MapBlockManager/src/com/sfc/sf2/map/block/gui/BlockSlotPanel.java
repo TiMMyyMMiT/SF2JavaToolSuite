@@ -77,7 +77,7 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         overrideImage = null;
         redraw();
         if (blockChangedListener != null) {
-            blockChangedListener.actionPerformed(new ActionEvent(block, block == null ? -1 : block.getIndex(), null));
+            blockChangedListener.actionPerformed(new ActionEvent(this, block == null ? -1 : block.getIndex(), null));
         }
     }
     
@@ -90,7 +90,7 @@ public class BlockSlotPanel extends AbstractLayoutPanel {
         block = null;
         redraw();
         if (blockChangedListener != null) {
-            blockChangedListener.actionPerformed(new ActionEvent(null, -1, null));
+            blockChangedListener.actionPerformed(new ActionEvent(this, -1, null));
         }
     }
 

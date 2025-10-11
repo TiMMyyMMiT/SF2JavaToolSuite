@@ -2716,7 +2716,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }
     
     private void onLeftBlockSlotChanged(ActionEvent e) {
-        mapLayoutPanel.setSelectedBlock((MapBlock)e.getSource());
+        MapBlock block = e.getID() == -1 ? null : mapLayoutPanel.getMapLayout().getBlockset().getBlocks()[e.getID()];
+        mapLayoutPanel.setSelectedBlock(block);
         mapLayoutPanel.redraw();
     }
 

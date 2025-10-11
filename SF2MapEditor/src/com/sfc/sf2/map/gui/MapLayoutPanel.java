@@ -21,6 +21,7 @@ import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapTile;
 import com.sfc.sf2.map.block.gui.BlockSlotPanel;
 import com.sfc.sf2.map.block.gui.MapBlocksetLayoutPanel;
+import com.sfc.sf2.map.layout.MapLayout;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
 import com.sfc.sf2.map.layout.gui.resources.MapLayoutFlagIcons;
@@ -216,12 +217,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                     graphics.dispose();
                 } else if (copiedBlocks != null) {
                     overlayRect = true;
-                    preview = new BufferedImage(copiedBlocks[0].length*PIXEL_WIDTH, copiedBlocks.length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+                    preview = new BufferedImage(copiedBlocks.length*PIXEL_WIDTH, copiedBlocks[0].length*PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
                     Graphics2D graphics = (Graphics2D)preview.getGraphics();
                     graphics.setColor(Color.WHITE);
-                    for (int j=0; j < copiedBlocks.length; j++) {
-                        for (int i=0; i < copiedBlocks[j].length; i++) {
-                            graphics.drawImage(copiedBlocks[j][i].getIndexedColorImage(layout.getTilesets()), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
+                    for (int i=0; i < copiedBlocks.length; i++) {
+                        for (int j=0; j < copiedBlocks[i].length; j++) {
+                            graphics.drawImage(copiedBlocks[i][j].getIndexedColorImage(layout.getTilesets()), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
                         }
                     }
                     graphics.dispose();
@@ -763,75 +764,18 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         int x = evt.x();
         int y = evt.y();
         if (currentMode == MAP_FLAG_EDIT_BLOCK) {
-            if (evt.dragging()) {
-                if (evt.mouseButton() == MouseEvent.BUTTON2 && copiedBlocksStartX >= 0) {
-                    previewImage = null;
-                    lastMapX = x;
-                    lastMapY = y;
-                    redraw();
-                }
-            } else if (evt.lifted()) {
-                if (evt.mouseButton() == MouseEvent.BUTTON2) {
-                    if (x == copiedBlocksStartX && y == copiedBlocksStartY) {
-                        selectedBlock = layout.getBlockset().getBlocks()[x+y*BLOCK_WIDTH];
-                        mapBlockLayoutPanel.selectedBlockIndexLeft = selectedBlock.getIndex();
-                        updateLeftSlot(selectedBlock);
-                    } else {
-                        // Mass copy
-                        int xStart;
-                        int xEnd;
-                        int yStart;
-                        int yEnd;
-                        if (x > copiedBlocksStartX) {
-                            xStart = copiedBlocksStartX;
-                            xEnd = x;
-                        } else {
-                            xStart = x;
-                            xEnd = copiedBlocksStartX;
-                        }
-                        if (y > copiedBlocksStartY) {
-                            yStart = copiedBlocksStartY;
-                            yEnd = y;
-                        } else {
-                            yStart = y;
-                            yEnd = copiedBlocksStartY;
-                        }
-                        int width = xEnd-xStart+1;
-                        int height = yEnd-yStart+1;
-                        copiedBlocks = new MapBlock[height][width];
-                        for (int j=0;j < height; j++) {
-                            for (int i=0;i < width; i++) {
-                                copiedBlocks[j][i] = layout.getBlockset().getBlocks()[xStart+i+(yStart+j)*BLOCK_WIDTH];
-                            }
-                        }
-                        mapBlockLayoutPanel.selectedBlockIndexLeft = -1;
-
-                        BufferedImage img = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-                        Graphics2D g2 = (Graphics2D)img.getGraphics();
-                        g2.setColor(Color.YELLOW);
-                        g2.drawRect(0, 0, img.getWidth()-1, img.getHeight()-1);
-                        g2.setColor(Color.BLACK);
-                        g2.drawString("copy", -1, 15);
-                        g2.dispose();
-
-                        leftSlot.setOverrideImage(img);
-                        leftSlot.revalidate();
-                    }
-
-                    copiedBlocksStartX = copiedBlocksStartY = -1;
-                }
-            } else {
-                switch (evt.mouseButton()) {
-                    case MouseEvent.BUTTON1:
-                        if(mapBlockLayoutPanel.selectedBlockIndexLeft !=- 1) {
+            switch (evt.mouseButton()) {
+                case MouseEvent.BUTTON1:
+                    if (!evt.released()) {
+                        if (mapBlockLayoutPanel.selectedBlockIndexLeft !=- 1) {
                             setBlockValue(x, y, mapBlockLayoutPanel.selectedBlockIndexLeft);
                             if (selectedBlock != null && selectedBlock.getIndex() == mapBlockLayoutPanel.selectedBlockIndexLeft) {
                                 setFlagValue(x, y, selectedBlock.getFlags());
                             }
-                        } else if (copiedBlocks != null) {
-                            int height = copiedBlocks.length;
-                            int width = copiedBlocks[0].length;
-                            int[] action = new int[4+2*height*width];
+                        } else if (copiedBlocks != null && !evt.dragging()) {
+                            int width = copiedBlocks.length;
+                            int height = copiedBlocks[0].length;
+                            int[] action = new int[4+2*width*height];
                             action[0] = ACTION_MASS_COPY;
                             int blockIndex = x+y*BLOCK_WIDTH;
                             action[1] = blockIndex;
@@ -839,37 +783,93 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                             action[3] = height;
                             for (int j=0; j < height; j++) {
                                 for (int i=0; i < width; i++) {
-                                    if ((blockIndex+i+j*BLOCK_WIDTH) < 4096 && (i+(blockIndex%BLOCK_WIDTH)) < BLOCK_WIDTH) {
+                                    if ((i+(blockIndex%BLOCK_WIDTH)) < BLOCK_WIDTH && (blockIndex+i+j*BLOCK_WIDTH) < MapLayout.BLOCK_COUNT) {
                                         MapBlock previousBlock = layout.getBlockset().getBlocks()[blockIndex+i+j*BLOCK_WIDTH];
                                         action[4+2*(i+j*width)] = previousBlock.getIndex();
                                         int origFlags = previousBlock.getFlags();
                                         action[4+2*(i+j*width)+1] = origFlags;
-                                        int index = copiedBlocks[j][i].getIndex();
-                                        int flags = copiedBlocks[j][i].getExplorationFlags()+(MapBlock.MAP_FLAG_MASK_EVENTS & origFlags);
-                                        MapTile[] tiles = copiedBlocks[j][i].getMapTiles();
-                                        layout.getBlockset().getBlocks()[blockIndex+i+j*64] = new MapBlock(index, flags, tiles);
+                                        int index = copiedBlocks[i][j].getIndex();
+                                        int flags = copiedBlocks[i][j].getFlags();
+                                        MapTile[] tiles = copiedBlocks[i][j].getMapTiles();
+                                        layout.getBlockset().getBlocks()[blockIndex+i+j*BLOCK_WIDTH] = new MapBlock(index, flags, tiles);
                                     } else {
-                                        action[4+2*(j*width+i)] = -1;
-                                        action[4+2*(j*width+i)+1] = -1;
+                                        action[4+2*(i+j*width)] = -1;
+                                        action[4+2*(i+j*width)+1] = -1;
                                     }
                                 }
                             }
                             actions.add(action);
                             redraw();
                         }
-                        break;
-                    case MouseEvent.BUTTON2:
+                    }
+                    break;
+                case MouseEvent.BUTTON2:
+                    if (evt.released()) {
+                        if (x == copiedBlocksStartX && y == copiedBlocksStartY) {
+                            selectedBlock = layout.getBlockset().getBlocks()[x+y*64];
+                            mapBlockLayoutPanel.selectedBlockIndexLeft = selectedBlock.getIndex();
+                            updateLeftSlot(selectedBlock);
+                        } else {
+                            // Mass copy
+                            int xStart, xEnd, yStart, yEnd;
+                            if (x > copiedBlocksStartX) {
+                                xStart = copiedBlocksStartX;
+                                xEnd = x;
+                            } else {
+                                xStart = x;
+                                xEnd = copiedBlocksStartX;
+                            }
+                            if (y > copiedBlocksStartY) {
+                                yStart = copiedBlocksStartY;
+                                yEnd = y;
+                            } else {
+                                yStart = y;
+                                yEnd = copiedBlocksStartY;
+                            }
+                            int width = xEnd - xStart + 1;
+                            int height = yEnd - yStart + 1;
+                            copiedBlocks = new MapBlock[width][height];
+                            MapBlock[] blocks = layout.getBlockset().getBlocks();
+                            for(int j=0; j < height; j++) {
+                                for (int i=0; i < width;i++){
+                                    copiedBlocks[i][j] = blocks[xStart+i+(yStart+j)*BLOCK_WIDTH];
+                                }
+                            }
+                            mapBlockLayoutPanel.selectedBlockIndexLeft = -1;
+                            BufferedImage img = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+                            Graphics2D g2 = (Graphics2D)img.getGraphics();
+                            g2.setColor(Color.YELLOW);
+                            g2.drawRect(0, 0, img.getWidth()-1, img.getHeight()-1);
+                            g2.setColor(Color.BLACK);
+                            g2.drawString("copy", -1, 15);
+                            g2.dispose();
+                            leftSlot.setOverrideImage(img);
+                        }
+                        copiedBlocksStartX = copiedBlocksStartY = -1;
+                        copiedBlocksDrawX = x;
+                        copiedBlocksDrawY = y;
+                        redraw();
+                    } else if (evt.dragging()) {
+                        if (copiedBlocksStartX != -1 && copiedBlocksStartY != -1) {
+                            previewImage = null;
+                            lastMapX = x;
+                            lastMapY = y;
+                            redraw();
+                        }
+                    } else {
                         copiedBlocksStartX = lastMapX = x;
                         copiedBlocksStartY = lastMapY = y;
                         copiedBlocks = null;
                         redraw();
-                        break;
-                    case MouseEvent.BUTTON3:
+                    }
+                    break;
+                case MouseEvent.BUTTON3:
+                    if (!evt.released()) {
                         setBlockValue(x, y, mapBlockLayoutPanel.selectedBlockIndexRight);
-                        break;
-                }
+                    }
+                    break;
             }
-        } else {
+        } else if (!evt.released()) {
             switch (evt.mouseButton()) {
                 case MouseEvent.BUTTON1:
                     int flagVal = currentMode;
@@ -989,8 +989,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                         int value = action[4+2*(j*width+i)];
                         int flags = action[4+2*(j*width+i)+1];
                         if (value != -1 && flags != -1) {
-                            MapBlock block = new MapBlock(value, flags, layout.getBlockset().getBlocks()[value].getMapTiles());
-                            layout.getBlockset().getBlocks()[i+blockIndex+j*BLOCK_WIDTH] = block;
+                            layout.getBlockset().getBlocks()[i+blockIndex+j*BLOCK_WIDTH] = map.getBlockset().getBlocks()[value];
                         }
                     }
                 }   actions.remove(actions.size()-1);

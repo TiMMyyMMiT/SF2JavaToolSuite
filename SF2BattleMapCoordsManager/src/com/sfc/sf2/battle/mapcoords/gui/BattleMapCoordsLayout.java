@@ -10,7 +10,7 @@ import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_HEIGHT;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_WIDTH;
-import com.sfc.sf2.map.layout.gui.StaticMapLayoutPanel;
+import com.sfc.sf2.map.layout.gui.MapLayoutPanel;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,7 +20,7 @@ import java.awt.Graphics2D;
  *
  * @author wiz
  */
-public class BattleMapCoordsLayout extends StaticMapLayoutPanel {
+public class BattleMapCoordsLayout extends MapLayoutPanel {
     
     protected BattleMapCoords battleCoords;
     protected boolean showBattleCoords = true;

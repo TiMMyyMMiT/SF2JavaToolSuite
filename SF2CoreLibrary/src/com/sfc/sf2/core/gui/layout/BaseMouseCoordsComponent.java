@@ -141,13 +141,15 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     @Override
     public void mouseReleased(MouseEvent e) {
         if (buttonHeld == -1) return;
-        if (buttonListener == null) {
-            buttonListener.mousePressed(new GridMousePressedEvent(0, 0, buttonHeld, false, true));
+        int x = getXCoord(e.getX());
+        int y = getYCoord(e.getY());
+        if (buttonListener != null) {
+            buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false, true));
         }
         buttonHeld = -1;
     }
     
-    public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging, boolean lifted) { }
+    public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging, boolean released) { }
     public interface GridMousePressedListener extends EventListener {
         public void mousePressed(GridMousePressedEvent evt);
     }

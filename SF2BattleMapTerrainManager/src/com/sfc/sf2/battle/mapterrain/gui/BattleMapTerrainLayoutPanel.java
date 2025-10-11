@@ -30,7 +30,7 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
     
     public BattleMapTerrainLayoutPanel() {
         super();
-        mouseInput = new LayoutMouseInput(this, this::onMouseInteraction, PIXEL_WIDTH, PIXEL_HEIGHT);
+        mouseInput = new LayoutMouseInput(this, this::onMouseButtonInput, PIXEL_WIDTH, PIXEL_HEIGHT);
     }
     
     @Override
@@ -138,7 +138,8 @@ public class BattleMapTerrainLayoutPanel extends BattleMapCoordsLayout {
         this.selectedTerrainType = (byte)(selectedTerrainType);
     }
     
-    protected void onMouseInteraction(GridMousePressedEvent evt) {
+    protected void onMouseButtonInput(GridMousePressedEvent evt) {
+        if (evt.released()) return;
         if (evt.mouseButton() != MouseEvent.BUTTON1) return;
         if (battleCoords == null) return;
         int x = evt.x();

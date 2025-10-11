@@ -6,6 +6,7 @@
 package com.sfc.sf2.battle.mapcoords.io;
 
 import com.sfc.sf2.battle.mapcoords.BattleMapCoords;
+import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.core.io.asm.ListAsmProcessor;
 
 /**
@@ -32,6 +33,12 @@ public class BattleMapCoordsAsmProcessor extends ListAsmProcessor<BattleMapCoord
     }
 
     @Override
+    protected String getHeaderName(BattleMapCoords[] item, EmptyPackage pckg) {
+        //Header plus info about the data
+        return "Battle map coords\n\t\t\t\t\t\t\t; Map, X, Y, Width, Height, Trigger X, Trigger Y";
+    }
+
+    @Override
     protected String packageItem(int index, BattleMapCoords item) {
         StringBuilder sb = new StringBuilder();
         sb.append(item.getMap());
@@ -48,11 +55,5 @@ public class BattleMapCoordsAsmProcessor extends ListAsmProcessor<BattleMapCoord
         sb.append(", ");
         sb.append(item.getTrigY());
         return sb.toString();
-    }
-
-    @Override
-    protected String getHeaderName(BattleMapCoords[] item) {
-        //Header plus info about the data
-        return "Battle map coords\n\t\t\t\t\t\t\t; Map, X, Y, Width, Height, Trigger X, Trigger Y";
     }
 }

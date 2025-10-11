@@ -48,7 +48,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel {
     public EditableBlockSlotPanel() {
         super();
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT);
-        mouseInput = new LayoutMouseInput(this, this::onMousePressed, PIXEL_WIDTH, PIXEL_HEIGHT);
+        mouseInput = new LayoutMouseInput(this, this::onMouseButtonInput, PIXEL_WIDTH, PIXEL_HEIGHT);
         setDisplayScale(4);
     }
     @Override
@@ -84,7 +84,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel {
         block.clearIndexedColorImage();
         redraw();
         if (blockEditedListener != null) {
-            blockEditedListener.actionPerformed(new ActionEvent(block, block.getIndex(), null));
+            blockEditedListener.actionPerformed(new ActionEvent(this, block.getIndex(), null));
         }
     }
     
@@ -104,7 +104,8 @@ public class EditableBlockSlotPanel extends BlockSlotPanel {
         this.rightTileSlotPanel = rightTileSlotPanel;
     }
     
-    private void onMousePressed(GridMousePressedEvent evt) {
+    private void onMouseButtonInput(GridMousePressedEvent evt) {
+        if (evt.released()) return;
         if (block == null) return;
         int index = evt.x()+evt.y()*TILE_WIDTH;
         switch (currentMode) {
