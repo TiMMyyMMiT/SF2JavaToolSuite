@@ -15,6 +15,7 @@ import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapFlagCopyEvent;
 import com.sfc.sf2.map.MapCopyEvent;
+import com.sfc.sf2.map.MapItem;
 import com.sfc.sf2.map.MapWarpEvent;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapTile;
@@ -59,11 +60,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     public static final int DRAW_MODE_STEP_COPIES = 1<<5;
     public static final int DRAW_MODE_ROOF_COPIES = 1<<6;
     public static final int DRAW_MODE_WARPS = 1<<7;
-    public static final int DRAW_MODE_ITEMS = 1<<8;
-    public static final int DRAW_MODE_TRIGGERS = 1<<9;
-    public static final int DRAW_MODE_VEHICLES = 1<<10;
-    public static final int DRAW_MODE_ACTION_FLAGS = 1<<11;
-    public static final int DRAW_MODE_ALL = (1<<12)-1;
+    public static final int DRAW_MODE_CHEST_ITEMS = 1<<8;
+    public static final int DRAW_MODE_OTHER_ITEMS = 1<<9;
+    public static final int DRAW_MODE_TRIGGERS = 1<<10;
+    public static final int DRAW_MODE_VEHICLES = 1<<11;
+    public static final int DRAW_MODE_ACTION_FLAGS = 1<<12;
+    public static final int DRAW_MODE_ALL = (1<<13)-1;
         
     MapBlocksetLayoutPanel MapBlockLayoutPanel = null;
     BlockSlotPanel leftSlot = null;
@@ -166,7 +168,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 drawMapWarp(g2, map.getWarps()[i], false);
             }
         }
-        if (shouldDraw(DRAW_MODE_ITEMS)) {
+        if (shouldDraw(DRAW_MODE_CHEST_ITEMS) || shouldDraw(DRAW_MODE_OTHER_ITEMS)) {
             drawMapItems(g2);
         }
         if (shouldDraw(DRAW_MODE_TRIGGERS)) {
@@ -457,6 +459,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             }
         }
     }
+    
+    private void drawItem(Graphics2D g2, MapItem item, boolean selected) {
+        g2.setStroke(new BasicStroke(3));
+        g2.setColor(Color.YELLOW);
+        g2.drawRect(item.getX()*PIXEL_WIDTH, item.getY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
+    }
         
     private void drawMapTriggers(Graphics2D g2) {
         MapBlock[] blocks = map.getLayout().getBlockset().getBlocks();
@@ -500,6 +508,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 break;
             case DRAW_MODE_WARPS:
                 drawMapWarp(g2, map.getWarps()[selectedItemIndex], true);
+                break;
+            case DRAW_MODE_CHEST_ITEMS:
+                drawItem(g2, map.getChestItems()[selectedItemIndex], true);
+                break;
+            case DRAW_MODE_OTHER_ITEMS:
+                drawItem(g2, map.getOtherItems()[selectedItemIndex], true);
                 break;
         }
     }
@@ -843,7 +857,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             case MapBlock.MAP_FLAG_VASE:
             case MapBlock.MAP_FLAG_BARREL:
             case MapBlock.MAP_FLAG_SHELF:
-                return (DRAW_MODE_ITEMS & drawFlag) != 0;
+                return (DRAW_MODE_CHEST_ITEMS & drawFlag) != 0 || (DRAW_MODE_OTHER_ITEMS & drawFlag) != 0;
             case MapBlock.MAP_FLAG_WARP:
                 return (DRAW_MODE_WARPS & drawFlag) != 0;
             case MapBlock.MAP_FLAG_TRIGGER:

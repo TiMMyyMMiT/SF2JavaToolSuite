@@ -123,7 +123,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_STEP_COPIES, jCheckBox17.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ROOF_COPIES, jCheckBox18.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_WARPS, jCheckBox19.isSelected());
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox20.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_CHEST_ITEMS, jCheckBox20.isSelected());
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox21.isSelected());
                 
         if (map != null) {
@@ -1605,6 +1605,12 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
         jTabbedPane2.addTab("Warps", jPanel27);
 
+        jTabbedPane4.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane4StateChanged(evt);
+            }
+        });
+
         tableChestItems.setBorder(null);
         tableChestItems.setModel(mapChestItemTableModel);
         tableChestItems.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -2184,7 +2190,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1416, 1008));
@@ -2337,7 +2343,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 SetTabRelativeCheckbox(jCheckBox19, MapLayoutPanel.DRAW_MODE_WARPS);
                 break;
             case 4:     //Items panel
-                SetTabRelativeCheckbox(jCheckBox20, MapLayoutPanel.DRAW_MODE_ITEMS);
+                jTabbedPane4StateChanged(new ChangeEvent(jTabbedPane4));
                 break;
         }
         mapLayoutPanel.redraw();
@@ -2349,7 +2355,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
         index = jTabbedPane3.getSelectedIndex();
         switch (index) {
-            default:     //Layout and Anims & Block Copies panels
+            default:
                 return;
             case 0:     //Flag copies
                 SetTabRelativeCheckbox(jCheckBox16, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
@@ -2363,6 +2369,24 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         }
         mapLayoutPanel.redraw();
     }//GEN-LAST:event_jTabbedPane3StateChanged
+	
+    private void jTabbedPane4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane4StateChanged
+        int index = jTabbedPane2.getSelectedIndex();
+        if (index != 4) return; //Is not on Block copies panel
+        SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
+        index = jTabbedPane4.getSelectedIndex();
+        switch (index) {
+            default:
+                return;
+            case 0:     //Chest items
+                SetTabRelativeCheckbox(jCheckBox20, MapLayoutPanel.DRAW_MODE_CHEST_ITEMS);
+                break;
+            case 1:     //Other items
+                SetTabRelativeCheckbox(jCheckBox20, MapLayoutPanel.DRAW_MODE_OTHER_ITEMS);
+                break;
+        }
+        mapLayoutPanel.redraw();
+    }//GEN-LAST:event_jTabbedPane4StateChanged
 
     private void jComboBox9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox9ActionPerformed
         mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
@@ -2409,7 +2433,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jCheckBox19ActionPerformed
 
     private void jCheckBox20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox20ActionPerformed
-        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_ITEMS, jCheckBox20.isSelected());
+        mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_CHEST_ITEMS, jCheckBox20.isSelected());
     }//GEN-LAST:event_jCheckBox20ActionPerformed
 
     private void jCheckBox21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox21ActionPerformed
