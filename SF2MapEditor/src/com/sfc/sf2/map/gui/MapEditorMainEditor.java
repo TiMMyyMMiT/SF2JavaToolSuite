@@ -20,6 +20,7 @@ import com.sfc.sf2.map.settings.MapBlockSettings;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.JCheckBox;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
@@ -2322,7 +2323,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
-        SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
+        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
         int index = jTabbedPane2.getSelectedIndex();
         mapLayoutPanel.setIsOnActionsTab(index == 0);
         switch (index) {
@@ -2334,13 +2335,13 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
                 break;
             case 1:     //Areas panel
-                SetTabRelativeCheckbox(jCheckBox15, MapLayoutPanel.DRAW_MODE_AREAS);
+                SetTabRelativeCheckbox(jCheckBox15, tableAreas.jTable, MapLayoutPanel.DRAW_MODE_AREAS);
                 break;
             case 2:     //Block Copies panels
                 jTabbedPane3StateChanged(new ChangeEvent(jTabbedPane3));
                 break;
             case 3:     //Warps panel
-                SetTabRelativeCheckbox(jCheckBox19, MapLayoutPanel.DRAW_MODE_WARPS);
+                SetTabRelativeCheckbox(jCheckBox19, tableWarps.jTable, MapLayoutPanel.DRAW_MODE_WARPS);
                 break;
             case 4:     //Items panel
                 jTabbedPane4StateChanged(new ChangeEvent(jTabbedPane4));
@@ -2352,19 +2353,19 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
         int index = jTabbedPane2.getSelectedIndex();
         if (index != 2) return; //Is not on Block copies panel
-        SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
+        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
         index = jTabbedPane3.getSelectedIndex();
         switch (index) {
             default:
                 return;
             case 0:     //Flag copies
-                SetTabRelativeCheckbox(jCheckBox16, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
+                SetTabRelativeCheckbox(jCheckBox16, tableFlagCopies.jTable, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
                 break;
             case 1:     //Step copies
-                SetTabRelativeCheckbox(jCheckBox17, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
+                SetTabRelativeCheckbox(jCheckBox17, tableStepCopies.jTable, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
                 break;
             case 2:     //Roof copies
-                SetTabRelativeCheckbox(jCheckBox18, MapLayoutPanel.DRAW_MODE_ROOF_COPIES);
+                SetTabRelativeCheckbox(jCheckBox18, tableRoofCopies.jTable, MapLayoutPanel.DRAW_MODE_ROOF_COPIES);
                 break;
         }
         mapLayoutPanel.redraw();
@@ -2373,16 +2374,16 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private void jTabbedPane4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane4StateChanged
         int index = jTabbedPane2.getSelectedIndex();
         if (index != 4) return; //Is not on Block copies panel
-        SetTabRelativeCheckbox(null, MapLayoutPanel.DRAW_MODE_NONE);
+        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
         index = jTabbedPane4.getSelectedIndex();
         switch (index) {
             default:
                 return;
             case 0:     //Chest items
-                SetTabRelativeCheckbox(jCheckBox20, MapLayoutPanel.DRAW_MODE_CHEST_ITEMS);
+                SetTabRelativeCheckbox(jCheckBox20, tableChestItems.jTable, MapLayoutPanel.DRAW_MODE_CHEST_ITEMS);
                 break;
             case 1:     //Other items
-                SetTabRelativeCheckbox(jCheckBox20, MapLayoutPanel.DRAW_MODE_OTHER_ITEMS);
+                SetTabRelativeCheckbox(jCheckBox20, tableOtherItems.jTable, MapLayoutPanel.DRAW_MODE_OTHER_ITEMS);
                 break;
         }
         mapLayoutPanel.redraw();
@@ -2603,7 +2604,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setShowStepCopyResult(jCheckBox12.isSelected());
     }//GEN-LAST:event_jCheckBox12ActionPerformed
 
-    private void SetTabRelativeCheckbox(JCheckBox checkbox, int mode) {
+    private void SetTabRelativeCheckbox(JCheckBox checkbox, JTable selectionTable, int mode) {
+        mapLayoutPanel.setSelectedItemIndex(-1);
+        if (selectionTable != null) {
+            selectionTable.clearSelection();
+        }
         if (checkbox == null) {
             // Restore checkboxes
             if (tabRelativeCheckbox != null) {
@@ -2614,7 +2619,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         }
         else {
             if (tabRelativeCheckbox != null) {
-                SetTabRelativeCheckbox(null, 0);
+                SetTabRelativeCheckbox(null, null, 0);
             }
             //If tabs change then disable the action tab affecting the checkboxes
             if (!mapLayoutPanel.isDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_ACTION_FLAGS)) {
@@ -2701,7 +2706,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     
     private void OnTableSelectionChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) return;
-        mapLayoutPanel.setSelectedItemIndex(((ListSelectionModel)e.getSource()).getLeadSelectionIndex());
+        mapLayoutPanel.setSelectedItemIndex(((ListSelectionModel)e.getSource()).getMaxSelectionIndex());
     }
     
     /**
