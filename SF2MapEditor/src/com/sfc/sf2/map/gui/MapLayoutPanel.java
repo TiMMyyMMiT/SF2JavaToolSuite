@@ -517,6 +517,61 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 break;
         }
     }
+    
+    public void scrollToSelected() {
+        if (selectedItemIndex == -1 || isOnActionsTab) return;
+        int x = -1;
+        int y = -1;
+        switch (selectedTabsDrawMode) {
+            case DRAW_MODE_AREAS:
+                MapArea area = map.getAreas()[selectedItemIndex];
+                x = area.getLayer1StartX()+10/getDisplayScale();
+                y = area.getLayer1StartY()+10/getDisplayScale();
+                break;
+            case DRAW_MODE_FLAG_COPIES:
+                MapCopyEvent flagCopy = map.getFlagCopies()[selectedItemIndex];
+                x = flagCopy.getSourceX();
+                y = flagCopy.getSourceY();
+                break;
+            case DRAW_MODE_STEP_COPIES:
+                MapCopyEvent stepCopy = map.getStepCopies()[selectedItemIndex];
+                x = stepCopy.getTriggerX();
+                y = stepCopy.getTriggerY();
+                break;
+            case DRAW_MODE_ROOF_COPIES:
+                MapCopyEvent roofCopy = map.getRoofCopies()[selectedItemIndex];
+                x = roofCopy.getTriggerX();
+                y = roofCopy.getTriggerY();
+                break;
+            case DRAW_MODE_WARPS:
+                MapWarpEvent warp = map.getWarps()[selectedItemIndex];
+                MapArea mainArea = map.getAreas()[0];
+                if (warp.getTriggerX() == 0xFF) {
+                    x = mainArea.getLayer1StartX() + (mainArea.getLayer1EndX()-mainArea.getLayer1StartX())/2;
+                } else {
+                    x = warp.getTriggerX();
+                }
+                if (warp.getTriggerY() == 0xFF) {
+                    y = mainArea.getLayer1StartY() + (mainArea.getLayer1EndY()-mainArea.getLayer1StartY())/2;
+                } else {
+                    y = warp.getTriggerY();
+                }
+                break;
+            case DRAW_MODE_CHEST_ITEMS:
+                MapItem chestItem = map.getChestItems()[selectedItemIndex];
+                x = chestItem.getX();
+                y = chestItem.getY();
+                break;
+            case DRAW_MODE_OTHER_ITEMS:
+                MapItem otherItem = map.getOtherItems()[selectedItemIndex];
+                x = otherItem.getX();
+                y = otherItem.getY();
+                break;
+        }
+        if (x >= 0 && y >= 0) {
+            centerOnMapPoint(x, y);
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Input">      
     private void onMouseButtonInput(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
@@ -878,6 +933,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
 
     public void setSelectedItemIndex(int selectedItemIndex) {
         this.selectedItemIndex = selectedItemIndex;
+        scrollToSelected();
         redraw();
     }
     

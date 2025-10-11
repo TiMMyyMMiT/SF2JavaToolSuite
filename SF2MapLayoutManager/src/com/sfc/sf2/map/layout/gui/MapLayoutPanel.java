@@ -113,6 +113,13 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
             }
         }
     }
+    
+    public void centerOnMapPoint(int mapX, int mapY) {
+        if (BaseLayoutComponent.IsEnabled(scroller)) {
+            int scaleOffset = 15/getDisplayScale();
+            scroller.scrollToPosition((mapX-scaleOffset)*PIXEL_WIDTH*getDisplayScale(), (mapY-scaleOffset)*PIXEL_HEIGHT*getDisplayScale());
+        }
+    }
 
     public MapLayout getMapLayout() {
         return layout;

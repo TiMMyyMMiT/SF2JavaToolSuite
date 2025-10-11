@@ -90,7 +90,7 @@ public abstract class AbstractLayoutPanel extends JPanel implements AnimationLis
         return currentImage;
     }
     
-    public void scrollToPosition(int pixelX, int pixelY) {
+    public void centerOnMapPoint(int pixelX, int pixelY) {
         if (BaseLayoutComponent.IsEnabled(scroller)) {
             scroller.scrollToPosition(pixelX, pixelY);
         }
