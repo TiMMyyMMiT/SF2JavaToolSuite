@@ -12,7 +12,12 @@ import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.Map;
+import com.sfc.sf2.map.MapArea;
+import com.sfc.sf2.map.MapCopyEvent;
+import com.sfc.sf2.map.MapFlagCopyEvent;
+import com.sfc.sf2.map.MapItem;
 import com.sfc.sf2.map.MapManager;
+import com.sfc.sf2.map.MapWarpEvent;
 import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.animation.MapAnimationFrame;
 import com.sfc.sf2.map.block.MapBlock;
@@ -71,6 +76,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setShowAreasUnderlay(jCheckBox4.isSelected());
         mapLayoutPanel.setShowFlagCopyResult(jCheckBox6.isSelected());
         mapLayoutPanel.setShowStepCopyResult(jCheckBox12.isSelected());
+        mapLayoutPanel.setShowRoofCopyResult(jCheckBox14.isSelected());
         
         mapBlocksetLayoutPanel.setShowGrid(jCheckBox3.isSelected());
         mapBlocksetLayoutPanel.setDisplayScale(jComboBox3.getSelectedIndex()+1);
@@ -93,6 +99,13 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tilesetLayoutPanelModified.setItemsPerRow((int)jSpinner6.getValue());
         tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
         
+        tableAreas.addTableModelListener(this::OnAreasTableDataChanged);
+        tableFlagCopies.addTableModelListener(this::OnFlagCopiesTableDataChanged);
+        tableStepCopies.addTableModelListener(this::OnStepCopiesTableDataChanged);
+        tableRoofCopies.addTableModelListener(this::OnRoofCopiesTableDataChanged);
+        tableWarps.addTableModelListener(this::OnWarpsTableDataChanged);
+        tableChestItems.addTableModelListener(this::OnChestItemsTableDataChanged);
+        tableOtherItems.addTableModelListener(this::OnOtherItemsTableDataChanged);
         tableAreas.addListSelectionListener(this::OnTableSelectionChanged);
         tableFlagCopies.addListSelectionListener(this::OnTableSelectionChanged);
         tableStepCopies.addListSelectionListener(this::OnTableSelectionChanged);
@@ -134,7 +147,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             mapAreaTableModel.setTableData(map.getAreas());
             mapFlagCopyTableModel.setTableData(map.getFlagCopies());
             mapStepCopyTableModel.setTableData(map.getStepCopies());
-            MapCopyEventTableModel.setTableData(map.getRoofCopies());
+            MapRoofCopyTableModel.setTableData(map.getRoofCopies());
             mapWarpTableModel.setTableData(map.getWarps());
             mapChestItemTableModel.setTableData(map.getChestItems());
             mapOtherItemTableModel.setTableData(map.getOtherItems());
@@ -174,7 +187,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             mapAreaTableModel.setTableData(null);
             mapFlagCopyTableModel.setTableData(null);
             mapStepCopyTableModel.setTableData(null);
-            MapCopyEventTableModel.setTableData(null);
+            MapRoofCopyTableModel.setTableData(null);
             mapWarpTableModel.setTableData(null);
             mapChestItemTableModel.setTableData(null);
             mapOtherItemTableModel.setTableData(null);
@@ -195,7 +208,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapFlagCopyTableModel = new com.sfc.sf2.map.models.MapFlagCopyEventTableModel();
         mapChestItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
         mapOtherItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
-        MapCopyEventTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
+        MapRoofCopyTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
         mapStepCopyTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
         mapAnimationFrameTableModel = new com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel();
         mapWarpTableModel = new com.sfc.sf2.map.models.MapWarpTableModel();
@@ -323,6 +336,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jCheckBox12 = new javax.swing.JCheckBox();
         jPanel26 = new javax.swing.JPanel();
         tableRoofCopies = new com.sfc.sf2.core.gui.controls.Table();
+        jPanel36 = new javax.swing.JPanel();
+        jCheckBox14 = new javax.swing.JCheckBox();
         jPanel27 = new javax.swing.JPanel();
         tableWarps = new com.sfc.sf2.core.gui.controls.Table();
         jPanel28 = new javax.swing.JPanel();
@@ -1544,10 +1559,36 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jTabbedPane3.addTab("Step Copies", jPanel25);
 
         tableRoofCopies.setBorder(null);
-        tableRoofCopies.setModel(MapCopyEventTableModel);
+        tableRoofCopies.setModel(MapRoofCopyTableModel);
         tableRoofCopies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableRoofCopies.setSingleClickText(true);
         tableRoofCopies.setSpinnerNumberEditor(true);
+
+        jPanel36.setBorder(javax.swing.BorderFactory.createTitledBorder("Roof copies display"));
+
+        jCheckBox14.setText("Show copy");
+        jCheckBox14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox14ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
+        jPanel36.setLayout(jPanel36Layout);
+        jPanel36Layout.setHorizontalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel36Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jCheckBox14)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel36Layout.setVerticalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel36Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jCheckBox14)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
@@ -1555,14 +1596,18 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                    .addComponent(jPanel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+                .addComponent(tableRoofCopies, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -2191,7 +2236,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1416, 1008));
@@ -2604,6 +2649,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setShowStepCopyResult(jCheckBox12.isSelected());
     }//GEN-LAST:event_jCheckBox12ActionPerformed
 
+    private void jCheckBox14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox14ActionPerformed
+        mapLayoutPanel.setShowRoofCopyResult(jCheckBox14.isSelected());
+    }//GEN-LAST:event_jCheckBox14ActionPerformed
+
     private void SetTabRelativeCheckbox(JCheckBox checkbox, JTable selectionTable, int mode) {
         mapLayoutPanel.setSelectedItemIndex(-1);
         if (selectionTable != null) {
@@ -2704,6 +2753,55 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tableAnimFrames.jTable.setRowSelectionInterval(e.getCurrentFrame(), e.getCurrentFrame());
     }
     
+    private boolean onTableDataChanged(TableModelEvent e) {int row = e.getFirstRow();
+        if (row == mapLayoutPanel.getSelectedItemIndex()) {
+            mapLayoutPanel.redraw();
+        }
+        return e.getType() == TableModelEvent.DELETE || e.getType() == TableModelEvent.INSERT;
+    }
+    
+    private void OnAreasTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setAreas(mapAreaTableModel.getTableData(MapArea[].class));
+        }
+    }
+
+    private void OnFlagCopiesTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setFlagCopies(mapFlagCopyTableModel.getTableData(MapFlagCopyEvent[].class));
+        }
+    }
+
+    private void OnStepCopiesTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setStepCopies(mapStepCopyTableModel.getTableData(MapCopyEvent[].class));
+        }
+    }
+
+    private void OnRoofCopiesTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setRoofCopies(MapRoofCopyTableModel.getTableData(MapCopyEvent[].class));
+        }
+    }
+
+    private void OnWarpsTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setWarps(mapWarpTableModel.getTableData(MapWarpEvent[].class));
+        }
+    }
+
+    private void OnChestItemsTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setChestItems(mapChestItemTableModel.getTableData(MapItem[].class));
+        }
+    }
+
+    private void OnOtherItemsTableDataChanged(TableModelEvent e) {
+        if (onTableDataChanged(e)) {
+            mapLayoutPanel.getMap().setOtherItems(mapOtherItemTableModel.getTableData(MapItem[].class));
+        }
+    }
+    
     private void OnTableSelectionChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) return;
         int index = ((ListSelectionModel)e.getSource()).getMaxSelectionIndex();
@@ -2727,7 +2825,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.map.models.MapCopyEventTableModel MapCopyEventTableModel;
+    private com.sfc.sf2.map.models.MapCopyEventTableModel MapRoofCopyTableModel;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel2;
     private javax.swing.ButtonGroup buttonGroupMapActions;
@@ -2785,6 +2883,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox11;
     private javax.swing.JCheckBox jCheckBox12;
     private javax.swing.JCheckBox jCheckBox13;
+    private javax.swing.JCheckBox jCheckBox14;
     private javax.swing.JCheckBox jCheckBox15;
     private javax.swing.JCheckBox jCheckBox16;
     private javax.swing.JCheckBox jCheckBox17;
@@ -2851,6 +2950,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel34;
     private javax.swing.JPanel jPanel35;
+    private javax.swing.JPanel jPanel36;
     private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;

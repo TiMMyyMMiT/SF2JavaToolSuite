@@ -12,7 +12,7 @@
     </Component>
     <Component class="com.sfc.sf2.map.models.MapItemTableModel" name="mapOtherItemTableModel">
     </Component>
-    <Component class="com.sfc.sf2.map.models.MapCopyEventTableModel" name="MapCopyEventTableModel">
+    <Component class="com.sfc.sf2.map.models.MapCopyEventTableModel" name="MapRoofCopyTableModel">
     </Component>
     <Component class="com.sfc.sf2.map.models.MapCopyEventTableModel" name="mapStepCopyTableModel">
     </Component>
@@ -1990,9 +1990,12 @@
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableRoofCopies" pref="383" max="32767" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="tableRoofCopies" alignment="0" pref="383" max="32767" attributes="0"/>
+                                                          <Component id="jPanel36" alignment="0" max="32767" attributes="0"/>
+                                                      </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -2001,7 +2004,9 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="tableRoofCopies" pref="817" max="32767" attributes="0"/>
+                                                      <Component id="tableRoofCopies" pref="756" max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jPanel36" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -2014,13 +2019,53 @@
                                                   <Border info="null"/>
                                                 </Property>
                                                 <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                                                  <ComponentRef name="MapCopyEventTableModel"/>
+                                                  <ComponentRef name="MapRoofCopyTableModel"/>
                                                 </Property>
                                                 <Property name="selectionMode" type="int" value="0"/>
                                                 <Property name="singleClickText" type="boolean" value="true"/>
                                                 <Property name="spinnerNumberEditor" type="boolean" value="true"/>
                                               </Properties>
                                             </Component>
+                                            <Container class="javax.swing.JPanel" name="jPanel36">
+                                              <Properties>
+                                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                                    <TitledBorder title="Roof copies display"/>
+                                                  </Border>
+                                                </Property>
+                                              </Properties>
+
+                                              <Layout>
+                                                <DimensionLayout dim="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jCheckBox14" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="32767" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                </DimensionLayout>
+                                                <DimensionLayout dim="1">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jCheckBox14" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                </DimensionLayout>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JCheckBox" name="jCheckBox14">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Show copy"/>
+                                                  </Properties>
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox14ActionPerformed"/>
+                                                  </Events>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
                                           </SubComponents>
                                         </Container>
                                       </SubComponents>
