@@ -961,7 +961,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(209, Short.MAX_VALUE))
                 );
 
@@ -985,7 +985,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     }
                 });
 
-                infoButton1.setMessageText("<html><b>Image Format:</b> Select an image File (e.g. PNG or GIF).<br>Color format should be 4BPP / 16 indexed colors.<br>(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16). <br><br><b>Priority tiles:</b> Outputs a a representation of the map's blockset with 'H' = a high-priority tile, and 'L' = a regular tile (low priority).<br>High priority tells the engine to draw tiles over the sprites (i.e. player character).</html>");
+                infoButton1.setMessageText("<html><b>Image Format:</b> Select an image File (e.g. PNG or GIF).<br>Color format should be 4BPP / 16 indexed colors.<br>(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16). <br><br><b>Priority tiles:</b> Outputs a representation of the map's blockset with 'H' = a high-priority tile, and 'L' = a regular tile (low priority).<br>High priority tells the engine to draw tiles over the sprites (i.e. player character).</html>");
                 infoButton1.setText("");
 
                 javax.swing.GroupLayout jPanel34Layout = new javax.swing.GroupLayout(jPanel34);
@@ -1022,13 +1022,13 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
                 jPanel35.setBorder(javax.swing.BorderFactory.createTitledBorder("Map layout image export"));
 
-                fileButton17.setFilePath("\\.export\\maplayout.png");
+                fileButton17.setFilePath(".\\export\\layout.png");
                 fileButton17.setLabelText("Layout image :");
 
-                fileButton18.setFilePath("\\.export\\maplayout_flags.txt");
+                fileButton18.setFilePath(".\\export\\layout_flags.txt");
                 fileButton18.setLabelText("Layout flags :");
 
-                fileButton19.setFilePath("\\.export\\layout_hptiles.txt");
+                fileButton19.setFilePath(".\\export\\layout_hptiles.txt");
                 fileButton19.setLabelText("Layout priority tiles :");
 
                 jLabel12.setText("Export map layout data");
@@ -1040,7 +1040,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     }
                 });
 
-                infoButton2.setMessageText("<html><b>Image Format:</b> Select an image File (e.g. PNG or GIF).<br>Color format should be 4BPP / 16 indexed colors.<br>(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16).<br><br><b>Flags:</b> Outputs a representation of the map containing flag values (i.e. if the tile has an item, warp, etc flag on it).<br><br><b>Priority tiles:</b> Outputs a a representation of the map with 'H' = a high-priority tile, and 'L' = a regular tile (low priority).<br>High priority tells the engine to draw tiles over the sprites (i.e. player character).</html>");
+                infoButton2.setMessageText("<html><b>Image Format:</b> Select an image File (e.g. PNG or GIF).<br>Color format should be 4BPP / 16 indexed colors.<br>(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16).<br><br><b>Flags:</b> Outputs a representation of the map containing flag values (i.e. if the tile has an item, warp, etc flag on it).<br><br><b>Priority tiles:</b> Outputs a representation of the map with 'H' = a high-priority tile, and 'L' = a regular tile (low priority).<br>High priority tells the engine to draw tiles over the sprites (i.e. player character).</html>");
                 infoButton2.setText("");
 
                 javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
@@ -2575,7 +2575,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         Path sf2enumsPath = PathHelpers.getBasePath().resolve(fileButton20.getFilePath());
         int mapId = (int)jSpinner4.getValue();
         try {
-            mapManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, sf2enumsPath, mapId);
+            mapManager.ImportMapEnums(sf2enumsPath);
+            mapManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapId);
             jSpinner5.setValue(mapId);
         } catch (Exception ex) {
             mapManager.clearData();
@@ -2622,75 +2623,32 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jRadioButton8ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        /*String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
-        
-        String mapPath = jTextField24.getText();
-        if(!mapPath.endsWith(File.separator)){
-            mapPath = mapPath+""+File.separator;
+        Path blocketImagePath = PathHelpers.getBasePath().resolve(fileButton15.getFilePath());
+        Path priorityPath = PathHelpers.getBasePath().resolve(fileButton16.getFilePath());
+        int blocksPerRow = (int)jSpinner7.getValue();
+        if (!PathHelpers.createPathIfRequred(blocketImagePath)) return;
+        if (!PathHelpers.createPathIfRequred(priorityPath)) return;
+        try {
+            mapManager.exportMapBlocksetImage(blocketImagePath, priorityPath, blocksPerRow, mapLayoutPanel.getMap().getBlockset(), mapLayoutPanel.getMapLayout().getTilesets());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map blockset data could not be exported to : " + blocketImagePath);
         }
-        //Path basePath = Paths.get(mapPath).toAbsolutePath();
-        System.out.println(toolPath.toString());
-        Path basePath = toolPath.resolve(Paths.get(mapPath)).normalize();
-        System.out.println(basePath.toString());
-        Path pPath = Paths.get(jTextField42.getText());
-        Path pngPath;
-        if(!pPath.isAbsolute()){
-           pngPath = basePath.resolve(pPath).normalize();
-        }else{
-            pngPath = pPath;
-        }
-        System.out.println(pngPath.toString());
-        Path hpPath = Paths.get(jTextField50.getText());
-        Path hpFilepath;
-        if(!hpPath.isAbsolute()){
-           hpFilepath = basePath.resolve(hpPath).normalize();
-        }else{
-            hpFilepath = hpPath;
-        }
-        System.out.println(hpFilepath.toString());
-        
-        //mapManager.exportBlocksetImage(mapblockLayout, pngPath.toString(), hpFilepath.toString(), (int)jSpinner1.getValue());
-        */
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-         /*                              
-        String toolDir = System.getProperty("user.dir");
-        Path toolPath = Paths.get(toolDir);
-        
-        String mapPath = jTextField24.getText();
-        if(!mapPath.endsWith(File.separator)){
-            mapPath = mapPath+""+File.separator;
+        Path layoutImagePath = PathHelpers.getBasePath().resolve(fileButton17.getFilePath());
+        Path layoutFlagsPath = PathHelpers.getBasePath().resolve(fileButton18.getFilePath());
+        Path priorityPath = PathHelpers.getBasePath().resolve(fileButton19.getFilePath());
+        if (!PathHelpers.createPathIfRequred(layoutImagePath)) return;
+        if (!PathHelpers.createPathIfRequred(layoutFlagsPath)) return;
+        if (!PathHelpers.createPathIfRequred(priorityPath)) return;
+        try {
+            mapManager.exportMapLayoutImage(layoutImagePath, layoutFlagsPath, priorityPath, mapLayoutPanel.getMap().getLayout());
+        } catch (Exception ex) {
+            Console.logger().log(Level.SEVERE, null, ex);
+            Console.logger().severe("ERROR Map layout data could not be exported to : " + layoutImagePath);
         }
-        //Path basePath = Paths.get(mapPath).toAbsolutePath();
-        System.out.println(toolPath.toString());
-        Path basePath = toolPath.resolve(Paths.get(mapPath)).normalize();
-        System.out.println(basePath.toString());
-        Path pPath = Paths.get(jTextField43.getText());
-        Path pngPath;
-        if(!pPath.isAbsolute()){
-           pngPath = basePath.resolve(pPath).normalize();
-        }else{
-            pngPath = pPath;
-        }
-        Path fPath = Paths.get(jTextField47.getText());
-        Path flagsPath;
-        if(!fPath.isAbsolute()){
-           flagsPath = basePath.resolve(fPath).normalize();
-        }else{
-            flagsPath = fPath;
-        }
-        Path tPath = Paths.get(jTextField44.getText());
-        Path phtilesPath;
-        if(!tPath.isAbsolute()){
-           phtilesPath = basePath.resolve(tPath).normalize();
-        }else{
-            phtilesPath = tPath;
-        }
-        System.out.println(phtilesPath.toString());
-        
-        mapManager.exportMapLayoutImage(////mapLayoutPanel, pngPath.toString(), flagsPath.toString(), phtilesPath.toString());*/
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
@@ -3001,7 +2959,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         Path mapChestItemsDataPath = mapDirectory.resolve(fileButton11.getFilePath());
         Path mapOtherItemsDataPath = mapDirectory.resolve(fileButton12.getFilePath());
         Path mapAnimationDataPath = mapDirectory.resolve(fileButton13.getFilePath());
+        Path sf2enumsPath = PathHelpers.getBasePath().resolve(fileButton20.getFilePath());
         try {
+            mapManager.ImportMapEnums(sf2enumsPath);
             mapManager.importDisassemblyFromData(paletteEntriesPath, tilesetEntriesPath, mapTilesetDataPath, mapBlocksetDataPath, mapLayoutDataPath, mapAreasDataPath,
                     mapFlagsDataPath, mapStepsDataPath, mapRoofsDataPath, mapWarpsDataPath, mapChestItemsDataPath, mapOtherItemsDataPath, mapAnimationDataPath);
             directoryButton4.setDirectoryPath(directoryButton4.getDirectoryPath());
@@ -3054,7 +3014,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         Path otherItemsPath = PathHelpers.getBasePath().resolve(fileButton39.getFilePath());
         Path animationPath = PathHelpers.getBasePath().resolve(fileButton29.getFilePath());
         Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton30.getFilePath());
+        Path sf2enumsPath = PathHelpers.getBasePath().resolve(fileButton20.getFilePath());
         try {
+            mapManager.ImportMapEnums(sf2enumsPath);
             mapManager.importDisassemblyFromRawFiles(palettePath, new Path[] { tilesetPath1, tilesetPath2, tilesetPath3, tilesetPath4, tilesetPath5 }, blocksPath, layoutPath,
                     areasPath, flagsPath, stepsPath, roofsPath, warpsPath, chestItemsPath, otherItemsPath, animationPath, tilesetEntriesPath);
         } catch (Exception ex) {

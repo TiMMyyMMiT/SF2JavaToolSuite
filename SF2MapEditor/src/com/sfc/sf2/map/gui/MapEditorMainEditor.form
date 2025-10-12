@@ -760,7 +760,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jPanel5" min="-2" pref="599" max="-2" attributes="0"/>
+                                              <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace pref="209" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1095,7 +1095,7 @@
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton1">
                                           <Properties>
-                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Image Format:&lt;/b&gt; Select an image File (e.g. PNG or GIF).&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16). &lt;br&gt;&lt;br&gt;&lt;b&gt;Priority tiles:&lt;/b&gt; Outputs a a representation of the map&apos;s blockset with &apos;H&apos; = a high-priority tile, and &apos;L&apos; = a regular tile (low priority).&lt;br&gt;High priority tells the engine to draw tiles over the sprites (i.e. player character).&lt;/html&gt;"/>
+                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Image Format:&lt;/b&gt; Select an image File (e.g. PNG or GIF).&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16). &lt;br&gt;&lt;br&gt;&lt;b&gt;Priority tiles:&lt;/b&gt; Outputs a representation of the map&apos;s blockset with &apos;H&apos; = a high-priority tile, and &apos;L&apos; = a regular tile (low priority).&lt;br&gt;High priority tells the engine to draw tiles over the sprites (i.e. player character).&lt;/html&gt;"/>
                                             <Property name="text" type="java.lang.String" value=""/>
                                           </Properties>
                                         </Component>
@@ -1154,19 +1154,19 @@
                                       <SubComponents>
                                         <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton17">
                                           <Properties>
-                                            <Property name="filePath" type="java.lang.String" value="\u005c.export\u005cmaplayout.png" containsInvalidXMLChars="true"/>
+                                            <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005clayout.png" containsInvalidXMLChars="true"/>
                                             <Property name="labelText" type="java.lang.String" value="Layout image :"/>
                                           </Properties>
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton18">
                                           <Properties>
-                                            <Property name="filePath" type="java.lang.String" value="\u005c.export\u005cmaplayout_flags.txt" containsInvalidXMLChars="true"/>
+                                            <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005clayout_flags.txt" containsInvalidXMLChars="true"/>
                                             <Property name="labelText" type="java.lang.String" value="Layout flags :"/>
                                           </Properties>
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton19">
                                           <Properties>
-                                            <Property name="filePath" type="java.lang.String" value="\u005c.export\u005clayout_hptiles.txt" containsInvalidXMLChars="true"/>
+                                            <Property name="filePath" type="java.lang.String" value=".\u005cexport\u005clayout_hptiles.txt" containsInvalidXMLChars="true"/>
                                             <Property name="labelText" type="java.lang.String" value="Layout priority tiles :"/>
                                           </Properties>
                                         </Component>
@@ -1185,7 +1185,7 @@
                                         </Component>
                                         <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton2">
                                           <Properties>
-                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Image Format:&lt;/b&gt; Select an image File (e.g. PNG or GIF).&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16).&lt;br&gt;&lt;br&gt;&lt;b&gt;Flags:&lt;/b&gt; Outputs a representation of the map containing flag values (i.e. if the tile has an item, warp, etc flag on it).&lt;br&gt;&lt;br&gt;&lt;b&gt;Priority tiles:&lt;/b&gt; Outputs a a representation of the map with &apos;H&apos; = a high-priority tile, and &apos;L&apos; = a regular tile (low priority).&lt;br&gt;High priority tells the engine to draw tiles over the sprites (i.e. player character).&lt;/html&gt;"/>
+                                            <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Image Format:&lt;/b&gt; Select an image File (e.g. PNG or GIF).&lt;br&gt;Color format should be 4BPP / 16 indexed colors.&lt;br&gt;(Images of 8BPP / 256 indexed colors will be converted to 4 BPP / 16).&lt;br&gt;&lt;br&gt;&lt;b&gt;Flags:&lt;/b&gt; Outputs a representation of the map containing flag values (i.e. if the tile has an item, warp, etc flag on it).&lt;br&gt;&lt;br&gt;&lt;b&gt;Priority tiles:&lt;/b&gt; Outputs a representation of the map with &apos;H&apos; = a high-priority tile, and &apos;L&apos; = a regular tile (low priority).&lt;br&gt;High priority tells the engine to draw tiles over the sprites (i.e. player character).&lt;/html&gt;"/>
                                             <Property name="text" type="java.lang.String" value=""/>
                                           </Properties>
                                         </Component>

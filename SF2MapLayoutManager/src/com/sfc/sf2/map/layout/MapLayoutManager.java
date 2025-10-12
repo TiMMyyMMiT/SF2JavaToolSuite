@@ -8,6 +8,8 @@ package com.sfc.sf2.map.layout;
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.MetadataException;
+import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.FileHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
@@ -16,6 +18,7 @@ import com.sfc.sf2.map.block.MapBlocksetManager;
 import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
 import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.map.layout.io.MapLayoutDisassemblyProcessor;
+import com.sfc.sf2.map.layout.io.MapLayoutMetaProcessor;
 import com.sfc.sf2.map.layout.io.MapLayoutPackage;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -28,6 +31,7 @@ public class MapLayoutManager extends AbstractManager {
     private final MapBlocksetManager mapBlocksetManager = new MapBlocksetManager();
     private final MapLayoutDisassemblyProcessor layoutDisassemblyProcessor = new MapLayoutDisassemblyProcessor();
     private final MapEntriesAsmProcessor mapEntriesAsmProcessor = new MapEntriesAsmProcessor();
+    private final MapLayoutMetaProcessor mapLayoutMetaProcessor = new MapLayoutMetaProcessor();
     
     private MapBlockset blockset;
     private MapLayout layout;
@@ -126,6 +130,14 @@ public class MapLayoutManager extends AbstractManager {
         layoutDisassemblyProcessor.exportDisassembly(layoutPath, layout, pckg);
         Console.logger().info("Map layout successfully exported from entries to : " + layoutPath);
         Console.logger().finest("EXITING exportDisassembly");   
+    }
+    
+    public void exportImage(Path filepath, Path flagsPath, Path hpFilePath, MapLayout layout) throws IOException, RawImageException, MetadataException {
+        Console.logger().finest("ENTERING exportImage");
+        mapBlocksetManager.exportImage(filepath, hpFilePath, MapLayout.BLOCK_WIDTH, layout.getBlockset(), layout.getTilesets());
+        mapLayoutMetaProcessor.exportMetadata(flagsPath, layout.getBlockset());
+        Console.logger().info("Map layout successfully exported to image : " + filepath + ", flags : " + flagsPath + ", and hpTiles : " + hpFilePath);
+        Console.logger().finest("EXITING exportImage");
     }
     
     //TODO Add support for creating new map entries
