@@ -1160,12 +1160,10 @@ public class MapLayoutMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton29ActionPerformed
 
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
-        Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
-        Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         int mapId = (int)jSpinner5.getValue();
         try {
-            maplayoutManager.exportDisassemblyFromMapEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapId, mapBlocksetPanel.getBlockset(), mapLayoutPanel.getMapLayout());
+            maplayoutManager.exportDisassemblyFromMapEntries(mapEntriesPath, mapId, mapBlocksetPanel.getBlockset(), mapLayoutPanel.getMapLayout());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Map layout disasm could not be exported to : " + mapId);

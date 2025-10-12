@@ -740,7 +740,7 @@
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="accordionPanel2" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jPanel24" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jPanel24" min="-2" pref="115" max="-2" attributes="0"/>
                                                       <EmptySpace pref="227" max="32767" attributes="0"/>
                                                       <Component id="jPanel27" min="-2" pref="93" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>

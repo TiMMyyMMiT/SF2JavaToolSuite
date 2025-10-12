@@ -1293,7 +1293,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
             mapAnimationManager.exportDisassemblyFromMapEntries(mapEntriesPath, mapId, tilesetLayoutPanelModified.getMapAnimation());
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
-            Console.logger().severe("ERROR Map layout disasm could not be exported to : " + mapId);
+            Console.logger().severe("ERROR Map animation disasm could not be exported to : " + mapId);
         }
     }//GEN-LAST:event_jButton31ActionPerformed
 

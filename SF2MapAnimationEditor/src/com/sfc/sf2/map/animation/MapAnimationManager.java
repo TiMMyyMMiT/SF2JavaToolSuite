@@ -75,7 +75,7 @@ public class MapAnimationManager extends AbstractManager {
         Console.logger().finest("EXITING importDisassemblyFromMapData");
         return animation;
     }
-       
+    
     public MapAnimation importDisassemblyFromRawFiles(Path palettePath, Path[] tilesetsFilePath, Path blocksetPath, Path layoutPath, Path animationPath, Path tilesetEntriesPath) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromRawFiles");
         sharedAnimationInfo = null;
@@ -124,26 +124,29 @@ public class MapAnimationManager extends AbstractManager {
         }
         this.animation = animation;
         mapAnimationAsmProcessor.exportAsmData(animationsPath, animation, null);
-        Console.logger().info("Map animation succesfully exported for : " + animationsPath);
+        Console.logger().info("Map animation succesfully exported to : " + animationsPath);
         Console.logger().finest("EXITING exportDisassembly");  
     }
     
     public void exportDisassemblyFromMapEntries(Path mapEntriesPath, int mapId, MapAnimation animation) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING exportDisassemblyFromMapEntries");
-        mapLayoutManager.ImportMapEntries(mapEntriesPath);
-        MapEntryData[] mapEntries = mapLayoutManager.getMapEntries();
-        if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
-            throw new DisassemblyException("Cannot import map " + mapId + ". Map entry was not found or map entries are corrupted.");
-        }
         this.animation = animation;
+        MapEntryData[] mapEntries = ImportMapEntries(mapEntriesPath);
+        if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
+            throw new DisassemblyException("Cannot export map " + mapId + ". Map entry was not found or map entries are corrupted.");
+        }
         MapEntryData mapEntry = mapEntries[mapId];
         Path animationPath = mapEntry.getLayoutPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath());
         mapAnimationAsmProcessor.exportAsmData(animationPath, animation, null);
-        Console.logger().info("Map animation successfully exported from entries. Animation file : " + animationPath);
+        Console.logger().info("Map animation successfully exported from entries to : " + animationPath);
         Console.logger().finest("EXITING exportDisassemblyFromMapEntries");   
     }
     
-    private void checkForSharedAnimations(MapEntryData[] mapEntries, int mapIndex, String path) {
+    public MapEntryData[] ImportMapEntries(Path mapEntriesPath) throws IOException, AsmException {
+        return mapLayoutManager.ImportMapEntries(mapEntriesPath);
+    }
+    
+    public void checkForSharedAnimations(MapEntryData[] mapEntries, int mapId, String path) {
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (int i = 0; i < mapEntries.length; i++) {
@@ -171,10 +174,6 @@ public class MapAnimationManager extends AbstractManager {
     
     public MapBlockset getMapBlockset() {
         return mapLayoutManager.getMapBlockset();
-    }
-    
-    public MapEntryData[] getMapEntries() {
-        return mapLayoutManager.getMapEntries();
     }
     
     public Tileset[] getMapTilesets() {

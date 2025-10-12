@@ -55,7 +55,7 @@ public class MapLayoutManager extends AbstractManager {
         int mapId = FileHelpers.getNumberFromFileName(layoutPath.getParent().toFile());
         MapLayoutPackage pckg = new MapLayoutPackage(mapId, blockset, mapBlocksetManager.getTilesets());
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
-        Console.logger().info("Map layout successfully imported. Layout data : " + layoutPath);
+        Console.logger().info("Map layout successfully imported for : " + layoutPath);
         Console.logger().finest("EXITING importDisassembly");
         return layout;
     }
@@ -66,14 +66,14 @@ public class MapLayoutManager extends AbstractManager {
         int mapId = FileHelpers.getNumberFromFileName(layoutPath.getParent().toFile());
         MapLayoutPackage pckg = new MapLayoutPackage(mapId, blockset, mapBlocksetManager.getTilesets());
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
-        Console.logger().info("Map layout successfully imported from palette and tilesets. Layout data : " + layoutPath);
+        Console.logger().info("Map layout successfully imported from palette and tilesets for : " + layoutPath);
         Console.logger().finest("EXITING importDisassemblyFromRawFiles");
         return layout;
     }
     
     public MapLayout importDisassemblyFromMapEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, int mapId) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING importDisassemblyFromMapEntries");
-        ImportMapEntries(mapEntriesPath);
+        mapEntries = ImportMapEntries(mapEntriesPath);
         if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
             throw new DisassemblyException("Cannot import map " + mapId + ". Map entry was not found or map entries are corrupted.");
         }
@@ -83,17 +83,19 @@ public class MapLayoutManager extends AbstractManager {
         Path tilesetsPath = mapEntry.getTilesetsPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getTilesetsPath());
         layout = importDisassembly(paletteEntriesPath, tilesetEntriesPath, tilesetsPath, blocksetPath, layoutPath);
         checkForSharedBlocks(mapEntries, mapEntry.getMapId(), mapEntry.getBlocksPath(), mapEntry.getLayoutPath());
-        Console.logger().info("Map layout successfully imported from entries. Layout data : " + layoutPath);
+        Console.logger().info("Map layout successfully imported from entries for : " + layoutPath);
         Console.logger().finest("EXITING importDisassemblyFromMapEntries");
         return layout;
     }
     
-    public void ImportMapEntries(Path mapEntriesPath) throws IOException, AsmException {
-        if (mapEntries != null) return;
-        Console.logger().finest("ENTERING importDisassembly");
-        mapEntries = mapEntriesAsmProcessor.importAsmData(mapEntriesPath, null);
-        Console.logger().info("Map entries successfully imported from : " + mapEntriesPath);
-        Console.logger().finest("EXITING importDisassembly");
+    public MapEntryData[] ImportMapEntries(Path mapEntriesPath) throws IOException, AsmException {
+        if (mapEntries == null) {
+            Console.logger().finest("ENTERING importDisassembly");
+            mapEntries = mapEntriesAsmProcessor.importAsmData(mapEntriesPath, null);
+            Console.logger().info("Map entries successfully imported from : " + mapEntriesPath);
+            Console.logger().finest("EXITING importDisassembly");
+        }
+        return mapEntries;
     }
     
     public void exportDisassembly(Path tilesetsPath, Path blocksetPath, Path layoutPath, MapBlockset mapBlockset, MapLayout mapLayout) throws IOException, DisassemblyException, AsmException {
@@ -107,13 +109,13 @@ public class MapLayoutManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");   
     }
     
-    public void exportDisassemblyFromMapEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, int mapId, MapBlockset mapBlockset, MapLayout mapLayout) throws IOException, DisassemblyException, AsmException {
+    public void exportDisassemblyFromMapEntries(Path mapEntriesPath, int mapId, MapBlockset mapBlockset, MapLayout mapLayout) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING exportDisassembly");
         ImportMapEntries(mapEntriesPath);
         blockset = mapBlockset;
         layout = mapLayout;
         if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
-            throw new DisassemblyException("Cannot import map " + mapId + ". Map entry was not found or map entries are corrupted.");
+            throw new DisassemblyException("Cannot export map " + mapId + ". Map entry was not found or map entries are corrupted.");
         }
         MapEntryData mapEntry = mapEntries[mapId];
         Path layoutPath = mapEntry.getLayoutPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getLayoutPath());
@@ -122,7 +124,7 @@ public class MapLayoutManager extends AbstractManager {
         mapBlocksetManager.exportDisassembly(tilesetsPath, blocksetPath, mapBlockset, mapLayout.getTilesets());
         MapLayoutPackage pckg = new MapLayoutPackage(layout.getIndex(), blockset, mapLayout.getTilesets());
         layoutDisassemblyProcessor.exportDisassembly(layoutPath, layout, pckg);
-        Console.logger().info("Map layout successfully exported from entries. Layout path : " + layoutPath);
+        Console.logger().info("Map layout successfully exported from entries to : " + layoutPath);
         Console.logger().finest("EXITING exportDisassembly");   
     }
     

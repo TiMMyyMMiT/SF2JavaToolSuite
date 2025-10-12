@@ -16,6 +16,7 @@ import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.gui.MapLayoutPanel;
 import com.sfc.sf2.map.io.*;
 import com.sfc.sf2.map.layout.MapLayout;
+import com.sfc.sf2.map.layout.MapLayoutManager;
 import com.sfc.sf2.map.layout.io.MapEntryData;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,33 +27,30 @@ import java.nio.file.Path;
  */
 public class MapManager extends AbstractManager {
     
-    private MapAnimationManager mapAnimationManager = new MapAnimationManager();
-    private MapEnumsAsmProcessor mapEnumsAsmProcessor = new MapEnumsAsmProcessor();
-    private MapAreaAsmProcessor mapAreasAsmProcessor = new MapAreaAsmProcessor();
-    private MapFlagEventsAsmProcessor mapFlagsAsmProcessor = new MapFlagEventsAsmProcessor();
-    private MapStepEventsAsmProcessor mapStepsAsmProcessor = new MapStepEventsAsmProcessor();
-    private MapRoofEventsAsmProcessor mapRoofsAsmProcessor = new MapRoofEventsAsmProcessor();
-    private MapWarpEventsAsmProcessor mapWarpsAsmProcessor = new MapWarpEventsAsmProcessor();
-    private MapItemAsmProcessor mapItemAsmProcessor = new MapItemAsmProcessor();
+    private final MapLayoutManager mapLayoutManager = new MapLayoutManager();
+    private final MapAnimationManager mapAnimationManager = new MapAnimationManager();
+    private final MapEnumsAsmProcessor mapEnumsAsmProcessor = new MapEnumsAsmProcessor();
+    private final MapAreaAsmProcessor mapAreasAsmProcessor = new MapAreaAsmProcessor();
+    private final MapFlagEventsAsmProcessor mapFlagsAsmProcessor = new MapFlagEventsAsmProcessor();
+    private final MapStepEventsAsmProcessor mapStepsAsmProcessor = new MapStepEventsAsmProcessor();
+    private final MapRoofEventsAsmProcessor mapRoofsAsmProcessor = new MapRoofEventsAsmProcessor();
+    private final MapWarpEventsAsmProcessor mapWarpsAsmProcessor = new MapWarpEventsAsmProcessor();
+    private final MapItemAsmProcessor mapItemAsmProcessor = new MapItemAsmProcessor();
             
     private Map map;
     private MapEnums mapEnums;
 
     @Override
     public void clearData() {
+        mapLayoutManager.clearData();
         mapAnimationManager.clearData();
         map = null;
         mapEnums = null;
     }
     
-    public Map importDisassemblyFromEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path sf2enumsPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
-        Console.logger().finest("ENTERING importDisassemblyFromEntries");
-        ImportMapEnums(sf2enumsPath);
-        MapAnimation animation = mapAnimationManager.importDisassemblyFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapIndex);
-        MapLayout layout = mapAnimationManager.getMapLayout();
-        MapBlockset blockset = mapAnimationManager.getMapBlockset();
-        
-        MapEntryData mapEntry = mapAnimationManager.getMapEntries()[mapIndex];
+    private Map importDisassembly(MapBlockset blockset, MapLayout layout, MapAnimation mapAnimation, Path areasPath, Path flagsPath, Path stepsPath, Path roofsPath,
+            Path warpsPath, Path chestItemsPath, Path otherItemsPath) throws IOException, AsmException {
+        Console.logger().finest("ENTERING importDisassembly");
         MapArea[] areas = null;
         MapFlagCopyEvent[] flagCopies = null;
         MapCopyEvent[] stepCopies = null;
@@ -60,35 +58,62 @@ public class MapManager extends AbstractManager {
         MapWarpEvent[] warps = null;
         MapItem[] chestItems = null;
         MapItem[] otherItems = null;
-        if (mapEntry.getAreasPath() != null) {
-            Path areasPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAreasPath());
-            areas = mapAreasAsmProcessor.importAsmData(areasPath, mapEnums);
-        }
-        if (mapEntry.getFlagEventsPath() != null) {
-            Path flagsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getFlagEventsPath());
-            flagCopies = mapFlagsAsmProcessor.importAsmData(flagsPath, null);
-        }
-        if (mapEntry.getStepEventsPath() != null) {
-            Path stepsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getStepEventsPath());
-            stepCopies = mapStepsAsmProcessor.importAsmData(stepsPath, null);
-        }
-        if (mapEntry.getRoofEventsPath() != null) {
-            Path roofsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getRoofEventsPath());
-            roofCopies = mapRoofsAsmProcessor.importAsmData(roofsPath, null);
-        }
-        if (mapEntry.getWarpEventsPath() != null) {
-            Path warpsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getWarpEventsPath());
-            warps = mapWarpsAsmProcessor.importAsmData(warpsPath, null);
-        }
-        if (mapEntry.getChestItemsPath()!= null) {
-            Path chestItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getChestItemsPath());
-            chestItems = mapItemAsmProcessor.importAsmData(chestItemsPath, null);
-        }
-        if (mapEntry.getOtherItemsPath()!= null) {
-            Path otherItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getOtherItemsPath());
-            otherItems = mapItemAsmProcessor.importAsmData(otherItemsPath, null);
-        }
+        MapAnimation animation = null;
+        if (areasPath != null) areas = mapAreasAsmProcessor.importAsmData(areasPath, mapEnums);
+        if (flagsPath != null) flagCopies = mapFlagsAsmProcessor.importAsmData(flagsPath, null);
+        if (stepsPath != null) stepCopies = mapStepsAsmProcessor.importAsmData(stepsPath, null);
+        if (roofsPath != null) roofCopies = mapRoofsAsmProcessor.importAsmData(roofsPath, null);
+        if (warpsPath != null) warps = mapWarpsAsmProcessor.importAsmData(warpsPath, null);
+        if (chestItemsPath != null) chestItems = mapItemAsmProcessor.importAsmData(chestItemsPath, null);
+        if (otherItemsPath != null) otherItems = mapItemAsmProcessor.importAsmData(otherItemsPath, null);
         map = new Map(blockset, layout, areas, flagCopies, stepCopies, roofCopies, warps, chestItems, otherItems, animation);
+        Console.logger().finest("EXITING importDisassembly");
+        return map;
+    }
+    
+    public Map importDisassemblyFromData(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path areasPath,
+            Path flagsPath, Path stepsPath, Path roofsPath, Path warpsPath, Path chestItemsPath, Path otherItemsPath, Path animationPath) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassemblyFromData");
+        mapLayoutManager.importDisassembly(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
+        MapLayout layout = mapLayoutManager.getMapLayout();
+        MapBlockset blockset = mapLayoutManager.getMapBlockset();
+        MapAnimation animation = mapAnimationManager.importDisassembly(animationPath, tilesetsEntriesPath);
+        importDisassembly(blockset, layout, animation, areasPath, flagsPath, stepsPath, roofsPath, warpsPath, chestItemsPath, otherItemsPath);
+        Console.logger().info("Map successfully imported from data for : " + blocksPath.getParent());
+        Console.logger().finest("EXITING importDisassemblyFromData");
+        return map;
+    }
+    
+    public Map importDisassemblyFromRawFiles(Path palettePath, Path[] tilesetsFilePath, Path blocksetPath, Path layoutPath, Path areasPath,
+            Path flagsPath, Path stepsPath, Path roofsPath, Path warpsPath, Path chestItemsPath, Path otherItemsPath, Path animationPath, Path tilesetEntriesPath) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassemblyFromRawFiles");
+        mapLayoutManager.importDisassemblyFromRawFiles(palettePath, tilesetsFilePath, blocksetPath, layoutPath);
+        MapLayout layout = mapLayoutManager.getMapLayout();
+        MapBlockset blockset = mapLayoutManager.getMapBlockset();
+        MapAnimation animation = mapAnimationManager.importDisassembly(animationPath, tilesetEntriesPath);
+        importDisassembly(blockset, layout, animation, areasPath, flagsPath, stepsPath, roofsPath, warpsPath, chestItemsPath, otherItemsPath);
+        Console.logger().finest("EXITING importDisassemblyFromRawFiles");
+        return map;
+    }
+    
+    public Map importDisassemblyFromEntries(Path paletteEntriesPath, Path tilesetEntriesPath, Path mapEntriesPath, Path sf2enumsPath, int mapId) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING importDisassemblyFromEntries");
+        ImportMapEnums(sf2enumsPath);
+        mapLayoutManager.importDisassemblyFromMapEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapId);
+        MapLayout layout = mapLayoutManager.getMapLayout();
+        MapBlockset blockset = mapLayoutManager.getMapBlockset();
+        
+        MapEntryData[] mapEntries = mapLayoutManager.getMapEntries();
+        MapEntryData mapEntry = mapEntries[mapId];
+        MapAnimation animation = null;
+        if (mapEntry.getAnimationsPath() != null) {
+            Path animationPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath());
+            animation = mapAnimationManager.importDisassembly(animationPath, tilesetEntriesPath);
+            mapAnimationManager.checkForSharedAnimations(mapEntries, mapId, mapEntry.getAnimationsPath());
+        }
+        importDisassembly(blockset, layout, animation, Path.of(mapEntry.getAreasPath()), Path.of(mapEntry.getFlagEventsPath()), Path.of(mapEntry.getStepEventsPath()), Path.of(mapEntry.getRoofEventsPath()),
+                Path.of(mapEntry.getWarpEventsPath()), Path.of(mapEntry.getChestItemsPath()), Path.of(mapEntry.getOtherItemsPath()));
+        Console.logger().info("Map successfully imported from entries for : " + mapId);
         Console.logger().finest("EXITING importDisassemblyFromEntries");
         return map;
     }
@@ -100,19 +125,48 @@ public class MapManager extends AbstractManager {
         }
     }
     
-    public void exportDisassembly(Path blocksPath, Path layoutPath, Path areasPath, Path flagCopiesPath, Path stepCopiesPath, Path layer2CopiesPath, Path warpsPath, Path chestItemsPath, Path otherItemsPath, Path animationsPath) {
-        /*System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Exporting disassembly ...");
-        mapLayoutManager.exportDisassembly(blocksPath, layoutPath);
-        DisassemblyManager.exportAreas(map.getAreas(), areasPath);
-        DisassemblyManager.exportFlagCopies(map.getFlagCopies(), flagCopiesPath);
-        DisassemblyManager.exportStepCopies(map.getStepCopies(), stepCopiesPath);
-        DisassemblyManager.exportLayer2Copies(map.getLayer2Copies(), layer2CopiesPath);
-        DisassemblyManager.exportWarps(map.getWarps(), warpsPath);
-        DisassemblyManager.exportChestItems(map.getChestItems(), chestItemsPath);
-        DisassemblyManager.exportOtherItems(map.getOtherItems(), otherItemsPath);
-        DisassemblyManager.exportAnimation(map.getAnimation(), animationsPath);
-        System.out.println("com.sfc.sf2.map.MapManager.importDisassembly() - Disassembly exported.");*/
-    }      
+    private void exportDisassembly(Path areasPath, Path flagsPath, Path stepsPath, Path roofsPath, Path warpsPath, Path chestItemsPath, Path otherItemsPath, Map map) throws IOException, AsmException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        if (areasPath != null) mapAreasAsmProcessor.exportAsmData(areasPath, map.getAreas(), mapEnums);
+        if (flagsPath != null) mapFlagsAsmProcessor.exportAsmData(flagsPath, map.getFlagCopies(), null);
+        if (stepsPath != null) mapStepsAsmProcessor.exportAsmData(stepsPath, map.getStepCopies(), null);
+        if (roofsPath != null) mapRoofsAsmProcessor.exportAsmData(roofsPath, map.getRoofCopies(), null);
+        if (warpsPath != null) mapWarpsAsmProcessor.exportAsmData(warpsPath, map.getWarps(), null);
+        if (chestItemsPath != null) mapItemAsmProcessor.exportAsmData(chestItemsPath, map.getChestItems(), null);
+        if (otherItemsPath != null) mapItemAsmProcessor.exportAsmData(otherItemsPath, map.getOtherItems(), null);
+        Console.logger().finest("EXITING exportDisassembly");
+    }
+    
+    public void exportDisassemblyFromData(Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path areasPath, Path flagsPath, Path stepsPath, Path roofsPath, Path warpsPath,
+            Path chestItemsPath, Path otherItemsPath, Path animationPath, Map map) throws IOException, AsmException, DisassemblyException {
+        Console.logger().finest("ENTERING exportDisassemblyFromData");
+        this.map = map;
+        mapLayoutManager.exportDisassembly(tilesetsFilePath, blocksPath, layoutPath, map.getBlockset(), map.getLayout());
+        if (map.getAnimation() != null) {
+            mapAnimationManager.exportDisassembly(animationPath, map.getAnimation());
+        }
+        exportDisassembly(areasPath, flagsPath, stepsPath, roofsPath, warpsPath, chestItemsPath, otherItemsPath, map);
+        Console.logger().info("Map successfully exported from data for : " + blocksPath.getParent());
+        Console.logger().finest("EXITING exportDisassemblyFromData");
+    }
+    
+    public void exportDisassemblyFromMapEntries(Path mapEntriesPath, int mapId, Map map) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING exportDisassembly");
+        this.map = map;
+        MapEntryData[] mapEntries = mapLayoutManager.ImportMapEntries(mapEntriesPath);
+        if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
+            throw new DisassemblyException("Cannot export map " + mapId + ". Map entry was not found or map entries are corrupted.");
+        }
+        MapEntryData mapEntry = mapEntries[mapId];
+        mapLayoutManager.exportDisassemblyFromMapEntries(mapEntriesPath, mapId, map.getBlockset(), map.getLayout());
+        if (map.getAnimation() != null) {
+            mapAnimationManager.exportDisassemblyFromMapEntries(mapEntriesPath, mapId, map.getAnimation());
+        }
+        exportDisassembly(Path.of(mapEntry.getAreasPath()), Path.of(mapEntry.getFlagEventsPath()), Path.of(mapEntry.getStepEventsPath()), Path.of(mapEntry.getRoofEventsPath()),
+                Path.of(mapEntry.getWarpEventsPath()), Path.of(mapEntry.getChestItemsPath()), Path.of(mapEntry.getOtherItemsPath()), map);
+        Console.logger().info("Map successfully exported from entries for : " + mapId);
+        Console.logger().finest("EXITING exportDisassembly");   
+    }
     
     public void exportMapImage(Map map, Path filepath) {
         /*System.out.println("com.sfc.sf2.maplayout.MapEditor.exportPng() - Exporting PNG ...");
@@ -146,7 +200,7 @@ public class MapManager extends AbstractManager {
     }
     
     public String getSharedBlockInfo() {
-        return mapAnimationManager.getSharedBlockInfo();
+        return mapLayoutManager.getSharedBlockInfo();
     }
     
     public String getSharedAnimationInfo() {
