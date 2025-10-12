@@ -119,4 +119,8 @@ public class MapEntryData {
     public void setAnimationsPath(String animationsPath) {
         this.animationsPath = animationsPath;
     }
+    
+    public boolean IsEmpty() {
+        return tilesetsPath == null && blocksPath == null && layoutPath == null;
+    }
 }

@@ -102,7 +102,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
         String sharedAnimationInfo = mapAnimationManager.getSharedAnimationInfo();
         infoButtonSharedAnimation.setVisible(sharedAnimationInfo != null);
         if (sharedAnimationInfo != null) {
-            infoButtonSharedAnimation.setMessageText("This animation data is used by the following maps:\n" + sharedAnimationInfo + "\nAny changes will affect all of these maps.\n\nTo unlink the maps, you can export this animation for a specific map and then update \\maps\\entries.asm");
+            infoButtonSharedAnimation.setMessageText("This animation data is used by the following maps:\n" + sharedAnimationInfo + "\nAny changes will affect all of these maps.\n\nTo unlink the maps, you can export this animation for a specific map folder and then update \\maps\\entries.asm");
         }
     }
     

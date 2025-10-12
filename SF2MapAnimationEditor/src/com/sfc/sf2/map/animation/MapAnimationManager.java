@@ -70,7 +70,7 @@ public class MapAnimationManager extends AbstractManager {
     public MapAnimation importDisassemblyFromMapData(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassemblyFromMapData");
         clearData();
-        mapLayoutManager.importDisassemblyFromEntryFiles(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
+        mapLayoutManager.importDisassembly(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
         animation = importDisassembly(animationsPath, tilesetsEntriesPath);
         Console.logger().finest("EXITING importDisassemblyFromMapData");
         return animation;
@@ -122,12 +122,20 @@ public class MapAnimationManager extends AbstractManager {
     
     private void checkForSharedAnimations(MapEntryData[] mapEntries, int mapIndex, String path) {
         StringBuilder sb = new StringBuilder();
+        int count = 0;
         for (int i = 0; i < mapEntries.length; i++) {
             if (i != mapIndex && path.equals(mapEntries[i].getAnimationsPath())) {
                 sb.append(String.format("- Map%02d\n", i));
+                count++;
             }
         }
-        sharedAnimationInfo = sb.length() == 0 ? null : sb.toString();
+        if (count <= 1) {
+            sharedAnimationInfo = null;
+            Console.logger().finest("Animation not shared with other maps");
+        } else {
+            sharedAnimationInfo = sb.toString();
+            Console.logger().finest(String.format("Animation shared between %d maps", count));
+        }
     }
 
     public MapAnimation getMapAnimation() {
