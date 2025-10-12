@@ -17,7 +17,6 @@ import com.sfc.sf2.map.layout.io.MapEntriesAsmProcessor;
 import com.sfc.sf2.map.layout.io.MapEntryData;
 import com.sfc.sf2.map.layout.io.MapLayoutDisassemblyProcessor;
 import com.sfc.sf2.map.layout.io.MapLayoutPackage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -123,7 +122,7 @@ public class MapLayoutManager extends AbstractManager {
         mapBlocksetManager.exportDisassembly(tilesetsPath, blocksetPath, mapBlockset, mapLayout.getTilesets());
         MapLayoutPackage pckg = new MapLayoutPackage(layout.getIndex(), blockset, mapLayout.getTilesets());
         layoutDisassemblyProcessor.exportDisassembly(layoutPath, layout, pckg);
-        Console.logger().info("Map layout successfully exported to entries files for map : " + mapId);
+        Console.logger().info("Map layout successfully exported from entries. Layout path : " + layoutPath);
         Console.logger().finest("EXITING exportDisassembly");   
     }
     

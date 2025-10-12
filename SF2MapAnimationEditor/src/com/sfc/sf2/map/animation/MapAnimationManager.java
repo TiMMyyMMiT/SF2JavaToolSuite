@@ -53,7 +53,7 @@ public class MapAnimationManager extends AbstractManager {
         Console.logger().finest("ENTERING importDisassembly");
         if (animationsPath != null && animationsPath.toFile().exists()) {
             animation = mapAnimationAsmProcessor.importAsmData(animationsPath, new MapAnimationPackage(getMapLayout().getTilesets()));
-            importTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
+            importAnimationTileset(getMapLayout().getPalette(), tilesetsEntriesPath, animation.getTilesetId());
             getMapLayout().setTilesets(animation.getModifiedTilesets());
             Console.logger().info("Map layout and animation succesfully imported for : " + animationsPath);
         } else {
@@ -69,18 +69,26 @@ public class MapAnimationManager extends AbstractManager {
     
     public MapAnimation importDisassemblyFromMapData(Path palettesEntriesPath, Path tilesetsEntriesPath, Path tilesetsFilePath, Path blocksPath, Path layoutPath, Path animationsPath) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassemblyFromMapData");
-        clearData();
+        sharedAnimationInfo = null;
         mapLayoutManager.importDisassembly(palettesEntriesPath, tilesetsEntriesPath, tilesetsFilePath, blocksPath, layoutPath);
         animation = importDisassembly(animationsPath, tilesetsEntriesPath);
         Console.logger().finest("EXITING importDisassemblyFromMapData");
         return animation;
     }
+       
+    public MapAnimation importDisassemblyFromRawFiles(Path palettePath, Path[] tilesetsFilePath, Path blocksetPath, Path layoutPath, Path animationPath, Path tilesetEntriesPath) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING importDisassemblyFromRawFiles");
+        sharedAnimationInfo = null;
+        mapLayoutManager.importDisassemblyFromRawFiles(palettePath, tilesetsFilePath, blocksetPath, layoutPath);
+        animation = importDisassembly(animationPath, tilesetEntriesPath);
+        Console.logger().finest("EXITING importDisassemblyFromRawFiles");
+        return animation;
+    }
     
     public MapAnimation importDisassemblyFromEntries(Path palettesEntriesPath, Path tilesetsEntriesPath, Path mapEntriesPath, int mapIndex) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassemblyFromEntries");
-        clearData();
-        mapLayoutManager.ImportMapEntries(mapEntriesPath);
-        mapLayoutManager.importMap(palettesEntriesPath, tilesetsEntriesPath, mapIndex);
+        sharedAnimationInfo = null;
+        mapLayoutManager.importDisassemblyFromMapEntries(palettesEntriesPath, tilesetsEntriesPath,mapEntriesPath, mapIndex);
         MapEntryData[] mapEntries = mapLayoutManager.getMapEntries();
         MapEntryData mapEntry = (mapIndex >= 0 && mapIndex < mapEntries.length) ? mapEntries[mapIndex] : null;
         if (mapEntry.getAnimationsPath() == null) {
@@ -93,7 +101,7 @@ public class MapAnimationManager extends AbstractManager {
         return animation;
     }
     
-    public Tileset importTileset(Palette palette, Path tilesetEntriesPath, int tilesetId) throws IOException, AsmException, DisassemblyException {
+    public Tileset importAnimationTileset(Palette palette, Path tilesetEntriesPath, int tilesetId) throws IOException, AsmException, DisassemblyException {
         Console.logger().finest("ENTERING importTileset");
         EntriesAsmData tilesetData = entriesAsmProcessor.importAsmData(tilesetEntriesPath, null);
         if (tilesetId < 0 || tilesetId >= tilesetData.entriesCount()) {
@@ -120,11 +128,26 @@ public class MapAnimationManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");  
     }
     
+    public void exportDisassemblyFromMapEntries(Path mapEntriesPath, int mapId, MapAnimation animation) throws IOException, DisassemblyException, AsmException {
+        Console.logger().finest("ENTERING exportDisassemblyFromMapEntries");
+        mapLayoutManager.ImportMapEntries(mapEntriesPath);
+        MapEntryData[] mapEntries = mapLayoutManager.getMapEntries();
+        if (mapId < 0 || mapId >= mapEntries.length || mapEntries[mapId] == null) {
+            throw new DisassemblyException("Cannot import map " + mapId + ". Map entry was not found or map entries are corrupted.");
+        }
+        this.animation = animation;
+        MapEntryData mapEntry = mapEntries[mapId];
+        Path animationPath = mapEntry.getLayoutPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getAnimationsPath());
+        mapAnimationAsmProcessor.exportAsmData(animationPath, animation, null);
+        Console.logger().info("Map animation successfully exported from entries. Animation file : " + animationPath);
+        Console.logger().finest("EXITING exportDisassemblyFromMapEntries");   
+    }
+    
     private void checkForSharedAnimations(MapEntryData[] mapEntries, int mapIndex, String path) {
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (int i = 0; i < mapEntries.length; i++) {
-            if (i != mapIndex && path.equals(mapEntries[i].getAnimationsPath())) {
+            if (path.equals(mapEntries[i].getAnimationsPath())) {
                 sb.append(String.format("- Map%02d\n", i));
                 count++;
             }

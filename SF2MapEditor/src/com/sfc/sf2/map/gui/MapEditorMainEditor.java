@@ -2542,7 +2542,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             try {
                 anim.setTilesetId(value);
                 Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
-                Tileset tileset = mapManager.getMapAnimationManager().importTileset(mapLayoutPanel.getMap().getLayout().getPalette(), tilesetEntriesPath, value);
+                Tileset tileset = mapManager.getMapAnimationManager().importAnimationTileset(mapLayoutPanel.getMap().getLayout().getPalette(), tilesetEntriesPath, value);
                 tilesetLayoutPanelAnim.setTileset(tileset);
             } catch (Exception ex) {
                 Console.logger().log(Level.SEVERE, null, ex);
