@@ -17,7 +17,6 @@ import com.sfc.sf2.map.animation.MapAnimation;
 import com.sfc.sf2.map.animation.MapAnimationManager;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.block.MapBlocksetManager;
-import com.sfc.sf2.map.gui.MapLayoutPanel;
 import com.sfc.sf2.map.io.*;
 import com.sfc.sf2.map.layout.MapLayout;
 import com.sfc.sf2.map.layout.MapLayoutManager;

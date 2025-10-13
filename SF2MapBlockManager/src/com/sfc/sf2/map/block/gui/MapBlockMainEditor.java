@@ -24,12 +24,12 @@ import java.util.logging.Level;
  */
 public class MapBlockMainEditor extends AbstractMainEditor {
     
-    MapBlockSettings MapBlockSettings = new MapBlockSettings();
+    MapBlockSettings mapBlockSettings = new MapBlockSettings();
     MapBlocksetManager mapblockManager = new MapBlocksetManager();
     
     public MapBlockMainEditor() {
         super();
-        SettingsManager.registerSettingsStore("mapBlock", MapBlockSettings);
+        SettingsManager.registerSettingsStore("mapBlock", mapBlockSettings);
         initComponents();
         initCore(console1);
     }
@@ -40,18 +40,18 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         
         accordionPanel1.setExpanded(false);
             
-        colorPickerBlockset.setColor(MapBlockSettings.getBlocksetBGColor());
-        jSpinner1.setValue(MapBlockSettings.getBlocksetBlocksPerRow());
-        jComboBox1.setSelectedIndex(MapBlockSettings.getBlocksetScale()-1);
-        colorPickerTileset.setColor(MapBlockSettings.getTilesetBGColor());
-        jSpinner4.setValue(MapBlockSettings.getTilesetTilesPerRow());
-        jComboBox4.setSelectedIndex(MapBlockSettings.getTilesetScale()-1);
-        colorPickerBlocks.setColor(MapBlockSettings.getBlockBGColor());
+        colorPickerBlockset.setColor(mapBlockSettings.getBlocksetBGColor());
+        jSpinner1.setValue(mapBlockSettings.getBlocksetBlocksPerRow());
+        jComboBox1.setSelectedIndex(mapBlockSettings.getBlocksetScale()-1);
+        colorPickerTileset.setColor(mapBlockSettings.getTilesetBGColor());
+        jSpinner4.setValue(mapBlockSettings.getTilesetTilesPerRow());
+        jComboBox4.setSelectedIndex(mapBlockSettings.getTilesetScale()-1);
+        colorPickerBlocks.setColor(mapBlockSettings.getBlockBGColor());
         
         mapBlocksetLayoutPanel.setShowGrid(jCheckBox1.isSelected());
         mapBlocksetLayoutPanel.setDisplayScale(jComboBox1.getSelectedIndex()+1);
         mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
-        mapBlocksetLayoutPanel.setItemsPerRow(((int)jSpinner1.getModel().getValue()));
+        mapBlocksetLayoutPanel.setItemsPerRow((int)jSpinner1.getValue());
         mapBlocksetLayoutPanel.setShowPriority(jCheckBox4.isSelected());
         
         tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
@@ -1377,9 +1377,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
         if (jComboBox4.getSelectedIndex() >= 0 && tilesetsLayoutPanel != null) {
             int scale = (int)jComboBox4.getSelectedIndex()+1;
-            if (scale != MapBlockSettings.getTilesetScale()) {
+            if (scale != mapBlockSettings.getTilesetScale()) {
                 tilesetsLayoutPanel.setDisplayScale(scale);
-                MapBlockSettings.setTilesetScale(scale);
+                mapBlockSettings.setTilesetScale(scale);
                 SettingsManager.saveSettingsFile();
             }
         }
@@ -1388,9 +1388,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         if (jComboBox1.getSelectedIndex() >= 0 && mapBlocksetLayoutPanel != null) {
             int scale = (int)jComboBox1.getSelectedIndex()+1;
-            if (scale != MapBlockSettings.getBlocksetScale()) {
+            if (scale != mapBlockSettings.getBlocksetScale()) {
                 mapBlocksetLayoutPanel.setDisplayScale(scale);
-                MapBlockSettings.setBlocksetScale(scale);
+                mapBlockSettings.setBlocksetScale(scale);
                 SettingsManager.saveSettingsFile();
             }
         }
@@ -1411,9 +1411,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         if (mapBlocksetLayoutPanel != null) {
             int blocksPerRow = (int)jSpinner1.getValue();
-            if (blocksPerRow != MapBlockSettings.getBlocksetBlocksPerRow()) {
+            if (blocksPerRow != mapBlockSettings.getBlocksetBlocksPerRow()) {
                 mapBlocksetLayoutPanel.setItemsPerRow(blocksPerRow);
-                MapBlockSettings.setBlocksetBlocksPerRow(blocksPerRow);
+                mapBlockSettings.setBlocksetBlocksPerRow(blocksPerRow);
                 SettingsManager.saveSettingsFile();
             }
         }
@@ -1422,9 +1422,9 @@ public class MapBlockMainEditor extends AbstractMainEditor {
     private void jSpinner4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner4StateChanged
         if (tilesetsLayoutPanel != null) {
             int tilesPerRow = (int)jSpinner4.getValue();
-            if (tilesPerRow != MapBlockSettings.getTilesetTilesPerRow()) {
+            if (tilesPerRow != mapBlockSettings.getTilesetTilesPerRow()) {
                 tilesetsLayoutPanel.setItemsPerRow(tilesPerRow);
-                MapBlockSettings.setTilesetTilesPerRow(tilesPerRow);
+                mapBlockSettings.setTilesetTilesPerRow(tilesPerRow);
                 SettingsManager.saveSettingsFile();
             }
         }
@@ -1484,19 +1484,19 @@ public class MapBlockMainEditor extends AbstractMainEditor {
 
     private void colorPickerBlocksetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksetColorChanged
         mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
-        MapBlockSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
+        mapBlockSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_colorPickerBlocksetColorChanged
 
     private void colorPickerTilesetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetColorChanged
         tilesetsLayoutPanel.setBGColor(colorPickerTileset.getColor());
-        MapBlockSettings.setTilesetBGColor(colorPickerTileset.getColor());
+        mapBlockSettings.setTilesetBGColor(colorPickerTileset.getColor());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_colorPickerTilesetColorChanged
 
     private void colorPickerBlocksColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksColorChanged
         editableBlockSlotPanel.setBGColor(colorPickerBlocks.getColor());
-        MapBlockSettings.setBlockBGColor(colorPickerBlocks.getColor());
+        mapBlockSettings.setBlockBGColor(colorPickerBlocks.getColor());
         SettingsManager.saveSettingsFile();
     }//GEN-LAST:event_colorPickerBlocksColorChanged
 

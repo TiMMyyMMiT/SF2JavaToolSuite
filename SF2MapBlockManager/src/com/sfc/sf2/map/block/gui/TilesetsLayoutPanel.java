@@ -147,7 +147,7 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
     private void setSelectedLeftSlot(int index) {
         if (leftSlotTilePanel == null) return;
         selectedTileIndexLeft = index;
-        MapTile tile = new MapTile(selectedTileset*MapBlockHelpers.TILESET_TILES + index);
+        MapTile tile = index == -1 ? null : new MapTile(selectedTileset*MapBlockHelpers.TILESET_TILES + index);
         leftSlotTilePanel.setTile(tile);
         leftSlotTilePanel.redraw();
         this.redraw();
@@ -156,7 +156,7 @@ public class TilesetsLayoutPanel extends AbstractLayoutPanel {
     private void setSelectedRightSlot(int index) {
         if (rightSlotTilePanel == null) return;
         selectedTileIndexRight = index;
-        MapTile tile = new MapTile(selectedTileset*MapBlockHelpers.TILESET_TILES + index);
+        MapTile tile = index == -1 ? null : new MapTile(selectedTileset*MapBlockHelpers.TILESET_TILES + index);
         rightSlotTilePanel.setTile(tile);
         rightSlotTilePanel.redraw();
         this.redraw();

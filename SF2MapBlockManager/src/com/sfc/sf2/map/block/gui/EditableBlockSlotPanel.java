@@ -128,23 +128,26 @@ public class EditableBlockSlotPanel extends BlockSlotPanel {
                 }
                 break;
             case MODE_TOGGLE_FLIP:
+                MapTile tile = block.getMapTiles()[index];
                 if (evt.mouseButton() == MouseEvent.BUTTON1) {
-                    block.getMapTiles()[index].getTileFlags().toggleFlag(TileFlags.TILE_FLAG_HFLIP);
-                    onBlockEdited();
+                    tile = tile.clone();
+                    tile.getTileFlags().toggleFlag(TileFlags.TILE_FLAG_HFLIP);
                 }
                 else if (evt.mouseButton() == MouseEvent.BUTTON2) {
                     TileFlags flags = block.getMapTiles()[index].getTileFlags();
                     if (flags.isHFlip() || flags.isVFlip()) {
+                        tile = tile.clone();
+                        flags = tile.getTileFlags();
                         flags.removeFlag(TileFlags.TILE_FLAG_HFLIP);
                         flags.removeFlag(TileFlags.TILE_FLAG_VFLIP);
-                        block.getMapTiles()[index].setTileFlags(flags);
-                        onBlockEdited();
                     }
                 }
                 else if (evt.mouseButton() == MouseEvent.BUTTON3) {
-                    block.getMapTiles()[index].getTileFlags().toggleFlag(TileFlags.TILE_FLAG_VFLIP);
-                    onBlockEdited();
+                    tile = tile.clone();
+                    tile.getTileFlags().toggleFlag(TileFlags.TILE_FLAG_VFLIP);
                 }
+                block.getMapTiles()[index] = tile;
+                onBlockEdited();
                 break;
             case MODE_TOGGLE_PRIORITY:
                 if (evt.mouseButton() == MouseEvent.BUTTON1) {
