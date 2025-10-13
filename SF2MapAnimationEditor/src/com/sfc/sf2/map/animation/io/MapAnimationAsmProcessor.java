@@ -30,7 +30,7 @@ public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation,
         while ((line = reader.readLine()) != null) {
             line = StringHelpers.trimAndRemoveComments(line);
             if (line.startsWith("mapAnimation")) {
-                String[] split = line.split(" ");
+                String[] split = line.split("\\s+");
                 tileset = StringHelpers.getValueInt(split[1].replace(",", "").trim());
                 length = StringHelpers.getValueInt(split[2].trim());
                 while ((line = reader.readLine()) != null) {
@@ -40,7 +40,7 @@ public class MapAnimationAsmProcessor extends AbstractAsmProcessor<MapAnimation,
                     } else if (!line.startsWith("mapAnimEntry")) {
                         continue;
                     }
-                    split = line.split(" ");
+                    split = line.split("\\s+");
                     int frameStart = StringHelpers.getValueInt(split[1].replace(",", "").trim());
                     int frameLength = StringHelpers.getValueInt(split[2].replace(",", "").trim());
                     int frameDest = StringHelpers.getValueInt(split[3].replace(",", "").trim());

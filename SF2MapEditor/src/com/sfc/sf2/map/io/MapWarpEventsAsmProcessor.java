@@ -42,7 +42,7 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
                 triggerY = StringHelpers.getValueInt(split[1]);
                 
                 line = reader.readLine().trim();
-                split = line.split(" ");
+                split = line.split("\\s+");
                 switch (split[0].trim()) {
                     default:
                         Console.logger().warning("WARNING Unknown warp type '" + split[0] + "' detected at warp event " + (warpsList.size()+1));
