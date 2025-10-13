@@ -73,7 +73,7 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
         writer.write(String.format("\t\t\t\tmapPalette  %2d\n", item.paletteIndex()));
         for (int i = 0; i < item.tilesetIndices().length; i++) {
             int index = item.tilesetIndices()[i];
-            writer.write(String.format("\t\t\t\tmapTileset %2d, %2d\n", (i+1), (index == -1 ? 255 : index)));
+            writer.write(String.format("\t\t\t\tmapTileset%d %2d\n", (i+1), (index == -1 ? 255 : index)));
         }
     }
 }

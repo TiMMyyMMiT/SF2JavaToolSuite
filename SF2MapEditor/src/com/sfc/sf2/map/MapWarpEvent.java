@@ -21,8 +21,9 @@ public class MapWarpEvent {
     private int destX;
     private int destY;
     private Direction facing;
+    private String comment;
 
-    public MapWarpEvent(int triggerX, int triggerY, String warpType, Direction scrollDirection, String destMap, int destX, int destY, Direction facing) {
+    public MapWarpEvent(int triggerX, int triggerY, String warpType, Direction scrollDirection, String destMap, int destX, int destY, Direction facing, String comment) {
         this.triggerX = triggerX;
         this.triggerY = triggerY;
         this.warpType = warpType;
@@ -31,6 +32,7 @@ public class MapWarpEvent {
         this.destX = destX;
         this.destY = destY;
         this.facing = facing;
+        this.comment = comment;
     }
 
     public int getTriggerX() {
@@ -96,13 +98,21 @@ public class MapWarpEvent {
     public void setFacing(Direction facing) {
         this.facing = facing;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
     
     public static MapWarpEvent createEmpty() {
-        return new MapWarpEvent(0, 0, "warpNoScroll", Direction.RIGHT, "NONE", 0, 0, Direction.DOWN);
+        return new MapWarpEvent(0, 0, "warpNoScroll", Direction.RIGHT, "NONE", 0, 0, Direction.DOWN, null);
     }
 
     @Override
     public MapWarpEvent clone() {
-        return new MapWarpEvent(triggerX, triggerY, warpType, scrollDirection, destMap, destX, destY, facing);
+        return new MapWarpEvent(triggerX, triggerY, warpType, scrollDirection, destMap, destX, destY, facing, comment);
     }
 }

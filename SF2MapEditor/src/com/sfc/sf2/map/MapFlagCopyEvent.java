@@ -7,12 +7,15 @@ package com.sfc.sf2.map;
 
 /**
  *
- * @author wiz
+ * @author TiMMy
  */
 public class MapFlagCopyEvent extends MapCopyEvent {
     
-    public MapFlagCopyEvent(int flag, int sourceX, int sourceY, int width, int height, int destX, int destY) {
-        super(flag, flag, sourceX, sourceY, width, height, destX, destY);
+    private String flagComment;
+    
+    public MapFlagCopyEvent(int flag, int sourceX, int sourceY, int width, int height, int destX, int destY, String flagComment, String comment) {
+        super(flag, flag, sourceX, sourceY, width, height, destX, destY, comment);
+        this.flagComment = flagComment;
     }
 
     public int getFlag() {
@@ -22,14 +25,22 @@ public class MapFlagCopyEvent extends MapCopyEvent {
     public void setFlag(int flag) {
         setTriggerX(flag);
     }
+
+    public String getFlagComment() {
+        return flagComment == null ? getFlagInfo(getFlag()) : flagComment;
+    }
+
+    public void setFlagComment(String flagComment) {
+        this.flagComment = flagComment;
+    }
     
     public static MapFlagCopyEvent createEmpty() {
-        return new MapFlagCopyEvent(100, 0, 0, 1, 1, 1, 1);
+        return new MapFlagCopyEvent(100, 0, 0, 1, 1, 1, 1, null, null);
     }
 
     @Override
     public MapFlagCopyEvent clone() {
-        return new MapFlagCopyEvent(getFlag(), getSourceX(), getSourceY(), getWidth(), getHeight(), getDestX(), getDestY());
+        return new MapFlagCopyEvent(getFlag(), getSourceX(), getSourceY(), getWidth(), getHeight(), getDestX(), getDestY(), flagComment, getComment());
     }
     
     public static String getFlagInfo(int flag) {

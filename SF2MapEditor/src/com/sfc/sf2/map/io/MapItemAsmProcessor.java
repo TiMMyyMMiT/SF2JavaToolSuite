@@ -25,15 +25,16 @@ public class MapItemAsmProcessor extends AbstractAsmProcessor<MapItem[], MapItem
         ArrayList<MapItem> itemsList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
-            line = StringHelpers.trimAndRemoveComments(line);
+            line = line.trim();
             if (line.startsWith("mapItem")) {
-                line = line.substring(7);
-                String[] split = line.split(",");
+                String comment = StringHelpers.extractComment(line);
+                line = StringHelpers.trimAndRemoveComments(line);
+                String[] split = line.substring(line.indexOf(' ')).split(",");
                 int x = StringHelpers.getValueInt(split[0]);
                 int y = StringHelpers.getValueInt(split[1]);
                 int flag = StringHelpers.getValueInt(split[2]);
                 String item = split[3].trim();
-                itemsList.add(new MapItem(x, y, flag, item));
+                itemsList.add(new MapItem(x, y, flag, item, comment));
             }
         }
         MapItem[] items = new MapItem[itemsList.size()];
@@ -49,7 +50,12 @@ public class MapItemAsmProcessor extends AbstractAsmProcessor<MapItem[], MapItem
     @Override
     protected void packageAsmData(FileWriter writer, MapItem[] item, MapItemPackage pckg) throws IOException, AsmException {
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tmapItem %2d, %2d, %3d, %s\n", item[i].getX(), item[i].getY(), item[i].getFlag(), item[i].getItem()));
+            writer.write(String.format("\t\t\t\tmapItem %2d, %2d, %3d, %s", item[i].getX(), item[i].getY(), item[i].getFlag(), item[i].getItem()));
+            if (item[i].getComment() != null && item[i].getComment().length() > 0) {
+                writer.write(String.format("\t; %s\n", item[i].getComment()));
+            } else {
+                writer.write('\n');
+            }
         }
         writer.write("\t\t\t\tendWord\n");
     }

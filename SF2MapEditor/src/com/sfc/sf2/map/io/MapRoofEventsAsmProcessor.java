@@ -27,11 +27,13 @@ public class MapRoofEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
         ArrayList<MapCopyEvent> roofCopiesList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
-            line = StringHelpers.trimAndRemoveComments(line);
+            line = line.trim();
             if (line.startsWith("slbc")) {
+                String comment = StringHelpers.extractComment(line);
+                line = StringHelpers.trimAndRemoveComments(line);
                 int triggerX, triggerY, sourceX, sourceY, width, height, destX, destY;
                 
-                String[] split = line.substring(line.indexOf(" ")).split(",");
+                String[] split = line.substring(line.indexOf(' ')).split(",");
                 triggerX = StringHelpers.getValueInt(split[0]);
                 triggerY = StringHelpers.getValueInt(split[1]);
                 
@@ -47,7 +49,7 @@ public class MapRoofEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
                 destX = StringHelpers.getValueInt(split[0]);
                 destY = StringHelpers.getValueInt(split[1]);
                 
-                roofCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY));
+                roofCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY, comment));
             }
         }
         MapCopyEvent[] roofCopies = new MapCopyEvent[roofCopiesList.size()];
@@ -63,7 +65,12 @@ public class MapRoofEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
     @Override
     protected void packageAsmData(FileWriter writer, MapCopyEvent[] item, EmptyPackage pckg) throws IOException, AsmException {
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tslbc %2d, %2d\n", item[i].getTriggerX(), item[i].getTriggerY()));
+            writer.write(String.format("\t\t\t\tslbc %2d, %2d", item[i].getTriggerX(), item[i].getTriggerY()));
+            if (item[i].getComment() != null && item[i].getComment().length() > 0) {
+                writer.write(String.format("\t; %s\n", item[i].getComment()));
+            } else {
+                writer.write('\n');
+            }
             writer.write(String.format("\t\t\t\t\tslbcSource %3d, %3d\n", item[i].getSourceX(), item[i].getSourceY()));
             writer.write(String.format("\t\t\t\t\tslbcSize   %3d, %3d\n", item[i].getWidth(), item[i].getHeight()));
             writer.write(String.format("\t\t\t\t\tslbcDest   %3d, %3d\n", item[i].getDestX(), item[i].getDestY()));

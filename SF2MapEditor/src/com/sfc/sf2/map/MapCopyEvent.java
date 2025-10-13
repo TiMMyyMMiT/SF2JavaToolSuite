@@ -19,8 +19,9 @@ public class MapCopyEvent {
     private int height;
     private int destX;
     private int destY;
+    private String comment;
 
-    public MapCopyEvent(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY) {
+    public MapCopyEvent(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY, String comment) {
         this.triggerX = triggerX;
         this.triggerY = triggerY;
         this.sourceX = sourceX;
@@ -29,6 +30,7 @@ public class MapCopyEvent {
         this.height = height;
         this.destX = destX;
         this.destY = destY;
+        this.comment = comment;
     }
 
     public int getTriggerX() {
@@ -94,13 +96,21 @@ public class MapCopyEvent {
     public void setDestY(int destY) {
         this.destY = destY;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
     
     public static MapCopyEvent createEmpty() {
-        return new MapCopyEvent(0, 0, 0, 0, 1, 1, 1, 1);
+        return new MapCopyEvent(0, 0, 0, 0, 1, 1, 1, 1, null);
     }
 
     @Override
     public MapCopyEvent clone() {
-        return new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY);
+        return new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY, comment);
     }
 }

@@ -29,13 +29,15 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
         ArrayList<MapWarpEvent> warpsList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
-            line = StringHelpers.trimAndRemoveComments(line);
+            line = line.trim();
             if (line.startsWith("mWarp")) {
+                String comment = StringHelpers.extractComment(line);
+                line = StringHelpers.trimAndRemoveComments(line);
                 int triggerX, triggerY, destX, destY;
                 String warpType, destMap;
                 Direction scrollDirection, facing;
                 
-                String[] split = line.substring(line.indexOf(" ")).split(",");
+                String[] split = line.substring(line.indexOf(' ')).split(",");
                 triggerX = StringHelpers.getValueInt(split[0]);
                 triggerY = StringHelpers.getValueInt(split[1]);
                 
@@ -64,7 +66,7 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
                 String face = MapStringHelpers.getNextLineSingle(reader, "warpFacing", warpsList.size()+1);
                 facing = Enum.valueOf(Direction.class, face);
                 
-                warpsList.add(new MapWarpEvent(triggerX, triggerY, warpType, scrollDirection, destMap, destX, destY, facing));
+                warpsList.add(new MapWarpEvent(triggerX, triggerY, warpType, scrollDirection, destMap, destX, destY, facing, comment));
             }
         }
         MapWarpEvent[] warps = new MapWarpEvent[warpsList.size()];
@@ -80,7 +82,12 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
     @Override
     protected void packageAsmData(FileWriter writer, MapWarpEvent[] item, EmptyPackage pckg) throws IOException, AsmException {
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tmWarp %3d, %3d\n", item[i].getTriggerX(), item[i].getTriggerY()));
+            writer.write(String.format("\t\t\t\tmWarp %3d, %3d", item[i].getTriggerX(), item[i].getTriggerY()));
+            if (item[i].getComment() != null && item[i].getComment().length() > 0) {
+                writer.write(String.format("\t; %s\n", item[i].getComment()));
+            } else {
+                writer.write('\n');
+            }
             if (item[i].getWarpType() == "warpNoScroll") {
                 writer.write(String.format("\t\t\t\t\t%s\n", item[i].getWarpType()));
             } else {

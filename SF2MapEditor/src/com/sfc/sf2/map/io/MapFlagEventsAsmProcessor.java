@@ -27,13 +27,17 @@ public class MapFlagEventsAsmProcessor extends AbstractAsmProcessor<MapFlagCopyE
         ArrayList<MapFlagCopyEvent> flagCopiesList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
-            line = StringHelpers.trimAndRemoveComments(line);
+            line = line.trim();
             if (line.startsWith("fbcFlag")) {
+                String flagComment = StringHelpers.extractComment(line);
+                line = StringHelpers.trimAndRemoveComments(line);
                 int flag, sourceX, sourceY, width, height, destX, destY;
                 
                 flag = StringHelpers.getValueInt(line.substring(line.indexOf(" ")));
-                
-                String[] split = MapStringHelpers.getNextLineMulti(reader, "fbcSource", flagCopiesList.size()+1);
+                line = reader.readLine();
+                String comment = StringHelpers.extractComment(line);
+                line = StringHelpers.trimAndRemoveComments(line);
+                String[] split = line.substring(line.indexOf(" ")+1).split(",");
                 sourceX = StringHelpers.getValueInt(split[0]);
                 sourceY = StringHelpers.getValueInt(split[1]);
                 
@@ -45,7 +49,7 @@ public class MapFlagEventsAsmProcessor extends AbstractAsmProcessor<MapFlagCopyE
                 destX = StringHelpers.getValueInt(split[0]);
                 destY = StringHelpers.getValueInt(split[1]);
                 
-                flagCopiesList.add(new MapFlagCopyEvent(flag, sourceX, sourceY, width, height, destX, destY));
+                flagCopiesList.add(new MapFlagCopyEvent(flag, sourceX, sourceY, width, height, destX, destY, flagComment, comment));
             }
         }
         MapFlagCopyEvent[] flagCopies = new MapFlagCopyEvent[flagCopiesList.size()];
@@ -61,8 +65,18 @@ public class MapFlagEventsAsmProcessor extends AbstractAsmProcessor<MapFlagCopyE
     @Override
     protected void packageAsmData(FileWriter writer, MapFlagCopyEvent[] item, EmptyPackage pckg) throws IOException, AsmException {
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tfbcFlag %3d\n", item[i].getFlag()));
-            writer.write(String.format("\t\t\t\t\tfbcSource %2d, %2d\n", item[i].getSourceX(), item[i].getSourceY()));
+            writer.write(String.format("\t\t\t\tfbcFlag %3d", item[i].getFlag()));
+            if (item[i].getComment() != null && item[i].getComment().length() > 0) {
+                writer.write(String.format("\t\t\t\t; %s\n", item[i].getFlagComment()));
+            } else {
+                writer.write('\n');
+            }
+            writer.write(String.format("\t\t\t\t\tfbcSource %2d, %2d", item[i].getSourceX(), item[i].getSourceY()));
+            if (item[i].getComment() != null && item[i].getComment().length() > 0) {
+                writer.write(String.format("\t; %s\n", item[i].getComment()));
+            } else {
+                writer.write('\n');
+            }
             writer.write(String.format("\t\t\t\t\tfbcSize   %2d, %2d\n", item[i].getWidth(), item[i].getHeight()));
             writer.write(String.format("\t\t\t\t\tfbcDest   %2d, %2d\n", item[i].getDestX(), item[i].getDestY()));
         }

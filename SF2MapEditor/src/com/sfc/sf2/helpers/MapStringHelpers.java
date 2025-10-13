@@ -19,7 +19,7 @@ public class MapStringHelpers {
         String line = reader.readLine();
         line = StringHelpers.trimAndRemoveComments(line);
         if (!line.startsWith(identifier)) {
-            throw new AsmException("ERROR Map area cannot be parsed. Cannot find '" + identifier + "' in area " + count);
+            throw new AsmException("ERROR Map data line cannot be parsed. Cannot find '" + identifier + "' in line " + count);
         }
         return line.substring(line.indexOf(" ")+1).trim();
     }
