@@ -98,7 +98,7 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
             writer.write(String.format("\t\t\t\t\tmainLayerAutoscroll %3d, %3d\n", item[i].getLayer1AutoscrollX(), item[i].getLayer1AutoscrollY()));
             writer.write(String.format("\t\t\t\t\tscndLayerAutoscroll %3d, %3d\n", item[i].getLayer2AutoscrollX(), item[i].getLayer2AutoscrollY()));
             writer.write(String.format("\t\t\t\t\tmainLayerType       %3d\n", item[i].getLayerType()));
-            writer.write(String.format("\t\t\t\t\tareaDefaultMusic    %s\n", pckg.getMusic()));
+            writer.write(String.format("\t\t\t\t\tareaDefaultMusic    Music_%s\n", item[i].getDefaultMusic()));
             writer.write("\n");
         }
         writer.write("\t\t\t\tendWord\n");
