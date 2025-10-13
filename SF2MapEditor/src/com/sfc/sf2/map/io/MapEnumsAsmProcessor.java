@@ -23,7 +23,7 @@ public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
     boolean foundItemNothing;
 
     public MapEnumsAsmProcessor() {
-        super(new String[] { "Items (bitfield)" });
+        super(new String[] { "Items (bitfield)", "Music" });
     }
 
     @Override
@@ -34,9 +34,9 @@ public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
     
     @Override
     protected void parseLine(int categoryIndex, String line, LinkedHashMap<String, Integer> asmData) {
-        if (foundItemNothing) return;
         switch (categoryIndex) {
             case 0:
+                if (foundItemNothing) return;
                 if (line.startsWith("ITEM_")) {
                     line = line.substring(line.indexOf("_") + 1);
                     String item = line.substring(0, line.indexOf(":"));
@@ -54,11 +54,18 @@ public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
                     }
                 }
                 break;
+            case 1:
+                if (line.startsWith("MUSIC_")) {
+                    line = line.substring(line.indexOf('_') + 1);
+                    String music = line.substring(0, line.indexOf(":"));
+                    int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
+                    asmData.put(music, value);
+                }
         }
     }
 
     @Override
     protected MapEnums createEnumsData(LinkedHashMap<String, Integer>[] dataSets) {
-        return new MapEnums(dataSets[0]);
+        return new MapEnums(dataSets[0], dataSets[1]);
     }
 }

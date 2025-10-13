@@ -62,12 +62,11 @@ public class MapStepEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
 
     @Override
     protected void packageAsmData(FileWriter writer, MapCopyEvent[] item, EmptyPackage pckg) throws IOException, AsmException {
-        writer.write("\n");
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tsbc %d, %d\n", item[i].getTriggerX(), item[i].getTriggerY()));
-            writer.write(String.format("\t\t\t\t\tsbcSource\t%d, %d\n", item[i].getSourceX(), item[i].getSourceY()));
-            writer.write(String.format("\t\t\t\t\tsbcSize\t%d, %d\n", item[i].getWidth(), item[i].getHeight()));
-            writer.write(String.format("\t\t\t\t\tsbcDest\t%d, %d\n", item[i].getDestX(), item[i].getDestY()));
+            writer.write(String.format("\t\t\t\tsbc %2d, %2d\n", item[i].getTriggerX(), item[i].getTriggerY()));
+            writer.write(String.format("\t\t\t\t\tsbcSource %2d, %2d\n", item[i].getSourceX(), item[i].getSourceY()));
+            writer.write(String.format("\t\t\t\t\tsbcSize   %2d, %2d\n", item[i].getWidth(), item[i].getHeight()));
+            writer.write(String.format("\t\t\t\t\tsbcDest   %2d, %2d\n", item[i].getDestX(), item[i].getDestY()));
         }
         writer.write("\t\t\t\tendWord\n");
     }

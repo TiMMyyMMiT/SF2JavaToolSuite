@@ -523,9 +523,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
         jSplitPane2.setDividerLocation(725);
         jSplitPane2.setOneTouchExpandable(true);
+        jSplitPane2.setPreferredSize(new java.awt.Dimension(830, 500));
 
         jSplitPane4.setDividerLocation(300);
         jSplitPane4.setOneTouchExpandable(true);
+        jSplitPane4.setPreferredSize(new java.awt.Dimension(725, 500));
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -881,9 +883,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addContainerGap()
                         .addComponent(accordionPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                 );
 
@@ -1041,7 +1043,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(209, Short.MAX_VALUE))
                 );
 
@@ -2373,11 +2375,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jPanel8.setLayout(jPanel8Layout);
                 jPanel8Layout.setHorizontalGroup(
                     jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane4)
+                    .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
                 jPanel8Layout.setVerticalGroup(
                     jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane4)
+                    .addComponent(jSplitPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
 
                 jSplitPane2.setLeftComponent(jPanel8);
@@ -3069,11 +3071,11 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jPanel15.setLayout(jPanel15Layout);
                 jPanel15Layout.setHorizontalGroup(
                     jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane2)
+                    .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
                 jPanel15Layout.setVerticalGroup(
                     jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane2)
+                    .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 );
 
                 jSplitPane1.setTopComponent(jPanel15);
@@ -3112,42 +3114,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        mapLayoutPanel.revertLastAction();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        onMapActionCheckboxSet(null, MapLayoutPanel.MAP_FLAG_EDIT_BLOCK);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
-
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        onMapActionCheckboxSet(jCheckBox11, MapBlock.MAP_FLAG_OBSTRUCTED);
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
-
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        onMapActionCheckboxSet(jCheckBox11, MapBlock.MAP_FLAG_STAIRS_RIGHT);
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
-
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        onMapActionCheckboxSet(jCheckBox19, MapBlock.MAP_FLAG_WARP);
-    }//GEN-LAST:event_jRadioButton4ActionPerformed
-
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
-        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_BARREL);
-    }//GEN-LAST:event_jRadioButton5ActionPerformed
-
-    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
-        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_VASE);
-    }//GEN-LAST:event_jRadioButton6ActionPerformed
-
-    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
-        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_TABLE);
-    }//GEN-LAST:event_jRadioButton7ActionPerformed
-
-    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
-        onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_TRIGGER);
-    }//GEN-LAST:event_jRadioButton8ActionPerformed
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         Path blocketImagePath = PathHelpers.getBasePath().resolve(fileButton15.getFilePath());
         Path priorityPath = PathHelpers.getBasePath().resolve(fileButton16.getFilePath());
@@ -3176,74 +3142,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             Console.logger().severe("ERROR Map layout data could not be exported to : " + layoutImagePath);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
-        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
-        int index = jTabbedPane2.getSelectedIndex();
-        mapLayoutPanel.setIsOnActionsTab(index == 0);
-        switch (index) {
-            case 0:     //Actions & Anims
-                JCheckBox actionCheckbox = actionRelativeCheckbox;
-                int mode = mapLayoutPanel.getCurrentMode();
-                onMapActionCheckboxSet(null, -1);
-                onMapActionCheckboxSet(actionCheckbox, mode);
-                mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
-                break;
-            case 1:     //Areas panel
-                SetTabRelativeCheckbox(jCheckBox15, tableAreas.jTable, MapLayoutPanel.DRAW_MODE_AREAS);
-                break;
-            case 2:     //Block Copies panels
-                jTabbedPane3StateChanged(new ChangeEvent(jTabbedPane3));
-                break;
-            case 3:     //Warps panel
-                SetTabRelativeCheckbox(jCheckBox19, tableWarps.jTable, MapLayoutPanel.DRAW_MODE_WARPS);
-                break;
-            case 4:     //Items panel
-                jTabbedPane4StateChanged(new ChangeEvent(jTabbedPane4));
-                break;
-        }
-        mapLayoutPanel.redraw();
-    }//GEN-LAST:event_jTabbedPane2StateChanged
-
-    private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
-        int index = jTabbedPane2.getSelectedIndex();
-        if (index != 2) return; //Is not on Block copies panel
-        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
-        index = jTabbedPane3.getSelectedIndex();
-        switch (index) {
-            default:
-                return;
-            case 0:     //Flag copies
-                SetTabRelativeCheckbox(jCheckBox16, tableFlagCopies.jTable, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
-                break;
-            case 1:     //Step copies
-                SetTabRelativeCheckbox(jCheckBox17, tableStepCopies.jTable, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
-                break;
-            case 2:     //Roof copies
-                SetTabRelativeCheckbox(jCheckBox18, tableRoofCopies.jTable, MapLayoutPanel.DRAW_MODE_ROOF_COPIES);
-                break;
-        }
-        mapLayoutPanel.redraw();
-    }//GEN-LAST:event_jTabbedPane3StateChanged
 	
-    private void jTabbedPane4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane4StateChanged
-        int index = jTabbedPane2.getSelectedIndex();
-        if (index != 4) return; //Is not on Block copies panel
-        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
-        index = jTabbedPane4.getSelectedIndex();
-        switch (index) {
-            default:
-                return;
-            case 0:     //Chest items
-                SetTabRelativeCheckbox(jCheckBox20, tableChestItems.jTable, MapLayoutPanel.DRAW_MODE_CHEST_ITEMS);
-                break;
-            case 1:     //Other items
-                SetTabRelativeCheckbox(jCheckBox20, tableOtherItems.jTable, MapLayoutPanel.DRAW_MODE_OTHER_ITEMS);
-                break;
-        }
-        mapLayoutPanel.redraw();
-    }//GEN-LAST:event_jTabbedPane4StateChanged
-
     private void jComboBox9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox9ActionPerformed
         mapLayoutPanel.setDisplayScale(jComboBox9.getSelectedIndex()+1);
         mapLayoutSettings.setTilesetScale(jComboBox9.getSelectedIndex()+1);
@@ -3296,74 +3195,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox21.isSelected());
     }//GEN-LAST:event_jCheckBox21ActionPerformed
 
-    private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
-        if (jComboBox4.getSelectedIndex() >= 0 && tilesetLayoutPanelModified != null) {
-            int scale = (int)jComboBox4.getSelectedIndex()+1;
-            if (scale != mapLayoutSettings.getTilesetScale()) {
-                tilesetLayoutPanelAnim.setDisplayScale(scale);
-                tilesetLayoutPanelModified.setDisplayScale(scale);
-                mapLayoutSettings.setTilesetScale(scale);
-                SettingsManager.saveSettingsFile();
-            }
-        }
-    }//GEN-LAST:event_jComboBox4ItemStateChanged
-
-    private void jCheckBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox2ItemStateChanged
-        tilesetLayoutPanelAnim.setShowGrid(jCheckBox2.isSelected());
-        tilesetLayoutPanelModified.setShowGrid(jCheckBox2.isSelected());
-    }//GEN-LAST:event_jCheckBox2ItemStateChanged
-
-    private void colorPickerTilesetAnimColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetAnimColorChanged
-        tilesetLayoutPanelAnim.setBGColor(colorPickerTilesetAnim.getColor());
-        tilesetLayoutPanelModified.setBGColor(colorPickerTilesetAnim.getColor());
-        mapLayoutSettings.setTilesetBGColor(colorPickerTilesetAnim.getColor());
-        SettingsManager.saveSettingsFile();
-    }//GEN-LAST:event_colorPickerTilesetAnimColorChanged
-
-    private void jSpinner6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner6StateChanged
-        int tilesPerRow = (int)jSpinner6.getValue();
-        tilesetLayoutPanelAnim.setItemsPerRow(tilesPerRow);
-        tilesetLayoutPanelModified.setItemsPerRow(tilesPerRow);
-    }//GEN-LAST:event_jSpinner6StateChanged
-
-    private void jCheckBox7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox7ItemStateChanged
-        tilesetLayoutPanelAnim.setShowAnimationFrames(jCheckBox7.isSelected());
-        tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
-    }//GEN-LAST:event_jCheckBox7ItemStateChanged
-
-    private void jCheckBox8animationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox8animationActionPerformed
-        boolean isSelected = ((JCheckBox)evt.getSource()).isSelected();
-        jCheckBox8.setSelected(isSelected);
-        jCheckBox9.setSelected(isSelected);
-        tilesetLayoutPanelModified.setPreviewAnim(isSelected);
-    }//GEN-LAST:event_jCheckBox8animationActionPerformed
-
-    private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
-        int value = (int)jSpinner2.getValue();
-        MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
-        if (anim != null && anim.getTilesetId()!= value) {
-            try {
-                anim.setTilesetId(value);
-                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
-                Tileset tileset = mapManager.getMapAnimationManager().importAnimationTileset(mapLayoutPanel.getMap().getLayout().getPalette(), tilesetEntriesPath, value);
-                tilesetLayoutPanelAnim.setTileset(tileset);
-            } catch (Exception ex) {
-                Console.logger().log(Level.SEVERE, null, ex);
-                Console.logger().severe("ERROR Tileset could not be imported for tileset : " + value);
-            }
-        }
-    }//GEN-LAST:event_jSpinner2StateChanged
-
-    private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
-        int value = (int)jSpinner3.getValue();
-        MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
-        if (anim != null && anim.getLength()!= value) {
-            anim.setLength(value);
-        }
-    }//GEN-LAST:event_jSpinner3StateChanged
-
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
+        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
         int mapId = (int)jSpinner5.getValue();
         try {
             mapManager.exportDisassemblyFromMapEntries(mapEntriesPath, mapId, mapLayoutPanel.getMap());
@@ -3380,95 +3213,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tilesetLayoutPanelModified.setPreviewAnim(isSelected);
     }//GEN-LAST:event_jCheckBox9animationActionPerformed
 
-    private void jComboBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox3ItemStateChanged
-        if (jComboBox3.getSelectedIndex() >= 0 && mapBlocksetLayoutPanel != null) {
-            int scale = (int)jComboBox3.getSelectedIndex()+1;
-            if (scale != mapLayoutSettings.getBlocksetScale()) {
-                mapBlocksetLayoutPanel.setDisplayScale(scale);
-                mapLayoutSettings.setBlocksetScale(scale);
-                SettingsManager.saveSettingsFile();
-            }
-        }
-    }//GEN-LAST:event_jComboBox3ItemStateChanged
-
-    private void jSpinner7StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner7StateChanged
-        if (mapBlocksetLayoutPanel != null) {
-            int blocksPerRow = (int)jSpinner7.getValue();
-            if (blocksPerRow != mapLayoutSettings.getBlocksetBlocksPerRow()) {
-                mapBlocksetLayoutPanel.setItemsPerRow(blocksPerRow);
-                mapLayoutSettings.setBlocksetBlocksPerRow(blocksPerRow);
-                SettingsManager.saveSettingsFile();
-            }
-        }
-    }//GEN-LAST:event_jSpinner7StateChanged
-
-    private void jCheckBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox3ItemStateChanged
-        if (mapBlocksetLayoutPanel != null) {
-            mapBlocksetLayoutPanel.setShowGrid(jCheckBox3.isSelected());
-        }
-    }//GEN-LAST:event_jCheckBox3ItemStateChanged
-
-    private void jCheckBox5ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox5ItemStateChanged
-        mapBlocksetLayoutPanel.setShowPriority(jCheckBox5.isSelected());
-    }//GEN-LAST:event_jCheckBox5ItemStateChanged
-
-    private void colorPickerBlocksetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksetColorChanged
-        mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
-        mapLayoutSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
-        SettingsManager.saveSettingsFile();
-    }//GEN-LAST:event_colorPickerBlocksetColorChanged
-
-    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
-        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_SHELF);
-    }//GEN-LAST:event_jRadioButton9ActionPerformed
-
-    private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton10ActionPerformed
-        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_SEARCH);
-    }//GEN-LAST:event_jRadioButton10ActionPerformed
-
-    private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton11ActionPerformed
-        onMapActionCheckboxSet(jCheckBox22, MapBlock.MAP_FLAG_CARAVAN);
-    }//GEN-LAST:event_jRadioButton11ActionPerformed
-
-    private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton12ActionPerformed
-        onMapActionCheckboxSet(jCheckBox22, MapBlock.MAP_FLAG_RAFT);
-    }//GEN-LAST:event_jRadioButton12ActionPerformed
-
     private void jCheckBox22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox22ActionPerformed
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_VEHICLES, jCheckBox22.isSelected());
     }//GEN-LAST:event_jCheckBox22ActionPerformed
-
-    private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton13ActionPerformed
-        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_CHEST);
-    }//GEN-LAST:event_jRadioButton13ActionPerformed
-
-    private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton14ActionPerformed
-        onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_LAYER_UP);
-    }//GEN-LAST:event_jRadioButton14ActionPerformed
-
-    private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton15ActionPerformed
-        onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_LAYER_DOWN);
-    }//GEN-LAST:event_jRadioButton15ActionPerformed
-
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        mapLayoutPanel.setShowAreasOverlay(jCheckBox1.isSelected());
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
-
-    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
-        mapLayoutPanel.setShowAreasUnderlay(jCheckBox4.isSelected());
-    }//GEN-LAST:event_jCheckBox4ActionPerformed
-
-    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
-        mapLayoutPanel.setShowFlagCopyResult(jCheckBox6.isSelected());
-    }//GEN-LAST:event_jCheckBox6ActionPerformed
-
-    private void jCheckBox12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox12ActionPerformed
-        mapLayoutPanel.setShowStepCopyResult(jCheckBox12.isSelected());
-    }//GEN-LAST:event_jCheckBox12ActionPerformed
-
-    private void jCheckBox14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox14ActionPerformed
-        mapLayoutPanel.setShowRoofCopyResult(jCheckBox14.isSelected());
-    }//GEN-LAST:event_jCheckBox14ActionPerformed
 
     private void jButton33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton33ActionPerformed
         Path mapDirectory = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
@@ -3627,6 +3374,261 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             blockSlot.setShowPriority(jCheckBox25.isSelected());
         }
     }//GEN-LAST:event_jRadioButton18ActionPerformed
+
+    private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
+        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
+        int index = jTabbedPane2.getSelectedIndex();
+        mapLayoutPanel.setIsOnActionsTab(index == 0);
+        switch (index) {
+            case 0:     //Actions & Anims
+            JCheckBox actionCheckbox = actionRelativeCheckbox;
+            int mode = mapLayoutPanel.getCurrentMode();
+            onMapActionCheckboxSet(null, -1);
+            onMapActionCheckboxSet(actionCheckbox, mode);
+            mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
+            break;
+            case 1:     //Areas panel
+            SetTabRelativeCheckbox(jCheckBox15, tableAreas.jTable, MapLayoutPanel.DRAW_MODE_AREAS);
+            break;
+            case 2:     //Block Copies panels
+            jTabbedPane3StateChanged(new ChangeEvent(jTabbedPane3));
+            break;
+            case 3:     //Warps panel
+            SetTabRelativeCheckbox(jCheckBox19, tableWarps.jTable, MapLayoutPanel.DRAW_MODE_WARPS);
+            break;
+            case 4:     //Items panel
+            jTabbedPane4StateChanged(new ChangeEvent(jTabbedPane4));
+            break;
+        }
+        mapLayoutPanel.redraw();
+    }//GEN-LAST:event_jTabbedPane2StateChanged
+
+    private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
+        int value = (int)jSpinner3.getValue();
+        MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
+        if (anim != null && anim.getLength()!= value) {
+            anim.setLength(value);
+        }
+    }//GEN-LAST:event_jSpinner3StateChanged
+
+    private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
+        int value = (int)jSpinner2.getValue();
+        MapAnimation anim = tilesetLayoutPanelModified.getMapAnimation();
+        if (anim != null && anim.getTilesetId()!= value) {
+            try {
+                anim.setTilesetId(value);
+                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
+                Tileset tileset = mapManager.getMapAnimationManager().importAnimationTileset(mapLayoutPanel.getMap().getLayout().getPalette(), tilesetEntriesPath, value);
+                tilesetLayoutPanelAnim.setTileset(tileset);
+            } catch (Exception ex) {
+                Console.logger().log(Level.SEVERE, null, ex);
+                Console.logger().severe("ERROR Tileset could not be imported for tileset : " + value);
+            }
+        }
+    }//GEN-LAST:event_jSpinner2StateChanged
+
+    private void jCheckBox8animationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox8animationActionPerformed
+        boolean isSelected = ((JCheckBox)evt.getSource()).isSelected();
+        jCheckBox8.setSelected(isSelected);
+        jCheckBox9.setSelected(isSelected);
+        tilesetLayoutPanelModified.setPreviewAnim(isSelected);
+    }//GEN-LAST:event_jCheckBox8animationActionPerformed
+
+    private void jCheckBox7ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox7ItemStateChanged
+        tilesetLayoutPanelAnim.setShowAnimationFrames(jCheckBox7.isSelected());
+        tilesetLayoutPanelModified.setShowAnimationFrames(jCheckBox7.isSelected());
+    }//GEN-LAST:event_jCheckBox7ItemStateChanged
+
+    private void jSpinner6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner6StateChanged
+        int tilesPerRow = (int)jSpinner6.getValue();
+        tilesetLayoutPanelAnim.setItemsPerRow(tilesPerRow);
+        tilesetLayoutPanelModified.setItemsPerRow(tilesPerRow);
+    }//GEN-LAST:event_jSpinner6StateChanged
+
+    private void colorPickerTilesetAnimColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerTilesetAnimColorChanged
+        tilesetLayoutPanelAnim.setBGColor(colorPickerTilesetAnim.getColor());
+        tilesetLayoutPanelModified.setBGColor(colorPickerTilesetAnim.getColor());
+        mapLayoutSettings.setTilesetBGColor(colorPickerTilesetAnim.getColor());
+        SettingsManager.saveSettingsFile();
+    }//GEN-LAST:event_colorPickerTilesetAnimColorChanged
+
+    private void jCheckBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox2ItemStateChanged
+        tilesetLayoutPanelAnim.setShowGrid(jCheckBox2.isSelected());
+        tilesetLayoutPanelModified.setShowGrid(jCheckBox2.isSelected());
+    }//GEN-LAST:event_jCheckBox2ItemStateChanged
+
+    private void jComboBox4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox4ItemStateChanged
+        if (jComboBox4.getSelectedIndex() >= 0 && tilesetLayoutPanelModified != null) {
+            int scale = (int)jComboBox4.getSelectedIndex()+1;
+            if (scale != mapLayoutSettings.getTilesetScale()) {
+                tilesetLayoutPanelAnim.setDisplayScale(scale);
+                tilesetLayoutPanelModified.setDisplayScale(scale);
+                mapLayoutSettings.setTilesetScale(scale);
+                SettingsManager.saveSettingsFile();
+            }
+        }
+    }//GEN-LAST:event_jComboBox4ItemStateChanged
+
+    private void jTabbedPane4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane4StateChanged
+        int index = jTabbedPane2.getSelectedIndex();
+        if (index != 4) return; //Is not on Block copies panel
+        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
+        index = jTabbedPane4.getSelectedIndex();
+        switch (index) {
+            default:
+            return;
+            case 0:     //Chest items
+            SetTabRelativeCheckbox(jCheckBox20, tableChestItems.jTable, MapLayoutPanel.DRAW_MODE_CHEST_ITEMS);
+            break;
+            case 1:     //Other items
+            SetTabRelativeCheckbox(jCheckBox20, tableOtherItems.jTable, MapLayoutPanel.DRAW_MODE_OTHER_ITEMS);
+            break;
+        }
+        mapLayoutPanel.redraw();
+    }//GEN-LAST:event_jTabbedPane4StateChanged
+
+    private void jTabbedPane3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane3StateChanged
+        int index = jTabbedPane2.getSelectedIndex();
+        if (index != 2) return; //Is not on Block copies panel
+        SetTabRelativeCheckbox(null, null, MapLayoutPanel.DRAW_MODE_NONE);
+        index = jTabbedPane3.getSelectedIndex();
+        switch (index) {
+            default:
+            return;
+            case 0:     //Flag copies
+            SetTabRelativeCheckbox(jCheckBox16, tableFlagCopies.jTable, MapLayoutPanel.DRAW_MODE_FLAG_COPIES);
+            break;
+            case 1:     //Step copies
+            SetTabRelativeCheckbox(jCheckBox17, tableStepCopies.jTable, MapLayoutPanel.DRAW_MODE_STEP_COPIES);
+            break;
+            case 2:     //Roof copies
+            SetTabRelativeCheckbox(jCheckBox18, tableRoofCopies.jTable, MapLayoutPanel.DRAW_MODE_ROOF_COPIES);
+            break;
+        }
+        mapLayoutPanel.redraw();
+    }//GEN-LAST:event_jTabbedPane3StateChanged
+
+    private void jCheckBox14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox14ActionPerformed
+        mapLayoutPanel.setShowRoofCopyResult(jCheckBox14.isSelected());
+    }//GEN-LAST:event_jCheckBox14ActionPerformed
+
+    private void jCheckBox12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox12ActionPerformed
+        mapLayoutPanel.setShowStepCopyResult(jCheckBox12.isSelected());
+    }//GEN-LAST:event_jCheckBox12ActionPerformed
+
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox6ActionPerformed
+        mapLayoutPanel.setShowFlagCopyResult(jCheckBox6.isSelected());
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
+
+    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+        mapLayoutPanel.setShowAreasUnderlay(jCheckBox4.isSelected());
+    }//GEN-LAST:event_jCheckBox4ActionPerformed
+
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        mapLayoutPanel.setShowAreasOverlay(jCheckBox1.isSelected());
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void colorPickerBlocksetColorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorPickerBlocksetColorChanged
+        mapBlocksetLayoutPanel.setBGColor(colorPickerBlockset.getColor());
+        mapLayoutSettings.setBlocksetBGColor(colorPickerBlockset.getColor());
+        SettingsManager.saveSettingsFile();
+    }//GEN-LAST:event_colorPickerBlocksetColorChanged
+
+    private void jCheckBox5ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox5ItemStateChanged
+        mapBlocksetLayoutPanel.setShowPriority(jCheckBox5.isSelected());
+    }//GEN-LAST:event_jCheckBox5ItemStateChanged
+
+    private void jCheckBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox3ItemStateChanged
+        if (mapBlocksetLayoutPanel != null) {
+            mapBlocksetLayoutPanel.setShowGrid(jCheckBox3.isSelected());
+        }
+    }//GEN-LAST:event_jCheckBox3ItemStateChanged
+
+    private void jSpinner7StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner7StateChanged
+        if (mapBlocksetLayoutPanel != null) {
+            int blocksPerRow = (int)jSpinner7.getValue();
+            if (blocksPerRow != mapLayoutSettings.getBlocksetBlocksPerRow()) {
+                mapBlocksetLayoutPanel.setItemsPerRow(blocksPerRow);
+                mapLayoutSettings.setBlocksetBlocksPerRow(blocksPerRow);
+                SettingsManager.saveSettingsFile();
+            }
+        }
+    }//GEN-LAST:event_jSpinner7StateChanged
+
+    private void jComboBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox3ItemStateChanged
+        if (jComboBox3.getSelectedIndex() >= 0 && mapBlocksetLayoutPanel != null) {
+            int scale = (int)jComboBox3.getSelectedIndex()+1;
+            if (scale != mapLayoutSettings.getBlocksetScale()) {
+                mapBlocksetLayoutPanel.setDisplayScale(scale);
+                mapLayoutSettings.setBlocksetScale(scale);
+                SettingsManager.saveSettingsFile();
+            }
+        }
+    }//GEN-LAST:event_jComboBox3ItemStateChanged
+
+    private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton15ActionPerformed
+        onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_LAYER_DOWN);
+    }//GEN-LAST:event_jRadioButton15ActionPerformed
+
+    private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton14ActionPerformed
+        onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_LAYER_UP);
+    }//GEN-LAST:event_jRadioButton14ActionPerformed
+
+    private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton13ActionPerformed
+        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_CHEST);
+    }//GEN-LAST:event_jRadioButton13ActionPerformed
+
+    private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton12ActionPerformed
+        onMapActionCheckboxSet(jCheckBox22, MapBlock.MAP_FLAG_RAFT);
+    }//GEN-LAST:event_jRadioButton12ActionPerformed
+
+    private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton11ActionPerformed
+        onMapActionCheckboxSet(jCheckBox22, MapBlock.MAP_FLAG_CARAVAN);
+    }//GEN-LAST:event_jRadioButton11ActionPerformed
+
+    private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton10ActionPerformed
+        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_SEARCH);
+    }//GEN-LAST:event_jRadioButton10ActionPerformed
+
+    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
+        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_SHELF);
+    }//GEN-LAST:event_jRadioButton9ActionPerformed
+
+    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
+        onMapActionCheckboxSet(jCheckBox21, MapBlock.MAP_FLAG_TRIGGER);
+    }//GEN-LAST:event_jRadioButton8ActionPerformed
+
+    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
+        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_TABLE);
+    }//GEN-LAST:event_jRadioButton7ActionPerformed
+
+    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_VASE);
+    }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+        onMapActionCheckboxSet(jCheckBox20, MapBlock.MAP_FLAG_BARREL);
+    }//GEN-LAST:event_jRadioButton5ActionPerformed
+
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+        onMapActionCheckboxSet(jCheckBox19, MapBlock.MAP_FLAG_WARP);
+    }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        onMapActionCheckboxSet(null, MapLayoutPanel.MAP_FLAG_EDIT_BLOCK);
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        onMapActionCheckboxSet(jCheckBox11, MapBlock.MAP_FLAG_STAIRS_RIGHT);
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        onMapActionCheckboxSet(jCheckBox11, MapBlock.MAP_FLAG_OBSTRUCTED);
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        mapLayoutPanel.revertLastAction();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void SetTabRelativeCheckbox(JCheckBox checkbox, JTable selectionTable, int mode) {
         mapLayoutPanel.setSelectedItemIndex(-1);

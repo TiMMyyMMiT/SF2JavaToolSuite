@@ -49,7 +49,7 @@ public class MapItemAsmProcessor extends AbstractAsmProcessor<MapItem[], MapItem
     @Override
     protected void packageAsmData(FileWriter writer, MapItem[] item, MapItemPackage pckg) throws IOException, AsmException {
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tmapItem %d, %d, %d, %s\n", item[i].getX(), item[i].getY(), item[i].getFlag(), item[i].getItem()));
+            writer.write(String.format("\t\t\t\tmapItem %2d, %2d, %3d, %s\n", item[i].getX(), item[i].getY(), item[i].getFlag(), item[i].getItem()));
         }
         writer.write("\t\t\t\tendWord\n");
     }

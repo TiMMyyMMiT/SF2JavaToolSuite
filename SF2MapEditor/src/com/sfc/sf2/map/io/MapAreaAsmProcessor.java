@@ -70,7 +70,7 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
                 
                 layerType = StringHelpers.getValueInt(MapStringHelpers.getNextLineSingle(reader, "mainLayerType", areasList.size()+1));
                 defaultMusic = MapStringHelpers.getNextLineSingle(reader, "areaDefaultMusic", areasList.size()+1);
-                defaultMusic = MapEnums.toEnumString(defaultMusic, pckg.getItems());
+                defaultMusic = MapEnums.toEnumString(defaultMusic, pckg.getMusic());
                 
                 areasList.add(new MapArea(l1StartX, l1StartY, l1EndX, l1EndY, fg2StartX, fg2StartY, bg2StartX, bg2StartY, l1ParallaxX, l1ParallaxY, l2ParallaxX, l2ParallaxY, l1AutoscrollX, l1AutoscrollY, l2AutoscrollX, l2AutoscrollY, layerType, defaultMusic));
             }
@@ -89,18 +89,19 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
     protected void packageAsmData(FileWriter writer, MapArea[] item, MapEnums pckg) throws IOException, AsmException {
         writer.write("\n");
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tmainLayerStart\t\t%d, %d\n", item[i].getLayer1StartX(), item[i].getLayer1StartY()));
-            writer.write(String.format("\t\t\t\tmainLayerEnd\t\t%d, %d\n", item[i].getLayer1EndX(), item[i].getLayer1EndY()));
-            writer.write(String.format("\t\t\t\tscndLayerFgndStart\t%d, %d\n", item[i].getForegroundLayer2StartX(), item[i].getForegroundLayer2StartY()));
-            writer.write(String.format("\t\t\t\tscndLayerBgndStart\t%d, %d\n", item[i].getBackgroundLayer2StartX(), item[i].getBackgroundLayer2StartY()));
-            writer.write(String.format("\t\t\t\tmainLayerParallax\t%d, %d\n", item[i].getLayer1ParallaxX(), item[i].getLayer1ParallaxY()));
-            writer.write(String.format("\t\t\t\tscndLayerParallax\t%d, %d\n", item[i].getLayer2ParallaxX(), item[i].getLayer2ParallaxY()));
-            writer.write(String.format("\t\t\t\tmainLayerAutoscroll\t%d, %d\n", item[i].getLayer1AutoscrollX(), item[i].getLayer1AutoscrollY()));
-            writer.write(String.format("\t\t\t\tscndLayerAutoscroll\t%d, %d\n", item[i].getLayer2AutoscrollX(), item[i].getLayer2AutoscrollY()));
-            writer.write(String.format("\t\t\t\tmainLayerType\t\t%d\n", item[i].getLayerType()));
-            writer.write(String.format("\t\t\t\tareaDefaultMusic\t%d\n", item[i].getDefaultMusic()));
+            writer.write(String.format("\t\t\t\t\tmainLayerStart      %3d, %3d\n", item[i].getLayer1StartX(), item[i].getLayer1StartY()));
+            writer.write(String.format("\t\t\t\t\tmainLayerEnd        %3d, %3d\n", item[i].getLayer1EndX(), item[i].getLayer1EndY()));
+            writer.write(String.format("\t\t\t\t\tscndLayerFgndStart  %3d, %3d\n", item[i].getForegroundLayer2StartX(), item[i].getForegroundLayer2StartY()));
+            writer.write(String.format("\t\t\t\t\tscndLayerBgndStart  %3d, %3d\n", item[i].getBackgroundLayer2StartX(), item[i].getBackgroundLayer2StartY()));
+            writer.write(String.format("\t\t\t\t\tmainLayerParallax   %3d, %3d\n", item[i].getLayer1ParallaxX(), item[i].getLayer1ParallaxY()));
+            writer.write(String.format("\t\t\t\t\tscndLayerParallax   %3d, %3d\n", item[i].getLayer2ParallaxX(), item[i].getLayer2ParallaxY()));
+            writer.write(String.format("\t\t\t\t\tmainLayerAutoscroll %3d, %3d\n", item[i].getLayer1AutoscrollX(), item[i].getLayer1AutoscrollY()));
+            writer.write(String.format("\t\t\t\t\tscndLayerAutoscroll %3d, %3d\n", item[i].getLayer2AutoscrollX(), item[i].getLayer2AutoscrollY()));
+            writer.write(String.format("\t\t\t\t\tmainLayerType       %3d\n", item[i].getLayerType()));
+            int music = MapEnums.toEnumInt(item[i].getDefaultMusic(), pckg.getMusic());
+            writer.write(String.format("\t\t\t\t\tareaDefaultMusic    %3d\n", music));
             writer.write("\n");
         }
-        writer.write("\n\t\t\t\tendWord\n");
+        writer.write("\t\t\t\tendWord\n");
     }
 }

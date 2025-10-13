@@ -79,17 +79,16 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
 
     @Override
     protected void packageAsmData(FileWriter writer, MapWarpEvent[] item, EmptyPackage pckg) throws IOException, AsmException {
-        writer.write("\n");
         for (int i = 0; i < item.length; i++) {
-            writer.write(String.format("\t\t\t\tmWarp %d, %d\n", item[i].getTriggerX(), item[i].getTriggerY()));
+            writer.write(String.format("\t\t\t\tmWarp %3d, %3d\n", item[i].getTriggerX(), item[i].getTriggerY()));
             if (item[i].getWarpType() == "warpNoScroll") {
                 writer.write(String.format("\t\t\t\t\t%s\n", item[i].getWarpType()));
             } else {
-                writer.write(String.format("\t\t\t\t\t%s\t%s\n", item[i].getWarpType(), item[i].getScrollDirection()));
+                writer.write(String.format("\t\t\t\t\t%s %s\n", item[i].getWarpType(), item[i].getScrollDirection()));
             }
-            writer.write(String.format("\t\t\t\t\twarpMap\t%s\n", item[i].getDestMap()));
-            writer.write(String.format("\t\t\t\t\twarpDest\t%d, %d\n", item[i].getDestX(), item[i].getDestY()));
-            writer.write(String.format("\t\t\t\t\twarpFacing\t%s\n", item[i].getFacing()));
+            writer.write(String.format("\t\t\t\t\twarpMap    %s\n", item[i].getDestMap()));
+            writer.write(String.format("\t\t\t\t\twarpDest   %2d, %2d\n", item[i].getDestX(), item[i].getDestY()));
+            writer.write(String.format("\t\t\t\t\twarpFacing %s\n", item[i].getFacing()));
         }
         writer.write("\t\t\t\tendWord\n");
     }

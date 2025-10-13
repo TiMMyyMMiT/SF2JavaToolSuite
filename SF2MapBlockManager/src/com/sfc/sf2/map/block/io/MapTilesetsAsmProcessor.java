@@ -70,16 +70,10 @@ public class MapTilesetsAsmProcessor extends AbstractAsmProcessor<MapTilesetData
 
     @Override
     protected void packageAsmData(FileWriter writer, MapTilesetData item, EmptyPackage pckg) throws IOException, AsmException {
-        writer.write("\t\t\tmapPalette  ");
-        writer.write(Integer.toString(item.paletteIndex()));
-        writer.write("\n");
+        writer.write(String.format("\t\t\t\tmapPalette  %2d\n", item.paletteIndex()));
         for (int i = 0; i < item.tilesetIndices().length; i++) {
-            writer.write("\t\t\tmapTileset");
-            writer.write(Integer.toString(i+1));
-            writer.write(" ");
             int index = item.tilesetIndices()[i];
-            writer.write(Integer.toString(index == -1 ? 255 : index));
-            writer.write("\n");
+            writer.write(String.format("\t\t\t\tmapTileset %2d, %2d\n", (i+1), (index == -1 ? 255 : index)));
         }
     }
 }
