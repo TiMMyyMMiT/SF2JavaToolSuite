@@ -741,7 +741,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jPanel5" min="-2" pref="599" max="-2" attributes="0"/>
+                                      <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace pref="209" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -3180,7 +3180,7 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jPanel14" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
+                                          <EmptySpace pref="73" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -3533,23 +3533,33 @@
                                                   <Group type="102" attributes="0">
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Group type="102" alignment="0" attributes="0">
+                                                          <Group type="102" attributes="0">
+                                                              <Component id="jRadioButton14" min="-2" max="-2" attributes="0"/>
+                                                              <EmptySpace max="-2" attributes="0"/>
+                                                              <Component id="infoButton16" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <Group type="102" attributes="0">
                                                               <Component id="jRadioButton4" min="-2" max="-2" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="infoButton5" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" alignment="0" attributes="0">
+                                                              <Component id="jRadioButton19" min="-2" max="-2" attributes="0"/>
+                                                              <EmptySpace max="-2" attributes="0"/>
+                                                              <Component id="infoButton21" min="-2" max="-2" attributes="0"/>
+                                                          </Group>
+                                                      </Group>
+                                                      <EmptySpace max="32767" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Group type="102" alignment="0" attributes="0">
                                                               <Component id="jRadioButton8" min="-2" max="-2" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
                                                               <Component id="infoButton6" min="-2" max="-2" attributes="0"/>
                                                           </Group>
-                                                      </Group>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="0" attributes="0">
                                                           <Group type="102" alignment="0" attributes="0">
-                                                              <Component id="jRadioButton14" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jRadioButton20" min="-2" max="-2" attributes="0"/>
                                                               <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="infoButton16" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="infoButton22" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <Group type="102" alignment="0" attributes="0">
                                                               <Component id="jRadioButton15" min="-2" max="-2" attributes="0"/>
@@ -3568,17 +3578,24 @@
                                                       <Group type="103" groupAlignment="2" attributes="0">
                                                           <Component id="jRadioButton4" alignment="2" min="-2" max="-2" attributes="0"/>
                                                           <Component id="infoButton5" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jRadioButton14" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="infoButton16" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jRadioButton8" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="infoButton6" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="2" attributes="0">
-                                                          <Component id="jRadioButton8" alignment="2" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="infoButton6" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jRadioButton14" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="infoButton16" alignment="2" min="-2" max="-2" attributes="0"/>
                                                           <Component id="jRadioButton15" alignment="2" min="-2" max="-2" attributes="0"/>
                                                           <Component id="infoButton17" alignment="2" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <EmptySpace max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="2" attributes="0">
+                                                          <Component id="jRadioButton19" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="infoButton21" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jRadioButton20" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="infoButton22" alignment="2" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                             </DimensionLayout>
@@ -3623,7 +3640,7 @@
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                                                   <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
-                                                <Property name="text" type="java.lang.String" value="L. Up"/>
+                                                <Property name="text" type="java.lang.String" value="Layer Up"/>
                                               </Properties>
                                               <Events>
                                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton14ActionPerformed"/>
@@ -3640,7 +3657,7 @@
                                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                                                   <ComponentRef name="buttonGroupMapActions"/>
                                                 </Property>
-                                                <Property name="text" type="java.lang.String" value="L. Down"/>
+                                                <Property name="text" type="java.lang.String" value="Layer Down"/>
                                               </Properties>
                                               <Events>
                                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton15ActionPerformed"/>
@@ -3649,6 +3666,40 @@
                                             <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton17">
                                               <Properties>
                                                 <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Layer Down flag:&lt;/b&gt; Marks the block to shift the player (and followers) out of the upper layer (the priority layer). Restores characters to be drawn above map tiles but below &apos;priority&apos; map tiles.&lt;br&gt;- Left click to flag a block as a layer down block&lt;br&gt;- Middle click to clear all flags from the block&lt;br&gt;- Right click to remove the layer down flag&lt;/html&gt;"/>
+                                                <Property name="text" type="java.lang.String" value=""/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JRadioButton" name="jRadioButton19">
+                                              <Properties>
+                                                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                                  <ComponentRef name="buttonGroupMapActions"/>
+                                                </Property>
+                                                <Property name="text" type="java.lang.String" value="Hide (Roof)"/>
+                                              </Properties>
+                                              <Events>
+                                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton19ActionPerformed"/>
+                                              </Events>
+                                            </Component>
+                                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton21">
+                                              <Properties>
+                                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Hide (Roof) flag:&lt;/b&gt; Marks the block to hide the upper layer (the priority layer). Used alongside Roof Copy events.&lt;br&gt;- Left click to flag a block as a hide block&lt;br&gt;- Middle click to clear all flags from the block&lt;br&gt;- Right click to remove the hide flag.&lt;br&gt;&lt;br&gt;NOTE: Many maps do not put the Hide flag on the door of a building but on the open doorway block that replaces the door (via Step Copy event).&lt;/html&gt;"/>
+                                                <Property name="text" type="java.lang.String" value=""/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JRadioButton" name="jRadioButton20">
+                                              <Properties>
+                                                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                                  <ComponentRef name="buttonGroupMapActions"/>
+                                                </Property>
+                                                <Property name="text" type="java.lang.String" value="Show (Roof)"/>
+                                              </Properties>
+                                              <Events>
+                                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton20ActionPerformed"/>
+                                              </Events>
+                                            </Component>
+                                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton22">
+                                              <Properties>
+                                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Show (Roof) flag:&lt;/b&gt; Marks the block to restore the last hidden section of upper layer (the priority layer). If not upper layer is hidden then does nothing.&lt;br&gt;- Left click to flag a block as a show block&lt;br&gt;- Middle click to clear all flags from the block&lt;br&gt;- Right click to remove the show flag.&lt;/html&gt;"/>
                                                 <Property name="text" type="java.lang.String" value=""/>
                                               </Properties>
                                             </Component>

@@ -89,6 +89,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setShowFlagCopyResult(jCheckBox6.isSelected());
         mapLayoutPanel.setShowStepCopyResult(jCheckBox12.isSelected());
         mapLayoutPanel.setShowRoofCopyResult(jCheckBox14.isSelected());
+        mapLayoutPanel.setEventEditedListener(this::onMapEventChanged);
         
         //Blockset panel
         mapBlocksetLayoutPanel.setShowGrid(jCheckBox3.isSelected());
@@ -298,7 +299,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapFlagCopyTableModel = new com.sfc.sf2.map.models.MapFlagCopyEventTableModel();
         mapChestItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
         mapOtherItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
-        MapRoofCopyTableModel = new com.sfc.sf2.map.models.MapRoofCopyEventTableModel();
+        MapRoofCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyEventTableModel();
         mapStepCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyEventTableModel();
         mapAnimationFrameTableModel = new com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel();
         mapWarpTableModel = new com.sfc.sf2.map.models.MapWarpTableModel();
@@ -519,6 +520,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         infoButton16 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jRadioButton15 = new javax.swing.JRadioButton();
         infoButton17 = new com.sfc.sf2.core.gui.controls.InfoButton();
+        jRadioButton19 = new javax.swing.JRadioButton();
+        infoButton21 = new com.sfc.sf2.core.gui.controls.InfoButton();
+        jRadioButton20 = new javax.swing.JRadioButton();
+        infoButton22 = new com.sfc.sf2.core.gui.controls.InfoButton();
         jPanel50 = new javax.swing.JPanel();
         jRadioButton7 = new javax.swing.JRadioButton();
         infoButton11 = new com.sfc.sf2.core.gui.controls.InfoButton();
@@ -1076,7 +1081,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(209, Short.MAX_VALUE))
                 );
 
@@ -2684,7 +2689,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 infoButton6.setText("");
 
                 buttonGroupMapActions.add(jRadioButton14);
-                jRadioButton14.setText("L. Up");
+                jRadioButton14.setText("Layer Up");
                 jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jRadioButton14ActionPerformed(evt);
@@ -2695,7 +2700,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 infoButton16.setText("");
 
                 buttonGroupMapActions.add(jRadioButton15);
-                jRadioButton15.setText("L. Down");
+                jRadioButton15.setText("Layer Down");
                 jRadioButton15.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jRadioButton15ActionPerformed(evt);
@@ -2705,6 +2710,28 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 infoButton17.setMessageText("<html><b>Layer Down flag:</b> Marks the block to shift the player (and followers) out of the upper layer (the priority layer). Restores characters to be drawn above map tiles but below 'priority' map tiles.<br>- Left click to flag a block as a layer down block<br>- Middle click to clear all flags from the block<br>- Right click to remove the layer down flag</html>");
                 infoButton17.setText("");
 
+                buttonGroupMapActions.add(jRadioButton19);
+                jRadioButton19.setText("Hide (Roof)");
+                jRadioButton19.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jRadioButton19ActionPerformed(evt);
+                    }
+                });
+
+                infoButton21.setMessageText("<html><b>Hide (Roof) flag:</b> Marks the block to hide the upper layer (the priority layer). Used alongside Roof Copy events.<br>- Left click to flag a block as a hide block<br>- Middle click to clear all flags from the block<br>- Right click to remove the hide flag.<br><br>NOTE: Many maps do not put the Hide flag on the door of a building but on the open doorway block that replaces the door (via Step Copy event).</html>");
+                infoButton21.setText("");
+
+                buttonGroupMapActions.add(jRadioButton20);
+                jRadioButton20.setText("Show (Roof)");
+                jRadioButton20.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jRadioButton20ActionPerformed(evt);
+                    }
+                });
+
+                infoButton22.setMessageText("<html><b>Show (Roof) flag:</b> Marks the block to restore the last hidden section of upper layer (the priority layer). If not upper layer is hidden then does nothing.<br>- Left click to flag a block as a show block<br>- Middle click to clear all flags from the block<br>- Right click to remove the show flag.</html>");
+                infoButton22.setText("");
+
                 javax.swing.GroupLayout jPanel49Layout = new javax.swing.GroupLayout(jPanel49);
                 jPanel49.setLayout(jPanel49Layout);
                 jPanel49Layout.setHorizontalGroup(
@@ -2713,19 +2740,27 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addContainerGap()
                         .addGroup(jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel49Layout.createSequentialGroup()
+                                .addComponent(jRadioButton14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(infoButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel49Layout.createSequentialGroup()
                                 .addComponent(jRadioButton4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(infoButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel49Layout.createSequentialGroup()
-                                .addComponent(jRadioButton8)
+                                .addComponent(jRadioButton19)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(infoButton21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel49Layout.createSequentialGroup()
-                                .addComponent(jRadioButton14)
+                                .addComponent(jRadioButton8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(infoButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel49Layout.createSequentialGroup()
+                                .addComponent(jRadioButton20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(infoButton22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel49Layout.createSequentialGroup()
                                 .addComponent(jRadioButton15)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2739,15 +2774,21 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addGroup(jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jRadioButton4)
                             .addComponent(infoButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton14)
-                            .addComponent(infoButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jRadioButton8)
+                            .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(jRadioButton8)
-                            .addComponent(infoButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jRadioButton14)
+                            .addComponent(infoButton16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jRadioButton15)
                             .addComponent(infoButton17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jRadioButton19)
+                            .addComponent(infoButton21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jRadioButton20)
+                            .addComponent(infoButton22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
 
                 buttonGroupMapActions.add(jRadioButton7);
@@ -3008,7 +3049,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(73, Short.MAX_VALUE))
                 );
 
                 jTabbedPane2.addTab("Map Edit", jPanel4);
@@ -3437,7 +3478,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         switch (index) {
             case 0:     //Actions & Anims
             JCheckBox actionCheckbox = actionRelativeCheckbox;
-            int mode = mapLayoutPanel.getCurrentMode();
+            int mode = mapLayoutPanel.getCurrentPaintMode();
             onMapActionCheckboxSet(null, -1);
             onMapActionCheckboxSet(actionCheckbox, mode);
             mapLayoutPanel.setDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_NONE);
@@ -3700,6 +3741,14 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         }
     }//GEN-LAST:event_jTabbedPane5StateChanged
 
+    private void jRadioButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton19ActionPerformed
+        onMapActionCheckboxSet(jCheckBox18, MapBlock.MAP_FLAG_HIDE);
+    }//GEN-LAST:event_jRadioButton19ActionPerformed
+
+    private void jRadioButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton20ActionPerformed
+        onMapActionCheckboxSet(jCheckBox18, MapBlock.MAP_FLAG_SHOW);
+    }//GEN-LAST:event_jRadioButton20ActionPerformed
+
     private void SetTabRelativeCheckbox(JCheckBox checkbox, JTable selectionTable, int mode) {
         mapLayoutPanel.setSelectedItemIndex(-1);
         if (selectionTable != null) {
@@ -3720,10 +3769,10 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             //If tabs change then disable the action tab affecting the checkboxes
             if (!mapLayoutPanel.isDrawMode_Tabs(MapLayoutPanel.DRAW_MODE_ACTION_FLAGS)) {
                 JCheckBox actionCheckbox = actionRelativeCheckbox;
-                int actionMode = mapLayoutPanel.getCurrentMode();
+                int actionMode = mapLayoutPanel.getCurrentPaintMode();
                 onMapActionCheckboxSet(null, -1);
                 actionRelativeCheckbox = actionCheckbox;
-                mapLayoutPanel.setCurrentMode(actionMode);
+                mapLayoutPanel.setCurrentPaintMode(actionMode);
             }
             // Lock active checkbox
             mapLayoutPanel.setDrawMode_Tabs(mode);
@@ -3735,8 +3784,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }
     
     private void onMapActionCheckboxSet(JCheckBox checkbox, int mode) {
-        if (mapLayoutPanel.getCurrentMode() == mode) return;
-        mapLayoutPanel.setCurrentMode(mode);
+        if (mapLayoutPanel.getCurrentPaintMode() == mode) return;
+        mapLayoutPanel.setCurrentPaintMode(mode);
         if (actionRelativeCheckbox != null) {
             // Restore checkboxes
             if (actionRelativeCheckbox != null) {
@@ -3870,6 +3919,35 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setSelectedItemIndex(index);
     }
     
+    private void onMapEventChanged(ActionEvent e) {
+        int row = e.getID();
+        if (row != -1) {
+            switch (e.getActionCommand()) {
+                case "Area":
+                    mapAreaTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "FlagCopy":
+                    mapAreaTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "StepCopy":
+                    mapAreaTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "RoofCopy":
+                    mapAreaTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "Warp":
+                    mapWarpTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "ChestItem":
+                    mapChestItemTableModel.fireTableRowsUpdated(row, row);
+                    break;
+                case "OtherItem":
+                    mapOtherItemTableModel.fireTableRowsUpdated(row, row);
+                    break;
+            }
+        }
+    }
+    
     /**
      * To create a new Main Editor, copy the below code
      * Don't forget to change the new main class (below)
@@ -3887,7 +3965,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.map.models.MapRoofCopyEventTableModel MapRoofCopyTableModel;
+    private com.sfc.sf2.map.models.MapStepCopyEventTableModel MapRoofCopyTableModel;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel2;
     private com.sfc.sf2.map.block.gui.BlockSlotPanel blockSlotPanelLeft;
@@ -3956,6 +4034,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton19;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton2;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton20;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton21;
+    private com.sfc.sf2.core.gui.controls.InfoButton infoButton22;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton3;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton4;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton5;
@@ -4088,7 +4168,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JRadioButton jRadioButton16;
     private javax.swing.JRadioButton jRadioButton17;
     private javax.swing.JRadioButton jRadioButton18;
+    private javax.swing.JRadioButton jRadioButton19;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton20;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JRadioButton jRadioButton5;

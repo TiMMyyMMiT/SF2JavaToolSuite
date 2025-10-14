@@ -529,7 +529,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         Point[] points = region.getPoints();
         int pointCount = region.getType();
         for (int i = 0; i < pointCount; i++) {
-            double dist = mouse.distance(points[i]);
+            double dist = mouse.distanceSq(points[i]);
             if (dist < distance) {
                 closest = i;
                 distance = dist;

@@ -102,6 +102,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
         if (x == lastX && y == lastY) return;
         lastX = x;
         lastY = y;
@@ -114,6 +115,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
         lastX = x;
         lastY = y;
         buttonHeld = e.getButton();
@@ -127,6 +129,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
         if (x == lastX && y == lastY) return;
         lastX = x;
         lastY = y;
@@ -143,6 +146,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (buttonHeld == -1) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
         if (buttonListener != null) {
             buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false, true));
         }

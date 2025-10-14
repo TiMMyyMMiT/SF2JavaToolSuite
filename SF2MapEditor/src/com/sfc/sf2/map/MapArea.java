@@ -83,6 +83,14 @@ public class MapArea {
         this.layer1EndY = layer1EndY;
     }
     
+    public int getLayer1Width() {
+        return layer1EndX - layer1StartX;
+    }
+    
+    public int getLayer1Height() {
+        return layer1EndY - layer1StartY;
+    }
+    
     public boolean hasForegroundLayer2() {
         return foregroundLayer2StartX != 0 || foregroundLayer2StartY != 0;
     }
