@@ -67,7 +67,7 @@ public class MapItemTableModel extends AbstractTableModel<MapItem> {
         switch (col) {
             case 1: item.setX((int)value); break;
             case 2: item.setY((int)value); break;
-            case 3: item.setFlag((int)value); break;
+            case 3: item.setFlag((int)value); setValueAt(item.getFlagInfo(), row, 4); break;
             case 5: item.setItem((String)value); break;
             case 6: item.setComment((String)value); break;
         }

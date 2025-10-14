@@ -24,6 +24,7 @@ public class MapFlagCopyEvent extends MapCopyEvent {
 
     public void setFlag(int flag) {
         setTriggerX(flag);
+        flagComment = null;
     }
 
     public String getFlagComment() {

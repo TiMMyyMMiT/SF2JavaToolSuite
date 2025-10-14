@@ -59,7 +59,7 @@ public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEv
     @Override
     protected MapFlagCopyEvent setValue(MapFlagCopyEvent item, int row, int col, Object value) {
         switch (col) {
-            case 1: item.setFlag((int)value); break;
+            case 1: item.setFlag((int)value); setValueAt(item.getFlagComment(), row, 2); break;
             case 3: item.setSourceX((int)value); break;
             case 4: item.setSourceY((int)value); break;
             case 5: item.setWidth((int)value); break;
