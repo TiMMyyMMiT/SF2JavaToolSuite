@@ -741,7 +741,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jPanel5" min="-2" pref="599" max="-2" attributes="0"/>
                                       <EmptySpace pref="209" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -3984,6 +3984,7 @@
                                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                   <Border info="null"/>
                                 </Property>
+                                <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Areas:&lt;/b&gt; Indicates areas for bounding the camera (forcing it to stay within the region), defining upper (roof) layers, and for foreground/background effects.&lt;br&gt;- L1 X/Y/X&apos;/Y&apos;: Defines a rectangle representing the area. The game camera is bound to this space.&lt;br&gt;- L2 F X/Y: Defines the foreground (upper) layer for the area. Used to define roofs, treetops, etc.&lt;br&gt;- L2 B X/Y: Defines the backgroun layer. TODO: What is it used for.&lt;br&gt;L1/L2 P X/Y: Defines the parallax effect of the layer 1 or 2. Parallax causes layers to scroll at different speeds as the player character moves.&lt;br&gt;- L1/2 S X/Y: Defines the autoscroll speed for layers 1 &amp; 2. Autoscroll will cause the layer to constantly scroll.&lt;br&gt;- Music: The music to start playing when the player character enters the area.&lt;br&gt;&lt;br&gt;&lt;b&gt;When Area row is selected:&lt;/b&gt;Left-click to drag the closest corner or point of the area (look for the circular blue handle).&lt;/html&gt;"/>
                                 <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                   <ComponentRef name="mapAreaTableModel"/>
                                 </Property>
@@ -4039,6 +4040,7 @@
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="null"/>
                                         </Property>
+                                        <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Flag copies event:&lt;/b&gt; If a game flag is triggered when the map loads, then copies map blocks in one section of the map to another section.&lt;br&gt;- Flag: The game flag to trigger the event.&lt;br&gt;- Flag Info: A helpful description of what the flag value refers to.&lt;br&gt;- Source X/Y: The top-left of the section to copy blocks FROM.&lt;br&gt;- Width/Height: The width and height of the section to copy to/from.&lt;br&gt;- Dest. X/Y: The top-left of the section to copy blocks TO.&lt;br&gt;- Comment: Optional comment that is saved to the .asm file.&lt;br&gt;&lt;br&gt;&lt;b&gt;When Flag Copy row is selected:&lt;/b&gt;TODO.&lt;/html&gt;"/>
                                         <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                           <ComponentRef name="mapFlagCopyTableModel"/>
                                         </Property>
@@ -4062,6 +4064,7 @@
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="null"/>
                                         </Property>
+                                        <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Step copies event:&lt;/b&gt; If the player character steps on this map block, then copies map blocks in one section of the map to another section.&lt;br&gt;- Trigger X/Y: The trigger position for the step copy.&lt;br&gt;- Source X/Y: The top-left of the section to copy blocks FROM.&lt;br&gt;- Width/Height: The width and height of the section to copy to/from.&lt;br&gt;- Dest. X/Y: The top-left of the section to copy blocks TO.&lt;br&gt;- Comment: Optional comment that is saved to the .asm file.&lt;br&gt;&lt;br&gt;NOTE: Step copy triggers before the character enters the Trigger X/Y block. If the Destination X/Y is the same block as the Trigger X/Y, this can then trigger another flag/event from the copied source (e.g. see door Hide flags in most town maps).&lt;br&gt;&lt;br&gt;&lt;b&gt;When Flag Copy row is selected:&lt;/b&gt;TODO.&lt;/html&gt;"/>
                                         <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                           <ComponentRef name="mapStepCopyTableModel"/>
                                         </Property>
@@ -4085,6 +4088,7 @@
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="null"/>
                                         </Property>
+                                        <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Roof copy event:&lt;/b&gt; If the player character enters the trigger block, then copies map blocks in one section of the upper layer to another section of the upper layer.&lt;br&gt;- Trigger X/Y: The trigger position for the step copy.&lt;br&gt;- Source X/Y: The top-left of the section to copy blocks FROM.&lt;br&gt;- Width/Height: The width and height of the section to copy to/from.&lt;br&gt;- Dest. X/Y: The top-left of the section to copy blocks TO.&lt;br&gt;- Comment: Optional comment that is saved to the .asm file.&lt;br&gt;&lt;br&gt;NOTE: Use Show flags to reverse the previous Roof Copy (i.e. to make the roof appear again).&lt;br&gt;&lt;br&gt;&lt;b&gt;When Flag Copy row is selected:&lt;/b&gt;TODO.&lt;/html&gt;"/>
                                         <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                           <ComponentRef name="MapRoofCopyTableModel"/>
                                         </Property>
@@ -4112,6 +4116,7 @@
                                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                   <Border info="null"/>
                                 </Property>
+                                <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Warp event:&lt;/b&gt; Teleports the player to a new position or a new map.&lt;br&gt;- Trigger X/Y: The trigger point for the warp.&lt;br&gt;- Scroll Dir: The direction that the camera scrolls when warping (used for overworld maps).&lt;br&gt; - Dest. Map: The map to warp to. Set to &quot;CURRENT&quot; to warp to a different position on the current map.&lt;br&gt;- Dest X/Y: The destination position to warp to (on this map or another.&lt;br&gt;- Facing: The direction to face at the warp destination.&lt;br&gt;- Comment: Optional comment that is saved to the .asm file.&lt;br&gt;&lt;br&gt;&lt;b&gt;When a warp row is selected:&lt;/b&gt; Left click and drag will set the set the Trigger or Destination X/Y position of the selected item event, whichever is closer to the cursor.&lt;/html&gt;"/>
                                 <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                   <ComponentRef name="mapWarpTableModel"/>
                                 </Property>
@@ -4149,6 +4154,7 @@
                                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                       <Border info="null"/>
                                     </Property>
+                                    <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Item event:&lt;/b&gt; Allows player to aquire items.&lt;br&gt;- X/Y: The position of the item event.&lt;br&gt;- Flag: The flag that is written when the item event is triggered (when the item is aquired).&lt;br&gt; - Flag Info: A helpful description of what the flag value refers to.&lt;br&gt;- Item: The item that is acquired by the event. Set to &quot;NOTHING&quot; for no item.&lt;br&gt;- Comment: Optional comment that is saved to the .asm file.&lt;br&gt;&lt;br&gt;&lt;b&gt;When an item row is selected:&lt;/b&gt; Left click will set the new X/Y position of the selected item event.&lt;/html&gt;"/>
                                     <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                       <ComponentRef name="mapChestItemTableModel"/>
                                     </Property>
@@ -4172,6 +4178,7 @@
                                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                       <Border info="null"/>
                                     </Property>
+                                    <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Item event:&lt;/b&gt; Allows player to aquire items.&lt;br&gt;- X/Y: The position of the item event.&lt;br&gt;- Flag: The flag that is written when the item event is triggered (when the item is aquired).&lt;br&gt; - Flag Info: A helpful description of what the flag value refers to.&lt;br&gt;- Item: The item that is acquired by the event. Set to &quot;NOTHING&quot; for no item.&lt;br&gt;- Comment: Optional comment that is saved to the .asm file.&lt;br&gt;&lt;br&gt;&lt;b&gt;When an item row is selected:&lt;/b&gt; Left click will set the new X/Y position of the selected item event.&lt;/html&gt;"/>
                                     <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.ComponentChooserEditor">
                                       <ComponentRef name="mapOtherItemTableModel"/>
                                     </Property>

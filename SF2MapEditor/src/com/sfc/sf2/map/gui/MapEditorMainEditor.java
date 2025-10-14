@@ -1081,7 +1081,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(209, Short.MAX_VALUE))
                 );
 
@@ -3055,6 +3055,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jTabbedPane2.addTab("Map Edit", jPanel4);
 
                 tableAreas.setBorder(null);
+                tableAreas.setInfoMessage("<html><b>Areas:</b> Indicates areas for bounding the camera (forcing it to stay within the region), defining upper (roof) layers, and for foreground/background effects.<br>- L1 X/Y/X'/Y': Defines a rectangle representing the area. The game camera is bound to this space.<br>- L2 F X/Y: Defines the foreground (upper) layer for the area. Used to define roofs, treetops, etc.<br>- L2 B X/Y: Defines the backgroun layer. TODO: What is it used for.<br>L1/L2 P X/Y: Defines the parallax effect of the layer 1 or 2. Parallax causes layers to scroll at different speeds as the player character moves.<br>- L1/2 S X/Y: Defines the autoscroll speed for layers 1 & 2. Autoscroll will cause the layer to constantly scroll.<br>- Music: The music to start playing when the player character enters the area.<br><br><b>When Area row is selected:</b>Left-click to drag the closest corner or point of the area (look for the circular blue handle).</html>");
                 tableAreas.setModel(mapAreaTableModel);
                 tableAreas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableAreas.setSingleClickText(true);
@@ -3070,6 +3071,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 });
 
                 tableFlagCopies.setBorder(null);
+                tableFlagCopies.setInfoMessage("<html><b>Flag copies event:</b> If a game flag is triggered when the map loads, then copies map blocks in one section of the map to another section.<br>- Flag: The game flag to trigger the event.<br>- Flag Info: A helpful description of what the flag value refers to.<br>- Source X/Y: The top-left of the section to copy blocks FROM.<br>- Width/Height: The width and height of the section to copy to/from.<br>- Dest. X/Y: The top-left of the section to copy blocks TO.<br>- Comment: Optional comment that is saved to the .asm file.<br><br><b>When Flag Copy row is selected:</b>TODO.</html>");
                 tableFlagCopies.setModel(mapFlagCopyTableModel);
                 tableFlagCopies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableFlagCopies.setSingleClickText(true);
@@ -3078,6 +3080,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jTabbedPane3.addTab("Flag Copies", tableFlagCopies);
 
                 tableStepCopies.setBorder(null);
+                tableStepCopies.setInfoMessage("<html><b>Step copies event:</b> If the player character steps on this map block, then copies map blocks in one section of the map to another section.<br>- Trigger X/Y: The trigger position for the step copy.<br>- Source X/Y: The top-left of the section to copy blocks FROM.<br>- Width/Height: The width and height of the section to copy to/from.<br>- Dest. X/Y: The top-left of the section to copy blocks TO.<br>- Comment: Optional comment that is saved to the .asm file.<br><br>NOTE: Step copy triggers before the character enters the Trigger X/Y block. If the Destination X/Y is the same block as the Trigger X/Y, this can then trigger another flag/event from the copied source (e.g. see door Hide flags in most town maps).<br><br><b>When Flag Copy row is selected:</b>TODO.</html>");
                 tableStepCopies.setModel(mapStepCopyTableModel);
                 tableStepCopies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableStepCopies.setSingleClickText(true);
@@ -3086,6 +3089,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jTabbedPane3.addTab("Step Copies", tableStepCopies);
 
                 tableRoofCopies.setBorder(null);
+                tableRoofCopies.setInfoMessage("<html><b>Roof copy event:</b> If the player character enters the trigger block, then copies map blocks in one section of the upper layer to another section of the upper layer.<br>- Trigger X/Y: The trigger position for the step copy.<br>- Source X/Y: The top-left of the section to copy blocks FROM.<br>- Width/Height: The width and height of the section to copy to/from.<br>- Dest. X/Y: The top-left of the section to copy blocks TO.<br>- Comment: Optional comment that is saved to the .asm file.<br><br>NOTE: Use Show flags to reverse the previous Roof Copy (i.e. to make the roof appear again).<br><br><b>When Flag Copy row is selected:</b>TODO.</html>");
                 tableRoofCopies.setModel(MapRoofCopyTableModel);
                 tableRoofCopies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableRoofCopies.setSingleClickText(true);
@@ -3107,6 +3111,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jTabbedPane2.addTab("Block Copies", jPanel22);
 
                 tableWarps.setBorder(null);
+                tableWarps.setInfoMessage("<html><b>Warp event:</b> Teleports the player to a new position or a new map.<br>- Trigger X/Y: The trigger point for the warp.<br>- Scroll Dir: The direction that the camera scrolls when warping (used for overworld maps).<br> - Dest. Map: The map to warp to. Set to \"CURRENT\" to warp to a different position on the current map.<br>- Dest X/Y: The destination position to warp to (on this map or another.<br>- Facing: The direction to face at the warp destination.<br>- Comment: Optional comment that is saved to the .asm file.<br><br><b>When a warp row is selected:</b> Left click and drag will set the set the Trigger or Destination X/Y position of the selected item event, whichever is closer to the cursor.</html>");
                 tableWarps.setModel(mapWarpTableModel);
                 tableWarps.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableWarps.setSingleClickText(true);
@@ -3121,6 +3126,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 });
 
                 tableChestItems.setBorder(null);
+                tableChestItems.setInfoMessage("<html><b>Item event:</b> Allows player to aquire items.<br>- X/Y: The position of the item event.<br>- Flag: The flag that is written when the item event is triggered (when the item is aquired).<br> - Flag Info: A helpful description of what the flag value refers to.<br>- Item: The item that is acquired by the event. Set to \"NOTHING\" for no item.<br>- Comment: Optional comment that is saved to the .asm file.<br><br><b>When an item row is selected:</b> Left click will set the new X/Y position of the selected item event.</html>");
                 tableChestItems.setModel(mapChestItemTableModel);
                 tableChestItems.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableChestItems.setSingleClickText(true);
@@ -3129,6 +3135,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jTabbedPane4.addTab("Chest Items", tableChestItems);
 
                 tableOtherItems.setBorder(null);
+                tableOtherItems.setInfoMessage("<html><b>Item event:</b> Allows player to aquire items.<br>- X/Y: The position of the item event.<br>- Flag: The flag that is written when the item event is triggered (when the item is aquired).<br> - Flag Info: A helpful description of what the flag value refers to.<br>- Item: The item that is acquired by the event. Set to \"NOTHING\" for no item.<br>- Comment: Optional comment that is saved to the .asm file.<br><br><b>When an item row is selected:</b> Left click will set the new X/Y position of the selected item event.</html>");
                 tableOtherItems.setModel(mapOtherItemTableModel);
                 tableOtherItems.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableOtherItems.setSingleClickText(true);
@@ -3181,7 +3188,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 );
                 layout.setVerticalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1093, Short.MAX_VALUE)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1093, Short.MAX_VALUE)
                 );
 
                 setSize(new java.awt.Dimension(1416, 1008));
