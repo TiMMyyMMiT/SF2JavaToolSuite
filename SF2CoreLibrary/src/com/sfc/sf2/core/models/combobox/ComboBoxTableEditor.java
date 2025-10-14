@@ -46,7 +46,7 @@ public class ComboBoxTableEditor extends AbstractCellEditor implements TableCell
         if (table.getModel() instanceof AbstractTableModel) {
             ComboBoxModel model = ((AbstractTableModel)table.getModel()).getComboBoxModel(row, column);
             if (model != null) {
-                comboBox.setSelectedItem(value);
+                model.setSelectedItem(value);
                 comboBox.setModel(model);
             }
         }

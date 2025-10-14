@@ -43,13 +43,12 @@ public class MapFlagCopyEvent extends MapCopyEvent {
         return new MapFlagCopyEvent(getFlag(), getSourceX(), getSourceY(), getWidth(), getHeight(), getDestX(), getDestY(), flagComment, getComment());
     }
     
-    public static String getFlagInfo(int flag) {
+    static String getFlagInfo(int flag) {
              if (flag < 32)   return String.format("Party member %d is in the force.", flag);
         else if (flag < 64)   return String.format("Party member %d is in the battle party.", (flag-32));
         else if (flag < 90)   return String.format("Map follower %d is present.", (flag-64));
-        else if (flag < 127)  return String.format("Temp battle flag %d is set.", flag);
-        else if (flag < 135)  return String.format("???", (flag-127));
-        else if (flag < 256)  return String.format("Item flag %d is acquired (found in chest or other).", (flag-135));
+        else if (flag < 128)  return String.format("Temp battle flag %d is set.", flag);
+        else if (flag < 256)  return String.format("Item flag %d is acquired (found in chest or other).", (flag-128));
         else if (flag < 280)  return String.format("Temp map setup flag %d is set.", flag);
         else if (flag < 400)  return String.format("???", (flag-280));
         else if (flag < 450)  return String.format("Battle %d is unlocked.", (flag-400));

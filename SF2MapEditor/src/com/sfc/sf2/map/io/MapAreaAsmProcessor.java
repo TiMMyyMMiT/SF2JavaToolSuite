@@ -70,6 +70,7 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
                 
                 layerType = StringHelpers.getValueInt(MapStringHelpers.getNextLineSingle(reader, "mainLayerType", areasList.size()+1));
                 defaultMusic = MapStringHelpers.getNextLineSingle(reader, "areaDefaultMusic", areasList.size()+1);
+                if (defaultMusic.startsWith("MUSIC_")) defaultMusic = defaultMusic.substring(6);
                 defaultMusic = MapEnums.toEnumString(defaultMusic, pckg.getMusic());
                 
                 areasList.add(new MapArea(l1StartX, l1StartY, l1EndX, l1EndY, fg2StartX, fg2StartY, bg2StartX, bg2StartY, l1ParallaxX, l1ParallaxY, l2ParallaxX, l2ParallaxY, l1AutoscrollX, l1AutoscrollY, l2AutoscrollX, l2AutoscrollY, layerType, defaultMusic));
@@ -98,7 +99,7 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
             writer.write(String.format("\t\t\t\t\tmainLayerAutoscroll %3d, %3d\n", item[i].getLayer1AutoscrollX(), item[i].getLayer1AutoscrollY()));
             writer.write(String.format("\t\t\t\t\tscndLayerAutoscroll %3d, %3d\n", item[i].getLayer2AutoscrollX(), item[i].getLayer2AutoscrollY()));
             writer.write(String.format("\t\t\t\t\tmainLayerType       %3d\n", item[i].getLayerType()));
-            writer.write(String.format("\t\t\t\t\tareaDefaultMusic    Music_%s\n", item[i].getDefaultMusic()));
+            writer.write(String.format("\t\t\t\t\tareaDefaultMusic    MUSIC_%s\n", item[i].getDefaultMusic()));
             writer.write("\n");
         }
         writer.write("\t\t\t\tendWord\n");

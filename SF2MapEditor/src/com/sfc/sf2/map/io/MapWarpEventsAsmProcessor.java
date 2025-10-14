@@ -58,6 +58,7 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
                 }
                 
                 destMap = MapStringHelpers.getNextLineSingle(reader, "warpMap", warpsList.size()+1);
+                destMap = destMap.replace("MAP_", "");
                 
                 split = MapStringHelpers.getNextLineMulti(reader, "warpDest", warpsList.size()+1);
                 destX = StringHelpers.getValueInt(split[0]);

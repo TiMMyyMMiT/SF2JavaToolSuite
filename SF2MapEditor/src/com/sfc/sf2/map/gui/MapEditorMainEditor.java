@@ -8,12 +8,15 @@ package com.sfc.sf2.map.gui;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.gui.layout.LayoutAnimator;
+import com.sfc.sf2.core.models.combobox.ComboBoxTableEditor;
+import com.sfc.sf2.core.models.combobox.ComboBoxTableRenderer;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.map.Map;
 import com.sfc.sf2.map.MapArea;
 import com.sfc.sf2.map.MapCopyEvent;
+import com.sfc.sf2.map.MapEnums;
 import com.sfc.sf2.map.MapFlagCopyEvent;
 import com.sfc.sf2.map.MapItem;
 import com.sfc.sf2.map.MapManager;
@@ -139,6 +142,31 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         tableAnimFrames.addTableModelListener(this::onAnimationFramesDataChanged);
         tableAnimFrames.jTable.getColumnModel().getColumn(0).setMaxWidth(30);
         
+        //Tables
+        tableAreas.setMinColumnWidth(0, 40);
+        tableAreas.setMaxColumnWidth(0, 40);
+        tableAreas.setMinColumnWidth(18, 100);
+        tableAreas.jTable.setDefaultRenderer(String.class, new ComboBoxTableRenderer());
+        tableAreas.jTable.setDefaultEditor(String.class, new ComboBoxTableEditor());
+        tableFlagCopies.setMaxColumnWidth(0, 40);
+        tableStepCopies.setMaxColumnWidth(0, 40);
+        tableRoofCopies.setMaxColumnWidth(0, 40);
+        tableWarps.setMaxColumnWidth(0, 40);
+        tableWarps.setMinColumnWidth(4, 100);
+        tableWarps.jTable.getColumnModel().getColumn(3).setCellRenderer(new ComboBoxTableRenderer());
+        tableWarps.jTable.getColumnModel().getColumn(3).setCellEditor(new ComboBoxTableEditor());
+        tableWarps.jTable.getColumnModel().getColumn(4).setCellRenderer(new ComboBoxTableRenderer());
+        tableWarps.jTable.getColumnModel().getColumn(4).setCellEditor(new ComboBoxTableEditor());
+        tableWarps.jTable.getColumnModel().getColumn(7).setCellRenderer(new ComboBoxTableRenderer());
+        tableWarps.jTable.getColumnModel().getColumn(7).setCellEditor(new ComboBoxTableEditor());
+        tableChestItems.setMaxColumnWidth(0, 40);
+        tableChestItems.setMaxColumnWidth(0, 40);
+        tableChestItems.jTable.getColumnModel().getColumn(5).setCellRenderer(new ComboBoxTableRenderer());
+        tableChestItems.jTable.getColumnModel().getColumn(5).setCellEditor(new ComboBoxTableEditor());
+        tableOtherItems.setMaxColumnWidth(0, 40);
+        tableOtherItems.jTable.getColumnModel().getColumn(5).setCellRenderer(new ComboBoxTableRenderer());
+        tableOtherItems.jTable.getColumnModel().getColumn(5).setCellEditor(new ComboBoxTableEditor());
+        
         //Data
         tableAreas.addTableModelListener(this::OnAreasTableDataChanged);
         tableFlagCopies.addTableModelListener(this::OnFlagCopiesTableDataChanged);
@@ -173,6 +201,12 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setDrawMode_Toggles(MapLayoutPanel.DRAW_MODE_TRIGGERS, jCheckBox21.isSelected());
                 
         if (map != null) {
+            MapEnums mapEnums = mapManager.getMapEnums();
+            mapAreaTableModel.setEnums(mapEnums);
+            mapWarpTableModel.setEnums(mapEnums);
+            mapChestItemTableModel.setEnums(mapEnums);
+            mapOtherItemTableModel.setEnums(mapEnums);
+            
             mapAreaTableModel.setTableData(map.getAreas());
             mapFlagCopyTableModel.setTableData(map.getFlagCopies());
             mapStepCopyTableModel.setTableData(map.getStepCopies());
@@ -238,7 +272,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             }
         } else {
             mapBlocksetLayoutPanel.setBlockset(null);
-            
+                    
             mapAreaTableModel.setTableData(null);
             mapFlagCopyTableModel.setTableData(null);
             mapStepCopyTableModel.setTableData(null);
@@ -264,8 +298,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapFlagCopyTableModel = new com.sfc.sf2.map.models.MapFlagCopyEventTableModel();
         mapChestItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
         mapOtherItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
-        MapRoofCopyTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
-        mapStepCopyTableModel = new com.sfc.sf2.map.models.MapCopyEventTableModel();
+        MapRoofCopyTableModel = new com.sfc.sf2.map.models.MapRoofCopyEventTableModel();
+        mapStepCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyEventTableModel();
         mapAnimationFrameTableModel = new com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel();
         mapWarpTableModel = new com.sfc.sf2.map.models.MapWarpTableModel();
         flatOptionPaneWarningIcon1 = new com.formdev.flatlaf.icons.FlatOptionPaneWarningIcon();
@@ -3853,7 +3887,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.map.models.MapCopyEventTableModel MapRoofCopyTableModel;
+    private com.sfc.sf2.map.models.MapRoofCopyEventTableModel MapRoofCopyTableModel;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel2;
     private com.sfc.sf2.map.block.gui.BlockSlotPanel blockSlotPanelLeft;
@@ -4096,7 +4130,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.map.models.MapFlagCopyEventTableModel mapFlagCopyTableModel;
     private com.sfc.sf2.map.gui.MapLayoutPanel mapLayoutPanel;
     private com.sfc.sf2.map.models.MapItemTableModel mapOtherItemTableModel;
-    private com.sfc.sf2.map.models.MapCopyEventTableModel mapStepCopyTableModel;
+    private com.sfc.sf2.map.models.MapStepCopyEventTableModel mapStepCopyTableModel;
     private com.sfc.sf2.map.models.MapWarpTableModel mapWarpTableModel;
     private com.sfc.sf2.core.gui.controls.Table tableAnimFrames;
     private com.sfc.sf2.core.gui.controls.Table tableAreas;

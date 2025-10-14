@@ -7,7 +7,10 @@ package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
 import com.sfc.sf2.map.MapArea;
+import com.sfc.sf2.map.MapEnums;
 import com.sfc.sf2.map.layout.MapLayout;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -15,9 +18,15 @@ import com.sfc.sf2.map.layout.MapLayout;
  */
 public class MapAreaTableModel extends AbstractTableModel<MapArea> {
     
+    private DefaultComboBoxModel musicModel;
+    
     public MapAreaTableModel() {
         super(new String[] { "Index", "L1 X", "L1 Y", "L1 X'", "L1 Y'", "L2 FX", "L2 FY", "L2 BX", "L2 BY",
             "L1 PX", "L1 PY", "L2 PX", "L2 PY", "L1 SX", "L1 SY", "L2 SX", "L2 SY", "L1 Type", "Music" }, 64);
+    }
+ 
+    public void setEnums(MapEnums enums) {
+        musicModel = new DefaultComboBoxModel(enums.getMusic().keySet().toArray());
     }
 
     @Override
@@ -64,24 +73,24 @@ public class MapAreaTableModel extends AbstractTableModel<MapArea> {
     @Override
     protected MapArea setValue(MapArea item, int row, int col, Object value) {
         switch (col) {
-            case  1: item.setLayer1StartX((int)value);
-            case  2: item.setLayer1StartY((int)value);
-            case  3: item.setLayer1EndX((int)value);
-            case  4: item.setLayer1EndY((int)value);
-            case  5: item.setForegroundLayer2StartX((int)value);
-            case  6: item.setForegroundLayer2StartY((int)value);
-            case  7: item.setBackgroundLayer2StartX((int)value);
-            case  8: item.setBackgroundLayer2StartY((int)value);
-            case  9: item.setLayer1ParallaxX((int)value);
-            case 10: item.setLayer1ParallaxY((int)value);
-            case 11: item.setLayer2ParallaxX((int)value);
-            case 12: item.setLayer2ParallaxY((int)value);
-            case 13: item.setLayer1AutoscrollX((int)value);
-            case 14: item.setLayer1AutoscrollY((int)value);
-            case 15: item.setLayer2AutoscrollX((int)value);
-            case 16: item.setLayer2AutoscrollY((int)value);
-            case 17: item.setLayerType((int)value);
-            case 18: item.setDefaultMusic((String)value);
+            case  1: item.setLayer1StartX((int)value); break;
+            case  2: item.setLayer1StartY((int)value); break;
+            case  3: item.setLayer1EndX((int)value); break;
+            case  4: item.setLayer1EndY((int)value); break;
+            case  5: item.setForegroundLayer2StartX((int)value); break;
+            case  6: item.setForegroundLayer2StartY((int)value); break;
+            case  7: item.setBackgroundLayer2StartX((int)value); break;
+            case  8: item.setBackgroundLayer2StartY((int)value); break;
+            case  9: item.setLayer1ParallaxX((int)value); break;
+            case 10: item.setLayer1ParallaxY((int)value); break;
+            case 11: item.setLayer2ParallaxX((int)value); break;
+            case 12: item.setLayer2ParallaxY((int)value); break;
+            case 13: item.setLayer1AutoscrollX((int)value); break;
+            case 14: item.setLayer1AutoscrollY((int)value); break;
+            case 15: item.setLayer2AutoscrollX((int)value); break;
+            case 16: item.setLayer2AutoscrollY((int)value); break;
+            case 17: item.setLayerType((int)value); break;
+            case 18: item.setDefaultMusic((String)value); break;
         }
         return item;
     }
@@ -93,9 +102,21 @@ public class MapAreaTableModel extends AbstractTableModel<MapArea> {
 
     @Override
     protected Comparable<?> getMaxLimit(MapArea item, int col) {
-        return MapLayout.BLOCK_WIDTH-1;
+        switch (col) {
+            case  9:
+            case 10:
+            case 11:
+            case 12:
+                return 0x100;
+            case 17:
+                return 0xFF;
+            default:
+                return MapLayout.BLOCK_WIDTH-1;
+        }
     }
     
-    
-    
+    @Override
+    public ComboBoxModel getComboBoxModel(int row, int col) {
+        return col == 18 ? musicModel : null;
+    }
 }

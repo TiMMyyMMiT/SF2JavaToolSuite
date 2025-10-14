@@ -15,15 +15,21 @@ import java.util.LinkedHashMap;
 public class MapEnums extends AbstractEnums {
         
     private final LinkedHashMap<String, Integer> items;
+    private final LinkedHashMap<String, Integer> maps;
     private final LinkedHashMap<String, Integer> music;
 
-    public MapEnums(LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> music) {
+    public MapEnums(LinkedHashMap<String, Integer> items, LinkedHashMap<String, Integer> maps, LinkedHashMap<String, Integer> music) {
         this.items = items;
+        this.maps = maps;
         this.music = music;
     }
 
     public LinkedHashMap<String, Integer> getItems() {
         return items;
+    }
+
+    public LinkedHashMap<String, Integer> getMaps() {
+        return maps;
     }
 
     public LinkedHashMap<String, Integer> getMusic() {

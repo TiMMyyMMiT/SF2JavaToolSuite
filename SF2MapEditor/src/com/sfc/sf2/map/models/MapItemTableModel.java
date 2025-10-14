@@ -6,9 +6,11 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
-import com.sfc.sf2.map.MapFlagCopyEvent;
+import com.sfc.sf2.map.MapEnums;
 import com.sfc.sf2.map.MapItem;
 import com.sfc.sf2.map.layout.MapLayout;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -16,8 +18,14 @@ import com.sfc.sf2.map.layout.MapLayout;
  */
 public class MapItemTableModel extends AbstractTableModel<MapItem> {
     
+    private DefaultComboBoxModel itemsModel;
+    
     public MapItemTableModel() {
-        super(new String[] { "Index", "X", "Y", "Flag", "Flag Info", "Item" }, 64);
+        super(new String[] { "Index", "X", "Y", "Flag", "Flag Info", "Item", "Comment" }, 64);
+    }
+ 
+    public void setEnums(MapEnums enums) {
+        itemsModel = new DefaultComboBoxModel(enums.getItems().keySet().toArray());
     }
 
     @Override
@@ -47,8 +55,9 @@ public class MapItemTableModel extends AbstractTableModel<MapItem> {
             case 1: return item.getX();
             case 2: return item.getY();
             case 3: return item.getFlag();
-            case 4: return MapFlagCopyEvent.getFlagInfo(item.getFlag());
+            case 4: return item.getFlagInfo();
             case 5: return item.getItem();
+            case 6: return item.getComment();
         }
         return -1;
     }
@@ -60,6 +69,7 @@ public class MapItemTableModel extends AbstractTableModel<MapItem> {
             case 2: item.setY((int)value); break;
             case 3: item.setFlag((int)value); break;
             case 5: item.setItem((String)value); break;
+            case 6: item.setComment((String)value); break;
         }
         return item;
     }
@@ -71,6 +81,16 @@ public class MapItemTableModel extends AbstractTableModel<MapItem> {
 
     @Override
     protected Comparable<?> getMaxLimit(MapItem item, int col) {
-        return MapLayout.BLOCK_WIDTH-1;
+        switch (col) {
+            case 1:
+            case 2:
+                return MapLayout.BLOCK_WIDTH-1;
+        }
+        return Integer.MAX_VALUE;
+    }
+    
+    @Override
+    public ComboBoxModel getComboBoxModel(int row, int col) {
+        return col == 5 ? itemsModel : null;
     }
 }

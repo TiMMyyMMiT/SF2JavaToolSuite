@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.models;
 
 import com.sfc.sf2.core.models.AbstractTableModel;
+import com.sfc.sf2.helpers.NumHelpers;
 import com.sfc.sf2.map.MapCopyEvent;
 import com.sfc.sf2.map.layout.MapLayout;
 
@@ -13,15 +14,15 @@ import com.sfc.sf2.map.layout.MapLayout;
  *
  * @author TiMMy
  */
-public class MapCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
+public class MapRoofCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
     
-    public MapCopyEventTableModel() {
-        super(new String[] { "Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y" }, 64);
+    public MapRoofCopyEventTableModel() {
+        super(new String[] { "Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y", "Comment" }, 64);
     }
 
     @Override
     public Class<?> getColumnType(int col) {
-        return Integer.class;
+        return col == 9 ? String.class : Integer.class;
     }
 
     @Override
@@ -46,6 +47,7 @@ public class MapCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
             case 6: return item.getHeight();
             case 7: return item.getDestX();
             case 8: return item.getDestY();
+            case 9: return item.getComment();
         }
         return -1;
     }
@@ -55,12 +57,13 @@ public class MapCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
         switch (col) {
             case 1: item.setTriggerX((int)value); break;
             case 2: item.setTriggerY((int)value); break;
-            case 3: item.setSourceX((int)value); break;
-            case 4: item.setSourceY((int)value); break;
+            case 3: item.setSourceX(NumHelpers.getValueWithValidGap((int)value, item.getSourceX(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
+            case 4: item.setSourceY(NumHelpers.getValueWithValidGap((int)value, item.getSourceY(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
             case 5: item.setWidth((int)value); break;
             case 6: item.setHeight((int)value); break;
             case 7: item.setDestX((int)value); break;
             case 8: item.setDestY((int)value); break;
+            case 9: item.setComment((String)value); break;
         }
         return item;
     }
@@ -72,6 +75,6 @@ public class MapCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
 
     @Override
     protected Comparable<?> getMaxLimit(MapCopyEvent item, int col) {
-        return MapLayout.BLOCK_WIDTH-1;
+        return col == 3 || col == 4 ? 0xFF : MapLayout.BLOCK_WIDTH-1;
     }
 }

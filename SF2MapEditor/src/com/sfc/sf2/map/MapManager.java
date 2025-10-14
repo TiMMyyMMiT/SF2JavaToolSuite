@@ -198,8 +198,8 @@ public class MapManager extends AbstractManager {
         return map;
     }
 
-    public void setMap(Map map) {
-        this.map = map;
+    public MapEnums getMapEnums() {
+        return mapEnums;
     }
     
     public String getSharedBlockInfo() {

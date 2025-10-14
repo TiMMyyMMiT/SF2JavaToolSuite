@@ -48,6 +48,10 @@ public class MapItem {
     public void setFlag(int flag) {
         this.flag = flag;
     }
+    
+    public String getFlagInfo() {
+        return MapFlagCopyEvent.getFlagInfo(flag);
+    }
 
     public String getItem() {
         return item;

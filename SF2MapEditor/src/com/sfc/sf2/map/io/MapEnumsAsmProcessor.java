@@ -20,10 +20,11 @@ import java.util.LinkedHashMap;
  */
 public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
 
+    private int itemNothingValue = 0;
     boolean foundItemNothing;
 
     public MapEnumsAsmProcessor() {
-        super(new String[] { "Items (bitfield)", "Music" });
+        super(new String[] { "Items (bitfield)", "Maps", "Music" });
     }
 
     @Override
@@ -43,6 +44,8 @@ public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
                     int value = 0;
                     if (item.equals("NOTHING")) {
                         foundItemNothing = true;
+                        value = itemNothingValue;
+                        asmData.put(item, value);
                         return;
                     } else {
                         int commentIndex = line.indexOf(";");
@@ -52,9 +55,21 @@ public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
                         value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
                         asmData.put(item, value);
                     }
+                } else if (line.startsWith("item")) {
+                    //Get the ITEM_NOTHING
+                    if (line.startsWith("itemNothing")) {
+                        itemNothingValue = StringHelpers.getValueInt(line.substring(line.indexOf("=") + 1));
+                    }
                 }
                 break;
             case 1:
+                if (line.startsWith("MAP_")) {
+                    line = line.substring(line.indexOf('_') + 1);
+                    String map = line.substring(0, line.indexOf(":"));
+                    int value = StringHelpers.getValueInt(line.substring(line.indexOf("equ") + 4));
+                    asmData.put(map, value);
+                }
+            case 2:
                 if (line.startsWith("MUSIC_")) {
                     line = line.substring(line.indexOf('_') + 1);
                     String music = line.substring(0, line.indexOf(":"));
@@ -66,6 +81,6 @@ public class MapEnumsAsmProcessor extends SF2EnumsAsmProcessor<MapEnums> {
 
     @Override
     protected MapEnums createEnumsData(LinkedHashMap<String, Integer>[] dataSets) {
-        return new MapEnums(dataSets[0], dataSets[1]);
+        return new MapEnums(dataSets[0], dataSets[1], dataSets[2]);
     }
 }

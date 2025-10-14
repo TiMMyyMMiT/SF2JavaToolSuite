@@ -478,9 +478,10 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 g2.drawRect(warp.getTriggerX()*PIXEL_WIDTH, warp.getTriggerY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
             }
         }
-        if (warp.getDestMap().equals("MAP_CURRENT")) {
+        if (warp.getDestMap().equals("CURRENT")) {
             g2.setColor(selected ? COLOR_SELECTED : Color.BLUE);
             GraphicsHelpers.drawArrowLine(g2, warp.getTriggerX()*PIXEL_WIDTH+12, warp.getTriggerY()*PIXEL_HEIGHT+12, warp.getDestX()*PIXEL_WIDTH+12, warp.getDestY()*PIXEL_HEIGHT+12);
+            g2.drawRect(warp.getDestX()*PIXEL_WIDTH, warp.getDestY()*PIXEL_HEIGHT, PIXEL_WIDTH, PIXEL_HEIGHT);
         }
     }    
 

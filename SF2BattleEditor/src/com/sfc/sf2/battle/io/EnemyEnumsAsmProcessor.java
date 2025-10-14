@@ -108,7 +108,7 @@ public class EnemyEnumsAsmProcessor extends SF2EnumsAsmProcessor<EnemyEnums> {
                         }
                     }
                 } else if (line.startsWith("item")) {
-                    //Get the ITEM_NOTHING & ITEM
+                    //Get the ITEM_NOTHING & ITEM_EQUIPPED
                     //TODO .asm will store as string so the value doesn't matter. .bin will store value which will only support expanded item values
                     if (line.startsWith("itemNothing")) {
                         itemNothingValue = StringHelpers.getValueInt(line.substring(line.indexOf("=") + 1));
