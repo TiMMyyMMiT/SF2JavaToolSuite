@@ -1900,7 +1900,7 @@
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" attributes="0">
                                                           <Component id="jPanel33" min="-2" max="-2" attributes="0"/>
-                                                          <EmptySpace max="32767" attributes="0"/>
+                                                          <EmptySpace pref="50" max="32767" attributes="0"/>
                                                           <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                       <Component id="jPanel1" max="32767" attributes="0"/>
@@ -1926,7 +1926,7 @@
                                           <Layout>
                                             <DimensionLayout dim="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jScrollPane2" alignment="0" pref="546" max="32767" attributes="0"/>
+                                                  <Component id="jScrollPane2" alignment="0" pref="607" max="32767" attributes="0"/>
                                               </Group>
                                             </DimensionLayout>
                                             <DimensionLayout dim="1">
@@ -2237,7 +2237,7 @@
                                             <DimensionLayout dim="1">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <EmptySpace max="32767" attributes="0"/>
                                                       <Component id="jPanelAreasDisplay" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jPanelFlagCopiesDisplay" min="-2" max="-2" attributes="0"/>
@@ -2245,7 +2245,6 @@
                                                       <Component id="jPanelStepCopiesDisplay" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jPanelRoofCopiesDisplay" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                             </DimensionLayout>
@@ -2268,6 +2267,8 @@
                                                           <Group type="103" groupAlignment="0" attributes="0">
                                                               <Component id="jCheckBox1" alignment="1" min="-2" max="-2" attributes="0"/>
                                                               <Component id="jCheckBox4" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jCheckBox26" alignment="1" min="-2" max="-2" attributes="0"/>
+                                                              <Component id="jCheckBox27" alignment="1" min="-2" max="-2" attributes="0"/>
                                                           </Group>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                       </Group>
@@ -2279,6 +2280,11 @@
                                                           <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
                                                           <EmptySpace max="-2" attributes="0"/>
                                                           <Component id="jCheckBox4" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jCheckBox26" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jCheckBox27" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
                                                 </DimensionLayout>
@@ -2298,6 +2304,22 @@
                                                   </Properties>
                                                   <Events>
                                                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox4ActionPerformed"/>
+                                                  </Events>
+                                                </Component>
+                                                <Component class="javax.swing.JCheckBox" name="jCheckBox26">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Simulate parallax"/>
+                                                  </Properties>
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox26ActionPerformed"/>
+                                                  </Events>
+                                                </Component>
+                                                <Component class="javax.swing.JCheckBox" name="jCheckBox27">
+                                                  <Properties>
+                                                    <Property name="text" type="java.lang.String" value="Animate autoscroll"/>
+                                                  </Properties>
+                                                  <Events>
+                                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox27ActionPerformed"/>
                                                   </Events>
                                                 </Component>
                                               </SubComponents>

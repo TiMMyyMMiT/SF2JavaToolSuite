@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.map.gui;
 
+import com.sfc.sf2.core.gui.layout.BaseLayoutComponent;
 import com.sfc.sf2.core.gui.layout.BaseMouseCoordsComponent;
 import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
 import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
@@ -35,6 +36,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -98,6 +100,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private int lastMapX;
     private int lastMapY;
     private int previewIndex = -1;
+    
+    private boolean simulateParallax;
     
     private List<int[]> actions = new ArrayList<int[]>();
     
@@ -329,13 +333,24 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         if (!area.hasBackgroundLayer2()) return;
         int width = area.getLayer1EndX()-area.getLayer1StartX();
         int height = area.getLayer1EndY()-area.getLayer1StartY();
+        int offsetX = 0, offsetY = 0;
+        if (simulateParallax && BaseLayoutComponent.IsEnabled(scroller) && (area.getLayer2ParallaxX() < 0x100 || area.getLayer2ParallaxY() < 0x100)) {
+            if (area.getLayer2ParallaxX() > 0 && area.getLayer2ParallaxX() < 0x100) {
+                offsetX = (int)(area.getLayer2ParallaxX()*PIXEL_WIDTH*scroller.getScrollPercent(true)*0.5f);
+            }
+            if (area.getLayer2ParallaxY() > 0 && area.getLayer2ParallaxY() < 0x100) {
+                offsetY = (int)(area.getLayer2ParallaxY()*PIXEL_WIDTH*scroller.getScrollPercent(false)*0.5f);
+            }
+        }
         MapBlock[] blocks = layout.getBlockset().getBlocks();
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
-                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH;
-                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT;
+                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH+offsetX;
+                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT+offsetY;
                 int index = area.getBackgroundLayer2StartX()+x + (area.getBackgroundLayer2StartY()+y)*BLOCK_WIDTH;
-                g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
+                if (index < MapLayout.BLOCK_COUNT) {
+                    g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
+                }
             }
         }
     }
@@ -784,6 +799,16 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         redraw();
     }
 
+    public void setSimulateParallax(boolean simulateParallax) {
+        this.simulateParallax = simulateParallax;
+        redraw();
+        if (simulateParallax) {
+            scroller.addScrollChangedListener(this::onScrollerUpdated);
+        } else {
+            scroller.removeScrollChangedListener(this::onScrollerUpdated);
+        }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Input">      
     private void onMouseButtonInput(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
         if (isOnActionsTab) {
@@ -1176,6 +1201,10 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         } else {
             return 1;
         }
+    }
+    
+    private void onScrollerUpdated(AdjustmentEvent scrollerAdjustment) {
+        redraw();
     }
     // </editor-fold>
 }
