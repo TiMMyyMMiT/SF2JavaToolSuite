@@ -522,7 +522,7 @@
                                                   <Component id="jLabel3" alignment="3" max="-2" attributes="0"/>
                                                   <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace pref="23" max="32767" attributes="0"/>
+                                              <EmptySpace pref="13" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -621,7 +621,7 @@
                             </Component>
                             <Component class="com.sfc.sf2.core.gui.controls.FileButton" name="fileButton8">
                               <Properties>
-                                <Property name="filePath" type="java.lang.String" value="..\u005cSF2Enums.asm" containsInvalidXMLChars="true"/>
+                                <Property name="filePath" type="java.lang.String" value="..\u005csf2enums.asm" containsInvalidXMLChars="true"/>
                                 <Property name="labelText" type="java.lang.String" value="SF2Enums :"/>
                               </Properties>
                             </Component>
