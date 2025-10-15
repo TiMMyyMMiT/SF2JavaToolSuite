@@ -116,6 +116,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         super.paintComponent(g);
         
         Graphics2D g2 = (Graphics2D)g;
+        drawHandleNode(g);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         Dimension offset = getImageOffset();
         g2.drawImage(previewImage, offset.width+(copiedBlocksDrawX*PIXEL_WIDTH)*getDisplayScale(), offset.height+(copiedBlocksDrawY*PIXEL_HEIGHT)*getDisplayScale(), null);
@@ -190,6 +191,134 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         }
         drawSelected(g2);
         buildPreviewImage();
+    }
+    
+    private void drawHandleNode(Graphics graphics) {
+        if (selectedTabsDrawMode == DRAW_MODE_NONE || selectedItemIndex == -1 || closestSelectedPointIndex == -1) return;
+        int x = -1, y = -1, offsetX = 0, offsetY = 0;
+        boolean atEdge = false;
+        switch (selectedTabsDrawMode) {
+            case DRAW_MODE_AREAS:
+                MapArea area = map.getAreas()[selectedItemIndex];
+                atEdge = true;
+                switch (closestSelectedPointIndex) {
+                    case 0:
+                        x = area.getLayer1StartX();
+                        y = area.getLayer1StartY();
+                        offsetX = 2;
+                        offsetY = 2;
+                        break;
+                    case 1:
+                        x = area.getLayer1EndX()+1;
+                        y = area.getLayer1StartY();
+                        offsetX = -4;
+                        offsetY = 2;
+                        break;
+                    case 2:
+                        x = area.getLayer1StartX();
+                        y = area.getLayer1EndY()+1;
+                        offsetX = 2;
+                        offsetY = -4;
+                        break;
+                    case 3:
+                        x = area.getLayer1EndX()+1;
+                        y = area.getLayer1EndY()+1;
+                        offsetX = -4;
+                        offsetY = -4;
+                        break;
+                    case 4:
+                        atEdge = false;
+                        if (area.hasBackgroundLayer2()) {
+                            x = area.getBackgroundLayer2StartX();
+                            y = area.getBackgroundLayer2StartY();
+                        } else {
+                            x = area.getLayer1StartX()+area.getForegroundLayer2StartX();
+                            y = area.getLayer1StartY()+area.getForegroundLayer2StartY();
+                        }
+                        break;
+                }
+                break;
+            case DRAW_MODE_FLAG_COPIES:
+            case DRAW_MODE_STEP_COPIES:
+            case DRAW_MODE_ROOF_COPIES:
+                MapCopyEvent copy = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? map.getFlagCopies()[selectedItemIndex] : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? map.getStepCopies()[selectedItemIndex] : map.getRoofCopies()[selectedItemIndex];
+                atEdge = true;
+                switch (closestSelectedPointIndex) {
+                    case 0:
+                        x = copy.getTriggerX();
+                        y = copy.getTriggerY();
+                        atEdge = false;
+                        break;
+                    case 1:
+                        x = copy.getSourceX();
+                        y = copy.getSourceY();
+                        offsetX = 2;
+                        offsetY = 2;
+                        break;
+                    case 2:
+                        x = copy.getSourceX()+copy.getWidth();
+                        y = copy.getSourceY();
+                        offsetX = -4;
+                        offsetY = 2;
+                        break;
+                    case 3:
+                        x = copy.getSourceX();
+                        y = copy.getSourceY()+copy.getHeight();
+                        offsetX = 2;
+                        offsetY = -4;
+                        break;
+                    case 4:
+                        x = copy.getSourceX()+copy.getWidth();
+                        y = copy.getSourceY()+copy.getHeight();
+                        offsetX = -4;
+                        offsetY = -4;
+                        break;
+                    case 5:
+                        x = copy.getDestX()+copy.getWidth()/2;
+                        y = copy.getDestY()+copy.getHeight()/2;
+                        atEdge = false;
+                        break;
+                }
+                break;
+            case DRAW_MODE_WARPS:
+                MapWarpEvent warp = map.getWarps()[selectedItemIndex];
+                MapArea mainArea = map.getAreas()[0];
+                if (closestSelectedPointIndex == 0) {
+                    x = warp.getTriggerX();
+                    if (x == 0xFF) x = mainArea.getLayer1StartX()+mainArea.getWidth()/2;
+                    y = warp.getTriggerY();
+                    if (y == 0xFF) y = mainArea.getLayer1StartY()+mainArea.getHeight()/2;
+                } else {
+                    x = warp.getDestX();
+                    y = warp.getDestY();
+                }
+                break;
+            case DRAW_MODE_CHEST_ITEMS:
+            case DRAW_MODE_OTHER_ITEMS:
+                MapItem item = selectedTabsDrawMode == DRAW_MODE_CHEST_ITEMS ? map.getChestItems()[selectedItemIndex] : map.getOtherItems()[selectedItemIndex];
+                x = item.getX();
+                y = item.getY();
+                break;
+            default:
+                return;
+        }
+        Dimension imageOffset = getImageOffset();
+        int scale = getDisplayScale();
+        x = x*PIXEL_WIDTH+offsetX;
+        y = y*PIXEL_HEIGHT+offsetY;
+        if (atEdge) {
+            x -= 4;
+            y -= 4;
+        } else {
+            x += 6;
+            y += 6;
+        }
+        graphics.setColor(Color.CYAN);
+        graphics.fillArc(x*scale + imageOffset.width, y*scale + imageOffset.height, 12*scale, 12*scale, 0, 360);
+        x += 2;
+        y += 2;
+        graphics.setColor(Color.BLUE);
+        graphics.fillArc(x*scale + imageOffset.width, y*scale + imageOffset.height, 8*scale, 8*scale, 0, 360);
     }
     
     private void buildPreviewImage() {
@@ -282,8 +411,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapArea(Graphics2D g2, MapArea area, boolean selected) {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(selected ? COLOR_SELECTED : Color.WHITE);
-        int width = area.getWidth()+1;
-        int heigth = area.getHeight()+1;
+        int width = area.getWidth();
+        int heigth = area.getHeight();
         g2.drawRect(area.getLayer1StartX()*PIXEL_WIDTH+3, area.getLayer1StartY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
         g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.LIGHT_GRAY);
         if (area.getForegroundLayer2StartX() != 0 || area.getForegroundLayer2StartY() != 0) {
@@ -861,45 +990,94 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         int y = evt.y();
         switch (selectedTabsDrawMode) {
             case DRAW_MODE_AREAS:
-                if (!evt.dragging()) return;
                 MapArea area = map.getAreas()[selectedItemIndex];
-                if (closestSelectedPointIndex < 2) {    //Main rect
-                    int sx = closestSelectedPointIndex == 0 ? x : area.getLayer1StartX();
-                    int sy = closestSelectedPointIndex == 0 ? y : area.getLayer1StartY();
-                    int ex = closestSelectedPointIndex == 1 ? x : area.getLayer1EndX();
-                    int ey = closestSelectedPointIndex == 1 ? y : area.getLayer1EndY();
+                if (closestSelectedPointIndex < 4) {    //Main rect
+                    int sx = closestSelectedPointIndex == 0 || closestSelectedPointIndex == 2 ? x : area.getLayer1StartX();
+                    int sy = closestSelectedPointIndex == 0 || closestSelectedPointIndex == 1 ? y : area.getLayer1StartY();
+                    int ex = closestSelectedPointIndex == 1 || closestSelectedPointIndex == 3 ? x : area.getLayer1EndX();
+                    int ey = closestSelectedPointIndex == 2 || closestSelectedPointIndex == 3 ? y : area.getLayer1EndY();
+                    boolean pointsSwapped = false;
                     if (ex < sx) {
                         int temp = sx;
                         sx = ex;
                         ex = temp;
+                        pointsSwapped = true;
                     }
                     if (ey < sy) {
                         int temp = sy;
                         sy = ey;
                         ey = temp;
+                        pointsSwapped = true;
                     }
                     area.setLayer1StartX(sx);
                     area.setLayer1StartY(sy);
                     area.setLayer1EndX(ex);
                     area.setLayer1EndY(ey);
+                    if (pointsSwapped) {
+                        closestSelectedPointIndex = findClosestAreaPoint(area, x, y);
+                    }
                 } else {    //Second rect
-                    x -= area.getLayer1StartX();
-                    y -= area.getLayer1StartY();
-                    int sx = closestSelectedPointIndex == 2 ? x : area.getForegroundLayer2StartX();
-                    int sy = closestSelectedPointIndex == 2 ? y : area.getForegroundLayer2StartY();
-                    area.setForegroundLayer2StartX(sx);
-                    area.setForegroundLayer2StartY(sy);
+                    if (area.hasBackgroundLayer2()) {
+                        area.setBackgroundLayer2StartX(x);
+                        area.setBackgroundLayer2StartY(y);
+                    } else {
+                        area.setForegroundLayer2StartX(x-area.getLayer1StartX());
+                        area.setForegroundLayer2StartY(y-area.getLayer1StartY());
+                    }
                 }
                 redraw();
                 if (eventEditedListener != null) {
                     eventEditedListener.actionPerformed(new ActionEvent(this, selectedItemIndex, "Area"));
                 }
                 break;
+            case DRAW_MODE_FLAG_COPIES:
+            case DRAW_MODE_STEP_COPIES:
+            case DRAW_MODE_ROOF_COPIES:
+                MapCopyEvent copy = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? map.getFlagCopies()[selectedItemIndex] : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? map.getStepCopies()[selectedItemIndex] : map.getRoofCopies()[selectedItemIndex];
+                String copyType = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? "FlagCopies" : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? "StepCopies" : "RoofCopies";
+                if (closestSelectedPointIndex == 0) {
+                    copy.setTriggerX(x);
+                    copy.setTriggerY(y);
+                } else if (closestSelectedPointIndex == 5) {
+                    copy.setDestX(x);
+                    copy.setDestY(y);
+                } else {
+                    //Main rect
+                    int sx = closestSelectedPointIndex == 1 || closestSelectedPointIndex == 3 ? x : copy.getSourceX();
+                    int sy = closestSelectedPointIndex == 1 || closestSelectedPointIndex == 2 ? y : copy.getSourceY();
+                    int ex = closestSelectedPointIndex == 2 || closestSelectedPointIndex == 4 ? x : copy.getSourceX()+copy.getWidth();
+                    int ey = closestSelectedPointIndex == 3 || closestSelectedPointIndex == 4 ? y : copy.getSourceY()+copy.getHeight();
+                    boolean pointsSwapped = false;
+                    if (ex < sx) {
+                        int temp = sx;
+                        sx = ex;
+                        ex = temp;
+                        pointsSwapped = true;
+                    }
+                    if (ey < sy) {
+                        int temp = sy;
+                        sy = ey;
+                        ey = temp;
+                        pointsSwapped = true;
+                    }
+                    copy.setSourceX(sx);
+                    copy.setSourceY(sy);
+                    copy.setWidth(ex-sx);
+                    copy.setHeight(ey-sy);
+                    if (pointsSwapped) {
+                        //closestSelectedPointIndex = findClosestCopyPoint(copy, x, y, selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES);
+                    }
+                }
+                redraw();
+                if (eventEditedListener != null) {
+                    eventEditedListener.actionPerformed(new ActionEvent(this, selectedItemIndex, copyType));
+                }
+                break;
             case DRAW_MODE_WARPS:
                 MapWarpEvent warp = map.getWarps()[selectedItemIndex];
                 if (closestSelectedPointIndex == 0) {
-                    warp.setTriggerX(x);
-                    warp.setTriggerY(y);
+                    if (warp.getTriggerX() != 0xFF) warp.setTriggerX(x);
+                    if (warp.getTriggerY() != 0xFF) warp.setTriggerY(y);
                 } else {
                     warp.setDestX(x);
                     warp.setDestY(y);
@@ -976,6 +1154,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 if (evt.released()) {
                     if (x == copiedBlocksStartX && y == copiedBlocksStartY) {
                         selectedBlock = layout.getBlockset().getBlocks()[x+y*64];
+                        if (selectedBlock == null) selectedBlock = map.getBlockset().getBlocks()[0];
                         mapBlockLayoutPanel.selectedBlockIndexLeft = selectedBlock.getIndex();
                         updateLeftSlot(selectedBlock);
                     } else {
@@ -1080,10 +1259,13 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                     closestSelectedPointIndex = findClosestAreaPoint(map.getAreas()[selectedItemIndex], x, y);
                     break;
                 case DRAW_MODE_FLAG_COPIES:
+                    closestSelectedPointIndex = findClosestCopyPoint(map.getFlagCopies()[selectedItemIndex], x, y, true);
                     break;
                 case DRAW_MODE_STEP_COPIES:
+                    closestSelectedPointIndex = findClosestCopyPoint(map.getStepCopies()[selectedItemIndex], x, y, false);
                     break;
                 case DRAW_MODE_ROOF_COPIES:
+                    closestSelectedPointIndex = findClosestCopyPoint(map.getRoofCopies()[selectedItemIndex], x, y, false);
                     break;
                 case DRAW_MODE_WARPS:
                     closestSelectedPointIndex = findClosestWarpPoint(map.getWarps()[selectedItemIndex], x, y);
@@ -1199,25 +1381,54 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private int findClosestAreaPoint(MapArea area, int x, int y) {
         Point mouse = new Point(x, y);
+        Point[] points = new Point[8];
+        points[0] = new Point(area.getLayer1StartX(), area.getLayer1StartY());
+        points[1] = new Point(area.getLayer1StartX()+area.getWidth(), area.getLayer1StartY());
+        points[2] = new Point(area.getLayer1StartX(), area.getLayer1StartY()+area.getHeight());
+        points[3] = new Point(area.getLayer1StartX()+area.getWidth(), area.getLayer1StartY()+area.getHeight());
+        if (area.hasBackgroundLayer2()) {
+            points[4] = new Point(area.getBackgroundLayer2StartX(), area.getBackgroundLayer2StartY());
+            points[5] = new Point(area.getBackgroundLayer2StartX()+area.getWidth(), area.getBackgroundLayer2StartY());
+            points[6] = new Point(area.getBackgroundLayer2StartX(), area.getBackgroundLayer2StartY()+area.getHeight());
+            points[7] = new Point(area.getBackgroundLayer2StartX()+area.getWidth(), area.getBackgroundLayer2StartY()+area.getHeight());
+        } else {    //Foreground layer 2
+            points[4] = new Point(area.getLayer1StartX()+area.getForegroundLayer2StartX(), area.getLayer1StartY()+area.getForegroundLayer2StartY());
+            points[5] = new Point(area.getLayer1StartX()+area.getForegroundLayer2StartX()+area.getWidth(), area.getLayer1StartY()+area.getForegroundLayer2StartY());
+            points[6] = new Point(area.getLayer1StartX()+area.getForegroundLayer2StartX(), area.getLayer1StartY()+area.getForegroundLayer2StartY()+area.getHeight());
+            points[7] = new Point(area.getLayer1StartX()+area.getForegroundLayer2StartX()+area.getWidth(), area.getLayer1StartY()+area.getForegroundLayer2StartY()+area.getHeight());
+        }
         int distIndex = 0;
         double tempDist;
-        double dist = mouse.distanceSq(area.getLayer1StartX(), area.getLayer1StartY());
-        tempDist = mouse.distanceSq(area.getLayer1EndX(), area.getLayer1EndY());
-        if (tempDist < dist) {
-            distIndex = 1;
-            dist = tempDist;
-        }
-        if (area.hasForegroundLayer2()) {
-            x -= area.getLayer1StartX();
-            y -= area.getLayer1StartY();
-            tempDist = mouse.distanceSq(area.getForegroundLayer2StartX(), area.getForegroundLayer2StartY());
+        double dist = mouse.distanceSq(points[0]);
+        for (int i = 1; i < points.length; i++) {
+            tempDist = mouse.distanceSq(points[i]);
             if (tempDist < dist) {
-                distIndex = 2;
+                distIndex = i;
                 dist = tempDist;
             }
-            tempDist = mouse.distanceSq(area.getForegroundLayer2StartX()+area.getWidth(), area.getForegroundLayer2StartY()+area.getHeight());
+        }
+        if (distIndex > 4) {
+            distIndex = 4;
+        }
+        return distIndex;
+    }
+    
+    private int findClosestCopyPoint(MapCopyEvent copy, int x, int y, boolean isFlagCopy) {
+        Point mouse = new Point(x, y);
+        Point[] points = new Point[6];
+        points[0] = new Point(copy.getTriggerX(), copy.getTriggerY());
+        points[1] = new Point(copy.getSourceX(), copy.getSourceY());
+        points[2] = new Point(copy.getSourceX()+copy.getWidth(), copy.getSourceY());
+        points[3] = new Point(copy.getSourceX(), copy.getSourceY()+copy.getHeight());
+        points[4] = new Point(copy.getSourceX()+copy.getWidth(), copy.getSourceY()+copy.getHeight());
+        points[5] = new Point(copy.getDestX()+copy.getWidth()/2, copy.getDestY()+copy.getHeight()/2);
+        int distIndex = isFlagCopy ? 1 : 0;
+        double tempDist;
+        double dist = mouse.distanceSq(points[distIndex]);
+        for (int i = distIndex+1; i < points.length; i++) {
+            tempDist = mouse.distanceSq(points[i]);
             if (tempDist < dist) {
-                distIndex = 3;
+                distIndex = i;
                 dist = tempDist;
             }
         }

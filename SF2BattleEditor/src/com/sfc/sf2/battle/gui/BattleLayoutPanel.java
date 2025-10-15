@@ -71,7 +71,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
 
     public BattleLayoutPanel() {
         super();
-        mouseInput.setMouseMotionListener(this::onMouseMoved);
+        mouseInput.setMouseMotionListener(this::onMouseMove);
     }
     
     @Override
@@ -338,12 +338,14 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         int battleX = battle.getMapCoords().getX();
         int battleY = battle.getMapCoords().getY();
         AIRegion region = battle.getSpriteset().getAiRegions()[selectedSpritesetEntity];
-        graphics.setColor(Color.BLUE);
         Point point = region.getPoint(closestRegionPoint);
         int scale = getDisplayScale();
-        int nodeX = (battleX+point.x)*PIXEL_WIDTH+16;
-        int nodeY = (battleY+point.y)*PIXEL_HEIGHT+16;
-        graphics.fillArc(nodeX*scale, nodeY*scale, 8*scale, 8*scale, 0, 360);
+        int nodeX = (battleX+point.x)*PIXEL_WIDTH;
+        int nodeY = (battleY+point.y)*PIXEL_HEIGHT;
+        graphics.setColor(Color.CYAN);
+        graphics.fillArc((nodeX+8)*scale, (nodeY+8)*scale, 12*scale, 12*scale, 0, 360);
+        graphics.setColor(Color.BLUE);
+        graphics.fillArc((nodeX+16)*scale, (nodeY+16)*scale, 8*scale, 8*scale, 0, 360);
     }
 
     public void setSpritesetEditedListener(ActionListener spritesetEditedListener) {
@@ -447,7 +449,7 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
         this.actions = actions;
     }
     
-    private void onMouseMoved(BaseMouseCoordsComponent.GridMouseMoveEvent evt) {
+    private void onMouseMove(BaseMouseCoordsComponent.GridMouseMoveEvent evt) {
         if (spritesetMode == SpritesetPaintMode.AiRegion && selectedSpritesetEntity >= 0) {
             int x = evt.x() - battle.getMapCoords().getX();
             int y = evt.y() - battle.getMapCoords().getY();
@@ -460,11 +462,11 @@ public class BattleLayoutPanel extends BattleMapTerrainLayoutPanel {
     }
     
     @Override
-    protected void onMouseInteraction(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
+    protected void onMouseButtonInput(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
         if (paintMode == BattlePaintMode.None) return;
         else if (paintMode == BattlePaintMode.Terrain) {
             if (isDrawTerrain()) {
-                super.onMouseInteraction(evt);
+                super.onMouseButtonInput(evt);
             }
             return;
         }

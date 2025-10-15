@@ -84,11 +84,11 @@ public class MapArea {
     }
     
     public int getWidth() {
-        return layer1EndX - layer1StartX;
+        return layer1EndX-layer1StartX+1;
     }
     
     public int getHeight() {
-        return layer1EndY - layer1StartY;
+        return layer1EndY-layer1StartY+1;
     }
     
     public boolean hasForegroundLayer2() {

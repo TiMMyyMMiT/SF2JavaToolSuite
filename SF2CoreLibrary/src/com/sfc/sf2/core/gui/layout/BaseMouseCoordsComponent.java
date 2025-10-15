@@ -72,18 +72,16 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     
     private int getXCoord(int mouseX) {
         int x = mouseX-coordsOffset.width;
-        if (x < 0 || x >= bounds.width-coordsOffset.width) {
-            return -1;
-        }
+        if (x < 0) x = 0;
+        else if (x >= bounds.width-coordsOffset.width) x = bounds.width-coordsOffset.width-1;
         x /= (displayScale * mouseCoordsGrid.width);
         return x;
     }
     
     private int getYCoord(int mouseY) {
         int y = mouseY-coordsOffset.height;
-        if (y < 0 || y >= bounds.height-coordsOffset.height) {
-            return -1;
-        }
+        if (y < 0) y = 0;
+        else if (y >= bounds.height-coordsOffset.height) y = bounds.height-coordsOffset.height-1;
         y /= (displayScale * mouseCoordsGrid.height);
         return y;
     }

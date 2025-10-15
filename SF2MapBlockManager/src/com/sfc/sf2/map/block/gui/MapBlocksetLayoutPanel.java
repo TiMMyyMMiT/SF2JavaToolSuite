@@ -135,7 +135,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
                 leftSlotBlockPanel.setBlock(block);
             }
             if (editableBlockPanel != null) {
-                editableBlockPanel.setBlock(block);
+                editableBlockPanel.setBlock(index < 3 ? null : block);
             }
             this.redraw();
         }

@@ -240,6 +240,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 tileSlotPanelRight.setTile(null);
                 tileSlotPanelRight.setTilesets(tilesets);
                 editableBlockSlotPanel.setTilesets(tilesets);
+                blockSlotPanelLeft.setBlock(mapBlockset.getBlocks()[0]);
+                blockSlotPanelRight.setBlock(mapBlockset.getBlocks()[0]);
             }
 
             MapAnimation animation = map.getAnimation();
