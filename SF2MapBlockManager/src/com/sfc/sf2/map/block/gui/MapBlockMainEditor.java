@@ -65,7 +65,7 @@ public class MapBlockMainEditor extends AbstractMainEditor {
         editableBlockSlotPanel.setBlockEditedListener(this::onBlockEdited);
         editableBlockSlotPanel.setLeftTileSlotPanel(tileSlotPanelLeft);
         editableBlockSlotPanel.setRightTileSlotPanel(tileSlotPanelRight);
-        mapBlocksetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
+        mapBlocksetLayoutPanel.setEditableBlockPanel(editableBlockSlotPanel);
         tilesetsLayoutPanel.setLeftSlotTilePanel(tileSlotPanelLeft);
         tilesetsLayoutPanel.setRightSlotBlockPanel(tileSlotPanelRight);
         tilesetsLayoutPanel.setBlockSlotPanel(editableBlockSlotPanel);

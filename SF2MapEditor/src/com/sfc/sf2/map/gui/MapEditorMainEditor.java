@@ -120,7 +120,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         editableBlockSlotPanel.setBlockEditedListener(this::onBlockEdited);
         editableBlockSlotPanel.setLeftTileSlotPanel(tileSlotPanelLeft);
         editableBlockSlotPanel.setRightTileSlotPanel(tileSlotPanelRight);
-        mapBlocksetLayoutPanel.setLeftSlotBlockPanel(editableBlockSlotPanel);
+        mapBlocksetLayoutPanel.setEditableBlockPanel(editableBlockSlotPanel);
         tilesetsLayoutPanel.setLeftSlotTilePanel(tileSlotPanelLeft);
         tilesetsLayoutPanel.setRightSlotBlockPanel(tileSlotPanelRight);
         tilesetsLayoutPanel.setBlockSlotPanel(editableBlockSlotPanel);
@@ -3822,6 +3822,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }
 
     private void onBlockEdited(ActionEvent e) {
+        blockSlotPanelLeft.redraw();
         mapBlocksetLayoutPanel.getBlockset().clearIndexedColorImage(false);
         mapBlocksetLayoutPanel.redraw();
     }

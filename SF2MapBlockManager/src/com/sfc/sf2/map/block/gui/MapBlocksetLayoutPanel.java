@@ -11,6 +11,7 @@ import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.helpers.MapBlockHelpers;
+import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -33,6 +34,7 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
     
     private BlockSlotPanel leftSlotBlockPanel;
     private BlockSlotPanel rightSlotBlockPanel;
+    private EditableBlockSlotPanel editableBlockPanel;
     private Color leftSlotColor = Color.YELLOW;
     private Color rightSlotColor = Color.GREEN;
     
@@ -113,23 +115,27 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
         this.showPriority = showPriority;
         this.redraw();
     }
-
-    public BlockSlotPanel getLeftSlotBlockPanel() {
-        return leftSlotBlockPanel;
-    }
     
     public int getLeftSelectedIndex() {
         return selectedBlockIndexLeft;
     }
     
     public void setLeftSelectedIndex(int index) {
-        if (leftSlotBlockPanel != null) {
+        if (leftSlotBlockPanel != null | editableBlockPanel != null) {
+            MapBlock block = null;
             if (index < (canSelectInitialBlocks ? 0 : 3) || index >= blockset.getBlocks().length) {
-                selectedBlockIndexLeft = -1;
-                leftSlotBlockPanel.setBlock(null);
+                index = -1;
+                block = null;
             } else {
-                selectedBlockIndexLeft = index;
-                leftSlotBlockPanel.setBlock(blockset.getBlocks()[index]);
+                block = blockset.getBlocks()[index];
+            }
+            
+            selectedBlockIndexLeft = index;
+            if (leftSlotBlockPanel != null) {
+                leftSlotBlockPanel.setBlock(block);
+            }
+            if (editableBlockPanel != null) {
+                editableBlockPanel.setBlock(block);
             }
             this.redraw();
         }
@@ -152,6 +158,10 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
         }
     }
 
+    public BlockSlotPanel getLeftSlotBlockPanel() {
+        return leftSlotBlockPanel;
+    }
+
     public void setLeftSlotBlockPanel(BlockSlotPanel leftSlotBlockPanel) {
         this.leftSlotBlockPanel = leftSlotBlockPanel;
     }
@@ -162,6 +172,14 @@ public class MapBlocksetLayoutPanel extends AbstractLayoutPanel {
 
     public void setRightSlotBlockPanel(BlockSlotPanel rightSlotBlockPanel) {
         this.rightSlotBlockPanel = rightSlotBlockPanel;
+    }
+
+    public EditableBlockSlotPanel getEditableBlockPanel() {
+        return editableBlockPanel;
+    }
+
+    public void setEditableBlockPanel(EditableBlockSlotPanel editableBlockPanel) {
+        this.editableBlockPanel = editableBlockPanel;
     }
 
     public void setLeftSlotColor(Color leftSlotColor) {
