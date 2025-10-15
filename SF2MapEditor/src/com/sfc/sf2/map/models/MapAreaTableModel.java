@@ -108,6 +108,10 @@ public class MapAreaTableModel extends AbstractTableModel<MapArea> {
             case 11:
             case 12:
                 return 0x100;
+            case 13:
+            case 14:
+            case 15:
+            case 16:
             case 17:
                 return 0xFF;
             default:

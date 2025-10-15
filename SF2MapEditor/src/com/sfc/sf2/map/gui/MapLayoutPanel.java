@@ -89,6 +89,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private boolean showFlagCopyResult;
     private boolean showStepCopyResult;
     private boolean showRoofCopyResult;
+    private boolean simulateParallax;
     
     private MapBlock selectedBlock;
     MapBlock[][] copiedBlocks;
@@ -100,8 +101,6 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private int lastMapX;
     private int lastMapY;
     private int previewIndex = -1;
-    
-    private boolean simulateParallax;
     
     private List<int[]> actions = new ArrayList<int[]>();
     
@@ -283,8 +282,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     private void drawMapArea(Graphics2D g2, MapArea area, boolean selected) {
         g2.setStroke(new BasicStroke(3));
         g2.setColor(selected ? COLOR_SELECTED : Color.WHITE);
-        int width = area.getLayer1Width()+1;
-        int heigth = area.getLayer1Height()+1;
+        int width = area.getWidth()+1;
+        int heigth = area.getHeight()+1;
         g2.drawRect(area.getLayer1StartX()*PIXEL_WIDTH+3, area.getLayer1StartY()*PIXEL_HEIGHT+3, width*PIXEL_WIDTH-6, heigth*PIXEL_HEIGHT-6);
         g2.setColor(selected ? COLOR_SELECTED_SECONDARY : Color.LIGHT_GRAY);
         if (area.getForegroundLayer2StartX() != 0 || area.getForegroundLayer2StartY() != 0) {
@@ -296,33 +295,41 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     }
     
     private void overlayMapUpperLayer(Graphics2D g2, MapArea area) {
-        if (!area.hasForegroundLayer2()) return;
-        int width = area.getLayer1EndX()-area.getLayer1StartX();
-        int height = area.getLayer1EndY()-area.getLayer1StartY();
-        //g2.setColor(MapBlockHelpers.PRIORITY_DARKEN_COLOR);
-        //g2.fillRect(area.getLayer1StartX()*PIXEL_WIDTH, area.getLayer1StartY()*PIXEL_HEIGHT, (width+1)*PIXEL_WIDTH, (height+1)*PIXEL_HEIGHT);
+        if (!area.hasForegroundLayer2() && !area.hasBackgroundLayer2()) return;
+        int width = area.getWidth();
+        int height = area.getHeight();
+        Point offset = calulateAreaOffset(area);
         MapBlock[] blocks = layout.getBlockset().getBlocks();
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
-                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH;
-                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT;
-                int index = area.getLayer1StartX()+area.getForegroundLayer2StartX()+x + (area.getLayer1StartY()+area.getForegroundLayer2StartY()+y)*BLOCK_WIDTH;
-                g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
+                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH+offset.x;
+                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT+offset.y;
+                int index = 0;
+                if (area.hasForegroundLayer2()) {
+                    index = area.getLayer1StartX()+area.getForegroundLayer2StartX()+x + (area.getLayer1StartY()+area.getForegroundLayer2StartY()+y)*BLOCK_WIDTH;
+                } else if (area.hasBackgroundLayer2()) {
+                    index = area.getLayer1StartX()+area.getBackgroundLayer2StartX()+x + (area.getLayer1StartY()+area.getBackgroundLayer2StartY()+y)*BLOCK_WIDTH;
+                }
+                if (index < MapLayout.BLOCK_COUNT) {
+                    g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
+                }
             }
         }
     }
     
     private void underlayMapUpperLayer(Graphics2D g2, MapArea area) {
         if (!area.hasForegroundLayer2()) return;
-        int width = area.getLayer1EndX()-area.getLayer1StartX();
-        int height = area.getLayer1EndY()-area.getLayer1StartY();
+        int width = area.getWidth();
+        int height = area.getHeight();
         MapBlock[] blocks = layout.getBlockset().getBlocks();
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
                 int destX = (area.getForegroundLayer2StartX()+x)*PIXEL_WIDTH;
                 int destY = (area.getForegroundLayer2StartY()+y)*PIXEL_HEIGHT;
                 int index = area.getLayer1StartX()+x + (area.getLayer1StartY()+y)*BLOCK_WIDTH;
-                g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
+                if (index < MapLayout.BLOCK_COUNT) {
+                    g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
+                }
             }
         }
         g2.setColor(MapBlockHelpers.PRIORITY_DARKEN_COLOR);
@@ -331,28 +338,43 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private void underlayMapBackground(Graphics2D g2, MapArea area) {
         if (!area.hasBackgroundLayer2()) return;
-        int width = area.getLayer1EndX()-area.getLayer1StartX();
-        int height = area.getLayer1EndY()-area.getLayer1StartY();
-        int offsetX = 0, offsetY = 0;
-        if (simulateParallax && BaseLayoutComponent.IsEnabled(scroller) && (area.getLayer2ParallaxX() < 0x100 || area.getLayer2ParallaxY() < 0x100)) {
-            if (area.getLayer2ParallaxX() > 0 && area.getLayer2ParallaxX() < 0x100) {
-                offsetX = (int)(area.getLayer2ParallaxX()*PIXEL_WIDTH*scroller.getScrollPercent(true)*0.5f);
-            }
-            if (area.getLayer2ParallaxY() > 0 && area.getLayer2ParallaxY() < 0x100) {
-                offsetY = (int)(area.getLayer2ParallaxY()*PIXEL_WIDTH*scroller.getScrollPercent(false)*0.5f);
-            }
-        }
+        int width = area.getWidth();
+        int height = area.getHeight();
+        Point offset = calulateAreaOffset(area);
         MapBlock[] blocks = layout.getBlockset().getBlocks();
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
-                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH+offsetX;
-                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT+offsetY;
+                int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH+offset.x;
+                int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT+offset.y;
                 int index = area.getBackgroundLayer2StartX()+x + (area.getBackgroundLayer2StartY()+y)*BLOCK_WIDTH;
                 if (index < MapLayout.BLOCK_COUNT) {
                     g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
                 }
             }
         }
+    }
+    
+    private Point calulateAreaOffset(MapArea area) {
+        Point offset = new Point();
+        if (simulateParallax && BaseLayoutComponent.IsEnabled(scroller)) {
+            if (area.getLayer2ParallaxX() < 0x100 || area.getLayer2ParallaxY() < 0x100) {
+                if (area.getLayer2ParallaxX() > 0 && area.getLayer2ParallaxX() < 0x100) {
+                    offset.x += (int)(area.getLayer2ParallaxX()*PIXEL_WIDTH*scroller.getScrollPercent(true)*0.5f);
+                }
+                if (area.getLayer2ParallaxY() > 0 && area.getLayer2ParallaxY() < 0x100) {
+                    offset.y += (int)(area.getLayer2ParallaxY()*PIXEL_WIDTH*scroller.getScrollPercent(false)*0.5f);
+                }
+            }
+            if (area.getLayer2AutoscrollX()< 0x100 || area.getLayer2AutoscrollY()< 0x100) {
+                if (area.getLayer2AutoscrollX() > 0 && area.getLayer2AutoscrollX() < 0x100) {
+                    offset.x += (int)(area.getLayer2AutoscrollX()*PIXEL_WIDTH*scroller.getScrollPercent(true)*0.5f);
+                }
+                if (area.getLayer2AutoscrollY() > 0 && area.getLayer2AutoscrollY() < 0x100) {
+                    offset.y += (int)(area.getLayer2AutoscrollY()*PIXEL_WIDTH*scroller.getScrollPercent(false)*0.5f);
+                }
+            }
+        }
+        return offset;
     }
     
     private void drawMapFlagCopy(Graphics2D g2, MapFlagCopyEvent flagCopy, boolean selected) {
@@ -1184,7 +1206,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 distIndex = 2;
                 dist = tempDist;
             }
-            tempDist = mouse.distanceSq(area.getForegroundLayer2StartX()+area.getLayer1Width(), area.getForegroundLayer2StartY()+area.getLayer1Height());
+            tempDist = mouse.distanceSq(area.getForegroundLayer2StartX()+area.getWidth(), area.getForegroundLayer2StartY()+area.getHeight());
             if (tempDist < dist) {
                 distIndex = 3;
                 dist = tempDist;

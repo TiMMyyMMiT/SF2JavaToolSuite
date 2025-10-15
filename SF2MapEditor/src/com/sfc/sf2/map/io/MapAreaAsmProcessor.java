@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.map.io;
 
+import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.asm.AbstractAsmProcessor;
 import com.sfc.sf2.core.io.asm.AsmException;
 import com.sfc.sf2.helpers.MapStringHelpers;
@@ -22,6 +23,9 @@ import java.util.ArrayList;
  */
 public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnums> {
 
+    private int importedFileDarknessPatchIndex1 = -1;
+    private int importedFileDarknessPatchIndex2 = -1;
+    
     @Override
     protected MapArea[] parseAsmData(BufferedReader reader, MapEnums pckg) throws IOException, AsmException {
         ArrayList<MapArea> areasList = new ArrayList<>();
@@ -48,9 +52,27 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
                 fg2StartX = StringHelpers.getValueInt(split[0]);
                 fg2StartY = StringHelpers.getValueInt(split[1]);
                 
-                split = MapStringHelpers.getNextLineMulti(reader, "scndLayerBgndStart", areasList.size()+1);
+                line = StringHelpers.trimAndRemoveComments(reader.readLine());
+                if (line.startsWith("if (")) {
+                    if (importedFileDarknessPatchIndex1 == -1) {
+                        importedFileDarknessPatchIndex1 = areasList.size();
+                        Console.logger().warning("Darkness patch found at item: " + importedFileDarknessPatchIndex1 + ". Patch will be reapplied on export.");
+                    } else {
+                        importedFileDarknessPatchIndex2 = areasList.size();
+                    }
+                    reader.readLine();
+                    reader.readLine();
+                    line = StringHelpers.trimAndRemoveComments(reader.readLine());
+                }
+                if (!line.startsWith("scndLayerBgndStart")) {
+                    throw new AsmException("ERROR Map data line cannot be parsed. Cannot find 'scndLayerBgndStart' in line " + areasList.size()+1);
+                }
+                split = line.substring(line.indexOf(" ")+1).trim().split(",");
                 bg2StartX = StringHelpers.getValueInt(split[0]);
                 bg2StartY = StringHelpers.getValueInt(split[1]);
+                if (importedFileDarknessPatchIndex1 == areasList.size() || importedFileDarknessPatchIndex2 == areasList.size()) {
+                    reader.readLine();
+                }
                 
                 split = MapStringHelpers.getNextLineMulti(reader, "mainLayerParallax", areasList.size()+1);
                 l1ParallaxX = StringHelpers.getValueInt(split[0]);
@@ -93,7 +115,17 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
             writer.write(String.format("\t\t\t\t\tmainLayerStart      %3d, %3d\n", item[i].getLayer1StartX(), item[i].getLayer1StartY()));
             writer.write(String.format("\t\t\t\t\tmainLayerEnd        %3d, %3d\n", item[i].getLayer1EndX(), item[i].getLayer1EndY()));
             writer.write(String.format("\t\t\t\t\tscndLayerFgndStart  %3d, %3d\n", item[i].getForegroundLayer2StartX(), item[i].getForegroundLayer2StartY()));
-            writer.write(String.format("\t\t\t\t\tscndLayerBgndStart  %3d, %3d\n", item[i].getBackgroundLayer2StartX(), item[i].getBackgroundLayer2StartY()));
+            if (importedFileDarknessPatchIndex1 == i || importedFileDarknessPatchIndex2 == i) {
+                //Darkness patch
+                Console.logger().warning("Darkness patch being reapplied to item: " + i);
+                writer.append("\t\t\t\tif (STANDARD_BUILD&NO_DARKNESS_IN_CAVES=1)\n");
+                writer.append("\t\t\t\t\tscndLayerBgndStart    0,  33\n");
+                writer.append("\t\t\t\telse\n");
+                writer.append(String.format("\t\t\t\t\tscndLayerBgndStart  %3d, %3d\n", item[i].getBackgroundLayer2StartX(), item[i].getBackgroundLayer2StartY()));
+                writer.append("\t\t\t\tendif\n\n");
+            } else {
+                writer.write(String.format("\t\t\t\t\tscndLayerBgndStart  %3d, %3d\n", item[i].getBackgroundLayer2StartX(), item[i].getBackgroundLayer2StartY()));
+            }
             writer.write(String.format("\t\t\t\t\tmainLayerParallax   %3d, %3d\n", item[i].getLayer1ParallaxX(), item[i].getLayer1ParallaxY()));
             writer.write(String.format("\t\t\t\t\tscndLayerParallax   %3d, %3d\n", item[i].getLayer2ParallaxX(), item[i].getLayer2ParallaxY()));
             writer.write(String.format("\t\t\t\t\tmainLayerAutoscroll %3d, %3d\n", item[i].getLayer1AutoscrollX(), item[i].getLayer1AutoscrollY()));

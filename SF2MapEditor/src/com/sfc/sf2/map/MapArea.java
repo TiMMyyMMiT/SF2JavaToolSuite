@@ -83,11 +83,11 @@ public class MapArea {
         this.layer1EndY = layer1EndY;
     }
     
-    public int getLayer1Width() {
+    public int getWidth() {
         return layer1EndX - layer1StartX;
     }
     
-    public int getLayer1Height() {
+    public int getHeight() {
         return layer1EndY - layer1StartY;
     }
     

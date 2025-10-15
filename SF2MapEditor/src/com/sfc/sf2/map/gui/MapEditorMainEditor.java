@@ -454,7 +454,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox26 = new javax.swing.JCheckBox();
-        jCheckBox27 = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
         jPanelFlagCopiesDisplay = new javax.swing.JPanel();
         jCheckBox6 = new javax.swing.JCheckBox();
         jPanelStepCopiesDisplay = new javax.swing.JPanel();
@@ -1672,7 +1672,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 jPanel1.setLayout(jPanel1Layout);
                 jPanel1Layout.setHorizontalGroup(
                     jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
                 );
                 jPanel1Layout.setVerticalGroup(
                     jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1804,7 +1804,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
-                                .addGap(0, 3, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jCheckBox9, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
@@ -1890,32 +1890,29 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     }
                 });
 
-                jCheckBox26.setText("Simulate parallax");
                 jCheckBox26.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         jCheckBox26ActionPerformed(evt);
                     }
                 });
 
-                jCheckBox27.setText("Animate autoscroll");
-                jCheckBox27.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jCheckBox27ActionPerformed(evt);
-                    }
-                });
+                jLabel1.setText("<html>Simulate parallax and autoscroll</html>");
+                jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
                 javax.swing.GroupLayout jPanelAreasDisplayLayout = new javax.swing.GroupLayout(jPanelAreasDisplay);
                 jPanelAreasDisplay.setLayout(jPanelAreasDisplayLayout);
                 jPanelAreasDisplayLayout.setHorizontalGroup(
                     jPanelAreasDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelAreasDisplayLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAreasDisplayLayout.createSequentialGroup()
+                        .addContainerGap(73, Short.MAX_VALUE)
                         .addGroup(jPanelAreasDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jCheckBox4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jCheckBox26, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jCheckBox27, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addContainerGap())
+                            .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelAreasDisplayLayout.createSequentialGroup()
+                                .addComponent(jCheckBox26)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6))
                 );
                 jPanelAreasDisplayLayout.setVerticalGroup(
                     jPanelAreasDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1923,10 +1920,12 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addComponent(jCheckBox1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox27)
+                        .addGap(9, 9, 9)
+                        .addGroup(jPanelAreasDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addGroup(jPanelAreasDisplayLayout.createSequentialGroup()
+                                .addComponent(jCheckBox26)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                 );
 
@@ -2040,7 +2039,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel41Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel33, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
                             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                 );
@@ -2051,7 +2050,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                         .addGroup(jPanel41Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel41Layout.createSequentialGroup()
                                 .addComponent(jPanel33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
@@ -2509,7 +2508,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     jPanel48Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel48Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPane5)
+                        .addComponent(jTabbedPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
                         .addContainerGap())
                 );
 
@@ -3782,10 +3781,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapLayoutPanel.setSimulateParallax(jCheckBox26.isSelected());
     }//GEN-LAST:event_jCheckBox26ActionPerformed
 
-    private void jCheckBox27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox27ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox27ActionPerformed
-
     private void SetTabRelativeCheckbox(JCheckBox checkbox, JTable selectionTable, int mode) {
         mapLayoutPanel.setSelectedItemIndex(-1);
         if (selectionTable != null) {
@@ -4110,7 +4105,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox24;
     private javax.swing.JCheckBox jCheckBox25;
     private javax.swing.JCheckBox jCheckBox26;
-    private javax.swing.JCheckBox jCheckBox27;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
@@ -4123,6 +4117,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JComboBox<String> jComboBox9;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
