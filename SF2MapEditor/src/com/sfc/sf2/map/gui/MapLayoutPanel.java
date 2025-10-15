@@ -295,7 +295,14 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     }
     
     private void overlayMapUpperLayer(Graphics2D g2, MapArea area) {
-        if (!area.hasForegroundLayer2() && !area.hasBackgroundLayer2()) return;
+        if (area.hasBackgroundLayer2()) {
+            //Hack for underground tunnel (because BG layer is drawn with priority)
+            MapBlock[] blocks = layout.getBlockset().getBlocks();
+            int index = area.getLayer1StartX()+area.getBackgroundLayer2StartX() + (area.getLayer1StartY()+area.getBackgroundLayer2StartY())*BLOCK_WIDTH;
+            if (!blocks[index].isAllPriority()) return;
+            index = area.getLayer1StartX()+5+area.getBackgroundLayer2StartX() + (area.getLayer1StartY()+5+area.getBackgroundLayer2StartY())*BLOCK_WIDTH;
+            if (!blocks[index].isAllPriority()) return;
+        } else if (!area.hasForegroundLayer2()) return;
         int width = area.getWidth();
         int height = area.getHeight();
         Point offset = calulateAreaOffset(area);
@@ -319,13 +326,15 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     
     private void underlayMapUpperLayer(Graphics2D g2, MapArea area) {
         if (!area.hasForegroundLayer2()) return;
+        int posX = area.getLayer1StartX()+area.getForegroundLayer2StartX();
+        int posY = area.getLayer1StartY()+area.getForegroundLayer2StartY();
         int width = area.getWidth();
         int height = area.getHeight();
         MapBlock[] blocks = layout.getBlockset().getBlocks();
         for (int y = 0; y <= height; y++) {
             for (int x = 0; x <= width; x++) {
-                int destX = (area.getForegroundLayer2StartX()+x)*PIXEL_WIDTH;
-                int destY = (area.getForegroundLayer2StartY()+y)*PIXEL_HEIGHT;
+                int destX = (posX+x)*PIXEL_WIDTH;
+                int destY = (posY+y)*PIXEL_HEIGHT;
                 int index = area.getLayer1StartX()+x + (area.getLayer1StartY()+y)*BLOCK_WIDTH;
                 if (index < MapLayout.BLOCK_COUNT) {
                     g2.drawImage(blocks[index].getIndexedColorImage(layout.getTilesets()), destX, destY, null);
@@ -333,7 +342,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             }
         }
         g2.setColor(MapBlockHelpers.PRIORITY_DARKEN_COLOR);
-        g2.fillRect(area.getForegroundLayer2StartX()*PIXEL_WIDTH, area.getForegroundLayer2StartY()*PIXEL_HEIGHT, (width+1)*PIXEL_WIDTH, (height+1)*PIXEL_HEIGHT);
+        g2.fillRect(posX*PIXEL_WIDTH, posY*PIXEL_HEIGHT, (width+1)*PIXEL_WIDTH, (height+1)*PIXEL_HEIGHT);
     }
     
     private void underlayMapBackground(Graphics2D g2, MapArea area) {

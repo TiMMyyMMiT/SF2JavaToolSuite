@@ -125,6 +125,13 @@ public class MapBlock {
         return true;
     }
     
+    public boolean isAllPriority() {
+        for (int i = 0; i < mapTiles.length; i++) {
+            if (!mapTiles[i].getTileFlags().isPriority()) return false;
+        }
+        return true;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (!equalsIgnoreTiles(obj)) return false;

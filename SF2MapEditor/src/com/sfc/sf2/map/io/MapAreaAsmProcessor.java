@@ -28,6 +28,7 @@ public class MapAreaAsmProcessor extends AbstractAsmProcessor<MapArea[], MapEnum
     
     @Override
     protected MapArea[] parseAsmData(BufferedReader reader, MapEnums pckg) throws IOException, AsmException {
+        importedFileDarknessPatchIndex1 = importedFileDarknessPatchIndex2 = -1;
         ArrayList<MapArea> areasList = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
