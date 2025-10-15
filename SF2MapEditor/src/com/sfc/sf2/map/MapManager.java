@@ -113,13 +113,14 @@ public class MapManager extends AbstractManager {
             animation = mapAnimationManager.importDisassembly(animationPath, tilesetEntriesPath, layout);
             mapAnimationManager.checkForSharedAnimations(mapEntries, mapId, mapEntry.getAnimationsPath());
         }
-        Path areasPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAreasPath());
-        Path flagsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getFlagEventsPath());
-        Path stepsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getStepEventsPath());
-        Path roofsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getRoofEventsPath());
-        Path warpsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getWarpEventsPath());
-        Path chestItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getChestItemsPath());
-        Path otherItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getOtherItemsPath());
+        Path areasPath = null, flagsPath = null, stepsPath = null, roofsPath = null, warpsPath = null, chestItemsPath = null, otherItemsPath = null;
+        if (mapEntry.getAreasPath() != null) areasPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAreasPath());
+        if (mapEntry.getFlagEventsPath() != null) flagsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getFlagEventsPath());
+        if (mapEntry.getStepEventsPath() != null) stepsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getStepEventsPath());
+        if (mapEntry.getRoofEventsPath() != null) roofsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getRoofEventsPath());
+        if (mapEntry.getWarpEventsPath() != null) warpsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getWarpEventsPath());
+        if (mapEntry.getChestItemsPath() != null) chestItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getChestItemsPath());
+        if (mapEntry.getOtherItemsPath() != null) otherItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getOtherItemsPath());
         importDisassembly(blockset, layout, animation, areasPath, flagsPath, stepsPath, roofsPath, warpsPath, chestItemsPath, otherItemsPath);
         Console.logger().info("Map successfully imported from entries for : " + mapId);
         Console.logger().finest("EXITING importDisassemblyFromEntries");
@@ -170,13 +171,14 @@ public class MapManager extends AbstractManager {
         if (map.getAnimation() != null) {
             mapAnimationManager.exportDisassemblyFromMapEntries(mapEntriesPath, mapId, map.getAnimation());
         }
-        Path areasPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAreasPath());
-        Path flagsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getFlagEventsPath());
-        Path stepsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getStepEventsPath());
-        Path roofsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getRoofEventsPath());
-        Path warpsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getWarpEventsPath());
-        Path chestItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getChestItemsPath());
-        Path otherItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getOtherItemsPath());
+        Path areasPath = null, flagsPath = null, stepsPath = null, roofsPath = null, warpsPath = null, chestItemsPath = null, otherItemsPath = null;
+        if (mapEntry.getAreasPath() != null) areasPath = PathHelpers.getIncbinPath().resolve(mapEntry.getAreasPath());
+        if (mapEntry.getFlagEventsPath() != null) flagsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getFlagEventsPath());
+        if (mapEntry.getStepEventsPath() != null) stepsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getStepEventsPath());
+        if (mapEntry.getRoofEventsPath() != null) roofsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getRoofEventsPath());
+        if (mapEntry.getWarpEventsPath() != null) warpsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getWarpEventsPath());
+        if (mapEntry.getChestItemsPath() != null) chestItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getChestItemsPath());
+        if (mapEntry.getOtherItemsPath() != null) otherItemsPath = PathHelpers.getIncbinPath().resolve(mapEntry.getOtherItemsPath());
         exportDisassembly(areasPath, flagsPath, stepsPath, roofsPath, warpsPath, chestItemsPath, otherItemsPath, map);
         Console.logger().info("Map successfully exported from entries for : " + mapId);
         Console.logger().finest("EXITING exportDisassembly");
