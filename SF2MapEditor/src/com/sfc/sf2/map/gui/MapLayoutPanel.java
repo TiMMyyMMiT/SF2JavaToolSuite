@@ -908,6 +908,9 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             case MapBlock.MAP_FLAG_LAYER_UP:
             case MapBlock.MAP_FLAG_LAYER_DOWN:
                 return (DRAW_MODE_TRIGGERS & drawFlag) != 0;
+            case MapBlock.MAP_FLAG_HIDE:
+            case MapBlock.MAP_FLAG_SHOW:
+                return (DRAW_MODE_ROOF_COPIES & drawFlag) != 0;
             case MapBlock.MAP_FLAG_CARAVAN:
             case MapBlock.MAP_FLAG_RAFT:
                 return (DRAW_MODE_VEHICLES & drawFlag) != 0;
