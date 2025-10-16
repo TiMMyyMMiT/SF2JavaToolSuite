@@ -94,7 +94,7 @@ public class MapWarpEventsAsmProcessor extends AbstractAsmProcessor<MapWarpEvent
             } else {
                 writer.write(String.format("\t\t\t\t\t%s %s\n", item[i].getWarpType(), item[i].getScrollDirection()));
             }
-            writer.write(String.format("\t\t\t\t\twarpMap    %s\n", item[i].getDestMap()));
+            writer.write(String.format("\t\t\t\t\twarpMap    MAP_%s\n", item[i].getDestMap()));
             writer.write(String.format("\t\t\t\t\twarpDest   %2d, %2d\n", item[i].getDestX(), item[i].getDestY()));
             writer.write(String.format("\t\t\t\t\twarpFacing %s\n", item[i].getFacing()));
         }
