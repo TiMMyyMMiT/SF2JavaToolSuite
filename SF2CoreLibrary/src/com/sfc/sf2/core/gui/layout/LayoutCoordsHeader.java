@@ -37,7 +37,6 @@ public class LayoutCoordsHeader extends BaseMouseCoordsComponent {
     public LayoutCoordsHeader(AbstractLayoutPanel panel, int gridX, int gridY, boolean showIndex) {
         super(panel, gridX, gridY);
         this.showIndex = showIndex;
-        setupListeners(null, this::onMouseMotion);
         java.awt.EventQueue.invokeLater(() -> { findCoordsTitle(panel); });
     }
     
@@ -69,6 +68,7 @@ public class LayoutCoordsHeader extends BaseMouseCoordsComponent {
             setEnabled(false);
         } else {
             origTitle = coordsTitle.getTitle();
+            setupListeners(null, this::onMouseMotion);
         }
     }
 
