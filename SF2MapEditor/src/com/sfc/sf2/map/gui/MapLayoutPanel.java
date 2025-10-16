@@ -983,6 +983,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         } else if (selectedTabsDrawMode != DRAW_MODE_NONE) {
             editMapEvents(evt);
         }
+        repaint();
     }
     
     private void editMapEvents(BaseMouseCoordsComponent.GridMousePressedEvent evt) {
@@ -1240,11 +1241,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 clearFlagValue(x, y, 0xFF00);
                 break;
             case MouseEvent.BUTTON3:
-                if ((currentPaintMode & MapBlock.MAP_FLAG_MASK_EXPLORE) != 0) {
-                    clearFlagValue(x, y, MapBlock.MAP_FLAG_MASK_EXPLORE);
-                } else {
-                    clearFlagValue(x, y, MapBlock.MAP_FLAG_MASK_EVENTS);
-                }
+                clearFlagValue(x, y, currentPaintMode);
                 break;
         }
     }
@@ -1280,6 +1277,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 this.repaint();
             }*/
         }
+        repaint();
     }
     
     private void updateLeftSlot(MapBlock block){
@@ -1334,10 +1332,23 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             action[1] = x+y*BLOCK_WIDTH;
             int origFlags = block.getFlags();
             action[2] = origFlags;
-            int newFlags = origFlags & ~value;
-            block.setFlags(newFlags);
-            actions.add(action);
-            redraw();
+            int newFlags = -1;
+            if (value == 0xFF00) {
+                newFlags = origFlags & ~value;
+            } else if ((value & MapBlock.MAP_FLAG_MASK_EXPLORE) != 0) {
+                if (block.getExplorationFlags() == value) {
+                    newFlags = block.getExplorationFlags() & ~value;
+                }
+            } else {
+                if (block.getEventFlags() == value) {
+                    newFlags = block.getEventFlags() & ~value;
+                }
+            }
+            if (newFlags >= 0) {
+                block.setFlags(newFlags);
+                actions.add(action);
+                redraw();
+            }
         }
     }
     
