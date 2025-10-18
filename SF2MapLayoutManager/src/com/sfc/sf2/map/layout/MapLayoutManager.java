@@ -56,6 +56,7 @@ public class MapLayoutManager extends AbstractManager {
         int mapId = FileHelpers.getNumberFromFileName(layoutPath.getParent().toFile());
         MapLayoutPackage pckg = new MapLayoutPackage(mapId, blockset, mapBlocksetManager.getTilesets());
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
+        layout.setTilesets(mapBlocksetManager.getTilesets());
         Console.logger().info("Map layout successfully imported. Layout data : " + layoutPath);
         Console.logger().finest("EXITING importDisassembly");
         return layout;
@@ -67,6 +68,7 @@ public class MapLayoutManager extends AbstractManager {
         int mapId = FileHelpers.getNumberFromFileName(layoutPath.getParent().toFile());
         MapLayoutPackage pckg = new MapLayoutPackage(mapId, blockset, mapBlocksetManager.getTilesets());
         layout = layoutDisassemblyProcessor.importDisassembly(layoutPath, pckg);
+        layout.setTilesets(mapBlocksetManager.getTilesets());
         Console.logger().info("Map layout successfully imported from palette and tilesets. Layout data : " + layoutPath);
         Console.logger().finest("EXITING importDisassemblyFromRawFiles");
         return layout;
