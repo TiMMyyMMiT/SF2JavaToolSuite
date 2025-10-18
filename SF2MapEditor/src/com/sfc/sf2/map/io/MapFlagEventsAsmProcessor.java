@@ -49,7 +49,7 @@ public class MapFlagEventsAsmProcessor extends AbstractAsmProcessor<MapFlagCopyE
                 destX = StringHelpers.getValueInt(split[0]);
                 destY = StringHelpers.getValueInt(split[1]);
                 
-                flagCopiesList.add(new MapFlagCopyEvent(flag, sourceX, sourceY, width, height, destX, destY, flagComment, comment));
+                flagCopiesList.add(new MapFlagCopyEvent(flag, sourceX, sourceY, sourceX+width-1, sourceY+height-1, destX, destY, flagComment, comment));
             }
         }
         MapFlagCopyEvent[] flagCopies = new MapFlagCopyEvent[flagCopiesList.size()];
@@ -71,14 +71,14 @@ public class MapFlagEventsAsmProcessor extends AbstractAsmProcessor<MapFlagCopyE
             } else {
                 writer.write('\n');
             }
-            writer.write(String.format("\t\t\t\t\tfbcSource %2d, %2d", item[i].getSourceX(), item[i].getSourceY()));
+            writer.write(String.format("\t\t\t\t\tfbcSource %2d, %2d", item[i].getSourceStartX(), item[i].getSourceStartY()));
             if (item[i].getComment() != null && item[i].getComment().length() > 0) {
                 writer.write(String.format("\t; %s\n", item[i].getComment()));
             } else {
                 writer.write('\n');
             }
-            writer.write(String.format("\t\t\t\t\tfbcSize   %2d, %2d\n", item[i].getWidth(), item[i].getHeight()));
-            writer.write(String.format("\t\t\t\t\tfbcDest   %2d, %2d\n", item[i].getDestX(), item[i].getDestY()));
+            writer.write(String.format("\t\t\t\t\tfbcSize   %2d, %2d\n", item[i].getWidth()-1, item[i].getHeight()-1));
+            writer.write(String.format("\t\t\t\t\tfbcDest   %2d, %2d\n", item[i].getDestStartX(), item[i].getDestStartY()));
         }
         writer.write("\t\t\t\tendWord\n");
     }

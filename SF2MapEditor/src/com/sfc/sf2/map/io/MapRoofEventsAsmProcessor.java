@@ -49,7 +49,11 @@ public class MapRoofEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
                 destX = StringHelpers.getValueInt(split[0]);
                 destY = StringHelpers.getValueInt(split[1]);
                 
-                roofCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY, comment));
+                if (sourceX == 0xFF && sourceY == 0xFF) {
+                    roofCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY, comment));
+                } else {
+                    roofCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, sourceX+width-1, sourceY+height-1, destX, destY, comment));
+                }
             }
         }
         MapCopyEvent[] roofCopies = new MapCopyEvent[roofCopiesList.size()];
@@ -71,9 +75,9 @@ public class MapRoofEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
             } else {
                 writer.write('\n');
             }
-            writer.write(String.format("\t\t\t\t\tslbcSource %3d, %3d\n", item[i].getSourceX(), item[i].getSourceY()));
-            writer.write(String.format("\t\t\t\t\tslbcSize   %3d, %3d\n", item[i].getWidth(), item[i].getHeight()));
-            writer.write(String.format("\t\t\t\t\tslbcDest   %3d, %3d\n", item[i].getDestX(), item[i].getDestY()));
+            writer.write(String.format("\t\t\t\t\tslbcSource %3d, %3d\n", item[i].getSourceStartX(), item[i].getSourceStartY()));
+            writer.write(String.format("\t\t\t\t\tslbcSize   %3d, %3d\n", item[i].getWidth()-1, item[i].getHeight()-1));
+            writer.write(String.format("\t\t\t\t\tslbcDest   %3d, %3d\n", item[i].getDestStartX(), item[i].getDestStartY()));
         }
         writer.write("\t\t\t\tendWord\n");
     }

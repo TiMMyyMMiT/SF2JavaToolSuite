@@ -17,7 +17,7 @@ import com.sfc.sf2.map.layout.MapLayout;
 public class MapRoofCopyEventTableModel extends AbstractTableModel<MapCopyEvent> {
     
     public MapRoofCopyEventTableModel() {
-        super(new String[] { "Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y", "Comment" }, 64);
+        super(new String[] { "Index", "Trigger X", "Trigger Y", "Source X", "Source Y", "Source X'", "Source Y'", "Dest X", "Dest Y", "Comment" }, 64);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class MapRoofCopyEventTableModel extends AbstractTableModel<MapCopyEvent>
             case 0: return row;
             case 1: return item.getTriggerX();
             case 2: return item.getTriggerY();
-            case 3: return item.getSourceX();
-            case 4: return item.getSourceY();
-            case 5: return item.getWidth();
-            case 6: return item.getHeight();
-            case 7: return item.getDestX();
-            case 8: return item.getDestY();
+            case 3: return item.getSourceStartX();
+            case 4: return item.getSourceStartY();
+            case 5: return item.getSourceEndX();
+            case 6: return item.getSourceEndY();
+            case 7: return item.getDestStartX();
+            case 8: return item.getDestStartY();
             case 9: return item.getComment();
         }
         return -1;
@@ -57,12 +57,12 @@ public class MapRoofCopyEventTableModel extends AbstractTableModel<MapCopyEvent>
         switch (col) {
             case 1: item.setTriggerX((int)value); break;
             case 2: item.setTriggerY((int)value); break;
-            case 3: item.setSourceX(NumHelpers.getValueWithValidGap((int)value, item.getSourceX(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
-            case 4: item.setSourceY(NumHelpers.getValueWithValidGap((int)value, item.getSourceY(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
-            case 5: item.setWidth((int)value); break;
-            case 6: item.setHeight((int)value); break;
-            case 7: item.setDestX((int)value); break;
-            case 8: item.setDestY((int)value); break;
+            case 3: item.setSourceStartX(NumHelpers.getValueWithValidGap((int)value, item.getSourceStartX(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
+            case 4: item.setSourceStartY(NumHelpers.getValueWithValidGap((int)value, item.getSourceStartY(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
+            case 5: item.setSourceEndX((int)value); break;
+            case 6: item.setSourceEndY((int)value); break;
+            case 7: item.SetDestStartX((int)value); break;
+            case 8: item.setDestStartY((int)value); break;
             case 9: item.setComment((String)value); break;
         }
         return item;

@@ -104,7 +104,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (x == lastX && y == lastY) return;
         lastX = x;
         lastY = y;
-        motionListener.mouseMoved(new GridMouseMoveEvent(x, y));
+        motionListener.mouseMoved(new GridMouseMoveEvent(x, y, false));
     }
     
     @Override
@@ -135,7 +135,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
             buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, true, false));
         }
         if (motionListener != null) {
-            motionListener.mouseMoved(new GridMouseMoveEvent(x, y));
+            motionListener.mouseMoved(new GridMouseMoveEvent(x, y, true));
         }
     }
     
@@ -156,7 +156,7 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         public void mousePressed(GridMousePressedEvent evt);
     }
     
-    public record GridMouseMoveEvent(int x, int y) { }
+    public record GridMouseMoveEvent(int x, int y, boolean dragging) { }
     public interface GridMouseMoveListener extends EventListener {
         public void mouseMoved(GridMouseMoveEvent evt);
     }

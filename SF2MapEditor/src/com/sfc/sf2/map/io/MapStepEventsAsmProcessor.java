@@ -49,7 +49,7 @@ public class MapStepEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
                 destX = StringHelpers.getValueInt(split[0]);
                 destY = StringHelpers.getValueInt(split[1]);
                 
-                stepCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY, comment));
+                stepCopiesList.add(new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, sourceX+width-1, sourceY+height-1, destX, destY, comment));
             }
         }
         MapCopyEvent[] stepCopies = new MapCopyEvent[stepCopiesList.size()];
@@ -71,9 +71,9 @@ public class MapStepEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
             } else {
                 writer.write('\n');
             }
-            writer.write(String.format("\t\t\t\t\tsbcSource %2d, %2d\n", item[i].getSourceX(), item[i].getSourceY()));
-            writer.write(String.format("\t\t\t\t\tsbcSize   %2d, %2d\n", item[i].getWidth(), item[i].getHeight()));
-            writer.write(String.format("\t\t\t\t\tsbcDest   %2d, %2d\n", item[i].getDestX(), item[i].getDestY()));
+            writer.write(String.format("\t\t\t\t\tsbcSource %2d, %2d\n", item[i].getSourceStartX(), item[i].getSourceStartY()));
+            writer.write(String.format("\t\t\t\t\tsbcSize   %2d, %2d\n", item[i].getWidth()-1, item[i].getHeight()-1));
+            writer.write(String.format("\t\t\t\t\tsbcDest   %2d, %2d\n", item[i].getDestStartX(), item[i].getDestStartY()));
         }
         writer.write("\t\t\t\tendWord\n");
     }

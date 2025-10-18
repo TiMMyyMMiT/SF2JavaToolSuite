@@ -13,23 +13,23 @@ public class MapCopyEvent {
     
     private int triggerX;
     private int triggerY;
-    private int sourceX;
-    private int sourceY;
-    private int width;
-    private int height;
-    private int destX;
-    private int destY;
+    private int sourceStartX;
+    private int sourceStartY;
+    private int sourceEndX;
+    private int sourceEndY;
+    private int destStartX;
+    private int destStartY;
     private String comment;
 
-    public MapCopyEvent(int triggerX, int triggerY, int sourceX, int sourceY, int width, int height, int destX, int destY, String comment) {
+    public MapCopyEvent(int triggerX, int triggerY, int sourceStartX, int sourceStartY, int sourceEndX, int sourceEndY, int destStartX, int destStartY, String comment) {
         this.triggerX = triggerX;
         this.triggerY = triggerY;
-        this.sourceX = sourceX;
-        this.sourceY = sourceY;
-        this.width = width;
-        this.height = height;
-        this.destX = destX;
-        this.destY = destY;
+        this.sourceStartX = sourceStartX;
+        this.sourceStartY = sourceStartY;
+        this.sourceEndX = sourceEndX;
+        this.sourceEndY = sourceEndY;
+        this.destStartX = destStartX;
+        this.destStartY = destStartY;
         this.comment = comment;
     }
 
@@ -49,52 +49,68 @@ public class MapCopyEvent {
         this.triggerY = triggerY;
     }
     
-    public int getSourceX() {
-        return sourceX;
+    public int getSourceStartX() {
+        return sourceStartX;
     }
 
-    public void setSourceX(int sourceX) {
-        this.sourceX = sourceX;
+    public void setSourceStartX(int sourceStartX) {
+        this.sourceStartX = sourceStartX;
     }
 
-    public int getSourceY() {
-        return sourceY;
+    public int getSourceStartY() {
+        return sourceStartY;
     }
 
-    public void setSourceY(int sourceY) {
-        this.sourceY = sourceY;
+    public void setSourceStartY(int sourceStartY) {
+        this.sourceStartY = sourceStartY;
     }
 
+    public int getSourceEndX() {
+        return sourceEndX;
+    }
+
+    public void setSourceEndX(int sourceEndX) {
+        this.sourceEndX = sourceEndX;
+    }
+
+    public int getSourceEndY() {
+        return sourceEndY;
+    }
+
+    public void setSourceEndY(int sourceEndY) {
+        this.sourceEndY = sourceEndY;
+    }
+    
     public int getWidth() {
-        return width;
+        return sourceStartX == 0xFF ? sourceEndX : sourceEndX-sourceStartX+1;
     }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
+    
     public int getHeight() {
-        return height;
+        return sourceStartY == 0xFF ? sourceEndY : sourceEndY-sourceStartY+1;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public int getDestStartX() {
+        return destStartX;
     }
 
-    public int getDestX() {
-        return destX;
+    public void SetDestStartX(int destStartX) {
+        this.destStartX = destStartX;
     }
 
-    public void setDestX(int destX) {
-        this.destX = destX;
+    public int getDestStartY() {
+        return destStartY;
     }
 
-    public int getDestY() {
-        return destY;
+    public void setDestStartY(int destStartY) {
+        this.destStartY = destStartY;
     }
 
-    public void setDestY(int destY) {
-        this.destY = destY;
+    public int getDestEndX() {
+        return destStartX+getWidth()-1;
+    }
+
+    public int getDestEndY() {
+        return destStartY+getHeight()-1;
     }
 
     public String getComment() {
@@ -111,6 +127,6 @@ public class MapCopyEvent {
 
     @Override
     public MapCopyEvent clone() {
-        return new MapCopyEvent(triggerX, triggerY, sourceX, sourceY, width, height, destX, destY, comment);
+        return new MapCopyEvent(triggerX, triggerY, sourceStartX, sourceStartY, sourceEndX, sourceEndY, destStartX, destStartY, comment);
     }
 }

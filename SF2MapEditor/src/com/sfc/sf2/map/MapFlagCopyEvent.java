@@ -41,7 +41,7 @@ public class MapFlagCopyEvent extends MapCopyEvent {
 
     @Override
     public MapFlagCopyEvent clone() {
-        return new MapFlagCopyEvent(getFlag(), getSourceX(), getSourceY(), getWidth(), getHeight(), getDestX(), getDestY(), flagComment, getComment());
+        return new MapFlagCopyEvent(getFlag(), getSourceStartX(), getSourceStartY(), getSourceEndX(), getHeight(), getDestStartX(), getDestStartY(), flagComment, getComment());
     }
     
     static String getFlagInfo(int flag) {

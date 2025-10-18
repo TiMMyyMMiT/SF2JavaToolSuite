@@ -3983,7 +3983,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     mapAreaTableModel.fireTableRowsUpdated(row, row);
                     break;
                 case "FlagCopy":
-                    MapRoofCopyTableModel.fireTableRowsUpdated(row, row);
+                    mapFlagCopyTableModel.fireTableRowsUpdated(row, row);
                     break;
                 case "StepCopy":
                     mapStepCopyTableModel.fireTableRowsUpdated(row, row);

@@ -16,7 +16,7 @@ import com.sfc.sf2.map.layout.MapLayout;
 public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEvent> {
     
     public MapFlagCopyEventTableModel() {
-        super(new String[] { "Index", "Flag", "Flag Info", "Source X", "Source Y", "Width", "Height", "Dest X", "Dest Y", "Comment" }, 64);
+        super(new String[] { "Index", "Flag", "Flag Info", "Source X", "Source Y", "Source X'", "Source Y'", "Dest X", "Dest Y", "Comment" }, 64);
     }
 
     @Override
@@ -45,12 +45,12 @@ public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEv
             case 0: return row;
             case 1: return item.getFlag();
             case 2: return item.getFlagComment();
-            case 3: return item.getSourceX();
-            case 4: return item.getSourceY();
-            case 5: return item.getWidth();
-            case 6: return item.getHeight();
-            case 7: return item.getDestX();
-            case 8: return item.getDestY();
+            case 3: return item.getSourceStartX();
+            case 4: return item.getSourceStartY();
+            case 5: return item.getSourceEndX();
+            case 6: return item.getSourceEndY();
+            case 7: return item.getDestStartX();
+            case 8: return item.getDestStartY();
             case 9: return item.getComment();
         }
         return -1;
@@ -60,12 +60,12 @@ public class MapFlagCopyEventTableModel extends AbstractTableModel<MapFlagCopyEv
     protected MapFlagCopyEvent setValue(MapFlagCopyEvent item, int row, int col, Object value) {
         switch (col) {
             case 1: item.setFlag((int)value); setValueAt(item.getFlagComment(), row, 2); break;
-            case 3: item.setSourceX((int)value); break;
-            case 4: item.setSourceY((int)value); break;
-            case 5: item.setWidth((int)value); break;
-            case 6: item.setHeight((int)value); break;
-            case 7: item.setDestX((int)value); break;
-            case 8: item.setDestY((int)value); break;
+            case 3: item.setSourceStartX((int)value); break;
+            case 4: item.setSourceStartY((int)value); break;
+            case 5: item.setSourceEndX((int)value); break;
+            case 6: item.setSourceEndY((int)value); break;
+            case 7: item.SetDestStartX((int)value); break;
+            case 8: item.setDestStartY((int)value); break;
             case 9: item.setComment((String)value); break;
         }
         return item;
