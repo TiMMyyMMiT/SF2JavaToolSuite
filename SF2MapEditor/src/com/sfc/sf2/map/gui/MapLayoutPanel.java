@@ -436,8 +436,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         int height = area.getHeight();
         Point offset = calulateAreaOffset(area);
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        for (int y = 0; y <= height; y++) {
-            for (int x = 0; x <= width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH+offset.x;
                 int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT+offset.y;
                 int index = 0;
@@ -460,8 +460,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         int width = area.getWidth();
         int height = area.getHeight();
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        for (int y = 0; y <= height; y++) {
-            for (int x = 0; x <= width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 int destX = (posX+x)*PIXEL_WIDTH;
                 int destY = (posY+y)*PIXEL_HEIGHT;
                 int index = area.getLayer1StartX()+x + (area.getLayer1StartY()+y)*BLOCK_WIDTH;
@@ -471,7 +471,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             }
         }
         g2.setColor(MapBlockHelpers.PRIORITY_DARKEN_COLOR);
-        g2.fillRect(posX*PIXEL_WIDTH, posY*PIXEL_HEIGHT, (width+1)*PIXEL_WIDTH, (height+1)*PIXEL_HEIGHT);
+        g2.fillRect(posX*PIXEL_WIDTH, posY*PIXEL_HEIGHT, width*PIXEL_WIDTH, height*PIXEL_HEIGHT);
     }
     
     private void underlayMapBackground(Graphics2D g2, MapArea area) {
@@ -480,8 +480,8 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         int height = area.getHeight();
         Point offset = calulateAreaOffset(area);
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        for (int y = 0; y <= height; y++) {
-            for (int x = 0; x <= width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 int destX = (area.getLayer1StartX()+x)*PIXEL_WIDTH+offset.x;
                 int destY = (area.getLayer1StartY()+y)*PIXEL_HEIGHT+offset.y;
                 int index = area.getBackgroundLayer2StartX()+x + (area.getBackgroundLayer2StartY()+y)*BLOCK_WIDTH;
