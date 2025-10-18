@@ -243,33 +243,39 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             case DRAW_MODE_ROOF_COPIES:
                 MapCopyEvent copy = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? map.getFlagCopies()[selectedItemIndex] : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? map.getStepCopies()[selectedItemIndex] : map.getRoofCopies()[selectedItemIndex];
                 atEdge = true;
-                switch (closestSelectedPointIndex) {
+                int sx = copy.getSourceX(), sy = copy.getSourceY();
+                if (sx == 0xFF && sy == 0xFF) {
+                    MapArea mainArea = map.getAreas()[0];
+                    sx = copy.getDestX()-mainArea.getForegroundLayer2StartX();
+                    sy = copy.getDestY()-mainArea.getForegroundLayer2StartY();
+                }
+                switch (closestSelectedPointIndex) {        
                     case 0:
                         x = copy.getTriggerX();
                         y = copy.getTriggerY();
                         atEdge = false;
                         break;
                     case 1:
-                        x = copy.getSourceX();
-                        y = copy.getSourceY();
+                        x = sx;
+                        y = sy;
                         offsetX = 2;
                         offsetY = 2;
                         break;
                     case 2:
-                        x = copy.getSourceX()+copy.getWidth();
-                        y = copy.getSourceY();
+                        x = sx+copy.getWidth();
+                        y = sy;
                         offsetX = -4;
                         offsetY = 2;
                         break;
                     case 3:
-                        x = copy.getSourceX();
-                        y = copy.getSourceY()+copy.getHeight();
+                        x = sx;
+                        y = sy+copy.getHeight();
                         offsetX = 2;
                         offsetY = -4;
                         break;
                     case 4:
-                        x = copy.getSourceX()+copy.getWidth();
-                        y = copy.getSourceY()+copy.getHeight();
+                        x = sx+copy.getWidth();
+                        y = sy+copy.getHeight();
                         offsetX = -4;
                         offsetY = -4;
                         break;
@@ -1038,13 +1044,41 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
             case DRAW_MODE_STEP_COPIES:
             case DRAW_MODE_ROOF_COPIES:
                 MapCopyEvent copy = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? map.getFlagCopies()[selectedItemIndex] : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? map.getStepCopies()[selectedItemIndex] : map.getRoofCopies()[selectedItemIndex];
-                String copyType = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? "FlagCopies" : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? "StepCopies" : "RoofCopies";
                 if (closestSelectedPointIndex == 0) {
                     copy.setTriggerX(x);
                     copy.setTriggerY(y);
                 } else if (closestSelectedPointIndex == 5) {
                     copy.setDestX(x);
                     copy.setDestY(y);
+                } else if (copy.getSourceX() == 0xFF && copy.getSourceY() == 0xFF) {
+                    //Main rect when infering source from roof (dest) position
+                    MapArea mainArea = map.getAreas()[0];
+                    int sourceX = copy.getDestX()-mainArea.getForegroundLayer2StartX();
+                    int sourceY = copy.getDestY()-mainArea.getForegroundLayer2StartY();
+                    int sx = closestSelectedPointIndex == 1 || closestSelectedPointIndex == 3 ? x : sourceX;
+                    int sy = closestSelectedPointIndex == 1 || closestSelectedPointIndex == 2 ? y : sourceY;
+                    int ex = closestSelectedPointIndex == 2 || closestSelectedPointIndex == 4 ? x : sourceX+copy.getWidth();
+                    int ey = closestSelectedPointIndex == 3 || closestSelectedPointIndex == 4 ? y : sourceY+copy.getHeight();
+                    boolean pointsSwapped = false;
+                    if (ex < sx) {
+                        int temp = sx;
+                        sx = ex;
+                        ex = temp;
+                        pointsSwapped = true;
+                    }
+                    if (ey < sy) {
+                        int temp = sy;
+                        sy = ey;
+                        ey = temp;
+                        pointsSwapped = true;
+                    }
+                    copy.setDestX(sx+mainArea.getForegroundLayer2StartX());
+                    copy.setDestY(sy+mainArea.getForegroundLayer2StartY());
+                    copy.setWidth(ex-sx);
+                    copy.setHeight(ey-sy);
+                    if (pointsSwapped) {
+                        closestSelectedPointIndex = findClosestCopyPoint(copy, x, y, selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES);
+                    }
                 } else {
                     //Main rect
                     int sx = closestSelectedPointIndex == 1 || closestSelectedPointIndex == 3 ? x : copy.getSourceX();
@@ -1069,11 +1103,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                     copy.setWidth(ex-sx);
                     copy.setHeight(ey-sy);
                     if (pointsSwapped) {
-                        //closestSelectedPointIndex = findClosestCopyPoint(copy, x, y, selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES);
+                        closestSelectedPointIndex = findClosestCopyPoint(copy, x, y, selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES);
                     }
                 }
                 redraw();
                 if (eventEditedListener != null) {
+                    String copyType = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? "FlagCopies" : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? "StepCopies" : "RoofCopies";
                     eventEditedListener.actionPerformed(new ActionEvent(this, selectedItemIndex, copyType));
                 }
                 break;
@@ -1431,11 +1466,22 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
         Point mouse = new Point(x, y);
         Point[] points = new Point[6];
         points[0] = new Point(copy.getTriggerX(), copy.getTriggerY());
-        points[1] = new Point(copy.getSourceX(), copy.getSourceY());
-        points[2] = new Point(copy.getSourceX()+copy.getWidth(), copy.getSourceY());
-        points[3] = new Point(copy.getSourceX(), copy.getSourceY()+copy.getHeight());
-        points[4] = new Point(copy.getSourceX()+copy.getWidth(), copy.getSourceY()+copy.getHeight());
-        points[5] = new Point(copy.getDestX()+copy.getWidth()/2, copy.getDestY()+copy.getHeight()/2);
+        if (!isFlagCopy && copy.getSourceX() == 0xFF && copy.getSourceY() == 0xFF) {
+            MapArea mainArea = map.getAreas()[0];
+            int sourceX = copy.getDestX()-mainArea.getForegroundLayer2StartX();
+            int sourceY = copy.getDestY()-mainArea.getForegroundLayer2StartY();
+            points[1] = new Point(sourceX, sourceY);
+            points[2] = new Point(sourceX+copy.getWidth(), sourceY);
+            points[3] = new Point(sourceX, sourceY+copy.getHeight());
+            points[4] = new Point(sourceX+copy.getWidth(), sourceY+copy.getHeight());
+            points[5] = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        } else {
+            points[1] = new Point(copy.getSourceX(), copy.getSourceY());
+            points[2] = new Point(copy.getSourceX()+copy.getWidth(), copy.getSourceY());
+            points[3] = new Point(copy.getSourceX(), copy.getSourceY()+copy.getHeight());
+            points[4] = new Point(copy.getSourceX()+copy.getWidth(), copy.getSourceY()+copy.getHeight());
+            points[5] = new Point(copy.getDestX()+copy.getWidth()/2, copy.getDestY()+copy.getHeight()/2);
+        }
         int distIndex = isFlagCopy ? 1 : 0;
         double tempDist;
         double dist = mouse.distanceSq(points[distIndex]);
