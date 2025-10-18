@@ -32,6 +32,8 @@ public class MapBlocksetDecoder {
     private List<Short> outputData = null;
     private Tileset[] tilesets;
     
+    //StringBuilder debugSb;
+    
     public MapBlock[] decode(byte[] inputData) {
         this.inputData = inputData;
         MapBlock[] blocks = null;
@@ -248,8 +250,8 @@ public class MapBlocksetDecoder {
         MapTile[] outputTiles = new MapTile[outputData.size()];
         for (int i=0; i < outputData.size(); i++) {
             short value = outputData.get(i);
-            outputTiles[i] = new MapTile(value & 0x3FF);
-            //System.out.println(i+"="+tile.getId()+", "+tile.isHighPriority()+" "+tile.ishFlip()+" "+tile.isvFlip());
+            outputTiles[i] = new MapTile(value);
+            //System.out.println(i+"="+outputTiles[i].toString());
         }
         MapBlock[] blocks = new MapBlock[outputTiles.length/TILES_COUNT];
         for (int i=0; i < blocks.length; i++) {
@@ -341,9 +343,7 @@ public class MapBlocksetDecoder {
                                 command = "101";
                                 //System.out.println(i + " - Copy mapped tile from bottom tile history map : 101");
                             } else {
-                                //System.out.println("highPriority tile="+tile.isHighPriority()+",previous="+previousTile.isHighPriority()
-                                //                    + "\nhFlip tile="+tile.ishFlip()+",previous="+previousTile.ishFlip()
-                                //                    + "\nvFlip tile="+tile.isvFlip()+",previous="+previousTile.isvFlip());
+                                //System.out.println(tile.toString());
                                 if (tile.getTileFlags().equals(previousTile.getTileFlags())) {
                                     /* Produce value with same flags */
                                     command = produceCommand110(tile, previousTile);
@@ -382,7 +382,8 @@ public class MapBlocksetDecoder {
             output[i] = b;
         }
         //System.out.println("output bytes length = " + output.length);
-        //System.out.println("output = " + bytesToHex(output));
+        //System.out.println("output = " + BinaryHelpers.bytesToHex(output));
+        //System.out.println(blocks.length+" Blocks");
         
         this.tilesets = null;
         return output;
