@@ -81,12 +81,12 @@ public class StaticMapLayoutPanel extends AbstractLayoutPanel {
             }
         }
         if (showPriority) {
-            MapBlockHelpers.drawTilePriorities(graphics, blocks, BLOCK_WIDTH);
+            MapBlockHelpers.drawTilePriorities(graphics, blocks, layout.getTilesets(), BLOCK_WIDTH);
         }
     }
     
     protected void drawBlock(MapBlock block, Graphics graphics, int x, int y) {
-        graphics.drawImage(block.getIndexedColorImage(), x, y, null);
+        graphics.drawImage(block.getIndexedColorImage(layout.getTilesets()), x, y, null);
         
         if (showExplorationFlags) {
             int explorationFlags = block.getFlags()&0xC000;
