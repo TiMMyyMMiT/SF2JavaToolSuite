@@ -110,7 +110,8 @@ public class MapBlocksetManager extends AbstractManager {
     public void exportDisassembly(Path tilesetsFilePath, Path blocksetPath, MapBlockset mapBlockset, Tileset[] mapTilesets) throws IOException, DisassemblyException, AsmException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.mapBlockset = mapBlockset;
-        blocksetDisassemblyProcessor.exportDisassembly(blocksetPath, mapBlockset, null);
+        MapBlockPackage pckg = new MapBlockPackage(mapTilesets, mapTilesets[0].getPalette());
+        blocksetDisassemblyProcessor.exportDisassembly(blocksetPath, mapBlockset, pckg);
         int paletteIndex = StringHelpers.getNumberFromString(mapTilesets[0].getPalette().getName());
         int[] tilesetIndices = new int[mapTilesets.length];
         for (int i = 0; i < tilesetIndices.length; i++) {
