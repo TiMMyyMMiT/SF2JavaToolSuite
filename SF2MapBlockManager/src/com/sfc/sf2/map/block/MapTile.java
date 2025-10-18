@@ -85,12 +85,17 @@ public class MapTile {
             return getTile(tilesets).getIndexedColorImage(tileFlags);
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("%d: %b, %b, %b", encodeTileID(), tileFlags.isPriority(), tileFlags.isHFlip(), tileFlags.isVFlip());
+    }
     
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;
-        if (!(obj instanceof MapBlock)) return false;
+        if (!(obj instanceof MapTile)) return false;
         MapTile tile = (MapTile)obj;
         return this.tilesetIndex == tile.tilesetIndex && this.tileIndex == tile.tileIndex && this.tileFlags.equals(tile.tileFlags);
     }
