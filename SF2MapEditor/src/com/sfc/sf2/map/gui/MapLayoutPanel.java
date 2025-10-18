@@ -1108,7 +1108,7 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 }
                 redraw();
                 if (eventEditedListener != null) {
-                    String copyType = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? "FlagCopies" : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? "StepCopies" : "RoofCopies";
+                    String copyType = selectedTabsDrawMode == DRAW_MODE_FLAG_COPIES ? "FlagCopy" : selectedTabsDrawMode == DRAW_MODE_STEP_COPIES ? "StepCopy" : "RoofCopy";
                     eventEditedListener.actionPerformed(new ActionEvent(this, selectedItemIndex, copyType));
                 }
                 break;
