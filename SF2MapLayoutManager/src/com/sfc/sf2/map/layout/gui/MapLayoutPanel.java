@@ -76,20 +76,16 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
     @Override
     protected void drawImage(Graphics graphics) {
         MapBlock[] blocks = layout.getBlockset().getBlocks();
-        drawBlocks(blocks, graphics);
+        for (int y=0; y < BLOCK_HEIGHT; y++) {
+            for (int x=0; x < BLOCK_WIDTH; x++) {
+                graphics.drawImage(blocks[x+y*BLOCK_WIDTH].getIndexedColorImage(layout.getTilesets()), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);
+            }
+        }
         if (getShowExplorationFlags() || getShowInteractionFlags()) {
             drawFlags(blocks, graphics);
         }
         if (showPriority) {
             MapBlockHelpers.drawTilePriorities(graphics, blocks, layout.getTilesets(), BLOCK_WIDTH);
-        }
-    }
-    
-    protected void drawBlocks(MapBlock[] blocks, Graphics graphics) {
-        for (int y=0; y < BLOCK_HEIGHT; y++) {
-            for (int x=0; x < BLOCK_WIDTH; x++) {
-                graphics.drawImage(blocks[x+y*BLOCK_WIDTH].getIndexedColorImage(layout.getTilesets()), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);
-            }
         }
     }
     

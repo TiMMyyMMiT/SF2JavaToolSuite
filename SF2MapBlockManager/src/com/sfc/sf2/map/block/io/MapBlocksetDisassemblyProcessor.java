@@ -8,7 +8,6 @@ package com.sfc.sf2.map.block.io;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.AbstractDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
-import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.block.compression.MapBlocksetDecoder;
@@ -17,10 +16,10 @@ import com.sfc.sf2.map.block.compression.MapBlocksetDecoder;
  *
  * @author TiMMy
  */
-public class MapBlocksetDisassemblyProcessor extends AbstractDisassemblyProcessor<MapBlockset, EmptyPackage> {
+public class MapBlocksetDisassemblyProcessor extends AbstractDisassemblyProcessor<MapBlockset, MapBlockPackage> {
     
     @Override
-    protected MapBlockset parseDisassemblyData(byte[] data, EmptyPackage pckg) throws DisassemblyException {
+    protected MapBlockset parseDisassemblyData(byte[] data, MapBlockPackage pckg) throws DisassemblyException {
         if (data == null) {
             throw new DisassemblyException("Cannot import map blockset. No data.");
         }
@@ -30,7 +29,7 @@ public class MapBlocksetDisassemblyProcessor extends AbstractDisassemblyProcesso
     }
 
     @Override
-    protected byte[] packageDisassemblyData(MapBlockset item, EmptyPackage pckg) throws DisassemblyException {
-        return new MapBlocksetDecoder().encode(item.getBlocks());
+    protected byte[] packageDisassemblyData(MapBlockset item, MapBlockPackage pckg) throws DisassemblyException {
+        return new MapBlocksetDecoder().encode(item.getBlocks(), pckg.tilesets());
     }
 }

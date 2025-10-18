@@ -30,6 +30,9 @@ public class MapBlocksetDecoder {
     private Short[] bottomTileHistory = new Short[0x800];
     
     private List<Short> outputData = null;
+    private Tileset[] tilesets;
+    
+    //StringBuilder debugSb;
     
     public MapBlock[] decode(byte[] inputData) {
         this.inputData = inputData;
@@ -222,7 +225,7 @@ public class MapBlocksetDecoder {
             relativeValue = (short)(relativeValue * -1);
         }
         //System.out.println("Relative value = $" + Integer.toString(relativeValue,16));
-        short result = (short)((previousTile&0x3FF) + relativeValue);
+        short result = (short)((previousTile & 0x3FF) + relativeValue);
         return result;
     }
     
@@ -245,13 +248,13 @@ public class MapBlocksetDecoder {
     
     private MapBlock[] produceBlocks() {
         MapTile[] outputTiles = new MapTile[outputData.size()];
-        for(int i=0;i<outputData.size();i++){
+        for (int i=0; i < outputData.size(); i++) {
             short value = outputData.get(i);
             outputTiles[i] = new MapTile(value);
-            //System.out.println(i+"="+tile.getId()+", "+tile.isHighPriority()+" "+tile.ishFlip()+" "+tile.isvFlip());
+            //System.out.println(i+"="+outputTiles[i].toString());
         }
-        MapBlock[] blocks = new MapBlock[outputTiles.length/9];
-        for(int i=0;i<blocks.length;i++){
+        MapBlock[] blocks = new MapBlock[outputTiles.length/TILES_COUNT];
+        for (int i=0; i < blocks.length; i++) {
             MapBlock block = new MapBlock(i, 0, Arrays.copyOfRange(outputTiles,i*TILES_COUNT, i*TILES_COUNT+TILES_COUNT));
             blocks[i] = block;
         }
@@ -271,18 +274,19 @@ public class MapBlocksetDecoder {
         return bit;
     }
     
-    public byte[] encode(MapBlock[] blocks) {
+    public byte[] encode(MapBlock[] blocks, Tileset[] tilesets) {
+        this.tilesets = tilesets;
         rightTileHistory = new Short[0x800];
         bottomTileHistory = new Short[0x800];
         int commandNumber = 0;
         StringBuilder outputSb = new StringBuilder();
         byte[] output;
-        MapTile[] tiles = new MapTile[blocks.length*9-3*9];
-        for(int i=0;i<blocks.length-3;i++){
-            System.arraycopy(blocks[i+3].getMapTiles(), 0, tiles, i*9, 9);
+        MapTile[] tiles = new MapTile[blocks.length*TILES_COUNT-3*TILES_COUNT];
+        for (int i=0; i < blocks.length-3; i++) {
+            System.arraycopy(blocks[i+3].getMapTiles(), 0, tiles, i*TILES_COUNT, TILES_COUNT);
         }
         
-        for (int i=0;i<(blocks.length-3)*9;i++) {
+        for (int i=0; i < (blocks.length-3)*TILES_COUNT; i++) {
             MapTile tile = tiles[i];
             short tileValue = (short)tile.encodeTileData();
             //System.out.println("Next tile=$"+Integer.toString(tileValue,16)); 
@@ -301,26 +305,26 @@ public class MapBlocksetDecoder {
                 } else {
                     MapTile nextTilesetTile = null;
                     if (previousTile.getTileFlags().isHFlip()) {
-                        int index = previousTile.encodeTileData()-1;
+                        int index = previousTile.encodeTileID()-1;
                         if (index < 0) {
                             //System.err.println("WARNING - While pointing to previous tile from tileset, had to put tile value 0 instead of this one : "+index);
                             index = 0;
                         }
                         nextTilesetTile = new MapTile(index);
                     } else {
-                        int index = previousTile.encodeTileData()+1;
+                        int index = previousTile.encodeTileID()+1;
                         if (index >= MAP_TILESETS_TILES) {
                             //System.err.println("WARNING - While pointing to previous tile from tileset, had to put tile value "+(tileset.length-1)+" instead of this one : "+index);
                             index = MAP_TILESETS_TILES-1;
                         }
                         nextTilesetTile = new MapTile(index);
                     }
-                    if (nextTilesetTile.equals(tile) && previousTile.getTileFlags().equals(tile.getTileFlags())) {
+                    if (nextTilesetTile.encodeTileID() == tile.encodeTileID() && previousTile.getTileFlags().equals(tile.getTileFlags())) {
                         /* Copy next tile from tileset with previous tile HFlip direction */
                         command = "01";
                         //System.out.println(i + " - Copy next tile from tileset : 01");
                     } else {
-                        int rightTileHistoryOffset = previousTile.encodeTileID() + (previousTile.getTileFlags().isHFlip()?0x0400:0);
+                        int rightTileHistoryOffset = (previousTile.encodeTileID() & 0x3FF) + (previousTile.getTileFlags().isHFlip()?0x0400:0);
                         Short rightTileValue = rightTileHistory[rightTileHistoryOffset];
                         //System.out.println("rightTileHistory[$"+Integer.toString(rightTileHistoryOffset,16)+"]=$"+((rightTileValue!=null)?Integer.toString(rightTileValue,16):"null")+", tileValue=$"+Integer.toString(tileValue,16));
                         if (rightTileValue!=null && rightTileValue==tileValue) {
@@ -331,7 +335,7 @@ public class MapBlocksetDecoder {
                             Short bottomTileValue = null;
                             if(i>=3){
                                MapTile thirdPreviousTile = tiles[i-3];
-                               int bottomTileHistoryOffset = thirdPreviousTile.encodeTileID() + (thirdPreviousTile.getTileFlags().isHFlip()?0x0400:0);
+                               int bottomTileHistoryOffset = (thirdPreviousTile.encodeTileID() & 0x3FF) + (thirdPreviousTile.getTileFlags().isHFlip()?0x0400:0);
                                bottomTileValue = bottomTileHistory[bottomTileHistoryOffset];
                             }
                             if (bottomTileValue != null && bottomTileValue == tileValue) {
@@ -339,9 +343,7 @@ public class MapBlocksetDecoder {
                                 command = "101";
                                 //System.out.println(i + " - Copy mapped tile from bottom tile history map : 101");
                             } else {
-                                //System.out.println("highPriority tile="+tile.isHighPriority()+",previous="+previousTile.isHighPriority()
-                                //                    + "\nhFlip tile="+tile.ishFlip()+",previous="+previousTile.ishFlip()
-                                //                    + "\nvFlip tile="+tile.isvFlip()+",previous="+previousTile.isvFlip());
+                                //System.out.println(tile.toString());
                                 if (tile.getTileFlags().equals(previousTile.getTileFlags())) {
                                     /* Produce value with same flags */
                                     command = produceCommand110(tile, previousTile);
@@ -354,9 +356,7 @@ public class MapBlocksetDecoder {
                                     updateHistoryMaps(tiles, i);
                                 }
                             }
-                            
                         }
-                        
                     }
                 }
             }
@@ -382,51 +382,53 @@ public class MapBlocksetDecoder {
             output[i] = b;
         }
         //System.out.println("output bytes length = " + output.length);
-        //System.out.println("output = " + bytesToHex(output));
+        //System.out.println("output = " + BinaryHelpers.bytesToHex(output));
+        //System.out.println(blocks.length+" Blocks");
         
+        this.tilesets = null;
         return output;
     }
     
-    private void updateHistoryMaps(MapTile[] tiles, int cursor){
+    private void updateHistoryMaps(MapTile[] tiles, int cursor) {
         MapTile tile = tiles[cursor];
         short tileValue = (short)tile.encodeTileData();
         if (cursor >= 1) {
             MapTile leftTile = tiles[cursor-1];
-            int rightTileHistoryOffset = leftTile.encodeTileID() + (leftTile.getTileFlags().isHFlip()?0x0400:0);
+            int rightTileHistoryOffset = (leftTile.encodeTileID() & 0x3FF) + (leftTile.getTileFlags().isHFlip()?0x0400:0);
             rightTileHistory[rightTileHistoryOffset] = tileValue;
         }
         if (cursor >= 3) {
             MapTile upperTile = tiles[cursor-3];
-            int bottomTileHistoryOffset = upperTile.encodeTileID() + (upperTile.getTileFlags().isHFlip()?0x0400:0);
+            int bottomTileHistoryOffset = (upperTile.encodeTileID() & 0x3FF) + (upperTile.getTileFlags().isHFlip()?0x0400:0);
             bottomTileHistory[bottomTileHistoryOffset] = tileValue;
         }
     }
     
-    private String produceCommand110(MapTile tile, MapTile previousTile){
+    private String produceCommand110(MapTile tile, MapTile previousTile) {
         String command = null;
         String value = produceValue(tile, previousTile);
         command = "110" + value;
         return command;
     }   
     
-    private String produceCommand111(MapTile tile, MapTile previousTile){
+    private String produceCommand111(MapTile tile, MapTile previousTile) {
         String command = null;
         TileFlags flag = tile.getTileFlags();
-        String highPriority = flag.isPriority()?"1":"0";
-        String vFlip = flag.isVFlip()?"1":"0";
-        String hFlip = flag.isHFlip()?"1":"0";
+        String highPriority = flag.isPriority() ? "1" : "0";
+        String vFlip = flag.isVFlip() ? "1" : "0";
+        String hFlip = flag.isHFlip() ? "1" : "0";
         String flags = highPriority + vFlip + hFlip;
         String value = produceValue(tile, previousTile);
         command = "111" + flags + value;
         return command;
     }   
     
-    private String produceValue(MapTile tile, MapTile previousTile){
+    private String produceValue(MapTile tile, MapTile previousTile) {
         String value = null;
-        if(previousTile!=null){
+        if (previousTile != null) {
             value = produceRelativeValue(tile, previousTile);
         }
-        if(value==null){
+        if (value == null) {
             value = produceAbsoluteValue(tile);
         }
         return value;
@@ -435,11 +437,11 @@ public class MapBlocksetDecoder {
     private String produceRelativeValue(MapTile tile, MapTile previousTile){
         String value = null;
         for (int i=0; i < 32; i++) {
-            int index = (previousTile.encodeTileData()&0x3FF) - i;
+            int index = previousTile.encodeTileID() - i;
             if (index > 0 && index < MAP_TILESETS_TILES) {
                 MapTile relativeTile = new MapTile(index);
                 if (relativeTile != null) {
-                    if (tile.getTilesetIndex() == relativeTile.getTilesetIndex() && tile.getTileIndex() == relativeTile.getTileIndex()) {
+                    if (tile.encodeTileID() == relativeTile.encodeTileID()) {
                         String val = Integer.toString(i, 2);
                         while (val.length() < 5) {
                             val = "0" + val;
@@ -452,14 +454,14 @@ public class MapBlocksetDecoder {
                 }
             }
         }
-        for (int i=0;i<32;i++) {
-            int index = (previousTile.encodeTileData()&0x3FF) + i;
-            if (index>0 && index<MAP_TILESETS_TILES) {
+        for (int i=0; i < 32; i++) {
+            int index = previousTile.encodeTileID() + i;
+            if (index > 0 && index < MAP_TILESETS_TILES) {
                 MapTile relativeTile = new MapTile(index);
                 if (relativeTile != null) {
-                    if (tile.getTilesetIndex() == relativeTile.getTilesetIndex() && tile.getTileIndex() == relativeTile.getTileIndex()) {
+                    if (tile.encodeTileID() == relativeTile.encodeTileID()) {
                         String val = Integer.toString(i, 2);
-                        while(val.length()<5){
+                        while (val.length() < 5) {
                             val = "0" + val;
                         }
                         String sign = "0";
@@ -475,7 +477,7 @@ public class MapBlocksetDecoder {
     
     private String produceAbsoluteValue(MapTile tile) {
         String value = null;
-        int id = (tile.encodeTileData()&0x3FF);
+        int id = tile.encodeTileID();
         int length = 9;
         if (id >= 0x180) {
             value = Integer.toString((id + 0x180) / 2,2);
