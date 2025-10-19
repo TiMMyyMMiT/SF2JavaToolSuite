@@ -72,7 +72,7 @@ public class MapStepEventsAsmProcessor extends AbstractAsmProcessor<MapCopyEvent
                 writer.write('\n');
             }
             writer.write(String.format("\t\t\t\t\tsbcSource %2d, %2d\n", item[i].getSourceStartX(), item[i].getSourceStartY()));
-            writer.write(String.format("\t\t\t\t\tsbcSize   %2d, %2d\n", item[i].getWidth()-1, item[i].getHeight()-1));
+            writer.write(String.format("\t\t\t\t\tsbcSize   %2d, %2d\n", item[i].getWidth(), item[i].getHeight()));
             writer.write(String.format("\t\t\t\t\tsbcDest   %2d, %2d\n", item[i].getDestStartX(), item[i].getDestStartY()));
         }
         writer.write("\t\t\t\tendWord\n");

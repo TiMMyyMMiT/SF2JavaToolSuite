@@ -77,7 +77,7 @@ public class MapFlagEventsAsmProcessor extends AbstractAsmProcessor<MapFlagCopyE
             } else {
                 writer.write('\n');
             }
-            writer.write(String.format("\t\t\t\t\tfbcSize   %2d, %2d\n", item[i].getWidth()-1, item[i].getHeight()-1));
+            writer.write(String.format("\t\t\t\t\tfbcSize   %2d, %2d\n", item[i].getWidth(), item[i].getHeight()));
             writer.write(String.format("\t\t\t\t\tfbcDest   %2d, %2d\n", item[i].getDestStartX(), item[i].getDestStartY()));
         }
         writer.write("\t\t\t\tendWord\n");
