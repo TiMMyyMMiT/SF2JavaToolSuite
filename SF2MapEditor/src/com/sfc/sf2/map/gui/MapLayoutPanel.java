@@ -1288,7 +1288,13 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
                 clearFlagValue(x, y, 0xFF00);
                 break;
             case MouseEvent.BUTTON3:
-                clearFlagValue(x, y, currentPaintMode);
+                flagVal = currentPaintMode;
+                if (flagVal == MapBlock.MAP_FLAG_STAIRS_RIGHT) {
+                    if (layout.getBlockset().getBlocks()[x+y*BLOCK_WIDTH].getExplorationFlags() == MapBlock.MAP_FLAG_STAIRS_LEFT) {
+                        flagVal = MapBlock.MAP_FLAG_STAIRS_LEFT;
+                    }
+                }
+                clearFlagValue(x, y, flagVal);
                 break;
         }
     }
