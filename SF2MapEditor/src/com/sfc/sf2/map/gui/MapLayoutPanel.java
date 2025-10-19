@@ -865,6 +865,12 @@ public class MapLayoutPanel extends com.sfc.sf2.map.layout.gui.MapLayoutPanel {
     public boolean getShowExplorationFlags() {
         return super.getShowExplorationFlags() || shouldDraw(DRAW_MODE_EXPLORATION_FLAGS);
     }
+
+    @Override
+    public void setShowExplorationFlags(boolean showExplorationFlags) {
+        setDrawMode_Toggles(DRAW_MODE_EXPLORATION_FLAGS, showExplorationFlags);
+        super.setShowExplorationFlags(showExplorationFlags);
+    }
     
     private boolean shouldDraw(int drawFlag) {
         return isDrawMode_Toggles(drawFlag) || isDrawMode_Tabs(drawFlag) || isDrawMode_Actions(drawFlag);
