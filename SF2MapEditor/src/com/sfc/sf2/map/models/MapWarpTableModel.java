@@ -73,8 +73,8 @@ public class MapWarpTableModel extends AbstractTableModel<MapWarpEvent> {
     @Override
     protected MapWarpEvent setValue(MapWarpEvent item, int row, int col, Object value) {
         switch (col) {
-            case 1: item.setTriggerX(NumHelpers.getValueWithValidGap((int)value, item.getTriggerX(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
-            case 2: item.setTriggerY(NumHelpers.getValueWithValidGap((int)value, item.getTriggerY(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
+            case 1: item.setTriggerX(NumHelpers.getValueWithValidGap((int)value, item.getTriggerX(), MapLayout.BLOCK_WIDTH-1, 0xFF)); break;
+            case 2: item.setTriggerY(NumHelpers.getValueWithValidGap((int)value, item.getTriggerY(), MapLayout.BLOCK_WIDTH-1, 0xFF)); break;
             case 3: item.setScrollDirection((Direction)value); break;
             case 4: item.setDestMap((String)value); break;
             case 5: item.setDestX((int)value); break;

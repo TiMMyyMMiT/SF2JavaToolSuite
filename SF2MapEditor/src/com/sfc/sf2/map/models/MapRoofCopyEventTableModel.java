@@ -57,8 +57,8 @@ public class MapRoofCopyEventTableModel extends AbstractTableModel<MapCopyEvent>
         switch (col) {
             case 1: item.setTriggerX((int)value); break;
             case 2: item.setTriggerY((int)value); break;
-            case 3: item.setSourceStartX(NumHelpers.getValueWithValidGap((int)value, item.getSourceStartX(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
-            case 4: item.setSourceStartY(NumHelpers.getValueWithValidGap((int)value, item.getSourceStartY(), MapLayout.BLOCK_WIDTH-1, 0xff)); break;
+            case 3: item.setSourceStartX(NumHelpers.getValueWithValidGap((int)value, item.getSourceStartX(), MapLayout.BLOCK_WIDTH-1, 0xFF)); break;
+            case 4: item.setSourceStartY(NumHelpers.getValueWithValidGap((int)value, item.getSourceStartY(), MapLayout.BLOCK_WIDTH-1, 0xFF)); break;
             case 5: item.setSourceEndX((int)value); break;
             case 6: item.setSourceEndY((int)value); break;
             case 7: item.SetDestStartX((int)value); break;

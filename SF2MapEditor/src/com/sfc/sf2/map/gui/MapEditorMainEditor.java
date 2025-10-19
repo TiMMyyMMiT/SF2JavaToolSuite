@@ -211,7 +211,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             mapAreaTableModel.setTableData(map.getAreas());
             mapFlagCopyTableModel.setTableData(map.getFlagCopies());
             mapStepCopyTableModel.setTableData(map.getStepCopies());
-            MapRoofCopyTableModel.setTableData(map.getRoofCopies());
+            mapRoofCopyTableModel.setTableData(map.getRoofCopies());
             mapWarpTableModel.setTableData(map.getWarps());
             mapChestItemTableModel.setTableData(map.getChestItems());
             mapOtherItemTableModel.setTableData(map.getOtherItems());
@@ -279,7 +279,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             mapAreaTableModel.setTableData(null);
             mapFlagCopyTableModel.setTableData(null);
             mapStepCopyTableModel.setTableData(null);
-            MapRoofCopyTableModel.setTableData(null);
+            mapRoofCopyTableModel.setTableData(null);
             mapWarpTableModel.setTableData(null);
             mapChestItemTableModel.setTableData(null);
             mapOtherItemTableModel.setTableData(null);
@@ -301,7 +301,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         mapFlagCopyTableModel = new com.sfc.sf2.map.models.MapFlagCopyEventTableModel();
         mapChestItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
         mapOtherItemTableModel = new com.sfc.sf2.map.models.MapItemTableModel();
-        MapRoofCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyEventTableModel();
+        mapRoofCopyTableModel = new com.sfc.sf2.map.models.MapRoofCopyEventTableModel();
         mapStepCopyTableModel = new com.sfc.sf2.map.models.MapStepCopyEventTableModel();
         mapAnimationFrameTableModel = new com.sfc.sf2.map.animation.models.MapAnimationFrameTableModel();
         mapWarpTableModel = new com.sfc.sf2.map.models.MapWarpTableModel();
@@ -3132,7 +3132,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
                 tableRoofCopies.setBorder(null);
                 tableRoofCopies.setInfoMessage("<html><b>Roof copy event:</b> If the player character enters the trigger block, then copies map blocks in one section of the upper layer to another section of the upper layer.<br>- Trigger X/Y: The trigger position for the step copy.<br>- Source X/Y: The top-left of the section to copy blocks FROM.<br>- Width/Height: The width and height of the section to copy to/from.<br>- Dest. X/Y: The top-left of the section to copy blocks TO.<br>- Comment: Optional comment that is saved to the .asm file.<br><br>NOTE: Use Show flags to reverse the previous Roof Copy (i.e. to make the roof appear again).<br><br><b>When Flag Copy row is selected:</b>TODO.</html>");
-                tableRoofCopies.setModel(MapRoofCopyTableModel);
+                tableRoofCopies.setModel(mapRoofCopyTableModel);
                 tableRoofCopies.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 tableRoofCopies.setSingleClickText(true);
                 tableRoofCopies.setSpinnerNumberEditor(true);
@@ -3947,7 +3947,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
 
     private void OnRoofCopiesTableDataChanged(TableModelEvent e) {
         if (onTableDataChanged(e)) {
-            mapLayoutPanel.getMap().setRoofCopies(MapRoofCopyTableModel.getTableData(MapCopyEvent[].class));
+            mapLayoutPanel.getMap().setRoofCopies(mapRoofCopyTableModel.getTableData(MapCopyEvent[].class));
         }
     }
 
@@ -3989,7 +3989,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                     mapStepCopyTableModel.fireTableRowsUpdated(row, row);
                     break;
                 case "RoofCopy":
-                    MapRoofCopyTableModel.fireTableRowsUpdated(row, row);
+                    mapRoofCopyTableModel.fireTableRowsUpdated(row, row);
                     break;
                 case "Warp":
                     mapWarpTableModel.fireTableRowsUpdated(row, row);
@@ -4021,7 +4021,6 @@ public class MapEditorMainEditor extends AbstractMainEditor {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.map.models.MapStepCopyEventTableModel MapRoofCopyTableModel;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel1;
     private com.sfc.sf2.core.gui.controls.AccordionPanel accordionPanel2;
     private com.sfc.sf2.map.block.gui.BlockSlotPanel blockSlotPanelLeft;
@@ -4271,6 +4270,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.map.models.MapFlagCopyEventTableModel mapFlagCopyTableModel;
     private com.sfc.sf2.map.gui.MapLayoutPanel mapLayoutPanel;
     private com.sfc.sf2.map.models.MapItemTableModel mapOtherItemTableModel;
+    private com.sfc.sf2.map.models.MapRoofCopyEventTableModel mapRoofCopyTableModel;
     private com.sfc.sf2.map.models.MapStepCopyEventTableModel mapStepCopyTableModel;
     private com.sfc.sf2.map.models.MapWarpTableModel mapWarpTableModel;
     private com.sfc.sf2.core.gui.controls.Table tableAnimFrames;
