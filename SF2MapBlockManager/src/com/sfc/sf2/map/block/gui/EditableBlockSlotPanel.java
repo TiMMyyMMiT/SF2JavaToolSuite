@@ -51,6 +51,7 @@ public class EditableBlockSlotPanel extends BlockSlotPanel {
         mouseInput = new LayoutMouseInput(this, this::onMouseButtonInput, PIXEL_WIDTH, PIXEL_HEIGHT);
         setDisplayScale(4);
     }
+    
     @Override
     protected void drawImage(Graphics graphics) {
         super.drawImage(graphics);

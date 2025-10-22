@@ -240,6 +240,8 @@ public class MapEditorMainEditor extends AbstractMainEditor {
                 tileSlotPanelRight.setTile(null);
                 tileSlotPanelRight.setTilesets(tilesets);
                 editableBlockSlotPanel.setTilesets(tilesets);
+                blockSlotPanelLeft.setTilesets(tilesets);
+                blockSlotPanelRight.setTilesets(tilesets);
                 blockSlotPanelLeft.setBlock(mapBlockset.getBlocks()[0]);
                 blockSlotPanelRight.setBlock(mapBlockset.getBlocks()[0]);
             }
@@ -3789,6 +3791,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         int index = jTabbedPane5.getSelectedIndex();
         if (index == 1) {   //Is on Block Editor
             jTabbedPane2.setSelectedIndex(0);
+        } else if (mapLayoutPanel.getMapLayout() != null) { //Map editor
+            mapLayoutPanel.getMapLayout().getBlockset().clearIndexedColorImage(true);
+            mapLayoutPanel.redraw();
         }
     }//GEN-LAST:event_jTabbedPane5StateChanged
 
@@ -3870,9 +3875,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }
 
     private void onBlockEdited(ActionEvent e) {
-        blockSlotPanelLeft.redraw();
         mapBlocksetLayoutPanel.getBlockset().clearIndexedColorImage(false);
         mapBlocksetLayoutPanel.redraw();
+        blockSlotPanelLeft.redraw();
     }
     
     private void onAnimationFramesSelectionChanged(ListSelectionEvent e) {
