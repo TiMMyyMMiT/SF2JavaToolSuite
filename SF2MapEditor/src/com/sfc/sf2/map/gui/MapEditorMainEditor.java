@@ -3567,7 +3567,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         if (anim != null && anim.getTilesetId()!= value) {
             try {
                 anim.setTilesetId(value);
-                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton14.getFilePath());
+                Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
                 Tileset tileset = mapManager.getMapAnimationManager().importAnimationTileset(mapLayoutPanel.getMap().getLayout().getPalette(), tilesetEntriesPath, value);
                 tilesetLayoutPanelAnim.setTileset(tileset);
             } catch (Exception ex) {
