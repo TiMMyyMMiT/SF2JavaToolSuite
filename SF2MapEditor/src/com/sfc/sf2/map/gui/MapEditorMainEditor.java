@@ -3899,6 +3899,9 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             //Number of animation frames changed
             MapAnimationFrame[] frames = mapAnimationFrameTableModel.getTableData(MapAnimationFrame[].class);
             tilesetLayoutPanelModified.getMapAnimation().setFrames(frames);
+            if (tilesetLayoutPanelModified.getAnimator().isAnimating()) {
+                tilesetLayoutPanelModified.setPreviewAnim(tilesetLayoutPanelModified.getAnimator().isAnimating());
+            }
         } else if (e.getColumn() == 3) {
             //Editing destination tileset
             MapAnimation animation = tilesetLayoutPanelModified.getMapAnimation();
