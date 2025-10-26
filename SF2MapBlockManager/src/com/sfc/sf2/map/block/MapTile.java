@@ -102,8 +102,7 @@ public class MapTile {
     
     @Override 
     public MapTile clone() {
-        MapTile clone = new MapTile(tilesetIndex, tileIndex, tileFlags);
-        return clone;
+        return new MapTile(tilesetIndex, tileIndex, new TileFlags(tileFlags.value()));
     }
     
     public static MapTile EmptyMapTile() {
