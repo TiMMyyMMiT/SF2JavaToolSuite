@@ -11,6 +11,7 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.io.TilesetRawImageProcessor;
+import com.sfc.sf2.helpers.PaletteHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
@@ -25,6 +26,8 @@ import java.nio.file.Path;
  * @author TiMMy
  */
 public class SpellGraphicManager extends AbstractManager {
+    private static final int[] paletteReplaceIndices = new int[] { 9, 13, 14 };
+    
     private final PaletteManager paletteManager = new PaletteManager();
     private final SpellDisassemblyProcessor spellDisassemblyProcessor = new SpellDisassemblyProcessor();
     private final TilesetRawImageProcessor tilesetImageProcessor = new TilesetRawImageProcessor();
@@ -63,7 +66,7 @@ public class SpellGraphicManager extends AbstractManager {
         PalettePackage pckg = new PalettePackage(PathHelpers.filenameFromPath(filePath), true);
         spellTileset = tilesetImageProcessor.importRawImage(filePath, pckg);
         Palette palette = spellTileset.getPalette();
-        adjustImportedPalette(defaultPalette, palette);
+        palette = PaletteHelpers.combinePalettes(defaultPalette, palette, paletteReplaceIndices, paletteReplaceIndices);
         Console.logger().info("Spell successfully imported from : " + filePath);
         Console.logger().finest("EXITING importImage");
         return spellTileset;
@@ -82,13 +85,6 @@ public class SpellGraphicManager extends AbstractManager {
     private void importDefaultPalette(Path defaultPalettePath) throws IOException, DisassemblyException {        
         if (defaultPalette == null) {
             defaultPalette = paletteManager.importDisassembly(defaultPalettePath, true);
-        }
-    }
-    
-    private static void adjustImportedPalette(Palette defaultPalette, Palette importedPalette) {
-        for (int i = 0; i < defaultPalette.getColors().length; i++) {
-            if (i != 9 && i != 13 && i != 14)
-                importedPalette.getColors()[i] = defaultPalette.getColors()[i];
         }
     }
 

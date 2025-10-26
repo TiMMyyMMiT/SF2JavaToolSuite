@@ -15,6 +15,15 @@ public class MapItem {
     private int y;
     private int flag;
     private String item;
+    private String comment;
+
+    public MapItem(int x, int y, int flag, String item, String comment) {
+        this.x = x;
+        this.y = y;
+        this.flag = flag;
+        this.item = item;
+        this.comment = comment;
+    }
 
     public int getX() {
         return x;
@@ -39,6 +48,10 @@ public class MapItem {
     public void setFlag(int flag) {
         this.flag = flag;
     }
+    
+    public String getFlagInfo() {
+        return MapFlagCopyEvent.getFlagInfo(flag);
+    }
 
     public String getItem() {
         return item;
@@ -48,6 +61,20 @@ public class MapItem {
         this.item = item;
     }
 
- 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
     
+    public static MapItem createEmpty() {
+        return new MapItem(0, 0, 0, "MEDICAL_HERB", "");
+    }
+
+    @Override
+    public MapItem clone() {
+        return new MapItem(x, y, flag, item, comment);
+    }
 }

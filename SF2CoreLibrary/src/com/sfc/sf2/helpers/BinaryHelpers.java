@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BinaryHelpers {
     final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-    
+        
     public static byte getByte(byte[] data, int cursor) {
         ByteBuffer bb = ByteBuffer.allocate(1);
         bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -33,7 +33,7 @@ public class BinaryHelpers {
         return s;
     }
     
-    public static void setWord(byte[] data, int cursor, short value){
+    public static void setWord(byte[] data, int cursor, short value) {
         ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         bb.putShort(value);

@@ -82,7 +82,7 @@ public class InvocationGraphicManager extends AbstractManager {
         File[] files = dir.toFile().listFiles();
         for (File f : files) { 
             if (f.getName().startsWith(pattern) && f.getName().endsWith(extension)) {
-                Tileset frame = tilesetManager.importImage(f.toPath());
+                Tileset frame = tilesetManager.importImage(f.toPath(), true);
                 frames.add(frame);
             }
         }

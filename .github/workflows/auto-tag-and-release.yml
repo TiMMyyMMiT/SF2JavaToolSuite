@@ -17,68 +17,164 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect changed projects
+        id: detect_changes
+        shell: bash
+        run: |
+          git fetch origin ${{ github.event.before }}
+      
+          # Find changed version.properties files
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
+      
+          if [ -z "$changed_files" ]; then
+            echo "No version.properties files changed."
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+      
+          # Check for release.properties
+          if [ ! -f "release.properties" ]; then
+            echo "release.properties not found!"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+      
+          # Read valid project names from release.properties
+          declare -A valid_projects
+          while IFS=':' read -r key value; do
+            key=$(echo "$key" | xargs)
+            value=$(echo "$value" | xargs)
+            if [[ -n "$key" && -n "$value" ]]; then
+              valid_projects["$key"]="$value"
+            fi
+          done < <(grep -vE '^\s*(#|$)' release.properties)
+      
+          # Filter changed projects based on release.properties
+          changed_projects=()
+          changed_filepaths=()
+      
+          for file in $changed_files; do
+            dir=$(dirname "$file")
+            project_name=$(basename "$dir")
+      
+            if [[ -n "${valid_projects[$project_name]}" ]]; then
+              changed_projects+=("$project_name")
+              changed_filepaths+=("$file")
+            else
+              echo "Skipping project '$project_name' — not listed in release.properties"
+            fi
+          done
+      
+          if [ ${#changed_projects[@]} -eq 0 ]; then
+            echo "No valid changed projects found in release.properties."
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          else
+            echo "Valid changed projects: ${changed_projects[*]}"
+            echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
+            echo "CHANGED_FILES=${changed_filepaths[*]}" >> $GITHUB_ENV
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Set up JDK 17
+        if: steps.detect_changes.outputs.should_run == 'true'
         uses: actions/setup-java@v4.7.1
         with:
           distribution: temurin
           java-version: 17
 
       - name: Download and install Apache Ant 1.10.14
+        if: steps.detect_changes.outputs.should_run == 'true'
         run: |
           wget https://downloads.apache.org/ant/binaries/apache-ant-1.10.14-bin.tar.gz
           tar -xzf apache-ant-1.10.14-bin.tar.gz
           sudo mv apache-ant-1.10.14 /opt/ant
           echo "ANT_HOME=/opt/ant" >> $GITHUB_ENV
           echo "/opt/ant/bin" >> $GITHUB_PATH
-
-      - name: Detect changed projects
-        id: detect_changes
-        shell: bash
-        run: |
-          git fetch origin ${{ github.event.before }}
-
-          # Find changed version.properties files
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'version.properties' || true)
-
-          if [ -z "$changed_files" ]; then
-            echo "No version.properties files changed."
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          else
-            changed_filepaths=()
-            changed_projects=()
-            for file in $changed_files; do
-              project=$(dirname "$file")
-              changed_projects+=("$(basename "$project")")
-              changed_filepaths+=("$(basename "$file")")
-            done
-            echo "Changed files: ${changed_filepaths[@]}"
-            echo "Changed projects: ${changed_projects[@]}"
-
-            echo "CHANGED_PROJECTS=${changed_projects[*]}" >> $GITHUB_ENV
-            echo "CHANGED_FILES=${changed_filepaths[*]}" >> $GITHUB_ENV
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Build projects
+          
+      - name: Build projects with dependencies
         if: steps.detect_changes.outputs.should_run == 'true'
         id: build_projects
         shell: bash
         run: |
           echo "Starting build process..."
-
           mkdir -p built-jars
 
           read -a CHANGED_PROJECTS <<< "$CHANGED_PROJECTS"
 
-          # Build changed apps
-          echo "Build changed projects"
           for proj in "${CHANGED_PROJECTS[@]}"; do
-            echo "Building project $proj..."
+            echo "-----------------------------"
+            echo "Processing project: $proj"
+            prop_file="$proj/nbproject/project.properties"
 
-            mkdir -p "$proj/build/classes"
-            mkdir -p "$proj/dist/lib"
-            mkdir -p "$proj/lib"
+            if [ ! -f "$prop_file" ]; then
+              echo "project.properties not found for $proj"
+              continue
+            fi
 
+            declare -A project_paths
+            declare -A reference_paths
+            declare -A file_references
+
+            # Step 1: Load relevant keys
+            while IFS='=' read -r key val; do
+              key=$(echo "$key" | xargs)
+              val=$(echo "$val" | xargs)
+
+              if [[ "$key" =~ ^project\.(.+)$ ]]; then
+                dep="${BASH_REMATCH[1]}"
+                project_paths["$dep"]="$val"  # Keep relative
+              elif [[ "$key" =~ ^reference\.(.+)\.jar$ ]]; then
+                reference_paths["${BASH_REMATCH[1]}"]="$val"
+              elif [[ "$key" =~ ^file\.reference\.(.+)\.jar$ ]]; then
+                jar="${BASH_REMATCH[1]}"
+                file_references["$jar"]="$val"  # Keep relative
+              fi
+            done < "$prop_file"
+
+            echo "Detected reference JARs: ${!reference_paths[@]}"
+            echo "Detected file dependencies: ${!file_references[@]}"
+
+            # Step 2: Build project dependencies
+            for ref in "${!reference_paths[@]}"; do
+              jar_path="${reference_paths[$ref]}"
+              if [[ "$jar_path" =~ \$\{project\.([^\}]+)\} ]]; then
+                dep_key="${BASH_REMATCH[1]}"
+                dep_rel_path="${project_paths[$dep_key]}"
+                if [ -n "$dep_rel_path" ]; then
+                  dep_path="$proj/$dep_rel_path"
+                  echo "Building dependency project '$dep_key' at path '$dep_path'"
+                  if [ -d "$dep_path" ]; then
+                    ant -v -f "$dep_path" -Dplatforms.JDK_17.home="$JAVA_HOME" -Dnb.internal.action.name=rebuild clean jar
+                  else
+                    echo "Warning: Project path '$dep_path' does not exist for $dep_key"
+                  fi
+                else
+                  echo "Warning: No project path defined for $dep_key"
+                fi
+              fi
+            done
+
+            # Step 3: Copy prebuilt jars
+            for jar in "${!file_references[@]}"; do
+              rel_path="${file_references[$jar]}"
+              rel_path="${rel_path//\\//}"  # fix Windows-style slashes
+              jar_path="$proj/$rel_path"
+              echo "Copying prebuilt jar '$jar' from $jar_path"
+                if [ -f "$jar_path" ]; then
+                  mkdir -p "$proj/lib"
+                  dest_path="$proj/lib/$(basename "$jar_path")"
+                  if [ "$jar_path" != "$dest_path" ]; then
+                    cp "$jar_path" "$dest_path"
+                  else
+                    echo "Skipping copy: source and destination are the same."
+                  fi
+                else
+                  echo "Warning: Prebuilt jar not found at $jar_path"
+                fi
+            done
+
+            # Step 4: Build the main project
+            echo "Building project $proj with package-for-store..."
             ant -v -f "$proj" -Dplatforms.JDK_17.home="$JAVA_HOME" package-for-store
 
             jar_name=$(basename "$proj")
@@ -111,7 +207,8 @@ jobs:
               tag_name="${folder_name}-${version}"
               jar_file="built-jars/${folder_name}.jar"
 
-              echo "==> Processing $folder_name ($version) in $dir_path"
+              echo "Processing ${folder_name} ($version) in ${dir_path}. Tag = ${tag_name}"
+              echo "JAR file = ${jar_file}"
               if [ -f "${jar_file}" ]; then
                 # Git tagging
                 git config user.name 'GitHub Actions'
@@ -124,9 +221,11 @@ jobs:
                   git tag "$tag_name"
                   git push origin "$tag_name"
                 fi
-
-                # Append to release list
-                echo "$tag_name|${jar_file}" >> release_list.txt
+                
+                # Extract release notes
+                release_notes=$(grep '^release-notes:' "$file_path" | cut -d':' -f2- | xargs)
+                # Append to release list with release notes
+                echo "$tag_name|${jar_file}|${release_notes}" >> release_list.txt
               else
                 echo "Warning: ${jar_file} not found so tag will not be created"
               fi
@@ -139,9 +238,10 @@ jobs:
         if: steps.detect_changes.outputs.should_run == 'true'
         run: |
           if [ -f release_list.txt ]; then
-            while IFS='|' read -r tag jar_path; do
+            while IFS='|' read -r tag jar_path release_notes; do
               echo "Creating release for $tag with artifact $jar_path"
-              gh release create "$tag" "$jar_path" --title "$tag" --notes "Automated release for $tag"
+              full_notes="$(printf "%s\n\n_Automated release for %s_" "$release_notes" "$tag")"
+              gh release create "$tag" "$jar_path" --title "$tag" --notes "$full_notes"
             done < release_list.txt
           else
             echo "No releases to create."
@@ -149,48 +249,77 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
       - name: Push to DISASM
         if: steps.detect_changes.outputs.should_run == 'true'
         run: |
           echo "Cloning destination repo..."
-          git clone --depth=1 --branch feature/tools_updates https://x-access-token:${{ secrets.SF2DISASM_PUSH_TOKEN }}@github.com/TiMMyyMMiT/SF2DISASM.git target-repo
+          git clone --depth=1 --branch feature/tools_updates https://x-access-token:${{ secrets.SF2DISASM_PUSH_TOKEN }}@github.com/ShiningForceCentral/SF2DISASM.git target-repo
     
           root_release_file="release.properties"
           if [ ! -f "$root_release_file" ]; then
             echo "release.properties file not found. Skipping push step."
             exit 0
           fi
-    
+      
           success_count=0
           skipped_count=0
-    
+          release_notes_list=()
           echo "Processing changed tool projects..."
-          for jar_file in built-jars/*.jar; do         
-            project_name=$(basename "$jar_file" .jar)    
+          
+          for jar_file in built-jars/*.jar; do
+            project_name=$(basename "$jar_file" .jar)
             dest_path=$(grep -vE '^\s*(#|$)' "$root_release_file" | grep "^$project_name:" | cut -d':' -f2- | xargs)
-    
+      
             if [ -z "$dest_path" ]; then
               echo "$project_name not defined in $root_release_file. Skipping."
               skipped_count=$((skipped_count + 1))
               continue
             fi
-    
+      
             echo "Copying $(basename "$jar_file") to target-repo/$dest_path"
             mkdir -p "target-repo/$dest_path"
             cp "$jar_file" "target-repo/$dest_path/"
             success_count=$((success_count + 1))
+      
+            # Extract release notes for this project from CHANGED_FILES
+            for changed_file in $CHANGED_FILES; do
+              changed_project=$(basename "$(dirname "$changed_file")")
+              if [ "$changed_project" == "$project_name" ]; then
+                note=$(grep '^release-notes:' "$changed_file" | cut -d':' -f2- | xargs)
+                if [ -n "$note" ]; then
+                  release_notes_list+=("- $project_name: $note")
+                fi
+                break
+              fi
+            done
           done
-    
+      
           cd target-repo
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-    
+      
           if git status --porcelain | grep .; then
             echo "Committing and pushing $success_count JAR(s)..."
             git add .
-            git commit -m "Update tools: auto-built JARs [${{ github.sha }}]"
+      
+            if [ ${#release_notes_list[@]} -gt 0 ]; then
+              {
+                echo "Update tools: auto-built JARs [${{ github.sha }}]"
+                echo
+                echo "Release notes:"
+                for note in "${release_notes_list[@]}"; do
+                  echo "$note"
+                done
+              } > commit_msg.txt
+              git commit -F commit_msg.txt
+            else
+              git commit -m "Update tools: auto-built JARs [${{ github.sha }}]"
+            fi
+      
             git push origin feature/tools_updates
           else
             echo "No changes to commit. ($skipped_count project(s) skipped)"
           fi
+
     

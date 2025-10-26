@@ -5,8 +5,8 @@
  */
 package com.sfc.sf2.vwfont;
 
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
@@ -16,25 +16,40 @@ import java.awt.image.DataBufferByte;
  */
 public class FontSymbol {
     
+    private static final Palette DEFAULT_PALETTE = new Palette(new CRAMColor[] { CRAMColor.WHITE, CRAMColor.BLACK, CRAMColor.LIGHT_GRAY }, true);
     public static final int PIXEL_WIDTH = 16;
     public static final int PIXEL_HEIGHT = 16;
-    private static final Palette defaultPalette = new Palette(new Color[] { new Color(0xFFF0), Color.BLACK, Color.LIGHT_GRAY });
     
     private int id;
     private int width;
-    private int[][] pixels = new int[PIXEL_WIDTH][PIXEL_HEIGHT];
-    private BufferedImage image = null;
+    private int[] pixels = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
+    private BufferedImage indexedColorImage = null;
+    private Palette palette;
 
-    public int[][] getPixels() {
+    public FontSymbol(int id, int[] pixels, int width) {
+        this.id = id;
+        this.pixels = pixels;
+        this.width = width;
+        palette = DEFAULT_PALETTE;
+    }
+    
+    public int[] getPixels() {
         return pixels;
     }
 
-    public void setPixels(int[][] pixels) {
+    public void setPixels(int[] pixels) {
         this.pixels = pixels;
     }
     
     public Palette getPalette() {
-        return defaultPalette;
+        return palette;
+    }
+    
+    public void setpalette(Palette palette) {
+        if (this.palette != palette) {
+            this.palette = palette;
+            clearIndexedColorImage();
+        }
     }
     
     public int getId() {
@@ -54,24 +69,28 @@ public class FontSymbol {
     }
 
     public BufferedImage getIndexColoredImage() {
-        if(image == null) {
-            image = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, defaultPalette.getIcm());
-            byte[] data = ((DataBufferByte)(image.getRaster().getDataBuffer())).getData();
+        if(indexedColorImage == null) {
+            indexedColorImage = new BufferedImage(PIXEL_WIDTH, PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, palette.getIcm());
+            byte[] data = ((DataBufferByte)(indexedColorImage.getRaster().getDataBuffer())).getData();
             for (int j = 0; j < PIXEL_HEIGHT; j++) {
                 for (int i = 0; i < PIXEL_WIDTH; i++) {
-                    data[i + j*PIXEL_HEIGHT] = (byte)pixels[i][j];
+                    data[i+j*PIXEL_WIDTH] = (byte)pixels[i+j*PIXEL_WIDTH];
                 }
             }
         }
-        return image;        
+        return indexedColorImage;        
     }
     
-    public void clearImage() {
-        image = null;
+    public void clearIndexedColorImage() {
+        if (indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+        }
     }
     
+    private static final int[] EMPTY_PIXELS = new int[PIXEL_WIDTH*PIXEL_HEIGHT];
     public static FontSymbol EmptySymbol() {
-        FontSymbol emptySymbol = new FontSymbol();
+        FontSymbol emptySymbol = new FontSymbol(-1, EMPTY_PIXELS, 2);
         return emptySymbol;
     }
 }

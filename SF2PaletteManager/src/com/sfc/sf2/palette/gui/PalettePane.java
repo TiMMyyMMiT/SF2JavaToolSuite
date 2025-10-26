@@ -5,9 +5,10 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.core.gui.controls.Console;
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ import javax.swing.JPanel;
  */
 public class PalettePane extends JPanel {
         
-    private ColorEditor colorEditor;
+    private CRAMColorEditor colorEditor;
     private Palette palette;
     private ColorPane[] colorPanes;
     
@@ -29,17 +30,17 @@ public class PalettePane extends JPanel {
         colorPanes = new ColorPane[16];
         for (int i = 0; i < 16; i++) {
             gbc.gridx = i;
-            ColorPane colorPane = new ColorPane(Color.BLACK, colorEditor);
+            ColorPane colorPane = new ColorPane(CRAMColor.BLACK, colorEditor);
             colorPanes[i] = colorPane;
             add(colorPane, gbc);
         }
     }
 
-    public ColorEditor getColorEditor() {
+    public CRAMColorEditor getColorEditor() {
         return colorEditor;
     }
 
-    public void setColorEditor(ColorEditor colorEditor) {
+    public void setColorEditor(CRAMColorEditor colorEditor) {
         this.colorEditor = colorEditor;
         for (int i = 0; i < colorPanes.length; i++) {
             colorPanes[i].setEditor(colorEditor);
@@ -54,11 +55,11 @@ public class PalettePane extends JPanel {
         this.palette = palette;
         if (palette == null) {
             for (int i = 0; i < colorPanes.length; i++) {
-                colorPanes[i].updateColor(Color.BLACK);
+                colorPanes[i].updateColor(CRAMColor.BLACK);
                 colorPanes[i].setVisible(true);
             }
         } else {
-            Color[] colors = palette.getColors();
+            CRAMColor[] colors = palette.getColors();
             for (int i = 0; i < colorPanes.length; i++) {
                 if (i < colors.length) {
                     colorPanes[i].updateColor(colors[i]);
@@ -68,6 +69,7 @@ public class PalettePane extends JPanel {
                 }
             }
         }
+        colorEditor.setColorPane(null);
    }
    
    public Palette getUpdatedPalette() {
@@ -75,7 +77,7 @@ public class PalettePane extends JPanel {
            Console.logger().warning("Palette not loaded.");
            return null;
        }
-       Color[] colors = new Color[palette.getColors().length];
+       CRAMColor[] colors = new CRAMColor[palette.getColors().length];
        for(int i=0; i < colorPanes.length; i++) {
            colors[i] = colorPanes[i].getCurrentColor();
        }

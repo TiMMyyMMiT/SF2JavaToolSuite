@@ -79,7 +79,7 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
     }
 
     //TODO update to new format. TODO Should this be in TilsetManager
-    public Tileset importDisassemblyWithLayout(Path baseTilesetPath, Palette[] palettes, Path tileset1FilePath, int tileset1Offset, Path tileset2FilePath, int tileset2Offset, TilesetCompression compression, int tilesPerRow, Path layoutPath)
+    /*public Tileset importDisassemblyWithLayout(Path baseTilesetPath, Palette[] palettes, Path tileset1FilePath, int tileset1Offset, Path tileset2FilePath, int tileset2Offset, TilesetCompression compression, int tilesPerRow, Path layoutPath)
             throws IOException, DisassemblyException {
         TilesetPackage basePckg = new TilesetPackage(PathHelpers.filenameFromPath(baseTilesetPath), TilesetCompression.STACK, palettes[0], tilesPerRow);
         Tile[] baseTiles = this.importDisassembly(baseTilesetPath, basePckg).getTiles();
@@ -103,6 +103,7 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
             int tileId = (layoutValue&0x7FF);
             if(tileId>=0&&tileId<vRamTiles.length){
                 Tile outputTile = vRamTiles[tileId];
+                outputTile.setHighPriority(priority!=0);
                 if(outputTile!=null&&palette!=0){
                     outputTile = Tile.paletteSwap(outputTile,palettes[palette]);
                 }
@@ -157,5 +158,5 @@ public class TilesetDisassemblyProcessor extends AbstractDisassemblyProcessor<Ti
         TilesetPackage pckg = new TilesetPackage(newTileset.getName(), compression, palette, 0);
         this.exportDisassembly(tilesPath, newTileset, pckg);
         Files.write(layoutPath, layout);
-    }
+    }*/
 }

@@ -7,13 +7,14 @@ package com.sfc.sf2.core.settings;
 
 import com.sfc.sf2.core.Manifest;
 import com.sfc.sf2.core.gui.controls.Console;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 /**
@@ -28,6 +29,7 @@ public class SettingsManager {
     private static Path globalSettingsPath = null;
     
     private static boolean isRunningInEditor = true;
+    private static boolean preventSaving = true;
 
     static {
         globalSettings = new GlobalSettings();
@@ -41,6 +43,10 @@ public class SettingsManager {
     
     public static void setRunningInEditor(boolean inEditor) {
         isRunningInEditor = inEditor;
+    }
+    
+    public static void setSavingAllowed(boolean allowed) {
+        preventSaving = !allowed;
     }
     
     private static Path getGlobalSettingsFilePath() {
@@ -91,9 +97,9 @@ public class SettingsManager {
         try {
             File file = getGlobalSettingsFilePath().toFile();
             if (file.exists()) {
-                Scanner scan = new Scanner(file);
-                readStoreData(scan, globalSettings);
-                scan.close();
+                BufferedReader reader = new BufferedReader(new FileReader(file));
+                readStoreData(reader, globalSettings);
+                reader.close();
             } else {
                 Console.logger().info("Initialising new global settings...");
                 globalSettings.initialiseNewUser();
@@ -117,26 +123,30 @@ public class SettingsManager {
     
     private static void loadSettings(String specificId) {
         Console.logger().finest("ENTERING loadSettings");
+        //Initialise files
+        for (Map.Entry<String, AbstractSettings> entry : settingsStores.entrySet()) {
+            entry.getValue().initialiseNewUser();
+        }
+        //Load content
         String line = null;
         try {
             File file = getSettingsFilePath().toFile();
             if (file.exists()) {
-                Scanner scan = new Scanner(file);
-                line = scan.nextLine();
+                BufferedReader reader = new BufferedReader(new FileReader(file));
                 String storeId = null;
                 HashMap<String, String> data = null;
-                while (scan.hasNext()) {
+                while ((line = reader.readLine()) != null) {
                     if (line.startsWith("Store_")) {
                         storeId = line.substring(line.indexOf("_")+1).trim();
                         if (settingsStores.containsKey(storeId) && (specificId == null || storeId.equals(specificId))) {
-                            readStoreData(scan, settingsStores.get(storeId));
+                            readStoreData(reader, settingsStores.get(storeId));
                         }
                         if (specificId != null) {
                             break;
                         }
                     }
                 }
-                scan.close();
+                reader.close();
             } else {
                 Console.logger().info("Initialising new user settings...");
                 if (specificId == null) {
@@ -156,12 +166,12 @@ public class SettingsManager {
         Console.logger().finest("EXITING loadSettings");
     }
     
-    private static void readStoreData(Scanner scan, AbstractSettings store) throws Exception {
+    private static void readStoreData(BufferedReader reader, AbstractSettings store) throws Exception {
         HashMap<String, String> data = new HashMap<>();
-        while (scan.hasNext()) {
-            String line = scan.nextLine();
-            if (line.startsWith("Store_")) {
-                break;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.length() == 0) {
+                break;   //Blank line
             } else {
                 int marker = line.indexOf(':');
                 if (marker >= 0) {
@@ -178,6 +188,7 @@ public class SettingsManager {
     }
     
     public static void saveGlobalSettingsFile() {
+        if (preventSaving) return;
         Console.logger().finest("ENTERING saveGlobalSettingsFile");
         try {
             StringBuilder sb = new StringBuilder();
@@ -192,6 +203,7 @@ public class SettingsManager {
     }
     
     public static void saveSettingsFile() {
+        if (preventSaving) return;
         Console.logger().finest("ENTERING saveSettingsFile");
         try {
             StringBuilder sb = new StringBuilder();

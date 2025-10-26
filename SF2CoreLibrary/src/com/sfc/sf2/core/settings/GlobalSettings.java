@@ -21,16 +21,16 @@ public class GlobalSettings implements AbstractSettings {
         return darkTheme;
     }
     
-    public void setTransparentBGColor(Color transparentBGColor) {
-        this.transparentBGColor = transparentBGColor;
+    public void setIsDarkTheme(boolean darkTheme) {
+        this.darkTheme = darkTheme;
     }
     
     public Color getTransparentBGColor() {
         return transparentBGColor;
     }
     
-    public void setIsDarkTheme(boolean darkTheme) {
-        this.darkTheme = darkTheme;
+    public void setTransparentBGColor(Color transparentBGColor) {
+        this.transparentBGColor = transparentBGColor;
     }
 
     @Override

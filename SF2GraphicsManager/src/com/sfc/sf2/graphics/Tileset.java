@@ -8,6 +8,7 @@ package com.sfc.sf2.graphics;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.palette.Palette;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -18,8 +19,8 @@ import java.awt.image.BufferedImage;
 public class Tileset {
     
     private String name;
-    private Tile[] tiles;
-    private int tilesPerRow;
+    protected Tile[] tiles;
+    protected int tilesPerRow;
     
     private BufferedImage indexedColorImage = null;
     
@@ -54,6 +55,20 @@ public class Tileset {
             clearIndexedColorImage(false);
         this.tilesPerRow = tilesPerRow;
     }
+    
+    public Dimension getDimensions(int tilesPerRow) {
+        this.setTilesPerRow(tilesPerRow);
+        return getDimensions();
+    }
+    
+    public Dimension getDimensions() {
+        int w = tilesPerRow;
+        int h = tiles.length/tilesPerRow;
+        if (tiles.length%tilesPerRow != 0) {
+            h++;
+        }
+        return new Dimension(w*PIXEL_WIDTH, h*PIXEL_HEIGHT);
+    }
 
     public Palette getPalette() {
         if (tiles == null || tiles.length == 0) {
@@ -61,8 +76,22 @@ public class Tileset {
         }
         return tiles[0].getPalette();
     }
+
+    public void setPalette(Palette palette) {
+        if (tiles == null || tiles.length == 0) {
+            return;
+        }
+        for (int i = 0; i < tiles.length; i++) {
+            tiles[i].setPalette(palette);
+        }
+        clearIndexedColorImage(false);
+    }
     
     public BufferedImage getIndexedColorImage() {
+        return getIndexedColorImage(1);
+    }
+    
+    public BufferedImage getIndexedColorImage(int scale) {
         if (tiles == null || tiles.length == 0) {
             return null;
         }
@@ -71,7 +100,7 @@ public class Tileset {
             int height = tiles.length/tilesPerRow;
             if (tiles.length%tilesPerRow != 0)
                 height++;
-            indexedColorImage = new BufferedImage(width*PIXEL_WIDTH, height*PIXEL_HEIGHT, BufferedImage.TYPE_BYTE_INDEXED, getPalette().getIcm());
+            indexedColorImage = new BufferedImage(width*PIXEL_WIDTH*scale, height*PIXEL_HEIGHT*scale, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = indexedColorImage.getGraphics();
             for(int j=0;j<height;j++){
                 for(int i=0;i<width;i++){
@@ -79,7 +108,7 @@ public class Tileset {
                     if (tileID >= tiles.length) {
                         break;
                     } else {
-                        graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*PIXEL_WIDTH, j*PIXEL_HEIGHT, null);
+                        graphics.drawImage(tiles[tileID].getIndexedColorImage(), i*PIXEL_WIDTH*scale, j*PIXEL_HEIGHT*scale, PIXEL_WIDTH*scale, PIXEL_HEIGHT*scale, null);
                     }
                 }
             }
@@ -89,12 +118,30 @@ public class Tileset {
     }
     
     public void clearIndexedColorImage(boolean alsoClearTiles) {
-        indexedColorImage = null;
+        if (this.indexedColorImage != null) {
+            indexedColorImage.flush();
+            indexedColorImage = null;
+        }
+        
         if (alsoClearTiles) {
             for (int i = 0; i < tiles.length; i++) {
                 tiles[i].clearIndexedColorImage();
             }
         }
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return this == null;
+        if (obj == this) return true;
+        if (!(obj instanceof Tileset)) return false;
+        Tileset tileset = (Tileset)obj;
+        for (int i=0; i < this.tiles.length; i++) {
+            if (!this.tiles[i].equals(tileset.getTiles()[i])) {
+                return false;
+            }
+        }
+        return true;
     }
     
     public Tileset clone() {
@@ -113,9 +160,9 @@ public class Tileset {
         return true;
     }
     
-    public static Tileset EmptyTilset(Palette palette, int tilesPerRow) {
+    public static Tileset EmptyTilset(Palette palette, int numberOfTiles, int tilesPerRow) {
         Tile emptyTile = Tile.EmptyTile(palette);
-        Tile[] tiles = new Tile[128];
+        Tile[] tiles = new Tile[numberOfTiles];
         for(int i=0; i < tiles.length; i++) {
             tiles[i] = emptyTile;
         }

@@ -5,33 +5,13 @@
  */
 package com.sfc.sf2.map.io;
 
-import com.sfc.sf2.map.MapAnimation;
-import com.sfc.sf2.map.MapAnimationFrame;
-import com.sfc.sf2.map.MapArea;
-import com.sfc.sf2.map.MapFlagCopy;
-import com.sfc.sf2.map.MapItem;
-import com.sfc.sf2.map.MapLayer2Copy;
-import com.sfc.sf2.map.MapStepCopy;
-import com.sfc.sf2.map.MapWarp;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author wiz
  */
 public class DisassemblyManager {
-    
+    /*
     private static String areasHeader;
     private static String flagCopiesHeader;
     private static String stepCopiesHeader;
@@ -1173,5 +1153,5 @@ public class DisassemblyManager {
             return Integer.valueOf(s);
         }
     }
-    
+    */
 }

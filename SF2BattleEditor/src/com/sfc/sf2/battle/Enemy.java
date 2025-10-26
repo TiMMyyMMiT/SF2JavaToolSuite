@@ -5,33 +5,50 @@
  */
 package com.sfc.sf2.battle;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author wiz
  */
 public class Enemy {
         
-    private EnemyData data;
+    private EnemyData enemyData;
     private int x;
     private int y;
     private String ai;
     private String item;
-    private String moveOrder1;
+    private String itemFlags;
+    private String moveOrder;
+    private int moveOrderTarget;
     private int triggerRegion1;
-    private String moveOrder2;
     private int triggerRegion2;
-    private int byte10;
+    private String backupMoveOrder;
+    private int backupMoveOrderTarget;
+    private int unknown;
     private String spawnParams;
 
+    public Enemy(EnemyData enemyData, int x, int y, String ai, String item, String itemFlags, String moveOrder, int moveOrderTarget, int triggerRegion1, int triggerRegion2, String backupMoveOrder, int backupMoveOrderTarget, int unknown, String spawnParams) {
+        this.enemyData = enemyData;
+        this.x = x;
+        this.y = y;
+        this.ai = ai;
+        this.item = item;
+        this.itemFlags = itemFlags;
+        this.moveOrder = moveOrder;
+        this.moveOrderTarget = moveOrderTarget;
+        this.triggerRegion1 = triggerRegion1;
+        this.triggerRegion2 = triggerRegion2;
+        this.backupMoveOrder = backupMoveOrder;
+        this.backupMoveOrderTarget = backupMoveOrderTarget;
+        this.unknown = unknown;
+        this.spawnParams = spawnParams;
+    }
+
     public EnemyData getEnemyData() {
-        return data;
+        return enemyData;
     }
 
     public void setEnemyData(EnemyData data) {
-        this.data = data;
+        this.enemyData = data;
     }
 
     public int getX() {
@@ -66,12 +83,28 @@ public class Enemy {
         this.item = item;
     }
 
-    public String getMoveOrder1() {
-        return moveOrder1;
+    public String getItemFlags() {
+        return itemFlags;
     }
 
-    public void setMoveOrder1(String moveOrder1) {
-        this.moveOrder1 = moveOrder1;
+    public void setItemFlags(String itemFlags) {
+        this.itemFlags = itemFlags;
+    }
+
+    public String getMoveOrder() {
+        return moveOrder;
+    }
+
+    public void setMoveOrder(String moveOrder) {
+        this.moveOrder = moveOrder;
+    }
+
+    public int getMoveOrderTarget() {
+        return moveOrderTarget;
+    }
+
+    public void setMoveOrderTarget(int moveOrderTarget) {
+        this.moveOrderTarget = moveOrderTarget;
     }
 
     public int getTriggerRegion1() {
@@ -82,14 +115,6 @@ public class Enemy {
         this.triggerRegion1 = triggerRegion1;
     }
 
-    public String getMoveOrder2() {
-        return moveOrder2;
-    }
-
-    public void setMoveOrder2(String moveOrder2) {
-        this.moveOrder2 = moveOrder2;
-    }
-
     public int getTriggerRegion2() {
         return triggerRegion2;
     }
@@ -98,12 +123,28 @@ public class Enemy {
         this.triggerRegion2 = triggerRegion2;
     }
 
-    public int getByte10() {
-        return byte10;
+    public String getBackupMoveOrder() {
+        return backupMoveOrder;
     }
 
-    public void setByte10(int byte10) {
-        this.byte10 = byte10;
+    public void setBackupMoveOrder(String backupMoveOrder) {
+        this.backupMoveOrder = backupMoveOrder;
+    }
+
+    public int getBackupMoveOrderTarget() {
+        return backupMoveOrderTarget;
+    }
+
+    public void setBackupMoveOrderTarget(int backupMoveOrderTarget) {
+        this.backupMoveOrderTarget = backupMoveOrderTarget;
+    }
+
+    public int getUnknown() {
+        return unknown;
+    }
+
+    public void setUnknown(int byte10) {
+        this.unknown = byte10;
     }
 
     public String getSpawnParams() {
@@ -112,5 +153,14 @@ public class Enemy {
 
     public void setSpawnParams(String spawnParams) {
         this.spawnParams = spawnParams;
+    }
+
+    @Override
+    public Enemy clone() {
+        return new Enemy(enemyData, x, y, ai, item, itemFlags, moveOrder, moveOrderTarget, triggerRegion1, triggerRegion2, backupMoveOrder, backupMoveOrderTarget, unknown, spawnParams);
+    }
+    
+    public static Enemy emptyEnemy() {
+        return new Enemy(null, 0, 0, null, null, null, null, -1, 15, 15, null, -1, 0, null);
     }
 }

@@ -14,12 +14,9 @@ import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.io.PaletteDisassemblyProcessor;
 import com.sfc.sf2.palette.io.PalettePackage;
 import com.sfc.sf2.palette.io.PaletteRawImageProcessor;
-import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  *
@@ -69,6 +66,12 @@ public class PaletteManager extends AbstractManager {
             palettes[i] = new Palette(Integer.toString(i), PaletteDecoder.decodePalette(newData), true);
         }
         return palettes;
+    }
+    
+    public Palette importDisassemblyFromPartial(Path filePath, int offset, int length, boolean firstColorTransparent) throws IOException, DisassemblyException {
+        byte[] data = binaryDisassemblyProcessor.importDisassembly(filePath, null);
+        byte[] paletteData = Arrays.copyOfRange(data, offset, offset+length);
+        return new Palette(PathHelpers.filenameFromPath(filePath), PaletteDecoder.decodePalette(paletteData), true);
     }
     
     public void exportDisassembly(Path filePath, Palette palette) throws IOException, DisassemblyException {

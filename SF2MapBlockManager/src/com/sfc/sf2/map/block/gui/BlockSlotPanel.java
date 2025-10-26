@@ -5,45 +5,80 @@
  */
 package com.sfc.sf2.map.block.gui;
 
+import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.*;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import javax.swing.JPanel;
 
 /**
  *
  * @author wiz
  */
-public class BlockSlotPanel extends JPanel {
+public class BlockSlotPanel extends AbstractLayoutPanel {
     
-    MapBlock block;
-    BufferedImage overrideImage;
+    protected MapBlock block;
+    protected Tileset[] tilesets;
+    private BufferedImage overrideImage;    //Required to render a non-block
     
+    private ActionListener blockChangedListener;
+    
+    public BlockSlotPanel() {
+        super();
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
+        scale = new LayoutScale(2);
+        grid = null;
+        coordsGrid = null;
+        coordsHeader = null;
+        mouseInput = null;
+        scroller = null;
+    }
+
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected boolean hasData() {
+        return block != null || overrideImage != null;
+    }
+
+    @Override
+    protected Dimension getImageDimensions() {
+        return new Dimension(PIXEL_WIDTH*3, PIXEL_HEIGHT*3);
+    }
+
+    @Override
+    protected void drawImage(Graphics graphics) {
         if (overrideImage != null) {
-            g.drawImage(overrideImage, 0, 0, this.getWidth(), this.getHeight(), null);
+            graphics.drawImage(overrideImage, 0, 0, null);
         } else if (block != null) {
-            g.drawImage(block.getIndexedColorImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+            graphics.drawImage(block.getIndexedColorImage(tilesets), 0, 0, null);
         }
     }
-    
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(getWidth(), getHeight());
+
+    public void setTilesets(Tileset[] tilesets) {
+        this.tilesets = tilesets;
     }
     
     public MapBlock getBlock() {
         return block;
     }
+    
+    public int getBlockIndex() {
+        return block == null ? -1 : block.getIndex();
+    }
 
     public void setBlock(MapBlock block) {
         this.block = block;
         overrideImage = null;
-        this.validate();
-        this.repaint();
+        redraw();
+        if (blockChangedListener != null) {
+            blockChangedListener.actionPerformed(new ActionEvent(this, block == null ? -1 : block.getIndex(), null));
+        }
     }
     
     public BufferedImage getOverrideImage() {
@@ -53,7 +88,13 @@ public class BlockSlotPanel extends JPanel {
     public void setOverrideImage(BufferedImage overrideImage) {
         this.overrideImage = overrideImage;
         block = null;
-        this.validate();
-        this.repaint();
+        redraw();
+        if (blockChangedListener != null) {
+            blockChangedListener.actionPerformed(new ActionEvent(this, -1, null));
+        }
+    }
+
+    public void setBlockChangedListener(ActionListener blockChangedListener) {
+        this.blockChangedListener = blockChangedListener;
     }
 }

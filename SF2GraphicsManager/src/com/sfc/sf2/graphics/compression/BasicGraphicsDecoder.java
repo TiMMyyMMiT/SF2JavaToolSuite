@@ -35,7 +35,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
             bbCommand.put(input[pointer]);
             short commands = bbCommand.getShort(0);
             pointer+=2;
-            Console.logger().finest("commands = " + Integer.toHexString(commands&0xFFFF)); 
+            //Console.logger().finest("commands = " + Integer.toHexString(commands&0xFFFF)); 
             for(int i=0;i<16;i++){
                 if((commands & (1<<15-i)) != 0){
                     // apply repeat
@@ -45,15 +45,15 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
                     bbRepeat.put(input[pointer]);          
                     short repeatCommand = bbRepeat.getShort(0); 
                     pointer+=2;
-                    Console.logger().finest("repeatCommand = " + Integer.toHexString(repeatCommand&0xFFFF)); 
+                    //Console.logger().finest("repeatCommand = " + Integer.toHexString(repeatCommand&0xFFFF)); 
                     if(repeatCommand==0){
                         done = true;
                         break;
                     }else{
                         byte repeats = (byte)(repeatCommand & 0x1F);
                         short wordIndex = (short)((repeatCommand - repeats)>>5);
-                        Console.logger().finest("pointer = " + pointer);
-                        Console.logger().finest("repeats = " + Integer.toHexString(repeats&0xFFFF) + ", wordIndex = " + Integer.toHexString(wordIndex&0xFFFF));
+                        //Console.logger().finest("pointer = " + pointer);
+                        //Console.logger().finest("repeats = " + Integer.toHexString(repeats&0xFFFF) + ", wordIndex = " + Integer.toHexString(wordIndex&0xFFFF));
                         if(wordIndex==1){
                             // repeat last word (4 pixels)
                             byte firstByte = output.get(output.size()-2);
@@ -71,14 +71,14 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
                                 copyPointer+=2;
                             }
                         }
-                        Console.logger().finest("output = " + BinaryHelpers.byteListToHex(output));
+                        //Console.logger().finest("output = " + BinaryHelpers.byteListToHex(output));
                     }
                 }else{
                     // copy word
                     output.add(input[pointer]);
                     output.add(input[pointer+1]);
                     pointer+=2;
-                    Console.logger().finest("output = " + BinaryHelpers.byteListToHex(output));
+                    //Console.logger().finest("output = " + BinaryHelpers.byteListToHex(output));
                 }
             }
 
@@ -87,7 +87,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
         for(int i=0;i<bytes.length;i++){
             bytes[i] = output.get(i);
         }
-        tiles = new UncompressedGraphicsDecoder().decode(input, palette);
+        tiles = new UncompressedGraphicsDecoder().decode(bytes, palette);
         Console.logger().finest("EXITING decode");
         return tiles;
     }
@@ -96,7 +96,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
     public byte[] encode(Tile[] tiles) {
         Console.logger().finest("ENTERING encode");
         byte[] input = new UncompressedGraphicsDecoder().encode(tiles);
-        Console.logger().finest("input = " + BinaryHelpers.bytesToHex(input));
+        //Console.logger().finest("input = " + BinaryHelpers.bytesToHex(input));
         byte[] output = null;
         List<Short> outputWords = new ArrayList();
         Short currentCommandWord = null;
@@ -119,7 +119,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
             inputbb.put(input[inputPointer]);          
             Short inputWord = inputbb.getShort(0);
             
-            Console.logger().finest("inputWord = " + Integer.toHexString(inputWord & 0xFFFF));
+            //Console.logger().finest("inputWord = " + Integer.toHexString(inputWord & 0xFFFF));
             
             /* Get number of potentially repeatable words */
             int potentialRepeats = 0;
@@ -143,7 +143,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
                         break;
                     }
                 } 
-                Console.logger().finest("Potential repeats = " + potentialRepeats);
+                //Console.logger().finest("Potential repeats = " + potentialRepeats);
             }
         
             /* Get number of potential word sequence to copy */
@@ -185,7 +185,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
                 }
                 sourceCursor-=2;      
             }
-            Console.logger().finest("Potential copy length from " + candidateSourceCursor + " = " + potentialCopyLength); 
+            //Console.logger().finest("Potential copy length from " + candidateSourceCursor + " = " + potentialCopyLength); 
             
             if(potentialRepeats>1 || potentialCopyLength>1){
                 if(potentialRepeats>=potentialCopyLength){
@@ -193,7 +193,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
                     int repeatValue = 33 - potentialRepeats;
                     short repeatWord = (short) (0x0020 | repeatValue);
                     outputWords.add(repeatWord);
-                    Console.logger().finest("repeatWord = " + Integer.toHexString(repeatWord & 0xFFFF));
+                    //Console.logger().finest("repeatWord = " + Integer.toHexString(repeatWord & 0xFFFF));
                     inputPointer+=2*potentialRepeats;
                 }else{
                     // Apply word sequence copy
@@ -201,7 +201,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
                     int sequenceLength = 33 - potentialCopyLength;
                     short repeatWord = (short) ((short)(startOffset<<5) | sequenceLength);
                     outputWords.add(repeatWord);
-                    Console.logger().finest("repeatWord = " + Integer.toHexString(repeatWord & 0xFFFF));
+                    //Console.logger().finest("repeatWord = " + Integer.toHexString(repeatWord & 0xFFFF));
                     inputPointer+=2*potentialCopyLength;
                 }
                 outputWords.set(commandWordIndex, (short) (outputWords.get(commandWordIndex) | (0x8000 >> commandWordCursor)));
@@ -216,7 +216,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
             previousbb.put(input[inputPointer-2]);          
             previousWord = previousbb.getShort(0);            
             commandWordCursor++;
-            Console.logger().finest("output = " + BinaryHelpers.shortListToHex(outputWords));
+            //Console.logger().finest("output = " + BinaryHelpers.shortListToHex(outputWords));
         }
         if(commandWordCursor % 16 == 0){
             currentCommandWord = (short)0;
@@ -226,7 +226,6 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
         }  
         outputWords.set(commandWordIndex, (short) (outputWords.get(commandWordIndex) | (0x8000 >> commandWordCursor)));
         outputWords.add((short)0);
-        Console.logger().finest("output = " + BinaryHelpers.shortListToHex(outputWords));
         
         output = new byte[outputWords.size()*2];
         for(int i=0;i<outputWords.size();i++){
@@ -235,6 +234,7 @@ public class BasicGraphicsDecoder extends AbstractGraphicsDecoder {
             output[i*2+1] = (byte)(word & 0xff);
         }
         Console.logger().finest("output bytes length = " + output.length);
+        //Console.logger().finest("output = " + BinaryHelpers.shortListToHex(outputWords));
         Console.logger().finest("EXITING decode");
         return output;
     }

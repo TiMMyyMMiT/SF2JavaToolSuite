@@ -5,9 +5,11 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.helpers.PathHelpers;
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.PaletteManager;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -34,16 +36,10 @@ public class PaletteMainEditor extends AbstractMainEditor {
     }
     
     @Override
-    protected void updateEditorData() {
-        palettePane1.setPalette(paletteManager.getPalette());
+    protected void onDataLoaded() {
+        super.onDataLoaded();
         
-        super.updateEditorData();
-    }
-    
-    @Override
-    protected void repaintEditorLayout() {
-        super.repaintEditorLayout();
-        palettePane1.revalidate();
+        palettePane1.setPalette(paletteManager.getPalette());
     }
 
     /**
@@ -67,7 +63,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
         fileButton2 = new com.sfc.sf2.core.gui.controls.FileButton();
         jPanel1 = new javax.swing.JPanel();
         palettePane1 = new com.sfc.sf2.palette.gui.PalettePane();
-        colorEditor1 = new com.sfc.sf2.palette.gui.ColorEditor();
+        colorEditor1 = new com.sfc.sf2.palette.gui.controls.CRAMColorEditor();
         jPanel5 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel11 = new javax.swing.JPanel();
@@ -193,18 +189,19 @@ public class PaletteMainEditor extends AbstractMainEditor {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(palettePane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(palettePane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(colorEditor1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(colorEditor1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(palettePane1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(colorEditor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -329,7 +326,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(console1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, Short.MAX_VALUE)
+                .addComponent(console1, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -351,25 +348,25 @@ public class PaletteMainEditor extends AbstractMainEditor {
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         try {
-            paletteManager.importDisassembly(palettePath, true);
+            paletteManager.importDisassembly(palettePath, false);
         } catch (Exception ex) {
             paletteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Palette disasm could not be imported from : " + palettePath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
         Path palettePath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         try {
-            paletteManager.importImage(palettePath,true);
+            paletteManager.importImage(palettePath, false);
         } catch (Exception ex) {
             paletteManager.clearData();
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Palette image could not be imported from : " + palettePath);
         }
-        updateEditorData();
+        onDataLoaded();
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -400,7 +397,7 @@ public class PaletteMainEditor extends AbstractMainEditor {
      */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.sfc.sf2.palette.gui.ColorEditor colorEditor1;
+    private com.sfc.sf2.palette.gui.controls.CRAMColorEditor colorEditor1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton2;

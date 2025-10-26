@@ -14,7 +14,7 @@ import com.sfc.sf2.core.models.AbstractTableModel;
 public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
 
     public PortraitDataTableModel() {
-        super(new String[] { "X", "Y", "X'", "Y'" }, 12);
+        super(new String[] { "Row", "X", "Y", "X'", "Y'" }, 12);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
 
     @Override
     protected int[] createBlankItem(int row) {
-        return new int[columns.length];
+        return new int[getColumnCount()];
     }
 
     @Override
@@ -35,13 +35,39 @@ public class PortraitDataTableModel extends AbstractTableModel<int[]>  {
     }
 
     @Override
-    protected Object getValue(int[] item, int col) {
-        return item[col];
+    protected Object getValue(int[] item, int row, int col) {
+        if (col == 0) {
+            return row;
+        } else {
+            return item[col-1];
+        }
     }
 
     @Override
-    protected int[] setValue(int[] item, int col, Object value) {
-        item[col] = (int)value;
+    protected int[] setValue(int[] item, int row, int col, Object value) {
+        if (col > 0) {
+            item[col-1] = (int)value;
+        }
         return item;
+    }
+
+    @Override
+    protected Comparable<?> getMinLimit(int[] item, int col) {
+        switch (col) {
+            case 3:
+                return 6;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    protected Comparable<?> getMaxLimit(int[] item, int col) {
+        switch (col) {
+            case 1:
+                return 5;
+            default:
+                return 7;
+        }
     }
 }

@@ -5,18 +5,25 @@
  */
 package com.sfc.sf2.background;
 
-import com.sfc.sf2.graphics.Tile;
-import java.awt.Color;
+import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.palette.Palette;
 
 /**
  *
  * @author wiz
  */
 public class Background {
+    public static final int BG_TILES_WIDTH = 32;
+    public static final int BG_TILES_HEIGHT = 12;
     
     private int index;
     
-    private Tile[] tiles;
+    private Tileset tileset;
+    
+    public Background(int index, Tileset tileset) {
+        this.index = index;
+        this.tileset = tileset;
+    }
     
     public int getIndex() {
         return index;
@@ -26,12 +33,18 @@ public class Background {
         this.index = index;
     }  
 
-    public Tile[] getTiles() {
-        return tiles;
+    public Tileset getTileset() {
+        return tileset;
     }
 
-    public void setTiles(Tile[] tiles) {
-        this.tiles = tiles;
+    public void setTileset(Tileset tileset) {
+        this.tileset = tileset;
     }
     
+    public Palette getPalette() {
+        if (tileset == null) {
+            return null;
+        }
+        return tileset.getPalette();
+    }
 }

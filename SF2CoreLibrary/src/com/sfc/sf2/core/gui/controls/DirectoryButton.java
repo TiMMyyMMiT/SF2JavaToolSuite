@@ -25,6 +25,12 @@ public class DirectoryButton extends javax.swing.JPanel {
     public DirectoryButton() {
         initComponents();
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        jTextFieldFile.setEnabled(enabled);
+        jButtonFile.setEnabled(enabled);
+    }
     
     public String getLabelText() {
         return jLabelFile.getText();
@@ -78,6 +84,9 @@ public class DirectoryButton extends javax.swing.JPanel {
         jTextFieldFile.setMinimumSize(new java.awt.Dimension(50, 26));
 
         jButtonFile.setIcon(flatFileViewDirectoryIcon);
+        jButtonFile.setMaximumSize(new java.awt.Dimension(26, 26));
+        jButtonFile.setMinimumSize(new java.awt.Dimension(26, 26));
+        jButtonFile.setPreferredSize(new java.awt.Dimension(26, 26));
         jButtonFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFileActionPerformed(evt);
@@ -91,10 +100,10 @@ public class DirectoryButton extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jLabelFile)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldFile, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonFile)
+                .addComponent(jTextFieldFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
@@ -104,8 +113,7 @@ public class DirectoryButton extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabelFile)
                     .addComponent(jTextFieldFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonFile, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(jButtonFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 

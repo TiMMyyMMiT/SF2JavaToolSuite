@@ -5,6 +5,8 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
+import com.sfc.sf2.palette.CRAMColor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -22,15 +24,15 @@ public class ColorPane extends JPanel {
     private static final Border DEFAULT_BORDER = new MatteBorder(1, 1, 1, 1, Color.GRAY);
     private static final Border HOVER_BORDER = new MatteBorder(2, 2, 2, 2, Color.DARK_GRAY);
     
-    private Color currentColor;
-    private ColorEditor colorEditor;
+    private CRAMColor currentColor;
+    private CRAMColorEditor colorEditor;
     private ColorPane self = this;
 
-    public ColorPane(Color color, ColorEditor ce) {
+    public ColorPane(CRAMColor color, CRAMColorEditor ce) {
         
         colorEditor = ce;
         updateColor(color);
-        setBackground(currentColor);
+        setBackground(currentColor.CRAMColor());
         setBorder(DEFAULT_BORDER);
         
         addMouseListener(new MouseAdapter() {
@@ -56,18 +58,20 @@ public class ColorPane extends JPanel {
         return new Dimension(30, 30);
     }
     
-    public void setEditor(ColorEditor ce) {
+    public void setEditor(CRAMColorEditor ce) {
         colorEditor = ce;
     }
 
-    public Color getCurrentColor() {
+    public CRAMColor getCurrentColor() {
         return currentColor;
     }
     
-    public void updateColor(Color c) {
+    public void updateColor(CRAMColor c) {
         currentColor = c;
-        if (c.getAlpha() == 0)
-            currentColor = new Color(c.getRed(),c.getGreen(),c.getBlue(),255);
-        setBackground(this.currentColor);
+        if (c.CRAMColor().getAlpha() == 0) {
+            int rgb = c.CRAMColor().getRGB() & 0xFF;
+            currentColor = CRAMColor.fromPremadeCramColor(new Color(rgb));
+        }
+        setBackground(this.currentColor.CRAMColor());
     }
 }    
