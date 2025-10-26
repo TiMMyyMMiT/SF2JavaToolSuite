@@ -45,13 +45,13 @@ public class BackgroundManager extends AbstractManager {
         }
     }
        
-    public Background[] importDisassembly(Path filePath) throws IOException, DisassemblyException {
+    public Background importDisassembly(Path filePath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         int index = FileHelpers.getNumberFromFileName(filePath.toFile());
         backgrounds = new Background[1];
         backgrounds[0] = backgroundDisassemblyProcessor.importDisassembly(filePath, new BackgroundPackage(index));
         Console.logger().finest("EXITING importDisassembly");
-        return backgrounds;
+        return backgrounds[0];
     }
     
     public Background[] importAllDisassemblies(Path basePath) throws IOException, DisassemblyException {

@@ -41,11 +41,11 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel implem
     private static final int WEAPONSPRITE_BASE_X = 136;
     private static final int WEAPONSPRITE_BASE_Y = 64;
         
-    private Background bg;
-    private Ground ground;
+    private BattleSpriteAnimation animation;
     private BattleSprite battlesprite;
     private WeaponSprite weaponsprite;
-    private BattleSpriteAnimation animation;
+    private Background bg;
+    private Ground ground;
     
     private boolean hideWeapon = false;
     
@@ -111,7 +111,7 @@ public class BattleSpriteAnimationLayoutPanel extends AbstractLayoutPanel implem
     
     private void drawBattleSpriteFrame(Graphics graphics, Tileset frame, int xOffset, int yOffset) {
         graphics.drawImage(frame.getIndexedColorImage(), xOffset, yOffset, null);
-    }    
+    }
 
     @Override
     public int getAnimationFrameSpeed(int currentAnimFrame) {

@@ -23,16 +23,15 @@ import java.util.logging.Level;
  *
  * @author TiMMy
  */
-public class SpellMainEditor extends AbstractMainEditor {
+public class SpellGraphicsMainEditor extends AbstractMainEditor {
     
     private final SpellGraphicManager spellGraphicManager = new SpellGraphicManager();
     private final InvocationGraphicManager invocationGraphicManager = new InvocationGraphicManager();
     
-    
     /**
      * Creates new form NewApplication
      */
-    public SpellMainEditor() {
+    public SpellGraphicsMainEditor() {
         super();
         initComponents();
         initCore(console1);
@@ -316,7 +315,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -419,7 +418,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -546,7 +545,7 @@ public class SpellMainEditor extends AbstractMainEditor {
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
         );
 
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -723,8 +722,8 @@ public class SpellMainEditor extends AbstractMainEditor {
         jPanellayoutContainer.setLayout(jPanellayoutContainerLayout);
         jPanellayoutContainerLayout.setHorizontalGroup(
             jPanellayoutContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spellLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(invocationLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(spellLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+            .addComponent(invocationLayoutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
         );
         jPanellayoutContainerLayout.setVerticalGroup(
             jPanellayoutContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1280,7 +1279,7 @@ public class SpellMainEditor extends AbstractMainEditor {
         AbstractMainEditor.programSetup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SpellMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
+                new SpellGraphicsMainEditor().setVisible(true);  // <------ Change this class to new Main Editor class
             }
         });
     }

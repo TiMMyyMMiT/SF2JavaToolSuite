@@ -7,17 +7,10 @@ package com.sfc.sf2.spellAnimation.io;
 
 import com.sfc.sf2.core.io.AbstractAsmProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
-import com.sfc.sf2.core.io.EmptyPackage;
 import com.sfc.sf2.spellAnimation.SpellAnimation;
-import com.sfc.sf2.spellAnimation.SpellAnimationFrame;
-import com.sfc.sf2.spellAnimation.SpellSubAnimation;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  *
