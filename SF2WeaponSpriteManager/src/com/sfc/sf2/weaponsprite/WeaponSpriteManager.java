@@ -102,7 +102,7 @@ public class WeaponSpriteManager extends AbstractManager {
     private void ImportPalettesFromEntries(Path entriesPath, Palette fromImage) throws IOException, AsmException {
         Console.logger().finest("ENTERING ImportPalettesFromEntries");
         createBasePalette();
-        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath);
+        EntriesAsmData entriesData = entriesAsmProcessor.importAsmData(entriesPath, null);
         Console.logger().info("Weapon palettes entries successfully imported. Entries found : " + entriesData.entriesCount());
         ArrayList<Palette> palettesList = new ArrayList<>();
         if (fromImage != null) {

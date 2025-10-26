@@ -7,8 +7,9 @@ package com.sfc.sf2.battlesprite.gui;
 
 import com.sfc.sf2.battlesprite.BattleSprite;
 import static com.sfc.sf2.battlesprite.BattleSprite.BATTLE_SPRITE_TILE_HEIGHT;
-import com.sfc.sf2.core.gui.AnimatedLayoutPanel;
+import com.sfc.sf2.core.gui.AbstractLayoutPanel;
 import com.sfc.sf2.core.gui.layout.*;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationController;
 import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
 import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
 import com.sfc.sf2.graphics.Tileset;
@@ -22,7 +23,7 @@ import java.awt.Graphics2D;
  *
  * @author wiz
  */
-public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
+public class BattleSpriteLayoutPanel extends AbstractLayoutPanel implements AnimationController {
     
     public BattleSpriteLayoutPanel() {
         super();
@@ -33,6 +34,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
         coordsHeader = null;
         mouseInput = null;
         scroller = new LayoutScrollNormaliser(this);
+        animator = new LayoutAnimator(this);
     }
     
     private BattleSprite battleSprite;
@@ -49,7 +51,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     protected Dimension getImageDimensions() {
         int width = battleSprite.getTilesPerRow()*PIXEL_WIDTH;
         int height = 0;
-        if (isAnimating()) {
+        if (animator.isAnimating()) {
             height = BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT;
         } else {
             height = battleSprite.getFrames().length*BATTLE_SPRITE_TILE_HEIGHT*PIXEL_HEIGHT;
@@ -60,7 +62,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     @Override
     protected void drawImage(Graphics graphics) {
         Graphics2D g2 = (Graphics2D)graphics;
-        if (isAnimating()) {
+        if (animator.isAnimating()) {
             drawAnimPreview(g2);
         } else {
             drawBattleSprites(g2);
@@ -68,7 +70,7 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
     }
     
     public void drawAnimPreview(Graphics2D graphics) {
-        Tileset tileset = battleSprite.getFrames()[getCurrentAnimationFrame()];
+        Tileset tileset = battleSprite.getFrames()[animator.getFrame()];
         graphics.drawImage(tileset.getIndexedColorImage(), 0, 0, null);
     }
     
@@ -97,6 +99,11 @@ public class BattleSpriteLayoutPanel extends AnimatedLayoutPanel {
         graphics.drawLine(x-5, y-5, x+5, y+5);
         graphics.drawLine(x-5, y+5, x+5, y-5);
         graphics.setColor(Color.WHITE);
+    }
+
+    @Override
+    public int getAnimationFrameSpeed(int currentAnimFrame) {
+        return 0;
     }
     
     public BattleSprite getBattleSprite() {

@@ -16,6 +16,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
+import jdk.jshell.spi.ExecutionControl;
 
 /**
  *
@@ -1113,7 +1114,13 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton37ActionPerformed
 
     private void jButton38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton38ActionPerformed
-        Path graphicPath = PathHelpers.getBasePath().resolve(jTextField44.getText());
+        try {
+            throw new ExecutionControl.NotImplementedException("Feature disabled in this version. Needs to be updated");
+        } catch (ExecutionControl.NotImplementedException ex) {
+            System.getLogger(GraphicsMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+            
+        /*Path graphicPath = PathHelpers.getBasePath().resolve(jTextField44.getText());
         Path tilesetPath = PathHelpers.getBasePath().resolve(jTextField41.getText());
         Path layoutPath = PathHelpers.getBasePath().resolve(jTextField43.getText());
         if (!PathHelpers.createPathIfRequred(graphicPath)) return;
@@ -1126,7 +1133,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Tileset/Layout could not be exported to : " + graphicPath);
-        }
+        }*/
     }//GEN-LAST:event_jButton38ActionPerformed
 
     private void jButton39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton39ActionPerformed
@@ -1213,7 +1220,12 @@ public class GraphicsMainEditor extends AbstractMainEditor {
     }//GEN-LAST:event_jButton31ActionPerformed
 
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
-        Path baseTilesetPath = PathHelpers.getBasePath().resolve(jTextField25.getText());
+        try {
+            throw new ExecutionControl.NotImplementedException("Feature disabled in this version. Needs to be updated");
+        } catch (ExecutionControl.NotImplementedException ex) {
+            System.getLogger(GraphicsMainEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        /*Path baseTilesetPath = PathHelpers.getBasePath().resolve(jTextField25.getText());
         Path palette1Path = PathHelpers.getBasePath().resolve(jTextField24.getText());
         Path palette2Path = PathHelpers.getBasePath().resolve(jTextField27.getText());
         Path palette3Path = PathHelpers.getBasePath().resolve(jTextField35.getText());
@@ -1238,7 +1250,7 @@ public class GraphicsMainEditor extends AbstractMainEditor {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Tileset/Layout could not be imported");
         }
-        onDataLoaded();
+        onDataLoaded();*/
     }//GEN-LAST:event_jButton25ActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed

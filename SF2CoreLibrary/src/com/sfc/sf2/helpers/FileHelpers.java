@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.helpers;
 
-import com.sfc.sf2.core.gui.controls.Console;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;

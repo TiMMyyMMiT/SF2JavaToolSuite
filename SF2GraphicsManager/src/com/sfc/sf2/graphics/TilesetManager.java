@@ -87,7 +87,7 @@ public class TilesetManager extends AbstractManager {
         Console.logger().finest("EXITING exportImage");
     }
        
-    public void importDisassemblyWithLayout(Path baseTilesetFilePath,Path palette1FilePath, int palette1Offset, Path palette2FilePath, int palette2Offset, Path palette3FilePath, int palette3Offset, Path palette4FilePath, int palette4Offset,
+    /*public void importDisassemblyWithLayout(Path baseTilesetFilePath,Path palette1FilePath, int palette1Offset, Path palette2FilePath, int palette2Offset, Path palette3FilePath, int palette3Offset, Path palette4FilePath, int palette4Offset,
             Path tileset1FilePath, int tileset1Offset, Path tileset2FilePath, int tileset2Offset, Path layoutFilePath, TilesetCompression compression, int tilesPerRow)
             throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassemblyWithLayout");
@@ -105,7 +105,7 @@ public class TilesetManager extends AbstractManager {
         paletteManager.exportDisassembly(palettePath, tileset.getPalette());
         tilesetDisassemblyProcessor.exportTilesAndLayout(tileset, tilesPath, layoutPath, graphicsOffset, compression, tileset.getPalette());
         Console.logger().finest("EXITING exportTilesAndLayout");
-    }
+    }*/
 
     public Tileset getTileset() {
         return tileset;

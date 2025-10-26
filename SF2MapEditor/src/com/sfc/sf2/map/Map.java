@@ -7,29 +7,44 @@ package com.sfc.sf2.map;
 
 import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.layout.MapLayout;
+import com.sfc.sf2.map.animation.MapAnimation;
+import com.sfc.sf2.map.block.MapBlockset;
 
 /**
  *
  * @author wiz
  */
 public class Map {
-    private MapBlock[] blocks;
+    private MapBlockset blockset;
     private MapLayout layout;
     private MapArea[] areas;
-    private MapFlagCopy[] flagCopies;
-    private MapStepCopy[] stepCopies;
-    private MapLayer2Copy[] layer2Copies;
-    private MapWarp[] warps;
+    private MapFlagCopyEvent[] flagCopies;
+    private MapCopyEvent[] stepCopies;
+    private MapCopyEvent[] roofCopies;
+    private MapWarpEvent[] warps;
     private MapItem[] chestItems;
     private MapItem[] otherItems;
     private MapAnimation animation;
-    
-    public MapBlock[] getBlocks() {
-        return blocks;
+
+    public Map(MapBlockset blockset, MapLayout layout, MapArea[] areas, MapFlagCopyEvent[] flagCopies, MapCopyEvent[] stepCopies, MapCopyEvent[] roofCopies, MapWarpEvent[] warps, MapItem[] chestItems, MapItem[] otherItems, MapAnimation animation) {
+        this.blockset = blockset;
+        this.layout = layout;
+        this.areas = areas;
+        this.flagCopies = flagCopies;
+        this.stepCopies = stepCopies;
+        this.roofCopies = roofCopies;
+        this.warps = warps;
+        this.chestItems = chestItems;
+        this.otherItems = otherItems;
+        this.animation = animation;
     }
 
-    public void setBlocks(MapBlock[] blocks) {
-        this.blocks = blocks;
+    public MapBlockset getBlockset() {
+        return blockset;
+    }
+
+    public void setBlockset(MapBlockset blockset) {
+        this.blockset = blockset;
     }
 
     public MapLayout getLayout() {
@@ -48,46 +63,35 @@ public class Map {
         this.areas = areas;
     }
 
-    public MapFlagCopy[] getFlagCopies() {
+    public MapFlagCopyEvent[] getFlagCopies() {
         return flagCopies;
     }
 
-    public void setFlagCopies(MapFlagCopy[] flagCopies) {
+    public void setFlagCopies(MapFlagCopyEvent[] flagCopies) {
         this.flagCopies = flagCopies;
     }
 
-    public MapStepCopy[] getStepCopies() {
+    public MapCopyEvent[] getStepCopies() {
         return stepCopies;
     }
 
-    public void setStepCopies(MapStepCopy[] stepCopies) {
+    public void setStepCopies(MapCopyEvent[] stepCopies) {
         this.stepCopies = stepCopies;
     }
 
-    public void setActionFlag(int x, int y, int value){
-        MapBlock block = this.layout.getBlocks()[y*64+x];
-        int origFlags = block.getFlags();
-        int newValue = value;
-        if((origFlags&0x0400)!=0 && newValue==0x0800){
-            newValue = 0x0400;
-        }
-        int newFlags = (origFlags & 0xC000) + (newValue & 0x3FFF);
-        block.setFlags(newFlags);
+    public MapCopyEvent[] getRoofCopies() {
+        return roofCopies;
     }
 
-    public MapLayer2Copy[] getLayer2Copies() {
-        return layer2Copies;
+    public void setRoofCopies(MapCopyEvent[] roofCopies) {
+        this.roofCopies = roofCopies;
     }
 
-    public void setLayer2Copies(MapLayer2Copy[] layer2Copies) {
-        this.layer2Copies = layer2Copies;
-    }
-
-    public MapWarp[] getWarps() {
+    public MapWarpEvent[] getWarps() {
         return warps;
     }
 
-    public void setWarps(MapWarp[] warps) {
+    public void setWarps(MapWarpEvent[] warps) {
         this.warps = warps;
     }
 
@@ -114,7 +118,15 @@ public class Map {
     public void setAnimation(MapAnimation animation) {
         this.animation = animation;
     }
-    
-    
-    
+
+    public void setActionFlag(int x, int y, int value) {
+        MapBlock block = this.layout.getBlockset().getBlocks()[y*64+x];
+        int origFlags = block.getFlags();
+        int newValue = value;
+        if ((origFlags & MapBlock.MAP_FLAG_STEP) != 0 && newValue == MapBlock.MAP_FLAG_SHOW) {
+            newValue = MapBlock.MAP_FLAG_STEP;
+        }
+        int newFlags = (origFlags & MapBlock.MAP_FLAG_HIDE)+(newValue & 0x3FFF);
+        block.setFlags(newFlags);
+    }
 }

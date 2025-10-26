@@ -45,7 +45,7 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         grid = new LayoutGrid(PIXEL_WIDTH, PIXEL_HEIGHT, PORTRAIT_TILES_WIDTH*PIXEL_WIDTH, -1);
         coordsGrid = new LayoutCoordsGridDisplay(PIXEL_WIDTH, PIXEL_HEIGHT, false);
         coordsHeader = null;
-        mouseInput = new LayoutMouseInput(this, this::onMouseInput, PIXEL_WIDTH, PIXEL_HEIGHT);
+        mouseInput = new LayoutMouseInput(this, this::onMouseButtonInput, PIXEL_WIDTH, PIXEL_HEIGHT);
         scroller = null;
     }
 
@@ -145,26 +145,24 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         }
     }
     
-    private void onMouseInput(GridMousePressedEvent e) {
-        if (e.mouseButton() != MouseEvent.BUTTON1) {
-            if (e.mouseButton() == MouseEvent.NOBUTTON) {
-                clickIndicator = 0;
-            }
+    private void onMouseButtonInput(GridMousePressedEvent evt) {
+        if (evt.released()) {
+            clickIndicator = 0;
             return;
         }
-        if (e.x() < 0 || e.x() >= PORTRAIT_TILES_FULL_WIDTH || e.y() < 0 || e.y() >= PORTRAIT_TILES_HEIGHT) return;
-        if (e.x() < 6 && clickIndicator >= 1 || e.x() >= 6 && clickIndicator <= -1) return; //Cannot drag between left/right regions
-        clickIndicator = e.x() < 6 ? -1 : 1;
+        if (evt.x() < 0 || evt.x() >= PORTRAIT_TILES_FULL_WIDTH || evt.y() < 0 || evt.y() >= PORTRAIT_TILES_HEIGHT) return;
+        if (evt.x() < 6 && clickIndicator >= 1 || evt.x() >= 6 && clickIndicator <= -1) return; //Cannot drag between left/right regions
+        clickIndicator = evt.x() < 6 ? -1 : 1;
         if (selectedEyeTile >= 0) {
             int[] item = eyeAnimTable.getRow(selectedEyeTile);
-            if (e.x() < 6) {
-                item[0] = e.x();
-                item[1] = e.y();
+            if (evt.x() < 6) {
+                item[0] = evt.x();
+                item[1] = evt.y();
                 eyeAnimTable.fireTableCellUpdated(selectedEyeTile, 0);
                 eyeAnimTable.fireTableCellUpdated(selectedEyeTile, 1);
             } else {
-                item[2] = e.x();
-                item[3] = e.y();
+                item[2] = evt.x();
+                item[3] = evt.y();
                 eyeAnimTable.fireTableCellUpdated(selectedEyeTile, 2);
                 eyeAnimTable.fireTableCellUpdated(selectedEyeTile, 3);
             }
@@ -175,14 +173,14 @@ public class PortraitLayoutPanel extends AbstractLayoutPanel {
         }
         else if (selectedMouthTile >= 0) {
             int[] item = mouthAnimTable.getRow(selectedMouthTile);
-            if (e.x() < 6) {
-                item[0] = e.x();
-                item[1] = e.y();
+            if (evt.x() < 6) {
+                item[0] = evt.x();
+                item[1] = evt.y();
                 mouthAnimTable.fireTableCellUpdated(selectedMouthTile, 0);
                 mouthAnimTable.fireTableCellUpdated(selectedMouthTile, 1);
             } else {
-                item[2] = e.x();
-                item[3] = e.y();
+                item[2] = evt.x();
+                item[3] = evt.y();
                 mouthAnimTable.fireTableCellUpdated(selectedMouthTile, 2);
                 mouthAnimTable.fireTableCellUpdated(selectedMouthTile, 3);
             }

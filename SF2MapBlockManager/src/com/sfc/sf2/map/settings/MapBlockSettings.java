@@ -82,9 +82,9 @@ public class MapBlockSettings implements AbstractSettings {
     
     @Override
     public void initialiseNewUser() {
-        blocksetBlocksPerRow = 8;
+        blocksetBlocksPerRow = 10;
         blocksetScale = 1;
-        tilesetTilesPerRow = 16;
+        tilesetTilesPerRow = 20;
         tilesetScale = 1;
         Color defaultColor = new Color(200, 0, 200);
         blocksetBGColor = defaultColor;
@@ -118,7 +118,7 @@ public class MapBlockSettings implements AbstractSettings {
         }
         if (data.containsKey("blockBGColor")) {
             String[] colorSplit = data.get("blockBGColor").split(",");
-            tilesetBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
+            blockBGColor = new Color(Integer.parseInt(colorSplit[0].trim()), Integer.parseInt(colorSplit[1].trim()), Integer.parseInt(colorSplit[2].trim()));
         }
     }
 
