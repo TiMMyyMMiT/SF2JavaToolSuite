@@ -150,8 +150,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         infoButton1 = new com.sfc.sf2.core.gui.controls.InfoButton();
         infoButton2 = new com.sfc.sf2.core.gui.controls.InfoButton();
         infoButton3 = new com.sfc.sf2.core.gui.controls.InfoButton();
-        jLabel9 = new javax.swing.JLabel();
-        infoButton4 = new com.sfc.sf2.core.gui.controls.InfoButton();
         tableFrames = new com.sfc.sf2.core.gui.controls.Table();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
 
@@ -301,7 +299,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton18)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -359,8 +357,8 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -610,11 +608,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         infoButton3.setMessageText("<html>Whether or not to terminate spell animation when battle sprite anim finishes.</html>");
         infoButton3.setText("");
 
-        jLabel9.setText("Anim frame help :");
-
-        infoButton4.setMessageText("<html><b>Frame:</b> The frame number (cannot be edited).<br><b>Battlesprite: </b> The battlesprite to show during this frame.<br><b>Duration:</b> The speed of the animation. 60 = 1 second. Lower numbers animate faster.<br><b>X/Y:</b> The X and Y position offset when rendering the battle sprite.<br><b>Weapon Index:</b> The index of the weapon sprite frame to render.<br><b>H/V Flip:</b> Whether or not the weapon sprite is flipped Horizontally or Vertically.<br><b>Behnd:</b> Whether the weapon is rendered in front of or behind the batttle sprite.<br><b>Weapon X/Y:</b> The X and Y position offset when rendering the weapon.<br><br><b>Note:</b> For frame 0; Battlesprite, Duration, X, and Y cannot be edited.</html>");
-        infoButton4.setText("");
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -636,11 +629,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                 .addComponent(jCheckBox3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(infoButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(infoButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -649,8 +638,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(infoButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(infoButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(infoButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
@@ -661,6 +648,7 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
         );
 
         tableFrames.setBorder(javax.swing.BorderFactory.createTitledBorder("Animation frames"));
+        tableFrames.setInfoMessage("<html><b>Frame:</b> The frame number (cannot be edited).<br><b>Battlesprite: </b> The battlesprite to show during this frame.<br><b>Duration:</b> The speed of the animation. 60 = 1 second. Lower numbers animate faster.<br><b>X/Y:</b> The X and Y position offset when rendering the battle sprite.<br><b>Weapon Index:</b> The index of the weapon sprite frame to render.<br><b>H/V Flip:</b> Whether or not the weapon sprite is flipped Horizontally or Vertically.<br><b>Behnd:</b> Whether the weapon is rendered in front of or behind the batttle sprite.<br><b>Weapon X/Y:</b> The X and Y position offset when rendering the weapon.<br><br><b>Note:</b> For frame 0; Battlesprite, Duration, X, and Y cannot be edited.</html>");
         tableFrames.setModel(battleSpriteAnimationFramesModel);
         tableFrames.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableFrames.setSingleClickText(false);
@@ -911,7 +899,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton1;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton2;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton3;
-    private com.sfc.sf2.core.gui.controls.InfoButton infoButton4;
     private com.sfc.sf2.core.gui.controls.InfoButton infoButton5;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
@@ -931,7 +918,6 @@ public class BattleSpriteAnimationMainEditor extends AbstractMainEditor {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel12;

@@ -109,7 +109,7 @@ public class BattleSpriteAnimationFramesTableModel extends AbstractTableModel<Ba
     protected Comparable<?> getMaxLimit(BattleSpriteAnimationFrame item, int col) {
         switch (col) {
             case 1:
-                return (byte)(item.getBattleSpriteAnim().getFrameCount()-1);
+                return (byte)(item.getBattleSpriteAnim().getBattleSprite().getFrames().length-1);
             case 5:
                 return (byte)(WeaponSprite.WEAPONSPRITE_FRAMES_LENGTH-1);
             default:

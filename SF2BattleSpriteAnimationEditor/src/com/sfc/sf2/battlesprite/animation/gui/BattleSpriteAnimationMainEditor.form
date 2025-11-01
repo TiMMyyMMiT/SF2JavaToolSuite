@@ -114,8 +114,8 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jPanel3" pref="416" max="32767" attributes="0"/>
-                                  <EmptySpace pref="180" max="32767" attributes="0"/>
+                                  <Component id="jPanel3" pref="409" max="32767" attributes="0"/>
+                                  <EmptySpace pref="186" max="32767" attributes="0"/>
                                   <Component id="jPanel5" min="-2" pref="99" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
@@ -178,7 +178,7 @@
                                           <Component id="jButton18" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -825,10 +825,6 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="infoButton3" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="infoButton4" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -839,8 +835,6 @@
                                       <Group type="103" groupAlignment="2" attributes="0">
                                           <Component id="infoButton2" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="infoButton3" alignment="2" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel9" alignment="2" min="-2" max="-2" attributes="0"/>
-                                          <Component id="infoButton4" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel3" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jSpinner2" alignment="2" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel4" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -910,17 +904,6 @@
                                 <Property name="text" type="java.lang.String" value=""/>
                               </Properties>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel9">
-                              <Properties>
-                                <Property name="text" type="java.lang.String" value="Anim frame help :"/>
-                              </Properties>
-                            </Component>
-                            <Component class="com.sfc.sf2.core.gui.controls.InfoButton" name="infoButton4">
-                              <Properties>
-                                <Property name="messageText" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Frame:&lt;/b&gt; The frame number (cannot be edited).&lt;br&gt;&lt;b&gt;Battlesprite: &lt;/b&gt; The battlesprite to show during this frame.&lt;br&gt;&lt;b&gt;Duration:&lt;/b&gt; The speed of the animation. 60 = 1 second. Lower numbers animate faster.&lt;br&gt;&lt;b&gt;X/Y:&lt;/b&gt; The X and Y position offset when rendering the battle sprite.&lt;br&gt;&lt;b&gt;Weapon Index:&lt;/b&gt; The index of the weapon sprite frame to render.&lt;br&gt;&lt;b&gt;H/V Flip:&lt;/b&gt; Whether or not the weapon sprite is flipped Horizontally or Vertically.&lt;br&gt;&lt;b&gt;Behnd:&lt;/b&gt; Whether the weapon is rendered in front of or behind the batttle sprite.&lt;br&gt;&lt;b&gt;Weapon X/Y:&lt;/b&gt; The X and Y position offset when rendering the weapon.&lt;br&gt;&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; For frame 0; Battlesprite, Duration, X, and Y cannot be edited.&lt;/html&gt;"/>
-                                <Property name="text" type="java.lang.String" value=""/>
-                              </Properties>
-                            </Component>
                           </SubComponents>
                         </Container>
                         <Component class="com.sfc.sf2.core.gui.controls.Table" name="tableFrames">
@@ -930,6 +913,7 @@
                                 <TitledBorder title="Animation frames"/>
                               </Border>
                             </Property>
+                            <Property name="infoMessage" type="java.lang.String" value="&lt;html&gt;&lt;b&gt;Frame:&lt;/b&gt; The frame number (cannot be edited).&lt;br&gt;&lt;b&gt;Battlesprite: &lt;/b&gt; The battlesprite to show during this frame.&lt;br&gt;&lt;b&gt;Duration:&lt;/b&gt; The speed of the animation. 60 = 1 second. Lower numbers animate faster.&lt;br&gt;&lt;b&gt;X/Y:&lt;/b&gt; The X and Y position offset when rendering the battle sprite.&lt;br&gt;&lt;b&gt;Weapon Index:&lt;/b&gt; The index of the weapon sprite frame to render.&lt;br&gt;&lt;b&gt;H/V Flip:&lt;/b&gt; Whether or not the weapon sprite is flipped Horizontally or Vertically.&lt;br&gt;&lt;b&gt;Behnd:&lt;/b&gt; Whether the weapon is rendered in front of or behind the batttle sprite.&lt;br&gt;&lt;b&gt;Weapon X/Y:&lt;/b&gt; The X and Y position offset when rendering the weapon.&lt;br&gt;&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; For frame 0; Battlesprite, Duration, X, and Y cannot be edited.&lt;/html&gt;"/>
                             <Property name="model" type="com.sfc.sf2.core.models.AbstractTableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection component="battleSpriteAnimationFramesModel" type="bean"/>
                             </Property>

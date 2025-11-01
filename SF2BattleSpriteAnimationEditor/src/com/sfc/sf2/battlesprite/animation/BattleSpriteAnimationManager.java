@@ -66,7 +66,7 @@ public class BattleSpriteAnimationManager extends AbstractManager {
         } catch (Exception e) {
             Console.logger().severe("ERROR Weapon could not be loaded : " + e);
         }
-        BattleSpriteAnimationPackage pckg = new BattleSpriteAnimationPackage(type);
+        BattleSpriteAnimationPackage pckg = new BattleSpriteAnimationPackage(battlespriteManager.getBattleSprite());
         battlespriteAnimation = battleSpriteAnimationDisassemblyProcessor.importDisassembly(animationPath, pckg);
         Console.logger().info("Animation successfully imported from : " + animationPath);
         Console.logger().finest("EXITING importDisassembly");
@@ -75,7 +75,7 @@ public class BattleSpriteAnimationManager extends AbstractManager {
     public void exportDisassembly(Path filePath, BattleSpriteAnimation battlespriteanimation) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING exportDisassembly");
         this.battlespriteAnimation = battlespriteanimation;
-        BattleSpriteAnimationPackage pckg = new BattleSpriteAnimationPackage(battlespriteanimation.getType());
+        BattleSpriteAnimationPackage pckg = new BattleSpriteAnimationPackage(battlespriteanimation.getBattleSprite());
         battleSpriteAnimationDisassemblyProcessor.exportDisassembly(filePath, battlespriteanimation, pckg);
         Console.logger().info("Animation successfully exported to : " + filePath);
         Console.logger().finest("EXITING exportDisassembly");
