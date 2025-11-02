@@ -31,6 +31,7 @@ public class PaletteButton extends javax.swing.JButton {
         
         palettePane.setColorEditor(cRAMColorEditor);
         palettePane.setColorChangeListener(this::onColorChanged);
+        paletteEditor.setLocationRelativeTo(this);
     }
     
     public void setupPaletteButton(PaletteListener paletteListener, ActionListener colorChangeListener) {
@@ -54,7 +55,6 @@ public class PaletteButton extends javax.swing.JButton {
         flatRadioButtonIcon1 = new com.formdev.flatlaf.icons.FlatRadioButtonIcon();
 
         paletteEditor.setTitle("Palette Editor");
-        paletteEditor.setAlwaysOnTop(true);
         paletteEditor.setBounds(new java.awt.Rectangle(0, 0, 532, 320));
         paletteEditor.setMaximumSize(new java.awt.Dimension(520, 295));
         paletteEditor.setMinimumSize(new java.awt.Dimension(520, 295));
@@ -144,8 +144,7 @@ public class PaletteButton extends javax.swing.JButton {
         defaultPalette = paletteListener.getPalette();
         activePalette = defaultPalette.Clone();
         palettePane.setPalette(activePalette);
-        
-        paletteEditor.setLocationRelativeTo(this);
+        paletteEditor.setTitle("Palette Editor: " + defaultPalette.getName());
         paletteEditor.setVisible(true);
     }//GEN-LAST:event_showPaletteEditor
 

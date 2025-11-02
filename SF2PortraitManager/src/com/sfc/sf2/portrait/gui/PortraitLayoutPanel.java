@@ -18,7 +18,6 @@ import com.sfc.sf2.portrait.models.PortraitDataTableModel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
 
 /**
  *

@@ -54,12 +54,14 @@ public class CRAMColorEditor extends javax.swing.JPanel {
     boolean settingNewColor = false;
     
     public CRAMColorEditor() {
-        this(CRAMColor.BLACK);
+        initComponents();
+        setColor(CRAMColor.BLACK, -1);
     }
     
     public CRAMColorEditor(CRAMColor initialColor) {
         initComponents();
         setColor(initialColor, -1);
+        setSliderEnabled(true);
     }
   
     public void setColorPane(PalettePane palettePane) {
@@ -78,6 +80,7 @@ public class CRAMColorEditor extends javax.swing.JPanel {
         blueIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getBlue());
         updateColor(false);
         settingNewColor = false;
+        setSliderEnabled(thisIndex >= 0);
     }
     
     private void updateColor(boolean triggerCallback) {
@@ -101,6 +104,12 @@ public class CRAMColorEditor extends javax.swing.JPanel {
         int g = PaletteDecoder.cramIndexToBrightness(greenIndex);
         int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
         jLabelRGB.setText(String.format("#%02X%02X%02X", r, g, b));
+    }
+    
+    private void setSliderEnabled(boolean enabled) {
+        sliderR.setEnabled(enabled);
+        sliderG.setEnabled(enabled);
+        sliderB.setEnabled(enabled);
     }
 
     /**
