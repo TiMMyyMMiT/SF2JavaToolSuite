@@ -76,14 +76,14 @@ public class CRAMColorEditor extends javax.swing.JPanel {
         redIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getRed());
         greenIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getGreen());
         blueIndex = PaletteDecoder.brightnessToCramIndex(color.CRAMColor().getBlue());
-        sliderR.setValue(redIndex);
-        sliderG.setValue(greenIndex);
-        sliderB.setValue(blueIndex);
         updateColor(false);
         settingNewColor = false;
     }
     
     private void updateColor(boolean triggerCallback) {
+        sliderR.setValue(redIndex);
+        sliderG.setValue(greenIndex);
+        sliderB.setValue(blueIndex);
         int r = PaletteDecoder.cramIndexToBrightness(redIndex);
         int g = PaletteDecoder.cramIndexToBrightness(greenIndex);
         int b = PaletteDecoder.cramIndexToBrightness(blueIndex);
@@ -119,7 +119,6 @@ public class CRAMColorEditor extends javax.swing.JPanel {
 
         sliderR.setMajorTickSpacing(2);
         sliderR.setMaximum(14);
-        sliderR.setMinorTickSpacing(2);
         sliderR.setPaintLabels(true);
         sliderR.setPaintTicks(true);
         sliderR.setSnapToTicks(true);
@@ -132,7 +131,6 @@ public class CRAMColorEditor extends javax.swing.JPanel {
 
         sliderG.setMajorTickSpacing(2);
         sliderG.setMaximum(14);
-        sliderG.setMinorTickSpacing(2);
         sliderG.setPaintLabels(true);
         sliderG.setPaintTicks(true);
         sliderG.setSnapToTicks(true);
@@ -145,7 +143,6 @@ public class CRAMColorEditor extends javax.swing.JPanel {
 
         sliderB.setMajorTickSpacing(2);
         sliderB.setMaximum(14);
-        sliderB.setMinorTickSpacing(2);
         sliderB.setPaintLabels(true);
         sliderB.setPaintTicks(true);
         sliderB.setSnapToTicks(true);
@@ -225,7 +222,9 @@ public class CRAMColorEditor extends javax.swing.JPanel {
 
     private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
         if (settingNewColor) return;
+        if (sliderR.getValue() == redIndex && sliderG.getValue() == greenIndex && sliderB.getValue() == blueIndex) return;
         JSlider slider = (JSlider)evt.getSource();
+        if (slider.getValue() % 2 == 1) return;//Ignore odd values
         if (slider == sliderR) redIndex = sliderR.getValue();
         if (slider == sliderG) greenIndex = sliderG.getValue();
         if (slider == sliderB) blueIndex = sliderB.getValue();

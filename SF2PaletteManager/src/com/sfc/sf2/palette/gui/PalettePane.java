@@ -41,6 +41,10 @@ public class PalettePane extends JPanel {
         
         setColorPaneSelected(-1);
     }
+
+    public void setColorChangeListener(ActionListener colorChangeListener) {
+        this.colorChangeListener = colorChangeListener;
+    }
     
     public void setColorEditor(CRAMColorEditor colorEditor) {
         this.colorEditor = colorEditor;
