@@ -55,6 +55,7 @@ public class PalettePane extends JPanel {
         if (colorEditor == null) return;
         if (index == -1 || palette == null) {
             colorEditor.setColor(CRAMColor.BLACK, -1);
+            ColorPane.clearSelection();
         } else {
             colorEditor.setColor(palette.getColors()[index], index);
         }
@@ -69,6 +70,15 @@ public class PalettePane extends JPanel {
                 colorChangeListener.actionPerformed(new ActionEvent(palette, index, "ColorChange"));
             }
         }
+    }
+    
+    public void refreshColorPanes() {
+        for (int i = 0; i < colorPanes.length; i++) {
+            colorPanes[i].updateColor(palette.getColors()[i]);
+        }
+        int selected = colorEditor.getThisIndex();
+        if (selected == -1) return;
+        colorEditor.setColor(palette.getColors()[selected], selected);
     }
 
     public Palette getPalette() {

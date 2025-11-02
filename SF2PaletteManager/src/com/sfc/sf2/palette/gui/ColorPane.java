@@ -5,6 +5,7 @@
  */
 package com.sfc.sf2.palette.gui;
 
+import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.palette.CRAMColor;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +25,9 @@ public class ColorPane extends JPanel implements MouseListener, MouseMotionListe
 
     private static final Border DEFAULT_BORDER = new MatteBorder(1, 1, 1, 1, Color.GRAY);
     private static final Border HOVER_BORDER = new MatteBorder(2, 2, 2, 2, Color.DARK_GRAY);
+    private static final Border SELETED_BORDER = new MatteBorder(2, 2, 2, 2, Color.WHITE);
+    
+    private static ColorPane LAST_SELECTED;
     
     private PalettePane palettePane;
     private int thisIndex;
@@ -49,6 +53,26 @@ public class ColorPane extends JPanel implements MouseListener, MouseMotionListe
         return currentColor;
     }
     
+    public static void clearSelection() {
+        if (LAST_SELECTED == null) return;
+        LAST_SELECTED.setBorder(DEFAULT_BORDER);
+        LAST_SELECTED = null;
+    }
+    
+    private void setBorder(boolean selected, boolean hover) {
+        if (LAST_SELECTED == this || selected) {
+            if (LAST_SELECTED != null) {
+                LAST_SELECTED.setBorder(DEFAULT_BORDER);
+            }
+            setBorder(SELETED_BORDER);
+            LAST_SELECTED = this;
+        } else if (hover) {
+            setBorder(HOVER_BORDER);
+        } else {
+            setBorder(DEFAULT_BORDER);
+        }
+    }
+    
     public void updateColor(CRAMColor c) {
         currentColor = c;
         if (c.CRAMColor().getAlpha() == 0) {
@@ -60,21 +84,24 @@ public class ColorPane extends JPanel implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        setBorder(HOVER_BORDER);
+        boolean selected = false;
         if (SwingUtilities.isLeftMouseButton(e)) {
             palettePane.setColorPaneSelected(thisIndex);
+            selected = true;
         }
+        setBorder(selected, true);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        setBorder(DEFAULT_BORDER);
+        setBorder(LAST_SELECTED == this, false);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getButton() != 1) return;
         palettePane.setColorPaneSelected(thisIndex);
+        setBorder(true, false);
     }
 
     @Override

@@ -67,6 +67,10 @@ public class CRAMColorEditor extends javax.swing.JPanel {
     public void setColorPane(PalettePane palettePane) {
         this.palettePane = palettePane;
     }
+
+    public int getThisIndex() {
+        return thisIndex;
+    }
     
     public CRAMColor getColor() {
         return color;

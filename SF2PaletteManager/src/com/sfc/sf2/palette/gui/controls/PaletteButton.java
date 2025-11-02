@@ -5,8 +5,8 @@
  */
 package com.sfc.sf2.palette.gui.controls;
 
+import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EventListener;
@@ -17,8 +17,8 @@ import java.util.EventListener;
  */
 public class PaletteButton extends javax.swing.JButton {
 
-    private Palette defaultPalette;
-    private Palette activePalette;
+    private Palette palette;
+    private CRAMColor[] originalColors;
     
     private PaletteListener paletteListener;
     private ActionListener colorChangeListener;
@@ -51,6 +51,7 @@ public class PaletteButton extends javax.swing.JButton {
         jSeparator = new javax.swing.JSeparator();
         cRAMColorEditor = new com.sfc.sf2.palette.gui.controls.CRAMColorEditor();
         jButtonConfirm = new javax.swing.JButton();
+        jButtonReset = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
         flatRadioButtonIcon1 = new com.formdev.flatlaf.icons.FlatRadioButtonIcon();
 
@@ -70,6 +71,13 @@ public class PaletteButton extends javax.swing.JButton {
         jButtonConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonConfirmActionPerformed(evt);
+            }
+        });
+
+        jButtonReset.setText("Reset");
+        jButtonReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResetActionPerformed(evt);
             }
         });
 
@@ -94,6 +102,8 @@ public class PaletteButton extends javax.swing.JButton {
                             .addGroup(paletteEditorLayout.createSequentialGroup()
                                 .addComponent(jButtonCancel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonReset)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonConfirm))
                             .addGroup(paletteEditorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(cRAMColorEditor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,7 +123,8 @@ public class PaletteButton extends javax.swing.JButton {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(paletteEditorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonConfirm)
-                    .addComponent(jButtonCancel))
+                    .addComponent(jButtonCancel)
+                    .addComponent(jButtonReset))
                 .addGap(14, 14, 14))
         );
 
@@ -129,31 +140,40 @@ public class PaletteButton extends javax.swing.JButton {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConfirmActionPerformed
-        defaultPalette = activePalette = null;
+        palette = null;
         paletteEditor.dispose();
     }//GEN-LAST:event_jButtonConfirmActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        if (defaultPalette != null && colorChangeListener != null) {
-            colorChangeListener.actionPerformed(new ActionEvent(defaultPalette, -1, "Reset"));
-        }
+        jButtonResetActionPerformed(evt);
+        palette = null;
         paletteEditor.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void showPaletteEditor(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPaletteEditor
-        defaultPalette = paletteListener.getPalette();
-        activePalette = defaultPalette.Clone();
-        palettePane.setPalette(activePalette);
-        paletteEditor.setTitle("Palette Editor: " + defaultPalette.getName());
+        palette = paletteListener.getPalette();
+        palettePane.setPalette(palette);
+        if (palette == null) {
+            originalColors = null;
+            paletteEditor.setTitle("Palette Editor");
+        } else {
+            originalColors = palette.getColors().clone();
+            paletteEditor.setTitle("Palette Editor: " + palette.getName());
+        }
         paletteEditor.setVisible(true);
     }//GEN-LAST:event_showPaletteEditor
 
     private void paletteEditorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_paletteEditorWindowClosing
-        if (defaultPalette != null && colorChangeListener != null) {
-            colorChangeListener.actionPerformed(new ActionEvent(defaultPalette, -1, "Reset"));
-        }
-        defaultPalette = activePalette = null;
+        jButtonCancelActionPerformed(null);
     }//GEN-LAST:event_paletteEditorWindowClosing
+
+    private void jButtonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetActionPerformed
+        palette.setColors(originalColors, palette.isFirstColorTransparent());
+        if (palette != null && colorChangeListener != null) {
+            colorChangeListener.actionPerformed(new ActionEvent(palette, -1, "Reset"));
+            palettePane.refreshColorPanes();
+        }
+    }//GEN-LAST:event_jButtonResetActionPerformed
 
     private void onColorChanged(ActionEvent e) {
         if (colorChangeListener != null) {
@@ -166,6 +186,7 @@ public class PaletteButton extends javax.swing.JButton {
     private com.formdev.flatlaf.icons.FlatRadioButtonIcon flatRadioButtonIcon1;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonConfirm;
+    private javax.swing.JButton jButtonReset;
     private javax.swing.JSeparator jSeparator;
     private javax.swing.JDialog paletteEditor;
     private com.sfc.sf2.palette.gui.PalettePane palettePane;

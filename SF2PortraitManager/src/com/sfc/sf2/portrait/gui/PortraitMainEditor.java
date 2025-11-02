@@ -746,7 +746,7 @@ public class PortraitMainEditor extends AbstractMainEditor {
         Portrait portrait = portraitLayoutPanel.getPortrait();
         if (portrait == null) return;
         palette.rebuildIcm();
-        portrait.getTileset().setPalette(palette);
+        portrait.getTileset().clearIndexedColorImage(true);
         portraitLayoutPanel.redraw();
     }
     

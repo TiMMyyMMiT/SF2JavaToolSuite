@@ -43,6 +43,10 @@ public class Palette {
         this.name = name;
     }
 
+    public boolean isFirstColorTransparent() {
+        return firstColorTransparent;
+    }
+
     public CRAMColor[] getColors() {
         return colors;
     }
