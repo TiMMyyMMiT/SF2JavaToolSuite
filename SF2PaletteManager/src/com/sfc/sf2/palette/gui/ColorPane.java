@@ -5,7 +5,6 @@
  */
 package com.sfc.sf2.palette.gui;
 
-import com.sfc.sf2.palette.gui.controls.CRAMColorEditor;
 import com.sfc.sf2.palette.CRAMColor;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,12 +24,8 @@ public class ColorPane extends JPanel {
     private static final Border HOVER_BORDER = new MatteBorder(2, 2, 2, 2, Color.DARK_GRAY);
     
     private CRAMColor currentColor;
-    private CRAMColorEditor colorEditor;
-    private ColorPane self = this;
 
-    public ColorPane(CRAMColor color, CRAMColorEditor ce) {
-        
-        colorEditor = ce;
+    public ColorPane(PalettePane palettePane, int thisIndex, CRAMColor color) {
         updateColor(color);
         setBackground(currentColor.CRAMColor());
         setBorder(DEFAULT_BORDER);
@@ -47,8 +42,8 @@ public class ColorPane extends JPanel {
             }
             
             @Override
-            public void mouseClicked(MouseEvent e){
-                colorEditor.setColorPane(self);
+            public void mouseClicked(MouseEvent e) {
+                palettePane.setColorPaneSelected(thisIndex);
             }
         });
     }
@@ -56,10 +51,6 @@ public class ColorPane extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(30, 30);
-    }
-    
-    public void setEditor(CRAMColorEditor ce) {
-        colorEditor = ce;
     }
 
     public CRAMColor getCurrentColor() {

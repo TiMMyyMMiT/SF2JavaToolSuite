@@ -134,4 +134,10 @@ public class Palette {
         IndexColorModel icm = new IndexColorModel(4,colors.length,reds,greens,blues,alphas);
         return icm;
     }
+    
+    public Palette Clone() {
+        Palette newPalette = new Palette(colors.clone(), firstColorTransparent);
+        newPalette.rebuildIcm();
+        return newPalette;
+    }
 }
