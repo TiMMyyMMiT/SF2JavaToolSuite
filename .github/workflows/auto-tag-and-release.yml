@@ -195,9 +195,12 @@ jobs:
         if: steps.detect_changes.outputs.should_run == 'true'
         id: tag_and_release
         run: |
+          echo "Cleaning up local tags..."
+          git tag -l | xargs git tag -d || true
+          git fetch --tags --force
+    
           mkdir -p artifacts
           releases=""
-
           read -a CHANGED_FILES <<< "$CHANGED_FILES"
           for file_path in "${CHANGED_FILES[@]}"; do
             if [ -f "$file_path" ]; then
