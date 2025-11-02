@@ -20,6 +20,9 @@
         </Property>
         <Property name="resizable" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="paletteEditorWindowClosing"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">

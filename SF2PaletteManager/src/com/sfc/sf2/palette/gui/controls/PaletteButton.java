@@ -60,6 +60,11 @@ public class PaletteButton extends javax.swing.JButton {
         paletteEditor.setMinimumSize(new java.awt.Dimension(520, 295));
         paletteEditor.setPreferredSize(new java.awt.Dimension(520, 295));
         paletteEditor.setResizable(false);
+        paletteEditor.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                paletteEditorWindowClosing(evt);
+            }
+        });
 
         jButtonConfirm.setText("Confirm");
         jButtonConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -129,10 +134,9 @@ public class PaletteButton extends javax.swing.JButton {
     }//GEN-LAST:event_jButtonConfirmActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        if (colorChangeListener != null) {
+        if (defaultPalette != null && colorChangeListener != null) {
             colorChangeListener.actionPerformed(new ActionEvent(defaultPalette, -1, "Reset"));
         }
-        defaultPalette = activePalette = null;
         paletteEditor.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
@@ -144,6 +148,13 @@ public class PaletteButton extends javax.swing.JButton {
         paletteEditor.setLocationRelativeTo(this);
         paletteEditor.setVisible(true);
     }//GEN-LAST:event_showPaletteEditor
+
+    private void paletteEditorWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_paletteEditorWindowClosing
+        if (defaultPalette != null && colorChangeListener != null) {
+            colorChangeListener.actionPerformed(new ActionEvent(defaultPalette, -1, "Reset"));
+        }
+        defaultPalette = activePalette = null;
+    }//GEN-LAST:event_paletteEditorWindowClosing
 
     private void onColorChanged(ActionEvent e) {
         if (colorChangeListener != null) {
