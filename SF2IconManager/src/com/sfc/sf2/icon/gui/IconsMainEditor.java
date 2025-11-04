@@ -7,7 +7,7 @@ package com.sfc.sf2.icon.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.icon.IconManager;
@@ -321,6 +321,7 @@ public class IconsMainEditor extends AbstractMainEditor {
             directoryButton2.setDirectoryPath(".\\export\\item\\");
                 directoryButton2.setLabelText("Images directory :");
 
+                buttonGroupImport.add(jRadioButton3);
                 jRadioButton3.setSelected(true);
                 jRadioButton3.setText("PNG");
                 jRadioButton3.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -329,6 +330,7 @@ public class IconsMainEditor extends AbstractMainEditor {
                     }
                 });
 
+                buttonGroupImport.add(jRadioButton4);
                 jRadioButton4.setText("GIF");
                 jRadioButton4.addChangeListener(new javax.swing.event.ChangeListener() {
                     public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -408,7 +410,7 @@ public class IconsMainEditor extends AbstractMainEditor {
                         .addContainerGap()
                         .addComponent(fileButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
                 );
 
                 jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -470,6 +472,7 @@ public class IconsMainEditor extends AbstractMainEditor {
 
                         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
+                        buttonGroupExport.add(jRadioButton2);
                         jRadioButton2.setText("GIF");
                         jRadioButton2.addChangeListener(new javax.swing.event.ChangeListener() {
                             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -477,6 +480,7 @@ public class IconsMainEditor extends AbstractMainEditor {
                             }
                         });
 
+                        buttonGroupExport.add(jRadioButton1);
                         jRadioButton1.setSelected(true);
                         jRadioButton1.setText("PNG");
                         jRadioButton1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -585,15 +589,15 @@ public class IconsMainEditor extends AbstractMainEditor {
                         );
                         jPanel5Layout.setVerticalGroup(
                             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                         );
 
                         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
                         jPanel8.setLayout(jPanel8Layout);
                         jPanel8Layout.setHorizontalGroup(
                             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
                         );
                         jPanel8Layout.setVerticalGroup(
                             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

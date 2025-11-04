@@ -75,8 +75,8 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jFileChooser2 = new javax.swing.JFileChooser();
+        buttonGroupImport = new javax.swing.ButtonGroup();
+        buttonGroupExport = new javax.swing.ButtonGroup();
         jPanel13 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel15 = new javax.swing.JPanel();
@@ -130,8 +130,6 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
         paletteButton1 = new com.sfc.sf2.palette.gui.controls.PaletteButton();
         jLabel7 = new javax.swing.JLabel();
         console1 = new com.sfc.sf2.core.gui.controls.Console();
-
-        jFileChooser2.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SF2BattleSpriteManager");
@@ -805,6 +803,8 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.sfc.sf2.battlesprite.gui.BattleSpriteLayoutPanel battleSpriteLayoutPanel;
+    private javax.swing.ButtonGroup buttonGroupExport;
+    private javax.swing.ButtonGroup buttonGroupImport;
     private com.sfc.sf2.core.gui.controls.ColorPicker colorPicker1;
     private com.sfc.sf2.core.gui.controls.Console console1;
     private com.sfc.sf2.core.gui.controls.FileButton fileButton1;
@@ -823,8 +823,6 @@ public class BattleSpriteMainEditor extends AbstractMainEditor {
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;

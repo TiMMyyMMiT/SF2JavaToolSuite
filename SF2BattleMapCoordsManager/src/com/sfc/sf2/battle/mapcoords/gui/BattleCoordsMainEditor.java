@@ -472,7 +472,6 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
         Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         Path battleCoordsPath = PathHelpers.getBasePath().resolve(fileButton4.getFilePath());
         try {
-            battlemapcoordsManager.ImportMapEntries(mapEntriesPath);
             coords = battlemapcoordsManager.importDisassembly(battleCoordsPath);
             selectedCoords = 0;
             loadMap(0);
@@ -504,17 +503,13 @@ public class BattleCoordsMainEditor extends AbstractMainEditor {
     
     private void loadMap(int index) {
         if (index < 0 || index >= coords.length) return;
+        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
         int mapId = -1;
         try {
             mapId = coords[index].getMap();
-            if (battlemapcoordsManager.doesMapDataExist(mapId)) {
-                battlemapcoordsManager.importMap(paletteEntriesPath, tilesetEntriesPath, mapId);
-            } else {
-                battlemapcoordsManager.setMapLayout(null);
-                Console.logger().warning(String.format("Battle map was not found for map%02d", mapId));
-            }
+            battlemapcoordsManager.importMapFromEntries(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, mapId);
         } catch (Exception ex) {
             battlemapcoordsManager.setMapLayout(null);
             Console.logger().log(Level.SEVERE, null, ex);
