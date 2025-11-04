@@ -7,7 +7,7 @@ package com.sfc.sf2.vwfont.gui;
 
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.vwfont.VWFontManager;
@@ -480,7 +480,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
         Path directoryPath = PathHelpers.getBasePath().resolve(directoryButton2.getDirectoryPath());
         if (!PathHelpers.createPathIfRequred(directoryPath)) return;
         try {
-            fontManager.exportAllImages(directoryPath, fontSymbolLayoutPanel.getFontSymbols(), FileFormat.PNG);
+            fontManager.exportAllImages(directoryPath, fontSymbolLayoutPanel.getFontSymbols(), FileFormat.ANY_IMAGE);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
             Console.logger().severe("ERROR Font symbols images could not be exported to : " + directoryPath);
@@ -490,7 +490,7 @@ public class VWFontMainEditor extends AbstractMainEditor {
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         Path directoryPath = PathHelpers.getBasePath().resolve(directoryButton1.getDirectoryPath());
         try {
-            FileFormat format = FileFormat.PNG;
+            FileFormat format = FileFormat.ANY_IMAGE;
             fontManager.importAllImages(directoryPath, format);
         } catch (Exception ex) {
             fontManager.clearData();

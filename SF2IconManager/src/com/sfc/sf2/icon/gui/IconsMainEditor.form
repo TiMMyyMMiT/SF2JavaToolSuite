@@ -516,6 +516,9 @@
                                       <SubComponents>
                                         <Component class="javax.swing.JRadioButton" name="jRadioButton3">
                                           <Properties>
+                                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                              <ComponentRef name="buttonGroupImport"/>
+                                            </Property>
                                             <Property name="selected" type="boolean" value="true"/>
                                             <Property name="text" type="java.lang.String" value="PNG"/>
                                           </Properties>
@@ -525,6 +528,9 @@
                                         </Component>
                                         <Component class="javax.swing.JRadioButton" name="jRadioButton4">
                                           <Properties>
+                                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                              <ComponentRef name="buttonGroupImport"/>
+                                            </Property>
                                             <Property name="text" type="java.lang.String" value="GIF"/>
                                           </Properties>
                                           <Events>
@@ -769,6 +775,9 @@
                                       <SubComponents>
                                         <Component class="javax.swing.JRadioButton" name="jRadioButton2">
                                           <Properties>
+                                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                              <ComponentRef name="buttonGroupExport"/>
+                                            </Property>
                                             <Property name="text" type="java.lang.String" value="GIF"/>
                                           </Properties>
                                           <Events>
@@ -777,6 +786,9 @@
                                         </Component>
                                         <Component class="javax.swing.JRadioButton" name="jRadioButton1">
                                           <Properties>
+                                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                                              <ComponentRef name="buttonGroupExport"/>
+                                            </Property>
                                             <Property name="selected" type="boolean" value="true"/>
                                             <Property name="text" type="java.lang.String" value="PNG"/>
                                           </Properties>

@@ -9,7 +9,7 @@ import com.sfc.sf2.background.BackgroundManager;
 import com.sfc.sf2.background.settings.BackgroundSettings;
 import com.sfc.sf2.core.gui.AbstractMainEditor;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
+import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.core.settings.SettingsManager;
 import com.sfc.sf2.helpers.PathHelpers;
 import java.nio.file.Path;
@@ -251,7 +251,7 @@ public class BackgroundMainEditor extends AbstractMainEditor {
                 );
                 jPanel3Layout.setVerticalGroup(
                     jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
                 );
 
                 jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Export to :"));
@@ -391,7 +391,7 @@ public class BackgroundMainEditor extends AbstractMainEditor {
                         );
                         jPanel5Layout.setVerticalGroup(
                             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTabbedPane2)
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         );
 
                         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
@@ -492,21 +492,21 @@ public class BackgroundMainEditor extends AbstractMainEditor {
                         jPanel15.setLayout(jPanel15Layout);
                         jPanel15Layout.setHorizontalGroup(
                             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)
+                            .addComponent(jSplitPane2)
                         );
                         jPanel15Layout.setVerticalGroup(
                             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSplitPane2)
                         );
 
-                        jSplitPane1.setLeftComponent(jPanel15);
-                        jSplitPane1.setRightComponent(console1);
+                        jSplitPane1.setTopComponent(jPanel15);
+                        jSplitPane1.setBottomComponent(console1);
 
                         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
                         jPanel13.setLayout(jPanel13Layout);
                         jPanel13Layout.setHorizontalGroup(
                             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)
+                            .addComponent(jSplitPane1)
                         );
                         jPanel13Layout.setVerticalGroup(
                             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

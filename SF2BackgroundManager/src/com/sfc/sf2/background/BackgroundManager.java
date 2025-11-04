@@ -9,9 +9,8 @@ import com.sfc.sf2.background.io.BackgroundDisassemblyProcessor;
 import com.sfc.sf2.background.io.BackgroundPackage;
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor.FileFormat;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
 import com.sfc.sf2.helpers.FileHelpers;
@@ -56,7 +55,7 @@ public class BackgroundManager extends AbstractManager {
     
     public Background[] importAllDisassemblies(Path basePath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importAllDisassemblies");
-        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "background", ".bin");
+        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "background", FileFormat.BIN);
         Console.logger().info(files.length + " Backgrounds found.");
         ArrayList<Background> bgsList = new ArrayList<>();
         int failedToLoad = 0;
@@ -95,7 +94,7 @@ public class BackgroundManager extends AbstractManager {
         int fileCount = 0;
         for (Background background : backgrounds) {
             try {
-                bgPath = basePath.resolve(String.format("background%02d%s", background.getIndex(), ".bin"));
+                bgPath = basePath.resolve(String.format("background%02d%s", background.getIndex(), FileFormat.BIN.getExt()));
                 backgroundDisassemblyProcessor.exportDisassembly(bgPath, background, null);
                 fileCount++;
             } catch (Exception e) {
@@ -112,7 +111,7 @@ public class BackgroundManager extends AbstractManager {
     
     public Background[] importAllImages(Path basePath, FileFormat format) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importAllImages");
-        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "background", AbstractRawImageProcessor.GetFileExtensionString(format));
+        File[] files = FileHelpers.findAllFilesInDirectory(basePath, "background", format);
         Console.logger().info(files.length + " background images found.");
         ArrayList<Background> bgsList = new ArrayList<>();
         int failedToLoad = 0;
@@ -146,7 +145,7 @@ public class BackgroundManager extends AbstractManager {
         int fileCount = 0;
         for (Background background : backgrounds) {
             try {
-                filePath = basePath.resolve(String.format("background%02d%s", background.getIndex(), AbstractRawImageProcessor.GetFileExtensionString(format)));
+                filePath = basePath.resolve(String.format("background%02d%s", background.getIndex(), format.getExt()));
                 tilesetManager.exportImage(filePath, background.getTileset());
                 fileCount++;
             }catch (Exception e) {

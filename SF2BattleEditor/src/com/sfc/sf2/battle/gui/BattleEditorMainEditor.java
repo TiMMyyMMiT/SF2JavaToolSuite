@@ -1738,9 +1738,10 @@ public class BattleEditorMainEditor extends AbstractMainEditor {
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         Path paletteEntriesPath = PathHelpers.getBasePath().resolve(fileButton1.getFilePath());
         Path tilesetEntriesPath = PathHelpers.getBasePath().resolve(fileButton2.getFilePath());
+        Path mapEntriesPath = PathHelpers.getBasePath().resolve(fileButton3.getFilePath());
         int newMapIndex = (int)jSpinner1.getModel().getValue();
         try {
-            MapLayout layout = battleManager.loadNewMap(paletteEntriesPath, tilesetEntriesPath, newMapIndex);
+            MapLayout layout = battleManager.loadNewMap(paletteEntriesPath, tilesetEntriesPath, mapEntriesPath, newMapIndex);
             battleLayoutPanel.setMapLayout(layout);
         } catch (Exception ex) {
             Console.logger().log(Level.SEVERE, null, ex);
