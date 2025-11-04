@@ -7,7 +7,6 @@ package com.sfc.sf2.vwfont;
 
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.helpers.FileHelpers;

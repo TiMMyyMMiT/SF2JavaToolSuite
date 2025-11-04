@@ -7,7 +7,6 @@ package com.sfc.sf2.mapsprite;
 
 import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.io.AbstractRawImageProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.core.io.asm.AsmException;
@@ -93,6 +92,7 @@ public class MapSpriteManager extends AbstractManager {
         if (entriesMax < entriesData.entriesCount()/3) {
             entriesMax = entriesData.entriesCount()/3;
         }
+        unreferencedMapsprites = null;
         mapSprites = new MapSpriteEntries(entriesMax*3);
         int frameCount = 0;
         int failedToLoad = 0;

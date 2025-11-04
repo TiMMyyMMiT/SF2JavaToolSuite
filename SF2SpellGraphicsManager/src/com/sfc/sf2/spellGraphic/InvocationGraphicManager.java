@@ -62,10 +62,9 @@ public class InvocationGraphicManager extends AbstractManager {
         Path dir = filePath.getParent();
         String name = getImageName(filePath.getFileName().toString());
         FileFormat format = FileFormat.getFormat(filePath);
-        if (format == FileFormat.UNKNOWN) {
+        if (format != FileFormat.PNG || format != FileFormat.GIF) {
             format = FileFormat.ANY_IMAGE;
         }
-        
         List<Tileset> frames = new ArrayList<>();
         File[] files = FileHelpers.findAllFilesInDirectory(dir, name+"-frame-", format);
         for (File f : files) { 
@@ -115,9 +114,9 @@ public class InvocationGraphicManager extends AbstractManager {
     }
     
     private String getImageName(String filename) {
-        int dotIndex = filename.lastIndexOf('.');
-        int frameIndex = filename.lastIndexOf("-frame");
-        int dashIndex = filename.lastIndexOf("-");
+        int dotIndex = filename.indexOf('.');
+        int frameIndex = filename.indexOf("-frame");
+        int dashIndex = filename.indexOf("-");
         if (frameIndex >= 0) {
             return filename.substring(0, frameIndex);
         } else if (dashIndex >= 0) {

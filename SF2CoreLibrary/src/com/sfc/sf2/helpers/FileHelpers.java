@@ -25,7 +25,7 @@ public class FileHelpers {
     }
     
     public static File[] findAllFilesInDirectory(File folder, String filePrefix, FileFormat fileFormat) {
-        return folder.listFiles(fileFormat.getFileFilter());
+        return folder.listFiles(fileFormat.getFileFilter(filePrefix));
     }
     
     public static String getExtension(File file) {

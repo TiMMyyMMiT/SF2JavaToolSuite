@@ -19,7 +19,6 @@ public class IconSettings implements AbstractSettings {
 
     private IconExportMode exportMode;
     private FileFormat exportFileFormat;
-    
     private int itemsPerRow;
     
     public IconExportMode getExportMode() {

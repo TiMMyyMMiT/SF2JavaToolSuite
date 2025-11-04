@@ -64,7 +64,8 @@ public class BackgroundManager extends AbstractManager {
             try {
                 int index = FileHelpers.getNumberFromFileName(file);
                 Background bg = backgroundDisassemblyProcessor.importDisassembly(bgPath, new BackgroundPackage(index));
-                bgsList.add(bg);
+                while (index >= bgsList.size()) bgsList.add(null);
+                bgsList.set(index, bg);
             } catch (Exception e) {
                 failedToLoad++;
                 Console.logger().warning("Background could not be imported : " + bgPath + " : " + e);
@@ -72,7 +73,7 @@ public class BackgroundManager extends AbstractManager {
         }
         backgrounds = new Background[bgsList.size()];
         backgrounds = bgsList.toArray(backgrounds);
-        Console.logger().info(backgrounds.length + " backgrounds successfully imported from disasm : " + basePath);
+        Console.logger().info(files.length + " backgrounds successfully imported from disasm : " + basePath);
         if (failedToLoad > 0) {
             Console.logger().severe(failedToLoad + " backgrounds failed to import. See logs above");
         }
@@ -93,6 +94,7 @@ public class BackgroundManager extends AbstractManager {
         Path bgPath = null;
         int fileCount = 0;
         for (Background background : backgrounds) {
+            if (background == null) continue;
             try {
                 bgPath = basePath.resolve(String.format("background%02d%s", background.getIndex(), FileFormat.BIN.getExt()));
                 backgroundDisassemblyProcessor.exportDisassembly(bgPath, background, null);
@@ -120,8 +122,9 @@ public class BackgroundManager extends AbstractManager {
             try {
                 int index = FileHelpers.getNumberFromFileName(file);
                 Tileset tileset = tilesetManager.importImage(bgPath, false);
-                Background background = new Background(index, tileset);
-                bgsList.add(background);
+                Background bg = new Background(index, tileset);
+                while (index >= bgsList.size()) bgsList.add(null);
+                bgsList.set(index, bg);
             } catch (Exception e) {
                 failedToLoad++;
                 Console.logger().warning("Background could not be imported : " + bgPath + " : " + e);
@@ -129,7 +132,7 @@ public class BackgroundManager extends AbstractManager {
         }
         backgrounds = new Background[bgsList.size()];
         backgrounds = bgsList.toArray(backgrounds);
-        Console.logger().info(backgrounds.length + " backgrounds successfully imported from images : " + basePath);
+        Console.logger().info(files.length + " backgrounds successfully imported from images : " + basePath);
         if (failedToLoad > 0) {
             Console.logger().severe(failedToLoad + " backgrounds failed to import. See logs above");
         }
@@ -144,6 +147,7 @@ public class BackgroundManager extends AbstractManager {
         Path filePath = null;
         int fileCount = 0;
         for (Background background : backgrounds) {
+            if (background == null) continue;
             try {
                 filePath = basePath.resolve(String.format("background%02d%s", background.getIndex(), format.getExt()));
                 tilesetManager.exportImage(filePath, background.getTileset());

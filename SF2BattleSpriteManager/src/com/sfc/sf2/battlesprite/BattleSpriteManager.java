@@ -66,7 +66,7 @@ public class BattleSpriteManager extends AbstractManager {
     public BattleSprite importImage(Path filePath, boolean useImagePalette) throws IOException, RawImageException, DisassemblyException, FileNotFoundException, MetadataException {
         Console.logger().finest("ENTERING importImage");
         FileFormat format = FileFormat.getFormat(filePath);
-        if (format != FileFormat.PNG && format != FileFormat.GIF) {
+        if (format != FileFormat.PNG || format != FileFormat.GIF) {
             format = FileFormat.ANY_IMAGE;
         }
         String filename = getImageName(filePath.getFileName().toString());
@@ -110,12 +110,12 @@ public class BattleSpriteManager extends AbstractManager {
         return battlesprite;
     }
     
-    public void exportImage(Path filePath, BattleSprite battlesprite, int selectedPalette) throws IOException, DisassemblyException, RawImageException, MetadataException {
+    public void exportImage(Path filePath, BattleSprite battlesprite, int selectedPalette, FileFormat fileFormat) throws IOException, DisassemblyException, RawImageException, MetadataException {
         Console.logger().finest("ENTERING exportImage");
         this.battlesprite = battlesprite;
         FileFormat format = FileFormat.getFormat(filePath);
         if (format == FileFormat.UNKNOWN) {
-            format = FileFormat.PNG;
+            format = fileFormat;
         }
         Tileset[] frames = battlesprite.getFrames();
         String filename = getImageName(filePath.getFileName().toString());
