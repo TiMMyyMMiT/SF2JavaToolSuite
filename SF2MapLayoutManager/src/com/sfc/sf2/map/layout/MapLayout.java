@@ -6,6 +6,7 @@
 package com.sfc.sf2.map.layout;
 
 import com.sfc.sf2.graphics.Tileset;
+import com.sfc.sf2.map.block.MapBlock;
 import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.palette.Palette;
 
@@ -22,9 +23,9 @@ public class MapLayout {
     private int index;
      
     private Tileset[] tilesets;
-    private MapBlockset blockset;
+    private MapLayoutBlockset blockset;
 
-    public MapLayout(int index, Tileset[] tilesets, MapBlockset blockset) {
+    public MapLayout(int index, Tileset[] tilesets, MapLayoutBlockset blockset) {
         this.index = index;
         this.tilesets = tilesets;
         this.blockset = blockset;
@@ -46,12 +47,20 @@ public class MapLayout {
         this.tilesets = tilesets;
     }
 
-    public MapBlockset getBlockset() {
+    public MapLayoutBlockset getBlockset() {
         return blockset;
     }
 
-    public void setBlockset(MapBlockset blockset) {
+    public void setBlockset(MapLayoutBlockset blockset) {
         this.blockset = blockset;
+    }
+    
+    public MapBlockset layoutToBlockset() {
+        MapBlock[] blocks = new MapBlock[BLOCK_COUNT];
+        for (int i = 0; i < BLOCK_COUNT; i++) {
+            blocks[i] = blockset.getBlocks()[i].getMapBlock();
+        }
+        return new MapBlockset(blocks, BLOCK_WIDTH);
     }
 
     public Palette getPalette() {
