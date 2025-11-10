@@ -47,7 +47,7 @@ public class MapLayoutManager extends AbstractManager {
             blockset = null;
         }
         if (layout != null) {
-            layout.getBlockset().clearIndexedColorImage(true);
+            layout.clearIndexedColorImage(true);
             layout = null;
         }
         mapEntries = null;
@@ -109,7 +109,7 @@ public class MapLayoutManager extends AbstractManager {
         Console.logger().finest("ENTERING exportDisassembly");
         layout = mapLayout;
         blockset = mapBlockset;
-        new MapLayoutDecoder().optimiseBlockset(blockset, mapLayout.getBlockset()); //Blockset must be optimised before saving either blockset or layout
+        new MapLayoutDecoder().optimiseBlockset(blockset, mapLayout); //Blockset must be optimised before saving either blockset or layout
         mapBlocksetManager.exportDisassembly(tilesetsPath, blocksetPath, blockset, mapBlocksetManager.getTilesets());
         MapLayoutPackage pckg = new MapLayoutPackage(layout.getIndex(), blockset, mapLayout.getTilesets());
         layoutDisassemblyProcessor.exportDisassembly(layoutPath, layout, pckg);
@@ -125,7 +125,7 @@ public class MapLayoutManager extends AbstractManager {
         }
         layout = mapLayout;
         blockset = mapBlockset;
-        new MapLayoutDecoder().optimiseBlockset(blockset, mapLayout.getBlockset()); //Blockset must be optimised before saving either blockset or layout
+        new MapLayoutDecoder().optimiseBlockset(blockset, mapLayout); //Blockset must be optimised before saving either blockset or layout
         MapEntryData mapEntry = mapEntries[mapId];
         Path layoutPath = mapEntry.getLayoutPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getLayoutPath());
         Path blocksetPath = mapEntry.getBlocksPath() == null ? null : PathHelpers.getIncbinPath().resolve(mapEntry.getBlocksPath());
@@ -140,7 +140,7 @@ public class MapLayoutManager extends AbstractManager {
     public void exportImage(Path filepath, Path flagsPath, Path hpFilePath, MapLayout layout) throws IOException, RawImageException, MetadataException {
         Console.logger().finest("ENTERING exportImage");
         mapBlocksetManager.exportImage(filepath, hpFilePath, MapLayout.BLOCK_WIDTH, layout.layoutToBlockset(), layout.getTilesets());
-        mapLayoutMetaProcessor.exportMetadata(flagsPath, layout.getBlockset());
+        mapLayoutMetaProcessor.exportMetadata(flagsPath, layout);
         Console.logger().info("Map layout successfully exported to image : " + filepath + ", flags : " + flagsPath + ", and hpTiles : " + hpFilePath);
         Console.logger().finest("EXITING exportImage");
     }

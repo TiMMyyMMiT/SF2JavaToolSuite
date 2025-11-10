@@ -1444,7 +1444,7 @@ public class MapAnimationMainEditor extends AbstractMainEditor {
     }
     
     private void onAnimationUpdated(LayoutAnimator.AnimationListener.AnimationFrameEvent e) {
-        mapAnimationLayoutPanel.getMapLayout().getBlockset().clearIndexedColorImage(true);
+        mapAnimationLayoutPanel.getMapLayout().clearIndexedColorImage(true);
         mapAnimationLayoutPanel.redraw();
         tableAnimFrames.jTable.setRowSelectionInterval(e.getCurrentFrame(), e.getCurrentFrame());
     }

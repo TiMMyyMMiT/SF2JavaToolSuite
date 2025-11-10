@@ -11,7 +11,6 @@ import com.sfc.sf2.map.block.MapBlockset;
 import com.sfc.sf2.map.layout.MapLayout;
 import static com.sfc.sf2.map.layout.MapLayout.BLOCK_COUNT;
 import com.sfc.sf2.map.layout.MapLayoutBlock;
-import com.sfc.sf2.map.layout.MapLayoutBlockset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class MapLayoutDecoder {
     
     //private StringBuilder debugSb = null;
 
-    public MapLayoutBlockset decode(byte[] layoutData, MapBlockset blockset) {
+    public MapLayoutBlock[] decode(byte[] layoutData, MapBlockset blockset) {
         inputData = layoutData;
         MapLayoutBlock[] layoutBlocks = new MapLayoutBlock[BLOCK_COUNT];
         MapBlock[] blocks = blockset.getBlocks();
@@ -240,7 +239,7 @@ public class MapLayoutDecoder {
                 layoutBlocks[i] = emptyBlock;
             }
         }
-        return new MapLayoutBlockset(layoutBlocks);
+        return layoutBlocks;
     }
 
     private void applyFlags(MapLayoutBlock block) {
@@ -337,9 +336,9 @@ public class MapLayoutDecoder {
         return bit;
     }
 
-    public void optimiseBlockset(MapBlockset blockset, MapLayoutBlockset layoutBlockset) {
+    public void optimiseBlockset(MapBlockset blockset, MapLayout layout) {
         MapBlock[] oldBlocks = blockset.getBlocks();
-        MapLayoutBlock[] layoutBlocks = layoutBlockset.getBlocks();
+        MapLayoutBlock[] layoutBlocks = layout.getBlocks();
         List<Integer> newBlockValues = new ArrayList<>();
         MapBlock[] newBlocks;
         /* Add base blocks : empty, closed chest and open chest */
@@ -388,7 +387,7 @@ public class MapLayoutDecoder {
         String nextBlockCandidate;
         String customBlockCandidate;
 
-        MapLayoutBlock[] layoutBlocks = layout.getBlockset().getBlocks();
+        MapLayoutBlock[] layoutBlocks = layout.getBlocks();
 
         while (blockCursor < 64 * 64) {
 

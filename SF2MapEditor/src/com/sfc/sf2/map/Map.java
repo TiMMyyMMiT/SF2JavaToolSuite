@@ -122,7 +122,7 @@ public class Map {
     }
 
     public void setActionFlag(int x, int y, int value) {
-        MapLayoutBlock block = this.layout.getBlockset().getBlocks()[y*BLOCK_WIDTH+x];
+        MapLayoutBlock block = this.layout.getBlocks()[y*BLOCK_WIDTH+x];
         int origFlags = block.getFlags();
         int newValue = value;
         if ((origFlags & MapLayoutBlock.MAP_FLAG_STEP) != 0 && newValue == MapLayoutBlock.MAP_FLAG_SHOW) {

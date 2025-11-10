@@ -65,7 +65,7 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected boolean hasData() {
-        return layout != null && layout.getBlockset() != null;
+        return layout != null && layout.getBlocks() != null;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class MapLayoutPanel extends AbstractLayoutPanel {
 
     @Override
     protected void drawImage(Graphics graphics) {
-        MapLayoutBlock[] blocks = layout.getBlockset().getBlocks();
+        MapLayoutBlock[] blocks = layout.getBlocks();
         for (int y=0; y < BLOCK_HEIGHT; y++) {
             for (int x=0; x < BLOCK_WIDTH; x++) {
                 graphics.drawImage(blocks[x+y*BLOCK_WIDTH].getMapBlock().getIndexedColorImage(layout.getTilesets()), x*PIXEL_WIDTH, y*PIXEL_HEIGHT, null);

@@ -3937,7 +3937,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         if (index == 1) {   //Is on Block Editor
             jTabbedPane2.setSelectedIndex(0);
         } else if (mapLayoutPanel.getMapLayout() != null) { //Map editor
-            mapLayoutPanel.getMapLayout().getBlockset().clearIndexedColorImage(true);
+            mapLayoutPanel.getMapLayout().clearIndexedColorImage(true);
             mapLayoutPanel.redraw();
         }
     }//GEN-LAST:event_jTabbedPane5StateChanged
@@ -4060,7 +4060,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }
     
     private void onLeftBlockSlotChanged(ActionEvent e) {
-        MapLayoutBlock block = e.getID() == -1 ? null : mapLayoutPanel.getMapLayout().getBlockset().getBlocks()[e.getID()];
+        MapLayoutBlock block = e.getID() == -1 ? null : mapLayoutPanel.getMapLayout().getBlocks()[e.getID()];
         mapLayoutPanel.setSelectedBlock(block == null ? null : block.getMapBlock());
         mapLayoutPanel.redraw();
     }
@@ -4118,7 +4118,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     }
     
     private void onAnimationUpdated(LayoutAnimator.AnimationListener.AnimationFrameEvent e) {
-        mapLayoutPanel.getMapLayout().getBlockset().clearIndexedColorImage(true);
+        mapLayoutPanel.getMapLayout().clearIndexedColorImage(true);
         mapLayoutPanel.redraw();
         tableAnimFrames.jTable.setRowSelectionInterval(e.getCurrentFrame(), e.getCurrentFrame());
     }
