@@ -110,7 +110,7 @@ public class MapBlock {
     
     @Override 
     public MapBlock clone() {
-        MapBlock clone = new MapBlock(index, mapTiles);
+        MapBlock clone = new MapBlock(index, mapTiles.clone());
         return clone;
     }
     

@@ -3999,7 +3999,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
             Console.logger().warning("WARNING Cannot clone from first 3 map slots.");
             return;
         }
-        MapBlock block = blockset.getBlocks()[index];
+        MapBlock block = blockset.getBlocks()[index].clone();
         blockset.insertBlock(index+1, block);
         mapBlocksetLayoutPanel.setLeftSelectedIndex(index+1);
     }//GEN-LAST:event_jButton37ActionPerformed
