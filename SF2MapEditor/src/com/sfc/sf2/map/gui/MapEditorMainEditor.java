@@ -3958,7 +3958,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
         if (mapBlocksetLayoutPanel.getBlockset() == null) return;
         MapBlockset blockset = mapBlocksetLayoutPanel.getBlockset();
         MapBlock block = null;
-        int index = editableBlockSlotPanel.getBlockIndex();
+        int index = mapBlocksetLayoutPanel.getLeftSelectedIndex();
         if (index >= 0 && index <= 2) {
             Console.logger().warning("WARNING Cannot insert map blocks before first 3 slots.");
             return;
@@ -3980,7 +3980,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private void jButton36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton36ActionPerformed
         if (mapBlocksetLayoutPanel.getBlockset() == null) return;
         MapBlockset blockset = mapBlocksetLayoutPanel.getBlockset();
-        int index = editableBlockSlotPanel.getBlockIndex();
+        int index = mapBlocksetLayoutPanel.getLeftSelectedIndex();
         if (index < 0) return;
         if (index <= 2) {
             Console.logger().warning("WARNING Cannot delete first 3 map blocks.");
@@ -3993,7 +3993,7 @@ public class MapEditorMainEditor extends AbstractMainEditor {
     private void jButton37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton37ActionPerformed
         if (mapBlocksetLayoutPanel.getBlockset() == null) return;
         MapBlockset blockset = mapBlocksetLayoutPanel.getBlockset();
-        int index = editableBlockSlotPanel.getBlockIndex();
+        int index = mapBlocksetLayoutPanel.getLeftSelectedIndex();
         if (index < 0 || index >= blockset.getBlocks().length) return;
         if (index <= 2) {
             Console.logger().warning("WARNING Cannot clone from first 3 map slots.");
