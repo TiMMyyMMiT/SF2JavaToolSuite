@@ -93,7 +93,7 @@ public class LayoutCoordsGridDisplay extends BaseLayoutComponent {
         BufferedImage image = new BufferedImage(topCoords ? imageSize : padding, topCoords ? padding : imageSize, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D)image.getGraphics();
         int fontSize = 4+2*displayScale+2*fontIncrease;
-        g2.setFont(new Font("SansSerif", Font.BOLD, fontSize));
+        g2.setFont(new Font(Font.DIALOG, Font.BOLD, fontSize));
         FontMetrics fontMetrics = g2.getFontMetrics();
         g2.setColor(SettingsManager.getGlobalSettings().getIsDarkTheme() ? Color.WHITE : Color.BLACK);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -107,7 +107,7 @@ public class LayoutCoordsGridDisplay extends BaseLayoutComponent {
             float y = topCoords ? halfPadding+1 + displayScale*0.75f : i*coordsSize+offset;
             g2.drawString(item, x, y);
         }
-        g2.setColor(SettingsManager.getGlobalSettings().getIsDarkTheme() ? Color.BLACK : Color.WHITE);
+        g2.setColor(Color.BLACK);
         for (int i = 0; i <= count; i++) {
             if (topCoords) {
                 g2.drawLine(i*coordsSize, 0, i*coordsSize, padding);

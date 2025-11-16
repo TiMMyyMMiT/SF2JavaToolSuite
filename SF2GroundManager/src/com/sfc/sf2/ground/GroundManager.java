@@ -44,13 +44,25 @@ public class GroundManager extends AbstractManager {
         }
     }
     
-    public void importDisassembly(Path basePalettePath, Path palettePath, Path graphicsPath) throws IOException, DisassemblyException {
+    public Ground importDisassembly(Path basePalettePath, Path palettePath, Path graphicsPath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         importBasePalette(basePalettePath);
         Palette palette = paletteManager.importDisassembly(palettePath, false);
         palette = PaletteHelpers.combinePalettes(basePalette, palette, paletteInsertInto, paletteInsertFrom);
         ground = groundDisassemblyProcessor.importDisassembly(graphicsPath, new GroundPackage(palette));
         Console.logger().finest("EXITING importDisassembly");
+        return ground;
+    }
+
+    public Ground importImage(Path basePalettePath, Path filePath) throws IOException, DisassemblyException, RawImageException {
+        Console.logger().finest("ENTERING importImage");
+        importBasePalette(basePalettePath);
+        Tileset tileset = tilesetManager.importImage(filePath, true);
+        ground = new Ground(tileset);
+        Palette palette = PaletteHelpers.combinePalettes(basePalette, tileset.getPalette(), paletteInsertInto, paletteInsertInto);
+        tileset.setPalette(palette);
+        Console.logger().finest("EXITING importImage");
+        return ground;
     }
     
     public void exportDisassembly(Path graphicsPath, Ground ground) throws IOException, DisassemblyException {
@@ -64,16 +76,6 @@ public class GroundManager extends AbstractManager {
         Palette palette = PaletteHelpers.extractColors(ground.getPalette(), paletteInsertInto);
         paletteManager.exportDisassembly(palettePath, palette);
         Console.logger().finest("EXITING exportPalette");
-    }
-
-    public void importImage(Path basePalettePath, Path filePath) throws IOException, DisassemblyException, RawImageException {
-        Console.logger().finest("ENTERING importImage");
-        importBasePalette(basePalettePath);
-        Tileset tileset = tilesetManager.importImage(filePath, true);
-        ground = new Ground(tileset);
-        Palette palette = PaletteHelpers.combinePalettes(basePalette, tileset.getPalette(), paletteInsertInto, paletteInsertInto);
-        tileset.setPalette(palette);
-        Console.logger().finest("EXITING importImage");
     }
     
     public void exportImage(Path filePath, Ground ground) throws IOException, DisassemblyException, RawImageException {

@@ -9,6 +9,7 @@ import com.sfc.sf2.core.gui.controls.Console;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ComboBoxModel;
 
 /**
  *
@@ -53,7 +54,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
     protected abstract T createBlankItem(int row);
     protected abstract T cloneItem(T item);
     protected abstract Object getValue(T item, int row, int col);
-    protected abstract T setValue(T item, int col, Object value);
+    protected abstract T setValue(T item, int row, int col, Object value);
     protected abstract Comparable<?> getMinLimit(T item, int col);
     protected abstract Comparable<?> getMaxLimit(T item, int col);
     
@@ -73,6 +74,10 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
             return null;
         }
         return getMaxLimit(tableItems.get(row), col);
+    }
+    
+    public ComboBoxModel getComboBoxModel(int row, int col) {
+        return null;
     }
     
     public T getRow(int row) {
@@ -95,7 +100,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
         if (row < 0 || row >= tableItems.size() || col < 0 || col >= columns.length) {
             return;
         }
-        tableItems.set(row, setValue(tableItems.get(row), col, value));
+        tableItems.set(row, setValue(tableItems.get(row), row, col, value));
         fireTableCellUpdated(row, col);
     }
     
@@ -228,7 +233,7 @@ public abstract class AbstractTableModel<T> extends javax.swing.table.AbstractTa
  
     @Override
     public boolean isCellEditable(int row, int column) {
-        return true;
+        return column > 0;
     }
  
     public boolean isRowLocked(int row) {

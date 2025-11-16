@@ -5,15 +5,8 @@
  */
 package com.sfc.sf2.core.gui;
 
-import com.sfc.sf2.core.gui.controls.Console;
-import com.sfc.sf2.core.gui.layout.BaseLayoutComponent;
-import com.sfc.sf2.core.gui.layout.LayoutBackground;
-import com.sfc.sf2.core.gui.layout.LayoutGrid;
-import com.sfc.sf2.core.gui.layout.LayoutScale;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsGridDisplay;
-import com.sfc.sf2.core.gui.layout.LayoutCoordsHeader;
-import com.sfc.sf2.core.gui.layout.LayoutMouseInput;
-import com.sfc.sf2.core.gui.layout.LayoutScrollNormaliser;
+import com.sfc.sf2.core.gui.layout.*;
+import com.sfc.sf2.core.gui.layout.LayoutAnimator.AnimationListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,7 +17,7 @@ import javax.swing.JPanel;
  *
  * @author TiMMy
  */
-public abstract class AbstractLayoutPanel extends JPanel {
+public abstract class AbstractLayoutPanel extends JPanel implements AnimationListener {
     
     private static final Dimension NO_OFFSET = new Dimension();
         
@@ -35,6 +28,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     protected LayoutCoordsHeader coordsHeader;
     protected LayoutMouseInput mouseInput;
     protected LayoutScrollNormaliser scroller;
+    protected LayoutAnimator animator;
     
     private int itemsPerRow = 8;
         
@@ -96,8 +90,21 @@ public abstract class AbstractLayoutPanel extends JPanel {
         return currentImage;
     }
     
+    public void centerOnMapPoint(int pixelX, int pixelY) {
+        if (BaseLayoutComponent.IsEnabled(scroller)) {
+            scroller.scrollToPosition(pixelX, pixelY);
+        }
+    }
+    
+    public void scrollToPosition(float percentX, float percentY) {
+        if (BaseLayoutComponent.IsEnabled(scroller)) {
+            Dimension dims = getSize();
+            scroller.scrollToPosition((int)(dims.width*percentX), (int)(dims.height*percentY));
+        }
+    }
+    
     protected Dimension getImageOffset() {
-        if (coordsGrid != null && coordsGrid.isEnabled()) {
+        if (BaseLayoutComponent.IsEnabled(coordsGrid)) {
             return coordsGrid.getOffset(getDisplayScale());
         } else {
             return NO_OFFSET;
@@ -108,6 +115,15 @@ public abstract class AbstractLayoutPanel extends JPanel {
         if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.updateDisplayParameters(getDisplayScale(), getPreferredSize(), offset); }
         if (BaseLayoutComponent.IsEnabled(mouseInput)) { mouseInput.updateDisplayParameters(getDisplayScale(), getPreferredSize(), offset); }
     }
+
+    public LayoutAnimator getAnimator() {
+        return animator;
+    }
+
+    @Override
+    public void animationFrameUpdated(AnimationFrameEvent e) {
+        redraw();
+    }
     
     public int getItemsPerRow() {
         return itemsPerRow;
@@ -116,7 +132,7 @@ public abstract class AbstractLayoutPanel extends JPanel {
     public void setItemsPerRow(int itemsPerRow) {
         if (this.itemsPerRow != itemsPerRow) {
             this.itemsPerRow = itemsPerRow;
-            if (BaseLayoutComponent.IsEnabled(coordsHeader)) { coordsHeader.setItemsPerRow(itemsPerRow); }
+            if (coordsHeader != null) { coordsHeader.setItemsPerRow(itemsPerRow); }
             redraw();
         }
     }

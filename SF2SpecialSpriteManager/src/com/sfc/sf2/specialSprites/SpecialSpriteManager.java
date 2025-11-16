@@ -11,7 +11,6 @@ import com.sfc.sf2.core.io.DisassemblyException;
 import com.sfc.sf2.core.io.RawImageException;
 import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.graphics.TilesetManager;
-import com.sfc.sf2.helpers.FileHelpers;
 import com.sfc.sf2.helpers.PathHelpers;
 import com.sfc.sf2.palette.Palette;
 import com.sfc.sf2.palette.PaletteManager;
@@ -40,7 +39,7 @@ public class SpecialSpriteManager extends AbstractManager {
         }
     }
     
-    public void importDisassembly(Path filePath, int blockRows, int blockColumns, int tilesPerBlock, Path paletteFilepath) throws IOException, DisassemblyException {
+    public Tileset importDisassembly(Path filePath, int blockRows, int blockColumns, int tilesPerBlock, Path paletteFilepath) throws IOException, DisassemblyException {
         Console.logger().finest("ENTERING importDisassembly");
         Palette optionalPalette = null;
         if (paletteFilepath != null) {
@@ -49,6 +48,7 @@ public class SpecialSpriteManager extends AbstractManager {
         SpecialSpritePackage pckg = new SpecialSpritePackage(PathHelpers.filenameFromPath(filePath), blockRows, blockColumns, tilesPerBlock, optionalPalette);
         tileset = specialSpriteDisassemblyProcessor.importDisassembly(filePath, pckg);
         Console.logger().finest("EXITING importDisassembly");
+        return tileset;
     }
     
     public void exportDisassembly(Path filePath, Tileset tileset, int blockRows, int blockColumns, int tilesPerBlock, boolean savePaletteInFile) throws IOException, DisassemblyException {
@@ -59,10 +59,11 @@ public class SpecialSpriteManager extends AbstractManager {
         Console.logger().finest("EXITING exportDisassembly");
     }
     
-    public void importImage(Path filePath) throws IOException, RawImageException {
+    public Tileset importImage(Path filePath) throws IOException, RawImageException {
         Console.logger().finest("ENTERING importImage");
         tileset = tilesetManager.importImage(filePath, true);
         Console.logger().finest("EXITING importImage");
+        return tileset;
     }
     
     public void exportImage(Path filePath, Tileset tileset, int tilesPerRow) throws IOException, RawImageException {

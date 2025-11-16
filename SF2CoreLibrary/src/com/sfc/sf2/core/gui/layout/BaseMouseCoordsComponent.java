@@ -56,6 +56,14 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         }
     }
     
+    public void setMouseButtonListener(GridMousePressedListener buttonListener) {
+        this.buttonListener = buttonListener;
+    }
+    
+    public void setMouseMotionListener(GridMouseMoveListener motionListener) {
+        this.motionListener = motionListener;
+    }
+    
     public void updateDisplayParameters(int displayScale, Dimension bounds, Dimension coordsOffset) {
         this.bounds = bounds;
         this.displayScale = displayScale;
@@ -64,18 +72,16 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
     
     private int getXCoord(int mouseX) {
         int x = mouseX-coordsOffset.width;
-        if (x < 0 || x >= bounds.width-coordsOffset.width) {
-            return -1;
-        }
+        if (x < 0) x = 0;
+        else if (x >= bounds.width-coordsOffset.width) x = bounds.width-coordsOffset.width-1;
         x /= (displayScale * mouseCoordsGrid.width);
         return x;
     }
     
     private int getYCoord(int mouseY) {
         int y = mouseY-coordsOffset.height;
-        if (y < 0 || y >= bounds.height-coordsOffset.height) {
-            return -1;
-        }
+        if (y < 0) y = 0;
+        else if (y >= bounds.height-coordsOffset.height) y = bounds.height-coordsOffset.height-1;
         y /= (displayScale * mouseCoordsGrid.height);
         return y;
     }
@@ -94,8 +100,11 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
         if (x == lastX && y == lastY) return;
-        motionListener.mouseMoved(new GridMouseMoveEvent(x, y));
+        lastX = x;
+        lastY = y;
+        motionListener.mouseMoved(new GridMouseMoveEvent(x, y, false));
     }
     
     @Override
@@ -104,39 +113,50 @@ public abstract class BaseMouseCoordsComponent extends BaseLayoutComponent imple
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
-        if (x == lastX && y == lastY) return;
+        if (x == -1 || y == -1) return;
         lastX = x;
         lastY = y;
         buttonHeld = e.getButton();
-        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false));
+        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false, false));
     }
     
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (buttonListener == null || buttonHeld == -1) return;
+        if (buttonHeld == -1) return;
+        if (buttonListener == null && motionListener == null) return;
         if (!panel.contains(e.getPoint())) return;
         int x = getXCoord(e.getX());
         int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
         if (x == lastX && y == lastY) return;
         lastX = x;
         lastY = y;
-        buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, true));
+        if (buttonListener != null) {
+            buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, true, false));
+        }
+        if (motionListener != null) {
+            motionListener.mouseMoved(new GridMouseMoveEvent(x, y, true));
+        }
     }
     
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (buttonHeld != -1) {
-            buttonListener.mousePressed(new GridMousePressedEvent(0, 0, MouseEvent.NOBUTTON, false));
-            buttonHeld = -1;
+        if (buttonHeld == -1) return;
+        int x = getXCoord(e.getX());
+        int y = getYCoord(e.getY());
+        if (x == -1 || y == -1) return;
+        if (buttonListener != null) {
+            buttonListener.mousePressed(new GridMousePressedEvent(x, y, buttonHeld, false, true));
         }
+        buttonHeld = -1;
     }
     
-    public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging) { }
+    public record GridMousePressedEvent(int x, int y, int mouseButton, boolean dragging, boolean released) { }
     public interface GridMousePressedListener extends EventListener {
         public void mousePressed(GridMousePressedEvent evt);
     }
     
-    public record GridMouseMoveEvent(int x, int y) { }
+    public record GridMouseMoveEvent(int x, int y, boolean dragging) { }
     public interface GridMouseMoveListener extends EventListener {
         public void mouseMoved(GridMouseMoveEvent evt);
     }

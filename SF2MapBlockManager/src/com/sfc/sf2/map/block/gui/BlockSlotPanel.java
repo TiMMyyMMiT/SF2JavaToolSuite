@@ -5,26 +5,40 @@
  */
 package com.sfc.sf2.map.block.gui;
 
-import com.sfc.sf2.core.gui.AbstractBasicPanel;
-import static com.sfc.sf2.graphics.Block.PIXEL_HEIGHT;
-import static com.sfc.sf2.graphics.Block.PIXEL_WIDTH;
+import com.sfc.sf2.core.gui.AbstractLayoutPanel;
+import com.sfc.sf2.core.gui.layout.*;
+import static com.sfc.sf2.graphics.Tile.PIXEL_HEIGHT;
+import static com.sfc.sf2.graphics.Tile.PIXEL_WIDTH;
+import com.sfc.sf2.graphics.Tileset;
 import com.sfc.sf2.map.block.MapBlock;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
  *
  * @author wiz
  */
-public class BlockSlotPanel extends AbstractBasicPanel {
+public class BlockSlotPanel extends AbstractLayoutPanel {
     
     protected MapBlock block;
+    protected Tileset[] tilesets;
     private BufferedImage overrideImage;    //Required to render a non-block
     
+    private ActionListener blockChangedListener;
+    
     public BlockSlotPanel() {
-        setDisplayScale(2);
-        setGridDimensions(8, 8);
+        super();
+        background = new LayoutBackground(Color.LIGHT_GRAY, PIXEL_WIDTH/2);
+        scale = new LayoutScale(2);
+        grid = null;
+        coordsGrid = null;
+        coordsHeader = null;
+        mouseInput = null;
+        scroller = null;
     }
 
     @Override
@@ -34,16 +48,20 @@ public class BlockSlotPanel extends AbstractBasicPanel {
 
     @Override
     protected Dimension getImageDimensions() {
-        return new Dimension(PIXEL_WIDTH, PIXEL_HEIGHT);
+        return new Dimension(PIXEL_WIDTH*3, PIXEL_HEIGHT*3);
     }
 
     @Override
-    protected void paintImage(Graphics graphics) {
+    protected void drawImage(Graphics graphics) {
         if (overrideImage != null) {
             graphics.drawImage(overrideImage, 0, 0, null);
         } else if (block != null) {
-            graphics.drawImage(block.getIndexedColorImage(), 0, 0, null);
+            graphics.drawImage(block.getIndexedColorImage(tilesets), 0, 0, null);
         }
+    }
+
+    public void setTilesets(Tileset[] tilesets) {
+        this.tilesets = tilesets;
     }
     
     public MapBlock getBlock() {
@@ -58,7 +76,9 @@ public class BlockSlotPanel extends AbstractBasicPanel {
         this.block = block;
         overrideImage = null;
         redraw();
-        repaint();
+        if (blockChangedListener != null) {
+            blockChangedListener.actionPerformed(new ActionEvent(this, block == null ? -1 : block.getIndex(), null));
+        }
     }
     
     public BufferedImage getOverrideImage() {
@@ -69,6 +89,12 @@ public class BlockSlotPanel extends AbstractBasicPanel {
         this.overrideImage = overrideImage;
         block = null;
         redraw();
-        repaint();
+        if (blockChangedListener != null) {
+            blockChangedListener.actionPerformed(new ActionEvent(this, -1, null));
+        }
+    }
+
+    public void setBlockChangedListener(ActionListener blockChangedListener) {
+        this.blockChangedListener = blockChangedListener;
     }
 }

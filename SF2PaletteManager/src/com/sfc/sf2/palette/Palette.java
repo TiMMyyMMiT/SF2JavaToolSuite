@@ -43,6 +43,10 @@ public class Palette {
         this.name = name;
     }
 
+    public boolean isFirstColorTransparent() {
+        return firstColorTransparent;
+    }
+
     public CRAMColor[] getColors() {
         return colors;
     }
@@ -133,5 +137,11 @@ public class Palette {
         alphas[0] = firstColorTransparent ? 0 : (byte)0xFF;
         IndexColorModel icm = new IndexColorModel(4,colors.length,reds,greens,blues,alphas);
         return icm;
+    }
+    
+    public Palette Clone() {
+        Palette newPalette = new Palette(colors.clone(), firstColorTransparent);
+        newPalette.rebuildIcm();
+        return newPalette;
     }
 }

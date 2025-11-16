@@ -9,6 +9,7 @@ import com.sfc.sf2.core.AbstractManager;
 import com.sfc.sf2.core.gui.controls.Console;
 import com.sfc.sf2.core.io.BinaryDisassemblyProcessor;
 import com.sfc.sf2.core.io.DisassemblyException;
+import com.sfc.sf2.core.io.FileFormat;
 import com.sfc.sf2.core.io.MetadataException;
 import com.sfc.sf2.core.io.TextFileException;
 import com.sfc.sf2.core.io.asm.AsmException;
@@ -93,7 +94,7 @@ public class TextManager extends AbstractManager {
         decoder.parseOffsets(offsets);
         decoder.parseTrees(trees);
         //Load banks
-        File[] files = FileHelpers.findAllFilesInDirectory(basePath, TEXTBANK_FILEPREFIX, ".bin");
+        File[] files = FileHelpers.findAllFilesInDirectory(basePath, TEXTBANK_FILEPREFIX, FileFormat.BIN);
         Console.logger().info(files.length + " Textbanks found.");
         ArrayList<String> textList = new ArrayList<>();
         int failedToLoad = 0;
@@ -138,7 +139,7 @@ public class TextManager extends AbstractManager {
         for(int i=0; i < newTextbanks.length; i++) {
             try {
                 String index = String.format("%02d", i);
-                bankPath = basePath.resolve(TEXTBANK_FILEPREFIX + index + ".bin");
+                bankPath = basePath.resolve(TEXTBANK_FILEPREFIX + index + FileFormat.BIN.getExt());
                 binaryDisassemblyProcessor.exportDisassembly(bankPath, newTextbanks[i], null);
                 fileCount++;
             } catch (Exception e) {
@@ -194,7 +195,7 @@ public class TextManager extends AbstractManager {
     
     public int[] importAsciiMap(Path asciiMapPath) throws IOException, FileNotFoundException, AsmException {
         Console.logger().finest("ENTERING importAsciiMap");
-        asciiToSymbolMap = asciiAsmProcessor.importAsmData(asciiMapPath);
+        asciiToSymbolMap = asciiAsmProcessor.importAsmData(asciiMapPath, null);
         Console.logger().finest("EXITING importAsciiMap");
         return asciiToSymbolMap;
     }
@@ -209,7 +210,7 @@ public class TextManager extends AbstractManager {
     
     public String[] importAllyNames(Path allyNamesPath) throws IOException, FileNotFoundException, AsmException {
         Console.logger().finest("ENTERING importAllyNames");
-        EntriesAsmData data = allyNamesAsmProcessor.importAsmData(allyNamesPath);
+        EntriesAsmData data = allyNamesAsmProcessor.importAsmData(allyNamesPath, null);
         allyNames = new String[data.uniqueEntriesCount()];
         for (int i = 0; i < allyNames.length; i++) {
             allyNames[i] = data.getUniqueEntries(i);

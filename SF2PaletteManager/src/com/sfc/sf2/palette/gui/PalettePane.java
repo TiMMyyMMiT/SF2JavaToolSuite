@@ -11,6 +11,8 @@ import com.sfc.sf2.palette.CRAMColor;
 import com.sfc.sf2.palette.Palette;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 /**
@@ -23,6 +25,8 @@ public class PalettePane extends JPanel {
     private Palette palette;
     private ColorPane[] colorPanes;
     
+    private ActionListener colorChangeListener;
+    
     public PalettePane() {
         setLayout(new GridBagLayout());
         
@@ -30,21 +34,51 @@ public class PalettePane extends JPanel {
         colorPanes = new ColorPane[16];
         for (int i = 0; i < 16; i++) {
             gbc.gridx = i;
-            ColorPane colorPane = new ColorPane(CRAMColor.BLACK, colorEditor);
+            ColorPane colorPane = new ColorPane(this, i, CRAMColor.BLACK);
             colorPanes[i] = colorPane;
             add(colorPane, gbc);
         }
+        
+        setColorPaneSelected(-1);
     }
 
-    public CRAMColorEditor getColorEditor() {
-        return colorEditor;
+    public void setColorChangeListener(ActionListener colorChangeListener) {
+        this.colorChangeListener = colorChangeListener;
     }
-
+    
     public void setColorEditor(CRAMColorEditor colorEditor) {
         this.colorEditor = colorEditor;
-        for (int i = 0; i < colorPanes.length; i++) {
-            colorPanes[i].setEditor(colorEditor);
+        colorEditor.setColorPane(this);
+    }
+  
+    public void setColorPaneSelected(int index) {
+        if (colorEditor == null) return;
+        if (index == -1 || palette == null) {
+            colorEditor.setColor(CRAMColor.BLACK, -1);
+            ColorPane.clearSelection();
+        } else {
+            colorEditor.setColor(palette.getColors()[index], index);
         }
+    }
+  
+    public void updateColor(int index, CRAMColor color) {
+        if (palette == null) return;
+        if (palette != null && index >= 0) {
+            colorPanes[index].updateColor(color);
+            palette.getColors()[index] = color;
+            if (colorChangeListener != null) {
+                colorChangeListener.actionPerformed(new ActionEvent(palette, index, "ColorChange"));
+            }
+        }
+    }
+    
+    public void refreshColorPanes() {
+        for (int i = 0; i < colorPanes.length; i++) {
+            colorPanes[i].updateColor(palette.getColors()[i]);
+        }
+        int selected = colorEditor.getThisIndex();
+        if (selected == -1) return;
+        colorEditor.setColor(palette.getColors()[selected], selected);
     }
 
     public Palette getPalette() {
@@ -69,7 +103,7 @@ public class PalettePane extends JPanel {
                 }
             }
         }
-        colorEditor.setColorPane(null);
+        setColorPaneSelected(-1);
    }
    
    public Palette getUpdatedPalette() {

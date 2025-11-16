@@ -20,7 +20,7 @@ public class BattleSprite {
         ENEMY,
     }
     
-    private BattleSpriteType type;    
+    private BattleSpriteType type;
     private Palette[] palettes;
     private Tileset[] frames;
     
