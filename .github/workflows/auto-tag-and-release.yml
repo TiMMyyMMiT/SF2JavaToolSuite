@@ -226,7 +226,7 @@ jobs:
                 fi
                 
                 # Extract release notes
-                release_notes=$(grep '^release-notes:' "$file_path" | cut -d':' -f2- | xargs)
+                release_notes=$(grep '^release-notes:/ {p; n; p; n; p}' "$file_path" | xargs)
                 # Append to release list with release notes
                 echo "$tag_name|${jar_file}|${release_notes}" >> release_list.txt
               else
