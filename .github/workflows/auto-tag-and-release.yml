@@ -224,9 +224,12 @@ jobs:
                   git tag "$tag_name"
                   git push origin "$tag_name"
                 fi
-                
-                # Extract release notes
-                release_notes=$(grep '^release-notes:/ {p; n; p; n; p}' "$file_path" | xargs)
+                # Extract release notes & extract the next 2 non-empty lines
+                start_line=$(grep -n '^release-notes:' "$file_path" | cut -d: -f1)
+                if [ -n "$start_line" ]; then
+                  release_notes=$(sed -n "$((start_line+1)),$((start_line+2))p" "$file_path" | sed '/^\s*$/d' | head -n 2 | sed 's/^[ \t]*//')
+                  release_notes=$(printf "%s" "$release_notes" | sed ':a;N;$!ba;s/\n/\\n/g')
+                fi
                 # Append to release list with release notes
                 echo "$tag_name|${jar_file}|${release_notes}" >> release_list.txt
               else
