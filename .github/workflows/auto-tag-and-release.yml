@@ -292,7 +292,7 @@ jobs:
               if [ "$changed_project" == "$project_name" ]; then
                 start_line=$(grep -n '^release-notes:' "$changed_file" | cut -d: -f1)
                 if [ -n "$start_line" ]; then
-                  note=$(sed -n "$((start_line+1)),$((start_line+3))p" "$changed_file" | sed '/^\s*$/d' | head -n 2 | sed 's/^[ \t]*//')
+                  note=$(sed -n "$((start_line+1)),$((start_line+2))p" "$changed_file" | sed '/^\s*$/d' | head -n 1 | sed 's/^[ \t]*//')
                   if [ -n "$note" ]; then
                     formatted_note=$(printf "%s" "$note" | sed ':a;N;$!ba;s/\n/ | /g')
                     release_notes_list+=("- $project_name: $formatted_note")
