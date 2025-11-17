@@ -290,7 +290,7 @@ jobs:
             success_count=$((success_count + 1))
       
             # Extract release notes for this project from CHANGED_FILES
-            for changed_file in $CHANGED_FILES; do
+            for changed_file in ${CHANGED_FILES[@]}; do
               changed_project=$(basename "$(dirname "$changed_file")")
               if [ "$changed_project" == "$project_name" ]; then
                 note=$(grep '^release-notes:' "$changed_file" | cut -d':' -f2- | xargs)
