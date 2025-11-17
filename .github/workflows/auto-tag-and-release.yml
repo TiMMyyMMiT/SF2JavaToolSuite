@@ -223,11 +223,12 @@ jobs:
                   echo "Creating Git tag $tag_name"
                   git tag "$tag_name"
                   git push origin "$tag_name"
+                fi
 
-                  # Extract release notes (first non-empty line after release-notes:)
-                  release_notes=$(awk '$1 == "release-notes:" {found=1; next} found && NF {print; exit}' "$file_path" | xargs)
-                  # Append to release list with release notes
-                  echo "$tag_name|${jar_file}|${release_notes}" >> release_list.txt
+                # Extract release notes (first non-empty line after release-notes:)
+                release_notes=$(awk '$1 == "release-notes:" {found=1; next} found && NF {print; exit}' "$file_path" | xargs)
+                # Append to release list with release notes
+                echo "$tag_name|${jar_file}|${release_notes}" >> release_list.txt
               else
                 echo "Warning: ${jar_file} not found so tag will not be created"
               fi
